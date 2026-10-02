@@ -74,6 +74,16 @@ live state in `STATUS.md`, and the item-by-item spec status in `docs/context/SPE
 - Prompt-only (stock model) gets z right in 100% of renders: z is fully inferable from the prompt.
 - Next (PI): the label experiment 003, asking whether z at `:` L40–44 is causally used. See report 002 §12.
 
+## 4c. What 003 found (reader-free labels; dev; descriptive because G4 failed)
+
+- Decorrelated content directions: held-out AUC 1.00; fidelity perfect; 82 pairs, 37k edits.
+- At `:` and the assistant newline, L40–44, **z has a small, consistent influence**: median S 0.03–0.05, above null,
+  above the start and answer directions, necessary by clamping. It is "used" in only 10–18% of pairs (a few tables,
+  e.g. 0383 at 0.36). 0.21–0.42 of the gap lies outside any single content direction.
+- At the `</think>` newline z is **decodable but not needed**. At `:` L60 the answer direction carries the cell.
+- **Label reliability fails** (κ 0.37), so the labels are not used to score readers. Report 003 §7 lists the next
+  options.
+
 ## 5. Known problems (not yet fixed)
 
 1. **Probe controls:** fixed (amendment A2; re-run 2026-10-02). Membership is now decodable at `:` L40–60, but only

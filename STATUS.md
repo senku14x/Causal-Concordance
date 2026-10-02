@@ -1,4 +1,14 @@
-# STATUS — 2026-10-02 (001 complete, audited, probes repaired; 002 claim scoring complete; awaiting PI review)
+# STATUS — 2026-10-02 (001, 002 and 003 complete on dev; awaiting PI review)
+
+**003, reader-free causal labels: complete** (`docs/reports/003_labels.md`).
+- Gates G1–G3 pass. **G4 (label reliability) fails** (κ 0.37, r(S) 0.41 between disjoint fits), so the labels are
+  **descriptive only** and are not used to score readers.
+- At `:` and the assistant newline, L40–44, the decorrelated z direction carries a small, consistent influence: median
+  S 0.03–0.05, above null, above the start and answer directions, necessary by clamping. It is "used" in only 10–18%
+  of pairs and concentrated in a few tables. 0.21–0.42 of the gap lies outside the start, z and answer directions.
+- At the `</think>` newline, z is **decodable but not needed** (70–100% of pairs). At `:` L60 the answer direction
+  carries the cell.
+- Next options in report 003 §7: subspace labels, DAS, more fitting data for reliability, or a descriptive 004.
 
 **Latest (2026-10-02, while the PI slept):**
 - **002, reader claim scoring: complete.** `docs/reports/002_claim_scoring.md`; design v2.2; external review accepted.

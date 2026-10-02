@@ -84,18 +84,18 @@ All open. Descriptive, exploratory hints from 001 (10 brew tables; not answers):
 | Margin m: full-sequence, LSE over spellings, every token scored | **done** | `margin.py`, tests |
 | Precision regime | **done**: SEC true-fp32 replay for L ≥ 40 (errata E4, design 001 v3); RHUT regime as the cross-check | `regime.py`, `engine.py`, `regime_check.json` |
 | Full-cell patch share S (the reference, E2) | **done** for brew and chain dev (001 §4–§5) | `outputs/001_leverage_profile/run/profile_*.jsonl` |
-| 1. Reader-blind mean-difference direction per contrast | **not started** (design 002) | — |
-| 2. 1-D swap along û | **built** (`engine.Swap1D`, `regime.swap_fn`; write tested) | not run for labels |
-| 3. Demonstrated influence: S ≥ τ and above the norm-matched random-direction null, BH-FDR (A01 C9) | **not started** | — |
-| 4. Necessity: ablate to the fitting-half mean, random-direction ablation control (A01 C10) | **built** (`engine.AblateToMean1D`), not run | — |
+| 1. Reader-blind mean-difference direction per contrast | **done on dev (003)**: decorrelated least-squares content directions (start / z / answer) plus naive centroids; held-out AUC 1.00 | `docs/reports/003_labels.md` |
+| 2. 1-D swap along û | **done on dev (003)**: 82 pairs, 37k edits, fidelity 0 failures | `outputs/003_labels/run/` |
+| 3. Demonstrated influence: S ≥ τ and above the norm-matched random-direction null, BH-FDR (A01 C9) | **done on dev (003)**: z used in 10–18% of pairs at the emission cells L40–44 | report 003 §3 |
+| 4. Necessity: ablate to the fitting-half mean, random-direction ablation control (A01 C10) | **done on dev (003)**: every used z label is also necessary | report 003 §3 |
 | 5. Decodable: cross-fitted probe + Hewitt–Liang control (A01 C11) | **done at the family level (001, repaired under amendment A2):** per-fold AUC, multi-draw controls (membership 0.48–0.52), full-procedure nulls; residual solver and grouped-null checks. No item-level labels yet | `analysis/probes.json`, `analysis/probe_residual_checks.json`, 001 §7 |
-| 6. States (used / decodable-not-needed / absent / unresolved) | **not started** | — |
+| 6. States (used / decodable-not-needed / absent / unresolved) | **done on dev (003), descriptive only** (G4 failed) | `results/003_labels/analysis/labels.json` |
 | 7. Per consumer | n/a (one consumer per WSB family) | — |
-| "Pair difference used" naming + four-way {input, z, answer, other} confusion; decorrelated direction (A01 C15) | **not started** | — |
+| "Pair difference used" naming + four-way {input, z, answer, other} confusion; decorrelated direction (A01 C15) | **done on dev (003)**: attribution table; "other" 0.21–0.42 of the gap | report 003 §2 |
 | DAS as a second label method | **not started** | — |
 | Share vs flips | **partial**: shares recorded; top-1 retention recorded for damage; answer flips not tabulated | — |
 | Gate: write fidelity ρ ∈ [0.9, 1.1], κ ≥ 0.99, fp32 hook | **built** (`gates.fidelity_gate`, tested); not exercised by a label run | — |
-| Gate: label reliability ≥ 0.7 | **not started** (no labels) | — |
+| Gate: label reliability ≥ 0.7 | **run (003): FAILED** (κ 0.37 for z at `:` L42–44; r(S) 0.41 between disjoint fits) | report 003 §1 |
 | Gate: unresolved fraction per family | **not started** | — |
 | Damage readouts (A01 C14) | **partial**: off-pair mass, Δlog P(a/a′), top-1 retention recorded; the flag fires at `:` (46–67%). The full answer-colour distribution is not logged, so the flag cannot be decomposed (001 §4) | — |
 | Thresholds τ = 0.10, ε′ = 0.05, substitution bound | **provisional**; freeze proposed for AMENDMENT_02 (001 §13) | — |
@@ -143,7 +143,7 @@ Design 001 registered its own predictions Q1–Q14; outcomes are in report 001 �
 | 3. End-to-end slice: brew + matched not-needed at L42, labels, reliability, W | **not started**. 001 (leverage profile + decodability, reader-free) is its precursor per A01 C22 |
 | 4. Open-set agreement atlas | **not started** |
 | 5. Bank construction for remaining families | **partial** (relational built, ungated); the rest out |
-| 6. Labels + reliability gate | **not started** |
+| 6. Labels + reliability gate | **done on dev (003)**; the reliability gate failed, labels descriptive |
 | 7. Reader runs at matched cells with controls | **partial** (001 snapshot, descriptive, 10 tables) |
 | 8. Analyses A1–A6 | **not started** |
 | Stop-and-redesign checks (bench reproduction, planted curves, reliability, slice) | **not yet testable** |

@@ -488,5 +488,190 @@ def stage_run():
     print("run done", time.time() - t0)
 
 
+# ---------------------------------------------------------------------------------------------- analysis
+def _bh(pvals, q=0.05):
+    import stats as ST
+    return ST.bh_fdr(pvals, q=q)
+
+
+def _kappa2(a, b):
+    a, b = np.asarray(a, bool), np.asarray(b, bool)
+    if len(a) == 0:
+        return float("nan")
+    po = float(np.mean(a == b))
+    pa, pb = a.mean(), b.mean()
+    pe = pa * pb + (1 - pa) * (1 - pb)
+    return float((po - pe) / (1 - pe)) if pe < 1 else float("nan")
+
+
+def _med_ci(vals, tables):
+    import stats as ST
+    v = np.asarray(vals, float)
+    if len(v) == 0:
+        return None
+    b = ST.cluster_bootstrap(v, np.asarray(tables), stat=np.median)
+    return {"median": float(np.median(v)), "boot95_tables": b["ci"], "n": int(len(v)), "n_tables": b["n_clusters"]}
+
+
+def stage_analysis():
+    rows = jl(OUT / "run" / "edits.jsonl")
+    pairs = sorted({r["pair_id"] for r in rows})
+    # whole-cell reference from 001 (same pairs, same regime)
+    prof = [r for r in jl(CAP001 / "profile_brew.jsonl") if r["direction"] == "p->m"]
+    cellpos = {"emit_asst": 158, "emit_think": 162, "emit_colon": 164, "start_tok": 142}
+    sfull = {(r["pair_id"], r["pos"], r["layer"]): r["S"] for r in prof}
+    item_of = {r["pair_id"]: r["item"] for r in rows}
+    sw = [r for r in rows if r["kind"] == "swap" and "S" in r]
+    nul = [r for r in rows if r["kind"] == "null"]
+    pool = {}
+    for r in nul:
+        pool.setdefault((r["cell"], r["layer"], r["content"]), []).append(r["S"])
+    pool = {k: np.array(v) for k, v in pool.items()}
+
+    def pval(r):
+        v = pool[(r["cell"], r["layer"], r["content"])]
+        return float((1 + (v >= r["S"]).sum()) / (1 + len(v)))
+
+    # primary labels
+    lab = {}
+    for pid in pairs:
+        rs = [r for r in sw if r["pair_id"] == pid]
+        ps = [pval(r) for r in rs]
+        rej, adj = _bh(ps)
+        for r, rj, a in zip(rs, rej, adj):
+            k = (pid, r["cell"], r["layer"], r["content"])
+            sf = sfull.get((pid, cellpos[r["cell"]], r["layer"]))
+            dmg = (r["off_pair_mass_edit"] - r["off_pair_mass_clean"] > 0.10 and
+                   r["colour_mass_edit"]["other"] - r["colour_mass_clean"]["other"] > 0.05) or \
+                  (r.get("top1_retention") is not None and r["top1_retention"] == r["top1_retention"] and r["top1_retention"] < 0.95)
+            fid_ok = r["fid_rho"] is not None and 0.9 <= r["fid_rho"][0] and r["fid_rho"][1] <= 1.1 and r["fid_kappa_min"] >= 0.99
+            used = bool(r["S"] >= TAU and rj)
+            lab[k] = {"S": r["S"], "p": ps[rs.index(r)], "p_bh": a, "used": used and not dmg and fid_ok, "used_raw": used,
+                      "damage": bool(dmg), "fidelity_ok": bool(fid_ok), "S_full": sf,
+                      "one_d_gt_full": bool(sf is not None and r["S"] > sf + EPS), "item": item_of[pid],
+                      "cos_other": r.get("cos_other_contents")}
+    # necessity (z)
+    nec = {(r["pair_id"], r["cell"], r["layer"]): r["N"] for r in rows if r["kind"] == "necessity" and "N" in r}
+    necnull = {}
+    for r in rows:
+        if r["kind"] == "necessity_null":
+            necnull.setdefault((r["cell"], r["layer"]), []).append(r["N"])
+    nq95 = {k: float(np.quantile(v, 0.95)) for k, v in necnull.items()}
+    for (pid, cell, L), N in nec.items():
+        k = (pid, cell, L, "z")
+        if k in lab:
+            lab[k]["N"] = N
+            lab[k]["necessary"] = bool(N > nq95[(cell, L)])
+    # final state
+    for k, v in lab.items():
+        pid, cell, L, content = k
+        if v["used"]:
+            v["state"] = "used + necessary" if v.get("necessary") else "used"
+        elif content == "z" and cell != "start_tok" and v["S_full"] is not None and abs(v["S_full"]) < EPS:
+            v["state"] = "decodable, not needed"
+        else:
+            v["state"] = "unresolved"
+    # reliability (G4): same rule with unadjusted p, two disjoint fits
+    rel = {}
+    for r in rows:
+        if r["kind"] in ("swap_r1", "swap_r2") and "S" in r:
+            rel.setdefault((r["pair_id"], r["cell"], r["layer"], r["content"]), {})[r["kind"]] = r
+    G4 = {}
+    for content in ROLES:
+        for cl in [("emit_colon", (42, 44)), ("emit_colon", (40,)), ("emit_asst", (40, 42, 44)), ("emit_think", (40, 42, 44))]:
+            cell, Ls = cl
+            a, b, s1, s2 = [], [], [], []
+            for k, v in rel.items():
+                if k[1] == cell and k[2] in Ls and k[3] == content and len(v) == 2:
+                    r1, r2 = v["swap_r1"], v["swap_r2"]
+                    a.append(r1["S"] >= TAU and pval(r1) < 0.05)
+                    b.append(r2["S"] >= TAU and pval(r2) < 0.05)
+                    s1.append(r1["S"]); s2.append(r2["S"])
+            G4[f"{content}|{cell}|{'/'.join(map(str, Ls))}"] = {"n": len(a), "kappa_used": _kappa2(a, b),
+                                                                "agreement": float(np.mean(np.array(a) == np.array(b))) if a else None,
+                                                                "frac_used_r1": float(np.mean(a)) if a else None, "frac_used_r2": float(np.mean(b)) if b else None,
+                                                                "pearson_S": float(np.corrcoef(s1, s2)[0, 1]) if len(s1) > 2 else None}
+    # summaries
+    summ = {}
+    for cell, L in GRID:
+        for content in ROLES:
+            ks = [k for k in lab if k[1] == cell and k[2] == L and k[3] == content]
+            if not ks:
+                continue
+            S = [lab[k]["S"] for k in ks]
+            summ[f"{cell}|L{L}|{content}"] = {
+                **(_med_ci(S, [lab[k]["item"] for k in ks]) or {}),
+                "frac_used": float(np.mean([lab[k]["used"] for k in ks])),
+                "frac_used_necessary": float(np.mean([lab[k]["state"] == "used + necessary" for k in ks])) if content == "z" and (cell, L) in NEC_GRID else None,
+                "frac_not_needed": float(np.mean([lab[k]["state"] == "decodable, not needed" for k in ks])),
+                "frac_unresolved": float(np.mean([lab[k]["state"] == "unresolved" for k in ks])),
+                "frac_damage": float(np.mean([lab[k]["damage"] for k in ks])),
+                "frac_one_d_gt_full": float(np.mean([lab[k]["one_d_gt_full"] for k in ks])),
+                "median_S_full": float(np.median([lab[k]["S_full"] for k in ks if lab[k]["S_full"] is not None])),
+                "null_q95": float(np.quantile(pool[(cell, L, content)], 0.95)),
+                "null_median": float(np.median(pool[(cell, L, content)])),
+                "median_N": float(np.median([lab[k]["N"] for k in ks if "N" in lab[k]])) if content == "z" and (cell, L) in NEC_GRID else None,
+                "necessity_null_q95": nq95.get((cell, L)) if content == "z" else None}
+    naive = {}
+    for cell, L in GRID:
+        a = [r["S"] for r in rows if r["kind"] == "swap_naive" and r["cell"] == cell and r["layer"] == L and "S" in r]
+        cs = [r["cos_with_primary"] for r in rows if r["kind"] == "swap_naive" and r["cell"] == cell and r["layer"] == L and "S" in r]
+        if a:
+            naive[f"{cell}|L{L}"] = {"median_S_naive": float(np.median(a)), "median_cos_with_decorrelated": float(np.median(cs)), "n": len(a)}
+    attrib = {}
+    for cell, L in GRID:
+        per = []
+        for pid in pairs:
+            ss = {c: lab.get((pid, cell, L, c), {}).get("S") for c in ROLES}
+            sf = sfull.get((pid, cellpos[cell], L))
+            if None in ss.values() or sf is None:
+                continue
+            per.append({"z": ss["z"], "start": ss["start"], "answer": ss["answer"], "full": sf, "other": sf - max(ss.values()),
+                        "largest": max(ss, key=ss.get)})
+        if per:
+            attrib[f"{cell}|L{L}"] = {"median_S": {k: float(np.median([x[k] for x in per])) for k in ("z", "start", "answer", "full", "other")},
+                                      "largest_content_counts": {c: sum(x["largest"] == c for x in per) for c in ROLES}, "n": len(per),
+                                      "median_cos": {f"{a}-{b}": float(np.nanmedian([lab[(pid, cell, L, a)]["cos_other"].get(b) if lab.get((pid, cell, L, a)) and lab[(pid, cell, L, a)]["cos_other"] and lab[(pid, cell, L, a)]["cos_other"].get(b) is not None else np.nan for pid in pairs]))
+                                                     for a, b in (("z", "start"), ("z", "answer"), ("start", "answer"))}}
+    fid = [x for r in rows if r.get("fid_rho") for x in r["fid_rho"]]
+    kap = [r["fid_kappa_min"] for r in rows if r.get("fid_kappa_min") is not None]
+    n_edits = sum(1 for r in rows if r.get("fid_rho"))
+    n_fail = sum(1 for r in rows if r.get("fid_rho") and not (0.9 <= r["fid_rho"][0] and r["fid_rho"][1] <= 1.1 and r["fid_kappa_min"] >= 0.99))
+    gates = {"G1_fidelity": {"n_edit_rows": n_edits, "n_fail": n_fail, "rho_range": [min(fid), max(fid)], "kappa_min": min(kap), "passes": n_fail <= 0.01 * n_edits},
+             "G3": json.loads((ANA / "directions_validity.json").read_text())["gate_G3"],
+             "G2": json.loads((ANA / "smoke_checks.json").read_text())["all_pass"],
+             "G4_label_reliability": G4,
+             "G4_passes_z_colon_L42_44": bool((G4.get("z|emit_colon|42/44") or {}).get("kappa_used", 0) >= 0.7)}
+    g = lambda k: summ.get(k, {})  # noqa: E731
+    pred = {
+        "L1 z swap at ':' L42/L44 used in >= 50% of pairs": [g("emit_colon|L42|z").get("frac_used"), g("emit_colon|L44|z").get("frac_used")],
+        "L2 ':' L40-44 median S_z > median S_start": [(g(f"emit_colon|L{L}|z").get("median"), g(f"emit_colon|L{L}|start").get("median")) for L in (40, 42, 44)],
+        "L3 ':' L42-44 median S_z > median S_answer": [(g(f"emit_colon|L{L}|z").get("median"), g(f"emit_colon|L{L}|answer").get("median")) for L in (42, 44)],
+        "L4 z necessity at ':' L40-44 above null q95 in >= 30%": [g(f"emit_colon|L{L}|z").get("frac_used_necessary") for L in (40, 42, 44)],
+        "L5 G4 kappa >= 0.7 for z at ':' L42-44": (G4.get("z|emit_colon|42/44") or {}).get("kappa_used"),
+        "L6 start swap at the start token L40 used in >= 70%": g("start_tok|L40|start").get("frac_used"),
+        "L7 ':' median S_z at L60 > at L44": [g("emit_colon|L60|z").get("median"), g("emit_colon|L44|z").get("median")],
+        "L8 naive z gives a larger median S than decorrelated at ':' L42-44": [((naive.get(f"emit_colon|L{L}") or {}).get("median_S_naive"), g(f"emit_colon|L{L}|z").get("median")) for L in (42, 44)],
+    }
+    # qualitative: per (':' L44) the 4 pairs with the largest z-swap S, with colour-mass shifts
+    qual = []
+    zr = sorted([r for r in sw if r["cell"] == "emit_colon" and r["layer"] == 44 and r["content"] == "z"], key=lambda r: -r["S"])
+    for r in zr[:3] + zr[len(zr) // 2: len(zr) // 2 + 1] + zr[-2:]:
+        cm0, cm1 = r["colour_mass_clean"], r["colour_mass_edit"]
+        top = lambda cm: sorted([(c, round(v, 3)) for c, v in cm.items()], key=lambda x: -x[1])[:4]  # noqa: E731
+        qual.append({"pair_id": r["pair_id"], "S_z": r["S"], "S_full": lab[(r["pair_id"], "emit_colon", 44, "z")]["S_full"],
+                     "S_start": lab.get((r["pair_id"], "emit_colon", 44, "start"), {}).get("S"),
+                     "S_answer": lab.get((r["pair_id"], "emit_colon", 44, "answer"), {}).get("S"),
+                     "colour_mass_clean_top4": top(cm0), "colour_mass_edit_top4": top(cm1),
+                     "state": lab[(r["pair_id"], "emit_colon", 44, "z")]["state"]})
+    out = {"gates": gates, "summary": summ, "naive_vs_decorrelated": naive, "attribution": attrib, "predictions": pred,
+           "n_pairs": len(pairs), "n_tables": len({item_of[p] for p in pairs}), "qualitative": qual}
+    (ANA / "summary.json").write_text(json.dumps(out, indent=1, default=float))
+    (ANA / "labels.json").write_text(json.dumps([{"pair_id": k[0], "cell": k[1], "layer": k[2], "content": k[3], **v} for k, v in lab.items()], default=float))
+    write_manifest("analysis", {"n_pairs": len(pairs)})
+    print(json.dumps(gates, indent=1, default=float)[:1500])
+
+
 if __name__ == "__main__":
-    {"capture": stage_capture, "directions": stage_directions, "smoke": stage_smoke, "run": stage_run}[sys.argv[1]]()
+    {"capture": stage_capture, "directions": stage_directions, "smoke": stage_smoke, "run": stage_run,
+     "analysis": stage_analysis}[sys.argv[1]]()

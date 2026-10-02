@@ -293,7 +293,7 @@ function rolesKey(){
 }
 
 document.getElementById("pills").innerHTML = [
-  ["good","Setup done"],["good","Tests pass"],["good","001 complete (audited)"],["good","002 claim scoring complete"],
+  ["good","Setup done"],["good","Tests pass"],["good","001 complete (audited)"],["good","002 claim scoring complete"],["good","003 labels complete"],["warn","003 reliability gate failed: descriptive"],
   ["good","Probe repair done"],["warn","Reports awaiting your review"],["warn","SAE deferred"]].map(([k,t]) => `<span class="pill ${k}">${t}</span>`).join("");
 
 (function(){
@@ -525,6 +525,32 @@ function lineChart(o){
   }
   sel.addEventListener("click", e => { const b = e.target.closest("button"); if (b) showQ(b.dataset.k); });
   if (keys.length) showQ(keys[0]);
+})();
+
+/* ---------- experiment 003: content attribution chart ---------- */
+(function(){
+  const X = DATA.exp003;
+  if (!X) return;
+  const C = [["z","var(--good)","z (intermediate)"],["start","var(--warn)","start"],["answer","var(--accent)","answer"],["full","var(--muted)","whole cell (001)"]];
+  const rows = X.chart, W = 680, L = 190, Rm = 20, T = 8, gh = 13, rowH = 4 * gh + 10;
+  const lo = Math.min(-0.05, ...rows.flatMap(r => C.map(([k]) => r[k] ?? 0))), hi = Math.max(0.6, ...rows.flatMap(r => C.map(([k]) => r[k] ?? 0)));
+  const xs = v => L + (W - L - Rm) * (v - lo) / (hi - lo);
+  const H = T + rows.length * rowH + 30;
+  let s = `<svg viewBox="0 0 ${W} ${H}" role="img" aria-label="Median share S per content direction">`;
+  for (let t = Math.ceil(lo * 10) / 10; t <= hi + 1e-9; t += 0.1) s += `<line class="gridl" x1="${xs(t)}" x2="${xs(t)}" y1="${T}" y2="${T + rows.length*rowH}"/><text x="${xs(t)}" y="${T + rows.length*rowH + 14}" text-anchor="middle">${t.toFixed(1)}</text>`;
+  s += `<line x1="${xs(0.1)}" x2="${xs(0.1)}" y1="${T}" y2="${T + rows.length*rowH}" style="stroke:var(--ink)" stroke-dasharray="4 4" opacity="0.5"/>`;
+  rows.forEach((r, i) => {
+    const y0 = T + i * rowH;
+    s += `<text class="lbl" x="${L-8}" y="${y0 + 2*gh + 4}" text-anchor="end">${esc(r.label)}</text>`;
+    C.forEach(([k, col, name], j) => { const v = r[k]; if (v == null) return;
+      const y = y0 + j * gh + 2;
+      s += `<rect x="${Math.min(xs(0), xs(v))}" y="${y}" width="${Math.abs(xs(v) - xs(0))}" height="${gh - 3}" style="fill:${col}" rx="2"><title>${name}: median S ${v.toFixed(3)}${r[k+"_q95"] != null ? `; random-direction null q95 ${r[k+"_q95"].toFixed(3)}` : ""}</title></rect>`;
+      if (r[k+"_ci"]) s += `<line x1="${xs(r[k+"_ci"][0])}" x2="${xs(r[k+"_ci"][1])}" y1="${y + (gh-3)/2}" y2="${y + (gh-3)/2}" style="stroke:var(--ink)" stroke-width="1.2" opacity="0.6"/>`;
+      if (r[k+"_q95"] != null) s += `<line x1="${xs(r[k+"_q95"])}" x2="${xs(r[k+"_q95"])}" y1="${y}" y2="${y + gh - 3}" style="stroke:var(--ink)" stroke-width="2"/>`;
+    });
+  });
+  s += `</svg><div class="key">${C.map(([k,col,name]) => `<span><i style="background:${col}"></i>${name}</span>`).join("")}<span>| = random-direction null q95</span><span>- - τ = 0.10</span></div>`;
+  document.getElementById("ex3-bars").innerHTML = s;
 })();
 /* ---------- experiment 001: reader naming grid + qualitative table browser ---------- */
 (function(){

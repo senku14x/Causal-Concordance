@@ -584,6 +584,85 @@ def exp002():
     return html_, data
 
 
+
+X3 = R.PROJECT / "results" / "003_labels"
+
+
+def exp003():
+    """HTML + data for experiment 003 (reader-free labels). Empty until the analysis has run."""
+    f = X3 / "analysis" / "summary.json"
+    if not f.exists():
+        return "", None
+    A = json.loads(f.read_text())
+    S, gates = A["summary"], A["gates"]
+    cells = [("emit_asst", 40), ("emit_asst", 42), ("emit_asst", 44), ("emit_think", 40), ("emit_think", 42), ("emit_think", 44),
+             ("emit_colon", 40), ("emit_colon", 42), ("emit_colon", 44), ("emit_colon", 60), ("start_tok", 40)]
+    nice = {"emit_asst": "after “assistant”", "emit_think": "after “</think>”", "emit_colon": "“:”", "start_tok": "start colour token"}
+    chart = []
+    for c, L in cells:
+        row = {"label": f"{nice[c]} L{L}"}
+        for k in ("z", "start", "answer"):
+            x = S.get(f"{c}|L{L}|{k}") or {}
+            row[k] = x.get("median")
+            row[k + "_ci"] = x.get("boot95_tables")
+            row[k + "_q95"] = x.get("null_q95")
+        row["full"] = (S.get(f"{c}|L{L}|z") or {}).get("median_S_full")
+        chart.append(row)
+    lt = ('<tr><th>Cell</th><th>Content</th><th class="num">median S [95% CI]</th><th class="num">null q95</th><th class="num">used</th>'
+          '<th class="num">used + necessary</th><th class="num">not needed</th><th class="num">unresolved</th><th class="num">damage</th><th class="num">1-D &gt; full</th></tr>')
+    for c, L in cells:
+        for k in ("z", "start", "answer"):
+            x = S.get(f"{c}|L{L}|{k}")
+            if not x:
+                continue
+            ci = x.get("boot95_tables") or [float("nan")] * 2
+            un = x.get("frac_used_necessary")
+            lt += (f'<tr><td>{h(nice[c])} L{L}</td><td>{k}</td><td class="num">{f2(x["median"])} [{f2(ci[0])}, {f2(ci[1])}]</td>'
+                   f'<td class="num">{f2(x["null_q95"])}</td><td class="num"><b>{pct(x["frac_used"])}</b></td>'
+                   f'<td class="num">{pct(un) if un is not None else "—"}</td><td class="num">{pct(x["frac_not_needed"])}</td>'
+                   f'<td class="num">{pct(x["frac_unresolved"])}</td><td class="num">{pct(x["frac_damage"])}</td><td class="num">{pct(x["frac_one_d_gt_full"])}</td></tr>')
+    g4 = gates["G4_label_reliability"]
+    rt = ('<tr><th>Content · cell · layers</th><th class="num">n</th><th class="num">agreement</th><th class="num">κ (used)</th>'
+          '<th class="num">used: fit 1 / fit 2</th><th class="num">r(S₁, S₂)</th></tr>' +
+          "".join(f'<tr><td>{h(k.replace("|", " · "))}</td><td class="num">{v["n"]}</td><td class="num">{f2(v["agreement"]) if v["agreement"] is not None else "—"}</td>'
+                  f'<td class="num">{f2(v["kappa_used"]) if v["kappa_used"] == v["kappa_used"] else "n/a"}</td>'
+                  f'<td class="num">{pct(v["frac_used_r1"]) if v["frac_used_r1"] is not None else "—"} / {pct(v["frac_used_r2"]) if v["frac_used_r2"] is not None else "—"}</td>'
+                  f'<td class="num">{f2(v["pearson_S"]) if v["pearson_S"] is not None else "—"}</td></tr>' for k, v in g4.items()))
+    nv = "".join(f'<tr><td>{h(k)}</td><td class="num">{f2(v["median_S_naive"])}</td><td class="num">{f2((S.get(k.replace("|L", "|L") + "|z") or {}).get("median", float("nan")))}</td><td class="num">{f2(v["median_cos_with_decorrelated"])}</td></tr>'
+                 for k, v in A["naive_vs_decorrelated"].items())
+    q = "".join(f'<tr><td><code>{h(x["pair_id"].split("-")[-1])}</code></td><td class="num">{f2(x["S_z"])}</td><td class="num">{f2(x["S_start"]) if x["S_start"] is not None else "—"}</td>'
+                f'<td class="num">{f2(x["S_answer"]) if x["S_answer"] is not None else "—"}</td><td class="num">{f2(x["S_full"]) if x["S_full"] is not None else "—"}</td>'
+                f'<td class="small">{h(", ".join(f"{c} {v}" for c, v in x["colour_mass_clean_top4"]))}</td><td class="small">{h(", ".join(f"{c} {v}" for c, v in x["colour_mass_edit_top4"]))}</td><td>{h(x["state"])}</td></tr>'
+                for x in A["qualitative"])
+    pr = "".join(f'<tr><td>{h(k)}</td><td class="small">{h(json.dumps(v, default=float)[:160])}</td></tr>' for k, v in A["predictions"].items())
+    G1 = gates["G1_fidelity"]
+    html_ = f"""
+<section aria-labelledby="h-003">
+  <div class="eyebrow">Experiment 003 · dev · {A["n_pairs"]} gated brew pairs ({A["n_tables"]} tables) · SEC regime · design: docs/design_specs/003_labels.md</div>
+  <h2 id="h-003">Experiment 003: is the intermediate itself used? Reader-free labels</h2>
+  <p>A whole-cell patch moves start, intermediate and answer together. Here each content gets its own direction:
+  a least-squares fit of the activations on start, intermediate and answer together (so each direction has the other
+  two regressed out), fitted on other tables only. The partner's coordinate along that one direction is swapped into the
+  member's run, and the share S of the answer gap it moves is measured against norm-matched random directions. No reader
+  is involved anywhere.</p>
+  <p class="small muted">Gates: fidelity {G1["n_fail"]} failures of {G1["n_edit_rows"]} edits (ρ {G1["rho_range"][0]:.5f}–{G1["rho_range"][1]:.5f}); engine checks {"pass" if gates["G2"] else "FAIL"};
+  direction validity (held-out AUC, “:” L42) {f2(gates["G3"]["median_auc_colon_L42"])}; label reliability for z at “:” L42–44 {"passes" if gates["G4_passes_z_colon_L42_44"] else "does NOT pass: labels are descriptive only"}.</p>
+  <h3>Which content carries the leverage? Median share S per content direction, against the whole cell</h3>
+  <div class="chart" id="ex3-bars"></div>
+  <h3>Labels</h3>
+  <div class="scroll"><table class="tbl">{lt}</table></div>
+  <p class="small muted">used = S ≥ τ (0.10) and above the norm-matched random-direction null (BH per pair). used + necessary = also, clamping that one direction to its fitting-set mean in both runs shrinks the gap more than 95% of random clamps. not needed = the whole cell carries |S| &lt; 0.05 while z is decodable there. Damage edits are unresolved.</p>
+  <h3>Label reliability: two disjoint fitting subsets (gate G4)</h3>
+  <div class="scroll"><table class="tbl">{rt}</table></div>
+  <details class="more"><summary>Decorrelated vs naive (centroid-difference) z direction</summary><div class="scroll"><table class="tbl"><tr><th>Cell</th><th class="num">median S, naive</th><th class="num">median S, decorrelated</th><th class="num">cos(naive, decorrelated)</th></tr>{nv}</table></div></details>
+  <h3>Qualitative: pairs at “:” L44 (largest, median and smallest z-swap S)</h3>
+  <div class="scroll"><table class="tbl"><tr><th>Pair</th><th class="num">S_z</th><th class="num">S_start</th><th class="num">S_answer</th><th class="num">S_full</th><th>colour mass, clean (top 4)</th><th>after the z swap</th><th>label</th></tr>{q}</table></div>
+  <details class="more"><summary>Predictions (L1–L8) and values</summary><div class="scroll"><table class="tbl">{pr}</table></div></details>
+</section>
+"""
+    return html_, {"chart": chart}
+
+
 STATUS_HTML = """
 <section aria-labelledby="h-status">
   <h2 id="h-status">Status</h2>
@@ -595,6 +674,7 @@ STATUS_HTML = """
       <li>Readers: logit lens, J_NP, J_CB, R_CB, Oracle Lens (L40), NLA (L42), plus their positive controls.</li>
       <li>Experiment 001 (dev): gate, smoke, run, probes, reader snapshot, analysis, figures, report (audited).</li>
       <li>Experiment 002 (dev): role-aware claim scoring of every snapshot readout (Gemini 3.8 Flash judge, validated), lens closed-set scores, prompt-only baseline.</li>
+      <li>Experiment 003 (dev): reader-free causal labels (decorrelated content directions, 1-D swaps, necessity). Gates G1–G3 pass; label reliability (G4) fails, so the labels are descriptive.</li>
     </ul></div>
     <div class="no"><h3>Not working, parked or dropped</h3><ul class="plain">
       <li><b>vLLM acceleration:</b> the engine won't start on this GPU (sm_120 check inside FlashInfer). Parked; the HF route works.</li>
@@ -606,7 +686,7 @@ STATUS_HTML = """
     <div class="todo"><h3>Waiting on you, then next</h3><ul class="plain">
       <li>Review report 001 and the AMENDMENT_02 proposals (above).</li>
       <li>HF dataset name for the raw outputs; paper PDFs in a public repo; merge to main.</li>
-      <li>Then the label experiment (now 003): is z at “:” L40–44 causally used? 1-D swaps along reader-free mean-difference directions, clamp-to-mean necessity tests, random-direction nulls. Shown to you before any run.</li>
+      <li>Next (your choice, report 003 §7): subspace labels (the whole z subspace), DAS as a second label method, more fitting data to pass the reliability gate, or a descriptive reader-vs-label comparison (004).</li>
     </ul></div>
   </div>
 </section>
@@ -626,6 +706,7 @@ def main():
     pc = rs["vector_lenses_positive_control"]
     exp_html, exp_data = exp001(tok)
     exp2_html, exp2_data = exp002()
+    exp3_html, exp3_data = exp003()
     data = {
         "prompt_tokens": [[i, t, r.regions.get(i, "")] for i, t in enumerate(r.decoded)],
         "item": {"name": it["name"], "start": it["start"], "z": it["intermediates"][0], "answer": it["answer"],
@@ -663,13 +744,14 @@ def main():
                     for a in tm["chain_gate_attempts"]],
         "exp001": exp_data,
         "exp002": exp2_data,
+        "exp003": exp3_data,
     }
     t = open(os.path.join(HERE, "template.html")).read()
     for key in ("__EXP001__", "__STATUS__", "__DATA__"):
         assert t.count(key) == 1, key
     # Lens readouts include byte-fragment tokens that decode to U+FFFD; write it as an escape so the page has no raw one.
     js = json.dumps(data, ensure_ascii=False).replace("</", "<\\/").replace("\ufffd", "\\ufffd")
-    page = (t.replace("__EXP001__", (exp_html + exp2_html).replace("\ufffd", "&#xFFFD;")).replace("__STATUS__", STATUS_HTML)
+    page = (t.replace("__EXP001__", (exp_html + exp2_html + exp3_html).replace("\ufffd", "&#xFFFD;")).replace("__STATUS__", STATUS_HTML)
              .replace("__DATA__", js))
     assert "\ufffd" not in page
     out = R.out_dir("outputs", "000_setup", "results_page") / "causal_concordance.html"
