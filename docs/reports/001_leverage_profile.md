@@ -108,15 +108,15 @@ Fractions are over pairs:
 
 | Cell | L40 | L42 | L44 | L56 | L60 |
 |---|---|---|---|---|---|
-| `:` after `Answer` | 0.35 [0.26, 0.34] | 0.48 [0.40, 0.48] | **0.50 [0.42, 0.50]** | 0.70 [0.67, 0.73] | **0.75 [0.71, 0.76]** |
+| `:` after `Answer` | 0.35 [0.26, 0.34] | 0.48 [0.40, 0.48] | **0.50 [0.42, 0.50]** | 0.70 [0.67, 0.73] | **0.74 [0.70, 0.76]** |
 | newline after `assistant` | 0.29 | 0.29 | 0.32 | 0.14 | 0.13 |
-| `\n\n` after `</think>` | 0.00 | 0.02 | 0.03 | 0.06 | 0.04 |
-| start-colour token | **0.23 [0.22, 0.33]** | 0.15 | 0.12 [0.11, 0.19] | 0.00 | 0.00 |
+| `\n\n` after `</think>` | 0.00 | 0.01 | 0.03 | 0.06 | 0.04 |
+| start-colour token | **0.23 [0.21, 0.33]** | 0.15 | 0.12 [0.11, 0.19] | 0.00 | 0.00 |
 | last question token `?` | 0.03 | 0.07 | 0.09 [0.06, 0.11] | 0.05 | 0.04 |
 | every other start/question token, every stir token | 0.00 | 0.00 | 0.00 | 0.00 | 0.00 |
 
 - **The `:` cell at L42–44 carries about half the gap in every pair:** 100% toward, 0% negligible, 0% away. Its share
-  rises with depth to 0.75 by L60.
+  rises with depth to 0.74 by L60.
 - **The start-colour token still carries about a quarter of the gap at L40.** It falls to 0 by L56. The colour is read
   from its own position well into the middle layers.
 - **The newline after `assistant` carries about 0.3 at L40–44.** The `\n\n` after `</think>` carries almost nothing,
@@ -175,7 +175,8 @@ damage into "intermediate / colour answers" and "non-colour mass", and add top-1
 ![chain profile](../../results/001_leverage_profile/figures/profile_chain.png)
 
 - **At L40–44 no single question-span cell carries the answer.**
-  - Final `\n\n` cell: S = 0.001 [−0.003, 0.010]; 96–100% negligible.
+  - Final `\n\n` cell: S ≈ 0.001 at each of L40, L42 and L44 (widest interval, L44: [−0.003, 0.010]); 96–100%
+    negligible.
   - Every other question-span cell is about 0.
 - **At L56–60 the final cell carries 0.66–0.69** ([0.54, 0.72] and [0.51, 0.74]), with the newline after `assistant`
   at 0.28 (L56).
@@ -210,6 +211,9 @@ Example, `0107` (green → black, answer gold):
 | original | 0.55 | 0.04 | — |
 | substituted | 0.62 | — | 0.05 |
 
+(Next-token probabilities of the lower-case tokens; "—" = not in the top 5. On the 12-colour answer distribution, green
+falls 0.057 → 0.001 and black rises 0.0004 → 0.062.)
+
 So the answer is insensitive to the substitution, but its tail is not: the model's output distribution carries a
 trace of which colours are in the table.
 
@@ -223,10 +227,10 @@ Caveat: the 90.7% behavioural figure sits just above the 90% line (Q12). That ma
 |---|---|---|---|---|---|
 | z (intermediate) | **0.77** | **0.75** | 0.68 | 0.81 | 0.81 |
 | start | 0.81 | 0.74 | 0.53 | 0.77 | 0.85 |
-| answer | **0.17** | **0.18** | **0.83** | 0.19 | 0.15 |
+| answer | **0.17** | **0.18** | **0.83** | 0.19 | 0.14 |
 
 - **z and start are strongly decodable at every emission cell at L40–44** (BH-significant, selectivity 0.61–0.77).
-- **The answer is barely decodable at L40–44:** balanced accuracy 0.15–0.26, and only 3 of the 9 cell × layer
+- **The answer is barely decodable at L40–44:** balanced accuracy 0.14–0.26, and only 3 of the 9 cell × layer
   combinations pass the selectivity rule, all weakly (selectivity 0.11–0.16). It becomes strongly decodable at L56/60
   (0.83–0.89).
 - So at the verbalizers' layers the emission cells hold the start and the intermediate but not yet the answer. That is
@@ -287,8 +291,9 @@ by side (the design's bridge condition holds).
 
 | Reader (real arm) | z | start | answer | an off-path candidate | Same reader, shuffled arm (z / off-path) |
 |---|---|---|---|---|---|
-| Any lens, L20–48 | **0** | 0 | 0 | 0 | 0 / 0 |
+| Any lens, L20–48 | **0** | 0 | 0 | 0–0.1 (J_NP cosine L36: “Green” in 1 table) | 0 / 0 |
 | Any lens, L52 | 0 | 0 | 0.4–0.9 | 0 | |
+| Any lens, L56 | 0–0.1 | 0 | **1.0** | 0.1–0.2 | |
 | Any lens, L60 | 0.2–0.7 | 0–0.1 | **1.0** | 0–0.5 | |
 | Oracle, 1 sample, L20–44 | 0.2–0.7 | 0.2–0.4 | 0–0.2 | 0.3–0.5 | |
 | Oracle, 1 sample, L52–60 | 0.5–0.6 | 0.1 | **1.0** | 0.3–0.5 | |
@@ -302,6 +307,9 @@ by side (the design's bridge condition holds).
   - No lens names any colour in its top 10; the J lenses show task-structure tokens instead ("second", "again",
     "next", "final"; 第二次 "second time", 再次 "again").
   - The lenses name the answer from L52 and z only at L60, where z is the model's runner-up output.
+- **One lens colour at L20–48:** J_NP cosine at L36 lists “Green” for table 0015 (an off-path candidate there) and
+  for table 0009's partner (its answer). The same capitalised token at the same lens and layer in two unrelated
+  tables looks like a lens-level token, not table content (n = 2). At L40–44 no lens names a colour.
 - **Off-path candidates are named about as often with a shuffled activation as with the real one** (Oracle 0.55 vs
   0.60; NLA 0.30–0.45 vs 0.30–0.63). The verbalizers' off-path mentions are not tied to this activation.
 - **No reader tracks the substitution.**
@@ -372,7 +380,7 @@ only. No reader result here enters any decision.
 | Q11 | Damage-dominated emission patches in < 10% of pairs | 75% | **False** (46–67% at `:`; see §4 on what the flag catches) |
 | Q12 | Substitution behaviourally negligible in ≥ 90% | 70% | **True, narrowly** (90.7%) |
 | Q13 | Transplants negligible in ≥ 90% at every layer | 75% | **True** (≥ 97.7% per cell × layer) |
-| Q14 | `:` median at L56 and L60 > L44 | 70% | **True** (0.70, 0.75 > 0.50) |
+| Q14 | `:` median at L56 and L60 > L44 | 70% | **True** (0.70, 0.74 > 0.50) |
 
 ## 11. Qualitative sample (seed 20261003; full record in `analysis/qualitative.json`)
 
@@ -446,5 +454,11 @@ Proposed for AMENDMENT_02 (before any test-split label):
   before running.
 - **The snapshot's render dictionary** was written without its loop: UnboundLocalError before any reader ran.
 - **A concurrent session** pushed b71d1df (park guard, the T(a) tag) while 001 ran.
+- **Rounding slips in this report**, found while generating the results page from the same JSON (fixed here): `:` L60
+  was written 0.75 [0.71, 0.76] (data 0.745 [0.705, 0.764] → 0.74 [0.70, 0.76]; also in §4 text and Q14);
+  `</think>` L42 0.02 (0.0145 → 0.01); start-token L40 interval [0.22, 0.33] (0.215 → [0.21, 0.33]); answer probe
+  at `</think>` L42 0.15 (0.1447 → 0.14; §7 range now 0.14–0.26). No conclusion changes. The chain L40–44 interval
+  was L44's, unlabelled; now labelled. The page now draws every number from the JSON with round-half-up.
+  The §8 row "Any lens, L20–48" said 0 for off-path candidates; it is 0–0.1 (one J_NP cosine readout at L36).
   - The run finished on 647dcb5 without the tag; the analysis back-fills it from the bank (f445816).
   - The push from this session was rejected and rebased, not forced.

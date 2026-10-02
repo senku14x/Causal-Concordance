@@ -8,8 +8,8 @@ Guide for any agent or collaborator working in this repo. Reading only this file
 2. **STATUS.md**: where things stand, what works, open questions.
 3. **docs/context/SPEC.md** + **docs/context/AMENDMENT_01.md**: the project spec and every decision that overrides it
    (the amendment wins where they disagree; its §6 lists each conflict by spec line).
-4. The latest **docs/design_specs/NNN_*.md** and **docs/reports/NNN_*.md** (currently: design 001 v3, approved,
-   gate + smoke run; report 000 = the reading report).
+4. The latest **docs/design_specs/NNN_*.md** and **docs/reports/NNN_*.md** (currently: design 001 v3 + A1, run in
+   full on dev; report 001 = its results, awaiting PI review; report 000 = the reading report).
 
 Supporting: `docs/context/READING_LIST.md`, `docs/context/reading_notes.md` (cited notes from the reading pass),
 `docs/papers/INDEX.md`.
@@ -108,8 +108,10 @@ without the PI's say-so.
 
 ## Where things stand
 
-See **STATUS.md** (block 000 done: environment, hashes, reader smoke tests, shared code + 74 tests at `647dcb5`, regime
-check; design 001 v3 approved, its `gate` and `smoke` stages run on dev, `run` in progress; no label computed yet).
+See **STATUS.md** (block 000 done; 78 tests; design 001 v3 + A1 run in full on dev and reported in
+`docs/reports/001_leverage_profile.md`, awaiting PI review; no label, no reader score and no test-split measurement yet).
+Results page (private artifact, built by `scripts/000_setup/results_page/make_page.py` from committed JSON only):
+https://claude.ai/artifact/RMRX8R4iFnysbnHaNWTBeC
 
 ## Pitfalls (read before writing code)
 
@@ -165,3 +167,5 @@ check; design 001 v3 approved, its `gate` and `smoke` stages run on dev, `run` i
 | 10-02 | Brew split rounded odd z-strata at random (51/49 instead of 50/50) | alternating rounding; caught by test_splits before any use |
 | 10-02 | 001 noise-floor helper drew a different random direction for the multi-token-spelling forwards of one perturbation | one direction per draw, shared by every forward; caught in review before any run |
 | 10-02 | 001 snapshot built its render dict as one literal instead of a loop over the 10 tables (UnboundLocalError before any reader ran) | loop; rerun |
+| 10-02 | The results-page template was truncated to its CSS by a later cleanup rewrite, and the broken page was what got published (no header, sections or first half of the script) | template rebuilt in full; the generator asserts each placeholder occurs once; the page is checked in jsdom (no script errors, every control clicked) before publishing |
+| 10-02 | Report 001 rounding slips: `:` L60 0.75 [0.71, 0.76] (data 0.745 [0.705, 0.764]), `</think>` L42 0.02 (0.0145), start L40 CI [0.22, …] (0.215), answer probe `</think>` L42 0.15 (0.1447); §8 "any lens L20–48: 0" missed one J_NP cosine "Green" at L36 | found by regenerating the numbers from JSON for the page; report corrected (§14); the page computes every number from JSON with round-half-up |

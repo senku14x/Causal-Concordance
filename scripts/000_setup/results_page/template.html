@@ -3,7 +3,7 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@100..125,500..800&family=JetBrains+Mono:wght@400;600&family=Source+Sans+3:ital,wght@0,400;0,600;1,400&display=swap">
 <style>
-/* Layout: one report column (≈72rem) — summary and "what to look for" first, then the evidence (prompt, readers,
+/* Layout: one report column (≈72rem) — experiment results first, then the block-000 evidence (prompt, readers,
    causal checks, WSB comparison), then status and decisions. Lab-notebook register: cool paper, indigo ink, real
    swatches for the 12 brew colours. */
 :root {
@@ -48,8 +48,6 @@ section { display: grid; gap: 16px; }
 code, .mono { font-family: var(--f-mono); font-size: 0.86em; }
 a { color: var(--accent); }
 .rule { border: 0; border-top: 1px solid var(--rule); margin: 0; }
-
-/* header */
 header { display: grid; gap: 18px; }
 .motto { font-family: var(--f-display); font-stretch: 118%; font-weight: 800; font-size: clamp(1.6rem, 4.2vw, 2.6rem); line-height: 1.08; color: var(--accent); }
 .pills { display: flex; flex-wrap: wrap; gap: 8px; }
@@ -61,17 +59,12 @@ header { display: grid; gap: 18px; }
 .three { display: grid; grid-template-columns: repeat(auto-fit, minmax(16rem, 1fr)); gap: 14px; }
 .three > div { background: var(--surface); border: 1px solid var(--rule); border-radius: 10px; padding: 14px 16px; display: grid; gap: 6px; align-content: start; }
 .three b { font-family: var(--f-display); font-stretch: 110%; }
-
-/* look-for list */
-.look { display: grid; gap: 10px; counter-reset: q; }
-.look li { list-style: none; background: var(--surface); border: 1px solid var(--rule); border-radius: 10px; padding: 12px 16px; display: grid; grid-template-columns: 2rem 1fr auto; gap: 4px 12px; align-items: start; }
+.look { display: grid; gap: 10px; counter-reset: q; margin: 0; padding: 0; }
+.look li { list-style: none; background: var(--surface); border: 1px solid var(--rule); border-radius: 10px; padding: 12px 16px; display: grid; grid-template-columns: 2rem 1fr; gap: 4px 12px; align-items: start; }
 .look li::before { counter-increment: q; content: counter(q); font-family: var(--f-display); font-weight: 800; font-size: 1.3rem; color: var(--accent); grid-row: span 2; }
 .look .q { font-weight: 600; }
-.look .a { grid-column: 2 / 4; color: var(--muted); }
-.look ul { margin: 0; padding: 0; display: grid; gap: 10px; }
+.look .a { grid-column: 2 / 3; color: var(--muted); }
 .cols2 { display: grid; grid-template-columns: repeat(auto-fit, minmax(22rem, 1fr)); gap: 22px; align-items: start; }
-
-/* prompt */
 .prompt { background: var(--surface); border: 1px solid var(--rule); border-radius: 10px; padding: 14px 16px; font-family: var(--f-mono); font-size: 0.8rem; line-height: 1.7; white-space: pre-wrap; word-break: break-word; overflow-x: auto; }
 .prompt span[data-r] { border-radius: 3px; }
 .prompt span[data-r="start"] { background: var(--hl-start); }
@@ -81,8 +74,6 @@ header { display: grid; gap: 18px; }
 .prompt span.diff { outline: 2px solid var(--warn); font-weight: 600; }
 .legend { display: flex; flex-wrap: wrap; gap: 14px; font-size: var(--step--1); color: var(--muted); }
 .legend i { display: inline-block; width: 0.9em; height: 0.9em; border-radius: 3px; vertical-align: -0.1em; margin-right: 6px; }
-
-/* tabs */
 .tabs { display: flex; flex-wrap: wrap; gap: 6px; border-bottom: 1px solid var(--rule); }
 .tabs button, .seg button { font: inherit; font-weight: 600; font-size: 0.92rem; color: var(--muted); background: none; border: 0; padding: 8px 12px; cursor: pointer; border-bottom: 2px solid transparent; margin-bottom: -1px; }
 .tabs button[aria-selected="true"] { color: var(--accent); border-bottom-color: var(--accent); }
@@ -91,8 +82,6 @@ header { display: grid; gap: 18px; }
 .seg button { border: 1px solid var(--rule); border-radius: 999px; padding: 4px 12px; margin: 0; background: var(--surface); }
 .seg button[aria-pressed="true"] { background: var(--accent); color: var(--surface); border-color: var(--accent); }
 .panel { display: grid; gap: 14px; padding-top: 6px; }
-
-/* token readouts */
 .tbl { width: 100%; border-collapse: collapse; font-size: 0.9rem; }
 .tbl th, .tbl td { text-align: left; padding: 7px 10px; border-bottom: 1px solid var(--rule); vertical-align: top; }
 .tbl th { font-family: var(--f-mono); font-size: 0.72rem; letter-spacing: 0.06em; text-transform: uppercase; color: var(--muted); font-weight: 600; }
@@ -102,13 +91,6 @@ header { display: grid; gap: 18px; }
 .tok { font-family: var(--f-mono); font-size: 0.76rem; padding: 1px 6px; border-radius: 4px; background: var(--surface-2); color: var(--muted); white-space: pre; }
 .tok.c { color: var(--ink); font-weight: 600; background: var(--surface); border: 1px solid var(--rule); }
 .sw { display: inline-block; width: 0.72em; height: 0.72em; border-radius: 50%; margin-right: 4px; vertical-align: -0.02em; border: 1px solid var(--rule); }
-.role { font-family: var(--f-mono); font-size: 0.66rem; letter-spacing: 0.05em; text-transform: uppercase; padding: 1px 6px; border-radius: 4px; margin-left: 6px; }
-.role.z { background: var(--good-soft); color: var(--good); }
-.role.a { background: var(--surface-2); color: var(--ink); }
-.role.s { background: var(--hl-start); color: var(--ink); }
-.role.o { background: var(--bad-soft); color: var(--bad); }
-
-/* text readouts */
 .arms { display: grid; grid-template-columns: repeat(auto-fit, minmax(19rem, 1fr)); gap: 14px; align-items: start; }
 .arm { background: var(--surface); border: 1px solid var(--rule); border-radius: 10px; padding: 12px 14px; display: grid; gap: 10px; align-content: start; }
 .arm h3 { font-size: 1rem; }
@@ -122,8 +104,232 @@ header { display: grid; gap: 18px; }
 .fve.pos { background: var(--good-soft); color: var(--good); }
 .fve.neg { background: var(--bad-soft); color: var(--bad); }
 details.more summary { cursor: pointer; color: var(--accent); font-weight: 600; font-size: 0.9rem; }
+.grid td, .grid th { text-align: center; padding: 5px 4px; border-bottom: 1px solid var(--rule); }
+.grid th:first-child, .grid td:first-child { text-align: left; padding-left: 10px; white-space: nowrap; }
+.dot { display: inline-block; width: 11px; height: 11px; border-radius: 50%; margin: 0 1px; vertical-align: middle; border: 1px solid var(--rule); }
+.grid .none { color: var(--rule); }
+.grid tr.first td { border-top: 2px solid var(--rule); }
+.chart { background: var(--surface); border: 1px solid var(--rule); border-radius: 10px; padding: 12px 10px 6px; overflow-x: auto; }
+.chart svg { display: block; width: 100%; min-width: 28rem; height: auto; }
+.chart text { fill: var(--muted); font-family: var(--f-mono); font-size: 11px; }
+.chart .lbl { fill: var(--ink); font-family: var(--f-body); font-size: 12.5px; }
+.chart .gridl { stroke: var(--rule); stroke-width: 1; }
+.chart .b-rhut { fill: var(--warn); } .chart .b-sec { fill: var(--accent); } .chart .b-mute { fill: var(--muted); } .chart .b-main { fill: var(--accent); }
+.key { display: flex; gap: 14px; flex-wrap: wrap; font-size: var(--step--1); color: var(--muted); padding: 4px 6px; }
+.key i { display: inline-block; width: 10px; height: 10px; border-radius: 2px; margin-right: 5px; vertical-align: -1px; }
+.status { display: grid; grid-template-columns: repeat(auto-fit, minmax(16rem, 1fr)); gap: 14px; align-items: start; }
+.status > div { background: var(--surface); border: 1px solid var(--rule); border-radius: 10px; padding: 14px 16px; display: grid; gap: 8px; align-content: start; }
+.status > div.ok { border-top: 3px solid var(--good); }
+.status > div.no { border-top: 3px solid var(--bad); }
+.status > div.todo { border-top: 3px solid var(--warn); }
+.status ul, .plain { margin: 0; padding-left: 1.1em; display: grid; gap: 5px; }
+ol.steps { margin: 0; padding-left: 1.3em; display: grid; gap: 6px; }
+dl.gloss { display: grid; grid-template-columns: max-content 1fr; gap: 6px 18px; margin: 0; }
+dl.gloss dt { font-family: var(--f-mono); font-size: 0.86rem; font-weight: 600; }
+dl.gloss dd { margin: 0; color: var(--muted); }
+.fig { background: #fff; border: 1px solid var(--rule); border-radius: 10px; padding: 8px; display: grid; gap: 6px; margin: 0; }
+.fig img { width: 100%; height: auto; display: block; }
+.fig figcaption { font-size: var(--step--1); color: #576274; }
+.findings { display: grid; gap: 10px; margin: 0; padding: 0; list-style: none; }
+.findings li { background: var(--surface); border: 1px solid var(--rule); border-left: 3px solid var(--accent); border-radius: 8px; padding: 10px 14px; }
+.findings li b { font-family: var(--f-display); font-stretch: 108%; }
+.q { font-size: 0.85rem; white-space: pre-wrap; overflow-wrap: anywhere; }
+footer { font-size: var(--step--1); color: var(--muted); display: grid; gap: 4px; }
+@media (max-width: 560px) { dl.gloss { grid-template-columns: 1fr; } }
+@media (prefers-reduced-motion: reduce) { * { transition: none !important; } }
+</style>
 
-/* scan grid */
+<div class="wrap">
+<header>
+  <div class="eyebrow">Causal-Concordance · Qwen3.6-27B · WorkspaceBench · branch setup/000-scaffold</div>
+  <h1>Do interpretability readers report what the model actually uses?</h1>
+  <div class="motto">Agreement is not truth.</div>
+  <p class="lede">Readers can agree because they share a flaw or because they all guess from the prompt. So we judge each
+  reader against a ground truth built with <em>no reader at all</em>: edit the model's internal state at one token and
+  one layer, and measure whether the answer moves.</p>
+  <div class="pills" id="pills"></div>
+</header>
+
+<section aria-labelledby="h-motto">
+  <h2 id="h-motto">The project in three lines</h2>
+  <div class="three">
+    <div><span class="eyebrow">The worry</span><b>Agreement can be shared error</b><span class="muted">The J and R lenses share an estimator, the Oracle and NLA share a training lineage, and every reader can guess from the prompt. Majority vote can't be ground truth.</span></div>
+    <div><span class="eyebrow">The idea</span><b>Readable is not the same as used</b><span class="muted">Content can be decodable at a token without the answer depending on it there. A reader that names it is not hallucinating, and not reporting what drives the answer either.</span></div>
+    <div><span class="eyebrow">The method</span><b>Causal labels, then score the readers</b><span class="muted">Each cell gets a reader-free label: used, decodable but not needed, absent, or unresolved. Then: does each reader name used content, and does it also name content that isn't needed?</span></div>
+  </div>
+</section>
+
+__EXP001__
+
+<section aria-labelledby="h-prompt">
+  <h2 id="h-prompt">Block 000: the test prompt</h2>
+  <p id="prompt-caption"></p>
+  <div class="prompt" id="prompt"></div>
+  <div class="legend">
+    <span><i style="background:var(--hl-start)"></i>start sentence (the coloured token is the only one that differs in the partner)</span>
+    <span><i style="background:var(--hl-stir)"></i>stir sentence (comes before the start colour: a patch here must do nothing)</span>
+    <span><i style="background:var(--hl-q)"></i>question</span>
+    <span><i style="background:var(--hl-emit);outline:1.5px solid var(--good)"></i>answer cells, where readers read</span>
+  </div>
+</section>
+
+<section aria-labelledby="h-readers">
+  <h2 id="h-readers">Block 000: what each reader said about one answer cell</h2>
+  <p class="muted" id="readers-caption"></p>
+  <div class="tabs" role="tablist" id="tabs"></div>
+  <div id="panels"></div>
+</section>
+
+<section aria-labelledby="h-causal">
+  <h2 id="h-causal">Block 000: precision check</h2>
+  <p>Copy the partner prompt's internal state into the member's run at one cell, then see how far the answer margin moves
+  toward the partner's answer. <b>G</b> is the full gap between the two prompts. Five such edits on one gated pair, under
+  two precision setups, checked that the measurement itself is trustworthy.</p>
+  <div class="cols2">
+    <div style="display:grid;gap:8px"><h3>Answer shift per edit (nats)</h3><div class="chart" id="ch-regime"></div></div>
+    <div style="display:grid;gap:8px"><h3>Numerical noise floor</h3><div class="chart" id="ch-noise"></div>
+      <p class="small muted">The biggest margin change from tiny random nudges (1e-4 of the vector's size) to one cell. SEC's floor is about 250× lower, which is why experiment 001 uses SEC for layers ≥ 40.</p></div>
+  </div>
+  <div class="scroll"><table class="tbl" id="tb-regime"></table></div>
+  <h3>Block 000 gate attempts</h3>
+  <p class="small muted">The first candidate pairs tried for the regime check, in bank order. Every attempt is kept, including failures.</p>
+  <div class="scroll"><table class="tbl" id="tb-gate"></table></div>
+</section>
+
+<section aria-labelledby="h-wsb">
+  <h2 id="h-wsb">How this compares to WorkspaceBench</h2>
+  <div class="cols2">
+    <div style="display:grid;gap:8px"><h3>WSB's published brew pass rates</h3><div class="chart" id="ch-wsb"></div>
+      <p class="small muted">Approximate values read off WSB's results chart. An item passes when the intermediate is named in more of 33 cells (3 answer cells × layers 20–60) than the average off-path colour.</p></div>
+    <div style="display:grid;gap:8px"><h3>Why the per-cell view matters</h3>
+      <p>Under WSB's rule, all three token lenses pass item 0000, mostly at layers 52–60, where they name green together
+      with black, the answer. At the last layer the model's own top choices are "black, Black, green, Green", so green
+      there is the runner-up answer. A WSB pass can't tell a held intermediate step from a runner-up answer, and can't
+      say whether the model uses green at that cell. Experiment 001 measures exactly that.</p></div>
+  </div>
+</section>
+
+__STATUS__
+
+<section aria-labelledby="h-gloss">
+  <h2 id="h-gloss">Glossary</h2>
+  <dl class="gloss">
+    <dt>cell</dt><dd>One token position at one layer. Labels and readouts are always per cell.</dd>
+    <dt>layer L</dt><dd>The output of block L, out of 64 (0–63).</dd>
+    <dt>z</dt><dd>The hidden intermediate the model never writes: the colour after the first stir.</dd>
+    <dt>margin m</dt><dd>log P(partner's answer) − log P(this prompt's answer), every token of every accepted spelling scored.</dd>
+    <dt>G</dt><dd>The margin difference between the two prompts of a pair: the whole effect of changing the input.</dd>
+    <dt>share S</dt><dd>How much of G one edit produces. 1 = the full flip, 0 = nothing. It can be negative.</dd>
+    <dt>τ, ε′</dt><dd>Provisional thresholds: "toward" if S ≥ 0.10, "negligible" if |S| &lt; 0.05.</dd>
+    <dt>gate</dt><dd>The model must answer both prompts of a pair reliably, or the pair isn't used.</dd>
+    <dt>RHUT / SEC</dt><dd>Two precision setups. RHUT keeps the running residual in fp32 but multiplies in bf16. SEC runs layers 40–63 fully in fp32.</dd>
+    <dt>J / R / logit lens</dt><dd>Token readers: project a cell's vector onto the vocabulary and list the top 10 tokens.</dd>
+    <dt>Oracle Lens, NLA</dt><dd>Text readers: models fine-tuned to describe an injected activation in words.</dd>
+    <dt>shuffled arm</dt><dd>The same cell taken from a different table and given to the reader, then scored against this table's colours: the chance rate.</dd>
+  </dl>
+</section>
+
+<footer>
+  <hr class="rule">
+  <span>Generated by <code>scripts/000_setup/results_page/make_page.py</code> from <code>results/*/analysis/*.json</code> on branch <code>setup/000-scaffold</code>.</span>
+  <span>Design: <code>docs/design_specs/001_leverage_profile.md</code> · Report: <code>docs/reports/001_leverage_profile.md</code> · Status: <code>STATUS.md</code></span>
+</footer>
+</div>
+
+<script>
+const DATA = __DATA__;
+const SCAN = {
+  layers: [20,24,28,32,36,40,44,48,52,56,60],
+  cells: ["after “assistant”", "after “</think>”", "the “:”"],
+  // one character per cell (after assistant / after </think> / the ":"): "." none, "G" green, "b" black, "g" black + green
+  rows: {
+    "J lens (J_NP, WSB cosine)": ["...","...","...","...","..G",".G.","...","...","bgb","bgb","bgg"],
+    "R lens (R_CB)":             ["...","...","...","...","...","...","...","...","bgb","bgb","bgg"],
+    "logit lens":                ["...","...","...","...","...","...","...","...","bgb","bgb","bgg"]
+  }
+};
+const SW = {black:"#141414",blue:"#2f6fde",brown:"#8b5a2b",gold:"#d4a017",gray:"#8c8c8c",green:"#2e9e4f",orange:"#f07f1a",pink:"#f28db2",purple:"#8a4fbf",red:"#d33a2f",teal:"#1a9e9a",white:"#ffffff"};
+const ZH = {black:"黑",blue:"蓝",brown:"棕褐",gold:"金",gray:"灰",green:"绿",orange:"橙",pink:"粉",purple:"紫",red:"红",teal:"青",white:"白"};
+const IT = DATA.item;
+const esc = s => String(s).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;");
+const role = c => c === IT.z ? "z" : c === IT.answer ? "a" : c === IT.start ? "s" : (IT.candidates.includes(c) ? "o" : "x");
+const roleName = {z:"intermediate", a:"answer", s:"start", o:"off-path", x:"other"};
+function colourOf(t){
+  const w = t.toLowerCase().replace(/[^a-z]/g,"");
+  if (SW[w]) return w;
+  if (w === "grey") return "gray";
+  for (const [c, chars] of Object.entries(ZH)) for (const ch of chars) if (t.includes(ch)) return c;
+  return null;
+}
+const showTok = t => t.replace(/\n/g,"⏎").replace(/\t/g,"⇥").replace(/^ /,"·");
+function tokChips(list){
+  return `<div class="toks">${list.map(t => { const c = colourOf(t);
+    return c ? `<span class="tok c" title="${roleName[role(c)]}"><span class="sw" style="background:${SW[c]}"></span>${esc(showTok(t))}</span>`
+             : `<span class="tok">${esc(showTok(t))}</span>`; }).join("")}</div>`;
+}
+const CW = new RegExp("\\b(" + Object.keys(SW).join("|") + "|grey|yellow)\\b|([" + Object.values(ZH).join("") + "])", "gi");
+function markColours(text){
+  return esc(text).replace(CW, (m, w, zh) => {
+    let c = w ? w.toLowerCase() : null;
+    if (c === "grey") c = "gray";
+    if (!c && zh) c = Object.keys(ZH).find(k => ZH[k].includes(zh));
+    if (c === "yellow") return `<span class="cw" data-r="o" title="not one of the 12 brew colours">${m}</span>`;
+    const r = role(c);
+    return `<span class="cw" data-r="${r}" title="${roleName[r]}">${m}</span>`;
+  });
+}
+function rolesKey(){
+  return `<div class="legend">${[["z",IT.z],["a",IT.answer],["s",IT.start]].map(([r,c]) =>
+    `<span><span class="sw" style="background:${SW[c]}"></span>${c} = ${roleName[r]}</span>`).join("")}
+    <span><span class="cw" data-r="o">red</span> = off-path candidate or a colour not in the problem</span></div>`;
+}
+
+document.getElementById("pills").innerHTML = [
+  ["good","Setup done"],["good","Tests pass"],["good","Experiment 001 complete"],
+  ["warn","001 report awaiting your review"],["warn","SAE deferred"]].map(([k,t]) => `<span class="pill ${k}">${t}</span>`).join("");
+
+(function(){
+  const out = [];
+  for (const [i, t, r] of DATA.prompt_tokens) {
+    const cls = i === 142 ? ' class="diff"' : "";
+    const title = r ? ` title="position ${i} · ${r}"` : ` title="position ${i}"`;
+    out.push(r || i === 142 ? `<span data-r="${r}"${cls}${title}>${esc(t)}</span>` : esc(t));
+  }
+  document.getElementById("prompt").innerHTML = out.join("");
+  const top = DATA.env.top5.slice(0,4).map(([t,lp]) => `<code>${esc(t)}</code> ${Math.exp(lp).toFixed(2)}`).join(", ");
+  document.getElementById("prompt-caption").innerHTML =
+    `WorkspaceBench item <code>${IT.name}</code>: start <b>${IT.start}</b> → after one stir <b>${IT.z}</b> (the hidden step, z) → answer <b>${IT.answer}</b>.
+     Its partner changes one token, “${IT.start}” → “${IT.partner_start}”, giving ${IT.partner_start} → ${IT.partner_z} → ${IT.partner_answer}.
+     The model's next-token probabilities here: ${top}.`;
+})();
+
+document.getElementById("readers-caption").innerHTML =
+  `All readers read the same vector: the model's state at the “:” after “Answer” (position 164) in the prompt above. Colour words are marked by role.`;
+const TABS = [["lenses","Token lenses (L40–44)"],["scan","Layer scan, WSB style"],["oracle","Oracle Lens (L40)"],["nla","NLA (L42)"]];
+const tabsEl = document.getElementById("tabs"), panelsEl = document.getElementById("panels");
+tabsEl.innerHTML = TABS.map(([id,t],i) => `<button role="tab" id="tab-${id}" aria-controls="p-${id}" aria-selected="${i===0}">${t}</button>`).join("");
+panelsEl.innerHTML = TABS.map(([id],i) => `<div class="panel" role="tabpanel" id="p-${id}" aria-labelledby="tab-${id}" ${i?"hidden":""}></div>`).join("");
+tabsEl.addEventListener("click", e => { const b = e.target.closest("button"); if (!b) return;
+  for (const x of tabsEl.querySelectorAll("button")) x.setAttribute("aria-selected", x === b);
+  for (const p of panelsEl.children) p.hidden = p.id !== "p-" + b.id.slice(4); });
+
+const LENS_NAMES = {logit_lens:"Logit lens", J_NP_standard:"J_NP (standard)", J_NP_cosine:"J_NP (WSB cosine)", J_CB_standard:"J_CB (standard)", J_CB_cosine:"J_CB (cosine)", R_CB_standard:"R_CB (standard)", R_CB_cosine:"R_CB (cosine)"};
+function renderLenses(L){
+  const rows = DATA.lenses[L];
+  document.getElementById("lens-table").innerHTML = `<tr><th>Reader</th><th>Top 10 tokens at ${L}</th></tr>` +
+    Object.entries(rows).map(([k,v]) => `<tr><td style="white-space:nowrap">${LENS_NAMES[k]||k}</td><td>${tokChips(v)}</td></tr>`).join("");
+  for (const b of document.querySelectorAll("#lens-seg button")) b.setAttribute("aria-pressed", b.dataset.l === L);
+}
+document.getElementById("p-lenses").innerHTML =
+  `<p>At layers 40–44, <b>no lens names a colour at this cell</b>. The J lenses show task words instead: “second time”, “twice”, “intermediate”, “end point”. Hover a colour token to see its role.</p>
+   <div class="seg" id="lens-seg">${Object.keys(DATA.lenses).map(L => `<button data-l="${L}">${L}</button>`).join("")}</div>
+   <div class="scroll"><table class="tbl" id="lens-table"></table></div>
+   <h3>The same cell at later layers</h3><p class="small muted">The logit lens at L63 is the model's own output, so its top token " black" matches the model's answer: a check that the code works. Colours appear from L56.</p>
+   <div class="scroll"><table class="tbl">${Object.entries(DATA.late).map(([k,v]) => `<tr><td style="white-space:nowrap">${esc(k)}</td><td>${tokChips(v)}</td></tr>`).join("")}</table></div>
+   ${rolesKey()}`;
+document.getElementById("lens-seg").addEventListener("click", e => { const b = e.target.closest("button"); if (b) renderLenses(b.dataset.l); });
+renderLenses("L42");
+
 (function(){
   const dot = c => `<span class="dot" style="background:${SW[c]}" title="${c} (${roleName[role(c)]})"></span>`;
   const head = `<tr><th>Reader · cell</th>${SCAN.layers.map(l => `<th>L${l}</th>`).join("")}</tr>`;
@@ -133,13 +339,11 @@ details.more summary { cursor: pointer; color: var(--accent); font-weight: 600; 
       const dots = ch === "G" ? dot("green") : ch === "b" ? dot("black") : ch === "g" ? dot("black") + dot("green") : "";
       return dots ? `<td>${dots}</td>` : `<td class="none">·</td>`; }).join("")}</tr>`).join("")).join("");
   document.getElementById("p-scan").innerHTML =
-    `<p>The three answer cells × WSB's layers 20–60, top 10 tokens each. Colours were matched by word instead of WSB's judge.
-     ${dot("green")} green (the hidden step) · ${dot("black")} black (the answer). No off-path colour (red, purple) appears anywhere,
-     so all three lenses pass this item under WSB's rule. Mostly that happens at L52–60, where green sits next to black.</p>
+    `<p>The three answer cells × WSB's layers 20–60, top 10 tokens each, colours matched by word. ${dot("green")} green (the hidden step) · ${dot("black")} black (the answer).
+     No off-path colour (red, purple) appears anywhere, so all three lenses pass this item under WSB's rule, mostly at L52–60, where green sits next to black.</p>
      <div class="scroll"><table class="tbl grid">${head}${rows}</table></div>`;
 })();
 
-/* text readers */
 function armsHtml(kind){
   const titles = {activation:"With this cell's activation", no_activation:"No activation injected", other_cell:"Activation from another cell (“You” in the stir line)"};
   return `<div class="arms">${["activation","no_activation","other_cell"].map(arm => {
@@ -148,22 +352,21 @@ function armsHtml(kind){
       const f = kind === "nla" ? DATA.fve[arm][i] : null;
       const meta = `sample ${i+1}` + (f!=null ? ` · reconstruction FVE <span class="fve ${f>0?"pos":"neg"}">${f.toFixed(2)}</span>` : "");
       const txt = s == null ? "(no explanation parsed)" : s;
-      const shown = i === 0 ? `<div class="sample"><span class="meta">${meta}</span>${markColours(txt)}</div>` : null;
-      return shown || `<details class="more"><summary>sample ${i+1}${f!=null?` · FVE ${f.toFixed(2)}`:""}</summary><div class="sample"><span class="meta">${meta}</span>${markColours(txt)}</div></details>`;
+      return i === 0 ? `<div class="sample"><span class="meta">${meta}</span>${markColours(txt)}</div>`
+        : `<details class="more"><summary>sample ${i+1}${f!=null?` · FVE ${f.toFixed(2)}`:""}</summary><div class="sample"><span class="meta">${meta}</span>${markColours(txt)}</div></details>`;
     }).join("");
     return `<div class="arm"><h3>${titles[arm]}</h3>${items}</div>`; }).join("")}</div>`;
 }
 document.getElementById("p-oracle").innerHTML =
-  `<p>The Oracle Lens is read at layer 40, one of its trained layers. With the activation it names green in all 4 samples, but also
-   red and purple (this item's two off-path candidates) and yellow, which isn't in the problem. Without the activation it writes about Korean companies: the marker ㈜ means “Co., Ltd.”.</p>${rolesKey()}${armsHtml("oracle")}`;
+  `<p>The Oracle Lens reads layer 40, one of its trained layers. With the activation it names green in all 4 samples, but also
+   red and purple (this item's off-path candidates) and yellow, which isn't in the problem. Without the activation it writes about Korean companies (㈜ means “Co., Ltd.”).</p>${rolesKey()}${armsHtml("oracle")}`;
 const fmt = a => a.map(x => x.toFixed(2)).join(", ");
 document.getElementById("p-nla").innerHTML =
-  `<p>The NLA reads layer 42. It gets the task shape right (a two-step lookup, “Answer:” about to be filled) and names green in all 4 samples, never black.
-   It also invents details. The reconstruction score (FVE) checks whether the explanation carries information about <em>this</em> vector:
-   <b>${fmt(DATA.fve.activation)}</b> with its own explanations, negative without the activation (${fmt(DATA.fve.no_activation)}) or with another cell's (${fmt(DATA.fve.other_cell)}).
-   Checks that our NLA code matches the published one: reference rows score ${fmt(DATA.fve.reference.slice(0,4))}…, against 0.745 on the model card. Our layer-42 capture reproduces the NLA's stored vectors at cosine ≥ ${DATA.fve.reextract_min_cos.toFixed(4)}.</p>${rolesKey()}${armsHtml("nla")}`;
+  `<p>The NLA reads layer 42. It gets the task shape right and names green in all 4 samples, never black, and invents details.
+   Reconstruction (FVE): <b>${fmt(DATA.fve.activation)}</b> with its own explanations, negative without the activation (${fmt(DATA.fve.no_activation)}) or with another cell's (${fmt(DATA.fve.other_cell)}).
+   Checks that our NLA code matches the published one: reference rows score ${fmt(DATA.fve.reference.slice(0,4))}…, against 0.745 on the model card, and our L42 capture reproduces the NLA's stored vectors at cosine ≥ ${DATA.fve.reextract_min_cos.toFixed(4)}.
+   Experiment 001 later showed that, across brew prompts, FVE mostly tracks the shared template, not the specific item.</p>${rolesKey()}${armsHtml("nla")}`;
 
-/* regime chart + table */
 (function(){
   const E = DATA.regime.edits;
   const nice = {patch_emit_colon_L44:"Patch “:” cell, L44", patch_emit_colon_L40:"Patch “:” cell, L40", patch_start_token_L40:"Patch start colour, L40",
@@ -177,13 +380,14 @@ document.getElementById("p-nla").innerHTML =
     s += `<rect class="b-rhut" x="${left}" y="${y+2}" width="${Math.max(1, x(e.rhut)-left)}" height="11" rx="2"/>`;
     s += `<rect class="b-sec" x="${left}" y="${y+15}" width="${Math.max(1, x(e.sec)-left)}" height="11" rx="2"/>`;
     s += `<text x="${x(Math.max(e.rhut,e.sec))+6}" y="${y+17}">${e.rhut.toFixed(2)} / ${e.sec.toFixed(2)}</text>`; });
-  s += `</svg><div class="key"><span><i style="background:var(--warn)"></i>RHUT (default)</span><span><i style="background:var(--accent)"></i>SEC (full fp32)</span><span>G ≈ ${DATA.regime.G.sec_true_fp32_from40.toFixed(1)} nats</span></div>`;
+  s += `</svg><div class="key"><span><i style="background:var(--warn)"></i>RHUT</span><span><i style="background:var(--accent)"></i>SEC (full fp32)</span><span>G ≈ ${DATA.regime.G.sec_true_fp32_from40.toFixed(1)} nats</span></div>`;
   document.getElementById("ch-regime").innerHTML = s;
   const G = DATA.regime.G.sec_true_fp32_from40;
   document.getElementById("tb-regime").innerHTML = `<tr><th>Edit</th><th class="num">RHUT Δm</th><th class="num">SEC Δm</th><th class="num">share S (SEC)</th><th class="num">|RHUT − SEC| / G</th></tr>` +
     E.map(e => `<tr><td>${nice[e.name]||e.name}</td><td class="num">${e.rhut.toFixed(3)}</td><td class="num">${e.sec.toFixed(3)}</td><td class="num">${(e.sec/G).toFixed(3)}</td><td class="num">${(Math.abs(e.rhut-e.sec)/G*100).toFixed(1)}%</td></tr>`).join("") +
-    `<tr><td colspan="5" class="small muted">Pair <code>${DATA.regime.pair}</code>: ${DATA.regime.member.start} → ${DATA.regime.member.z} → ${DATA.regime.member.a} vs ${DATA.regime.partner.start} → ${DATA.regime.partner.z} → ${DATA.regime.partner.a}. Max difference ${(DATA.regime.max_frac.rhut_fp32res_from0*100).toFixed(1)}% of G, under the 5% rule.</td></tr>`;
-  // noise floor, log scale
+    `<tr><td colspan="5" class="small muted">Pair <code>${DATA.regime.pair}</code>: ${DATA.regime.member.start} → ${DATA.regime.member.z} → ${DATA.regime.member.a} vs ${DATA.regime.partner.start} → ${DATA.regime.partner.z} → ${DATA.regime.partner.a}. Largest RHUT–SEC difference ${(DATA.regime.max_frac.rhut_fp32res_from0*100).toFixed(1)}% of G.</td></tr>`;
+  document.getElementById("tb-gate").innerHTML = `<tr><th>Pair</th><th>Result</th><th class="num">member correct /10</th><th class="num">partner correct /10</th><th>partner's sampled answers</th></tr>` +
+    DATA.gates.map(g => `<tr><td><code>${esc(g.pair)}</code></td><td><span class="pill ${g.pass?"good":"bad"}">${g.pass?"pass":"fail"}</span></td><td class="num">${g.m ?? "—"}</td><td class="num">${g.p ?? "—"}</td><td class="small">${g.p_samples.length ? g.p_samples.map(esc).join(" · ") : "—"}</td></tr>`).join("");
   const N = [["RHUT (from block 0)", DATA.regime.noise.rhut_fp32res_from0, "b-rhut"], ["RHUT (from block 35)", DATA.regime.noise.rhut_fp32res_from35, "b-rhut"],
              ["Stock bf16", DATA.regime.noise.stock_bf16, "b-mute"], ["SEC (full fp32)", DATA.regime.noise.sec_true_fp32_from40, "b-sec"]];
   const W2 = 520, l2 = 150, r2 = 70, lo = -4, hi = 0, top2 = 14, rh = 28;
@@ -192,14 +396,9 @@ document.getElementById("p-nla").innerHTML =
   for (let p = lo; p <= hi; p++) n += `<line class="gridl" x1="${xl(10**p)}" x2="${xl(10**p)}" y1="${top2-6}" y2="${top2 + N.length*rh}"/><text x="${xl(10**p)}" y="${top2 + N.length*rh + 15}" text-anchor="middle">${p===0?"1":"1e"+p}</text>`;
   N.forEach(([lab, v, cls], i) => { const y = top2 + i*rh;
     n += `<text class="lbl" x="${l2-8}" y="${y+14}" text-anchor="end">${lab}</text><rect class="${cls}" x="${xl(1e-4)}" y="${y+4}" width="${Math.max(2, xl(v)-xl(1e-4))}" height="13" rx="2"/><text x="${xl(v)+6}" y="${y+15}">${v < 0.001 ? v.toExponential(1) : v.toFixed(3)} nats</text>`; });
-  n += `</svg>`;
-  document.getElementById("ch-noise").innerHTML = n;
-  // gate table
-  document.getElementById("tb-gate").innerHTML = `<tr><th>Pair</th><th>Result</th><th class="num">member correct /10</th><th class="num">partner correct /10</th><th>partner's sampled answers</th></tr>` +
-    DATA.gates.map(g => `<tr><td><code>${g.pair}</code></td><td><span class="pill ${g.pass?"good":"bad"}">${g.pass?"pass":"fail"}</span></td><td class="num">${g.m ?? "—"}</td><td class="num">${g.p ?? "—"}</td><td class="small">${g.p_samples.length ? g.p_samples.map(esc).join(" · ") : "—"}</td></tr>`).join("");
+  document.getElementById("ch-noise").innerHTML = n + `</svg>`;
 })();
 
-/* WSB chart (approximate published values) */
 (function(){
   const V = [["J lens",0.86,"b-main"],["R lens",0.76,"b-main"],["Oracle Lens (SFT)",0.73,"b-main"],["Template lens",0.71,"b-main"],["Oracle Lens (RL)",0.70,"b-main"],
              ["NLA (RL, L42)",0.66,"b-main"],["NLA (SFT, L42)",0.50,"b-main"],["Logit lens",0.43,"b-main"],["Tuned lens",0.31,"b-main"],["Patchscopes",0.21,"b-main"],
@@ -211,5 +410,79 @@ document.getElementById("p-nla").innerHTML =
   V.forEach(([lab, v, cls], i) => { const y = top + i*rh;
     s += `<text class="lbl" x="${l-8}" y="${y+14}" text-anchor="end">${lab}</text><rect class="${cls}" x="${l}" y="${y+4}" width="${x(v)-l}" height="13" rx="2"/><text x="${x(v)+5}" y="${y+15}">≈${v.toFixed(2)}</text>`; });
   document.getElementById("ch-wsb").innerHTML = s + `</svg>`;
+})();
+
+/* ---------- experiment 001: reader naming grid + qualitative table browser ---------- */
+(function(){
+  const X = DATA.exp001;
+  const READERS = [["logit_lens","Logit lens"],["J_NP_cosine","J_NP (WSB cosine)"],["J_NP_standard","J_NP (standard)"],["J_CB_standard","J_CB"],
+                   ["R_CB_standard","R_CB"],["oracle_wsb","Oracle (WSB, 1 sample)"],["oracle","Oracle (contract, 4 samples)"],["nla","NLA (4 samples)"]];
+  const TARGETS = [["z","z (hidden step)"],["answer","answer"],["start","start colour"],["off","off-path candidate"],["any_colour","any colour"]];
+  const CELLS = [["cell2","“:” after Answer"],["cell1","after </think>"],["cell0","after assistant"]];
+  let target = "z", cell = "cell2";
+  const tgEl = document.getElementById("ex-target"), ceEl = document.getElementById("ex-cell");
+  tgEl.innerHTML = TARGETS.map(([k,t]) => `<button data-k="${k}">${t}</button>`).join("");
+  ceEl.innerHTML = CELLS.map(([k,t]) => `<button data-k="${k}">${t}</button>`).join("");
+  function draw(){
+    for (const b of tgEl.children) b.setAttribute("aria-pressed", b.dataset.k === target);
+    for (const b of ceEl.children) b.setAttribute("aria-pressed", b.dataset.k === cell);
+    const head = `<tr><th>Reader</th>${X.grid_layers.map(l => `<th>L${l}</th>`).join("")}</tr>`;
+    const rows = READERS.map(([r, name]) => {
+      const byL = (X.naming[r] || {})[cell] || {};
+      return `<tr><td>${name}</td>${X.grid_layers.map(l => {
+        const e = byL[String(l)];
+        if (!e || !e.real) return `<td class="none">·</td>`;
+        const v = e.real[target], sh = e.shuffled ? e.shuffled[target] : null;
+        const a = Math.round(Math.min(1, v) * 60);
+        return `<td style="background:color-mix(in srgb, var(--good) ${a}%, transparent)" title="${name}, L${l}: real ${v.toFixed(2)}${sh!=null?`, shuffled ${sh.toFixed(2)}`:""} (n = ${e.real.n})"><span class="mono">${v.toFixed(2)}</span>${sh!=null?`<br><span class="small muted mono">${sh.toFixed(2)}</span>`:""}</td>`;
+      }).join("")}</tr>`; }).join("");
+    document.getElementById("ex-grid").innerHTML = head + rows;
+  }
+  tgEl.addEventListener("click", e => { const b = e.target.closest("button"); if (b) { target = b.dataset.k; draw(); } });
+  ceEl.addEventListener("click", e => { const b = e.target.closest("button"); if (b) { cell = b.dataset.k; draw(); } });
+  draw();
+
+  const tEl = document.getElementById("ex-tables"), bEl = document.getElementById("ex-browser");
+  tEl.innerHTML = X.tables.map((t,i) => `<button data-i="${i}">${t.item.slice(-4)}</button>`).join("");
+  function roleOf(T, c){ return c === T.z ? "z" : c === T.answer ? "a" : c === T.start ? "s" : (T.candidates.includes(c) ? "o" : "x"); }
+  function marked(T, text){
+    return esc(text).replace(CW, (m, w, zh) => {
+      let c = w ? w.toLowerCase() : null;
+      if (c === "grey") c = "gray";
+      if (!c && zh) c = Object.keys(ZH).find(k => ZH[k].includes(zh));
+      if (c === "yellow") return `<span class="cw" data-r="o" title="not one of the 12 brew colours">${m}</span>`;
+      const r = roleOf(T, c);
+      return `<span class="cw" data-r="${r}" title="${roleName[r]}">${m}</span>`; });
+  }
+  function chips(T, list){
+    return `<div class="toks">${list.map(t => { const c = colourOf(t);
+      return c ? `<span class="tok c" title="${roleName[roleOf(T,c)]}"><span class="sw" style="background:${SW[c]}"></span>${esc(showTok(t))}</span>`
+               : `<span class="tok">${esc(showTok(t))}</span>`; }).join("")}</div>`;
+  }
+  function show(i){
+    const T = X.tables[i];
+    for (const b of tEl.children) b.setAttribute("aria-pressed", b.dataset.i == i);
+    const sw = c => `<span class="sw" style="background:${SW[c]}"></span>${c}`;
+    const lens = Object.entries(T.lens).map(([L, rows]) => Object.entries(rows).map(([r, toks], j) =>
+      `<tr${j===0?' class="first"':""}><td style="white-space:nowrap">${j===0?`<b>${L}</b> `:""}${esc(r)}</td><td>${chips(T, toks)}</td></tr>`).join("")).join("");
+    const samp = (arr, fve) => arr.map((s, k) => {
+      const txt = Array.isArray(s) ? s[0] : s, f = Array.isArray(s) ? s[1] : null;
+      const meta = `sample ${k+1}` + (f!=null ? ` · FVE <span class="fve ${f>0?"pos":"neg"}">${f.toFixed(2)}</span>` : "");
+      const body = `<div class="sample"><span class="meta">${meta}</span>${txt == null ? "(no explanation parsed)" : marked(T, txt)}</div>`;
+      return k === 0 ? body : `<details class="more"><summary>sample ${k+1}${f!=null?` · FVE ${f.toFixed(2)}`:""}</summary>${body}</details>`; }).join("");
+    bEl.innerHTML = `
+      <p><b>${T.item}</b>: start ${sw(T.start)} → z ${sw(T.z)} → answer ${sw(T.answer)}. Off-path candidates: ${T.candidates.filter(c => ![T.z,T.answer,T.start].includes(c)).map(sw).join(", ") || "none"}.
+      Partner start ${T.partner.start} (→ ${T.partner.z} → ${T.partner.answer}). Substitution: ${T.substitution.c} → ${T.substitution.c2}. Shuffled arm taken from ${T.shuffled_from.slice(-4)}.</p>
+      <div class="legend"><span><span class="cw" data-r="z">z</span> = hidden step</span><span><span class="cw" data-r="o">off-path</span> = candidate not on the path, or a colour not in the problem</span><span>start / answer in plain bold</span></div>
+      <details class="more" open><summary>Lens top-10 at the “:” cell (L40, L44, L52, L60)</summary><div class="scroll"><table class="tbl grid">${lens}</table></div></details>
+      <div class="arms">
+        <div class="arm"><h3>Oracle L40, real activation</h3>${samp(T.oracle)}</div>
+        <div class="arm"><h3>Oracle L40, shuffled (from ${T.shuffled_from.slice(-4)})</h3>${samp(T.oracle_shuffled)}<h3>Oracle L40, no activation</h3>${samp(T.oracle_none)}</div>
+        <div class="arm"><h3>NLA L42, real activation</h3>${samp(T.nla)}</div>
+        <div class="arm"><h3>NLA L42, shuffled</h3>${samp(T.nla_shuffled)}${X.nla_none ? `<h3>NLA, no activation</h3>${samp([X.nla_none])}` : ""}</div>
+      </div>`;
+  }
+  tEl.addEventListener("click", e => { const b = e.target.closest("button"); if (b) show(+b.dataset.i); });
+  show(0);
 })();
 </script>

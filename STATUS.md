@@ -33,7 +33,10 @@ https://claude.ai/artifact/RMRX8R4iFnysbnHaNWTBeC
 - Readers on one smoke cell: logit lens, J_NP, J_CB, R_CB, Oracle Lens (L40), NLA AV + AR (L42). The NLA positive
   controls pass.
 - The 001 pipeline `scripts/001_leverage_profile/leverage_profile.py` (stages gate → smoke → run → probes → snapshot →
-  analysis → figures); gate and smoke have run (below).
+  analysis → figures); every stage has run on dev.
+- The results page, rebuilt 2026-10-02: the published copy had lost its middle (a template truncation, logged in
+  CLAUDE.md). It now carries the 001 results, figures, reader grid and qualitative browser, and is checked in jsdom
+  before publishing.
 
 **Not working / blocked:**
 - **SAE:** deferred by the PI (2026-10-02); no SAE arm until the PI decides what to do with it. Candidate located since:
@@ -49,8 +52,9 @@ https://claude.ai/artifact/RMRX8R4iFnysbnHaNWTBeC
   reader baselines at scale, relational gating — all after 001 and AMENDMENT_02 (design 002).
 
 **Next:**
-1. Finish the 001 `run` stage, then `probes`, `snapshot`, `analysis`, `figures`.
-2. Report 001 (`docs/reports/001_*.md`), with the qualitative section the design requires.
+1. PI review of report 001. Rebuilding the page from JSON turned up rounding slips in the report (`:` L60 is 0.74, not
+   0.75; three more, plus one lens readout at L36). They are corrected and listed in its §14; no conclusion changes.
+2. The PI's decision on report §13 (not-needed reader scoring at L60 only, or also L40–44 via the directional test).
 3. AMENDMENT_02 freezes τ, ε′ and the substitution bound (one dev-only revision allowed), records the 002 critiques
    (briefing §8: used/not-needed exclusivity, permuted-label null, "used, non-1-D" bucket, shared null set, pooled
    k-curve) and the PI decisions still pending (below).
