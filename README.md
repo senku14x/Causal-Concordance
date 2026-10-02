@@ -30,7 +30,7 @@ outputs/                  raw arrays and logs (gitignored)
 
 ```bash
 bash scripts/000_setup/rebuild_env.sh            # pinned stack, source clones, model + lens downloads, hash checks
-python -m pytest scripts/common/tests -q         # 57 tests (the GPU ones load the 27B model once)
+python -m pytest scripts/common/tests -q         # 61 tests (the GPU ones load the 27B model once)
 ```
 
 Requires one GPU with ≥ 80 GB (developed on an RTX PRO 6000 Blackwell, 96 GB).

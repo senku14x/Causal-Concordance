@@ -33,6 +33,22 @@ def sha256(path, buf=1 << 24):
     return h.hexdigest()
 
 
+MODIFIED_ATTR = "_cc_weights_modified_by"
+
+
+def assert_subject_model_intact(model):
+    """Refuse a subject model whose weights a reader changed in place (e.g. the NLA's SFT-adapter merge). Every capture
+    and labelling entry point calls this; readers that modify weights set MODIFIED_ATTR on the model object."""
+    objs = [model]
+    if hasattr(model, "get_base_model"):
+        objs.append(model.get_base_model())
+    for o in objs:
+        why = getattr(o, MODIFIED_ATTR, None)
+        if why:
+            raise RuntimeError(f"subject model weights were modified in place ({why}); reload the model before "
+                               f"capturing or labelling")
+
+
 def make_tokenizer():
     from transformers import AutoTokenizer
     return AutoTokenizer.from_pretrained(MODEL, revision=REV)

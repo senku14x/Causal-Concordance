@@ -73,8 +73,10 @@ def load_lenses(names=("J_NP",), layers=None, device="cuda", verify_sha=True):
 # --------------------------------------------------------------------------------------------- capture
 @torch.no_grad()
 def capture_stock(model, ids, layers, positions):
-    """{layer: [P, d] float32 cpu}: one stock bf16 forward (adapter disabled if one is mounted)."""
+    """{layer: [P, d] float32 cpu}: one stock bf16 forward (adapter disabled if one is mounted). Refuses a model whose
+    weights a reader merged in place (disabling an adapter cannot undo a merge)."""
     import engine as E
+    R.assert_subject_model_intact(model)
     blocks = R.blocks(model)
     rec = E.Recorder(blocks, layers)
     off = model.disable_adapter() if hasattr(model, "disable_adapter") else contextlib.nullcontext()
@@ -193,7 +195,8 @@ def extract_explanation(text):
 
 
 class NLAVerbalizer:
-    """AV of nla-L42. MODIFIES `model` IN PLACE (the SFT LoRA is merged into the base weights): capture first."""
+    """AV of nla-L42. MODIFIES `model` IN PLACE (the SFT LoRA is merged into the base weights) and marks it, so any
+    later capture or labelling call on that object raises. Capture every subject activation first, or use a fresh model."""
 
     def __init__(self, model, tok_av):
         from peft import PeftModel
@@ -201,6 +204,8 @@ class NLAVerbalizer:
         meta = nla_meta()
         self.tok = tok_av
         merged = PeftModel.from_pretrained(model, p["av_sft_lora"]).merge_and_unload()
+        for o in (model, merged):                       # the same object; mark it so no capture/label code reuses it
+            setattr(o, R.MODIFIED_ATTR, "nla-L42 av_sft_lora merged in place by readers.NLAVerbalizer")
         self.model = PeftModel.from_pretrained(merged, p["av_rl_lora"])
         self.model.eval()
         tm = meta["tokens"]

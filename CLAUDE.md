@@ -104,8 +104,8 @@ without the PI's say-so.
 
 ## Where things stand
 
-See **STATUS.md** (block 000 done: environment, hashes, reader smoke tests, shared code + 56 tests, regime check;
-design 001 drafted, awaiting review; nothing scientific run).
+See **STATUS.md** (block 000 done: environment, hashes, reader smoke tests, shared code + 61 tests, regime check;
+design 001 at draft v2 after an external review, awaiting PI review; nothing scientific run).
 
 ## Pitfalls (read before writing code)
 
@@ -125,6 +125,11 @@ design 001 drafted, awaiting review; nothing scientific run).
   the start sentence (all 100 items), so stir cells precede the only token that differs within a pair.
 - **Chain prompts collide across items** with the same steps (15 collisions among the 28 usable items): split by step
   sequence, de-duplicate pairs.
+- **Subject-model integrity:** `readers.NLAVerbalizer` merges the NLA's SFT adapter into the model object IN PLACE and
+  marks it; `Engine`, `SecReplay` and `capture_stock` refuse a marked model. Capture every subject activation before
+  the NLA loads, or load a fresh model. Attach/unload readers (Oracle) leave the model bitwise intact (tested).
+- **Small effects are magnitude tests** (|S| < ε′, AMENDMENT_01 errata E1); a whole-cell patch is a reference, not a
+  ceiling (E2).
 - **Readers:** the NLA adapters are rsLoRA (scaling α/√r); the NLA tokenizer files differ in format from the base but
   render identical AV prompt ids; the Oracle marker is ㈜ at slot 24 of a 56-token carrier for L40. Reader code lives in
   `readers.py` and may import label code, never the reverse (`tests/test_import_boundary.py`).
@@ -146,3 +151,8 @@ design 001 drafted, awaiting review; nothing scientific run).
 | 10-02 | vLLM venv resolved transformers 4.57.6 | override to 5.5.4 (the NLA's training stack) |
 | 10-02 | vLLM-check capture hook indexed the marker during decode steps (IndexError) | length guard |
 | 10-02 | Duplicate paper PDF copied | removed (byte-identical) |
+| 10-02 | "Not needed" and the within-position rule used a signed S < ε′ (S = −0.8 passed) | magnitude test, toward/away/negligible kept separate (errata E1, 001 v2) |
+| 10-02 | 001 v1 asked for PCA to 256 dims from ≈ 184 training rows | no PCA in the primary probe; rank capped at n_train − 1 in any sensitivity check |
+| 10-02 | 001 v1 called a small block-0 patch "engine broken" | block 0 is GatedDeltaNet; only the embedding anchor, self-patch and stir cells are engine checks |
+| 10-02 | 001 v1 made within-position variation a stop rule although the brew contrast is within-cell | demoted to a diagnostic |
+| 10-02 | The NLA's in-place merge was guarded only by a docstring | integrity marker + refusal in every capture/label entry point + tests |

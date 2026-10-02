@@ -30,6 +30,7 @@ class _Stop(Exception):
 class SecReplay:
     def __init__(self, model, l0, device="cuda"):
         import registry
+        registry.assert_subject_model_intact(model)
         self.model, self.l0, self.device = model, int(l0), device
         self.blocks = registry.blocks(model)
         self.text = model.model

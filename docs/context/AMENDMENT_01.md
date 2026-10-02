@@ -33,8 +33,8 @@ fallback is **not built** unless 001 says so.
 
 - **Unit.** One token position at one layer. Span patches are context only and never label anything.
 - **Used.** S ≥ τ **and** S above the norm-matched random-direction null after Benjamini–Hochberg FDR across the family's cells. τ = 0.10 (*provisional*).
-- **Not needed.** Decodable **and** full-cell patch share < ε′, with ε′ < τ; ε′ = 0.05 (*provisional*). Cells in between are **unresolved**.
-- **Illusion flag.** Every cell where the 1-D share exceeds the full-cell share is flagged (Makelov signature).
+- **Not needed.** Decodable **and** full-cell patch share < ε′, with ε′ < τ; ε′ = 0.05 (*provisional*). Cells in between are **unresolved**. *(Read |S| < ε′: see errata E1–E3, §8.)*
+- **Illusion flag.** Every cell where the 1-D share exceeds the full-cell share is flagged (Makelov signature). *(Renamed and reinterpreted: errata E2, §8.)*
 - **Halves (cross-fitting).** By items: brew by table, stratified by z; chain by start number, stratified by z; relational by name set. Cross-fit A→B and B→A so every item is labelled. Label reliability (agreement between labels computed from two disjoint fitting subsets for the same items) ≥ 0.7 before any reader is scored.
 - **Naming.** The label is called **"pair difference used"**. Every used cell gets a four-way confusion of what the direction tracks: {input, z, answer, other}. A decorrelated direction (z varying while input and answer are decorrelated from it) is fitted where the family supports it.
 - **Necessity.** Pooled mean = mean of û·h over the fitting half at that cell; a random-direction ablation control is run alongside; "used + necessary" requires N_i above that control's 95th percentile. INLP/LEACE-style removal later.
@@ -94,3 +94,29 @@ fallback is **not built** unless 001 says so.
 - **Logits in float32.** Margins are computed from float32 logits (`final_norm(h) @ W_U^T` in float32), not from the bf16 lm_head output, whose spacing at |logit| ≈ 20 is 0.125.
 - **Fixed-length comparisons.** Appending tokens changes prompt-position activations (rounding onset at block 3, the first full-attention block; not a causal leak). Every clean/edited comparison is made at one sequence length, and patch sources are captured at the matching length (`margin.score` builds writes per continuation).
 - **Reader activations** are captured from the stock bf16 forward (WSB's `Backend.capture` convention), not from the label regime.
+
+## 8. Errata (2026-10-02, after the external review of commit c13fd43; accepted by the PI)
+
+These correct §3 in place of silently rewriting it.
+
+- **E1. Small effects are magnitude tests.** Wherever §3 says "full-cell patch share < ε′", read **|S| < ε′**. A patch
+  with S = −0.8 moves the answer strongly the other way and is not small. Patch outcomes are kept separate:
+  - toward (S ≥ τ);
+  - away (S ≤ −τ);
+  - negligible (|S| < ε′);
+  - intermediate (otherwise).
+
+  Group-level claims of negligibility use an equivalence test (90% CI of E[S] inside ±ε′, `stats.equivalence`) and
+  are never converted into item-level labels.
+- **E2. The full-cell patch is a reference, not a ceiling.** Two components of the patched difference can cancel. A
+  negligible full-cell share therefore means "the natural pair difference at this cell has negligible influence on
+  this answer", not "nothing at this cell matters". The "Illusion flag" is renamed the **1-D > full-cell flag**. It has
+  two readings, and the flag alone does not choose between them:
+  - a subspace-patching illusion;
+  - cancellation inside the full patch.
+- **E3. Not-needed content that is not the pair's latent** (e.g. brew off-trajectory colours) has no counterfactual
+  answer gap (G = 0). Its criterion is a behavioural plus transplant bound on |Δlog P(a)| and the answer-distribution
+  shift (design 001 §3.3), to be frozen with τ and ε′ in AMENDMENT_02.
+- **E4. Precision for small-effect decisions.** The RHUT regime passed the 5% rule (3.3% of G). Its absolute noise
+  floor (0.05–0.25 nats) is still too coarse for ε′ = 5% decisions. Design 001 v2 uses SEC's true-fp32 replay for all
+  L ≥ 40 (pending PI confirmation, 001 §9.1).

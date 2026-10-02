@@ -1,15 +1,15 @@
 # STATUS — 2026-10-02
 
-**Block 000 (setup) is done. Design 001 is drafted and awaiting PI review. No scientific run has been made, and none may
-start without the PI's go.**
+**Block 000 (setup) is done. Design 001 is at draft v2 (revised after the external review of c13fd43) and awaits PI
+review. No scientific run has been made, and none may start without the PI's go.**
 
 | Block | State | Evidence |
 |---|---|---|
 | a. Repo | done | this file, `CLAUDE.md`, `README.md`, `docs/context/{SPEC,AMENDMENT_01,READING_LIST,reading_notes}.md`, `docs/reports/000_reading_report.md` |
 | b. Environment | done | model loads (16 s, 50.1 GB); one brew forward gives the gated answer; 29/29 hashes match; `scripts/000_setup/rebuild_env.sh` |
 | c. Reader smoke tests | done (5 work; SAE and the optional vLLM path blocked) | table below; `results/000_setup/analysis/reader_smoke.json` |
-| d. Shared code | done, 57/57 tests pass | list below |
-| e. Design 001 | drafted, not run | `docs/design_specs/001_leverage_profile.md` |
+| d. Shared code | done, 61/61 tests pass | list below |
+| e. Design 001 | draft v2, not run | `docs/design_specs/001_leverage_profile.md` (v1 → v2 changes at its bottom) |
 
 ## Environment
 
@@ -51,7 +51,7 @@ Notes (smoke observations on one cell, not findings):
 - The Oracle adapter is the public copy `olens_s3d_rl600`. That it equals WSB's private `s3d.ddp600.s0/iter_000600`
   is assumed from the names and cannot be verified.
 
-## Tests (block d) — 57 passed, 0 failed (`python -m pytest scripts/common/tests -v`, log `outputs/logs/pytest_full.log`)
+## Tests (block d) — 61 passed, 0 failed (`python -m pytest scripts/common/tests -v`, log `outputs/logs/pytest_full.log`)
 
 | Module | Tests | Result |
 |---|---|---|
@@ -64,6 +64,7 @@ Notes (smoke observations on one cell, not findings):
 | stats | cluster-t vs scipy; BH-FDR vs statsmodels (exact); Holm vs statsmodels; cluster bootstrap covers and is wider than the naive interval; ratio of means; empirical p; equivalence | 6/6 |
 | figures | ICLR figure round-trip (pdf + png); distinct reader colours | 2/2 |
 | import boundary | no label module (registry, cells, wsb, partners, margin, engine, gates, stats, regime) reaches readers/jlens/peft/vllm, transitively and including imports inside functions; sanity: readers does reach jlens | 2/2 |
+| model integrity | Engine, SecReplay and capture_stock refuse a model a reader merged weights into (3 cases); Oracle attach → capture (adapter disabled) → unload leaves the subject's activations and logits bitwise unchanged | 4/4 |
 
 ## Regime check (`results/000_setup/analysis/regime_check.json`)
 
@@ -123,14 +124,25 @@ The hand-checked `0000__pink` failed the gate (partner 5/10) and `0001__black` f
 ## Open questions for the PI
 
 1. **SAE**: location and auto-interpretation labels (AMENDMENT_01 §4).
-2. **Regime for 002+**: keep RHUT (rule met) or move layers ≥ 40 to SEC's true-fp32 stack (≈ 250× lower noise floor;
-   fits; faster replay)? Recommendation: SEC for 002. See 001 §9.2.
-3. **Off-trajectory not-needed criterion**: add the off-trajectory edit arm to 001 and accept an effect-bound criterion
-   for content that is not the pair's latent (001 §9.1)?
-4. **HF dataset name** for the private `outputs/` mirror.
-5. **Paper PDFs** in this public repo: committed or local only? (Currently gitignored; `docs/papers/INDEX.md` lists them.)
-6. **P5 prior**: the dated update accepted in AMENDMENT_01 §5 needs your number.
-7. **Push target**: a feature branch is pushed; merge to `main` on your say-so.
+2. **Regime**: design 001 v2 uses SEC's true-fp32 replay for every L ≥ 40 (errata E4). Confirm (001 §9.1).
+3. **Reader snapshot**: include the optional descriptive reader stage in 001, or defer it to 002 (001 §3.7)?
+4. **Chain split**: 50/50 by step-sequence group (≈ 10 groups per side), or 70/30 (001 §9.3)?
+5. **HF dataset name** for the private `outputs/` mirror.
+6. **Paper PDFs** in this public repo: committed or local only? (Currently gitignored; `docs/papers/INDEX.md` lists them.)
+7. **P5 prior**: the dated update accepted in AMENDMENT_01 §5 needs your number.
+8. **Branch**: merge `setup/000-scaffold` to `main` on your say-so.
+
+## External review (2026-10-02)
+
+Every concrete claim was checked against the repo, and all hold. Accepted changes:
+- design 001 v2 (its change list);
+- AMENDMENT_01 errata E1–E4;
+- the model-integrity guard and its tests.
+
+Two corrections to the review discussion:
+- J does name green at L36 (emit_colon) and L40 (emit_think) on the smoke item. "No colours at L40–44" held only for
+  the emit_colon cell.
+- SEC removes the reader-input bridge only for layers ≤ 39 (001 §9.4).
 
 ## Next
 

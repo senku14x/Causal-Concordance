@@ -1,8 +1,9 @@
-# 001 — Leverage profile (brew, chain) and off-trajectory decodability (brew)
+# 001 — Leverage profile (brew, chain) and off-trajectory content (brew)
 
-*Draft, 2026-10-02, for PI review. Not run. Governs: `scripts/001_leverage_profile/` (to be written after approval).
-Context: `docs/context/SPEC.md` + `docs/context/AMENDMENT_01.md`; engine, regime and gates as built and tested in block
-000 (`STATUS.md`).*
+*Draft v2, 2026-10-02, for PI review. Not run. v1 → v2 follows the external review of commit c13fd43 and the PI's
+response (changes listed at the bottom). Governs `scripts/001_leverage_profile/` (to be written after approval).
+Context: `docs/context/SPEC.md` + `docs/context/AMENDMENT_01.md` (including its 2026-10-02 errata); engine, regime and
+gates as built and tested in block 000 (`STATUS.md`).*
 
 ---
 
@@ -11,196 +12,313 @@ Context: `docs/context/SPEC.md` + `docs/context/AMENDMENT_01.md`; engine, regime
 Two premises of the label design are untested and cheap to test before any direction, probe-based label or reader is
 built.
 
-1. **Do single-cell labels vary within a position?** W (SPEC §8 A2) is estimated within family × position. If a
-   single (position, layer) cell's full-cell patch share is high for every pair at the emission cells and ~0
-   everywhere else, then "used" and "not needed" collapse onto position and W cannot be estimated however good the
-   labels are (reading report §5.2).
+1. **Where does a single (position, layer) cell carry leverage over the answer?** Whole-cell patches show where the
+   *natural pair difference* (start → z → answer) has influence, and whether that influence varies between pairs at a
+   position. This is a diagnostic. W can still be estimated if the contrast comes from content inside one cell
+   (premise 2).
 2. **Does brew supply a not-needed class?** AMENDMENT_01 §2 makes brew's off-trajectory colours at the emission cells
-   the candidate *decodable-not-needed* content. That candidate exists only if those colours are decodable there.
+   the candidate decodable-not-needed content. That requires two separate facts:
+   - (a) the content is decodable there;
+   - (b) changing it changes neither the model's answer behaviour nor, when its activation is transplanted, the answer.
 
-The outcome decides whether label construction (002) proceeds on brew + chain, and whether the RHUT tagged-selection
-fallback has to be designed next.
+   Task invariance alone is not (b): the mathematical answer being unchanged does not show the model's computation is.
+
+The pilot's output is a small set of inspectable cases. For each: what changed in the prompt, what is decodable at the
+cell, and what the edit changed downstream.
 
 ## 2. Materials
 
-**Families and splits (fixed here, before any outcome is seen).**
+**Splits** (fixed here, before any outcome is seen).
 
 | Family | Unit of split | Dev / test | Notes |
 |---|---|---|---|
-| Brew | table (each of the 100 items has its own table; partners share their member's table) | 50 / 50 tables, stratified by z (12 colours; seed 20261002) | Items touched by block-000 engineering (`brew-s2-r10d2-0000`, `-0001`) are forced into dev and listed in the manifest |
-| Chain | step sequence (the 28 single-digit-intermediate items form 20 step-sequence groups) | 10 / 10 groups, stratified by depth (d2 / d3) | Grouping is required: items with the same steps produce identical prompts (15 cross-item collisions, e.g. partner `chain-w2-d3p-0408__12` == member `chain-w2-d3p-0422`). Pairs are de-duplicated as unordered {prompt, prompt} sets. `chain-w2-d3p-0408` (touched in block 000) is forced into dev |
+| Brew | table (each of the 100 items has its own table; partners and edits share their item's table) | 50 / 50 tables, stratified by z (seed 20261002) | `brew-s2-r10d2-0000`, `-0001` (touched in block 000) forced into dev |
+| Chain | step sequence (28 usable items in 20 groups) | 10 / 10 groups, stratified by depth | items with the same steps produce identical prompts (15 cross-item collisions), so the split is by group and pairs are de-duplicated as unordered {prompt, prompt}; `chain-w2-d3p-0408` forced into dev |
 
-Halves A/B (AMENDMENT_01 §3) are not needed in 001: nothing is fitted except decodability probes, which use
-item-grouped cross-validation (§3.3).
-
-**Pairs.** Brew: same-table partners (361 candidates over 100 items, all token-aligned, differing only at the
-start-colour token). Chain: same-steps partners (110 candidates over 25 items before de-duplication; all
-token-aligned). Every candidate (dev **and** test) is gated in stage `gate` (greedy correct and ≥ 9/10 at T = 0.8, both
-members), so admission counts and the difficulty distribution (per-item candidate counts, pass rate by z and by table)
-are reported for the whole bank. Only dev pairs enter the measurements below. The gate is label-free and reader-free.
+**Pairs.**
+- **Start pairs (the natural pair difference).**
+  - Brew: same table, different start colour (361 candidates, all token-aligned, differing only at the start-colour
+    token).
+  - Chain: same steps, different start number (110 candidates before de-duplication).
+  - Every candidate (dev and test) is gated in stage `gate` (greedy correct and ≥ 9/10 at T = 0.8, both members), and
+    admission counts plus the difficulty distribution are reported for the whole bank. The gate is label-free and
+    reader-free. Only dev pairs enter the measurements.
+- **Off-trajectory substitution pairs (brew, new in v2).**
+  - For each dev item, one colour c that is in the table but off the trajectory (c ∉ {start, z, answer}) is replaced
+    by a colour c′ absent from the table, everywhere it occurs (its row key and any row outputs).
+  - "orange" is excluded on both sides because its article ("An") would also change.
+  - By construction the trajectory and the answer are unchanged, only colour tokens inside the rule table change, and
+    the renders stay token-aligned.
+  - The edit flips table membership: c goes present → absent, c′ goes absent → present.
+  - Checked on the bank: all 100 items admit at least one such edit (1,138 valid (c, c′) choices). One (c, c′) per
+    item is drawn by seed.
 
 **Cells.**
-- Brew: the 24 WSB pinned positions (stir ×6, start ×6, question ×9, emit_asst, emit_think, emit_colon), re-asserted
-  per render with the pinned tokenizer.
-- Chain: the question span (" What" → final token, 25 positions at T = 78) including the final cell ("\n\n" after
-  `</think>`).
-- Layers 40, 42, 44 (block outputs). Controls add early layers (§3.4).
+- **Brew:** the 24 WSB pinned positions (stir ×6, start ×6, question ×9, emit_asst, emit_think, emit_colon),
+  re-asserted per render with the pinned tokenizer. Substitution pairs add the substituted key token as a reference
+  cell.
+- **Chain:** the question span (" What" → final token; 25 positions at T = 78) including the final cell.
+- **Layers:**
+  - L40, L42, L44 (reader-matched: NLA at 42, Oracle on-contract at 40/44);
+  - L56 and L60, where every lens first names colours on the smoke cell (green and black), so the profile can say
+    whether late-layer naming coincides with late-layer leverage;
+  - early layers for the controls only (§3.5).
 
-**Regime.** RHUT float32-residual from block 0 (`engine.Engine(fp32_from=0)`), float32 logits, every comparison at a
-fixed sequence length with partner sources captured at the matching length (block-000 findings). See §9 for the open
-regime question.
+**Regime (changed in v2).** SEC true-fp32 replay for every block output ≥ 40 (`regime.SecReplay`, l0 = 39, resident:
+bf16 blocks 0–39 + fp32 blocks 40–63 + fp32 W_U ≈ 72 GB; noise floor ≈ 2e-4 nats vs 0.05–0.25 under RHUT). Early-layer
+controls and the embedding anchor run in the bf16 lower stack, which is the stock forward. Every comparison is made at
+one sequence length, with sources captured at the matching length. The gate stage runs on the stock model before the
+fp32 stack is built.
 
 ## 3. Estimands and measurements
 
-Notation: member x (answer a), partner x′ (answer a′), margin m(·) = LSE_{s∈S(a′)} log P(s|·) − LSE_{s∈S(a)} log P(s|·)
-with full-sequence teacher forcing over every token of every accepted spelling (brew: " c", " C"; chain: str(n)).
-G = m(x′) − m(x) (clean, both renders).
+Notation: member x (answer a), partner x′ (answer a′); m(·) = LSE_{S(a′)} log P − LSE_{S(a)} log P, full-sequence teacher
+forcing over every token of every accepted spelling; G = m(x′) − m(x).
 
-### 3.1 Full-cell patch share (primary)
+### 3.1 Whole-cell patch share (start pairs)
 
-For every dev pair, cell c and layer ℓ: run x with its block-ℓ output at position c replaced by x′'s (captured at the
-same sequence length), Δm_c = m(x with patch) − m(x), share S_c = Δm_c / G. Direction m ← p for every pair; the reverse
-direction (p ← m, share = −Δm/G) on a fixed random 30% of dev pairs as a symmetry check.
+For every dev pair, cell c and layer ℓ: replace x's block-ℓ output at c by x′'s; Δm_c; S_c = Δm_c / G. Direction m ← p
+for every pair; p ← m on a fixed random 30% of dev pairs (symmetry check).
 
-Recorded per (pair, cell, layer): Δm, S, the damage readouts (Δlog P(a), Δlog P(a′), top-1 retention at the
-teacher-forced prompt positions after c, off-pair mass at the answer position), and whether the write fired once.
+**Outcomes per (pair, cell, layer)**, kept separate and never merged:
 
-**Within-position variation** (decision rule 1). For each (family, position, layer) with n ≥ 20 dev pairs:
-- the fraction of pairs with S ≥ τ (0.10) and the fraction with S < ε′ (0.05) (provisional AMENDMENT_01 thresholds);
-- the between-pair SD of S with a pair-level cluster bootstrap CI (clusters = items);
-- the numerical noise floor at that cell (§3.5), so that variation is not rounding.
+| Outcome | Rule |
+|---|---|
+| toward | S ≥ τ (0.10) |
+| away | S ≤ −τ |
+| negligible | \|S\| < ε′ (0.05) |
+| intermediate | otherwise |
 
-A (position, layer) **shows within-position variation** if ≥ 10% of its pairs have S ≥ τ **and** ≥ 10% have
-S < ε′, and the between-pair SD exceeds 3× the noise-floor SD.
+Damage readouts (Δlog P(a), Δlog P(a′), top-1 retention after c, off-pair mass) are recorded with every patch.
+
+**Group-level negligibility** per (family, position, layer): TOST equivalence of E[S] within ±ε′ (90% cluster-t
+interval; `stats.equivalence`). A group-level equivalence result is never turned into item-level absence labels.
+
+**Wording rule.** A negligible whole-cell share means "the natural pair difference at this cell has negligible
+influence on this answer". It never means "nothing at this cell matters": two components of the patched difference
+can cancel, so the whole-cell patch is a reference measurement, not a ceiling.
+
+**Within-position variation (diagnostic only).** For each (family, position, layer) with n ≥ 20 dev pairs, report:
+- the fractions toward / negligible / away;
+- the between-pair SD of S with a cluster-bootstrap CI;
+- the SD of S against the noise floor (§3.6).
 
 ### 3.2 Span patches (context only)
 
-The same pairs, with whole regions replaced at all three layers jointly (`SpanWriter`): brew regions start, question,
-emission (3 cells), and start + question + emission; chain: input digits, question span. Reported next to the
-single-cell shares (how much of the region effect a single cell carries). Never used for a label.
+The same pairs, whole regions replaced at L40–60 jointly:
+- brew: start, question, emission, and start + question + emission;
+- chain: input digits, question span.
 
-### 3.3 Decodability (brew emission cells; probes only, no directions used anywhere else)
+Reported next to the single-cell shares; never used for a label.
 
-Activations: stock-model block outputs (the regime of §2) at emit_asst, emit_think, emit_colon × L40/42/44, for every
-dev render (members and all partner candidates; ~230 renders over 50 tables).
+### 3.3 Off-trajectory content (core; new in v2)
 
-Targets:
-- **z** (12-way), and for comparison the **start** colour and the **answer** (12-way each; the {input, z, answer}
-  confusion of AMENDMENT_01 §3).
-- **Off-trajectory presence**, one binary target per colour c: positive = c is in this render's table and off its
-  trajectory; negative = c is absent from the table (2 absent colours per table); renders where c is on the
-  trajectory are excluded for that c. Pooled over the 12 colours by mean AUC.
-- Secondary (descriptive): the answer's successor table[a] when it is off-trajectory (look-ahead content), 12-way.
+**(i) Behaviour.**
+- Gate the substituted prompt (greedy + ≥ 9/10).
+- Measure Δlog P(a) between the clean original and substituted prompts.
+- Measure the total-variation distance between their answer distributions over the 12 colours (LSE over spellings,
+  renormalised over colours).
 
-Probe: L2-regularised logistic regression on standardised features after PCA to 256 dims (fitted inside each training
-fold); C from {1e-3, 1e-2, 1e-1, 1} by inner grouped CV; outer 5-fold CV **grouped by table**.
+The answer is task-invariant, but the model may not be.
 
-Controls:
-- **Control task (Hewitt–Liang).** Each table gets a random label (consistent across its renders), and the identical
-  pipeline is fitted. Selectivity = real − control. Under table-grouped folds the control should sit at chance; a
-  control above chance flags leakage.
-- **Null.** 200 table-level label permutations (preserving the group structure) give the null of the pooled statistic.
+**(ii) Activation transplant.**
+- Full-cell patch of the substituted render's state into the original at the 3 emission cells × 5 layers; p ← m on 30%.
+- Measures: Δlog P(a), TV, damage.
+- Reference: the substituted key token patched at L0. Its effect estimates the behavioural difference carried
+  through that token (localization, not an engine check).
 
-**Decodable** (for decision rule 2): the pooled off-trajectory presence AUC exceeds its permutation null at
-BH-FDR q = 0.05 across the 9 (cell × layer) tests **and** its selectivity is ≥ 0.10, at one or more emission cells ×
-layers. The same rule is reported for z, start and answer.
+There is no G here (a = a′), so no share is formed.
 
-### 3.4 Controls
+**Negligible bound** (provisional; frozen with τ and ε′ in AMENDMENT_02 before any test label):
+- |Δlog P(a)| < ε′ · median(G) over brew dev start pairs;
+- TV < 0.05.
 
-| Control | Cell | Prediction | What failure means |
-|---|---|---|---|
-| Embedding patch (exact anchor) | start-colour token, input embedding | partner logits reproduced bitwise | engine broken |
-| **Positive** (rule 3) | start-colour token (brew) / start digit (chain), block outputs L0, L1, L2, L4 | S ≥ 0.9 at L0 | engine broken (rule 3) if S < 0.5 at L0 on most pairs; 0.5–0.9 is a model fact (block 0 already mixes the colour into later positions) and is reported |
-| **Negative** | brew stir cells (before the start sentence in the bank prompts) | S = 0 bitwise (identical prefix, identical length) | engine broken |
-| Self-patch no-op | emit_colon, each layer | m identical bitwise | engine broken |
+**(iii) Matched decodability.** The edit changes the table membership of c and c′, so the membership probes of §3.4
+are the matched variable. The probe trained on natural dev renders is applied to each substitution pair. Item-level
+test: the score for c′ rises and for c falls, original → substituted (sign test across items).
 
-### 3.5 Noise floor
+Row binding (which colour a given key maps to) is secondary and descriptive: about 25 dev items per key cannot power a
+12-way probe.
 
-On a fixed random 20 dev pairs per family: 8 random perturbations of relative size 1e-4 at emit_colon (brew) / the final
-cell (chain) at L42, giving |Δm| (block 000 measured up to 0.05–0.24 nats on two brew pairs, 0.5–2.7% of G). Reported per
-pair and as a fraction of G. Feeds the within-position variation rule (§3.1) and the regime question (§9).
+### 3.4 Decodability (probes; brew emission cells; no directions used anywhere else)
+
+**Activations:** block outputs at emit_asst, emit_think, emit_colon × L40/42/44/56/60, in the §2 regime, for every dev
+render (members, all partner candidates, substitution renders; ≈ 280 renders over 50 tables).
+
+**Targets:**
+- z, start and answer (12-way each; the {input, z, answer} comparison of AMENDMENT_01 §3);
+- membership of each colour c: present and off-trajectory vs absent from the table (renders with c on the trajectory
+  excluded for that c), pooled over colours by mean AUC;
+- secondary: the answer's successor T(a) when off-trajectory (look-ahead), and row bindings (descriptive).
+
+**Probe:**
+- L2-regularised logistic regression on standardised features, no PCA in the primary pipeline. A PCA sensitivity
+  check, if run, caps the rank at min(64, n_train − 1) inside each training fold.
+- C from {1e-3, 1e-2, 1e-1, 1} by inner grouped CV.
+- Outer StratifiedGroupKFold(5), grouped by table.
+- Every training and test fold must contain both classes (asserted).
+- A target with fewer than 5 tables per class in dev is reported as "insufficient support", never as "not decodable".
+
+**Controls:**
+- Hewitt–Liang control task: a random label per table, consistent across its renders. It should sit at chance under
+  grouped folds; above chance flags leakage.
+- 200 table-level label permutations as the null.
+
+**Decodable:** pooled membership AUC above its permutation null at BH-FDR q = 0.05 across the 15 (cell × layer) tests,
+**and** selectivity ≥ 0.10, at one or more emission cells × layers. The same rule is reported for z, start and answer.
+
+### 3.5 Controls
+
+**Engine checks (implementation invariants).** Any failure means the engine is broken (rule 3).
+
+| Check | Cell | Requirement |
+|---|---|---|
+| Embedding anchor | start-colour token, input embedding | partner logits reproduced bitwise |
+| Self-patch | emit_colon, each layer | m identical bitwise |
+| Stir cells | brew stir positions (before the only differing token in all 100 items) | patch is a bitwise no-op |
+
+**Localization results (reported, never alarms).** Start-token block-output patches at L0, L1, L2, L4. Block 0 is a
+GatedDeltaNet layer whose recurrent state already carries the start colour into later positions within the block, so
+the share there can be well below 1. Chain uses the start digit.
+
+### 3.6 Noise floor
+
+On 20 random dev pairs per family:
+- 8 random perturbations of relative size 1e-4 at emit_colon / the final cell at L42 (SEC regime);
+- the same at the start token at L2 (bf16 lower stack).
+
+Reported per pair as a fraction of G. Every "negligible" call needs the bound to exceed the noise floor by ≥ 10×.
+
+### 3.7 Descriptive reader snapshot (optional; PI decision)
+
+The PI's original 001 instruction was "no readers", and none of the measurements above uses one. An *explained
+disagreement* (e.g. the NLA names green where J does not; what do §3.1–3.4 say about green at that cell?) needs reader
+outputs on the same cells.
+
+Proposed separate stage `readers_snapshot`:
+- runs after every reader-free output of 001 is written and hashed;
+- 10 dev pairs fixed by rule (the first 10 dev pairs in bank order), their emission cells;
+- readers on their own contracts: J_NP / J_CB / R_CB / logit lens at L40–60, Oracle at L40/L44, NLA at L42, each with
+  the no-activation arm;
+- descriptive only, never an input to any 001 decision.
+
+Include it in 001 or defer it to 002 — the PI's call.
 
 ## 4. Gates (before any outcome is read)
 
-1. Span/rendering: every render passes the WSB position assertions; every pair is token-aligned with the single allowed
-   difference.
-2. Same-source == clean bitwise: self-patch, stir-cell and embedding-patch controls (§3.4).
-3. Fidelity: n/a for full-cell patches (exact writes; ρ = κ = 1 recorded).
-4. Damage: per patch; a family whose emission-cell patches raise the off-pair mass by > 0.10 in > 20% of pairs has those
-   cells reported as damage-dominated.
-5. Sequence-length discipline: asserted in code (sources captured per continuation).
+1. Span/rendering: every render passes the WSB position assertions; every pair is token-aligned with only the allowed
+   tokens differing (start token; or the c → c′ colour tokens inside the table).
+2. Engine checks of §3.5.
+3. Fidelity: full-cell patches are exact writes (ρ = κ = 1 recorded).
+4. Damage: per patch; emission-cell patches that raise the off-pair mass by > 0.10 in > 20% of a family's pairs are
+   reported as damage-dominated.
+5. Sequence-length discipline (sources per continuation) and subject-model integrity (`registry.assert_subject_model_intact`,
+   called by every capture and labelling entry point) are asserted in code.
 
 A failed gate is repaired and the stage re-run; nothing scored is deleted.
 
 ## 5. Predictions and priors
 
-*Written 2026-10-02 before any 001 data. Already seen, and disclosed because they inform these priors: the block-000
-regime check on one dev pair (`brew-s2-r10d2-0001__blue`, G ≈ 10.5 nats): full-cell shares emit_colon L44 ≈ 0.42–0.45,
-emit_colon L40 ≈ 0.21–0.23, start token L40 ≈ 0.05; the reader smoke test on `brew-s2-r10d2-0000` emit_colon (no lens
-names a colour in its top 10 at L40–44, colours appear from L56; the NLA at L42 named z in 4/4 samples; the Oracle at L40
-named the start and z colours); gate failures for 2 of the first 3 brew candidates.*
+*v1 priors written 2026-10-02 before any 001 data.*
+
+Already seen, and disclosed because they inform these priors:
+- the block-000 regime check on `brew-s2-r10d2-0001__blue` (whole-cell share emit_colon L44 ≈ 0.42–0.45, L40 ≈ 0.21–0.23,
+  start token L40 ≈ 0.05);
+- the reader smoke readouts on `brew-s2-r10d2-0000`:
+  - under WSB's layer grid, the J cosine readout names green at emit_colon L36 and emit_think L40;
+  - every lens names black then green from L52–60;
+  - the NLA names green 4/4 at L42;
+  - the Oracle at L40 names green but also both off-path candidates;
+- 2 of the first 3 brew gate attempts failed.
+
+*v2 revisions (2026-10-02, still before any 001 data) are marked †.*
 
 | # | Prediction | Prior |
 |---|---|---|
 | Q1 | Gate pass rate ≥ 40% of brew candidates and ≥ 40% of chain candidates | 55% |
-| Q2 | Positive control: brew start-token S ≥ 0.9 at L0 in ≥ 90% of dev pairs | 75% |
-| Q3 | Brew start-token S at L40–44 has median ≤ 0.10 (the colour has been moved on) | 75% |
-| Q4 | Brew emit_colon median S increases L40 < L42 < L44, with L44 median ≥ 0.3 | 65% |
-| Q5 | Every brew question-span cell has median S ≤ 0.10 at L40–44 | 60% |
-| Q6 | Decision rule 1 is met for brew (≥ 1 emission cell × layer with within-position variation) | 50% |
-| Q7 | Decision rule 1 is met for chain (final cell or question span) | 40% |
-| Q8 | z decodable at emit_colon (12-way, by §3.3's rule) at all three layers | 70% |
-| Q9 | Off-trajectory presence decodable at ≥ 1 emission cell × layer (decision rule 2 met) | 55% |
-| Q10 | The answer is more decodable than z at emit_colon L44 (higher selectivity) | 65% |
-| Q11 | Damage: emission-cell patches raise the off-pair mass by > 0.10 in < 10% of brew pairs | 75% |
+| Q2† | Start-token block-output patch at L0: median S ≥ 0.5 across brew dev pairs (v1 asked for S ≥ 0.9 in ≥ 90% of pairs at 75%; revised because block 0 is a GatedDeltaNet layer that mixes the colour forward within the block) | 60% |
+| Q3 | Start-token S at L40–44 has median \|S\| < ε′ (the colour has been moved on) | 70% |
+| Q4 | emit_colon median S increases L40 < L42 < L44, with L44 median ≥ 0.3 | 65% |
+| Q5† | Every brew question-span cell is negligible at the group level (TOST within ±ε′) at L40–44 | 45% |
+| Q6 | Within-position variation present (≥ 10% toward and ≥ 10% negligible) at ≥ 1 brew emission cell × layer | 50% |
+| Q7 | The same for chain (final cell or question span) | 40% |
+| Q8 | z decodable at emit_colon (12-way, §3.4 rule) at L40, L42 and L44 | 70% |
+| Q9 | Off-trajectory membership decodable at ≥ 1 emission cell × layer (§3.4 rule) | 55% |
+| Q10 | The answer is more decodable than z at emit_colon L44 | 65% |
+| Q11 | Damage-dominated emission-cell patches in < 10% of brew dev pairs | 75% |
+| Q12† | Substitution edits are behaviourally negligible (§3.3 bound) in ≥ 90% of dev items | 70% |
+| Q13† | Emission-cell transplants of substitution edits are negligible in ≥ 90% of dev items at every layer | 75% |
+| Q14† | emit_colon median S at L56 and L60 exceeds the L44 median | 70% |
 
 ## 6. Decision rules
 
-1. **If no family shows leverage variation within a position** (§3.1 criterion), stop and rethink before building
-   labels. Report the profile; the next step is a redesign discussion, not 002.
-2. **If the off-trajectory colours are not decodable at the emission cells** (§3.3 rule), brew has no not-needed class;
-   the RHUT tagged-selection fallback is designed next.
-3. **If the positive control fails** (§3.4: S < 0.5 at L0 on most pairs, or any exact-anchor/bitwise control fails), the
-   engine is broken; fix it first and re-run.
-4. *(added)* If fewer than 20 brew or 15 chain dev pairs pass the gate, report and stop for the PI (power).
-5. *(added)* τ and ε′ may be revised once from this profile (dev only) and frozen in AMENDMENT_02 before any test-split
-   label is computed.
+1. **(Diagnostic, not a stop rule; v2.)** If no position shows within-position variation in whole-cell leverage, record
+   "whole-cell leverage does not supply the contrast". Whether W is estimable is then decided by the content-level
+   contrast (rule 2).
+2. **If off-trajectory membership is not decodable at the emission cells (§3.4), or the substitution edits are not
+   negligible behaviourally and by transplant (§3.3), brew has no not-needed class.** Design the RHUT
+   tagged-selection fallback next.
+3. **If any engine check of §3.5 fails, the engine is broken.** Fix it first and re-run. A small block-0 patch is a
+   localization result, not an engine failure (v2).
+4. If fewer than 20 brew or 15 chain dev pairs pass the gate, report and stop for the PI (power).
+5. τ, ε′ and the §3.3 bound may be revised once from this profile (dev only) and frozen in AMENDMENT_02 before any
+   test-split label is computed.
 
 ## 7. Stop rules
 
-Stop and report (no silent continuation) if: any gate in §4 fails twice after repair; the gate admits < 20 brew dev
-pairs; the noise floor exceeds 0.05 of G in more than a quarter of the noise-floor pairs (then the regime question of §9
-blocks 002).
+Stop and report (no silent continuation) if:
+- any gate in §4 fails twice after repair;
+- the gate admits < 20 brew dev pairs;
+- the SEC noise floor exceeds one tenth of the negligible bound on any noise-floor pair.
 
-## 8. Budget (from `results/000_setup/analysis/timing_smoke.json`)
+## 8. Budget
 
-Measured on the RTX PRO 6000 (96 GB), RHUT regime: one forward ≈ 0.23 s for both brew (T = 165) and chain (T = 78);
-gate ≈ 5.4 s (brew) / 4.4 s (chain) per pair; probe capture ≈ 0.23 s per render.
+Sources: `timing_smoke.json` and the regime check. Stock forward ≈ 0.23 s; SEC fp32 replay of blocks 40–63 ≈ 0.09 s;
+SEC lower-stack capture ≈ 0.15 s (estimate: 40 of 64 bf16 blocks); SEC build 8.5 s; gate ≈ 5.4 s (brew) / 4.4 s (chain)
+per pair.
 
-| Stage | Forwards | Wall-clock |
-|---|---|---|
-| Gate, all candidates (361 brew + ≤ 110 chain) | — | ≈ 32 + 8 min |
-| Brew profile, ~90 dev pairs × (72 cells + 14 controls + 6 spans + 3 clean/capture) | ≈ 8.5 k | ≈ 35 min |
-| Brew reverse direction, 30% of pairs | ≈ 2 k | ≈ 8 min |
-| Chain profile, ~25 dev pairs × (75 cells + 10 controls + 2 spans), × ≤ 3 for two-digit answers | ≈ 2–7 k | ≈ 10–27 min |
-| Noise floor, 40 pairs × 8 | 320 | ≈ 1.5 min |
-| Decodability captures (~230 brew dev renders) | 230 | ≈ 1 min |
-| Probes (CPU; 12 colours + 3 12-way targets × 9 cells, 5 folds, 200 permutations) | — | ≈ 20–40 min CPU |
-| **Total** | | **≈ 1.7–2.2 GPU-h + < 1 CPU-h** |
+| Stage | Wall-clock |
+|---|---|
+| Gate, all candidates (361 brew + ≤ 110 chain) + 50 substitution prompts | ≈ 45 min (stock model) |
+| Brew profile, ~90 dev pairs × (24 cells × 5 layers + controls + spans) | ≈ 20 min (one lower-stack capture per prompt, one 0.09 s replay per edit) |
+| Brew reverse direction, 30% | ≈ 6 min |
+| Chain profile, ~25 dev pairs × 25 cells × 5 layers × ≤ 3 continuations | ≈ 15 min |
+| Off-trajectory arm, ~50 dev items (behaviour + 15 transplants + reverse 30%) | ≈ 3 min (+ gate above) |
+| Noise floor, 40 pairs × 16 | ≈ 2 min |
+| Decodability captures (~280 renders × 5 layers) | ≈ 2 min |
+| Probes (CPU; 3 × 12-way + 12 membership targets × 15 cell-layers, 5 folds, inner CV, 200 permutations) | ≈ 30–60 min CPU |
+| Optional reader snapshot (§3.7; 10 pairs) | ≈ 15 min |
+| **Total** | **≈ 1.5 GPU-h (+ 15 min with §3.7) and ≤ 1 CPU-h** |
 
 ## 9. Open questions for the PI
 
-1. **The not-needed status of off-trajectory colours.** The full-cell share at an emission cell measures the *pair*
-   difference (start, z, answer), which is expected to be large there; it cannot certify that the off-trajectory
-   *content* is not needed. Their not-needed status currently rests on task construction (the answer is invariant to
-   off-trajectory rows). Option: add an **off-trajectory edit arm** (partner = same item with one off-trajectory row's
-   result colour changed, single token, token-aligned; answer unchanged) and record |Δlog P(a)| and the answer-
-   distribution KL of the emission-cell full-cell patch (G = 0, so no share). Cost ≈ 10 min. Needs your call because it
-   implies a label criterion other than ε′ for content that is not the pair's latent (AMENDMENT_02).
-2. **Regime.** By the 5% rule RHUT stays the default (max 3.3% of G). But its noise floor is absolute (0.05–0.24 nats on
-   the two pairs measured, vs 0.0002 under SEC), so on pairs with G below ≈ 7 nats a 3.3%-sized discrepancy would exceed
-   5% of G. SEC's upper stack fits on this GPU (72 GB resident, replay 0.09 s). Options: (a) keep RHUT and report the §3.5
-   noise floor; (b) switch the label stack to SEC for layers ≥ 40 (early-layer controls stay in the bf16 lower stack).
-   I recommend (b) for 002; 001 is unaffected either way.
-3. **Dev/test sizes.** Chain has 20 step-sequence groups (≈ 10 per split). If too few chain dev pairs pass the gate,
-   should chain use 70/30 dev/test instead?
+1. **Regime.** v2 uses SEC for every L ≥ 40. AMENDMENT_01's 5% rule did not require the switch (3.3%), but
+   negligible-effect calls at ε′ = 5% need a floor far below 5%. Confirm.
+2. **Reader snapshot** (§3.7): include in 001, or defer to 002?
+3. **Chain split:** 50/50 by step-sequence group leaves ≈ 10 groups per side. Keep it, or use 70/30?
+4. **Reader-input bridge.** Reader inputs come from the stock forward (WSB convention); SEC activations at L ≥ 40 are
+   fp32 replays, about 1% different. SEC's lower stack *is* the stock forward, so this bridge is exact only for layers
+   ≤ 39. Before reader scoring (002+), check that reader readouts at the label layers are stable across the two capture
+   regimes, or feed readers the SEC activations.
+
+---
+
+## Changes v1 → v2 (2026-10-02; external review of c13fd43 + PI response)
+
+1. Signed small-effect test fixed. Negligible = |S| < ε′; toward / away / negligible / intermediate kept separate;
+   group claims by TOST equivalence; never converted into item labels (§3.1).
+2. Whole-cell share worded as the influence of the *natural pair difference*; the patch is a reference, not a ceiling
+   (cancellation) (§3.1).
+3. Off-trajectory arm made core: behaviour first, then activation transplant. The edit is a colour substitution so that
+   its decoded variable (table membership of c and c′) is exactly what the edit changes; row binding is secondary
+   (§2, §3.3, §3.4).
+4. PCA-256 removed (rank ≤ n_train − 1 ≈ 183); stratified grouped folds, both classes asserted, insufficient support
+   reported as such (§3.4).
+5. Block-0 patch is a localization result; only the embedding anchor, self-patch and stir cells are engine checks
+   (§3.5, rule 3); prior Q2 revised.
+6. Decision rule 1 demoted to a diagnostic (§6).
+7. SEC true-fp32 regime for all L ≥ 40 (§2), pending PI confirmation (§9.1).
+8. Layers 56 and 60 added to the profile (§2). The reader layer scan is a separate optional stage (§3.7) because 001
+   was specified reader-free.
+9. Subject-model integrity: reader setup that merges weights in place marks the model; every capture/label entry point
+   refuses a marked model; tests added (code, 2026-10-02).

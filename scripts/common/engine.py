@@ -199,6 +199,7 @@ class Engine:
     """
     def __init__(self, model, fp32_from=0):
         import registry
+        registry.assert_subject_model_intact(model)
         self.model = model
         self.blocks = registry.blocks(model)
         self.text_model = (model.get_base_model() if hasattr(model, "get_base_model") else model).model
