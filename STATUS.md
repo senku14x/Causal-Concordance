@@ -47,6 +47,11 @@ https://claude.ai/artifact/RMRX8R4iFnysbnHaNWTBeC
   trained and read at **layer 62**; "fed raw L42" would be off-distribution. Reinstatable on-contract at L62, or as a
   separate off-contract L42 arm, if wanted.
 
+- **Optional readers (SPEC "Optional" line):** modulation lens and phrase-J dropped by the PI (2026-10-02). Template
+  lens deferred: maybe later, not a priority. It exists for Qwen3.6-27B at the pinned
+  `camilablank/workspace-lenses` @ d740106d (`qwen3.6-27b/template-lens/templates.safetensors`, 8.6 GB, 13,174 words,
+  cosine-scored). Its vocabulary has 11 of the 12 brew colours (no teal).
+
 **Not built yet:**
 - Label construction (directions, 1-D swaps, necessity, random-direction nulls), reader scoring (closed-set + judge),
   reader baselines at scale, relational gating — all after 001 and AMENDMENT_02 (design 002).

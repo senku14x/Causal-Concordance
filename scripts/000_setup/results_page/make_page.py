@@ -455,6 +455,7 @@ STATUS_HTML = """
       <li><b>vLLM acceleration:</b> the engine won't start on this GPU (sm_120 check inside FlashInfer). Parked; the HF route works.</li>
       <li><b>SAE:</b> deferred until you decide. One candidate is noted (ceselder/qwen36-27b-bsf-l42-1b).</li>
       <li><b>Skip-lens:</b> dropped. Its checkpoints are trained at L62, not L42.</li>
+      <li><b>Modulation lens, phrase-J:</b> dropped. <b>Template lens:</b> deferred (exists for this model; its vocabulary lacks teal).</li>
       <li><b>Raw outputs</b> are only on this instance (no persistent volume; the HF mirror has no name yet). Committed results and figures are safe in git.</li>
     </ul></div>
     <div class="todo"><h3>Waiting on you, then next</h3><ul class="plain">
