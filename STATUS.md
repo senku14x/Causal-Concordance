@@ -1,8 +1,13 @@
-# STATUS — 2026-10-02 (updated after `647dcb5`)
+# STATUS — 2026-10-02 (updated during the 001 snapshot)
 
-**Block 000 (setup) is done. Design 001 v3 is approved ("proceed", 2026-10-02) and its `gate` and `smoke` stages have
-run on dev material; the `run` stage is in progress. No label, no reader score and no test-split measurement exists yet.
-Nothing starts without the PI's go.**
+**Design 001 v3 (+ amendment A1) is running on dev material.** Done:
+- `gate`, `smoke` (every exact check passes);
+- `run` (72 min, SEC regime);
+- `probes` (25 min);
+- `analysis`, `figures` (reader-free outputs).
+
+In progress: the descriptive `snapshot` (readers). The draft report is `docs/reports/001_leverage_profile.md`; its §8
+(snapshot) is pending. No label and no reader score exists yet, and no test-split measurement has been made.
 
 | Block | State | Evidence |
 |---|---|---|
@@ -10,7 +15,7 @@ Nothing starts without the PI's go.**
 | b. Environment | done | model loads (16 s, 50.1 GB); one brew forward gives the gated answer; 29/29 hashes match; `scripts/000_setup/rebuild_env.sh` |
 | c. Reader smoke tests | done (5 work; SAE deferred, vLLM path parked) | table below; `results/000_setup/analysis/reader_smoke.json` |
 | d. Shared code | done; **74/74 tests at `647dcb5`** (+4 added since, see Tests) | list below |
-| e. Design 001 | **v3 approved**; `gate` done, `smoke` passed, `run` in progress | `docs/design_specs/001_leverage_profile.md`; `results/001_leverage_profile/{manifest_gate,manifest_smoke}.json`, `analysis/{gate_summary,gate_pairs,smoke_checks}` |
+| e. Design 001 | **v3 + A1 approved**; gate, smoke, run, probes, analysis, figures done; snapshot running; report drafted | `docs/design_specs/001_leverage_profile.md`; `results/001_leverage_profile/{manifest_gate,manifest_smoke}.json`, `analysis/{gate_summary,gate_pairs,smoke_checks}` |
 
 ## At a glance (2026-10-02)
 

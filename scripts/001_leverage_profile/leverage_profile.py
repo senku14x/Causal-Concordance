@@ -687,7 +687,9 @@ def stage_snapshot():
     tables = [n for n in mats["brew_items"] if n in starts and n in subs][:10]
     assert len(tables) == 10, len(tables)
     roles = ("member", "partner", "substituted")
-    renders = {(t, "member"): starts[t]["r_m"], (t, "partner"): starts[t]["r_p"], (t, "substituted"): subs[t]["r_p"]}
+    renders = {}
+    for t in tables:
+        renders[(t, "member")], renders[(t, "partner")], renders[(t, "substituted")] = starts[t]["r_m"], starts[t]["r_p"], subs[t]["r_p"]
     cap = np.load(OUT / "run" / "captures_brew.npz")["X"]
     cmeta = json.loads((OUT / "run" / "captures_brew_meta.json").read_text())
     kidx = {r["key"]: i for i, r in enumerate(cmeta["renders"])}
@@ -1157,12 +1159,22 @@ def stage_figures():
     def cell_order(keys):
         order = {"stir": 0, "start": 1, "question": 2, "emit_asst": 3, "emit_think": 4, "emit_colon": 5, "final": 6}
         return sorted(keys, key=lambda c: (order.get(c.split("#")[0], 9), int(c.split("#")[1]) if "#" in c else 0))
+    tok = R.make_tokenizer()
+    names = {}
+    for fam, item in (("brew", "brew-s2-r10d2-0000"), ("chain", "chain-w2-d3p-0408")):
+        _, bank = wsb.load_bank(fam)
+        r = wsb.render_item(tok, fam, next(x for x in bank if x["name"] == item))
+        cells_r = cells_of(fam, r)
+        by_region = {}
+        for pos, reg in cells_r:
+            by_region.setdefault(reg, []).append(pos)
+        names[fam] = {f"{reg}#{i}": f"{reg}: {r.decoded[pos]!r}" for reg, ps in by_region.items() for i, pos in enumerate(sorted(ps))}
     for fam in ("brew", "chain"):
         prof = S[fam]["profile"]
         cells = cell_order({k.split("|L")[0] for k in prof})
         M = np.array([[prof.get(f"{c}|L{L}", {}).get("median", np.nan) for L in LAYERS] for c in cells])
         f, ax = ip.figure(width="half", aspect=1.6 if fam == "brew" else 1.3)
-        ip.heatmap(ax, M, xlabels=[f"L{L}" for L in LAYERS], ylabels=cells, signed=True)
+        ip.heatmap(ax, M, xlabels=[f"L{L}" for L in LAYERS], ylabels=[names[fam].get(c, c) for c in cells], signed=True)
         ax.set_title(f"{fam}: median whole-cell share S (n = {S[fam]['n_pairs']} dev pairs)", fontsize=8)
         F.save(f, str(FIG / f"profile_{fam}"))
     f, ax = ip.figure(width="half")
