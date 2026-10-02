@@ -5,7 +5,6 @@
 Block 000 comes from `results/000_setup/analysis/*.json`; experiment 001 from `results/001_leverage_profile/
 {analysis/*.json, figures/*.png}` and the predictions table of `docs/reports/001_leverage_profile.md` §10.
 """
-import base64
 import html
 from decimal import ROUND_HALF_UP, Decimal
 import json
@@ -52,12 +51,6 @@ def shade(s):
     return f' style="background:color-mix(in srgb, var(--accent) {round(a * 55)}%, transparent)"' if a >= 0.02 else ""
 
 
-def fig(name, alt, caption):
-    b64 = base64.b64encode((X / "figures" / f"{name}.png").read_bytes()).decode()
-    return (f'<figure class="fig"><img src="data:image/png;base64,{b64}" alt="{h(alt)}" loading="lazy">'
-            f'<figcaption>{caption}</figcaption></figure>')
-
-
 def md_inline(s):
     s = h(s.replace("\\|", "|"))
     s = re.sub(r"\*\*(.+?)\*\*", r"<b>\1</b>", s)
@@ -77,7 +70,28 @@ def top3(lst):
     return ", ".join(f"{h(t.strip() or t)} {math.exp(lp):.2f}" for t, lp in lst[:3])
 
 
-def exp001():
+def region_tokens(tok, fam, name):
+    """Tokens of each region of one render, in prompt order (the brew/chain templates fix every non-colour token)."""
+    _, bank = wsb.load_bank(fam)
+    r = wsb.render_item(tok, fam, next(x for x in bank if x.get("name") == name))
+    out = {}
+    for pos, g in sorted(r.regions.items()):
+        out.setdefault(g, []).append(r.decoded[pos])
+    return out
+
+
+def heat_rows(prof, order, toks, notes):
+    rows = []
+    for region, group in order:
+        for k, t in enumerate(toks[region]):
+            es = [prof[f"{region}#{k}|L{L}"] for L in LAYERS]
+            rows.append({"group": group, "tok": t, "note": notes.get(f"{region}#{k}", ""),
+                         "S": [round(e["median"], 4) for e in es], "ci": [[round(x, 3) for x in e["ci95_items"]] for e in es],
+                         "tow": [round(e["frac_toward"], 3) for e in es], "neg": [round(e["frac_negligible"], 3) for e in es]})
+    return rows
+
+
+def exp001(tok):
     """HTML for the 'what to look for' + experiment 001 sections, and the data the page's script needs."""
     s = json.loads((X / "analysis" / "summary.json").read_text())
     ss = json.loads((X / "analysis" / "snapshot_summary.json").read_text())
@@ -332,23 +346,24 @@ def exp001():
   <h3>Measurement checks (exact)</h3>
   <div class="scroll"><table class="tbl">{ctl_tbl}</table></div>
 
-  <h3>Brew: share of the answer gap carried by one cell</h3>
-  {fig("profile_brew", "Heatmap of median share S by cell and layer for brew", "Median share S over 82 pairs, every start / stir / question / answer cell × five layers. Read the top row (the “:” cell) and the start-colour column.")}
-  <p class="small muted">Median S over pairs; brackets: 95% cluster-t interval over table means (33 tables), shown where S ≥ τ at L44/L60. τ = {tau}, ε′ = {eps}. No cell moves the answer the wrong way (“away” is 0% everywhere).</p>
-  <div class="scroll"><table class="tbl">{brew_tbl}</table></div>
+  <h3>Share of the answer gap carried by one cell</h3>
+  <p class="small muted">Median share S over pairs, for every cell of the prompt × five layers (hover a cell for its interval and the toward / negligible fractions). “·” = |S| &lt; 0.005. No cell moves the answer the wrong way: “away” is 0% everywhere. Oracle reads the “:” cell at L40/44, the NLA at L42.</p>
+  <div class="cols2">
+    <div style="display:grid;gap:8px"><h3>Brew ({b['n_pairs']} pairs, {b['n_items']} tables)</h3><div class="scroll" id="ex-heat-brew"></div></div>
+    <div style="display:grid;gap:8px"><h3>Chain ({c['n_pairs']} pairs, {c['n_items']} items)</h3><div class="scroll" id="ex-heat-chain"></div></div>
+  </div>
+  <details class="more"><summary>Brew medians with 95% intervals over table means</summary><p class="small muted">Brackets shown where S ≥ τ at L44/L60. τ = {tau}, ε′ = {eps}.</p><div class="scroll"><table class="tbl">{brew_tbl}</table></div></details>
   <ul class="findings">
     <li><b>The “:” cell carries about half the gap at L42–44</b> in every pair (100% toward), rising to {f2(S(bp, 'emit_colon#0', 60))} by L60.</li>
     <li><b>The start-colour token still carries {f2(S(bp, 'start#4', 40))} at L40</b> and nothing by L56: the colour is still read from its own position in the middle layers.</li>
     <li><b>Damage flag.</b> By the pre-registered rule the “:” patches are damage-dominated (46–67% of pairs gain > 0.10 off-pair mass). Most of that mass goes to the two pairs' intermediate colours (z and z′), so the rule overstates harm here. AMENDMENT_02 proposes splitting the readout.</li>
   </ul>
   <div class="cols2">
-    {fig("start_token_by_layer", "Start-token share by layer", "Start-colour token: S ≈ 1 at L0–4 (positive control), about 0.23 at L40, 0 by L56.")}
-    {fig("profile_chain", "Heatmap of median share S for chain", "Chain: no single question cell matters at L40–44; the final cell carries about two-thirds of the gap at L56–60.")}
+    <div style="display:grid;gap:8px"><h3>The start-colour token across depth</h3><div class="chart" id="ex-start"></div>
+      <p class="small muted">L0–4: patching the differing token reproduces the whole flip (positive control; bars = IQR over pairs). L40–60: brew only, bars = 95% interval over table means. The colour is still read from its own position at L40 and no longer by L56.</p></div>
+    <div style="display:grid;gap:8px"><h3>Spans (several cells patched at once)</h3><div class="scroll"><table class="tbl">{span_tbl}</table></div>
+      <details class="more"><summary>Chain final cell with intervals</summary><div class="scroll"><table class="tbl">{chain_tbl}</table></div></details></div>
   </div>
-  <h3>Spans (several cells patched at once)</h3>
-  <div class="scroll"><table class="tbl">{span_tbl}</table></div>
-  <h3>Chain: final cell</h3>
-  <div class="scroll"><table class="tbl">{chain_tbl}</table></div>
 
   <h3>Decodability at the answer cells (probes)</h3>
   <p class="small muted">L2 logistic regression, 5-fold by table, nested C. Control task (Hewitt–Liang) at 0.05–0.12; ✓ = BH-significant and selectivity ≥ 0.10. Chance ≈ 0.083 for 12 colours.</p>
@@ -361,7 +376,8 @@ def exp001():
   <b>Behaviour:</b> {frac(sub['behaviour_frac_negligible'], sub['n_items'])} items within the bound (median |Δlog P(a)| {sub['behaviour_abs_dlogPa_median']:.3f}).
   <b>Transplanting</b> the substituted state at the answer cells: {frac(sub['transplant_all_cells_frac_negligible'], sub['n_items'])} items within the bound at every cell × layer.</p>
   <div class="cols2">
-    {fig("substitution_transplants", "Substitution transplant effects", "|Δlog P(a)| from transplanting the substituted state, per answer cell and layer; dashed line = the bound.")}
+    <div style="display:grid;gap:8px"><h3>Worst item per transplant cell</h3><div class="chart" id="ex-transplant"></div>
+      <p class="small muted">Largest |Δlog P(a)| over the {sub['n_items']} items when the substituted state is transplanted at one answer cell. Dashed: the bound.</p></div>
     <div style="display:grid;gap:8px"><h3>Share within the bound, per transplant cell</h3><div class="scroll"><table class="tbl">{sub_tbl}</table></div></div>
   </div>
   <p class="small muted">The items over the bound all fail only TV, and narrowly: a little tail probability moves from the removed colour to the inserted one. So the answer does not depend on the swap, but its tail carries a trace of which colours are in the table.</p>
@@ -402,7 +418,24 @@ def exp001():
   </ul>
 </section>
 """
-    data = {"grid_layers": grid_layers, "naming": naming, "tables": tables,
+    bt, ct = region_tokens(tok, "brew", "brew-s2-r10d2-0000"), region_tokens(tok, "chain", "chain-w2-d3p-0408")
+    heat = {
+        "layers": LAYERS,
+        "brew": heat_rows(bp, [("stir", "stir"), ("start", "start"), ("question", "question"), ("emit_asst", "answer cells"),
+                               ("emit_think", "answer cells"), ("emit_colon", "answer cells")], bt,
+                          {"start#4": "start colour", "emit_asst#0": "after “assistant”",
+                           "emit_think#0": "after “</think>”", "emit_colon#0": "after “Answer”"}),
+        "chain": heat_rows(cp, [("question", "question"), ("final", "final")], ct,
+                           {"question#20": "after “assistant”", "final#0": "after “</think>”"}),
+    }
+    ctl_c = c["controls"]["start_token_S"]
+    start = {"brew_ctrl": [[int(L), v["median"], v["q25"], v["q75"]] for L, v in sorted(ctl["start_token_S"].items(), key=lambda x: int(x[0]))],
+             "chain_ctrl": [[int(L), v["median"], v["q25"], v["q75"]] for L, v in sorted(ctl_c.items(), key=lambda x: int(x[0]))],
+             "brew_prof": [[L, bp[f"start#4|L{L}"]["median"], *bp[f"start#4|L{L}"]["ci95_items"]] for L in LAYERS]}
+    transplant = {"bound": sub["bound"]["abs_dlogPa"],
+                  "series": {cell: [[L, tb[f"{cell}|L{L}"]["max_abs_dlogPa"], tb[f"{cell}|L{L}"]["median_abs_dlogPa"]] for L in LAYERS]
+                             for cell in ("emit_colon", "emit_asst", "emit_think")}}
+    data = {"grid_layers": grid_layers, "naming": naming, "tables": tables, "heat": heat, "start": start, "transplant": transplant,
             "oracle_none": none_or, "nla_none": nla_none}
     return exp_html, data
 
@@ -445,7 +478,7 @@ def main():
     r = wsb.render_item(tok, "brew", it)
     pair = {p.p.inp: p for p in P.brew_candidates(it)}["pink"]
     pc = rs["vector_lenses_positive_control"]
-    exp_html, exp_data = exp001()
+    exp_html, exp_data = exp001(tok)
     data = {
         "prompt_tokens": [[i, t, r.regions.get(i, "")] for i, t in enumerate(r.decoded)],
         "item": {"name": it["name"], "start": it["start"], "z": it["intermediates"][0], "answer": it["answer"],
