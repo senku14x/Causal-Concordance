@@ -496,15 +496,53 @@ def stage_run():
 
 # ----------------------------------------------------------------------------------------------- stage: probes
 C_GRID = (1e-3, 1e-2, 1e-1, 1.0)
-N_PERM = 200
+N_PERM = {"binary": 200, "multi": 100}      # amendment A2: every permutation repeats the full procedure (C tuned)
+K_CTRL = {"binary": 20, "multi": 10}        # amendment A2: control-task draws per target (was one shared-seed draw)
 
 
-def _fit(Xtr, ytr, C, multi):
+class _SpanLR:
+    """StandardScaler + L2 logistic regression solved in the span of the standardised training rows (amendment A2).
+    With n_train < d the L2-penalised solution lies in that span (representer theorem; lbfgs leaves the intercept
+    unpenalised), so this is the model the full d-dimensional fit finds, solved in <= n_train dimensions (~30x faster).
+    Equivalence against the full fit is checked in tests/test_probe_span.py."""
+
+    def __init__(self, C):
+        self.C = C
+
+    def fit(self, X, y):
+        import numpy as np
+        from sklearn.linear_model import LogisticRegression
+        from sklearn.preprocessing import StandardScaler
+        self.scaler = StandardScaler().fit(X)
+        Z = self.scaler.transform(X).astype(np.float64)
+        _, sv, vt = np.linalg.svd(Z, full_matrices=False)
+        self.V = vt[: int((sv > sv[0] * 1e-10).sum())].T
+        self.lr = LogisticRegression(C=self.C, max_iter=2000).fit(Z @ self.V, y)
+        self.classes_ = self.lr.classes_
+        return self
+
+    def _z(self, X):
+        import numpy as np
+        return self.scaler.transform(X).astype(np.float64) @ self.V
+
+    def predict(self, X):
+        return self.lr.predict(self._z(X))
+
+    def decision_function(self, X):
+        return self.lr.decision_function(self._z(X))
+
+
+def _fit_full(Xtr, ytr, C, multi):
+    """The original full-dimensional fit (first 001 probe run; kept for the equivalence test)."""
     from sklearn.linear_model import LogisticRegression
     from sklearn.pipeline import make_pipeline
     from sklearn.preprocessing import StandardScaler
     clf = make_pipeline(StandardScaler(), LogisticRegression(C=C, max_iter=2000))
     return clf.fit(Xtr, ytr)
+
+
+def _fit(Xtr, ytr, C, multi):
+    return _SpanLR(C).fit(Xtr, ytr)
 
 
 def _choose_C(Xtr, ytr, gtr, multi):
@@ -544,57 +582,57 @@ def _cv_scores(X, y, g, multi, seed=0, C_fixed=None):
     return pred, fold_of, Cs, models
 
 
-def _metric(y, pred, multi):
+def _metric(y, pred, multi, fold_of=None):
+    """12-way: balanced accuracy of the pooled held-out labels. Binary: AUC within each outer fold, averaged over the
+    folds that contain both classes (amendment A2; pooling decision scores of different fold models biases the AUC)."""
     import numpy as np
     from sklearn.metrics import balanced_accuracy_score, roc_auc_score
-    return float(balanced_accuracy_score(y, pred.astype(y.dtype))) if multi else float(roc_auc_score(y, pred.astype(float)))
-
-
-def _one_target(X, y, g, multi, label_perm_unit, seed):
-    """Real score, control-task score, permutation null (labels permuted at the table level for table-level targets,
-    at the render level otherwise), and fitted fold models for directional scoring."""
-    import numpy as np
-    rng = np.random.default_rng(seed)
-    pred, fold_of, Cs, models = _cv_scores(X, y, g, multi, seed=seed)
-    real = _metric(y, pred, multi)
-    # control task (Hewitt-Liang analogue): a random label per table (binary) / per (table, colour) (multiclass)
     if multi:
-        lab = sorted(set(y))
-        perm_of = {t: dict(zip(lab, rng.permutation(lab))) for t in sorted(set(g))}
-        yc = np.array([perm_of[t][v] for t, v in zip(g, y)])
-    else:
-        tabs = sorted(set(g))
-        frac = float(np.mean([y[g == t][0] for t in tabs]))
-        tl = {t: int(rng.random() < frac) for t in tabs}
-        yc = np.array([tl[t] for t in g])
+        return float(balanced_accuracy_score(y, pred.astype(y.dtype)))
+    if fold_of is None:
+        return float(roc_auc_score(y, pred.astype(float)))
+    per = [roc_auc_score(y[fold_of == k], pred[fold_of == k].astype(float)) for k in sorted(set(fold_of))
+           if len(set(y[fold_of == k])) == 2]
+    return float(np.mean(per)) if per else float("nan")
+
+
+def _seed(*parts):
+    """Stable per-target / per-draw seed (amendment A2: no seed shared across targets)."""
+    return int(hashlib.sha256("|".join(map(str, parts)).encode()).hexdigest()[:8], 16)
+
+
+_PROBE_X = {}
+
+
+def _probe_X():
+    """Activations loaded once per worker process (jobs pass indices, not arrays)."""
+    import numpy as np
+    if "X" not in _PROBE_X:
+        _PROBE_X["X"] = np.load(OUT / "run" / "captures_brew.npz")["X"]
+    return _PROBE_X["X"]
+
+
+def _probe_job(job):
+    """One full-procedure fit (inner-CV C tuning, StratifiedGroupKFold(5) by table, fold seed QUAL_SEED) on real,
+    control-task or permuted labels. Returns (target id, draw kind, index, metric, extras)."""
+    import numpy as np
+    tid, kind, idx, multi, rows_idx, ci, li, y, g = job
+    X = _probe_X()[rows_idx, ci, li]
     try:
-        pc, _, _, _ = _cv_scores(X, yc, g, multi, seed=seed)
-        control = _metric(yc, pc, multi)
+        pred, fold_of, Cs, models = _cv_scores(X, y, g, multi, seed=QUAL_SEED)
     except AssertionError:
-        control = float("nan")
-    null = []
-    tabs = sorted(set(g))
-    for i in range(N_PERM):
-        if label_perm_unit == "table":
-            tl = dict(zip(tabs, rng.permutation([y[g == t][0] for t in tabs])))
-            yp = np.array([tl[t] for t in g])
-        else:
-            yp = rng.permutation(y)
-        try:
-            pp, _, _, _ = _cv_scores(X, yp, g, multi, seed=seed, C_fixed=Cs)
-            null.append(_metric(yp, pp, multi))
-        except AssertionError:
-            continue
-    null = np.array(null)
-    p = float((1 + (null >= real).sum()) / (1 + len(null)))
-    return {"real": real, "control": control, "selectivity": real - control if control == control else None,
-            "null_mean": float(null.mean()) if len(null) else None, "null_q95": float(np.quantile(null, 0.95)) if len(null) else None,
-            "n_null": int(len(null)), "null": [round(float(x), 5) for x in null], "p": p, "Cs": Cs, "n": int(len(y)),
-            "n_tables": int(len(set(g))),
-            "classes": {str(k): int((y == k).sum()) for k in sorted(set(y))}}, models, fold_of
+        return tid, kind, idx, None, None
+    val = _metric(y, pred, multi, None if multi else fold_of)
+    extra = None
+    if kind == "real":
+        extra = {"Cs": Cs, "pooled": None if multi else _metric(y, pred, False)}
+        if not multi:
+            extra["models"] = (models, dict(zip(g, fold_of)))
+    return tid, kind, idx, val, extra
 
 
 def stage_probes():
+    """Decodability probes (design 001 §3.4 as repaired by amendment A2)."""
     import numpy as np
     from joblib import Parallel, delayed
     out = OUT / "run"
@@ -603,35 +641,87 @@ def stage_probes():
     R_ = meta["renders"]
     nat = np.array([r["role"] in ("member", "partner") for r in R_])
     g_all = np.array([r["item"] for r in R_])
-    jobs = []
+    present_of = {}
+    for r in R_:
+        present_of.setdefault(r["item"], set(r["present"]))
+    tables = sorted(present_of)
+    targets, jobs = {}, []
     for ci, cell in enumerate(meta["cells"]):
         for li, L in enumerate(meta["layers"]):
+            # 12-way targets: render-level permutation null; control = a random colour relabelling per table
             for tgt in ("z", "start", "answer"):
-                y = np.array([str(r[tgt]) for r in R_])[nat]
-                jobs.append(("multi", tgt, ci, li, X[nat, ci, li], y, g_all[nat], "render"))
+                tid = ("multi", tgt, ci, li)
+                idx = np.where(nat)[0]
+                y = np.array([str(R_[i][tgt]) for i in idx])
+                g = g_all[idx]
+                targets[tid] = {"y": y, "g": g}
+                jobs.append((tid, "real", 0, True, idx, ci, li, y, g))
+                lab = sorted(set(y))
+                for k in range(K_CTRL["multi"]):
+                    rng = np.random.default_rng(_seed("ctrl", *tid, k))
+                    perm_of = {t: dict(zip(lab, rng.permutation(lab))) for t in sorted(set(g))}
+                    jobs.append((tid, "ctrl", k, True, idx, ci, li, np.array([perm_of[t][v] for t, v in zip(g, y)]), g))
+                for k in range(N_PERM["multi"]):
+                    rng = np.random.default_rng(_seed("null", *tid, k))
+                    jobs.append((tid, "null", k, True, idx, ci, li, rng.permutation(y), g))
+            # membership targets: null = one joint permutation of table identities per draw, shared by every colour
+            perms = [dict(zip(tables, np.random.default_rng(_seed("tableperm", ci, li, k)).permutation(tables)))
+                     for k in range(N_PERM["binary"])]
             for c in COLOURS:
-                keep = np.array([r["role"] in ("member", "partner") and c not in r["trajectory"] for r in R_])
-                y = np.array([int(c in r["present"]) for r in R_])[keep]
-                if min((y == 0).sum(), (y == 1).sum()) == 0 or len(set(g_all[keep][y == 0])) < 5 or len(set(g_all[keep][y == 1])) < 5:
-                    jobs.append(("skip", c, ci, li, None, None, None, None))
+                idx = np.array([i for i, r in enumerate(R_) if r["role"] in ("member", "partner") and c not in r["trajectory"]])
+                y = np.array([int(c in R_[i]["present"]) for i in idx])
+                g = g_all[idx]
+                tid = ("member", c, ci, li)
+                if min((y == 0).sum(), (y == 1).sum()) == 0 or len(set(g[y == 0])) < 5 or len(set(g[y == 1])) < 5:
+                    targets[tid] = {"skip": True}
                     continue
-                jobs.append(("member", c, ci, li, X[keep, ci, li], y, g_all[keep], "table"))
-
-    def run(job):
-        kind, tgt, ci, li, Xs, y, g, unit = job
-        if kind == "skip":
-            return {"kind": "membership", "target": tgt, "cell": ci, "layer": li, "status": "insufficient support"}, None
-        res, models, fold_of = _one_target(Xs, y, g, kind == "multi", unit, seed=QUAL_SEED)
-        res.update({"kind": "12-way" if kind == "multi" else "membership", "target": tgt, "cell": ci, "layer": li, "status": "ok"})
-        keep_models = None
-        if kind == "member":                      # keep fold models + table->fold map for the directional test
-            keep_models = (models, dict(zip(g, fold_of)))
-        return res, keep_models
+                targets[tid] = {"y": y, "g": g}
+                jobs.append((tid, "real", 0, False, idx, ci, li, y, g))
+                tabs = sorted(set(g))
+                frac = float(np.mean([y[g == t][0] for t in tabs]))
+                for k in range(K_CTRL["binary"]):
+                    rng = np.random.default_rng(_seed("ctrl", *tid, k))
+                    tl = {t: int(rng.random() < frac) for t in tabs}
+                    jobs.append((tid, "ctrl", k, False, idx, ci, li, np.array([tl[t] for t in g]), g))
+                for k, pm in enumerate(perms):
+                    jobs.append((tid, "null", k, False, idx, ci, li, np.array([int(c in present_of[pm[t]]) for t in g]), g))
+    jobs.sort(key=lambda j: not j[3])            # the slow 12-way fits first, for load balance
     t0 = time.time()
-    results = Parallel(n_jobs=96, verbose=5)(delayed(run)(j) for j in jobs)
-    rows = [r for r, _ in results]
-    models = {(r["target"], r["cell"], r["layer"]): m for (r, m) in results if m is not None}
-    # directional substitution test (cross-fitted: the fold model that never saw the item)
+    results = Parallel(n_jobs=120, verbose=2, batch_size=1)(delayed(_probe_job)(j) for j in jobs)
+    acc = {tid: {"real": None, "ctrl": {}, "null": {}} for tid in targets if not targets[tid].get("skip")}
+    for tid, kind, idx, val, extra in results:
+        if kind == "real":
+            acc[tid]["real"], acc[tid]["extra"] = val, extra
+        elif val is not None:
+            acc[tid][kind][idx] = val
+    rows, models = [], {}
+    for tid, info in targets.items():
+        kind, tgt, ci, li = tid
+        base = {"kind": "12-way" if kind == "multi" else "membership", "target": tgt, "cell": ci, "layer": li}
+        if info.get("skip"):
+            rows.append({**base, "status": "insufficient support"})
+            continue
+        a = acc[tid]
+        y, g = info["y"], info["g"]
+        nmax = N_PERM["multi" if kind == "multi" else "binary"]
+        null = [a["null"].get(k) for k in range(nmax)]            # index-aligned (joint table permutations for membership)
+        valid = np.array([v for v in null if v is not None])
+        ctrl = np.array(list(a["ctrl"].values()))
+        real = a["real"]
+        p = float((1 + (valid >= real).sum()) / (1 + len(valid))) if real is not None and len(valid) else None
+        rows.append({**base, "status": "ok" if real is not None else "fit failed", "real": real,
+                     "real_pooled_auc": (a.get("extra") or {}).get("pooled"),
+                     "control": float(ctrl.mean()) if len(ctrl) else float("nan"), "control_sd": float(ctrl.std()) if len(ctrl) else None,
+                     "n_control": int(len(ctrl)), "control_draws": [round(float(v), 5) for v in ctrl],
+                     "selectivity": (real - float(ctrl.mean())) if real is not None and len(ctrl) else None,
+                     "null_mean": float(valid.mean()) if len(valid) else None,
+                     "null_q95": float(np.quantile(valid, 0.95)) if len(valid) else None, "n_null": int(len(valid)),
+                     "null": [None if v is None else round(float(v), 5) for v in null], "p": p,
+                     "Cs": (a.get("extra") or {}).get("Cs"), "n": int(len(y)), "n_tables": int(len(set(g))),
+                     "classes": {str(k): int((y == k).sum()) for k in sorted(set(y))}})
+        if kind == "member" and a.get("extra"):
+            models[(tgt, ci, li)] = a["extra"]["models"]
+    # directional substitution test (cross-fitted: the fold model that never saw the item); unchanged by A2
     subs = [(i, r) for i, r in enumerate(R_) if r["role"] == "substituted"]
     key2idx = {r["key"]: i for i, r in enumerate(R_)}
     direc = []
@@ -652,9 +742,10 @@ def stage_probes():
                     row[name] = float(fm.decision_function(X[[i], ci, li])[0] - fm.decision_function(X[[j], ci, li])[0])
                 direc.append(row)
     (ANA / "probes.json").write_text(json.dumps({"rows": rows, "cells": meta["cells"], "layers": meta["layers"],
-                                                 "n_perm": N_PERM, "seconds": time.time() - t0}, indent=1, default=float))
+                                                 "n_perm": N_PERM, "k_control": K_CTRL, "repair": "amendment A2",
+                                                 "seconds": time.time() - t0}, indent=1, default=float))
     (ANA / "probes_substitution_directional.json").write_text(json.dumps(direc, indent=1, default=float))
-    write_manifest("probes", {"seconds": time.time() - t0, "n_jobs": len(jobs)})
+    write_manifest("probes", {"seconds": time.time() - t0, "n_jobs": len(jobs), "repair": "amendment A2"})
     print("probes done", time.time() - t0)
 
 
@@ -965,12 +1056,17 @@ def stage_analysis():
                 if not rr:
                     continue
                 real = float(np.mean([r["real"] for r in rr]))
+                # A2: draws are joint table permutations, index-aligned across colours; keep draws valid for every colour
                 nn = min(len(r["null"]) for r in rr)
-                null = np.mean([r["null"][:nn] for r in rr], axis=0)
+                ok = [k for k in range(nn) if all(r["null"][k] is not None for r in rr)]
+                null = np.array([np.mean([r["null"][k] for r in rr]) for k in ok])
                 sel = float(np.mean([r["selectivity"] for r in rr if r["selectivity"] is not None]))
                 mem[f"{cell}|L{L}"] = {"pooled_auc": real, "n_colours": len(rr), "null_mean": float(null.mean()),
-                                       "p": float((1 + (null >= real).sum()) / (1 + nn)), "selectivity": sel,
-                                       "per_colour": {r["target"]: round(r["real"], 3) for r in rr}}
+                                       "null_q95": float(np.quantile(null, 0.95)), "n_null": len(ok),
+                                       "p": float((1 + (null >= real).sum()) / (1 + len(ok))), "selectivity": sel,
+                                       "control_mean": float(np.mean([r["control"] for r in rr])),
+                                       "per_colour": {r["target"]: round(r["real"], 3) for r in rr},
+                                       "per_colour_p": {r["target"]: r["p"] for r in rr}}
         keys = sorted(mem)
         rej, adj = ST.bh_fdr([mem[k]["p"] for k in keys], q=0.05)
         for k, rj, a in zip(keys, rej, adj):

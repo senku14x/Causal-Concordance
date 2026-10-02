@@ -388,3 +388,41 @@ sample across the same layers; NLA one sample at L42.
 - The v3 contract runs (Oracle k = 4 at emit_colon L40/L44 with real / none / shuffled / SEC arms) are unchanged.
 
 Still descriptive only: the added layers have no causal measurement and feed no decision.
+
+## Amendment A2 (2026-10-02, after the external audit; probe repair; PI go "move onto fixing the probes")
+
+**Why.** The audit found that the membership control task (§3.4) sat far from chance: median AUC 0.58 over 165 fits,
+maximum 0.84. A diagnostic on the saved captures (40 fresh random table-level labels each, on four of the worst targets)
+found three faults in the implementation, none of them leakage:
+1. **One control draw per fit, with one seed shared by every target.** With about 10 negative tables, a single
+   random-label AUC has SD ≈ 0.12. The shared seed repeats the same table assignment across all 15 cell × layer fits
+   of a colour (red: 0.80–0.84 everywhere). Fresh draws average 0.49–0.54.
+2. **AUC pooled across folds.** Decision scores from five different fold models were ranked together. On pure-noise
+   activations this biases the AUC to 0.45 under the null; per-fold AUC gives 0.49–0.50.
+3. **The permutation null reused the C chosen per fold on the real labels.** The real and control fits tuned C by
+   inner CV, so the null did not repeat the procedure.
+
+Fault 1 matters for the decision rules. Membership selectivity was computed against an unlucky control around 0.57,
+which pushed the L40–56 calls below the 0.10 line. Those are the layers where the Oracle and NLA read.
+
+**Repair** (decided before any repaired result was seen):
+- Binary targets: AUC is computed within each outer fold and averaged over folds with both classes. The pooled AUC
+  is kept as a secondary field.
+- Controls: K independent draws per target through the full procedure (C tuned), K = 20 for binary and 10 for 12-way.
+  Selectivity = real − mean of the control draws; their SD is reported.
+- Permutation null: every permutation repeats the full procedure, inner-CV C tuning included. N = 200 for binary and
+  100 for 12-way, because 12-way full-procedure fits take about 26 s. Each target gets its own seed stream.
+- Pooled membership per cell × layer: one joint permutation of table identities per draw, applied to every colour.
+  The colour-averaged null is then the null of the colour-averaged statistic. Per-colour p-values are reported too.
+- Unchanged: folds (StratifiedGroupKFold(5) by table, the same fold seed), C grid, features, the BH-FDR + selectivity
+  ≥ 0.10 rule, and the cross-fitted directional test, which uses the real fits' fold models.
+- Rows from the first run stay in git history (commit dc33f48, `analysis/probes.json`); nothing scored is deleted.
+- Implementation: every fit in the repaired run (real, control, null) uses `_SpanLR`. It solves the same
+  L2-logistic objective in the span of the standardised training rows, which contains the L2 optimum when
+  n_train < d (representer theorem; the intercept is unpenalised). It is 3× faster single-threaded and avoids the
+  memory contention that made 120 parallel full-dimensional 12-way fits about 10× slower.
+  - Against the full fit (tests/test_probe_span.py): predictions match at C ≤ 1e-2.
+  - At C = 1, where the problem is nearly separable and the solver stops early, 12-way predictions agree on 93.5% of
+    held-out rows.
+  - So real-label 12-way values can shift slightly from the first run. Within the repaired run, real, control and
+    null all use one estimator.
