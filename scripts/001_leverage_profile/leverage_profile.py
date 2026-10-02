@@ -909,6 +909,13 @@ def stage_analysis():
         by_cl.setdefault(f'{r["region"]}|L{r["layer"]}', []).append(r)
     # c = T(a) (the answer's successor, look-ahead content) is tagged at construction and reported separately from
     # truly unrelated off-path colours; both groups stay in every pooled figure above (a tag, not a filter).
+    # backfill the tag for heads written before it existed (run stage at 647dcb5): c is T(a), the answer's successor
+    _, _bank = wsb.load_bank("brew")
+    _succ = {it["name"]: it["table"].get(it["answer"], {}).get("stir") for it in _bank}
+    for h in fs:
+        if "c_is_succ_answer" not in h:
+            h["succ_answer"] = _succ[h["item"]]
+            h["c_is_succ_answer"] = h["c"] == _succ[h["item"]]
     succ_ids = {h["pair_id"] for h in fs if h.get("c_is_succ_answer")}
     by_tag = {}
     for name, ids in (("c_is_succ_answer", succ_ids), ("c_unrelated", {h["pair_id"] for h in fs} - succ_ids)):
