@@ -88,7 +88,7 @@ All open. Descriptive, exploratory hints from 001 (10 brew tables; not answers):
 | 2. 1-D swap along û | **built** (`engine.Swap1D`, `regime.swap_fn`; write tested) | not run for labels |
 | 3. Demonstrated influence: S ≥ τ and above the norm-matched random-direction null, BH-FDR (A01 C9) | **not started** | — |
 | 4. Necessity: ablate to the fitting-half mean, random-direction ablation control (A01 C10) | **built** (`engine.AblateToMean1D`), not run | — |
-| 5. Decodable: cross-fitted probe + Hewitt–Liang control (A01 C11) | **partial**: 001 probes run (z, start, answer, membership). **Needs repair:** the membership control sits far from chance (median AUC 0.58, max 0.84), and the permutation null reuses C from the real fit. No item-level labels yet | `analysis/probes.json`, 001 §7, §15 |
+| 5. Decodable: cross-fitted probe + Hewitt–Liang control (A01 C11) | **done at the family level (001, repaired under amendment A2):** per-fold AUC, multi-draw controls (membership 0.48–0.52), full-procedure nulls; residual solver and grouped-null checks. No item-level labels yet | `analysis/probes.json`, `analysis/probe_residual_checks.json`, 001 §7 |
 | 6. States (used / decodable-not-needed / absent / unresolved) | **not started** | — |
 | 7. Per consumer | n/a (one consumer per WSB family) | — |
 | "Pair difference used" naming + four-way {input, z, answer, other} confusion; decorrelated direction (A01 C15) | **not started** | — |

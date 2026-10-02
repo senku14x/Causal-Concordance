@@ -1725,59 +1725,23 @@
  },
  "probe_controls": {
   "twelve_way_control_range": [
-   0.049633168763603554,
-   0.11631976433177806
+   0.0663554169552257,
+   0.095669242030722
   ],
   "membership_control": {
    "n": 165,
-   "median": 0.5775237032905745,
-   "q90": 0.6900657406387957,
-   "max": 0.8427216954824317,
-   "n_above_0.6": 71,
-   "n_above_0.7": 13,
+   "median": 0.5043502500561254,
+   "q90": 0.5408731376378645,
+   "max": 0.5870909690153294,
+   "n_above_0.6": 0,
+   "n_above_0.7": 0,
    "highest": [
-    {
-     "colour": "red",
-     "cell": "emit_colon",
-     "layer": 56,
-     "control": 0.843,
-     "real": 0.531,
-     "n_tables": 48,
-     "classes": {
-      "0": 40,
-      "1": 145
-     }
-    },
-    {
-     "colour": "red",
-     "cell": "emit_think",
-     "layer": 56,
-     "control": 0.834,
-     "real": 0.443,
-     "n_tables": 48,
-     "classes": {
-      "0": 40,
-      "1": 145
-     }
-    },
-    {
-     "colour": "red",
-     "cell": "emit_asst",
-     "layer": 56,
-     "control": 0.819,
-     "real": 0.52,
-     "n_tables": 48,
-     "classes": {
-      "0": 40,
-      "1": 145
-     }
-    },
     {
      "colour": "green",
      "cell": "emit_think",
      "layer": 56,
-     "control": 0.818,
-     "real": 0.838,
+     "control": 0.587,
+     "real": 0.843,
      "n_tables": 48,
      "classes": {
       "0": 18,
@@ -1785,51 +1749,87 @@
      }
     },
     {
-     "colour": "red",
-     "cell": "emit_colon",
-     "layer": 60,
-     "control": 0.798,
-     "real": 0.572,
-     "n_tables": 48,
-     "classes": {
-      "0": 40,
-      "1": 145
-     }
-    },
-    {
-     "colour": "red",
+     "colour": "teal",
      "cell": "emit_think",
-     "layer": 60,
-     "control": 0.796,
-     "real": 0.597,
+     "layer": 40,
+     "control": 0.582,
+     "real": 0.728,
      "n_tables": 48,
      "classes": {
-      "0": 40,
-      "1": 145
-     }
-    },
-    {
-     "colour": "purple",
-     "cell": "emit_asst",
-     "layer": 56,
-     "control": 0.761,
-     "real": 0.504,
-     "n_tables": 47,
-     "classes": {
-      "0": 35,
-      "1": 152
+      "0": 22,
+      "1": 144
      }
     },
     {
      "colour": "white",
-     "cell": "emit_think",
-     "layer": 56,
-     "control": 0.74,
-     "real": 0.658,
+     "cell": "emit_asst",
+     "layer": 42,
+     "control": 0.569,
+     "real": 0.648,
      "n_tables": 48,
      "classes": {
       "0": 36,
       "1": 130
+     }
+    },
+    {
+     "colour": "red",
+     "cell": "emit_asst",
+     "layer": 42,
+     "control": 0.561,
+     "real": 0.429,
+     "n_tables": 48,
+     "classes": {
+      "0": 40,
+      "1": 145
+     }
+    },
+    {
+     "colour": "black",
+     "cell": "emit_think",
+     "layer": 60,
+     "control": 0.559,
+     "real": 0.764,
+     "n_tables": 48,
+     "classes": {
+      "0": 55,
+      "1": 128
+     }
+    },
+    {
+     "colour": "teal",
+     "cell": "emit_think",
+     "layer": 44,
+     "control": 0.556,
+     "real": 0.6,
+     "n_tables": 48,
+     "classes": {
+      "0": 22,
+      "1": 144
+     }
+    },
+    {
+     "colour": "pink",
+     "cell": "emit_think",
+     "layer": 56,
+     "control": 0.555,
+     "real": 0.651,
+     "n_tables": 48,
+     "classes": {
+      "0": 43,
+      "1": 127
+     }
+    },
+    {
+     "colour": "green",
+     "cell": "emit_colon",
+     "layer": 40,
+     "control": 0.552,
+     "real": 0.797,
+     "n_tables": 48,
+     "classes": {
+      "0": 18,
+      "1": 149
      }
     }
    ]

@@ -1,4 +1,4 @@
-# STATUS — 2026-10-02 (001 complete + audited; 002 claim scoring complete; 001 probe repair running)
+# STATUS — 2026-10-02 (001 complete, audited, probes repaired; 002 claim scoring complete; awaiting PI review)
 
 **Latest (2026-10-02, while the PI slept):**
 - **002, reader claim scoring: complete.** `docs/reports/002_claim_scoring.md`; design v2.2; external review accepted.
@@ -9,8 +9,13 @@
   - **The token lenses carry z inside the candidate set at L40–44:** the z-vs-z′ ranking flips with the start swap in
     47–48 of 48 tables. They do not carry the start.
   - Descriptive; no causal label.
-- **001 probe repair (amendment A2):** re-run in progress (41k fits, CPU); then the residual checks from the 002
-  review (solver across the C grid, 12-way grouped null) and the report 001 §7/§9 update.
+- **001 probe repair (amendment A2): done.** 41k fits, 2 h CPU.
+  - Membership controls now average 0.48–0.52 (they were 0.58, up to 0.84).
+  - **The call changed:** off-path membership is decodable at the `:` cell at every layer, narrowly at L40–44
+    (selectivity 0.11–0.13) and clearly at L60.
+  - Residual checks: the span solver matches or beats the full solver across the C grid; the grouped 12-way null
+    is wider but changes no call.
+  - Report 001 §7/§9/§10/§12/§13/§15 updated.
 
 **New here?** Read `docs/COME_UP_TO_SPEED.md` first; `docs/context/SPEC_STATUS.md` maps the whole spec to done / not
 done. **The repo is private and `main` carries everything** (merged from `setup/000-scaffold` on 2026-10-02).

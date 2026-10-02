@@ -241,39 +241,63 @@ trace of which colours are in the table.
 
 Caveat: the 90.7% behavioural figure sits just above the 90% line (Q12). That margin is fragile.
 
-## 7. Decodability (probes; natural dev renders, folds grouped by table)
+## 7. Decodability (probes; natural dev renders, folds grouped by table) — repaired under amendment A2
 
-12-way balanced accuracy (chance ≈ 0.083); the Hewitt–Liang control task sits at 0.05–0.12:
+*The first probe run (commit dc33f48, `analysis/probes.json` in git history) had three faults:*
+- *one control draw per fit, with one seed shared by every target;*
+- *AUC pooled across fold models;*
+- *a permutation null that reused the C chosen on the real labels.*
+
+*Design 001 amendment A2 repaired them, and this section reports the repaired run: 41k fits, 2 h on CPU, every
+fit through the full procedure. The first run's numbers are given only where a call changed.*
+
+12-way balanced accuracy (chance ≈ 0.083). Control task: the mean of 10 draws per target, 0.07–0.10. Null: 100
+full-procedure permutations.
 
 | Target | `:` L40 | `:` L44 | `:` L60 | assistant-newline L42 | `</think>`-newline L42 |
 |---|---|---|---|---|---|
-| z (intermediate) | **0.77** | **0.75** | 0.68 | 0.81 | 0.81 |
-| start | 0.81 | 0.74 | 0.53 | 0.77 | 0.85 |
-| answer | **0.17** | **0.18** | **0.83** | 0.19 | 0.14 |
+| z (intermediate) | **0.79** | **0.77** | 0.70 | 0.81 | 0.84 |
+| start | 0.84 | 0.75 | 0.54 | 0.80 | 0.87 |
+| answer | **0.18** | **0.19** | **0.84** | 0.19 | 0.15 |
 
-- **z and start are strongly decodable at every emission cell at L40–44** (BH-significant, selectivity 0.61–0.77).
-- **This linear probe decodes the answer poorly at L40–44:** balanced accuracy 0.14–0.26, and only 3 of the 9 cell ×
-  layer combinations pass the selectivity rule, all weakly (selectivity 0.11–0.16). It decodes it well at L56/60
-  (0.83–0.89).
-- So at the verbalizers' layers, start and z are linearly decodable from the emission cells and the answer much less
-  so. That ordering is consistent with a two-step computation. It does not show that the answer is absent or not yet
-  computed at L40–44; a weak linear probe is not evidence of absence.
+- **z and start are strongly decodable at every emission cell at L40–44** (BH-significant, selectivity 0.64–0.80).
+- **This linear probe decodes the answer poorly at L40–44:** balanced accuracy 0.15–0.26. Five of the 9 cell × layer
+  combinations pass the selectivity rule, all narrowly (0.11–0.18); the first run passed 3. It decodes the answer well
+  at L56/60 (0.84–0.89).
+- At the verbalizers' layers, start and z are linearly decodable from the emission cells and the answer much less so.
+  That ordering is consistent with a two-step computation. A weak linear probe is not evidence that the answer is
+  absent or not yet computed.
 
-**Off-trajectory membership** ("is colour c in this table?"; 11 colours had support; pooled AUC):
-- **0.57–0.63 at L40–56.** Above the permutation null (BH p ≤ 0.02 everywhere), but selectivity over the control task
-  is < 0.10, so not decodable by the pre-registered rule.
-- **0.76 at `:` L60 and 0.72 at `</think>` L60.** Selectivity 0.19 and 0.13: decodable by the rule.
-- **Both calls are provisional; the probe controls need repair** (found in the audit, §15):
-  - The membership control task (a random label per table, scored on held-out tables) should sit at AUC ≈ 0.5. It
-    does not: median 0.58 over the 165 colour × cell × layer fits, 71 above 0.6, 13 above 0.7, maximum 0.84 (red,
-    `:` L56, where the real AUC is 0.53). The cause is not yet diagnosed. One candidate is pooling decision scores
-    across folds with different intercepts, under heavy class imbalance (e.g. red 145 : 40). Until it is fixed,
-    selectivity against this control is not interpretable. The 12-way controls are fine (0.05–0.12).
-  - The permutation null reuses the regularisation C chosen per outer fold on the real labels, while the real and
-    control fits tune C by inner cross-validation. So the null does not repeat the full fitting procedure, and the
-    p-values are not yet usable as a label gate.
-- A failed rule at L40–44 is not evidence that membership is absent there: the directional test below follows the
-  edit in most items.
+**Off-trajectory membership** ("is colour c in this table?"; 11 colours had support):
+- **Metric:** AUC within each outer fold, averaged over folds, then averaged over colours.
+- **Control:** 20 random table-label draws per colour; their mean is 0.48–0.52 at every cell × layer (per-draw SD
+  about 0.12).
+- **Null:** 200 joint table permutations, shared across colours. 148–200 per colour are valid; the rest fail the
+  class-support check and are dropped, and the counts are reported.
+
+| Cell | L40 | L42 | L44 | L56 | L60 |
+|---|---|---|---|---|---|
+| `:` | **0.64** ✓ | **0.63** ✓ | **0.61** ✓ | **0.64** ✓ | **0.79** ✓ |
+| `</think>` newline | 0.63 ✓ | 0.64 ✓ | 0.60 | 0.64 ✓ | 0.74 ✓ |
+| assistant newline | 0.61 ✓ | 0.61 | 0.58 | 0.59 | 0.64 ✓ |
+
+✓ = BH-significant against the full-procedure null **and** selectivity ≥ 0.10.
+
+- **The call changed.** Membership is now decodable by the pre-registered rule at the `:` cell **at every layer**,
+  including L40–44 where the Oracle and NLA read. The first run passed only L60.
+  - The L40–44 selectivities are 0.11–0.13, **just above the 0.10 line, so the call is fragile**.
+  - L60 is clear (selectivity 0.30).
+  - The first run's failure at L40–56 came from an unlucky control draw of about 0.57.
+- **Residual checks** (`analysis/probe_residual_checks.json`; requested by the external review of design 002):
+  - **Solver:** across the whole C grid on real folds, the span solver used in the repair reaches the same objective
+    value as the full-dimensional solver at C ≤ 0.1 (relative difference ≤ 2e-4; predictions agree 98–100%). At
+    C = 1 it reaches a **lower** objective (by 0.4–2.4%; predictions agree 91.5–100%), so it is the better
+    optimiser. No convergence warnings from either.
+  - **12-way null:** the row-level permutation null is somewhat narrower than a grouped null that permutes whole
+    tables among tables with the same render count (95th percentile 0.106–0.117 vs 0.126–0.149). Every real score
+    tested exceeds the grouped null's 95th percentile too: answer at `:` L40/L44 and at the assistant newline L40,
+    0.175–0.19; z 0.78. No conclusion changes, but row-level p-values for borderline targets should be read as
+    somewhat anti-conservative.
 
 **Cross-fitted directional test** (probe fitted without the item's table, applied to its original and substituted
 renders):
@@ -283,11 +307,11 @@ renders):
 | L40–44 | 67–82% of items | 77–89% |
 | L60 | 98% (`:`), 98% (`</think>`) | 98%, 94% |
 
-Mean logit shifts at the `:` cell, L60: −1.90 and +2.14.
+Mean logit shifts at the `:` cell, L60: −1.88 and +2.14.
 
-Probe power (from a synthetic check; it predates the control problem above): with about 180 renders in 5120 dimensions, a single strong direction in isotropic
-noise only reaches AUC about 0.68. The z/start/answer results show the probe works on strong signals. The weak
-L40–56 membership AUCs may be a limit of the probe as much as of the representation.
+Probe power (synthetic check): with about 180 renders in 5120 dimensions, a single strong direction in isotropic
+noise reaches only AUC about 0.68. The membership AUCs of 0.58–0.64 at L40–56 are near that ceiling. A weak signal
+there may reflect probe power as much as the representation.
 
 ## 8. Reader snapshot (descriptive; 10 dev tables; 32 min; run after the reader-free outputs were hashed)
 
@@ -442,7 +466,7 @@ only. No reader result here enters any decision.
 | Rule | Outcome |
 |---|---|
 | 1. Within-position variation (diagnostic) | Present at the start token, the last question token and the `</think>` newline; **absent at the `:` and assistant-newline cells at L40–44**, where every pair is "toward". Whole-cell leverage does not supply the contrast at the emission cells; content level does (rule 2) |
-| 2. Brew supplies a not-needed class | **Provisional yes, only at L60.** Off-trajectory membership passes the rule at `:` and `</think>` L60, and the substitution is behaviourally and transplant-negligible (90.7% / 95.3%). But the membership control task is far from chance and the permutation null does not repeat C tuning (§7), so the call waits on the probe repair. At L40–44, where the Oracle and NLA read, the rule fails, which is not evidence of absence: the directional test follows the edit in most items. L60 success does not validate an L42 not-needed class. The RHUT fallback is not triggered |
+| 2. Brew supplies a not-needed class | **Yes, after the probe repair (A2).** Off-trajectory membership passes the rule at the `:` cell at every layer (L40–60) and the substitution is behaviourally and transplant-negligible (90.7% / 95.3%). At L40–44, where the Oracle and NLA read, selectivity is 0.11–0.13, just above the 0.10 line, so the class is **fragile there and clear at L60**. The RHUT fallback is not triggered |
 | 3. Engine checks | **Pass** (every exact check, every pair) |
 | 4. Power | **Pass** (82 brew, 48 chain dev pairs), but chain spans only 9 groups |
 | 5. Threshold revision (τ, ε′, bound) | Not yet; proposal in §13 |
@@ -459,7 +483,7 @@ only. No reader result here enters any decision.
 | Q6 | Within-position variation at ≥ 1 brew emission cell × layer | 50% | **True, only at `</think>` L56/60** |
 | Q7 | Same for chain | 40% | **True** (one question cell, L60) |
 | Q8 | z decodable at `:` L40, 42, 44 | 70% | **True** |
-| Q9 | Off-trajectory membership decodable at ≥ 1 emission cell × layer | 55% | **True (L60 only); provisional** until the probe controls are repaired (§7) |
+| Q9 | Off-trajectory membership decodable at ≥ 1 emission cell × layer | 55% | **True**; after the A2 repair at `:` L40–60 (first run: L60 only) |
 | Q10 | Answer more decodable than z at `:` L44 | 65% | **False** (0.18 vs 0.75) |
 | Q11 | Damage-dominated emission patches in < 10% of pairs | 75% | **False** (46–67% at `:`; the flag stands, §4) |
 | Q12 | Substitution behaviourally negligible in ≥ 90% | 70% | **True, narrowly** (90.7%) |
@@ -499,9 +523,10 @@ Each is stated next to its claim above; collected here:
 - **Whole-cell shares cannot say which content matters**, and a mean-difference direction does not settle it by
   itself; a content-specific test that separates intermediate from answer information is still needed.
 - **Damage:** most patches at `:` are flagged; the saved top-5 cannot say where most of the off-pair mass goes.
-- **Probe controls need repair:** the membership control task sits far from chance (median AUC 0.58, max 0.84), and
-  the permutation null reuses C from the real fit. Membership calls are provisional at every layer. A weak linear
-  probe (answer at L40–44, membership at L40–56) is not evidence of absence.
+- **Probes:**
+  - Repaired under A2 (§7). Membership is decodable at L40–44 only narrowly (selectivity 0.11–0.13).
+  - The 12-way row-level null is somewhat anti-conservative compared with a grouped null; no tested call changes.
+  - A weak linear probe (the answer at L40–44) is not evidence of absence.
 - **Reader snapshot:** mention scoring, no role scoring, no matched claim budgets, no prompt-only baseline (the
   project rule asks for it from day one; it was not run in 001), Oracle and NLA at different layers, n = 10 tables.
 - **The 90.7% behavioural substitution figure is near its threshold.**
@@ -514,8 +539,8 @@ Under these conditions (Qwen3.6-27B, brew dev, SEC regime):
   the gap at `:`). Which content carries that influence is not yet tested.
 - Start and z are linearly decodable there; the answer is decoded much less accurately by the same probe.
 - Off-trajectory table contents leave a trace: the substitution barely moves the answer (90.7% within the bound) but
-  shifts its tail, and a cross-fitted probe follows it, most clearly at L60. The pooled membership rule is
-  provisional until the probe controls are repaired.
+  shifts its tail. A cross-fitted probe follows it, and after the probe repair, membership is decodable by the rule
+  at the `:` cell at every layer: clearly at L60, narrowly at L40–44.
 
 Reader snapshot (descriptive, 10 tables):
 - The readers share task-structure information, show some activation-sensitive colour signal (the within-table
@@ -528,16 +553,15 @@ role; the J lenses list no palette colour". Whether z itself is causally influen
 claims track it, is unresolved.
 
 For W, this means:
-- Brew offers a candidate within-cell contrast: a pair difference with large leverage, against off-trajectory colours
-  that leave a decodable trace and barely move the answer. It is clean only once the probe controls are repaired, and
-  at L40–44 it rests on the directional test.
+- Brew offers a within-cell contrast: a pair difference with large leverage, against off-trajectory colours that
+  leave a decodable trace and barely move the answer. It is clear at L60 and narrow (selectivity 0.11–0.13) at the
+  verbalizers' L40–44.
 
 Proposed for AMENDMENT_02 (before any test-split label):
 - keep τ = 0.10 and ε′ = 0.05 (the profile gives no reason to move them);
 - adopt the §6 bound as frozen;
 - log the full answer-colour distribution at flagged cells and report the damage components separately (§4);
-- repair the probes: permutation null that repeats C tuning, per-fold rather than pooled AUC (or a diagnosis of the
-  control), and a control that sits at chance before any membership call is used;
+- probes: done (amendment A2; §7);
 - reader scoring: separate mention, correct role, and contradicted claims, with abstention allowed and matched claim
   budgets; within-table contrasts; a prompt-only baseline; frozen on dev before any held-out use;
 - decide whether reader scoring of the not-needed class uses L60 (lenses) only, or also L40–44 via the directional
@@ -568,8 +592,9 @@ Proposed for AMENDMENT_02 (before any test-split label):
   - "FVE reflects the template, not item-specific content" (a small source preference exists);
   - "not yet the answer" from a weak probe;
   - the substitution null stated as a finding.
-- **Probe controls were not checked before use:** the membership control task sits far from chance, and the
-  permutation null reuses C from the real fit. Not yet fixed: needs a probe re-run (§13 proposal).
+- **Probe controls were not checked before use:**
+  - one shared-seed control draw per fit; AUC pooled across folds; a null that reused C.
+  - Repaired by amendment A2 and re-run; this changed the membership call at L40–56 (§7).
 - **No prompt-only baseline was run in 001,** although the project rules ask for it from day one.
 
 ## 15. External audit (Codex, 2026-10-02) and follow-ups
@@ -588,8 +613,8 @@ report; it ran no model. Every number it gave was recomputed independently by
 | Damage explanation incomplete | Yes (top 5 holds 0.77 of mass; off-pair 0.35, intermediates 0.09 within the top 5) | §4 rewritten; the flag stands |
 | Table-mean intervals next to pair medians | Yes | §4 now uses a bootstrap of the median |
 | Chain clustered by item, not step group | Yes | §5 recomputed over 9 groups |
-| Permutation null reuses C from the real fit | Yes (`leverage_profile.py`, `_one_target`) | Flagged; needs a probe re-run |
-| Membership controls up to AUC 0.84 | Yes; worse than stated: median 0.58, 71/165 above 0.6 | §7, §9 marked provisional; needs diagnosis |
+| Permutation null reuses C from the real fit | Yes (`leverage_profile.py`, `_one_target`) | Repaired (A2): every null fit tunes C; re-run |
+| Membership controls up to AUC 0.84 | Yes; worse than stated: median 0.58, 71/165 above 0.6 | Diagnosed: one shared-seed draw (SD about 0.12) plus cross-fold pooling. Repaired (A2): the control now averages 0.48–0.52; membership decodable at `:` L40–60 (§7) |
 | Substitution null is exploratory | Yes | §8 |
 | No prompt-only baseline, matched budgets or causal reader ranking | Yes | §12, §14 |
 | No Oracle L42 arm, so no matched-layer comparison | Yes | §8 |

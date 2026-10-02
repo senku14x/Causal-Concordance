@@ -76,14 +76,14 @@ live state in `STATUS.md`, and the item-by-item spec status in `docs/context/SPE
 
 ## 5. Known problems (not yet fixed)
 
-1. **Probe controls:**
-   - The membership control task sits far from chance (median AUC 0.58, max 0.84).
-   - The permutation null reuses the regularisation chosen on the real labels.
-   - Fix and re-run the probes (CPU only) before any membership or "not needed" call is used.
+1. **Probe controls:** fixed (amendment A2; re-run 2026-10-02). Membership is now decodable at `:` L40–60, but only
+   narrowly at L40–44 (selectivity 0.11–0.13); the 12-way row-level null is somewhat narrower than a grouped one
+   (no call changes).
 2. **Damage readout:** only the top 5 tokens of edited distributions were saved, so most of the flagged off-pair mass
    is unaccounted for. Log the full answer-colour distribution.
-3. **Prompt-only baseline** (stock Qwen3.6-27B) was not run, although the PI asked for it from day one.
-4. **Reader scoring** is mention-only: no role scoring, no matched claim budgets, no judge.
+3. **Prompt-only baseline:** done in 002 as a task baseline (z 1.00).
+4. **Reader scoring:** role-aware scoring done in 002. Still missing: atomic-claim extraction that keeps out-of-set
+   colour identities, and matched claim budgets beyond one claim per role.
 5. **Oracle and NLA read different layers** (L40/44 vs L42); there is no matched-layer comparison.
 6. **Raw outputs** (`outputs/`, gitignored) exist only on the current instance, which has no persistent volume, and are
    not mirrored (HF dataset name pending). Committed `results/` and the code reproduce every reported number only

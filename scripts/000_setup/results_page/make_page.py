@@ -130,10 +130,10 @@ def exp001(tok):
          f"at L40–44, and the answer poorly ({f2(min(ac))}–{f2(max(ac))}); it decodes the answer well from L56. Consistent with a "
          "two-step computation, but a weak probe is not evidence that the answer is absent."),
         ("Is there content that is decodable but not needed?",
-         f"Candidate: off-path table colours. Swapping one out barely moves the answer ({frac(sub['behaviour_frac_negligible'], sub['n_items'])} "
-         f"items within the bound; the line was 90%), and a cross-fitted probe follows the swap (98% of items at L60). The pooled "
-         f"membership probe passes only at L60 (AUC {f2(mem60)}), and that call is provisional: its control task sits far from "
-         "chance (median AUC 0.58, max 0.84), so the probes need repair first."),
+         f"Yes: off-path table colours. Swapping one out barely moves the answer ({frac(sub['behaviour_frac_negligible'], sub['n_items'])} "
+         f"items within the bound; the line was 90%). After the probe repair (amendment A2) membership is decodable by the rule at "
+         f"the “:” cell at every layer: clearly at L60 (AUC {f2(mem60)}), narrowly at L40–44 (selectivity 0.11–0.13, just above "
+         "the 0.10 line)."),
         ("Do readers name the content the answer depends on?",
          "Not scored yet (no labels). Descriptively: the NLA mentions this table's z in 17 of 40 samples at “:” (shuffled 8 of 40), "
          "on 6 of 10 tables, and gives z the right role in about 5 of those 17. A within-table contrast (swap the start, which "
@@ -148,9 +148,9 @@ def exp001(tok):
          f"{f2(orc_off[0])} vs {f2(orc_off[1])}), and no substitution tracking was detected. Both are exploratory nulls at n = 10."),
         ("Can the measurements be trusted?",
          f"The patching engine, yes: every exact check passes on every pair (self-patch, embedding anchor, prefix, stir no-op: "
-         f"bitwise), and the SEC noise floor is {b['noise_floor']['upper_L42_rms_frac_G']:.1e} of the gap. Two diagnostics need "
-         "repair: the probe controls and permutation null, and the damage readout (the saved top 5 tokens cannot say where "
-         "most off-pair mass goes). Found by an external audit; see report §15."),
+         f"bitwise), and the SEC noise floor is {b['noise_floor']['upper_L42_rms_frac_G']:.1e} of the gap. The probe controls and "
+         "null were repaired and re-run (amendment A2; controls now at 0.48–0.52). The damage readout still cannot say where "
+         "most off-pair mass goes (only the top 5 tokens were saved). Found by external audits; see report §7 and §15."),
     ]
     look_html = "".join(f'<li><span class="q">{h(a)}</span><span class="a">{h(bb)}</span></li>' for a, bb in look)
 
@@ -360,7 +360,7 @@ def exp001(tok):
 <section aria-labelledby="h-001">
   <div class="eyebrow">Experiment 001 · dev split · SEC regime (true fp32 from block 40) · report: docs/reports/001_leverage_profile.md</div>
   <h2 id="h-001">Experiment 001: where the answer depends on one cell, and what sits there</h2>
-  <p class="small" style="background:var(--warn-soft);color:var(--ink);padding:10px 14px;border-radius:8px"><b>Revised after an external audit (2026-10-02).</b> Every number was recomputed independently from the saved outputs and matched. Corrected: the damage reading, reader mention counts read as claims, the reconstruction and null wording, and interval estimands. Still to repair: the probe controls and the permutation null. Defensible summary: the readers share task-structure information, show some activation-sensitive colour signal, and often surround it with incorrect detail. Whether their claims track causally influential content is unresolved. Report §15 has the point-by-point table.</p>
+  <p class="small" style="background:var(--warn-soft);color:var(--ink);padding:10px 14px;border-radius:8px"><b>Revised after an external audit (2026-10-02).</b> Every number was recomputed independently from the saved outputs and matched. Corrected: the damage reading, reader mention counts read as claims, the reconstruction and null wording, and interval estimands. The probe controls and null have since been repaired and re-run (amendment A2). Defensible summary: the readers share task-structure information, show some activation-sensitive colour signal, and often surround it with incorrect detail. Whether their claims track causally influential content is unresolved. Report §15 has the point-by-point table.</p>
   <p><b>What was done.</b> For each gated pair (two prompts that differ only in the start colour), the partner's whole
   activation was copied into the member's run at one token position and one layer, and we measured how much of the
   answer gap G that single edit produces (share S). This was repeated at every start, stir, question and answer cell, at
@@ -401,7 +401,7 @@ def exp001(tok):
   </div>
 
   <h3>Decodability at the answer cells (probes)</h3>
-  <p class="small muted">L2 logistic regression, 5-fold by table, nested C. Control task (Hewitt–Liang) at 0.05–0.12; ✓ = BH-significant and selectivity ≥ 0.10. Chance ≈ 0.083 for 12 colours. <b>Membership row provisional:</b> its control task sits far from chance (median AUC 0.58, max 0.84), and the permutation null reuses the regularisation chosen on the real labels. Both need repair before any membership call is used.</p>
+  <p class="small muted">L2 logistic regression, 5-fold by table, nested C. Control task (Hewitt–Liang) at 0.05–0.12; ✓ = BH-significant and selectivity ≥ 0.10. Chance ≈ 0.083 for 12 colours. Repaired run (amendment A2): per-fold AUC; 20 (membership) / 10 (12-way) control draws per target, membership controls now 0.48–0.52; full-procedure permutation nulls. Membership passes at “:” L40–60, narrowly at L40–44.</p>
   <div class="scroll"><table class="tbl">{dec_tbl}</table></div>
   <details class="more"><summary>Same targets at the other two answer cells</summary><div class="scroll"><table class="tbl">{dec_other}</table></div></details>
 
@@ -455,7 +455,7 @@ def exp001(tok):
   <ul class="plain">
     <li>Keep τ = {tau} and ε′ = {eps} (the profile gives no reason to move them) and freeze the substitution bound.</li>
     <li>Log the full answer-colour distribution at flagged cells; report intermediate mass, non-colour mass and top-1 retention separately.</li>
-    <li>Repair the probes (a permutation null that repeats C tuning; diagnose the off-chance control) before any membership call is used.</li>
+    <li>Probes: repaired and re-run (A2). The not-needed class now exists at L40–44 too, but narrowly; decide whether to score it there.</li>
     <li>Reader scoring: mention vs correct role vs contradicted, with abstention, matched claim budgets, within-table contrasts and a prompt-only baseline; frozen on dev.</li>
     <li><b>Your call:</b> should reader scoring of the not-needed class use L60 only (lenses), or also L40–44 via the directional test (where the Oracle and NLA read)?</li>
   </ul>

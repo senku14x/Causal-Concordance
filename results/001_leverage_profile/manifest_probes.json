@@ -1,7 +1,7 @@
 {
  "experiment": "001_leverage_profile",
  "stage": "probes",
- "run_id": "20261002T092423Z",
+ "run_id": "20261002T122816Z",
  "design": "docs/design_specs/001_leverage_profile.md (v3)",
  "model": {
   "repo": "Qwen/Qwen3.6-27B",
@@ -155,9 +155,10 @@
   "cuda": "12.8"
  },
  "git": {
-  "commit": "f44581619e90fb1a5bac057d74876a49f71e9225",
+  "commit": "09785b545bea7f172bfb1c9dc3744add7222d0c3",
   "dirty": true
  },
- "seconds": 1525.9311282634735,
- "n_jobs": 225
+ "seconds": 7430.700037479401,
+ "n_jobs": 41460,
+ "repair": "amendment A2"
 }

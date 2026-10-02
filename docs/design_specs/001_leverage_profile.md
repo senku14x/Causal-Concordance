@@ -426,3 +426,13 @@ which pushed the L40–56 calls below the 0.10 line. Those are the layers where 
     held-out rows.
   - So real-label 12-way values can shift slightly from the first run. Within the repaired run, real, control and
     null all use one estimator.
+
+**A2 outcome** (run 2026-10-02, 41k fits, 2 h CPU; report 001 §7):
+- the membership control now averages 0.48–0.52;
+- membership is decodable at the `:` cell at L40–60 (L40–44 narrowly, selectivity 0.11–0.13);
+- z and start are unchanged; the answer passes narrowly at 5 of 9 L40–44 cells.
+
+Residual checks (`analysis/probe_residual_checks.json`):
+- the span solver matches the full solver at C ≤ 0.1 and finds a lower objective at C = 1;
+- the grouped 12-way null is wider than the row-level one, but no tested call changes.
+
