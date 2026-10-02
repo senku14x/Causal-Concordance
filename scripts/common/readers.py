@@ -169,6 +169,26 @@ class OracleLens:
                                   num_return_sequences=k, pad_token_id=self.tok.pad_token_id or self.tok.eos_token_id)
         return [t.strip() for t in self.tok.batch_decode(out, skip_special_tokens=True)]
 
+    @torch.no_grad()
+    def read_batch(self, hs, layer, k=4, seed=0, sampling=SAMPLING_WSB):
+        """Several activations in one generate call (same carrier, one row per activation; None = no activation).
+        Returns a list (one per activation) of k samples."""
+        ids, slot, _ = self.carrier(layer)
+        dev = self.model.device
+        base = self.model.get_input_embeddings()(torch.tensor([ids], device=dev))[0]
+        e = base.unsqueeze(0).repeat(len(hs), 1, 1).clone()
+        for b, h in enumerate(hs):
+            if h is not None:
+                v = h.to(dev).float()
+                e[b, slot, :] = (self.c["alpha"] * v / v.norm().clamp_min(1e-9)).to(e.dtype)
+        torch.manual_seed(seed)
+        out = self.model.generate(inputs_embeds=e, attention_mask=torch.ones(len(hs), len(ids), device=dev, dtype=torch.long),
+                                  do_sample=True, temperature=sampling["temperature"], top_p=sampling["top_p"],
+                                  top_k=sampling["top_k"], max_new_tokens=sampling["max_new_tokens"],
+                                  num_return_sequences=k, pad_token_id=self.tok.pad_token_id or self.tok.eos_token_id)
+        texts = [t.strip() for t in self.tok.batch_decode(out, skip_special_tokens=True)]
+        return [texts[b * k:(b + 1) * k] for b in range(len(hs))]
+
     def unload(self):
         """Remove the adapter (no merge) and return the base model."""
         return self.model.unload()
@@ -227,9 +247,19 @@ class NLAVerbalizer:
         mp = self.marker
         if v is None or h.shape[1] <= mp:
             return out
-        hp = h[:, mp, :].clone()
-        vu = v.to(h.device, h.dtype) / (v.to(h.device, h.dtype).norm() + 1e-9)
-        h[:, mp, :] = hp + hp.norm(dim=-1, keepdim=True) * vu
+        if v.dim() == 1:                                   # one vector for every row (contract: bf16 arithmetic)
+            hp = h[:, mp, :].clone()
+            vu = v.to(h.device, h.dtype) / (v.to(h.device, h.dtype).norm() + 1e-9)
+            h[:, mp, :] = hp + hp.norm(dim=-1, keepdim=True) * vu
+        else:                                              # one vector per row; all-zero rows = no activation
+            V = v.to(h.device, h.dtype)
+            assert V.shape[0] == h.shape[0], (V.shape, h.shape)
+            for b in range(h.shape[0]):
+                if float(V[b].float().norm()) == 0.0:
+                    continue
+                hp = h[b, mp, :].clone()
+                vu = V[b] / (V[b].norm() + 1e-9)
+                h[b, mp, :] = hp + hp.norm() * vu
         self.injections += 1
         return out
 
@@ -247,6 +277,25 @@ class NLAVerbalizer:
         finally:
             self._v["v"] = None
         return self.tok.batch_decode(out[:, len(self.ids):], skip_special_tokens=True)
+
+    @torch.no_grad()
+    def read_batch(self, hs, k=4, seed=0, sampling=SAMPLING_WSB):
+        """Several activations in one generate call (None = no activation). Returns one list of k raw samples per
+        activation (rows are expanded k times by num_return_sequences, so the per-row vectors are too)."""
+        d = next(h for h in hs if h is not None).shape[-1] if any(h is not None for h in hs) else 5120
+        V = torch.stack([h.float() if h is not None else torch.zeros(d) for h in hs]).repeat_interleave(k, 0)
+        self._v["v"] = V
+        try:
+            torch.manual_seed(seed)
+            x = torch.tensor([self.ids] * len(hs), device=self.model.device)
+            out = self.model.generate(x, attention_mask=torch.ones_like(x), do_sample=True,
+                                      temperature=sampling["temperature"], top_p=sampling["top_p"], top_k=sampling["top_k"],
+                                      max_new_tokens=sampling["max_new_tokens"], num_return_sequences=k,
+                                      pad_token_id=self.tok.pad_token_id or self.tok.eos_token_id)
+        finally:
+            self._v["v"] = None
+        texts = self.tok.batch_decode(out[:, len(self.ids):], skip_special_tokens=True)
+        return [texts[b * k:(b + 1) * k] for b in range(len(hs))]
 
     def close(self):
         self._hook.remove()

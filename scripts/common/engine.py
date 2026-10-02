@@ -171,6 +171,26 @@ class SpanWriter(_Hooked):
         return f
 
 
+class EmbedPatch:
+    """Replace input-embedding rows at `positions` with `source` [P, d] (forward hook on the embedding module). With the
+    partner's embedding rows at the only differing token this reproduces the partner's forward exactly (the 001 anchor)."""
+    def __init__(self, embed, positions, source):
+        self.embed, self.pos, self.src, self._h, self.calls = embed, list(positions), source, None, 0
+
+    def _f(self, m, i, o):
+        h = o.clone()
+        h[0, self.pos, :] = self.src.to(h.device, h.dtype).reshape(len(self.pos), -1)
+        self.calls += 1
+        return h
+
+    def __enter__(self):
+        self._h = self.embed.register_forward_hook(self._f)
+        return self
+
+    def __exit__(self, *a):
+        self._h.remove()
+
+
 def realized_write_stats(hook):
     """rho and kappa of a CellWrite's realised write (cell-level, all positions flattened). RHUT definition."""
     r = hook.realized

@@ -66,3 +66,25 @@ def test_relational_pairs_aligned(tok, rel_bank):
     ("relational", " sibling's landlord", "landlord's sibling", False)])
 def test_answer_parsing(family, text, answer, ok):
     assert P.is_correct(family, text, answer) is ok
+
+
+def test_brew_substitution_hand_checked(tok, brew_bank):
+    """brew-s2-r10d2-0000 (blue -> green -> black): gray is in the table and off the trajectory (key of 'gray -> blue',
+    output of 'pink -> gray'); gold and teal are absent. gray -> teal changes exactly those two tokens, keeps the
+    trajectory and the answer, and sits inside the rule table."""
+    it = next(x for x in brew_bank if x["name"] == "brew-s2-r10d2-0000")
+    subs = {(p.meta["c"], p.meta["c2"]): p for p in P.brew_substitutions(tok, it)}
+    assert set(c2 for _, c2 in subs) <= {"gold", "teal"}
+    assert not any(c in ("blue", "green", "black", "orange") for c, _ in subs)
+    p = subs[("gray", "teal")]
+    r_m, r_p, diff = P.token_align(tok, p, it)
+    assert len(diff) == 2 and [r_m.decoded[i] for i in diff] == [" gray", " gray"] and [r_p.decoded[i] for i in diff] == [" teal", " teal"]
+    assert "A teal potion turns blue when stirred." in p.p.text and "A pink potion turns teal when stirred." in p.p.text
+    assert (p.p.z, p.p.a) == ("green", "black") and max(diff) < 131
+
+
+def test_every_brew_item_has_a_substitution(tok, brew_bank):
+    for it in brew_bank:
+        p = P.brew_substitution(tok, it)
+        assert p is not None, it["name"]
+        assert P.brew_substitution(tok, it).pair_id == p.pair_id          # deterministic by seed

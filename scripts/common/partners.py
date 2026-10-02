@@ -6,6 +6,7 @@ token counts and differ only at the changed input tokens. The gate: greedy corre
 T = 0.8 (top_p 0.95, max 16 new tokens, EOS suppressed as in WSB's gate config), for BOTH pair members.
 """
 import math
+import random
 import re
 from dataclasses import asdict, dataclass, field
 
@@ -74,6 +75,53 @@ def brew_candidates(it):
                               "off_trajectory_m": sorted(set(table) - {s, z, a}),
                               "off_trajectory_p": sorted(set(table) - {s2, z2, a2})}))
     return out
+
+
+BREW_COLOURS = ("black", "blue", "brown", "gold", "gray", "green", "orange", "pink", "purple", "red", "teal", "white")
+SUB_EXCLUDE = ("orange",)        # its article "An" would change too
+SUB_SEED = 20261002
+
+
+def brew_substitutions(tok, it):
+    """Every valid off-trajectory substitution for a brew item (design 001 §2): a colour c that is in the table and off
+    the trajectory (c not in {start, z, answer}) is replaced, everywhere it occurs (row key and row outputs), by a colour
+    c2 absent from the table. Valid = the trajectory is unchanged, the token count is unchanged, and only c -> c2 colour
+    tokens change, all inside the rule table (before the stir sentence). The answer is the member's answer."""
+    s, z, a = it["start"], it["intermediates"][0], it["answer"]
+    depth = it.get("depth", 2)
+    table = it["table"]
+    present = set(table) | {v["stir"] for v in table.values()}
+    absent = [c for c in BREW_COLOURS if c not in present and c not in SUB_EXCLUDE]
+    cands = [c for c in sorted(present) if c not in (s, z, a) and c not in SUB_EXCLUDE]
+    r0 = wsb.render_item(tok, "brew", it)
+    stir0 = min(p for p, g in r0.regions.items() if g == "stir")
+    out = []
+    for c in cands:
+        for c2 in absent:
+            text = re.sub(rf"\b{c}\b", c2, it["prompt"])
+            t2 = {(c2 if k == c else k): {"stir": (c2 if v["stir"] == c else v["stir"])} for k, v in table.items()}
+            if brew_trajectory(t2, s, depth) != brew_trajectory(table, s, depth):
+                continue
+            r1 = wsb.render_item(tok, "brew", it, text=text)
+            if len(r1) != len(r0):
+                continue
+            diff = changed_positions(r0, r1)
+            if not diff or max(diff) >= stir0:
+                continue
+            if not all(r0.decoded[i].strip() == c and r1.decoded[i].strip() == c2 for i in diff):
+                continue
+            out.append(Pair(pair_id=f"{it['name']}__sub_{c}_{c2}", family="brew", item=it["name"],
+                            m=Member(it["name"], it["prompt"], s, z, a), p=Member(it["name"], text, s, z, a),
+                            meta={"kind": "substitution", "c": c, "c2": c2, "diff": diff}))
+    return out
+
+
+def brew_substitution(tok, it, seed=SUB_SEED):
+    """One substitution per item, drawn by seed (None if the item admits none)."""
+    cands = brew_substitutions(tok, it)
+    if not cands:
+        return None
+    return cands[random.Random(f"{seed}|{it['name']}").randrange(len(cands))]
 
 
 # --------------------------------------------------------------------------------------------- chain
@@ -182,6 +230,8 @@ def token_align(tok, pair, bank_item):
     if len(r_m) != len(r_p):
         return None
     diff = changed_positions(r_m, r_p)
+    if pair.meta.get("kind") == "substitution":
+        return (r_m, r_p, diff) if diff == pair.meta["diff"] else None
     if fam == "brew":
         start_pos = sorted(p for p, g in r_m.regions.items() if g == "start")
         if len(diff) != 1 or diff[0] not in start_pos:
