@@ -21,10 +21,12 @@ amendment A1) · 2026-10-02.*
 | smoke | 20261002T080920Z | 5d5d1a3, dirty |
 | run | 20261002T081118Z | 647dcb5, clean |
 | probes | 20261002T092423Z | f445816, dirty |
-| snapshot | see §8 | |
+| snapshot | 20261002T095116Z | 6b55a02, dirty |
 
 - **gate, smoke:** "dirty" because the analysis/figures stages were uncommitted when the manifest was written. The gate
   and measurement code were committed.
+- **snapshot:** the code that ran is the one committed in 6b55a02, which includes the render-loop fix; it ran
+  after the run and probe outputs were hashed. "dirty" because the report was being edited.
 - **probes:** the probe code is as committed at f445816. "dirty" because snapshot-summary code was uncommitted when the
   manifest was written.
 - **raw outputs:** `outputs/001_leverage_profile/` (sha256 in `manifest_run.json`).
@@ -249,9 +251,99 @@ Probe power (from a synthetic check): with about 180 renders in 5120 dimensions,
 noise only reaches AUC about 0.68. The z/start/answer results show the probe works on strong signals. The weak
 L40–56 membership AUCs may be a limit of the probe as much as of the representation.
 
-## 8. Reader snapshot (descriptive)
+## 8. Reader snapshot (descriptive; 10 dev tables; 32 min; run after the reader-free outputs were hashed)
 
-*To be filled from `snapshot.json` / `snapshot_summary.json`.*
+**Protocol** (design §3.7 + A1):
+- **Tables:** the first 10 dev tables with a gated start pair and a gated substitution.
+- **Activations per table:** the member, its start partner, and the substituted render.
+- **Cells:** the three emission cells.
+
+| Reader | Layers | Samples |
+|---|---|---|
+| Lenses: J_NP (cosine and standard), J_CB, R_CB, logit lens | L20–60 every 4, plus L42 | top-10 tokens |
+| Oracle Lens, WSB protocol | the same grid | 1 per cell |
+| Oracle Lens, contract | L40 / L44 at `:` | 4 |
+| NLA | L42, all three cells | 4, plus reconstruction (FVE) |
+
+**Arms:**
+- real: this cell's own activation;
+- none: no activation, for the verbalizers;
+- shuffled: the same cell from another snapshot table. Scored against this table's colours, this gives the chance rate
+  of naming them.
+- SEC: the same cell captured in the SEC regime.
+
+Colour naming is by word match (English + Chinese colour characters), not a judge. Full readouts are in
+`analysis/snapshot.json`; rates are in `analysis/snapshot_summary.json`.
+
+**Bridge (stock vs SEC capture).**
+- cosine ≥ 0.99985 at every layer;
+- lens top-10 lists agree 99.4% on average (minimum 80%);
+- Oracle/NLA naming rates match between the two arms to within sampling noise.
+
+Reader outputs do not depend on the capture regime, so SEC assay results and stock-fed reader outputs can be set side
+by side (the design's bridge condition holds).
+
+**Who names what at the `:` cell (member activation; fraction of readouts naming the item's colour).**
+
+| Reader (real arm) | z | start | answer | an off-path candidate | Same reader, shuffled arm (z / off-path) |
+|---|---|---|---|---|---|
+| Any lens, L20–48 | **0** | 0 | 0 | 0 | 0 / 0 |
+| Any lens, L52 | 0 | 0 | 0.4–0.9 | 0 | |
+| Any lens, L60 | 0.2–0.7 | 0–0.1 | **1.0** | 0–0.5 | |
+| Oracle, 1 sample, L20–44 | 0.2–0.7 | 0.2–0.4 | 0–0.2 | 0.3–0.5 | |
+| Oracle, 1 sample, L52–60 | 0.5–0.6 | 0.1 | **1.0** | 0.3–0.5 | |
+| Oracle, 4 samples, L40 | **0.53** | 0.35 | 0.28 | 0.55 | 0.38 / 0.60 |
+| NLA L42 (`:` / `</think>` / assistant cells) | **0.43 / 0.60 / 0.55** | 0.03–0.30 | 0.15–0.23 | 0.30–0.45 | 0.20–0.25 / 0.30–0.63 |
+
+- **The explained disagreement from the smoke test holds on all 10 tables.**
+  - At L40–44 the probes decode z from the `:` cell (bal. acc. 0.75–0.77), and the cell carries about half the pair
+    difference (§4).
+  - The NLA names this table's z at about twice the shuffled rate.
+  - No lens names any colour in its top 10; the J lenses show task-structure tokens instead ("second", "again",
+    "next", "final"; 第二次 "second time", 再次 "again").
+  - The lenses name the answer from L52 and z only at L60, where z is the model's runner-up output.
+- **Off-path candidates are named about as often with a shuffled activation as with the real one** (Oracle 0.55 vs
+  0.60; NLA 0.30–0.45 vs 0.30–0.63). The verbalizers' off-path mentions are not tied to this activation.
+- **No reader tracks the substitution.**
+
+| Reader, `:` cell | Removed colour c, original → substituted | Inserted colour c′, original → substituted |
+|---|---|---|
+| NLA L42 (real) | 0.12 → 0.10 | 0.28 → 0.15 |
+| Oracle L40, 4 samples (real) | 0.28 → 0.30 | 0.42 → 0.45 |
+| Oracle L44, 4 samples (real) | 0.30 → 0.35 | 0.25 → 0.30 |
+| Lenses L56 / L60 | 0–0.2 → 0–0.1 | 0 → 0–0.1 |
+
+The changes are within the shuffled-arm noise (n = 10 tables). The cross-fitted probe follows the same edit in 98% of
+items at L60 (§7). Observation, n = 10: the table change is linearly decodable but no reader reports it.
+
+- **NLA reconstruction does not identify the item.**
+
+  | Explanations | FVE against this cell (median) |
+  |---|---|
+  | Own (real) | 0.49 |
+  | Shuffled, from another table | 0.48 (0.50 against its own source) |
+  | No activation | −0.35 |
+
+  On these near-identical prompts, FVE reflects the shared brew template, not item-specific content.
+
+**Qualitative example** (table 0009: gold → **red** → purple; substitution pink → blue; shuffled from table 0015):
+
+| Reader | Output |
+|---|---|
+| J_NP cosine, `:` L40 | `kembali`, `다시`, `снова`, `послед`, `第二次`, `再次`, `Cycle`, `Sequence`, `AGAIN`, `novamente` ("again"/"second time" in five languages) |
+| J_NP cosine, `:` L44 | `SECOND`, `AGAIN`, `FOLLOW`, `NEXT`, `второй`, `FINAL`, `END`, … |
+| J_NP cosine, `:` L60 | `purple`, `Purple`, `紫色`, … `pink` |
+| Oracle L40 (real, sample 1) | "- Blue (Explanation: Green → Red, then Red → Blue after two steps) - Red (or Blue …) - Blue, Red …" |
+| Oracle L40 (no activation) | Korean company names (㈜) |
+| NLA L42 (real, sample 1; FVE 0.55) | "…a chain-following puzzle with specific examples ("Input: **red** → output: red → next: green") … a color cycle lookup table (red→cyan, cyan→blue …) …" |
+| NLA L42 (shuffled, sample 1; FVE 0.53) | "…a color transformation chain step … "orange -> yellow -> ?" …" |
+| NLA L42 (no activation) | "Educational product review pattern … a knitting pattern book …" |
+
+The NLA centres its story on **red**, the hidden step, and surrounds it with invented content (cyan, shell commands).
+The Oracle names red and blue in invented chains.
+
+Limitations: 10 tables; word matching, not a judge; one prompt template; 1–4 samples per reader and cell. Descriptive
+only. No reader result here enters any decision.
 
 ## 9. Decision rules (design §6)
 
@@ -325,6 +417,13 @@ Under these conditions:
 - They encode the start and the intermediate but not yet the answer.
 - They also hold a small, measurable trace of off-trajectory table contents. That trace grows by L60, and it barely
   affects the answer.
+
+Reader snapshot (descriptive, 10 tables):
+- At L40–44 the verbalizers name the decodable intermediate above chance, while the lenses name no colour at all.
+- No reader tracks the off-path table change that the probes decode.
+
+The first explained disagreement is therefore "z is present and the pair difference is used at this cell; the NLA names
+z, the J lenses do not", scoped to brew `:` at L40–44, 10 tables.
 
 For W, this means:
 - Brew offers a within-cell contrast at the emission cells: the pair difference with large leverage, against

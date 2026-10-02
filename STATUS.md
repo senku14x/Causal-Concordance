@@ -1,4 +1,4 @@
-# STATUS — 2026-10-02 (updated during the 001 snapshot)
+# STATUS — 2026-10-02 (001 complete, report awaiting review)
 
 **Design 001 v3 (+ amendment A1) is running on dev material.** Done:
 - `gate`, `smoke` (every exact check passes);
@@ -6,8 +6,9 @@
 - `probes` (25 min);
 - `analysis`, `figures` (reader-free outputs).
 
-In progress: the descriptive `snapshot` (readers). The draft report is `docs/reports/001_leverage_profile.md`; its §8
-(snapshot) is pending. No label and no reader score exists yet, and no test-split measurement has been made.
+`snapshot` (readers, descriptive, 32 min) is done too. The report is complete: `docs/reports/001_leverage_profile.md`.
+It awaits PI review; its proposals for AMENDMENT_02 are in §13. No label and no reader score exists yet, and no
+test-split measurement has been made.
 
 | Block | State | Evidence |
 |---|---|---|
@@ -15,7 +16,7 @@ In progress: the descriptive `snapshot` (readers). The draft report is `docs/rep
 | b. Environment | done | model loads (16 s, 50.1 GB); one brew forward gives the gated answer; 29/29 hashes match; `scripts/000_setup/rebuild_env.sh` |
 | c. Reader smoke tests | done (5 work; SAE deferred, vLLM path parked) | table below; `results/000_setup/analysis/reader_smoke.json` |
 | d. Shared code | done; **74/74 tests at `647dcb5`** (+4 added since, see Tests) | list below |
-| e. Design 001 | **v3 + A1 approved**; gate, smoke, run, probes, analysis, figures done; snapshot running; report drafted | `docs/design_specs/001_leverage_profile.md`; `results/001_leverage_profile/{manifest_gate,manifest_smoke}.json`, `analysis/{gate_summary,gate_pairs,smoke_checks}` |
+| e. Design 001 | **v3 + A1 approved**; all stages done; report complete | `docs/design_specs/001_leverage_profile.md`; `results/001_leverage_profile/{manifest_gate,manifest_smoke}.json`, `analysis/{gate_summary,gate_pairs,smoke_checks}` |
 
 ## At a glance (2026-10-02)
 
