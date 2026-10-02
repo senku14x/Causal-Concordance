@@ -1,4 +1,4 @@
-# 002 — Reader claim scoring (role-aware, closed-set) — design v2
+# 002 — Reader claim scoring (role-aware, closed-set) — design v2.2
 
 *2026-10-02.*
 - **What this is:** exploratory development of the reader-scoring procedure on dev material. The material is the
@@ -227,6 +227,49 @@ p-values, unadjusted and labelled exploratory):
 4. **Cost re-estimate:** Gemini 3.8 Flash spends about 385 reasoning tokens per call even at "minimal" effort, so a call
    costs about $0.0018 and a full pass about $7.3, not the $2.35 estimated in §10. Kept WSB's setting for
    comparability; the $10 cap is now global across all judge files.
+5. **v2.2: external review of design 002** (Codex, ~12:42 UTC; `docs/reviews/2026-10-02_codex_design_002_review/`;
+   PI: "accept if it's not dogshit"). Accepted in full, while the v2.1 judge run was in progress; no generation is
+   repeated.
+   - **Truth key (point 2):** `validation/key.jsonl` had given 25 partner rows the member trajectory. Fixed:
+     `make_sets.variant_truth` (member, substituted and none → member path; partner → partner path; shuffled → the
+     recipient variant). It matches the snapshot metadata 80/80; the sets are byte-identical. The analysis code
+     already resolved truth by variant.
+   - **Outcome categories (point 3):** every correct role value is a v2.1 candidate, so an explicit non-candidate
+     value ("none") is an **incorrect** claim, not an abstention. The intermediate outcome is one of:
+     - correct;
+     - incorrect, meaning another candidate or an explicit non-candidate value; the two are also reported
+       separately;
+     - no claim ("cannot tell");
+     - conflicting.
+     The identity of a wrong colour outside the set is not recoverable from this run.
+   - **Cross-table control (point 1):** the role-based own-z versus other tables' z control is censored, because
+     other tables' z are often not candidates (45/90 comparisons). It is **omitted**. The unrestricted mention-based
+     control in `001/audit_followups.json` stands for this run.
+   - **Provenance (point 4):**
+     - New judged rows carry the prompt sha, schema version and text hash.
+     - A resume refuses cached rows from another prompt, schema or candidate order.
+     - Rows of the first v2.1 run predate these fields. They were produced under the frozen prompt e1cc74d7, and the
+       analysis asserts that every row's candidate order is v2.1.
+     - Pilot passes are now archived. Pass 1 was overwritten before this fix; its cost ($0.031) is added to reported
+       spend by hand.
+   - **Validation (point 5):**
+     - The full grid ran before the validation pass (that order is already done). The validation gate is still
+       read before any reader result.
+     - The 60-readout set is mostly non-claims (few candidate assignments), so a **positive-claim supplement** is
+       added: 30 readouts (10 per reader) drawn from those where the judge assigned a candidate to the intermediate
+       role, coded by the author **without seeing the judge's labels**.
+     - Author codes are another model's annotations, not human ground truth. The PI spot-check stays open.
+   - **Interpretation (point 6):**
+     - The real-vs-SEC comparison is an **end-to-end bridge**: reader, activation and judge together, not judge noise.
+     - Lens hits and verbalizer role claims are different targets; there is no matched reader ranking.
+     - New exploratory reader-overlap table on common tables and cells: both, only one, neither; shared wrong values.
+       Different-layer comparisons are labelled.
+     - Prompt-only is a **task baseline** (prompt solvability), not a ceiling. It is also reported on the 10 snapshot
+       tables.
+     - Everything is descriptive at 10 tables.
+   - **Probe A2 residuals (point 7):** a span-vs-full solver comparison across the whole C grid on real folds
+     (objective, predictions, convergence), and a check of the 12-way row-level permutation null against a grouped
+     alternative, both after the probe run. Failed randomizations are reported (`n_null`).
 
 ## Appendix A — judge prompt (frozen after the pilot; sha256 of system + prompt recorded in the manifest)
 

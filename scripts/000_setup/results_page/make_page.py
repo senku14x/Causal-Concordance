@@ -481,6 +481,88 @@ def exp001(tok):
     return exp_html, data
 
 
+
+X2 = R.PROJECT / "results" / "002_claim_scoring"
+
+
+def exp002():
+    """HTML + data for experiment 002 (reader claim scoring). Empty if the analysis has not run."""
+    f = X2 / "analysis" / "scores.json"
+    if not f.exists():
+        return "", None
+    A = json.loads(f.read_text())
+    Q = json.loads((X2 / "analysis" / "qualitative.json").read_text())
+    v, gate = A["validation"], A["validation_gate"]
+    # stacked outcome bars (member renders): real vs shuffled
+    arms = [("nla", 0, 42, "NLA L42, after assistant"), ("nla", 1, 42, "NLA L42, after </think>"), ("nla", 2, 42, "NLA L42, “:”"),
+            ("oracle", 2, 40, "Oracle L40, “:” (k=4)"), ("oracle", 2, 44, "Oracle L44, “:” (k=4)")] + \
+           [("oracle_wsb", 2, L, f"Oracle WSB grid, “:” L{L}") for L in range(20, 61, 8)]
+    bars = []
+    for rd, cell, L, lab in arms:
+        for arm in ("real", "shuffled"):
+            k = f"{rd}|member|cell{cell}|L{L}|{arm}"
+            if k in A["rates"]:
+                r = A["rates"][k]
+                bars.append({"label": lab, "arm": arm, "n": r["n"], "correct": r["int_correct"], "other": r["int_other_candidate"],
+                             "none": r["int_none"], "ct": r["int_cannot_tell"], "conf": r["int_conflicting"], "mention": r["mention_z"]})
+    # contrasts table
+    crow = ""
+    for key, lab in [("nla|cell0|L42", "NLA L42, after assistant"), ("nla|cell1|L42", "NLA L42, after </think>"), ("nla|cell2|L42", "NLA L42, “:”"),
+                     ("oracle|cell2|L40", "Oracle L40, “:”"), ("oracle|cell2|L44", "Oracle L44, “:”")]:
+        c = A["contrasts"].get(key, {})
+        def cell_(x):
+            if not x:
+                return '<td class="num">—</td>'
+            return f'<td class="num">{f2(x["mean"])}<br><span class="small muted">{x["pos"]}+ / {x["neg"]}− / {x["tie"]}=, p {f2(x["signflip_p_unadj"])}</span></td>'
+        br = c.get("end_to_end_bridge_intermediate_agreement") or {}
+        crow += (f"<tr><td>{h(lab)}</td>{cell_(c.get('start_swap_tracking_roles'))}{cell_(c.get('real_minus_shuffled_roles'))}"
+                 f"{cell_(c.get('real_minus_none_roles'))}<td class=\"num\">{f2(br['agreement']) if br.get('agreement') is not None else '—'}</td></tr>")
+    ctbl = ('<tr><th>Reader, cell</th><th class="num">start-swap tracking<br>(z in the intermediate role)</th><th class="num">real − shuffled</th>'
+            '<th class="num">real − no activation</th><th class="num">same claim under SEC capture<br>(end-to-end: reader + activation + judge)</th></tr>' + crow)
+    # validation
+    vt = ('<tr><th>Role</th><th class="num">exact agreement</th><th class="num">Cohen κ (labels)</th><th class="num">κ (correct / other / none / cannot tell / conflicting)</th><th class="num">n</th></tr>' +
+          "".join(f'<tr><td>{r}</td><td class="num">{f2(v[r]["exact_agreement"])}</td><td class="num">{f2(v[r]["kappa_labels"])}</td>'
+                  f'<td class="num">{f2(v[r]["kappa_categories"])}</td><td class="num">{v[r]["n"]}</td></tr>' for r in ("start", "intermediate", "answer")))
+    conf = "".join(f"<tr><td>{h(k)}</td><td class=\"num\">{n}</td></tr>" for k, n in list(v["intermediate"]["confusion"].items())[:10])
+    # predictions
+    pr = "".join(f'<tr><td>{h(k)}</td><td class="small">{h(json.dumps(x["value"], default=str)[:120])}</td><td>{"✓ true" if x["true"] else ("✗ false" if x["true"] is not None else "—")}</td></tr>'
+                 for k, x in A["predictions"].items())
+    po = A["prompt_only"]
+    data = {"bars": bars, "lens": A["lens_closed_set"], "prompt_only": po, "qual": Q, "top10": A["lens_top10_claims"]}
+    html_ = f"""
+<section aria-labelledby="h-002">
+  <div class="eyebrow">Experiment 002 · dev · 10 snapshot tables (verbalizers), 48 tables (lenses) · judge {h(", ".join(A["judge_models_returned"]))} · design: docs/design_specs/002_claim_scoring.md</div>
+  <h2 id="h-002">Experiment 002: what do the readers actually claim?</h2>
+  <p>Experiment 001 counted colour <em>mentions</em>. Here a judge (Gemini 3.8 Flash, WorkspaceBench's judge) reads each
+  of the {A["judge_status"].get("ok", 0)} verbalizer outputs with only the table's candidate colours and says which colour
+  the text puts in each role: start, intermediate (after one rule application), answer. It may also say “none”,
+  “cannot tell” or “conflicting”. The judge never sees the prompt. Token lenses are scored without a judge: does z rank
+  first among the candidates, and score above the same lens on the mean activation? Judge spend:
+  ${A["judge_spend_usd"]:.2f}.</p>
+  <h3>Is the judge trustworthy? Agreement with blind author codes (60 readouts)</h3>
+  <p class="small muted">Gate: κ on the intermediate role ≥ 0.6. <b>{"Passed" if gate["passes"] else "FAILED: judge-based reader scores below are not results"}</b> (κ = {f2(gate["kappa_intermediate_labels"])}; judge errors {gate["judge_error_frac"]*100:.1f}%).</p>
+  <div class="cols2">
+    <div class="scroll"><table class="tbl">{vt}</table></div>
+    <details class="more"><summary>Intermediate role: where judge and author differ</summary><div class="scroll"><table class="tbl"><tr><th>author | judge (categories)</th><th class="num">n</th></tr>{conf}</table></div></details>
+  </div>
+  <h3>What each reader puts in the intermediate role (member activation)</h3>
+  <div class="chart" id="ex2-bars"></div>
+  <p class="small muted">Green: z, the correct intermediate. Red: an incorrect claim: another candidate (solid) or an explicit value outside the candidates (pale red; every correct value is a candidate, so this is also wrong). Light: no claim. Amber: conflicting claims. The dot marks the 001-style mention rate for the same readouts.</p>
+  <h3>Does the claim follow the activation? (within table)</h3>
+  <div class="scroll"><table class="tbl">{ctbl}</table></div>
+  <h3>Token lenses: closed-set hit rate on z and on the answer (all 48 dev tables, “:” cell)</h3>
+  <div class="cols2"><div class="chart" id="ex2-lens-z"></div><div class="chart" id="ex2-lens-a"></div></div>
+  <p class="small muted">Hit = the colour ranks first among the render's 5 candidates (start, z, answer, 2 off-path) <b>and</b> scores above the lens's output on the dev-mean activation (A01 rule). Prompt-only <b>task baseline</b> (stock model given the full prompt and asked; prompt solvability, not a ceiling on readers): z {f2(po["intermediate"]["top1_of_12"])} on all 48 tables ({f2(po["intermediate"]["snapshot_tables_top1_of_12"])} on the 10 snapshot tables), answer {f2(po["answer"]["top1_of_12"])}, start {f2(po["start"]["top1_of_12"])}.</p>
+  <h3>Qualitative: judged readouts</h3>
+  <div class="seg" id="ex2-qsel"></div>
+  <div id="ex2-q" class="panel"></div>
+  <h3>Predictions written before the judge ran</h3>
+  <div class="scroll"><table class="tbl"><tr><th>Prediction</th><th>Value</th><th>Outcome</th></tr>{pr}</table></div>
+</section>
+"""
+    return html_, data
+
+
 STATUS_HTML = """
 <section aria-labelledby="h-status">
   <h2 id="h-status">Status</h2>
@@ -521,6 +603,7 @@ def main():
     pair = {p.p.inp: p for p in P.brew_candidates(it)}["pink"]
     pc = rs["vector_lenses_positive_control"]
     exp_html, exp_data = exp001(tok)
+    exp2_html, exp2_data = exp002()
     data = {
         "prompt_tokens": [[i, t, r.regions.get(i, "")] for i, t in enumerate(r.decoded)],
         "item": {"name": it["name"], "start": it["start"], "z": it["intermediates"][0], "answer": it["answer"],
@@ -557,13 +640,14 @@ def main():
                  + [{"pair": a["pair_id"], "pass": a["pass"], "m": None, "p": None, "p_samples": []}
                     for a in tm["chain_gate_attempts"]],
         "exp001": exp_data,
+        "exp002": exp2_data,
     }
     t = open(os.path.join(HERE, "template.html")).read()
     for key in ("__EXP001__", "__STATUS__", "__DATA__"):
         assert t.count(key) == 1, key
     # Lens readouts include byte-fragment tokens that decode to U+FFFD; write it as an escape so the page has no raw one.
     js = json.dumps(data, ensure_ascii=False).replace("</", "<\\/").replace("\ufffd", "\\ufffd")
-    page = (t.replace("__EXP001__", exp_html.replace("\ufffd", "&#xFFFD;")).replace("__STATUS__", STATUS_HTML)
+    page = (t.replace("__EXP001__", (exp_html + exp2_html).replace("\ufffd", "&#xFFFD;")).replace("__STATUS__", STATUS_HTML)
              .replace("__DATA__", js))
     assert "\ufffd" not in page
     out = R.out_dir("outputs", "000_setup", "results_page") / "causal_concordance.html"

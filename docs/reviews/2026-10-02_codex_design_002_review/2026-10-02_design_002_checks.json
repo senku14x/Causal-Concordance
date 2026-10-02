@@ -1,0 +1,555 @@
+{
+  "checked_at_utc": "2026-10-02T12:42:33.512763+00:00",
+  "n_tables": 10,
+  "missing_partner_role_counts": {
+    "start": 4,
+    "z": 8,
+    "answer": 6
+  },
+  "candidate_checks": [
+    {
+      "item": "brew-s2-r10d2-0009",
+      "original_candidates": [
+        "red",
+        "purple",
+        "pink",
+        "white",
+        "gold"
+      ],
+      "member": {
+        "start": "gold",
+        "z": "red",
+        "answer": "purple"
+      },
+      "partner": {
+        "start": "black",
+        "z": "orange",
+        "answer": "green"
+      },
+      "missing_partner_roles": [
+        "start",
+        "z",
+        "answer"
+      ]
+    },
+    {
+      "item": "brew-s2-r10d2-0015",
+      "original_candidates": [
+        "brown",
+        "black",
+        "gray",
+        "white",
+        "green"
+      ],
+      "member": {
+        "start": "gray",
+        "z": "brown",
+        "answer": "black"
+      },
+      "partner": {
+        "start": "black",
+        "z": "red",
+        "answer": "green"
+      },
+      "missing_partner_roles": [
+        "z"
+      ]
+    },
+    {
+      "item": "brew-s2-r10d2-0027",
+      "original_candidates": [
+        "black",
+        "pink",
+        "red",
+        "orange",
+        "purple"
+      ],
+      "member": {
+        "start": "orange",
+        "z": "pink",
+        "answer": "black"
+      },
+      "partner": {
+        "start": "purple",
+        "z": "red",
+        "answer": "teal"
+      },
+      "missing_partner_roles": [
+        "answer"
+      ]
+    },
+    {
+      "item": "brew-s2-r10d2-0041",
+      "original_candidates": [
+        "teal",
+        "black",
+        "purple",
+        "gray",
+        "blue"
+      ],
+      "member": {
+        "start": "teal",
+        "z": "black",
+        "answer": "gray"
+      },
+      "partner": {
+        "start": "gray",
+        "z": "gold",
+        "answer": "orange"
+      },
+      "missing_partner_roles": [
+        "z",
+        "answer"
+      ]
+    },
+    {
+      "item": "brew-s2-r10d2-0066",
+      "original_candidates": [
+        "green",
+        "purple",
+        "black",
+        "orange",
+        "white"
+      ],
+      "member": {
+        "start": "green",
+        "z": "purple",
+        "answer": "orange"
+      },
+      "partner": {
+        "start": "gold",
+        "z": "red",
+        "answer": "white"
+      },
+      "missing_partner_roles": [
+        "start",
+        "z"
+      ]
+    },
+    {
+      "item": "brew-s2-r10d2-0069",
+      "original_candidates": [
+        "orange",
+        "black",
+        "teal",
+        "green",
+        "pink"
+      ],
+      "member": {
+        "start": "black",
+        "z": "teal",
+        "answer": "orange"
+      },
+      "partner": {
+        "start": "gray",
+        "z": "green",
+        "answer": "pink"
+      },
+      "missing_partner_roles": [
+        "start"
+      ]
+    },
+    {
+      "item": "brew-s2-r10d2-0071",
+      "original_candidates": [
+        "gold",
+        "brown",
+        "gray",
+        "teal",
+        "blue"
+      ],
+      "member": {
+        "start": "blue",
+        "z": "gold",
+        "answer": "brown"
+      },
+      "partner": {
+        "start": "brown",
+        "z": "orange",
+        "answer": "white"
+      },
+      "missing_partner_roles": [
+        "z",
+        "answer"
+      ]
+    },
+    {
+      "item": "brew-s2-r10d2-0073",
+      "original_candidates": [
+        "red",
+        "pink",
+        "white",
+        "orange",
+        "gray"
+      ],
+      "member": {
+        "start": "orange",
+        "z": "red",
+        "answer": "gray"
+      },
+      "partner": {
+        "start": "brown",
+        "z": "blue",
+        "answer": "green"
+      },
+      "missing_partner_roles": [
+        "start",
+        "z",
+        "answer"
+      ]
+    },
+    {
+      "item": "brew-s2-r10d2-0075",
+      "original_candidates": [
+        "purple",
+        "black",
+        "gray",
+        "teal",
+        "gold"
+      ],
+      "member": {
+        "start": "gold",
+        "z": "gray",
+        "answer": "teal"
+      },
+      "partner": {
+        "start": "black",
+        "z": "blue",
+        "answer": "white"
+      },
+      "missing_partner_roles": [
+        "z",
+        "answer"
+      ]
+    },
+    {
+      "item": "brew-s2-r10d2-0104",
+      "original_candidates": [
+        "brown",
+        "black",
+        "red",
+        "green",
+        "orange"
+      ],
+      "member": {
+        "start": "orange",
+        "z": "green",
+        "answer": "black"
+      },
+      "partner": {
+        "start": "black",
+        "z": "white",
+        "answer": "orange"
+      },
+      "missing_partner_roles": [
+        "z"
+      ]
+    }
+  ],
+  "wrong_partner_key_rows": [
+    {
+      "id": "brew-s2-r10d2-0075|partner|cell0|L42|nla|real|3",
+      "set": "pilot",
+      "wrong_roles": [
+        "start",
+        "z",
+        "answer"
+      ]
+    },
+    {
+      "id": "brew-s2-r10d2-0069|partner|cell1|L36|oracle_wsb|real|0",
+      "set": "pilot",
+      "wrong_roles": [
+        "start",
+        "z",
+        "answer"
+      ]
+    },
+    {
+      "id": "brew-s2-r10d2-0071|partner|cell1|L28|oracle_wsb|shuffled|0",
+      "set": "pilot",
+      "wrong_roles": [
+        "start",
+        "z",
+        "answer"
+      ]
+    },
+    {
+      "id": "brew-s2-r10d2-0071|partner|cell2|L44|oracle|none|2",
+      "set": "pilot",
+      "wrong_roles": [
+        "start",
+        "z",
+        "answer"
+      ]
+    },
+    {
+      "id": "brew-s2-r10d2-0075|partner|cell1|L60|oracle_wsb|real|0",
+      "set": "pilot",
+      "wrong_roles": [
+        "start",
+        "z",
+        "answer"
+      ]
+    },
+    {
+      "id": "brew-s2-r10d2-0041|partner|cell2|L42|nla|shuffled|0",
+      "set": "validation",
+      "wrong_roles": [
+        "start",
+        "z",
+        "answer"
+      ]
+    },
+    {
+      "id": "brew-s2-r10d2-0075|partner|cell1|L42|nla|shuffled|2",
+      "set": "validation",
+      "wrong_roles": [
+        "start",
+        "z",
+        "answer"
+      ]
+    },
+    {
+      "id": "brew-s2-r10d2-0075|partner|cell0|L36|oracle_wsb|shuffled|0",
+      "set": "validation",
+      "wrong_roles": [
+        "start",
+        "z",
+        "answer"
+      ]
+    },
+    {
+      "id": "brew-s2-r10d2-0073|partner|cell2|L40|oracle|none|2",
+      "set": "validation",
+      "wrong_roles": [
+        "start",
+        "z",
+        "answer"
+      ]
+    },
+    {
+      "id": "brew-s2-r10d2-0069|partner|cell1|L42|nla|real|0",
+      "set": "validation",
+      "wrong_roles": [
+        "start",
+        "z",
+        "answer"
+      ]
+    },
+    {
+      "id": "brew-s2-r10d2-0075|partner|cell1|L40|oracle_wsb|real|0",
+      "set": "validation",
+      "wrong_roles": [
+        "start",
+        "z",
+        "answer"
+      ]
+    },
+    {
+      "id": "brew-s2-r10d2-0009|partner|cell2|L44|oracle|real|0",
+      "set": "validation",
+      "wrong_roles": [
+        "start",
+        "z",
+        "answer"
+      ]
+    },
+    {
+      "id": "brew-s2-r10d2-0066|partner|cell0|L20|oracle_wsb|real|0",
+      "set": "validation",
+      "wrong_roles": [
+        "start",
+        "z",
+        "answer"
+      ]
+    },
+    {
+      "id": "brew-s2-r10d2-0073|partner|cell0|L42|nla|real|1",
+      "set": "validation",
+      "wrong_roles": [
+        "start",
+        "z",
+        "answer"
+      ]
+    },
+    {
+      "id": "brew-s2-r10d2-0009|partner|cell0|L40|oracle_wsb|real|0",
+      "set": "validation",
+      "wrong_roles": [
+        "start",
+        "z",
+        "answer"
+      ]
+    },
+    {
+      "id": "brew-s2-r10d2-0066|partner|cell2|L40|oracle|shuffled|3",
+      "set": "validation",
+      "wrong_roles": [
+        "start",
+        "z",
+        "answer"
+      ]
+    },
+    {
+      "id": "brew-s2-r10d2-0041|partner|cell2|L40|oracle|real|0",
+      "set": "validation",
+      "wrong_roles": [
+        "start",
+        "z",
+        "answer"
+      ]
+    },
+    {
+      "id": "brew-s2-r10d2-0071|partner|cell2|L40|oracle|real|2",
+      "set": "validation",
+      "wrong_roles": [
+        "start",
+        "z",
+        "answer"
+      ]
+    },
+    {
+      "id": "brew-s2-r10d2-0009|partner|cell2|L40|oracle|real|3",
+      "set": "validation",
+      "wrong_roles": [
+        "start",
+        "z",
+        "answer"
+      ]
+    },
+    {
+      "id": "brew-s2-r10d2-0041|partner|cell2|L40|oracle|real|3",
+      "set": "validation",
+      "wrong_roles": [
+        "start",
+        "z",
+        "answer"
+      ]
+    },
+    {
+      "id": "brew-s2-r10d2-0015|partner|cell2|L40|oracle|real|2",
+      "set": "validation",
+      "wrong_roles": [
+        "start",
+        "z",
+        "answer"
+      ]
+    },
+    {
+      "id": "brew-s2-r10d2-0104|partner|cell2|L44|oracle|shuffled|2",
+      "set": "validation",
+      "wrong_roles": [
+        "start",
+        "z",
+        "answer"
+      ]
+    },
+    {
+      "id": "brew-s2-r10d2-0041|partner|cell2|L42|nla|real|0",
+      "set": "validation",
+      "wrong_roles": [
+        "start",
+        "z",
+        "answer"
+      ]
+    },
+    {
+      "id": "brew-s2-r10d2-0041|partner|cell0|L42|nla|real|3",
+      "set": "validation",
+      "wrong_roles": [
+        "start",
+        "z",
+        "answer"
+      ]
+    },
+    {
+      "id": "brew-s2-r10d2-0104|partner|cell0|L42|nla|real|1",
+      "set": "validation",
+      "wrong_roles": [
+        "start",
+        "z",
+        "answer"
+      ]
+    }
+  ],
+  "wrong_partner_key_counts_by_set": {
+    "pilot": 5,
+    "validation": 20
+  },
+  "sources": [
+    {
+      "path": "/workspace/Causal-Concordance/results/001_leverage_profile/analysis/snapshot.json",
+      "sha256": "49556bb1130d6fea25941d0f991760cc4de0960630c3693668fcac0efce09a92"
+    },
+    {
+      "path": "/workspace/Causal-Concordance/docs/design_specs/002_claim_scoring.md",
+      "sha256": "dd407f8cc9588d2a6b5fc108f707e1602f7ff78231fd89c2b363ef4667892777"
+    },
+    {
+      "path": "/workspace/Causal-Concordance/docs/design_specs/001_leverage_profile.md",
+      "sha256": "9d8051e265c12784350468622fc11ea90ae97d7c37000283ed72d9f9a4a9cea3"
+    },
+    {
+      "path": "/workspace/Causal-Concordance/scripts/002_claim_scoring/make_sets.py",
+      "sha256": "eb455836e890de0f717bc001309b5a3f454b0677aa5e9ad34c66ab4bde7ba8f3"
+    },
+    {
+      "path": "/workspace/Causal-Concordance/scripts/002_claim_scoring/claim_scoring.py",
+      "sha256": "998fbbae9ee42854a46e8a32e06d8f001819b533268bf344d31bf740a95b9c8f"
+    },
+    {
+      "path": "/workspace/Causal-Concordance/scripts/001_leverage_profile/leverage_profile.py",
+      "sha256": "1fcc82e530ef0c8e0987f0e030d8dfb355de1d1ea73ae14b6794fb999e952b01"
+    },
+    {
+      "path": "/workspace/Causal-Concordance/results/002_claim_scoring/validation/pilot.jsonl",
+      "sha256": "ff12fc8146fcb1c85edcdb0c29a6cf5a8c7a28022153ee97b16ba3d3b8b4ae29"
+    },
+    {
+      "path": "/workspace/Causal-Concordance/results/002_claim_scoring/validation/validation.jsonl",
+      "sha256": "3dbcc5522535dc3c04b3de782737ba717ec5fafd0257361c53b71aa3d8fb2781"
+    },
+    {
+      "path": "/workspace/Causal-Concordance/results/002_claim_scoring/validation/key.jsonl",
+      "sha256": "5a94f6592c5444198f409feb288aa08b19641ae99e131421a63e9dbd3ea3c515"
+    },
+    {
+      "path": "/workspace/Causal-Concordance/results/002_claim_scoring/validation/author_codes.jsonl",
+      "sha256": "c3e77e9bb43d3c68d29dd97ec0d7592cdb864f674dfa1a79312522f6051b8e70"
+    }
+  ],
+  "v21_followup": {
+    "checked_at_utc": "2026-10-02T12:46:23.777215+00:00",
+    "missing_pair_role_targets_after_v21": [],
+    "wrong_partner_truth_key_ids": [
+      "brew-s2-r10d2-0075|partner|cell0|L42|nla|real|3",
+      "brew-s2-r10d2-0069|partner|cell1|L36|oracle_wsb|real|0",
+      "brew-s2-r10d2-0071|partner|cell1|L28|oracle_wsb|shuffled|0",
+      "brew-s2-r10d2-0071|partner|cell2|L44|oracle|none|2",
+      "brew-s2-r10d2-0075|partner|cell1|L60|oracle_wsb|real|0",
+      "brew-s2-r10d2-0041|partner|cell2|L42|nla|shuffled|0",
+      "brew-s2-r10d2-0075|partner|cell1|L42|nla|shuffled|2",
+      "brew-s2-r10d2-0075|partner|cell0|L36|oracle_wsb|shuffled|0",
+      "brew-s2-r10d2-0073|partner|cell2|L40|oracle|none|2",
+      "brew-s2-r10d2-0069|partner|cell1|L42|nla|real|0",
+      "brew-s2-r10d2-0075|partner|cell1|L40|oracle_wsb|real|0",
+      "brew-s2-r10d2-0009|partner|cell2|L44|oracle|real|0",
+      "brew-s2-r10d2-0066|partner|cell0|L20|oracle_wsb|real|0",
+      "brew-s2-r10d2-0073|partner|cell0|L42|nla|real|1",
+      "brew-s2-r10d2-0009|partner|cell0|L40|oracle_wsb|real|0",
+      "brew-s2-r10d2-0066|partner|cell2|L40|oracle|shuffled|3",
+      "brew-s2-r10d2-0041|partner|cell2|L40|oracle|real|0",
+      "brew-s2-r10d2-0071|partner|cell2|L40|oracle|real|2",
+      "brew-s2-r10d2-0009|partner|cell2|L40|oracle|real|3",
+      "brew-s2-r10d2-0041|partner|cell2|L40|oracle|real|3",
+      "brew-s2-r10d2-0015|partner|cell2|L40|oracle|real|2",
+      "brew-s2-r10d2-0104|partner|cell2|L44|oracle|shuffled|2",
+      "brew-s2-r10d2-0041|partner|cell2|L42|nla|real|0",
+      "brew-s2-r10d2-0041|partner|cell0|L42|nla|real|3",
+      "brew-s2-r10d2-0104|partner|cell0|L42|nla|real|1"
+    ],
+    "cross_table_z_values_excluded_after_v21": 45,
+    "cross_table_comparisons": 90
+  }
+}

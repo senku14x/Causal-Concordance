@@ -484,6 +484,48 @@ function lineChart(o){
     refs: [{y: X.transplant.bound, label: `bound ${X.transplant.bound.toFixed(2)} nats`, key: "bound"}],
     series: Object.entries(X.transplant.series).map(([c, pts], k) => ({name: TC[c][0], color: TC[c][1], dx: (k - 1) * 5, pts: pts.map(([L, mx]) => [X.heat.layers.indexOf(L), mx])}))});
 })();
+
+/* ---------- experiment 002: claim scoring ---------- */
+(function(){
+  const X = DATA.exp002;
+  if (!X) return;
+  const SEG = [["correct","var(--good)","z (correct)"],["other","var(--bad)","wrong: another candidate"],["none","color-mix(in srgb, var(--bad) 45%, var(--surface))","wrong: non-candidate value"],["ct","var(--rule)","no claim"],["conf","var(--warn)","conflicting"]];
+  const rowsH = 22, W = 640, L = 230, Rm = 20, T = 8;
+  const H = T + X.bars.length * rowsH + 30;
+  const xs = v => L + (W - L - Rm) * v;
+  let s = `<svg viewBox="0 0 ${W} ${H}" role="img" aria-label="Intermediate-role outcomes per reader">`;
+  for (const t of [0, .25, .5, .75, 1]) s += `<line class="gridl" x1="${xs(t)}" x2="${xs(t)}" y1="${T}" y2="${T + X.bars.length*rowsH}"/><text x="${xs(t)}" y="${T + X.bars.length*rowsH + 14}" text-anchor="middle">${t}</text>`;
+  X.bars.forEach((b, i) => {
+    const y = T + i * rowsH;
+    s += `<text class="lbl" x="${L-8}" y="${y+14}" text-anchor="end">${b.arm === "real" ? esc(b.label) : ""}<tspan style="fill:var(--muted)"> ${b.arm}</tspan></text>`;
+    let x0 = 0;
+    for (const [k, col, name] of SEG) { const w = b[k] || 0;
+      if (w > 0) s += `<rect x="${xs(x0)}" y="${y+3}" width="${xs(x0+w)-xs(x0)}" height="${rowsH-7}" style="fill:${col}" opacity="${b.arm==="real"?1:0.55}"><title>${esc(b.label)} (${b.arm}): ${name} ${(w*100).toFixed(0)}% of ${b.n}</title></rect>`;
+      x0 += w; }
+    s += `<circle cx="${xs(b.mention)}" cy="${y + rowsH/2}" r="3" style="fill:var(--ink);stroke:var(--surface)" stroke-width="1"><title>mention rate ${(b.mention*100).toFixed(0)}%</title></circle>`;
+  });
+  s += `</svg><div class="key">${SEG.map(([k,col,name]) => `<span><i style="background:${col}"></i>${name}</span>`).join("")}<span>● 001 mention rate</span></div>`;
+  document.getElementById("ex2-bars").innerHTML = s;
+  const LS = [["logit","Logit lens","var(--muted)"],["J_NP_standard","J_NP","var(--accent)"],["J_NP_cosine","J_NP cosine","var(--bad)"],["J_CB_standard","J_CB","var(--good)"],["R_CB_standard","R_CB","var(--warn)"]];
+  const lay = [40, 42, 44, 56, 60];
+  for (const [id, field, title, ref] of [["ex2-lens-z", "hit_z", "z hit rate", X.prompt_only.intermediate.top1_of_12], ["ex2-lens-a", "hit_answer", "answer hit rate", X.prompt_only.answer.top1_of_12]]) {
+    document.getElementById(id).innerHTML = lineChart({aria: title, x: lay.map(l => "L" + l), xLabel: "layer (“:” cell)", yLabel: title,
+      yMin: 0, yMax: 1.05, yTicks: [0, .25, .5, .75, 1], yFmt: (v, f) => v.toFixed(f ? 2 : 2),
+      refs: [{y: ref, label: `prompt-only ${ref.toFixed(2)}`, key: "prompt-only"}],
+      series: LS.map(([k, name, col], j) => ({name, color: col, dx: (j - 2) * 3, pts: lay.map((l, i) => [i, (X.lens[`${k}|emit_colon|L${l}`] || {})[field] ?? 0])}))});
+  }
+  const keys = Object.keys(X.qual).filter(k => X.qual[k].length);
+  const sel = document.getElementById("ex2-qsel"), box = document.getElementById("ex2-q");
+  sel.innerHTML = keys.map((k, i) => `<button data-k="${esc(k)}">${esc(k.replace("|", " · "))}</button>`).join("");
+  function showQ(k){
+    for (const b of sel.children) b.setAttribute("aria-pressed", b.dataset.k === k);
+    box.innerHTML = X.qual[k].map(e => `<div class="arm"><span class="small mono muted">${esc(e.id)}</span>
+      <div class="small"><b>truth</b> ${esc(e.truth.start)} → <b>${esc(e.truth.intermediate)}</b> → ${esc(e.truth.answer)} · <b>judge</b> start ${esc(e.judge.start)}, intermediate <b>${esc(e.judge.intermediate)}</b>, answer ${esc(e.judge.answer)}</div>
+      <div class="sample">${esc(e.text)}</div></div>`).join("");
+  }
+  sel.addEventListener("click", e => { const b = e.target.closest("button"); if (b) showQ(b.dataset.k); });
+  if (keys.length) showQ(keys[0]);
+})();
 /* ---------- experiment 001: reader naming grid + qualitative table browser ---------- */
 (function(){
   const X = DATA.exp001;

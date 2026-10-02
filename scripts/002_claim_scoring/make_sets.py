@@ -40,6 +40,17 @@ def readouts(sn):
     return rows
 
 
+def variant_truth(t, rid):
+    """Truth for the render a readout was taken from (review of design 002, point 2). Member, substituted (off-path
+    substitution keeps the trajectory) and no-activation readouts take the member trajectory; partner readouts take the
+    partner's. Shuffled readouts are scored against the recipient variant named in their key (the primary shuffled
+    control); donor truth is not used."""
+    variant = rid.split("|")[1]
+    if variant == "partner":
+        return {"variant": "partner", "start": t["partner"]["start"], "z": t["partner"]["z"], "answer": t["partner"]["answer"]}
+    return {"variant": variant, "start": t["start"], "z": t["z"], "answer": t["answer"]}
+
+
 def table_candidates(t):
     """One closed set per table (design 002 v2.1): the member's path, the partner's path, then WSB's off-path options for
     the item. Both pair members' z are candidates for every readout of the table, so start-swap tracking can be scored
@@ -75,8 +86,7 @@ def main():
                 f.write(json.dumps({"id": r["id"], "reader": r["reader"], "arm": r["arm"], "candidates": cands, "text": r["text"]}, ensure_ascii=False) + "\n")
     with open(OUTD / "key.jsonl", "w") as f:
         for r in pilot + val:
-            t = tab[r["table"]]
-            f.write(json.dumps({"id": r["id"], "start": t["start"], "z": t["z"], "answer": t["answer"]}) + "\n")
+            f.write(json.dumps({"id": r["id"], **variant_truth(tab[r["table"]], r["id"])}) + "\n")
     print(len(pilot), "pilot,", len(val), "validation ->", OUTD)
 
 
