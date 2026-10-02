@@ -959,11 +959,64 @@ def stage_analysis():
                                   "S_by_region_layer": {f'{r["region"]}@{r["pos"]}|L{r["layer"]}': round(r["S"], 3) for r in rr},
                                   "read_cell_top5": {f'{r["region"]}|L{r["layer"]}': r.get("top5") for r in rr if r.get("top5")}})
     qual["substitution_exceeding"] = [h for h in subs if h["pair_id"] in S["substitution"]["exceeding"]]
+    # gate failures (qualitative): a fixed-seed sample of failing prompts with every decode
+    gp = _load_jsonl(OUT / "gate" / "gate_prompts.jsonl")
+    fails = [g for g in gp if not g["pass"]]
+    qual["gate_failures_sample"] = [{k: g[k] for k in ("family", "answer", "greedy", "samples", "n_correct", "text")}
+                                    for g in random.Random(QUAL_SEED).sample(fails, k=min(12, len(fails)))]
     (ANA / "qualitative.json").write_text(json.dumps(qual, indent=1, default=float, ensure_ascii=False))
     write_manifest("analysis", {})
     print(json.dumps(S["decision_rules"], indent=1, default=float))
 
 
+# ---------------------------------------------------------------------------------------------- stage: figures
+def stage_figures():
+    """ICLR-style figures from results/001_leverage_profile/analysis/summary.json only."""
+    import numpy as np
+    import figures as F
+    ip = F.setup()
+    S = json.loads((ANA / "summary.json").read_text())
+    FIG = R.out_dir("results", EXP, "figures")
+
+    def cell_order(keys):
+        order = {"stir": 0, "start": 1, "question": 2, "emit_asst": 3, "emit_think": 4, "emit_colon": 5, "final": 6}
+        return sorted(keys, key=lambda c: (order.get(c.split("#")[0], 9), int(c.split("#")[1]) if "#" in c else 0))
+    for fam in ("brew", "chain"):
+        prof = S[fam]["profile"]
+        cells = cell_order({k.split("|L")[0] for k in prof})
+        M = np.array([[prof.get(f"{c}|L{L}", {}).get("median", np.nan) for L in LAYERS] for c in cells])
+        f, ax = ip.figure(width="half", aspect=1.6 if fam == "brew" else 1.3)
+        ip.heatmap(ax, M, xlabels=[f"L{L}" for L in LAYERS], ylabels=cells, signed=True)
+        ax.set_title(f"{fam}: median whole-cell share S (n = {S[fam]['n_pairs']} dev pairs)", fontsize=8)
+        F.save(f, str(FIG / f"profile_{fam}"))
+    f, ax = ip.figure(width="half")
+    for i, fam in enumerate(("brew", "chain")):
+        st = S[fam]["controls"].get("start_token_S", {})
+        if not st:
+            continue
+        xs = [int(L) for L in st]
+        med = [st[L]["median"] for L in st]
+        lo = [st[L]["q25"] for L in st]
+        hi = [st[L]["q75"] for L in st]
+        ip.line_ci(ax, xs, med, lo, hi, label=fam, color=ip.CATEGORICAL[i])
+    ax.set_xlabel("block output layer (start token patched)")
+    ax.set_ylabel("share S (median, IQR)")
+    ax.legend(frameon=False)
+    F.save(f, str(FIG / "start_token_by_layer"))
+    sub = S["substitution"]["transplant_by_cell_layer"]
+    if sub:
+        f, ax = ip.figure(width="half")
+        for i, reg in enumerate(("emit_asst", "emit_think", "emit_colon")):
+            ys = [sub.get(f"{reg}|L{L}", {}).get("max_abs_dlogPa", np.nan) for L in LAYERS]
+            ax.plot(LAYERS, ys, marker="o", color=ip.CATEGORICAL[i], label=reg)
+        ip.reference_line(ax, y=S["substitution"]["bound"]["abs_dlogPa"], label="negligible bound")
+        ax.set_xlabel("layer")
+        ax.set_ylabel("max |Δ log P(answer)| over items")
+        ax.legend(frameon=False, fontsize=7)
+        F.save(f, str(FIG / "substitution_transplants"))
+    print("figures written to", FIG)
+
+
 if __name__ == "__main__":
     stage = sys.argv[1]
-    {"gate": stage_gate, "smoke": stage_smoke, "run": stage_run, "probes": stage_probes, "snapshot": stage_snapshot, "analysis": stage_analysis}[stage]()
+    {"gate": stage_gate, "smoke": stage_smoke, "run": stage_run, "probes": stage_probes, "snapshot": stage_snapshot, "analysis": stage_analysis, "figures": stage_figures}[stage]()
