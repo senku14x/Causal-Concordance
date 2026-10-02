@@ -1,0 +1,725 @@
+{
+ "item": "brew-s2-r10d2-0001",
+ "pair_id": "brew-s2-r10d2-0001__blue",
+ "member": {
+  "start": "purple",
+  "z": "green",
+  "a": "orange"
+ },
+ "partner": {
+  "start": "blue",
+  "z": "black",
+  "a": "pink"
+ },
+ "diff_positions": [
+  142
+ ],
+ "edits": [
+  {
+   "name": "patch_emit_colon_L44",
+   "kind": "patch",
+   "position": 164,
+   "layer": 44
+  },
+  {
+   "name": "patch_emit_colon_L40",
+   "kind": "patch",
+   "position": 164,
+   "layer": 40
+  },
+  {
+   "name": "patch_start_token_L40",
+   "kind": "patch",
+   "position": 142,
+   "layer": 40
+  },
+  {
+   "name": "swap1d_emit_colon_L42_along_emit_think_diff",
+   "kind": "swap_diff",
+   "position": 164,
+   "layer": 42
+  },
+  {
+   "name": "swap1d_emit_colon_L42_random_dir",
+   "kind": "swap_rand",
+   "position": 164,
+   "layer": 42
+  }
+ ],
+ "switch_frac": 0.05,
+ "gate_attempts": [
+  {
+   "pair_id": "brew-s2-r10d2-0000__pink",
+   "gate": {
+    "pair_id": "brew-s2-r10d2-0000__pink",
+    "m": {
+     "greedy": " black\n\n**Step-by-step Deduction:**\n\n1.  **Initial State",
+     "greedy_ok": true,
+     "samples": [
+      " black\n\n**Step-by-step Deduction:**\n1.  **Initial State",
+      " black\nblack\nblack\nblack\nblack\nblack\nblack\nblack\n",
+      " black\n\n**Reasoning:**\n\n1.  **Initial State:** The potion",
+      " black\n\n**Step-by-step derivation:**\n\n1.  **Start:** The",
+      " black\n\nThe problem asks for the final color of a potion after being stirred twice",
+      " black\n\n**Reasoning:**\n1.  **Start:** The potion is",
+      " black\nblack\ngreen\nblack\nbrown\ngreen\nblack\nbrown\n",
+      " black\n\nblack\n\nblack\n\nblack\n\nblack\n\nblack\n\nblack\n\nblack\n\n",
+      " black\n\n```json\n{\n  \"final_colour\": \"black\"\n",
+      " black\n\n**Reasoning:**\n\n1.  **Start:** The potion is"
+     ],
+     "n_correct": 10,
+     "k": 10,
+     "pass": true
+    },
+    "p": {
+     "greedy": " blue\n\n**Step-by-step derivation:**\n1.  **Start:** The",
+     "greedy_ok": true,
+     "samples": [
+      " blue\n\nThe potion starts pink.\nFirst stir: Pink turns gray.\n",
+      " blue\n\n**Step-by-step derivation:**\n\n1.  **Initial State:**",
+      " blue\n\n**Step-by-step derivation:**\n1.  **Initial State:**",
+      " green\n\n**Explanation:**\n1.  **Start:** The potion is **",
+      " gray\nBlue\nGreen\nBlack\nBrown\nGreen\nBlack\nPurple\n",
+      " green\n\n**Step-by-step derivation:**\n1.  **Start:** The",
+      " blue\n\n**Step-by-step Deduction:**\n\n1.  **Initial State",
+      " gray\n</think>\n\nblue\nAnswer: green\nAnswer: gray\nAnswer:",
+      " blue\n\n**Step-by-step Deduction:**\n\n1.  **Initial State",
+      " Gray\n\n**Step-by-step derivation:**\n1.  **Start:** The"
+     ],
+     "n_correct": 5,
+     "k": 10,
+     "pass": false
+    },
+    "pass": false
+   },
+   "gate_s": 5.992136716842651
+  },
+  {
+   "pair_id": "brew-s2-r10d2-0001__black",
+   "gate": {
+    "pair_id": "brew-s2-r10d2-0001__black",
+    "m": {
+     "greedy": " orange\n\n**Step-by-step Deduction:**\n\n1.  **Initial State",
+     "greedy_ok": true,
+     "samples": [
+      " orange\n\n**Step-by-step Deduction:**\n\n1.  **Initial State",
+      " orange\n</think>\n\norange\n```\n</think>\n\nAnswer: orange\n```\n",
+      " orange\n\nThe first stir turns the purple potion green.\nThe second stir turns",
+      " orange\n\n**Step-by-step derivation:**\n\n1.  **Start:** The",
+      " orange\n\nThe problem asks for the final color of a potion after two stirs",
+      " orange\n\nThe thought process for this answer is as follows:\n1. ",
+      " orange\nAnswer: orange\n\norange\nAnswer: orange\nAnswer: orange\n",
+      " Orange\n\n**Step-by-step derivation:**\n\n1.  **Initial State:**",
+      " Orange\n\n**Step-by-step Deduction:**\n\n1.  **Initial State",
+      " Orange\n\n**Reasoning:**\n\n1.  **Start:** Purple.\n"
+     ],
+     "n_correct": 10,
+     "k": 10,
+     "pass": true
+    },
+    "p": {
+     "greedy": " red\n\n**Step-by-step Deduction:**\n\n1.  **Initial State",
+     "greedy_ok": true,
+     "samples": [
+      " green\n\nThe potion starts out black.\nFirst stir: Black turns pink.",
+      " red\n\n**Step-by-step Deduction:**\n\n1.  **Initial State",
+      " red\n\n**Step-by-step derivation:**\n\n1.  **Initial State:**",
+      " red\n**Explanation:**\n1.  **Start:** Black\n2.",
+      " red\n<|end_of_text|>\nThe potion starts out black.",
+      " green\n\n**Step-by-step derivation:**\n1.  **Initial State:**",
+      "\nRed\n\n**Reasoning:**\n1.  **Start:** The potion",
+      " Red\n**Step-by-step Deduction:**\n\n1.  **Initial State",
+      " Red\n\n**Step-by-step Deduction:**\n\n1.  **Initial State",
+      " red\n\n**Step-by-step derivation:**\n\n1.  **Initial State:**"
+     ],
+     "n_correct": 8,
+     "k": 10,
+     "pass": false
+    },
+    "pass": false
+   },
+   "gate_s": 4.880497932434082
+  },
+  {
+   "pair_id": "brew-s2-r10d2-0001__blue",
+   "gate": {
+    "pair_id": "brew-s2-r10d2-0001__blue",
+    "m": {
+     "greedy": " orange\n\n**Step-by-step Deduction:**\n\n1.  **Initial State",
+     "greedy_ok": true,
+     "samples": [
+      " orange\n\n**Step-by-step Deduction:**\n\n1.  **Initial State",
+      " orange\n</think>\n\norange\n```\n</think>\n\nAnswer: orange\n```\n",
+      " orange\n\nThe first stir turns the purple potion green.\nThe second stir turns",
+      " orange\n\n**Step-by-step derivation:**\n\n1.  **Start:** The",
+      " orange\n\nThe problem asks for the final color of a potion after two stirs",
+      " orange\n\nThe thought process for this answer is as follows:\n1. ",
+      " orange\nAnswer: orange\n\norange\nAnswer: orange\nAnswer: orange\n",
+      " Orange\n\n**Step-by-step derivation:**\n\n1.  **Initial State:**",
+      " Orange\n\n**Step-by-step Deduction:**\n\n1.  **Initial State",
+      " Orange\n\n**Reasoning:**\n\n1.  **Start:** Purple.\n"
+     ],
+     "n_correct": 10,
+     "k": 10,
+     "pass": true
+    },
+    "p": {
+     "greedy": " pink\n\n**Step-by-step Deduction:**\n\n1.  **Initial State",
+     "greedy_ok": true,
+     "samples": [
+      " pink\n\nThe potion starts out blue.\n1. First stir: A blue",
+      " pink\n\n**Step-by-step Deduction:**\n\n1.  **Initial State",
+      " black\n\n**Step-by-step derivation:**\n\n1.  **Initial State:**",
+      " pink\n\n**Explanation:**\n1.  **Start:** The potion is **",
+      " pink\n**Step-by-step derivation:**\n\n1.  **Initial State**:",
+      " pink\n\n**Step-by-step derivation:**\n1.  **Initial State:**",
+      " pink\n\n**Step-by-step Deduction:**\n\n1.  **Initial State",
+      " pink\nblack -> pink -> red -> green -> orange -> green -> orange ->",
+      " pink\n\n**Step-by-step Deduction:**\n\n1.  **Initial State",
+      " pink\n\n**Step-by-step derivation:**\n\n1.  **Initial State:**"
+     ],
+     "n_correct": 9,
+     "k": 10,
+     "pass": true
+    },
+    "pass": true
+   },
+   "gate_s": 4.7014219760894775
+  }
+ ],
+ "regimes": {
+  "rhut_fp32res_from0": {
+   "fp32_from": 0,
+   "m_member": -6.194029005901132,
+   "m_partner": 4.43871706582371,
+   "G": 10.632746071724842,
+   "forward_s": 0.24446582794189453,
+   "edits": {
+    "patch_emit_colon_L44": {
+     "dm": 4.769764491101099,
+     "share": 0.4485919685211996,
+     "rho": 0.9999999999999519,
+     "kappa": 1.0,
+     "req_norm": 20.75963020324707,
+     "write_dtype": "torch.float32"
+    },
+    "patch_emit_colon_L40": {
+     "dm": 2.43677720031125,
+     "share": 0.2291766570812084,
+     "rho": 0.9999999999999369,
+     "kappa": 1.0,
+     "req_norm": 15.858338356018066,
+     "write_dtype": "torch.float32"
+    },
+    "patch_start_token_L40": {
+     "dm": 0.558803564689355,
+     "share": 0.052554961899763115,
+     "rho": 0.9999999999999726,
+     "kappa": 1.0,
+     "req_norm": 36.50465393066406,
+     "write_dtype": "torch.float32"
+    },
+    "swap1d_emit_colon_L42_along_emit_think_diff": {
+     "dm": 2.0323352488481268,
+     "share": 0.19113926309710524,
+     "rho": 0.9999999069982317,
+     "kappa": 1.0,
+     "req_norm": 10.254378318786621,
+     "write_dtype": "torch.float32"
+    },
+    "swap1d_emit_colon_L42_random_dir": {
+     "dm": -0.015400656098307763,
+     "share": -0.0014484175578369164,
+     "rho": 0.9999996088751192,
+     "kappa": 1.0,
+     "req_norm": 0.09524810314178467,
+     "write_dtype": "torch.float32"
+    }
+   },
+   "noise_floor": {
+    "pos": 164,
+    "layer": 42,
+    "rel": 0.0001,
+    "k": 8,
+    "seed": 300,
+    "abs_dm": [
+     0.00017259971366900828,
+     0.021290697545144788,
+     0.023165400980046158,
+     0.006370631005627736,
+     0.05305659019615483,
+     0.01156482446600915,
+     0.01947263464414828,
+     0.01825127581257391
+    ],
+    "max_abs_dm": 0.05305659019615483,
+    "max_abs_dm_over_G": 0.0049899235661468215
+   }
+  },
+  "rhut_fp32res_from35": {
+   "fp32_from": 35,
+   "m_member": -6.2421276859211545,
+   "m_partner": 4.275205648578711,
+   "G": 10.517333334499867,
+   "forward_s": 0.23952913284301758,
+   "edits": {
+    "patch_emit_colon_L44": {
+     "dm": 4.663788777427589,
+     "share": 0.4434383345186014,
+     "rho": 0.9999999999999517,
+     "kappa": 0.9999999403953552,
+     "req_norm": 20.660985946655273,
+     "write_dtype": "torch.float32"
+    },
+    "patch_emit_colon_L40": {
+     "dm": 2.2758390916961018,
+     "share": 0.21638936594608993,
+     "rho": 0.9999999999999366,
+     "kappa": 1.0,
+     "req_norm": 15.77460765838623,
+     "write_dtype": "torch.float32"
+    },
+    "patch_start_token_L40": {
+     "dm": 0.5536768683095064,
+     "share": 0.05264422555604353,
+     "rho": 0.9999999999999726,
+     "kappa": 1.0,
+     "req_norm": 36.53885269165039,
+     "write_dtype": "torch.float32"
+    },
+    "swap1d_emit_colon_L42_along_emit_think_diff": {
+     "dm": 1.9548678913364919,
+     "share": 0.18587105962725028,
+     "rho": 0.9999999999999015,
+     "kappa": 1.0,
+     "req_norm": 10.152774810791016,
+     "write_dtype": "torch.float32"
+    },
+    "swap1d_emit_colon_L42_random_dir": {
+     "dm": -0.03607035245928447,
+     "share": -0.0034296100838568442,
+     "rho": 0.9999997832373201,
+     "kappa": 1.0,
+     "req_norm": 0.10312080383300781,
+     "write_dtype": "torch.float32"
+    }
+   },
+   "noise_floor": {
+    "pos": 164,
+    "layer": 42,
+    "rel": 0.0001,
+    "k": 8,
+    "seed": 300,
+    "abs_dm": [
+     0.032433978698003685,
+     0.0025574578500853207,
+     0.034346393125646024,
+     0.013701854295247173,
+     0.025544572173784807,
+     0.032759380165637175,
+     0.020876443624195495,
+     0.015102857411183557
+    ],
+    "max_abs_dm": 0.034346393125646024,
+    "max_abs_dm_over_G": 0.0032656940721827285
+   }
+  },
+  "stock_bf16": {
+   "fp32_from": null,
+   "m_member": -6.127154631889798,
+   "m_partner": 4.187304528421372,
+   "G": 10.31445916031117,
+   "forward_s": 0.22893548011779785,
+   "edits": {
+    "patch_emit_colon_L44": {
+     "dm": 4.291669725391808,
+     "share": 0.41608286568292885,
+     "rho": 0.9999999999999514,
+     "kappa": 1.0,
+     "req_norm": 20.54693603515625,
+     "write_dtype": "torch.bfloat16"
+    },
+    "patch_emit_colon_L40": {
+     "dm": 2.174652422870778,
+     "share": 0.21083533213632621,
+     "rho": 0.9999999999999362,
+     "kappa": 0.9999998807907104,
+     "req_norm": 15.660867691040039,
+     "write_dtype": "torch.bfloat16"
+    },
+    "patch_start_token_L40": {
+     "dm": 0.4959434136583143,
+     "share": 0.0480823478914577,
+     "rho": 0.9999999999999726,
+     "kappa": 0.9999998211860657,
+     "req_norm": 36.54267883300781,
+     "write_dtype": "torch.bfloat16"
+    },
+    "swap1d_emit_colon_L42_along_emit_think_diff": {
+     "dm": 2.0714743127043453,
+     "share": 0.20083208246876733,
+     "rho": 0.9990371645937745,
+     "kappa": 0.9999229907989502,
+     "req_norm": 10.28817081451416,
+     "write_dtype": "torch.bfloat16"
+    },
+    "swap1d_emit_colon_L42_random_dir": {
+     "dm": 0.010003232769888015,
+     "share": 0.0009698262036248379,
+     "rho": 1.0368969750973862,
+     "kappa": 0.8602785468101501,
+     "req_norm": 0.09352254867553711,
+     "write_dtype": "torch.bfloat16"
+    }
+   },
+   "noise_floor": {
+    "pos": 164,
+    "layer": 42,
+    "rel": 0.0001,
+    "k": 8,
+    "seed": 300,
+    "abs_dm": [
+     0.0215991561797253,
+     0.06363700327844413,
+     0.02061938634201077,
+     0.010782988201615495,
+     0.04951649154711735,
+     0.031368385749617644,
+     0.000575158914406515,
+     0.03255696988842516
+    ],
+    "max_abs_dm": 0.06363700327844413,
+    "max_abs_dm_over_G": 0.006169688811538647
+   }
+  },
+  "sec_true_fp32_from40": {
+   "l0": 39,
+   "build_s": 8.49894905090332,
+   "gpu_alloc_gb_resident": 71.85253715515137,
+   "rotary_maxdiff_cos_sin": [
+    0.0019508004188537598,
+    0.001953125
+   ],
+   "replay_s": 0.08875107765197754,
+   "m_member": -6.21013810824199,
+   "m_partner": 4.27253569495976,
+   "G": 10.48267380320175,
+   "edits": {
+    "patch_emit_colon_L44": {
+     "dm": 4.42639444045826,
+     "share": 0.42225814935749456
+    },
+    "patch_emit_colon_L40": {
+     "dm": 2.219476317931933,
+     "share": 0.2117280723982876
+    },
+    "patch_start_token_L40": {
+     "dm": 0.5262645234649241,
+     "share": 0.050203271927071295
+    },
+    "swap1d_emit_colon_L42_along_emit_think_diff": {
+     "dm": 2.1226915018560417,
+     "share": 0.20249523563422364
+    },
+    "swap1d_emit_colon_L42_random_dir": {
+     "dm": 0.0012806041990041095,
+     "share": 0.00012216388900825772
+    }
+   },
+   "noise_floor": {
+    "pos": 164,
+    "layer": 42,
+    "rel": 0.0001,
+    "k": 8,
+    "seed": 300,
+    "abs_dm": [
+     1.7672424970527345e-05,
+     0.00018161189539256384,
+     6.090072998965468e-05,
+     0.00011769516726189977,
+     5.3668079385005285e-05,
+     2.077097372676917e-05,
+     5.4636061232571365e-05,
+     0.00020102253136133896
+    ],
+    "max_abs_dm": 0.00020102253136133896,
+    "max_abs_dm_over_G": 1.917664663951864e-05
+   },
+   "gpu_peak_gb": 71.96357345581055
+  }
+ },
+ "comparison_vs_sec": {
+  "rhut_fp32res_from0": {
+   "per_edit": {
+    "patch_emit_colon_L44": {
+     "dm_regime": 4.769764491101099,
+     "dm_sec": 4.42639444045826,
+     "abs_diff": 0.34337005064283854,
+     "abs_diff_over_G_sec": 0.03275596065366091
+    },
+    "patch_emit_colon_L40": {
+     "dm_regime": 2.43677720031125,
+     "dm_sec": 2.219476317931933,
+     "abs_diff": 0.217300882379317,
+     "abs_diff_over_G_sec": 0.02072952821568732
+    },
+    "patch_start_token_L40": {
+     "dm_regime": 0.558803564689355,
+     "dm_sec": 0.5262645234649241,
+     "abs_diff": 0.032539041224430854,
+     "abs_diff_over_G_sec": 0.0031040783902378387
+    },
+    "swap1d_emit_colon_L42_along_emit_think_diff": {
+     "dm_regime": 2.0323352488481268,
+     "dm_sec": 2.1226915018560417,
+     "abs_diff": 0.09035625300791494,
+     "abs_diff_over_G_sec": 0.008619580719979782
+    },
+    "swap1d_emit_colon_L42_random_dir": {
+     "dm_regime": -0.015400656098307763,
+     "dm_sec": 0.0012806041990041095,
+     "abs_diff": 0.016681260297311873,
+     "abs_diff_over_G_sec": 0.0015913173118309635
+    }
+   },
+   "max_abs_diff_over_G": 0.03275596065366091,
+   "G_regime": 10.632746071724842,
+   "G_sec": 10.48267380320175,
+   "switch_to_sec": false
+  },
+  "rhut_fp32res_from35": {
+   "per_edit": {
+    "patch_emit_colon_L44": {
+     "dm_regime": 4.663788777427589,
+     "dm_sec": 4.42639444045826,
+     "abs_diff": 0.237394336969329,
+     "abs_diff_over_G_sec": 0.02264635353785606
+    },
+    "patch_emit_colon_L40": {
+     "dm_regime": 2.2758390916961018,
+     "dm_sec": 2.219476317931933,
+     "abs_diff": 0.05636277376416876,
+     "abs_diff_over_G_sec": 0.0053767554750157095
+    },
+    "patch_start_token_L40": {
+     "dm_regime": 0.5536768683095064,
+     "dm_sec": 0.5262645234649241,
+     "abs_diff": 0.027412344844582215,
+     "abs_diff_over_G_sec": 0.002615014581128108
+    },
+    "swap1d_emit_colon_L42_along_emit_think_diff": {
+     "dm_regime": 1.9548678913364919,
+     "dm_sec": 2.1226915018560417,
+     "abs_diff": 0.16782361051954986,
+     "abs_diff_over_G_sec": 0.016009618697501688
+    },
+    "swap1d_emit_colon_L42_random_dir": {
+     "dm_regime": -0.03607035245928447,
+     "dm_sec": 0.0012806041990041095,
+     "abs_diff": 0.03735095665828858,
+     "abs_diff_over_G_sec": 0.003563113510875477
+    }
+   },
+   "max_abs_diff_over_G": 0.02264635353785606,
+   "G_regime": 10.517333334499867,
+   "G_sec": 10.48267380320175,
+   "switch_to_sec": false
+  },
+  "stock_bf16": {
+   "per_edit": {
+    "patch_emit_colon_L44": {
+     "dm_regime": 4.291669725391808,
+     "dm_sec": 4.42639444045826,
+     "abs_diff": 0.13472471506645256,
+     "abs_diff_over_G_sec": 0.012852132728321971
+    },
+    "patch_emit_colon_L40": {
+     "dm_regime": 2.174652422870778,
+     "dm_sec": 2.219476317931933,
+     "abs_diff": 0.04482389506115503,
+     "abs_diff_over_G_sec": 0.004275998271305967
+    },
+    "patch_start_token_L40": {
+     "dm_regime": 0.4959434136583143,
+     "dm_sec": 0.5262645234649241,
+     "abs_diff": 0.030321109806609847,
+     "abs_diff_over_G_sec": 0.002892497694371525
+    },
+    "swap1d_emit_colon_L42_along_emit_think_diff": {
+     "dm_regime": 2.0714743127043453,
+     "dm_sec": 2.1226915018560417,
+     "abs_diff": 0.051217189151696374,
+     "abs_diff_over_G_sec": 0.004885889813346379
+    },
+    "swap1d_emit_colon_L42_random_dir": {
+     "dm_regime": 0.010003232769888015,
+     "dm_sec": 0.0012806041990041095,
+     "abs_diff": 0.008722628570883906,
+     "abs_diff_over_G_sec": 0.0008320995897267862
+    }
+   },
+   "max_abs_diff_over_G": 0.012852132728321971,
+   "G_regime": 10.31445916031117,
+   "G_sec": 10.48267380320175,
+   "switch_to_sec": false
+  }
+ },
+ "decision": "keep RHUT fp32-residual (from block 0) as the default",
+ "manifest": {
+  "model": {
+   "repo": "Qwen/Qwen3.6-27B",
+   "revision": "6a9e13bd6fc8f0983b9b99948120bc37f49c13e9",
+   "dtype": "bfloat16",
+   "attn_implementation": "eager",
+   "enable_thinking": false,
+   "n_blocks": 64,
+   "d_model": 5120,
+   "vocab_size": 248320,
+   "layer_types_note": "full_attention at block indices i%4==3 (3,7,...,63); GatedDeltaNet (linear_attention) elsewhere. Read from config at load and asserted.",
+   "block_indexing": "zero-based block-output indexing: layer L = output of model.model.layers[L] (= HF hidden_states[L+1]); hooks write block outputs",
+   "rmsnorm_gain": "1 + weight (Qwen3_5RMSNorm)"
+  },
+  "lenses": {
+   "J_NP": {
+    "hf_repo": "neuronpedia/jacobian-lens",
+    "hf_revision": "0731326edff4ae730ffc5356fe1a4728c748b3a6",
+    "file": "qwen3.6-27b/jlens/Salesforce-wikitext/Qwen3.6-27B_jacobian_lens_n1000.pt",
+    "sha256": "1718c8c52dd8a9dad03738d4d625937c1fbba10be325b872ed446c7290fc11e1",
+    "n_prompts": 1000,
+    "source_layers": [
+     0,
+     62
+    ],
+    "provenance": "Neuronpedia n=1000, Salesforce/wikitext; target/skip settings not stored in the checkpoint"
+   },
+   "J_CB": {
+    "hf_repo": "camilablank/workspace-lenses",
+    "hf_revision": "d740106d1e0f95456dc8718fba2895e9c8ffd6ef",
+    "file": "qwen3.6-27b/j-lens/lens.pt",
+    "sha256": "a036b35843d389b6655df721711917436fb79c83358c1861a4d58ad103a02724",
+    "n_prompts": 25,
+    "source_layers": [
+     0,
+     62
+    ],
+    "provenance": "NeelNanda/pile-10k first 25 docs, target_layer 62, t_max 128, skip_first 4, estimator standard"
+   },
+   "R_CB": {
+    "hf_repo": "camilablank/workspace-lenses",
+    "hf_revision": "d740106d1e0f95456dc8718fba2895e9c8ffd6ef",
+    "file": "qwen3.6-27b/r-lens/lens.pt",
+    "sha256": "fe4d0b6a17318760e67e7a5ed417fc5dbb8e66129c6944656f506b2f10ce6192",
+    "n_prompts": 25,
+    "source_layers": [
+     0,
+     62
+    ],
+    "provenance": "same recipe as J_CB, estimator relp (LN, identity, half rules; qk norms excluded)"
+   }
+  },
+  "readers": {
+   "oracle_lens": {
+    "hf_repo": "agu18dec/olens_and_ar",
+    "hf_revision": "c95215d5d2f6250f20c305ae55c6e4d7569f92dc",
+    "subfolder": "olens_s3d_rl600",
+    "contract": {
+     "prompt": "An activation vector from layer {layer} of a language model is enclosed in activation tags: <activation>{char}</activation>. Produce distinct concepts that encode this activation, each as a '- ' bullet on its own line.",
+     "transform": "unit",
+     "alpha": 16000.0,
+     "injection": "replace the input-embedding row of the marker token with alpha * h/||h||",
+     "marker_scan": "U+3200..U+33FF, first char that is one token in the full chat render",
+     "layers_on_contract": [
+      20,
+      24,
+      28,
+      32,
+      36,
+      40,
+      44,
+      48,
+      52,
+      56,
+      60
+     ],
+     "capture_with_adapter_disabled": true
+    },
+    "sampling_wsb": {
+     "temperature": 1.0,
+     "top_p": 0.95,
+     "top_k": 64,
+     "max_new_tokens": 256
+    }
+   },
+   "nla_L42": {
+    "hf_repo": "ceselder/qwen3.6-27b-nla-L42",
+    "hf_revision": "54e3ce6040b9a37fd341e286870b7480b3e6bd50",
+    "layer": 42,
+    "av_sft_lora": "av_sft_lora",
+    "av_rl_lora": "av_rl_lora_step400",
+    "ar_critic": "rl_critic_step400",
+    "meta": "nla_meta.yaml",
+    "contract": {
+     "av_composition": "base + av_sft_lora (merged) + av_rl_lora_step400 (adapter_config base_model_name_or_path = av_merged)",
+     "injection": "Karvonen norm-matched ADD at the output of block 1 at the marker token: h' = h + ||h|| * v/||v|| (EasyNLA nla/injection.py karvonen_inject_in_residual)",
+     "marker_token_id": 158983,
+     "marker_neighbors": [
+      29,
+      510
+     ],
+     "ar_read": "output of the last (43rd) block at the last prompt token, final norm removed; pred = value_head(normalize(h, sqrt(d)))",
+     "fve": "paper definition: 1 - mean((n(pred) - n(gold))^2) / mean((n(v) - mean n(v))^2) over a reference set, n = scale to L2 norm sqrt(d)"
+    },
+    "sampling_wsb": {
+     "temperature": 1.0,
+     "top_p": 0.95,
+     "top_k": 64,
+     "max_new_tokens": 256
+    }
+   },
+   "nla_reference_activations": {
+    "hf_repo": "ceselder/qwen3.6-27b-nla-rl",
+    "hf_revision": "5a13b7ec21a69fcdd0fb24d5edbe96a92aef4b9f",
+    "file": "data/example_activations.parquet",
+    "sha256": "26f200b07382c9d30ec84b7a491e1a2f9a4093f308285d633c58b56503393ba2",
+    "use": "64 layer-42 activations of the NLA training corpus; FVE denominator for single-cell smoke tests"
+   }
+  },
+  "wsb": {
+   "repo": "https://github.com/camilablank/workspace-bench",
+   "commit": "92d763e722377f5bfae045e829a308ab5919a820",
+   "banks": {
+    "brew_intermediates": {
+     "file": "evals/brew_intermediates/items.json",
+     "sha256": "183be95d4182c373674786b7610820520e56434fb0c15a75a62dad854bed9d83"
+    },
+    "chain_intermediates": {
+     "file": "evals/chain_intermediates/items.json",
+     "sha256": "79c9ce395061e1214c2734237defcf86db2407b8245098d894fa9351c88c3f6f"
+    },
+    "relational_multihop": {
+     "file": "evals/relational_multihop/items.json",
+     "sha256": "1fcabbad503cb19585a6d827451b5b3edfb97c1907bd6b6214f6ed5fcad5c431"
+    },
+    "multihop": {
+     "file": "evals/multihop/items.json",
+     "sha256": "5ba9c1431680a6363476c9319a3cf16c60fd2970ed8f969c21ed5790ccee6c92"
+    },
+    "role_bound_association": {
+     "file": "evals/role_bound_association/items.json",
+     "sha256": "ac3886011daa51c6b0967ba416b4db8c16eefd60f6b32e98d076771d46ab8541"
+    }
+   }
+  },
+  "software": {
+   "torch": "2.11.0+cu128",
+   "transformers": "5.15.0",
+   "peft": "0.21.2",
+   "jlens_commit": "581d398",
+   "cuda": "12.8"
+  },
+  "git": {
+   "commit": "3ebecb06874d0d5402c33f404f8d12506086e8a1",
+   "dirty": true
+  }
+ }
+}

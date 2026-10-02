@@ -1,0 +1,2626 @@
+{
+ "cell": {
+  "item": "brew-s2-r10d2-0000",
+  "position": 164,
+  "region": "emit_colon",
+  "other_cell_position": 131,
+  "start": "blue",
+  "z": [
+   "green"
+  ],
+  "answer": "black",
+  "off_trajectory": [
+   "gray",
+   "pink",
+   "orange",
+   "white",
+   "purple",
+   "red",
+   "brown"
+  ],
+  "token": ":",
+  "other_token": "You",
+  "norms": {
+   "40": 70.29511260986328,
+   "42": 68.85183715820312,
+   "44": 74.39332580566406
+  }
+ },
+ "manifest": {
+  "model": {
+   "repo": "Qwen/Qwen3.6-27B",
+   "revision": "6a9e13bd6fc8f0983b9b99948120bc37f49c13e9",
+   "dtype": "bfloat16",
+   "attn_implementation": "eager",
+   "enable_thinking": false,
+   "n_blocks": 64,
+   "d_model": 5120,
+   "vocab_size": 248320,
+   "layer_types_note": "full_attention at block indices i%4==3 (3,7,...,63); GatedDeltaNet (linear_attention) elsewhere. Read from config at load and asserted.",
+   "block_indexing": "zero-based block-output indexing: layer L = output of model.model.layers[L] (= HF hidden_states[L+1]); hooks write block outputs",
+   "rmsnorm_gain": "1 + weight (Qwen3_5RMSNorm)"
+  },
+  "lenses": {
+   "J_NP": {
+    "hf_repo": "neuronpedia/jacobian-lens",
+    "hf_revision": "0731326edff4ae730ffc5356fe1a4728c748b3a6",
+    "file": "qwen3.6-27b/jlens/Salesforce-wikitext/Qwen3.6-27B_jacobian_lens_n1000.pt",
+    "sha256": "1718c8c52dd8a9dad03738d4d625937c1fbba10be325b872ed446c7290fc11e1",
+    "n_prompts": 1000,
+    "source_layers": [
+     0,
+     62
+    ],
+    "provenance": "Neuronpedia n=1000, Salesforce/wikitext; target/skip settings not stored in the checkpoint"
+   },
+   "J_CB": {
+    "hf_repo": "camilablank/workspace-lenses",
+    "hf_revision": "d740106d1e0f95456dc8718fba2895e9c8ffd6ef",
+    "file": "qwen3.6-27b/j-lens/lens.pt",
+    "sha256": "a036b35843d389b6655df721711917436fb79c83358c1861a4d58ad103a02724",
+    "n_prompts": 25,
+    "source_layers": [
+     0,
+     62
+    ],
+    "provenance": "NeelNanda/pile-10k first 25 docs, target_layer 62, t_max 128, skip_first 4, estimator standard"
+   },
+   "R_CB": {
+    "hf_repo": "camilablank/workspace-lenses",
+    "hf_revision": "d740106d1e0f95456dc8718fba2895e9c8ffd6ef",
+    "file": "qwen3.6-27b/r-lens/lens.pt",
+    "sha256": "fe4d0b6a17318760e67e7a5ed417fc5dbb8e66129c6944656f506b2f10ce6192",
+    "n_prompts": 25,
+    "source_layers": [
+     0,
+     62
+    ],
+    "provenance": "same recipe as J_CB, estimator relp (LN, identity, half rules; qk norms excluded)"
+   }
+  },
+  "readers": {
+   "oracle_lens": {
+    "hf_repo": "agu18dec/olens_and_ar",
+    "hf_revision": "c95215d5d2f6250f20c305ae55c6e4d7569f92dc",
+    "subfolder": "olens_s3d_rl600",
+    "contract": {
+     "prompt": "An activation vector from layer {layer} of a language model is enclosed in activation tags: <activation>{char}</activation>. Produce distinct concepts that encode this activation, each as a '- ' bullet on its own line.",
+     "transform": "unit",
+     "alpha": 16000.0,
+     "injection": "replace the input-embedding row of the marker token with alpha * h/||h||",
+     "marker_scan": "U+3200..U+33FF, first char that is one token in the full chat render",
+     "layers_on_contract": [
+      20,
+      24,
+      28,
+      32,
+      36,
+      40,
+      44,
+      48,
+      52,
+      56,
+      60
+     ],
+     "capture_with_adapter_disabled": true
+    },
+    "sampling_wsb": {
+     "temperature": 1.0,
+     "top_p": 0.95,
+     "top_k": 64,
+     "max_new_tokens": 256
+    }
+   },
+   "nla_L42": {
+    "hf_repo": "ceselder/qwen3.6-27b-nla-L42",
+    "hf_revision": "54e3ce6040b9a37fd341e286870b7480b3e6bd50",
+    "layer": 42,
+    "av_sft_lora": "av_sft_lora",
+    "av_rl_lora": "av_rl_lora_step400",
+    "ar_critic": "rl_critic_step400",
+    "meta": "nla_meta.yaml",
+    "contract": {
+     "av_composition": "base + av_sft_lora (merged) + av_rl_lora_step400 (adapter_config base_model_name_or_path = av_merged)",
+     "injection": "Karvonen norm-matched ADD at the output of block 1 at the marker token: h' = h + ||h|| * v/||v|| (EasyNLA nla/injection.py karvonen_inject_in_residual)",
+     "marker_token_id": 158983,
+     "marker_neighbors": [
+      29,
+      510
+     ],
+     "ar_read": "output of the last (43rd) block at the last prompt token, final norm removed; pred = value_head(normalize(h, sqrt(d)))",
+     "fve": "paper definition: 1 - mean((n(pred) - n(gold))^2) / mean((n(v) - mean n(v))^2) over a reference set, n = scale to L2 norm sqrt(d)"
+    },
+    "sampling_wsb": {
+     "temperature": 1.0,
+     "top_p": 0.95,
+     "top_k": 64,
+     "max_new_tokens": 256
+    }
+   },
+   "nla_reference_activations": {
+    "hf_repo": "ceselder/qwen3.6-27b-nla-rl",
+    "hf_revision": "5a13b7ec21a69fcdd0fb24d5edbe96a92aef4b9f",
+    "file": "data/example_activations.parquet",
+    "sha256": "26f200b07382c9d30ec84b7a491e1a2f9a4093f308285d633c58b56503393ba2",
+    "use": "64 layer-42 activations of the NLA training corpus; FVE denominator for single-cell smoke tests"
+   }
+  },
+  "wsb": {
+   "repo": "https://github.com/camilablank/workspace-bench",
+   "commit": "92d763e722377f5bfae045e829a308ab5919a820",
+   "banks": {
+    "brew_intermediates": {
+     "file": "evals/brew_intermediates/items.json",
+     "sha256": "183be95d4182c373674786b7610820520e56434fb0c15a75a62dad854bed9d83"
+    },
+    "chain_intermediates": {
+     "file": "evals/chain_intermediates/items.json",
+     "sha256": "79c9ce395061e1214c2734237defcf86db2407b8245098d894fa9351c88c3f6f"
+    },
+    "relational_multihop": {
+     "file": "evals/relational_multihop/items.json",
+     "sha256": "1fcabbad503cb19585a6d827451b5b3edfb97c1907bd6b6214f6ed5fcad5c431"
+    },
+    "multihop": {
+     "file": "evals/multihop/items.json",
+     "sha256": "5ba9c1431680a6363476c9319a3cf16c60fd2970ed8f969c21ed5790ccee6c92"
+    },
+    "role_bound_association": {
+     "file": "evals/role_bound_association/items.json",
+     "sha256": "ac3886011daa51c6b0967ba416b4db8c16eefd60f6b32e98d076771d46ab8541"
+    }
+   }
+  },
+  "software": {
+   "torch": "2.11.0+cu128",
+   "transformers": "5.15.0",
+   "peft": "0.21.2",
+   "jlens_commit": "581d398",
+   "cuda": "12.8"
+  },
+  "git": {
+   "commit": "3ebecb06874d0d5402c33f404f8d12506086e8a1",
+   "dirty": true
+  }
+ },
+ "model_load": {
+  "seconds": 13.5,
+  "gpu_alloc_gb": 50.1
+ },
+ "nla_reference_reextraction": {
+  "status": "works",
+  "rows": [
+   {
+    "row": 60,
+    "n_tokens": 56,
+    "cos": 0.9999489188194275,
+    "rel_norm_diff": 0.010217588394880295
+   },
+   {
+    "row": 47,
+    "n_tokens": 62,
+    "cos": 0.9998407959938049,
+    "rel_norm_diff": 0.017898080870509148
+   },
+   {
+    "row": 53,
+    "n_tokens": 67,
+    "cos": 0.9999454021453857,
+    "rel_norm_diff": 0.01085817813873291
+   },
+   {
+    "row": 40,
+    "n_tokens": 71,
+    "cos": 0.9999523162841797,
+    "rel_norm_diff": 0.009862636215984821
+   },
+   {
+    "row": 13,
+    "n_tokens": 81,
+    "cos": 0.9999520778656006,
+    "rel_norm_diff": 0.010178462602198124
+   },
+   {
+    "row": 42,
+    "n_tokens": 86,
+    "cos": 0.9999703764915466,
+    "rel_norm_diff": 0.007813846692442894
+   },
+   {
+    "row": 3,
+    "n_tokens": 93,
+    "cos": 0.99996018409729,
+    "rel_norm_diff": 0.009084111079573631
+   },
+   {
+    "row": 55,
+    "n_tokens": 93,
+    "cos": 0.9999590516090393,
+    "rel_norm_diff": 0.009158061817288399
+   }
+  ],
+  "min_cos": 0.9998407959938049,
+  "ref_rows": [
+   60,
+   47,
+   53,
+   40,
+   13,
+   42,
+   3,
+   55
+  ],
+  "seconds": 1.8,
+  "gpu_alloc_gb_after": 50.11,
+  "gpu_peak_gb": 50.3
+ },
+ "vector_lenses": {
+  "status": "works",
+  "readouts": {
+   "L40": {
+    "logit_lens": {
+     "top10": [
+      [
+       " ",
+       7.0077
+      ],
+      [
+       " (",
+       6.1412
+      ],
+      [
+       " either",
+       5.8991
+      ],
+      [
+       "...",
+       5.7596
+      ],
+      [
+       " ...",
+       5.5872
+      ],
+      [
+       " \\",
+       5.4855
+      ],
+      [
+       "!",
+       5.1553
+      ],
+      [
+       "\n\n",
+       5.0561
+      ],
+      [
+       "\n",
+       5.04
+      ],
+      [
+       " a",
+       4.9767
+      ]
+     ],
+     "colours_named": []
+    },
+    "J_NP_standard": {
+     "top10": [
+      [
+       "<|endoftext|>",
+       19.6629
+      ],
+      [
+       "\n\n",
+       17.0574
+      ],
+      [
+       " ...",
+       14.8407
+      ],
+      [
+       "<|im_end|>",
+       14.8143
+      ],
+      [
+       " ...\"",
+       13.8483
+      ],
+      [
+       " [...]",
+       13.6878
+      ],
+      [
+       " \n\n",
+       13.5226
+      ],
+      [
+       " ......",
+       13.44
+      ],
+      [
+       " [\u2026]",
+       12.6603
+      ],
+      [
+       "...",
+       12.0432
+      ]
+     ],
+     "colours_named": []
+    },
+    "J_NP_cosine": {
+     "top10": [
+      [
+       " \uc785\ub2c8\ub2e4",
+       3.7572
+      ],
+      [
+       "\u3057\u307e\u3059",
+       3.7211
+      ],
+      [
+       " acab",
+       3.6581
+      ],
+      [
+       "<|fim_middle|>",
+       3.6579
+      ],
+      [
+       "\u041e\u0442",
+       3.6579
+      ],
+      [
+       "\uc785\ub2c8\ub2e4",
+       3.6482
+      ],
+      [
+       "\u4e0b\u6b21",
+       3.6413
+      ],
+      [
+       " \u043f\u043e\u0441\u043b\u0435\u0434",
+       3.6188
+      ],
+      [
+       "\u306b\u306a\u308a\u307e\u3059",
+       3.576
+      ],
+      [
+       "(end",
+       3.5512
+      ]
+     ],
+     "colours_named": []
+    },
+    "J_CB_standard": {
+     "top10": [
+      [
+       "<|endoftext|>",
+       6.5073
+      ],
+      [
+       "\u4e0b\u4e00\u9636\u6bb5",
+       6.2052
+      ],
+      [
+       " downstream",
+       6.164
+      ],
+      [
+       " successor",
+       6.16
+      ],
+      [
+       "\u8f6c\u6362",
+       6.0123
+      ],
+      [
+       " successors",
+       5.9417
+      ],
+      [
+       "\u518d\u6b21",
+       5.9383
+      ],
+      [
+       "\u7ec8\u70b9",
+       5.7559
+      ],
+      [
+       "\u4e24\u6b21",
+       5.7465
+      ],
+      [
+       "<think>",
+       5.7387
+      ]
+     ],
+     "colours_named": []
+    },
+    "J_CB_cosine": {
+     "top10": [
+      [
+       "<think>",
+       4.1669
+      ],
+      [
+       "\t",
+       4.0029
+      ],
+      [
+       "!",
+       3.9257
+      ],
+      [
+       "<|endoftext|>",
+       3.5287
+      ],
+      [
+       ".",
+       3.4377
+      ],
+      [
+       "\n\n",
+       3.3606
+      ],
+      [
+       "\u3002",
+       3.3243
+      ],
+      [
+       " \\",
+       3.3128
+      ],
+      [
+       " =",
+       3.2943
+      ],
+      [
+       " ",
+       3.2116
+      ]
+     ],
+     "colours_named": []
+    },
+    "R_CB_standard": {
+     "top10": [
+      [
+       " ...",
+       6.5762
+      ],
+      [
+       "\u4e24\u6b21",
+       6.3139
+      ],
+      [
+       " intermediate",
+       5.9289
+      ],
+      [
+       "\u7b2c\u4e8c\u6b21",
+       5.8157
+      ],
+      [
+       "...",
+       5.7539
+      ],
+      [
+       " twice",
+       5.6688
+      ],
+      [
+       " either",
+       5.5122
+      ],
+      [
+       " successor",
+       5.5072
+      ],
+      [
+       " destination",
+       5.32
+      ],
+      [
+       " subsequent",
+       5.3181
+      ]
+     ],
+     "colours_named": []
+    },
+    "R_CB_cosine": {
+     "top10": [
+      [
+       "<|endoftext|>",
+       4.458
+      ],
+      [
+       "\t",
+       4.2766
+      ],
+      [
+       "<think>",
+       3.9525
+      ],
+      [
+       "!",
+       3.8101
+      ],
+      [
+       " ",
+       3.7895
+      ],
+      [
+       "\n\n",
+       3.7648
+      ],
+      [
+       " \\",
+       3.5938
+      ],
+      [
+       " B",
+       3.5408
+      ],
+      [
+       "...",
+       3.519
+      ],
+      [
+       " =",
+       3.4971
+      ]
+     ],
+     "colours_named": []
+    }
+   },
+   "L42": {
+    "logit_lens": {
+     "top10": [
+      [
+       " ",
+       7.8696
+      ],
+      [
+       " (",
+       6.4209
+      ],
+      [
+       " either",
+       5.8952
+      ],
+      [
+       "...",
+       5.7902
+      ],
+      [
+       "\n\n",
+       5.3657
+      ],
+      [
+       "\n",
+       5.2185
+      ],
+      [
+       "\u2026",
+       5.1777
+      ],
+      [
+       " $\\",
+       5.1497
+      ],
+      [
+       "!",
+       5.1169
+      ],
+      [
+       "  ",
+       5.0307
+      ]
+     ],
+     "colours_named": []
+    },
+    "J_NP_standard": {
+     "top10": [
+      [
+       "\n\n",
+       18.4533
+      ],
+      [
+       " \n\n",
+       16.6447
+      ],
+      [
+       "<|im_end|>",
+       14.2169
+      ],
+      [
+       "<|endoftext|>",
+       14.1025
+      ],
+      [
+       "  \n\n",
+       13.7328
+      ],
+      [
+       " ...",
+       12.9783
+      ],
+      [
+       "   \n\n",
+       12.2637
+      ],
+      [
+       " ...\"",
+       12.2346
+      ],
+      [
+       "    \n\n",
+       11.6972
+      ],
+      [
+       "Final",
+       11.2607
+      ]
+     ],
+     "colours_named": []
+    },
+    "J_NP_cosine": {
+     "top10": [
+      [
+       " END",
+       3.7569
+      ],
+      [
+       " FINAL",
+       3.7022
+      ],
+      [
+       " \uc785\ub2c8\ub2e4",
+       3.6868
+      ],
+      [
+       "_final",
+       3.6851
+      ],
+      [
+       "(end",
+       3.6782
+      ],
+      [
+       "\u3057\u307e\u3059",
+       3.6184
+      ],
+      [
+       "\uc785\ub2c8\ub2e4",
+       3.6048
+      ],
+      [
+       "\u306b\u306a\u308a\u307e\u3059",
+       3.6044
+      ],
+      [
+       " getResult",
+       3.5741
+      ],
+      [
+       " K\u1ebft",
+       3.5514
+      ]
+     ],
+     "colours_named": []
+    },
+    "J_CB_standard": {
+     "top10": [
+      [
+       "\u7ec8\u70b9",
+       6.674
+      ],
+      [
+       "\u7b2c\u4e8c\u6b21",
+       6.3871
+      ],
+      [
+       "\u4e0d\u4f1a\u518d",
+       5.9815
+      ],
+      [
+       "\u7ec8\u7ed3",
+       5.9645
+      ],
+      [
+       "\u518d\u6b21",
+       5.7627
+      ],
+      [
+       "\u7684\u6700\u7ec8",
+       5.5917
+      ],
+      [
+       " finale",
+       5.5666
+      ],
+      [
+       "\u4e0b\u4e00\u6b21",
+       5.5653
+      ],
+      [
+       "\u7b2c\u4e09\u6b21",
+       5.5415
+      ],
+      [
+       " downstream",
+       5.5379
+      ]
+     ],
+     "colours_named": []
+    },
+    "J_CB_cosine": {
+     "top10": [
+      [
+       "\t",
+       4.567
+      ],
+      [
+       "!",
+       4.388
+      ],
+      [
+       ".",
+       4.2279
+      ],
+      [
+       " ",
+       4.0824
+      ],
+      [
+       "<think>",
+       3.9328
+      ],
+      [
+       " \\",
+       3.8461
+      ],
+      [
+       " =",
+       3.8117
+      ],
+      [
+       "\n\n",
+       3.7196
+      ],
+      [
+       ":",
+       3.5766
+      ],
+      [
+       "\u3002",
+       3.5085
+      ]
+     ],
+     "colours_named": []
+    },
+    "R_CB_standard": {
+     "top10": [
+      [
+       " ...",
+       6.2772
+      ],
+      [
+       " either",
+       5.6978
+      ],
+      [
+       "\u7b2c\u4e8c\u6b21",
+       5.6844
+      ],
+      [
+       "...",
+       5.6213
+      ],
+      [
+       " intermediate",
+       5.5607
+      ],
+      [
+       " second",
+       5.54
+      ],
+      [
+       "\u2026",
+       5.3352
+      ],
+      [
+       " further",
+       5.0285
+      ],
+      [
+       "\u7ec8\u70b9",
+       5.0173
+      ],
+      [
+       " subsequent",
+       4.9963
+      ]
+     ],
+     "colours_named": []
+    },
+    "R_CB_cosine": {
+     "top10": [
+      [
+       "\t",
+       4.8011
+      ],
+      [
+       " ",
+       4.6222
+      ],
+      [
+       "\n\n",
+       4.4893
+      ],
+      [
+       "!",
+       4.2628
+      ],
+      [
+       " B",
+       4.1621
+      ],
+      [
+       "<|endoftext|>",
+       4.1525
+      ],
+      [
+       " =",
+       4.1029
+      ],
+      [
+       " (",
+       4.0137
+      ],
+      [
+       ":",
+       3.9829
+      ],
+      [
+       " \\",
+       3.9406
+      ]
+     ],
+     "colours_named": []
+    }
+   },
+   "L44": {
+    "logit_lens": {
+     "top10": [
+      [
+       "...",
+       6.9006
+      ],
+      [
+       " ",
+       6.8363
+      ],
+      [
+       " (",
+       6.4056
+      ],
+      [
+       " ...",
+       5.9976
+      ],
+      [
+       " either",
+       5.9356
+      ],
+      [
+       "\u2026",
+       5.1794
+      ],
+      [
+       "\u518d",
+       5.1223
+      ],
+      [
+       "\n\n",
+       5.0404
+      ],
+      [
+       " &",
+       4.8824
+      ],
+      [
+       "\n",
+       4.8821
+      ]
+     ],
+     "colours_named": []
+    },
+    "J_NP_standard": {
+     "top10": [
+      [
+       " ...",
+       19.3472
+      ],
+      [
+       " ...\"",
+       17.9245
+      ],
+      [
+       "...",
+       15.7705
+      ],
+      [
+       " ...\\",
+       15.0294
+      ],
+      [
+       " ....",
+       14.6669
+      ],
+      [
+       " [...]",
+       14.6237
+      ],
+      [
+       " ......",
+       14.5622
+      ],
+      [
+       "<|im_end|>",
+       14.4316
+      ],
+      [
+       "...</",
+       14.1125
+      ],
+      [
+       "...\"",
+       14.0937
+      ]
+     ],
+     "colours_named": []
+    },
+    "J_NP_cosine": {
+     "top10": [
+      [
+       " FINAL",
+       4.3016
+      ],
+      [
+       "_final",
+       4.2321
+      ],
+      [
+       "\u7b2c\u4e8c\u6b65",
+       4.2086
+      ],
+      [
+       " \u0432\u0442\u043e\u0440\u043e\u0439",
+       4.1912
+      ],
+      [
+       "second",
+       4.1452
+      ],
+      [
+       "\u7684\u6700\u7ec8",
+       4.1077
+      ],
+      [
+       "\u4e0b\u4e00\u6b65",
+       4.1035
+      ],
+      [
+       "\u6700\u7ec8\u7684",
+       4.0808
+      ],
+      [
+       "Final",
+       4.0671
+      ],
+      [
+       "FINAL",
+       4.033
+      ]
+     ],
+     "colours_named": []
+    },
+    "J_CB_standard": {
+     "top10": [
+      [
+       "\u7b2c\u4e8c\u6b21",
+       7.8859
+      ],
+      [
+       "\u4e0b\u4e00\u6b21",
+       7.1565
+      ],
+      [
+       "\u7b2c\u4e09\u6b21",
+       7.0684
+      ],
+      [
+       "\u4e0b\u4e00\u6b65",
+       7.0655
+      ],
+      [
+       "\u4e24\u6b21",
+       7.0586
+      ],
+      [
+       "\u7ec8\u70b9",
+       6.8009
+      ],
+      [
+       "second",
+       6.7608
+      ],
+      [
+       "\u7684\u6700\u7ec8",
+       6.7535
+      ],
+      [
+       "\u7b2c\u4e8c\u6b65",
+       6.744
+      ],
+      [
+       "\u6700\u7ec8",
+       6.5596
+      ]
+     ],
+     "colours_named": []
+    },
+    "J_CB_cosine": {
+     "top10": [
+      [
+       ".",
+       4.8299
+      ],
+      [
+       "!",
+       4.4985
+      ],
+      [
+       "\u3002",
+       4.2246
+      ],
+      [
+       " ",
+       4.1545
+      ],
+      [
+       "\t",
+       4.1264
+      ],
+      [
+       "<think>",
+       4.1238
+      ],
+      [
+       " =",
+       4.05
+      ],
+      [
+       "\u518d",
+       4.0381
+      ],
+      [
+       "B",
+       3.9278
+      ],
+      [
+       "?",
+       3.686
+      ]
+     ],
+     "colours_named": []
+    },
+    "R_CB_standard": {
+     "top10": [
+      [
+       "...",
+       6.8742
+      ],
+      [
+       " ...",
+       6.8335
+      ],
+      [
+       " second",
+       6.7752
+      ],
+      [
+       "\u7b2c\u4e8c\u6b21",
+       6.6787
+      ],
+      [
+       " further",
+       6.577
+      ],
+      [
+       " ultimately",
+       6.0106
+      ],
+      [
+       "\u4e24\u6b21",
+       5.8206
+      ],
+      [
+       " twice",
+       5.8157
+      ],
+      [
+       " either",
+       5.7241
+      ],
+      [
+       " final",
+       5.6509
+      ]
+     ],
+     "colours_named": []
+    },
+    "R_CB_cosine": {
+     "top10": [
+      [
+       " ",
+       5.2153
+      ],
+      [
+       "\t",
+       5.0099
+      ],
+      [
+       ".",
+       4.8342
+      ],
+      [
+       "\n\n",
+       4.7979
+      ],
+      [
+       "!",
+       4.7235
+      ],
+      [
+       " =",
+       4.6875
+      ],
+      [
+       "...",
+       4.6222
+      ],
+      [
+       " (",
+       4.5705
+      ],
+      [
+       ":",
+       4.5638
+      ],
+      [
+       " B",
+       4.4793
+      ]
+     ],
+     "colours_named": []
+    }
+   }
+  },
+  "seconds": 16.9,
+  "gpu_alloc_gb_after": 50.11,
+  "gpu_peak_gb": 56.35
+ },
+ "oracle_lens_L40": {
+  "status": "works",
+  "marker_char": "\u321c",
+  "slot": 24,
+  "prompt_len": 56,
+  "activation": {
+   "samples": [
+    "- Green (Since after two steps from Blue, we reach Green, and the next\n- Red (since the next step after Yellow is Red) | Explanation: Two steps from 11: 11 -> Green ->\n- \u7eff\u8272 (Green) \u2192 Green (Answer: After two applications, the result is Green)\n- blue (Explanation: Following the chain: Blue \u2192 Red \u2192 Blue)\n\nThe second application leads to **Blue**.",
+    "- blue (or green) | Explanation: From Green, step 3 goes to Blue.\n- Green (or Purple) [Explanation: The result after two steps is Green, and applying the rule once more yields Green\n- \u7ea2 \u2192 Blue (Explanation: Following the sequence twice from the initial Red state, the result is Blue.\n- Green (or just **Green**, as the third step leads there and no further transitions are defined) | Explanation:",
+    "- green (Explanation: After two steps: Red $\\to$ Yellow $\\rightarrow$ Green\n- Blue (or Green, depending on interpretation, but following the chain strictly yields Blue after two steps)\n- \u7070\u8272 (Gray) (or potentially the chain ends depending on interpretation, but strictly following the steps: Yellow $\\rightarrow$ Blue $\\rightarrow$ Green\n- Yellow (Explanation: After two applications of the rule, we land on Yellow. Since there is no 3rd step provided, the final state is",
+    "- blue (or red, depending on the second jump)\n- \u7eff (Green) (After two steps) | Explanation: The sequence reaches Green after two transitions.\n- Green (or possibly further steps depending on interpretation, but the question asks for the result of *two* steps from Black)\n- Blue, Blue (Explanation: After two steps from Green, we land on Blue again.)\n\n**Explanation of the chain:**"
+   ],
+   "colours_named": [
+    [
+     "green",
+     "blue",
+     "red"
+    ],
+    [
+     "blue",
+     "green",
+     "purple",
+     "red"
+    ],
+    [
+     "green",
+     "red",
+     "blue",
+     "gray"
+    ],
+    [
+     "blue",
+     "red",
+     "green",
+     "black"
+    ]
+   ],
+   "seconds": 10.6
+  },
+  "no_activation": {
+   "samples": [
+    "- \ub300\ub9cc\uc720\ub2c8\uc628\u321c\n- \uc11c\uc6b8\u2019 (South Korea)\uc5d0\uc11c \u2018\u321c\n- \ud68c\uc0ac\u2019 (Company) \u2018\ud2b8\ub8e8\uc2dc\u2019\uac00 \ub370\ubdd4\ud558\uba70, 2023\ub144 9\uc6d4\ubd80\ud130 \u321c\n- \u6cd5\u4eba\ud2b8\ub808\ube14\ucf54\u2019** (Jukkyun Entertainment)\uc758 \uc0c8\ub85c\uc6b4 \ubd80\ud2b8\uc2a4\ud2b8\ub7a9 \ud504\ub85c\uc81d\ud2b8\uc785\ub2c8\ub2e4.",
+    "- \uc778\ud06c\uc2a4\u5a1b\u6a02 (\u321c\n- \ud55c\uad6d \uae30\uc5c5 **\uc81c\uc774\ucf55\uc2a4**\uc758 \ucd5c\uc2e0 \ub77c\uc778\uc5c5\uc785\ub2c8\ub2e4.\n- \u4ee3\u8868\u53d6\u7de0\u5f79\" (\ub300\ud45c) \uc2e0\uc774 \ub41c \u300a\ubcf4\ub530\ub9ac\u300b(Jeory)\ub77c\ub294 \ube0c\ub79c\ub4dc\ub85c \uc7ac\ucd9c\ubc1c\ud558\ub294 \uac83\n- \uc624\uc624\uc774(\u041e\u041e\u041e) \uc2a4\ud398\uc15c \uc2a4\ud29c\ub514\uc624`\uac00 \ud55c\uad6d\uc5d0\uc11c\ub3c4 \uc0ac\ub791\ubc1b\ub294 \uc774\uc720\uc785\ub2c8\ub2e4.\n- \ud504\ub85c\ub4c0\uc2a4 \ucf54\ub9ac\uc544 (Produce Korea)**\ub77c\uace0 \ubd80\ub974\ub294 \uae30\uc5c5 \uc774\ub984\uc73c\ub85c \ud0c4\uc0dd",
+    "- \ud06c\ub9b0\ud2b8\ub7a9 (\u321c\n- \ud55c\uad6d\uc778 \uae30\uc5c5\" (Gukjeo Company)\ub85c \uc774\uc5b4\uc9c0\ub294 \uc0c8\ub85c\uc6b4 \ud750\ub984\uc774\n- \ub3c4\uba54\uc778 \uc2dc\uc2a4\ucf54 **(Studio Korea)\ub294 \ud55c\uad6d\uc758 \ub300\ud45c\uc801\uc778 \uae30\uc5c5\uc73c\ub85c, \"\uc9c0\n- \u682a\u5f0f\u4f1a\u793e**\uc640 **\uc2a4\ud29c\ub514\uc624**\uac00 \ud569\uccd0\uc838 \uc0c8\ub85c\uc6b4 \ube0c\ub79c\ub4dc\uac00 \ud0c4\uc0dd\ud588\uc2b5\ub2c8\ub2e4. \ud83c\uddf0\ud83c\uddf7\u2728\n\n**",
+    "- \ud68c\uc0ac** (\u321c\n- \ud55c\uad6d\uc778 \uac8c\uc784publisher** (Korean publisher)\ub85c \uc54c\ub824\uc9c0\uae30 \uc2dc\uc791\ud55c \uac8c\uc784\ud68c\uc0ac\uc785\ub2c8\ub2e4. \"\u321c\n- \u6771\uad6c Games\"** (\u321c \ub3d9\uad6c\uac8c\uc784\uc988)\uc5d0\uc11c \ucd9c\uc2dc\ud55c \uac8c\uc784\uc785\ub2c8\ub2e4. \ud55c\uad6d \uae30\uc5c5\uc73c\ub85c\ub294 \ub4dc\ubb3c\uac8c \uae00\ub85c\ubc8c \uc2dc\uc7a5\uc5d0\uc11c \uc131\uacf5\ud55c \uc0ac\ub840\uc785\ub2c8\ub2e4.\n- \uc870\uc0c1** / **\u321c** (\ub610\ub294 **"
+   ],
+   "colours_named": [
+    [],
+    [],
+    [],
+    []
+   ],
+   "seconds": 9.5
+  },
+  "other_cell": {
+   "samples": [
+    "- are starting with a liquid that is **Purple**. What color is it after the\n- \u73b0\u5728 have a liquid that is initially **Black**. What will be its final color after going through the process? You\n- 're given the following sequence of events. What color will the liquid be at the end?\n- are given a potion that is currently **Orange**. After applying the rules in order, what color will it be?\n\nYou must determine",
+    "- are given a sequence of operations applied to this liquid. What is its final color?\n- 're given the following starting state for the liquid: **Red**. You must apply the changes in order.\n- \u73b0\u5728 have a liquid of color **Green**. What color is it after the following sequence of operations? You must apply them in order. You\n- are told that the liquid starts as **Yellow**. Your task is to determine its final color after the following sequence of changes.\n\n---",
+    "- are given a liquid that is currently **blue**. What will the final color be?\n- are starting with a liquid of the color **Yellow**. Which color will the liquid be when you are done?\n- 're told the liquid starts as **Yellow**. Your task is to determine its final color after the following sequence of events:\n\nYou start with a\n- are now given a liquid that is **Green**. Apply the rules in order. What color will it be at the end?",
+    "- are currently holding a solution that is **Green**. Your task is to find out what\n- \u73b0\u5728 have a liquid that starts as **Brown**. Which color will it be after the following sequence of\n- 're starting with a liquid that is currently **Blue**. After going through the rules below, what will its final color be?\n- are given a starting liquid of color **Blue**. Apply the rules in order. What will the liquid look like at the end?"
+   ],
+   "colours_named": [
+    [
+     "purple",
+     "black",
+     "orange"
+    ],
+    [
+     "red",
+     "green"
+    ],
+    [
+     "blue",
+     "green"
+    ],
+    [
+     "green",
+     "brown",
+     "blue"
+    ]
+   ],
+   "seconds": 10.2
+  },
+  "seconds": 32.1,
+  "gpu_alloc_gb_after": 50.11,
+  "gpu_peak_gb": 51.25
+ },
+ "nla_L42_av": {
+  "status": "works",
+  "prompt_len": 112,
+  "marker_pos": 93,
+  "av_prompt_ids_equal_base_tokenizer": true,
+  "activation": {
+   "raw": [
+    "<explanation>\nTable structure with consistent rows: binary \u2192 decimal \u2192 result pattern, establishing a direct continuation format. The question asks for two successive applications of a lookup table (e.g., R296 \u2192 R198 \u2192 R196).\n\nThe previous answer row shows \"Answer: 10010010\" then \"Answer:\" implying the next step after R198 (which is green/decimal 196) must be filled. The output is completing the two-step chain result: R296\u2192R198\u2192R?.\n\nFinal token \"Answer:\" is the second step's answer prompt, requiring the next value (R198's successor, likely a terminal state), following the pattern \"Answer: [result]\" with possible parenthetical explanation.\n</explanation>",
+    "<explanation>\nSequential mapping exercise following a table format, requiring continuation of two-step trace of `x86_64` assembly instruction through repeated application rules to find the result.\n\nThe pattern established is: input \u2192 two-step application \u2192 output. Step 1 maps `0010011` \u2192 `yellow`, Step 2 must apply `yellow` to find its successor (from the table: `yellow` maps to `0010011` is wrong; `yellow` should give next result). Actually, Step 2 yields `green` or a terminal value.\n\nFinal token `Answer:` opens the answer field for Step 2; it must immediately be followed by the instruction/color result of applying the next step to `yellow`, most likely `yellow` or a specific value.\n</explanation>",
+    "<explanation>\nInstructional task pattern: question asks for the result of a two-step dice transition chain, with Q&A format showing parallel structure \u2014 first answer given, second now expected.\n\nState transition table pattern: the sequence shows green\u2192pink\u2192blue progression based on the transition table (e.g., 2\u21924\u2192?), so the answer must be the result of applying the transition rule twice starting from green. The first answer showed \"5 (red),\" so \"Answer 2:\" expects a single state name.\n\nFinal token \"Answer 2:\" mirrors \"Answer 1: pink\" format, immediately requiring a state/number answer \u2014 but pink's next transition is green (no further steps), so next tokens will likely be \"error\" or a specific terminal value.\n</explanation>",
+    "<explanation>\nRepeating pattern: each line shows \"After 1 step: [result]\" then \"After 2 steps: [result]\", with the answer being the next value from the x86 CPU opcode chain.\n\nThe opcode sequence chains: \"00100110\" \u2192 \"3581333542\" \u2192 \"green\" (terminal/sink state), so \"After 2 steps:\" must yield the same green terminal result as derived from \"3581333542.\"\n\nFinal token \"Answer:\" is an answer-prompt, immediately requiring the next step value \"green\" or similar result code. The table shows \"Answer:\" completed the prior row with a color. Immediate constraint: a two-step output value follows, likely \"\u2192\" or the result \"3581333542.\"\n</explanation>"
+   ],
+   "explanations": [
+    "Table structure with consistent rows: binary \u2192 decimal \u2192 result pattern, establishing a direct continuation format. The question asks for two successive applications of a lookup table (e.g., R296 \u2192 R198 \u2192 R196).\n\nThe previous answer row shows \"Answer: 10010010\" then \"Answer:\" implying the next step after R198 (which is green/decimal 196) must be filled. The output is completing the two-step chain result: R296\u2192R198\u2192R?.\n\nFinal token \"Answer:\" is the second step's answer prompt, requiring the next value (R198's successor, likely a terminal state), following the pattern \"Answer: [result]\" with possible parenthetical explanation.",
+    "Sequential mapping exercise following a table format, requiring continuation of two-step trace of `x86_64` assembly instruction through repeated application rules to find the result.\n\nThe pattern established is: input \u2192 two-step application \u2192 output. Step 1 maps `0010011` \u2192 `yellow`, Step 2 must apply `yellow` to find its successor (from the table: `yellow` maps to `0010011` is wrong; `yellow` should give next result). Actually, Step 2 yields `green` or a terminal value.\n\nFinal token `Answer:` opens the answer field for Step 2; it must immediately be followed by the instruction/color result of applying the next step to `yellow`, most likely `yellow` or a specific value.",
+    "Instructional task pattern: question asks for the result of a two-step dice transition chain, with Q&A format showing parallel structure \u2014 first answer given, second now expected.\n\nState transition table pattern: the sequence shows green\u2192pink\u2192blue progression based on the transition table (e.g., 2\u21924\u2192?), so the answer must be the result of applying the transition rule twice starting from green. The first answer showed \"5 (red),\" so \"Answer 2:\" expects a single state name.\n\nFinal token \"Answer 2:\" mirrors \"Answer 1: pink\" format, immediately requiring a state/number answer \u2014 but pink's next transition is green (no further steps), so next tokens will likely be \"error\" or a specific terminal value.",
+    "Repeating pattern: each line shows \"After 1 step: [result]\" then \"After 2 steps: [result]\", with the answer being the next value from the x86 CPU opcode chain.\n\nThe opcode sequence chains: \"00100110\" \u2192 \"3581333542\" \u2192 \"green\" (terminal/sink state), so \"After 2 steps:\" must yield the same green terminal result as derived from \"3581333542.\"\n\nFinal token \"Answer:\" is an answer-prompt, immediately requiring the next step value \"green\" or similar result code. The table shows \"Answer:\" completed the prior row with a color. Immediate constraint: a two-step output value follows, likely \"\u2192\" or the result \"3581333542.\""
+   ],
+   "colours_named": [
+    [
+     "green"
+    ],
+    [
+     "green"
+    ],
+    [
+     "green",
+     "pink",
+     "blue",
+     "red"
+    ],
+    [
+     "green"
+    ]
+   ],
+   "n_parsed": 4,
+   "injections": 1,
+   "seconds": 14.9
+  },
+  "no_activation": {
+   "raw": [
+    "<explanation>\nAggregated search results about car audio technical content have converged into a detailed FAQ/essay format answering the question about Doodlebug's song lyrics using the car alternator analogy.\n\nThe text is mid-sentence, explaining the narrative's structural parallel \u2014 \"A later section of the story will provide...\" \u2014 expecting the next plot point: Doodlebug in a hospital bed receiving treatments and their corresponding frequencies/components.\n\nFinal token \"of \" opens a prepositional phrase completing \"In the original story, the treatment occurs during the [interval of the tone]?\" \u2014 likely \"mid-section\" or \"top section\" (open-close system), continuing the domain-consistent explanation of the piano's keyboard components. The phrase references a specific guitar string frequency convention, constraining next tokens to a closing narrative element about the cabinet's top section or a frequency specification.\n</explanation>",
+    "<explanation>\nPatent specification following standard USPTO format, systematically describing figures with numbered references. The text has been detailing FIG. 2 and is transitioning to describe FIG. 3.\n\nThe narrative momentum of describing two figures of a technical patent \u2014 FIG. 2 covered the top layer construction, and FIG. 3 logically introduces a contrasting structural property or additional layer.\n\nThe final phrase \"with a wind speed of %\" is mid-sentence, ending abruptly \u2014 \"is shown in\" requires a location completing the description. Based on the earlier discussion about seasonal depression and \"nocturnal layer,\" the next tokens likely reference a specific figure number.\n\n\"with reference to:\" is incomplete \u2014 a figure reference or diagram description follows immediately, constrained to a numbered patent-style closing diagram about wind conditions or psychological/behavioral phenomena context.\n</explanation>",
+    "<explanation>\nTechnical article structure: comprehensive guide on 1967 Ford Mustang engine failures, systematically covering maintenance, specs, and historical context in encyclopedic style.\n\nThe narrative is cycling back through a second detailed explanation of the failure symptom \u2014 \"engine knocks due to broken piston rings in a V8 engine is common in the [X season]\" mirrors the earlier explanation, signaling the completion of a seasonal contrast with diesel/gasoline seasonal patterns.\n\nFinal token: \"[ ]\" mid-sentence pattern \u2014 \"to check for wear in the engine during the time of year?\" strongly implies the next token completes the \"inlet/outlet\" or \"worn cylinder bore\" reference from the diagram legend, likely \"the same\" or a date referencing the Mustang's interior.\n</explanation>",
+    "<explanation>\nRepetitive catalogue/list structure of sewing machine product descriptions and informational text about Singer's history, mixing commercial copy with encyclopedia-style content throughout.\n\nThe text is explaining Singer overlock/serger repair instructions, with the 1992 case analysis establishing a detailed technical narrative about specific stitch diagrams \u2014 the description of the sewing needle is mid-sentence and must continue naming the needle location (e.g., \"white part of his brain\").\n\nFinal token \"of\" is part of \"When viewed on the wrong side of\" \u2014 a prepositional phrase requiring a noun phrase immediately following. In garment/needlework contexts referencing the \"upper garment\" pattern and \"brain death\" metaphor used previously, the next tokens are likely a standard \"wrong side\" or fabric thickness descriptor completing the pattern.\n</explanation>"
+   ],
+   "explanations": [
+    "Aggregated search results about car audio technical content have converged into a detailed FAQ/essay format answering the question about Doodlebug's song lyrics using the car alternator analogy.\n\nThe text is mid-sentence, explaining the narrative's structural parallel \u2014 \"A later section of the story will provide...\" \u2014 expecting the next plot point: Doodlebug in a hospital bed receiving treatments and their corresponding frequencies/components.\n\nFinal token \"of \" opens a prepositional phrase completing \"In the original story, the treatment occurs during the [interval of the tone]?\" \u2014 likely \"mid-section\" or \"top section\" (open-close system), continuing the domain-consistent explanation of the piano's keyboard components. The phrase references a specific guitar string frequency convention, constraining next tokens to a closing narrative element about the cabinet's top section or a frequency specification.",
+    "Patent specification following standard USPTO format, systematically describing figures with numbered references. The text has been detailing FIG. 2 and is transitioning to describe FIG. 3.\n\nThe narrative momentum of describing two figures of a technical patent \u2014 FIG. 2 covered the top layer construction, and FIG. 3 logically introduces a contrasting structural property or additional layer.\n\nThe final phrase \"with a wind speed of %\" is mid-sentence, ending abruptly \u2014 \"is shown in\" requires a location completing the description. Based on the earlier discussion about seasonal depression and \"nocturnal layer,\" the next tokens likely reference a specific figure number.\n\n\"with reference to:\" is incomplete \u2014 a figure reference or diagram description follows immediately, constrained to a numbered patent-style closing diagram about wind conditions or psychological/behavioral phenomena context.",
+    "Technical article structure: comprehensive guide on 1967 Ford Mustang engine failures, systematically covering maintenance, specs, and historical context in encyclopedic style.\n\nThe narrative is cycling back through a second detailed explanation of the failure symptom \u2014 \"engine knocks due to broken piston rings in a V8 engine is common in the [X season]\" mirrors the earlier explanation, signaling the completion of a seasonal contrast with diesel/gasoline seasonal patterns.\n\nFinal token: \"[ ]\" mid-sentence pattern \u2014 \"to check for wear in the engine during the time of year?\" strongly implies the next token completes the \"inlet/outlet\" or \"worn cylinder bore\" reference from the diagram legend, likely \"the same\" or a date referencing the Mustang's interior.",
+    "Repetitive catalogue/list structure of sewing machine product descriptions and informational text about Singer's history, mixing commercial copy with encyclopedia-style content throughout.\n\nThe text is explaining Singer overlock/serger repair instructions, with the 1992 case analysis establishing a detailed technical narrative about specific stitch diagrams \u2014 the description of the sewing needle is mid-sentence and must continue naming the needle location (e.g., \"white part of his brain\").\n\nFinal token \"of\" is part of \"When viewed on the wrong side of\" \u2014 a prepositional phrase requiring a noun phrase immediately following. In garment/needlework contexts referencing the \"upper garment\" pattern and \"brain death\" metaphor used previously, the next tokens are likely a standard \"wrong side\" or fabric thickness descriptor completing the pattern."
+   ],
+   "colours_named": [
+    [],
+    [],
+    [],
+    [
+     "white"
+    ]
+   ],
+   "n_parsed": 4,
+   "injections": 0,
+   "seconds": 14.4
+  },
+  "other_cell": {
+   "raw": [
+    "<explanation>\nLogic puzzle format establishing rules then applying to a scenario. The text defines a rule set (color transformation rules) for a liquid, strongly implying a scenario follows where initial color and transformation sequence are given.\n\nThe pattern of listing conditional rules (\"if red then turns into...\") is now complete, signaling a narrative shift: \"You\" introduces the scenario/setup asking the reader to trace the liquid's color through a specific initial state and steps.\n\nFinal token \"You\" opens a second-person prompt/instruction, likely starting with \"You start with...\" or \"You are given...\" as part of a larger puzzle template common in LLM chain-of-thought prompts about color-changing potions.\n\nThe puzzle domain expects a scenario describing an initial state and a question, likely starting \"start with a pot of this liquid in X state\" or similar.\n</explanation>",
+    "<explanation>\nLogic puzzle with a strict template pattern: a list of color transformation rules followed by an application task. The next section will describe a starting color and ask for the result.\n\nThe rule set is fully presented \u2014 eight bullet-point color rules (e.g., \"If the liquid is yellow, it turns into crimson\") establish a formal puzzle structure common to LLM benchmark prompts.\n\n\"You\" is the start of a scenario setup or instruction continuation, directly following the rule list. It is the opening word of the final problem statement (e.g., \"You start with a pot of [color]\"), likely introducing an initial state or scenario describing the sequence.\n</explanation>",
+    "<explanation>\nInstructional puzzle format establishes a logical ruleset: color transformation rules are given (\"X to Y\"), then a scenario/problem is posed. The narrative will describe an initial color and sequence of steps to track through.\n\nList of transformation rules is complete \u2014 \"Red becomes black,\" \"Yellow becomes black,\" \"Purple becomes green\" \u2014 signaling the setup phase is done and the puzzle scenario begins.\n\nFinal token \"You\" opens the second-person instruction about the pot's state, immediately requiring a continuation like \"start with\" or \"are given\" describing the initial scenario/puzzle setup. The word \"You\" is part of the problem prompt's final sentence, constrained to follow the \"Given the following rules for transforming liquid colours... / You\" pattern common in this puzzle format.\n</explanation>",
+    "<explanation>\nRepetition/continuation pattern: color transformation rules list established (\"white changes to orange,\" \"green changes to black,\" etc.), signaling a puzzle format where specific rules will be applied to a scenario.\n\nNarrative momentum: instructional puzzle structure \u2014 rules have been fully listed, now the scenario/problem setup is beginning. \"You\" signals a second-person instruction introducing the starting state of a potion (e.g., \"start with a cup that is currently [color]\").\n\nFinal token \"You\" opens the test case/prompt question, part of a structured logic puzzle pattern in Chinese LLM benchmark datasets. It immediately expects \"are given\" or \"start with\" or \"begin with a cup of potion which undergoes the following changes.\" The \"You\" introduces the initial question about a specific potion scenario with a multi-step transformation.\n</explanation>"
+   ],
+   "explanations": [
+    "Logic puzzle format establishing rules then applying to a scenario. The text defines a rule set (color transformation rules) for a liquid, strongly implying a scenario follows where initial color and transformation sequence are given.\n\nThe pattern of listing conditional rules (\"if red then turns into...\") is now complete, signaling a narrative shift: \"You\" introduces the scenario/setup asking the reader to trace the liquid's color through a specific initial state and steps.\n\nFinal token \"You\" opens a second-person prompt/instruction, likely starting with \"You start with...\" or \"You are given...\" as part of a larger puzzle template common in LLM chain-of-thought prompts about color-changing potions.\n\nThe puzzle domain expects a scenario describing an initial state and a question, likely starting \"start with a pot of this liquid in X state\" or similar.",
+    "Logic puzzle with a strict template pattern: a list of color transformation rules followed by an application task. The next section will describe a starting color and ask for the result.\n\nThe rule set is fully presented \u2014 eight bullet-point color rules (e.g., \"If the liquid is yellow, it turns into crimson\") establish a formal puzzle structure common to LLM benchmark prompts.\n\n\"You\" is the start of a scenario setup or instruction continuation, directly following the rule list. It is the opening word of the final problem statement (e.g., \"You start with a pot of [color]\"), likely introducing an initial state or scenario describing the sequence.",
+    "Instructional puzzle format establishes a logical ruleset: color transformation rules are given (\"X to Y\"), then a scenario/problem is posed. The narrative will describe an initial color and sequence of steps to track through.\n\nList of transformation rules is complete \u2014 \"Red becomes black,\" \"Yellow becomes black,\" \"Purple becomes green\" \u2014 signaling the setup phase is done and the puzzle scenario begins.\n\nFinal token \"You\" opens the second-person instruction about the pot's state, immediately requiring a continuation like \"start with\" or \"are given\" describing the initial scenario/puzzle setup. The word \"You\" is part of the problem prompt's final sentence, constrained to follow the \"Given the following rules for transforming liquid colours... / You\" pattern common in this puzzle format.",
+    "Repetition/continuation pattern: color transformation rules list established (\"white changes to orange,\" \"green changes to black,\" etc.), signaling a puzzle format where specific rules will be applied to a scenario.\n\nNarrative momentum: instructional puzzle structure \u2014 rules have been fully listed, now the scenario/problem setup is beginning. \"You\" signals a second-person instruction introducing the starting state of a potion (e.g., \"start with a cup that is currently [color]\").\n\nFinal token \"You\" opens the test case/prompt question, part of a structured logic puzzle pattern in Chinese LLM benchmark datasets. It immediately expects \"are given\" or \"start with\" or \"begin with a cup of potion which undergoes the following changes.\" The \"You\" introduces the initial question about a specific potion scenario with a multi-step transformation."
+   ],
+   "colours_named": [
+    [
+     "red"
+    ],
+    [],
+    [
+     "red",
+     "black",
+     "purple",
+     "green"
+    ],
+    [
+     "white",
+     "orange",
+     "green",
+     "black"
+    ]
+   ],
+   "n_parsed": 4,
+   "injections": 1,
+   "seconds": 14.1
+  },
+  "reference": {
+   "rows": [
+    60,
+    47,
+    53,
+    40,
+    13,
+    42,
+    3,
+    55
+   ],
+   "explanations": [
+    "Product listing format with structured specification, UK-based commercial page for industrial lighting equipment, suggesting retail/e-commerce content for trade customers.\n\nPrice listing pattern: \"\u00a3174.00 inc VAT / 15\" establishes a price display sequence. In UK retail context, \"inc VAT\" signals tax inclusion; the truncated \"15\" likely begins a percentage discount, VAT-exclusive price, or completes a pricing line.\n\nThe final token \"15\" is part of an incomplete pricing/numeric expression following the price line break \"\u00a3174.00 inc VAT\\n15\", strongly constraining next tokens to complete a figure like \"150.00\" or a discount/GBP amount, likely formatted as a new line with continuation of pricing data.",
+    "Formal advocacy letter context signals professional congressional lobbying language defending tribal economic interests and civil rights against discriminatory legislation.\n\nThe sentence structure builds toward a positive counter-argument: \"Tribal Members not only run businesses across the nation but also operate many of the most\" sets up a superlative praising the scale/quality of tribal enterprises, likely gambling, energy, healthcare, or similar large-scale industries.\n\nFinal token \"most\" is the superlative marker mid-phrase, part of \"Tribal owned enterprises who own and operate many of the most\" \u2014 immediately requires a superlative adjective phrase like \"successful,\" \"thriving,\" or \"sophisticated\" businesses, likely contrasting with stigmatizing legislation. The phrase's momentum demands an impressive descriptor of tribal enterprise scale or reputation.",
+    "Persuasive/informational tone from a Reddit comment advocating for adoption over buying pets, establishing moral reasoning for choosing rescue dogs.\n\nNarrative momentum toward completing the argument: \"I'm a big advocate of adopting pets instead of buying them...because when you adopt you're saving their life. I personally prefer adopting from shelters because you're\" \u2014 the logical conclusion strongly implies a contrasting benefit (saving a life/helping someone in need).\n\nFinal token \"you're\" is a mid-sentence pivot after \"buying a dog feels the same, but when you adopt, the feeling is amazing because you're\" \u2014 immediately requires a verb phrase completing the moral argument, likely \"helping/saving/adopting instead of buying.\" The \"because you're\" construction demands a gerund clause explaining the positive impact of shelter adoption.",
+    "Product listing/catalog format for UK radio play publishing site, describing scripts with author, ISBN, and synopsis details. Each listing follows a structured pattern of title, description, and accolades.\n\nNarrative momentum toward completing publication accolades: \"Finalist National Playwriting Awards 2001\" signals an award citation pattern that may continue with additional awards or years, mirroring the earlier reference to \"Won First Prize in BBC Writers' 2001.\"\n\nThe final token \"2001\" is part of an incomplete award/recognition citation (\"Dark humourous story. Commended Award winner BBC National Playwriting Competition 2001\"), likely requiring continuation describing the award's outcome or contextual significance for the play. The year 2001 is the sentence's endpoint.",
+    "Community/blog platform interface pattern: Techmeme-style tag page listing recent blog posts about \"sports betting,\" now transitioning to a community encouragement section.\n\nThe phrase \"DiggBlog has hundreds of bloggers writing about [topic]... Want to become an expert? You can write a\" is a standard DiggBlog call-to-action pattern, inviting users to contribute authoritative content.\n\nFinal token \"a\" is an indefinite article beginning a noun phrase; \"Want to become an expert blogger in this topic. You can write a\" strongly anticipates a specific article type, most likely \"a comprehensive guide\" or \"your own\" introductory/guide post. The platform's 2007-era wiki/blog culture suggests completion like \"your own tag overview\" or a recommended long-form post.",
+    "Travel blog narrative structure: sequential travelogue entries describing Canadian/BC botanical visits, establishing a personal, casual voice. The narrator describes discovering a surprising shop/stop.\n\nThe entry about the nursery follows an enthusiastic discovery tone: \"What a delightful, quaint shop it was\" and \"but it also had a delightful mini nursery garden with some beautiful plants and furniture to view\" build up an appreciation of the location, suggesting continued positive description.\n\nFinal token \"But most\" begins a contrastive intensifier clause, signaling an elaboration or surprise detail about the nursery shop. \"And most\" likely leads to \"most importantly\" or \"most impressive was...\" continuing the layered description. \"But most\" sits mid-sentence, requiring completion of a noun phrase highlighting the standout feature. The \"shop\" framing requires a specific remarkable quality about the shop or its plants/people.",
+    "Academic bibliography format: each line is a distinct citation/summary of a scientific paper, likely from a journal or reference list. Pattern of brief title-then-description continues.\n\nThe text is transitioning through disparate research topics (fire ecology, fisheries modeling), suggesting this is a list of research publications, possibly from a single researcher's profile. Geographic citation bias is a well-known topic in conservation/bibliometric literature.\n\nFinal token \"of\" completes \"Geographic biases in citation rates of\" \u2014 this is a partial bibliometric paper title requiring a noun phrase specifying what publications/authors are being cited, most likely \"ecological/scientific literature from specific regions\" or \"tropical/developing-world journals\" referencing citation patterns in ecology or environmental sciences. \"cit\" suggests \"scientific papers\" about geographic regions follows.",
+    "UK property listing style: self-catering holiday cottage description on a remote UK hillside, detailing amenities of a luxury converted 18th-century building with sea views.\n\nRoom-by-room feature enumeration momentum: \"large open-plan living room with a large comfortable sofa,\" establishes interior space description mid-list, strongly implying continuation with additional furniture/features like fireplace, TV, or kitchen equipment.\n\nThe final token \"sofa,\" is mid-list after \"includes a superb bedroom suite with shower, ensuite, and the ground floor open plan living room which includes, with its four comfortable armchairs,\" \u2014 immediately expects continuation of interior comforts like a fireplace, bookshelf, or dining table."
+   ],
+   "seconds": 104.4
+  },
+  "seconds": 155.7,
+  "gpu_alloc_gb_after": 51.29,
+  "gpu_peak_gb": 52.47
+ },
+ "nla_L42_ar": {
+  "status": "works",
+  "n_layers": 43,
+  "fve_activation_explanations_vs_cell": [
+   0.4614,
+   0.5455,
+   0.5863,
+   0.5037
+  ],
+  "fve_no_activation_explanations_vs_cell": [
+   -0.1488,
+   -0.3391,
+   -0.3823,
+   -0.483
+  ],
+  "fve_other_cell_explanations_vs_cell": [
+   -0.4295,
+   -0.6618,
+   -0.4091,
+   -0.5232
+  ],
+  "fve_other_cell_explanations_vs_other_cell": [
+   0.6182,
+   0.6452,
+   0.5569,
+   0.6206
+  ],
+  "fve_reference": [
+   0.8035,
+   0.7682,
+   0.8277,
+   0.7452,
+   0.7452,
+   0.8343,
+   0.8589,
+   0.8203
+  ],
+  "fve_denominator_reference_var": 0.4616343379020691,
+  "seconds": 22.6,
+  "gpu_alloc_gb_after": 0.01,
+  "gpu_peak_gb": 35.24
+ },
+ "vector_lenses_positive_control": {
+  "model_greedy_next_token": " black",
+  "logit_lens": {
+   "L48": {
+    "top10": [
+     [
+      "\n\n",
+      5.7687
+     ],
+     [
+      " ",
+      5.7408
+     ],
+     [
+      "aste",
+      5.72
+     ],
+     [
+      "...",
+      5.1134
+     ],
+     [
+      "\t",
+      4.7481
+     ],
+     [
+      " ...",
+      4.7229
+     ],
+     [
+      "  ",
+      4.6703
+     ],
+     [
+      " (",
+      4.6604
+     ],
+     [
+      "1",
+      4.6363
+     ],
+     [
+      "\u5bb3",
+      4.604
+     ]
+    ],
+    "colours_named": []
+   },
+   "L52": {
+    "top10": [
+     [
+      "<think>",
+      6.2178
+     ],
+     [
+      " a",
+      5.7138
+     ],
+     [
+      "\u4e24\u6b21",
+      5.6989
+     ],
+     [
+      "\ufffd",
+      5.4544
+     ],
+     [
+      "ursal",
+      5.3299
+     ],
+     [
+      "\u9ed1\u8272",
+      5.2656
+     ],
+     [
+      " NaN",
+      5.2652
+     ],
+     [
+      "\u0430\u0442\u044b",
+      5.1829
+     ],
+     [
+      "\u8403",
+      5.1601
+     ],
+     [
+      "\u0435\u0440\u0435",
+      4.9884
+     ]
+    ],
+    "colours_named": []
+   },
+   "L56": {
+    "top10": [
+     [
+      " black",
+      18.0526
+     ],
+     [
+      "\u9ed1\u8272",
+      16.5638
+     ],
+     [
+      "\u9ed1",
+      14.3311
+     ],
+     [
+      "-black",
+      13.7877
+     ],
+     [
+      "black",
+      13.7405
+     ],
+     [
+      " Black",
+      13.0661
+     ],
+     [
+      "\u9ed1\u8272\u7684",
+      12.6893
+     ],
+     [
+      "_black",
+      12.0696
+     ],
+     [
+      "Black",
+      11.7281
+     ],
+     [
+      "\u7684\u9ed1\u8272",
+      11.617
+     ]
+    ],
+    "colours_named": [
+     "black"
+    ]
+   },
+   "L60": {
+    "top10": [
+     [
+      " black",
+      20.322
+     ],
+     [
+      "\u9ed1",
+      15.4649
+     ],
+     [
+      "\u9ed1\u8272",
+      15.371
+     ],
+     [
+      "black",
+      14.9765
+     ],
+     [
+      " green",
+      14.8662
+     ],
+     [
+      " Black",
+      14.58
+     ],
+     [
+      "-black",
+      14.4568
+     ],
+     [
+      ".black",
+      13.0923
+     ],
+     [
+      "Black",
+      12.7354
+     ],
+     [
+      "_black",
+      12.4781
+     ]
+    ],
+    "colours_named": [
+     "black",
+     "green"
+    ]
+   },
+   "L62": {
+    "top10": [
+     [
+      " black",
+      23.1702
+     ],
+     [
+      " Black",
+      19.42
+     ],
+     [
+      " green",
+      17.5311
+     ],
+     [
+      "black",
+      14.8416
+     ],
+     [
+      " Green",
+      14.7018
+     ],
+     [
+      "-black",
+      14.374
+     ],
+     [
+      "Black",
+      14.266
+     ],
+     [
+      "\u9ed1\u8272",
+      14.2312
+     ],
+     [
+      "\u9ed1",
+      14.2147
+     ],
+     [
+      " brown",
+      13.7777
+     ]
+    ],
+    "colours_named": [
+     "black",
+     "green",
+     "brown"
+    ]
+   },
+   "L63": {
+    "top10": [
+     [
+      " black",
+      20.4161
+     ],
+     [
+      " Black",
+      18.3643
+     ],
+     [
+      " green",
+      18.0278
+     ],
+     [
+      " Green",
+      16.683
+     ],
+     [
+      "<|im_end|>",
+      16.6129
+     ],
+     [
+      " **",
+      16.2404
+     ],
+     [
+      " A",
+      15.9393
+     ],
+     [
+      "\n",
+      15.7739
+     ],
+     [
+      " brown",
+      15.7161
+     ],
+     [
+      "\n\n",
+      15.5322
+     ]
+    ],
+    "colours_named": [
+     "black",
+     "green",
+     "brown"
+    ]
+   }
+  },
+  "J": {
+   "L56_J_NP_standard": {
+    "top10": [
+     [
+      " black",
+      28.7899
+     ],
+     [
+      "black",
+      25.0402
+     ],
+     [
+      " Black",
+      24.6848
+     ],
+     [
+      "\u9ed1\u8272",
+      24.6367
+     ],
+     [
+      "-black",
+      23.5899
+     ],
+     [
+      " BLACK",
+      23.113
+     ],
+     [
+      "_black",
+      22.42
+     ],
+     [
+      "\u9ed1",
+      21.9052
+     ],
+     [
+      ".black",
+      21.7716
+     ],
+     [
+      "/black",
+      21.1635
+     ]
+    ],
+    "colours_named": [
+     "black"
+    ]
+   },
+   "L56_J_NP_cosine": {
+    "top10": [
+     [
+      " black",
+      28.3441
+     ],
+     [
+      "\u9ed1\u8272",
+      25.7035
+     ],
+     [
+      "black",
+      24.4674
+     ],
+     [
+      " Black",
+      24.2548
+     ],
+     [
+      "-black",
+      22.9274
+     ],
+     [
+      "\u9ed1\u8272\u7684",
+      22.3958
+     ],
+     [
+      " BLACK",
+      22.0022
+     ],
+     [
+      "\u7684\u9ed1\u8272",
+      21.9899
+     ],
+     [
+      ".black",
+      21.7743
+     ],
+     [
+      " \u0447\u0435\u0440\u043d\u044b\u0439",
+      21.4799
+     ]
+    ],
+    "colours_named": [
+     "black"
+    ]
+   },
+   "L56_J_CB_standard": {
+    "top10": [
+     [
+      " black",
+      17.4936
+     ],
+     [
+      "\u9ed1\u8272",
+      16.49
+     ],
+     [
+      "black",
+      14.678
+     ],
+     [
+      "-black",
+      13.6586
+     ],
+     [
+      "\u9ed1",
+      13.4524
+     ],
+     [
+      "\u9ed1\u8272\u7684",
+      13.4467
+     ],
+     [
+      " Black",
+      13.2309
+     ],
+     [
+      "\u7684\u9ed1\u8272",
+      13.0106
+     ],
+     [
+      "_black",
+      12.7346
+     ],
+     [
+      ".black",
+      12.4054
+     ]
+    ],
+    "colours_named": [
+     "black"
+    ]
+   },
+   "L56_J_CB_cosine": {
+    "top10": [
+     [
+      " black",
+      26.3351
+     ],
+     [
+      "\u9ed1\u8272",
+      24.672
+     ],
+     [
+      "black",
+      19.6558
+     ],
+     [
+      "\u9ed1",
+      19.3309
+     ],
+     [
+      " Black",
+      19.2781
+     ],
+     [
+      "<|endoftext|>",
+      18.9311
+     ],
+     [
+      "\u9ed1\u8272\u7684",
+      18.3518
+     ],
+     [
+      " a",
+      18.1097
+     ],
+     [
+      "\u7684\u9ed1\u8272",
+      17.8739
+     ],
+     [
+      "Black",
+      16.5468
+     ]
+    ],
+    "colours_named": [
+     "black"
+    ]
+   },
+   "L56_R_CB_standard": {
+    "top10": [
+     [
+      " black",
+      15.6354
+     ],
+     [
+      "\u9ed1\u8272",
+      13.9972
+     ],
+     [
+      "black",
+      12.5254
+     ],
+     [
+      " Black",
+      12.1899
+     ],
+     [
+      "-black",
+      11.806
+     ],
+     [
+      "\u9ed1",
+      11.703
+     ],
+     [
+      "\u9ed1\u8272\u7684",
+      11.175
+     ],
+     [
+      "\u7684\u9ed1\u8272",
+      11.1315
+     ],
+     [
+      "Black",
+      10.8752
+     ],
+     [
+      "_black",
+      10.7587
+     ]
+    ],
+    "colours_named": [
+     "black"
+    ]
+   },
+   "L56_R_CB_cosine": {
+    "top10": [
+     [
+      " black",
+      26.0022
+     ],
+     [
+      "\u9ed1\u8272",
+      23.158
+     ],
+     [
+      " a",
+      20.6295
+     ],
+     [
+      "<|endoftext|>",
+      20.1376
+     ],
+     [
+      " Black",
+      19.2669
+     ],
+     [
+      "\u9ed1",
+      18.2179
+     ],
+     [
+      "\n",
+      18.0106
+     ],
+     [
+      "black",
+      17.7557
+     ],
+     [
+      "\n\n",
+      17.4362
+     ],
+     [
+      " ",
+      16.6911
+     ]
+    ],
+    "colours_named": [
+     "black"
+    ]
+   },
+   "L60_J_NP_standard": {
+    "top10": [
+     [
+      " black",
+      29.2241
+     ],
+     [
+      " Black",
+      24.2405
+     ],
+     [
+      "black",
+      23.4662
+     ],
+     [
+      "-black",
+      21.5111
+     ],
+     [
+      " green",
+      21.255
+     ],
+     [
+      "\u9ed1\u8272",
+      20.2251
+     ],
+     [
+      "\u9ed1",
+      20.1904
+     ],
+     [
+      ".black",
+      20.1269
+     ],
+     [
+      "_black",
+      19.7699
+     ],
+     [
+      " BLACK",
+      19.7241
+     ]
+    ],
+    "colours_named": [
+     "black",
+     "green"
+    ]
+   },
+   "L60_J_NP_cosine": {
+    "top10": [
+     [
+      " black",
+      49.0069
+     ],
+     [
+      " Black",
+      38.9772
+     ],
+     [
+      " green",
+      37.4655
+     ],
+     [
+      "black",
+      36.8398
+     ],
+     [
+      "\u9ed1\u8272",
+      34.4866
+     ],
+     [
+      "-black",
+      32.8792
+     ],
+     [
+      " brown",
+      30.9898
+     ],
+     [
+      ".black",
+      30.6825
+     ],
+     [
+      "\u9ed1",
+      30.6245
+     ],
+     [
+      " \u0447\u0435\u0440\u043d\u044b\u0439",
+      29.437
+     ]
+    ],
+    "colours_named": [
+     "black",
+     "green",
+     "brown"
+    ]
+   },
+   "L60_J_CB_standard": {
+    "top10": [
+     [
+      " black",
+      23.505
+     ],
+     [
+      "black",
+      18.7529
+     ],
+     [
+      "\u9ed1\u8272",
+      18.0961
+     ],
+     [
+      " Black",
+      18.0299
+     ],
+     [
+      "\u9ed1",
+      17.6915
+     ],
+     [
+      "-black",
+      17.4975
+     ],
+     [
+      ".black",
+      16.1974
+     ],
+     [
+      "Black",
+      16.1086
+     ],
+     [
+      "_black",
+      16.0142
+     ],
+     [
+      " green",
+      15.4177
+     ]
+    ],
+    "colours_named": [
+     "black",
+     "green"
+    ]
+   },
+   "L60_J_CB_cosine": {
+    "top10": [
+     [
+      " black",
+      45.3842
+     ],
+     [
+      "\u9ed1\u8272",
+      34.366
+     ],
+     [
+      " Black",
+      32.708
+     ],
+     [
+      "black",
+      32.5274
+     ],
+     [
+      " green",
+      31.1478
+     ],
+     [
+      "\u9ed1",
+      30.6644
+     ],
+     [
+      " a",
+      28.902
+     ],
+     [
+      "Black",
+      27.5445
+     ],
+     [
+      "-black",
+      27.5376
+     ],
+     [
+      "<|endoftext|>",
+      26.9541
+     ]
+    ],
+    "colours_named": [
+     "black",
+     "green"
+    ]
+   },
+   "L60_R_CB_standard": {
+    "top10": [
+     [
+      " black",
+      22.1036
+     ],
+     [
+      " Black",
+      17.0189
+     ],
+     [
+      "black",
+      16.7488
+     ],
+     [
+      "\u9ed1\u8272",
+      15.9028
+     ],
+     [
+      "-black",
+      15.7046
+     ],
+     [
+      "\u9ed1",
+      15.5396
+     ],
+     [
+      " green",
+      14.6453
+     ],
+     [
+      "Black",
+      14.5065
+     ],
+     [
+      "_black",
+      14.3321
+     ],
+     [
+      ".black",
+      14.3017
+     ]
+    ],
+    "colours_named": [
+     "black",
+     "green"
+    ]
+   },
+   "L60_R_CB_cosine": {
+    "top10": [
+     [
+      " black",
+      46.0824
+     ],
+     [
+      " Black",
+      33.0228
+     ],
+     [
+      "\u9ed1\u8272",
+      32.4508
+     ],
+     [
+      " green",
+      31.863
+     ],
+     [
+      " a",
+      31.0461
+     ],
+     [
+      "black",
+      30.6601
+     ],
+     [
+      "\u9ed1",
+      28.7136
+     ],
+     [
+      "<|endoftext|>",
+      28.079
+     ],
+     [
+      " the",
+      27.5268
+     ],
+     [
+      "\n",
+      27.2816
+     ]
+    ],
+    "colours_named": [
+     "black",
+     "green"
+    ]
+   },
+   "L62_J_NP_standard": {
+    "top10": [
+     [
+      " black",
+      21.9982
+     ],
+     [
+      " Black",
+      20.4034
+     ],
+     [
+      " green",
+      18.0143
+     ],
+     [
+      " Green",
+      17.0299
+     ],
+     [
+      " brown",
+      14.6821
+     ],
+     [
+      " BLACK",
+      14.6009
+     ],
+     [
+      "black",
+      14.5854
+     ],
+     [
+      "-black",
+      14.1885
+     ],
+     [
+      "Black",
+      13.498
+     ],
+     [
+      "_black",
+      13.1293
+     ]
+    ],
+    "colours_named": [
+     "black",
+     "green",
+     "brown"
+    ]
+   },
+   "L62_J_NP_cosine": {
+    "top10": [
+     [
+      " black",
+      66.7892
+     ],
+     [
+      " Black",
+      57.4689
+     ],
+     [
+      " green",
+      53.8146
+     ],
+     [
+      " Green",
+      45.5298
+     ],
+     [
+      " brown",
+      43.1907
+     ],
+     [
+      " blue",
+      39.4493
+     ],
+     [
+      " The",
+      36.7096
+     ],
+     [
+      "black",
+      36.2213
+     ],
+     [
+      " A",
+      35.0498
+     ],
+     [
+      " Brown",
+      34.5288
+     ]
+    ],
+    "colours_named": [
+     "black",
+     "green",
+     "brown",
+     "blue"
+    ]
+   },
+   "L62_J_CB_standard": {
+    "top10": [
+     [
+      " black",
+      23.1702
+     ],
+     [
+      " Black",
+      19.42
+     ],
+     [
+      " green",
+      17.5311
+     ],
+     [
+      "black",
+      14.8416
+     ],
+     [
+      " Green",
+      14.7018
+     ],
+     [
+      "-black",
+      14.374
+     ],
+     [
+      "Black",
+      14.266
+     ],
+     [
+      "\u9ed1\u8272",
+      14.2312
+     ],
+     [
+      "\u9ed1",
+      14.2147
+     ],
+     [
+      " brown",
+      13.7777
+     ]
+    ],
+    "colours_named": [
+     "black",
+     "green",
+     "brown"
+    ]
+   },
+   "L62_J_CB_cosine": {
+    "top10": [
+     [
+      " black",
+      62.5379
+     ],
+     [
+      " Black",
+      48.7395
+     ],
+     [
+      " green",
+      45.8901
+     ],
+     [
+      " a",
+      41.0611
+     ],
+     [
+      " the",
+      39.4127
+     ],
+     [
+      " **",
+      38.1906
+     ],
+     [
+      " The",
+      36.6912
+     ],
+     [
+      "\u9ed1\u8272",
+      35.2715
+     ],
+     [
+      " A",
+      35.1297
+     ],
+     [
+      "\n\n",
+      34.7086
+     ]
+    ],
+    "colours_named": [
+     "black",
+     "green"
+    ]
+   },
+   "L62_R_CB_standard": {
+    "top10": [
+     [
+      " black",
+      23.1702
+     ],
+     [
+      " Black",
+      19.42
+     ],
+     [
+      " green",
+      17.5311
+     ],
+     [
+      "black",
+      14.8416
+     ],
+     [
+      " Green",
+      14.7018
+     ],
+     [
+      "-black",
+      14.374
+     ],
+     [
+      "Black",
+      14.266
+     ],
+     [
+      "\u9ed1\u8272",
+      14.2312
+     ],
+     [
+      "\u9ed1",
+      14.2147
+     ],
+     [
+      " brown",
+      13.7777
+     ]
+    ],
+    "colours_named": [
+     "black",
+     "green",
+     "brown"
+    ]
+   },
+   "L62_R_CB_cosine": {
+    "top10": [
+     [
+      " black",
+      62.5379
+     ],
+     [
+      " Black",
+      48.7395
+     ],
+     [
+      " green",
+      45.8901
+     ],
+     [
+      " a",
+      41.0611
+     ],
+     [
+      " the",
+      39.4127
+     ],
+     [
+      " **",
+      38.1906
+     ],
+     [
+      " The",
+      36.6912
+     ],
+     [
+      "\u9ed1\u8272",
+      35.2715
+     ],
+     [
+      " A",
+      35.1297
+     ],
+     [
+      "\n\n",
+      34.7086
+     ]
+    ],
+    "colours_named": [
+     "black",
+     "green"
+    ]
+   }
+  },
+  "pass": true
+ }
+}
