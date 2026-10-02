@@ -318,7 +318,8 @@ def stage_prompt_only():
             it = items[r["item"]]
             base = P.BREW_START_FMT.format(it["start"])
             text = it["prompt"].replace(base, P.BREW_START_FMT.format(r["start"])) if r["role"] == "partner" else it["prompt"]
-            row = {k: r[k] for k in ("key", "item", "role", "start", "z", "answer")}
+            row = {"key": r["key"], "item": r["item"], "role": r["role"],
+                   "truth": {"start": r["start"], "intermediate": r["z"], "answer": r["answer"]}}
             for role, q in QUESTIONS.items():
                 ids = wsb.render_text(tok, "brew", _prompt_only_text(text, base, q))
                 seqs = [(c, s) for c in COLOURS for s in sp[c]]
@@ -335,7 +336,7 @@ def stage_prompt_only():
                     logits = norm(hs[j, pos]).float() @ Wu.float().T
                     tot = float(torch.log_softmax(logits, -1)[torch.arange(len(s)), torch.tensor(s, device=hs.device)].sum())
                     lp.setdefault(c, []).append(tot)
-                row[role] = {c: float(torch.logsumexp(torch.tensor(v, dtype=torch.float64), 0)) for c, v in lp.items()}
+                row.setdefault("scores", {})[role] = {c: float(torch.logsumexp(torch.tensor(v, dtype=torch.float64), 0)) for c, v in lp.items()}
             rows.append(row)
             if (n + 1) % 25 == 0:
                 print(f"prompt-only {n + 1}/{len(renders)} {time.time() - t0:.0f}s", flush=True)
@@ -361,6 +362,16 @@ def _summ(v):
     return {"mean": float(v.mean()), "boot95_tables": ST.cluster_bootstrap(v, np.arange(len(v)))["ci"],
             "pos": int((v > 0).sum()), "neg": int((v < 0).sum()), "tie": int((v == 0).sum()),
             "signflip_p_unadj": _signflip_p(v), "per_table": [round(float(x), 4) for x in v]}
+
+
+def _summ_sign(v):
+    """Mean, table-bootstrap interval and sign counts, without the exact sign-flip test (n can be 48 tables)."""
+    import stats as ST
+    v = np.asarray(v, float)
+    if not len(v):
+        return None
+    return {"mean": float(v.mean()), "boot95_tables": ST.cluster_bootstrap(v, np.arange(len(v)))["ci"], "n_tables": int(len(v)),
+            "pos": int((v > 0).sum()), "neg": int((v < 0).sum()), "tie": int((v == 0).sum())}
 
 
 def _kappa(a, b):
@@ -542,6 +553,73 @@ def stage_analysis():
                                                    "hit_answer": float(np.mean(out["answer"])), "mrr_z": float(np.mean(out["rr_z"])),
                                                    "top1_of_12_is_z": float(np.mean(out["z12"]))}
     A["lens_closed_set"] = lens_rows
+    # post hoc (added after seeing the closed-set hit rates; exploratory): judge-free within-table tracking and a shuffled
+    # baseline for the token lenses, all 48 dev tables
+    nat_idx = [n for n, r in enumerate(ls["renders"]) if r["role"] in ("member", "partner")]
+    by_item = {}
+    for n in nat_idx:
+        by_item.setdefault(ls["renders"][n]["item"], []).append(n)
+    items_sorted = sorted(by_item)
+    track, shuf = {}, {}
+    for ci, cell in enumerate(ls["cells"]):
+        for li, L in enumerate(ls["layers"]):
+            for rd in ls["readouts"]:
+                S = np.array(ls["scores"][f"{rd}|{ci}|{li}"])
+                T = np.log(np.clip(S, 1e-30, None)) if rd != "J_NP_cosine" else S    # log-prob for softmax lenses
+                for tgt in ("z", "start", "answer"):
+                    per_table = []
+                    for item in items_sorted:
+                        m = [n for n in by_item[item] if ls["renders"][n]["role"] == "member"]
+                        if not m:
+                            continue
+                        m = m[0]
+                        zm = cols.index(ls["renders"][m][tgt])
+                        ds = []
+                        for p_ in by_item[item]:
+                            if ls["renders"][p_]["role"] != "partner" or ls["renders"][p_][tgt] == ls["renders"][m][tgt]:
+                                continue
+                            zp = cols.index(ls["renders"][p_][tgt])
+                            ds.append(float((T[m, zm] - T[m, zp]) - (T[p_, zm] - T[p_, zp])))
+                        if ds:
+                            per_table.append(float(np.mean(ds)))
+                    track[f"{rd}|{cell}|L{L}" + ("" if tgt == "z" else f"|{tgt}")] = _summ_sign(per_table)
+                # shuffled: each render's scores judged against the next table's member render's candidates (derangement)
+                hits = []
+                for k, item in enumerate(items_sorted):
+                    other = items_sorted[(k + 1) % len(items_sorted)]
+                    mo = [n for n in by_item[other] if ls["renders"][n]["role"] == "member"]
+                    mi = [n for n in by_item[item] if ls["renders"][n]["role"] == "member"]
+                    if not mo or not mi:
+                        continue
+                    r = ls["renders"][mi[0]]
+                    off = sorted(set(r["present"]) - set(r["trajectory"]))
+                    off = [str(x) for x in np.random.default_rng(MS.SEED + sum(map(ord, r["key"]))).permutation(off)[:2]]
+                    cand = [r["start"], r["z"], r["answer"]] + off
+                    sc = {c: S[mo[0], cols.index(c)] for c in cand}
+                    Ref = np.array(ls["reference"][f"{rd}|{ci}|{li}"])[0]
+                    top = max(cand, key=lambda c: sc[c])
+                    hits.append(bool(top == r["z"] and sc[r["z"]] > Ref[cols.index(r["z"])]))
+                shuf[f"{rd}|{cell}|L{L}"] = {"n": len(hits), "hit_z_shuffled": float(np.mean(hits))}
+    member_hit = {}
+    for ci, cell in enumerate(ls["cells"]):
+        for li, L in enumerate(ls["layers"]):
+            for rd in ls["readouts"]:
+                S = np.array(ls["scores"][f"{rd}|{ci}|{li}"]); Ref = np.array(ls["reference"][f"{rd}|{ci}|{li}"])[0]
+                hh = []
+                for item in items_sorted:
+                    mi = [n for n in by_item[item] if ls["renders"][n]["role"] == "member"]
+                    if not mi:
+                        continue
+                    r = ls["renders"][mi[0]]
+                    off = sorted(set(r["present"]) - set(r["trajectory"]))
+                    off = [str(x) for x in np.random.default_rng(MS.SEED + sum(map(ord, r["key"]))).permutation(off)[:2]]
+                    cand = [r["start"], r["z"], r["answer"]] + off
+                    sc = {c: S[mi[0], cols.index(c)] for c in cand}
+                    top = max(cand, key=lambda c: sc[c])
+                    hh.append(bool(top == r["z"] and sc[r["z"]] > Ref[cols.index(r["z"])]))
+                member_hit[f"{rd}|{cell}|L{L}"] = float(np.mean(hh))
+    A["lens_post_hoc"] = {"note": "added after seeing the closed-set hit rates; exploratory; 48 dev tables",
+                          "start_swap_tracking_logscore": track, "member_hit_z": member_hit, "shuffled_hit_z": shuf}
     top10 = {}
     for item, t in tab.items():
         cand = MS.table_candidates(t)
@@ -557,15 +635,22 @@ def stage_analysis():
                                   "abstains": float(np.mean([x["claim"] is None for x in v]))} for k, v in sorted(top10.items())}
 
     # ---- prompt-only baseline
-    po = json.load(open(RES / "prompt_only" / "colour_logprobs.json"))["rows"]
+    po_raw = json.load(open(RES / "prompt_only" / "colour_logprobs.json"))["rows"]
+    rmeta = {r["key"]: r for r in json.load(open(R.PROJECT / "outputs" / "001_leverage_profile" / "run" / "captures_brew_meta.json"))["renders"]}
+    po = []
+    for r in po_raw:                       # normalise both row formats; truth always from the capture metadata by key
+        m = rmeta[r["key"]]
+        sc = r["scores"] if "scores" in r else {k: r[k] for k in ROLES}
+        po.append({"key": r["key"], "item": m["item"], "start_colour": m["start"], "scores": sc,
+                   "truth": {"start": m["start"], "intermediate": m["z"], "answer": m["answer"]}})
     pacc = {}
-    for role, truth in (("start", "start"), ("intermediate", "z"), ("answer", "answer")):
-        pacc[role] = {"n": len(po), "top1_of_12": float(np.mean([max(r[role], key=r[role].get) == r[truth] for r in po]))}
+    for role in ROLES:
+        pacc[role] = {"n": len(po), "top1_of_12": float(np.mean([max(r["scores"][role], key=r["scores"][role].get) == r["truth"][role] for r in po]))}
     snap_keys = {(t["item"], t["start"]) for t in tab.values()} | {(t["item"], t["partner"]["start"]) for t in tab.values()}
-    po10 = [r for r in po if (r["item"], r["start"]) in snap_keys]
-    for role, truth in (("start", "start"), ("intermediate", "z"), ("answer", "answer")):
+    po10 = [r for r in po if (r["item"], r["start_colour"]) in snap_keys]
+    for role in ROLES:
         pacc[role]["snapshot_tables_n"] = len(po10)
-        pacc[role]["snapshot_tables_top1_of_12"] = float(np.mean([max(r[role], key=r[role].get) == r[truth] for r in po10]))
+        pacc[role]["snapshot_tables_top1_of_12"] = float(np.mean([max(r["scores"][role], key=r["scores"][role].get) == r["truth"][role] for r in po10]))
     pacc["note"] = "task baseline (prompt solvability), not a ceiling on readers; full prompt, not a prefix"
     A["prompt_only"] = pacc
 

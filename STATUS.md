@@ -1,4 +1,16 @@
-# STATUS — 2026-10-02 (001 complete; report revised after an external audit; awaiting PI review)
+# STATUS — 2026-10-02 (001 complete + audited; 002 claim scoring complete; 001 probe repair running)
+
+**Latest (2026-10-02, while the PI slept):**
+- **002, reader claim scoring: complete.** `docs/reports/002_claim_scoring.md`; design v2.2; external review accepted.
+  - Judge: Gemini 3.8 Flash, as in WSB. 3,930 readouts, 0 errors, $7.98. The gate passed (κ 0.67 / 0.81 against
+    blind author codes).
+  - **The verbalizers rarely claim z in its role:** NLA 5–15%, Oracle 0–3%. 85% of Oracle L40 samples contradict
+    themselves. Role-based tracking is weak.
+  - **The token lenses carry z inside the candidate set at L40–44:** the z-vs-z′ ranking flips with the start swap in
+    47–48 of 48 tables. They do not carry the start.
+  - Descriptive; no causal label.
+- **001 probe repair (amendment A2):** re-run in progress (41k fits, CPU); then the residual checks from the 002
+  review (solver across the C grid, 12-way grouped null) and the report 001 §7/§9 update.
 
 **New here?** Read `docs/COME_UP_TO_SPEED.md` first; `docs/context/SPEC_STATUS.md` maps the whole spec to done / not
 done. **The repo is private and `main` carries everything** (merged from `setup/000-scaffold` on 2026-10-02).

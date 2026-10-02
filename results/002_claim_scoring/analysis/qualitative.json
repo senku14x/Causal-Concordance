@@ -1,0 +1,542 @@
+{
+ "nla|role-correct z": [
+  {
+   "id": "brew-s2-r10d2-0104|partner|cell1|L42|nla|real|1",
+   "truth": {
+    "start": "black",
+    "intermediate": "white",
+    "answer": "orange"
+   },
+   "judge": {
+    "start": "none",
+    "intermediate": "white",
+    "answer": "conflicting"
+   },
+   "text": "Recursive color chain puzzle: each step transforms color to its successor — blue→white→red→black, so \"Final Answer:\" requires naming the color after two steps from blue, i.e., \"white\" was first step, then the second step's answer follows.\n\nThe structured input-output format expects a single color name as final answer on the next line, matching the established pattern of color output lines.\n\nThe trailing newline after \"Final Answer:\\n\" is the immediate constraint: a color name must follow. Based on the chain's logic (blue→white, second step yields \"red\"), the answer is likely \"white\" or \"red\" depending on which step — but the instruction format expects exactly one word. The answer must be a color matching the function trace output."
+  },
+  {
+   "id": "brew-s2-r10d2-0027|partner|cell2|L42|nla|real|2",
+   "truth": {
+    "start": "purple",
+    "intermediate": "red",
+    "answer": "teal"
+   },
+   "judge": {
+    "start": "none",
+    "intermediate": "red",
+    "answer": "cannot tell"
+   },
+   "text": "Recursive instruction pattern: \"Execute N steps\" repeats twice — Round 1 output is \"d\", now Round 2 requires finding successor of \"d\", which from the table is \"e\".\n\nPuzzle/output format: each answer follows \"Final Answer:\" prefix, established in Round 1. The task demands a color name output matching the chain progression: blue→red→?\n\nFinal token \"Answer:\" is mid-completion of \"Final Answer:\" format, directly after \"Round 2:\\nFinal Answer:\", requiring the next opcode successor of Round 1's output \"red\" — specifically the opcode for \"red\"'s result. Round 1 gave red, so successor is \"e\" or a color name follows."
+  }
+ ],
+ "nla|other candidate as intermediate": [
+  {
+   "id": "brew-s2-r10d2-0069|member|cell1|L42|nla|real|0",
+   "truth": {
+    "start": "black",
+    "intermediate": "teal",
+    "answer": "orange"
+   },
+   "judge": {
+    "start": "none",
+    "intermediate": "green",
+    "answer": "conflicting"
+   },
+   "text": "Chain puzzle format: each line follows a rigid input/output pattern where the answer describes the color resulting from applying nextColor to the previous answer's color.\n\nThe sequence establishes a two-step chain: \"purple → green → [next step result],\" so the model must predict the final answer color. nextColor(\"green\") yields \"red\" based on JavaScript array/index logic — the final answer is the color name.\n\nFinal token \"answer\\n\\n\" ends the answer section header, directly requiring the solution string. \"Two step answer:\\n\\n\" has already given \"green\" in the previous turn's format, so the next token must be a single color word completing this puzzle answer: likely \"cyan\" or \"red.\""
+  },
+  {
+   "id": "brew-s2-r10d2-0073|substituted|cell0|L42|nla|real|3",
+   "truth": {
+    "start": "orange",
+    "intermediate": "red",
+    "answer": "gray"
+   },
+   "judge": {
+    "start": "conflicting",
+    "intermediate": "blue",
+    "answer": "conflicting"
+   },
+   "text": "Color sequence logic: the prompt establishes a chain of color transformations following a specific rule. \"2 applications\" means applying the function twice more after green→blue→?.\n\nPattern/series continuation: The puzzle requires tracking a cyclic color mapping; first answer was \"blue\" (253→109/246→blue). Now the second answer is requested. \"Starts with red...after 2 applications.\"\n\nFinal token \"will be \\n\" is a structured fill-in prompt expecting a single color name. The third transformation from green's result must follow. After green→?→?, likely \"yellow\" or a specific next color.\n\nThe repeated word pattern mirrors the first answer line format, requiring \"red\" (or similar numeric/colored result like \"109\") to complete the chain — next logical step from green."
+  }
+ ],
+ "nla|z misplaced": [
+  {
+   "id": "brew-s2-r10d2-0027|substituted|cell0|L42|nla|real|2",
+   "truth": {
+    "start": "orange",
+    "intermediate": "pink",
+    "answer": "black"
+   },
+   "judge": {
+    "start": "pink",
+    "intermediate": "none",
+    "answer": "conflicting"
+   },
+   "text": "Table pattern continuation: structured format with pipe-delimited rows establishing a clear template for tracing color/function outputs in sequence.\n\nLogical chain resolution: the question traces two steps — \"Pink → Yellow\" established; \"Pink traced to the second iteration will result in:\" requires the next color after Yellow. Yellow must be looked up in the same table to find Yellow→? (Pink).\n\nFinal token \"is \\n| \" opens the answer cell in the table format, directly mirroring the first row's structure. The immediate next token must be a color word completing \"answer is\\nPink\" — specifically the second iteration's result from the Pink→Yellow chain, likely \"Yellow\" or a third color name in the 2-iteration sequence."
+  },
+  {
+   "id": "brew-s2-r10d2-0027|partner|cell0|L42|nla|real|1",
+   "truth": {
+    "start": "purple",
+    "intermediate": "red",
+    "answer": "teal"
+   },
+   "judge": {
+    "start": "red",
+    "intermediate": "none",
+    "answer": "cannot tell"
+   },
+   "text": "Chaining color transformation logic: each function evaluates to a specific color; \"blue\" → \"green\" → next color. The question asks for the result of two successive color evaluations from \"red.\"\n\nSequence pattern established: two inputs given (\"Red\", \"orange\"), two outputs expected in sequence. The first round (red→green) was computed; the second round must now show the next color transformation result from \"green\" via `evaluate`.\n\nFinal token \"answer:\\n\" is a prompt awaiting the solution. \"Evaluate evaluate Red is\\n\" requires a specific single-word color answer, likely a color resulting from `evaluate Green` — possibly \"red\" if evaluate replaces the value with a non-color instruction. Next token completes the puzzle answer, mirroring the Q&A format with a color like \"Red.\""
+  }
+ ],
+ "nla|conflicting": [
+  {
+   "id": "brew-s2-r10d2-0104|partner|cell0|L42|nla|real|0",
+   "truth": {
+    "start": "black",
+    "intermediate": "white",
+    "answer": "orange"
+   },
+   "judge": {
+    "start": "cannot tell",
+    "intermediate": "conflicting",
+    "answer": "none"
+   },
+   "text": "Repetition/continuation pattern: the puzzle asks to trace successive state changes, establishing a chain: \"0000\" → \"1010\" → \"0000\" → next. The sequence follows Bitcoin/OP codes state transitions.\n\nThe answer format requires a state name or color string, and the question \"What is the final state after 2 iterations?\" demands a concise answer. Given the pattern (1st iteration = green/Yellow), the second iteration follows the same first iteration from the new starting state \"Yellow\" back.\n\nFinal token \"→\\n \" is a line break introducing the answer. The established answer is \"Yellow\" after another transition: Yellow→Blue→0000, so the next token is \"Yellow.\""
+  },
+  {
+   "id": "brew-s2-r10d2-0009|partner|cell2|L42|nla|real|0",
+   "truth": {
+    "start": "black",
+    "intermediate": "orange",
+    "answer": "green"
+   },
+   "judge": {
+    "start": "conflicting",
+    "intermediate": "conflicting",
+    "answer": "cannot tell"
+   },
+   "text": "Sequential answer pattern: each line shows a color transformation result, requiring a third-step answer for \"Cyan → Red → ?\" pattern completing the chain.\n\nThe puzzle uses a color cycle lookup table with multiple iterations (two applications), so the answer must be a color derived from applying one more step from the intermediate result \"Orange\".\n\n\"Answer 2:\" is the final token, mirroring \"Answer 1: Blue\" exactly, and directly requires the next color result of the chain. Since \"Orange\" was the output in step 2, step 3 needs the color following Orange's code. The prompt established a pattern — \"Answer 1: Yellow\\nAnswer 2:\" — so a color name follows, likely \"???\" or a new intermediate color."
+  }
+ ],
+ "nla|cannot tell": [
+  {
+   "id": "brew-s2-r10d2-0041|substituted|cell2|L42|nla|real|3",
+   "truth": {
+    "start": "teal",
+    "intermediate": "black",
+    "answer": "gray"
+   },
+   "judge": {
+    "start": "cannot tell",
+    "intermediate": "cannot tell",
+    "answer": "cannot tell"
+   },
+   "text": "Step-by-step explanation of nested function computation using a specific machine state lookup table, establishing a pattern of multi-step answers with intermediate results.\n\nThe answer pattern from part (a) established: one-step answers show intermediate state name, e.g., \"1 answer: 0\\n2 answer:\" — so part (b) expects the next successor of \"Dead\" state after \"2 step(s) from 01 = Dead\", requiring the successor of Dead (which is 1) to be the final answer.\n\nFinal token \"2 answer:\" is a label in an enumeration pattern, mirroring \"1 answer: Dead\\n2 answer:\", immediately requiring a state name as the next token — likely \"Dead\" or the next step in the chain."
+  },
+  {
+   "id": "brew-s2-r10d2-0015|substituted|cell2|L42|nla|real|2",
+   "truth": {
+    "start": "gray",
+    "intermediate": "brown",
+    "answer": "black"
+   },
+   "judge": {
+    "start": "cannot tell",
+    "intermediate": "cannot tell",
+    "answer": "cannot tell"
+   },
+   "text": "Sequential step-by-step chain computation pattern: each row applies the function repeatedly to colors (yellow→blue→brown→gray), suggesting continuation of the chain.\n\nThe puzzle context establishes a mapping table being processed iteratively: \"blue → brown\" was found in row 1 answer, so row 2 answer is the next iteration applying the function to brown (which should yield the color after brown in the cycle).\n\nFinal token \"Answer:\\nRow 2:\" is a label header in the answer table format, directly requiring the computed next color. Following the same pattern as row 1's \"Answer: brown\" (but noting intermediate step logic), the next token should be a color code like \"gray\" or intermediate answer."
+  }
+ ],
+ "nla|none": [
+  {
+   "id": "brew-s2-r10d2-0069|substituted|cell2|L42|nla|real|2",
+   "truth": {
+    "start": "black",
+    "intermediate": "teal",
+    "answer": "orange"
+   },
+   "judge": {
+    "start": "green",
+    "intermediate": "none",
+    "answer": "gray"
+   },
+   "text": "Code challenge pattern: sequential application of opcodes (2x) on a value chain — Day1 yields \"Cyan\", Day2 requires next color in sequence after Green.\n\nColor instruction cycle pattern: Green → Cyan → ...; the system applies each instruction value again. The answer must follow the established format \"Answer N:\" structure, with a color code following.\n\nFinal token \":\" completes \"Day 2:\" label, immediately requiring a color answer. Given Day 1 was 0x6c39c3d → Green, and Green's instruction is 0x9b2c48c (next value in chain), Day 2 answer must be the result of applying twice to Green, likely another opcode result color. \"Answer:\" expects \"Gray\" or a hex intermediate value next."
+  },
+  {
+   "id": "brew-s2-r10d2-0104|member|cell0|L42|nla|real|1",
+   "truth": {
+    "start": "orange",
+    "intermediate": "green",
+    "answer": "black"
+   },
+   "judge": {
+    "start": "conflicting",
+    "intermediate": "none",
+    "answer": "conflicting"
+   },
+   "text": "Recursive function chain pattern: `GetNextState('Running')` returned `'Pending'`, now `GetNextState(GetNextState('Running'))` applies the function again, requiring the next state after 'Pending'.\n\nTable/state transition logic: sequence shown as Active → Pending → ???, so the answer must be the third state, likely 'Active' or a third element from the provided dataset.\n\nFinal token \"Answer:\\n\" follows the established answer format (\"Answer:\\nPending\\n\"), directly mirroring the previous answer structure; the next token must be the next state value, e.g., 'Active' (skipping one: Pending→?), specifically \"next state after Pending\" derived from the code/function logic. The answer must be a color-coded or plain state string."
+  }
+ ],
+ "oracle|role-correct z": [
+  {
+   "id": "brew-s2-r10d2-0041|substituted|cell2|L40|oracle|real|0",
+   "truth": {
+    "start": "teal",
+    "intermediate": "black",
+    "answer": "gray"
+   },
+   "judge": {
+    "start": "none",
+    "intermediate": "black",
+    "answer": "conflicting"
+   },
+   "text": "- Red (or Green, depending on interpretation, but \"next two steps\" usually implies two transformations\n- 3 (because Step 2 from Dead leads to Red, and Step 3 from Red leads to Black)\n- Black → White (Explanation: After two steps from the poison start, the chain is Poison -> Black -> White\n- 1 (or Black, depending on interpretation of second step) (See explanation below for the second step result)\n\n###"
+  },
+  {
+   "id": "brew-s2-r10d2-0041|substituted|cell2|L44|oracle|real|1",
+   "truth": {
+    "start": "teal",
+    "intermediate": "black",
+    "answer": "gray"
+   },
+   "judge": {
+    "start": "cannot tell",
+    "intermediate": "black",
+    "answer": "conflicting"
+   },
+   "text": "- 2 (Explanation: Chaos → Black Hole → 2)\n- 1 (Explanation: The third step leads to 1, and the fourth step transforms 1 to 0\n- 黑 → 白** (Explanation: Two steps after Chaos) Let's trace carefully. First step: Black. Second step: from Black, the map says\n- 2, None** (or potentially **2, Black** if \"next\" means two steps total) Let's trace carefully."
+  }
+ ],
+ "oracle|other candidate as intermediate": [
+  {
+   "id": "brew-s2-r10d2-0066|partner|cell2|L44|oracle|real|2",
+   "truth": {
+    "start": "gold",
+    "intermediate": "red",
+    "answer": "white"
+   },
+   "judge": {
+    "start": "white",
+    "intermediate": "black",
+    "answer": "conflicting"
+   },
+   "text": "- 2 (via Blue $\\rightarrow$ Red)\n- 3, then 5 (Explanation below) (Note: The chain is 2 steps long. Let's trace carefully\n- 2, Blue** (or **1, Yellow** if we assume Blue transforms to Red immediately, but typically \"third day\" implies applying the function three times\n- Blue (or more precisely: White $\\rightarrow$ Black $\\rightarrow$ Red) [Since \"Apply the function again\" usually implies two applications]"
+  },
+  {
+   "id": "brew-s2-r10d2-0073|substituted|cell2|L44|oracle|real|3",
+   "truth": {
+    "start": "orange",
+    "intermediate": "red",
+    "answer": "gray"
+   },
+   "judge": {
+    "start": "blue",
+    "intermediate": "green",
+    "answer": "red"
+   },
+   "text": "- 2 (After: Blue -> Green -> Red)\n- B, then C, then D. (2 applications of the function)\n- 整数 -> 负整数 (Explanation: The third day's output is the result of applying the chain twice.)\n- 2 (or -1 if following the chain strictly) (Explanation: Sun → Mon → Tue → Wed → **Thu**)\n\n### Step-by-"
+  }
+ ],
+ "oracle|z misplaced": [
+  {
+   "id": "brew-s2-r10d2-0073|partner|cell2|L44|oracle|real|1",
+   "truth": {
+    "start": "brown",
+    "intermediate": "blue",
+    "answer": "green"
+   },
+   "judge": {
+    "start": "blue",
+    "intermediate": "red",
+    "answer": "blue"
+   },
+   "text": "- 2 (after 2 jumps)\n- 3 (After two applications: Blue → Red → Blue)\n- blue -> black** (Explanation: Start at 0 → Apply once → 1 → Apply again → 2\n- 3 → red** (Explanation: Start: 0 → Apply next() → 1 → Apply next() → 2 → Apply next() →\n- D (after two steps: X → Y → D)\n\n**Explanation of the chain:**"
+  },
+  {
+   "id": "brew-s2-r10d2-0009|member|cell2|L40|oracle|real|2",
+   "truth": {
+    "start": "gold",
+    "intermediate": "red",
+    "answer": "purple"
+   },
+   "judge": {
+    "start": "red",
+    "intermediate": "none",
+    "answer": "conflicting"
+   },
+   "text": "- blue, orange (because red transforms to blue, and then blue transforms to red\n- Red (Explanation: Second cycle lands on Red, third step converts Red to Blue)\n- Blue → Red** (or simply **Red** if only 2 steps are requested, but \"two times\" implies the cycle continues. Let\n- Green (Explanation below) Let's trace the full path for two steps as implied by \"apply the code two times\"."
+  }
+ ],
+ "oracle|conflicting": [
+  {
+   "id": "brew-s2-r10d2-0071|member|cell2|L40|oracle|real|1",
+   "truth": {
+    "start": "blue",
+    "intermediate": "gold",
+    "answer": "brown"
+   },
+   "judge": {
+    "start": "conflicting",
+    "intermediate": "conflicting",
+    "answer": "conflicting"
+   },
+   "text": "- Green (after two steps: Blue → Green → Red)\n- 1 (or Black, depending on interpretation, but following the chain: Yellow $\\to$ Red $\\to$ 1)\n- 黄 (Yellow) (Explanation: After two steps, the sequence is 0 → Purple $\\rightarrow$ 2)\n- 土狼 (or 2 → Blue → Red) *(Note: The second step leads to 2, which leads to Red.)*"
+  },
+  {
+   "id": "brew-s2-r10d2-0015|partner|cell2|L44|oracle|real|1",
+   "truth": {
+    "start": "black",
+    "intermediate": "red",
+    "answer": "green"
+   },
+   "judge": {
+    "start": "conflicting",
+    "intermediate": "conflicting",
+    "answer": "conflicting"
+   },
+   "text": "- Green (because Red → Yellow → Green)\n- 2, 4, 6** (Two steps: Black -> White -> Green)\n- 黄 → 白 （解析：第一次转换得到红，第二次转换得到绿） ```markdown\n- Yellow → Black** (or simply **Yellow** if only two steps are taken)\n\n**Explanation:**\n1.  **First transformation**:"
+  }
+ ],
+ "oracle|cannot tell": [
+  {
+   "id": "brew-s2-r10d2-0104|member|cell2|L44|oracle|real|0",
+   "truth": {
+    "start": "orange",
+    "intermediate": "green",
+    "answer": "black"
+   },
+   "judge": {
+    "start": "cannot tell",
+    "intermediate": "cannot tell",
+    "answer": "cannot tell"
+   },
+   "text": "- 2. Tuesday (start -> next -> next -> next = Friday)\n- C) Sunday (Since we apply .next two times)\n- Wednesday (Explanation: start -> next -> next) 【Explanation】: Starting from \"start\", applying `.next` twice leads to \"\n- 星期三 (or Day 3) 【Explanation】: Applying .next twice from \"next\" leads to \"day3\", which then becomes \"sun\". Note:"
+  },
+  {
+   "id": "brew-s2-r10d2-0066|substituted|cell2|L44|oracle|real|1",
+   "truth": {
+    "start": "green",
+    "intermediate": "purple",
+    "answer": "orange"
+   },
+   "judge": {
+    "start": "cannot tell",
+    "intermediate": "cannot tell",
+    "answer": "cannot tell"
+   },
+   "text": "- B (two steps from start: Go -> Go again)\n- 2) D (Two steps: Go -> Go) | Explanation: Starting at \"go\", apply \"next\" twice leads to\n- 星期三 ``` (Explanation: start → next → next) 【Explanation】The first `next` gets the value \"Wednesday\". The second `\n- 火 (Fire) → 水 (Water) 【解析】：两次 next() 操作】\n\n**Question 2:"
+  }
+ ],
+ "oracle|none": [
+  {
+   "id": "brew-s2-r10d2-0027|member|cell2|L40|oracle|real|0",
+   "truth": {
+    "start": "orange",
+    "intermediate": "pink",
+    "answer": "black"
+   },
+   "judge": {
+    "start": "red",
+    "intermediate": "none",
+    "answer": "conflicting"
+   },
+   "text": "- 蓝色 (Blue) (since $0 \\rightarrow \\text{Yellow} \\rightarrow \\text\n- red \\rightarrow yellow$ (Applying the sequence twice) | Explanation: Following the chain from the second application:\n- Blue (or depends on interpretation, but let's trace it) | Let's trace carefully: First click: Red $\\rightarrow$ Yellow. Second\n- Blue (Explanation: The second application yields Purple, and the third application maps Purple to Blue.)\n\n### Step-by-step"
+  },
+  {
+   "id": "brew-s2-r10d2-0071|substituted|cell2|L40|oracle|real|3",
+   "truth": {
+    "start": "blue",
+    "intermediate": "gold",
+    "answer": "brown"
+   },
+   "judge": {
+    "start": "blue",
+    "intermediate": "none",
+    "answer": "conflicting"
+   },
+   "text": "- Red $\\rightarrow$ Black\n- Blue (since the sequence is 7 → Purple → Red) or **Answer: Black\n- 黄 (or possibly Blue, depending on interpretation of 2 steps) Let's trace carefully: Step 1:\n- 白 (or Red, depending on the cycle length) Let's trace carefully: Blue $\\rightarrow$ Red $\\rightarrow$ **White**\n\n### Step-by-Step Trace:"
+  }
+ ],
+ "oracle_wsb|role-correct z": [
+  {
+   "id": "brew-s2-r10d2-0027|substituted|cell0|L36|oracle_wsb|real|0",
+   "truth": {
+    "start": "orange",
+    "intermediate": "pink",
+    "answer": "black"
+   },
+   "judge": {
+    "start": "purple",
+    "intermediate": "pink",
+    "answer": "conflicting"
+   },
+   "text": "- green** (since Purple changes to Pink, then Pink changes to Yellow\n- yellow (if the chain continues) or pink (if the second application changes Purple to Yellow). Let's trace the chain carefully.\n- 蓝色 (Blue) (Applying the sequence twice) Let's trace the transformation step-by-step to find the result after two applications of the spell.\n- Pink (or Yellow, depending on the chain length). Here is the step-by-step reasoning: The second application transforms \"Purple\" to"
+  },
+  {
+   "id": "brew-s2-r10d2-0041|substituted|cell2|L40|oracle_wsb|real|0",
+   "truth": {
+    "start": "teal",
+    "intermediate": "black",
+    "answer": "gray"
+   },
+   "judge": {
+    "start": "conflicting",
+    "intermediate": "black",
+    "answer": "conflicting"
+   },
+   "text": "- Red (or Black, depending on interpretation of \"two steps from dead\")\n- 2 → 4` (since the chain is: Dead → Black → 2. The second step from Dead is Black,\n- Black (or -1, depending on interpretation) ✅ (Note: Two steps means applying the rule twice. Starting at Dead, step 1 goes to Black\n- White, Red (Explanation below)\n\nHere is the step-by-step derivation of the second state after starting with -4:"
+  }
+ ],
+ "oracle_wsb|other candidate as intermediate": [
+  {
+   "id": "brew-s2-r10d2-0066|partner|cell1|L60|oracle_wsb|real|0",
+   "truth": {
+    "start": "gold",
+    "intermediate": "red",
+    "answer": "white"
+   },
+   "judge": {
+    "start": "red",
+    "intermediate": "orange",
+    "answer": "conflicting"
+   },
+   "text": "- white\n- red → Step 4: Orange → purple\n- purple | step4-color | The third color in the lineage, purple\n- white | The third step color is white, derived from the parent Blue. |\n- White (Step 3) | #FFD700 | Yellow (Step 4) |\n\nNote"
+  },
+  {
+   "id": "brew-s2-r10d2-0066|member|cell2|L56|oracle_wsb|real|0",
+   "truth": {
+    "start": "green",
+    "intermediate": "purple",
+    "answer": "orange"
+   },
+   "judge": {
+    "start": "black",
+    "intermediate": "orange",
+    "answer": "conflicting"
+   },
+   "text": "- Orange\n\nAfter applying the transformation rules step by step, the final color of the\n- orange / After step 1, the color becomes orange. Following the rules, the next color is brown\n- 橙色 (Orange) The reasoning process begins with the color black. Following the instruction \"When black changes into Yellow,\" the first transformation yields orange.\n- Orange The reasoning follows the provided color transformation rules step by step, starting from Black, which transforms to Orange in the"
+  }
+ ],
+ "oracle_wsb|z misplaced": [
+  {
+   "id": "brew-s2-r10d2-0069|partner|cell1|L32|oracle_wsb|real|0",
+   "truth": {
+    "start": "gray",
+    "intermediate": "green",
+    "answer": "pink"
+   },
+   "judge": {
+    "start": "green",
+    "intermediate": "none",
+    "answer": "none"
+   },
+   "text": "- blue\n- Purple (or the resulting single element after following the chain of transformations). Let's trace the logic carefully to determine the\n- Red (or more precisely, the resulting color after the chain of transformations)\n- Green (Note: The logic follows the transformation chain step-by-step: Start Green -> Add Red -> Result is Purple. No further changes are applied.)\n\n**Final Answer:** Purple\n\n*(Note"
+  },
+  {
+   "id": "brew-s2-r10d2-0066|partner|cell0|L44|oracle_wsb|real|0",
+   "truth": {
+    "start": "gold",
+    "intermediate": "red",
+    "answer": "white"
+   },
+   "judge": {
+    "start": "red",
+    "intermediate": "orange",
+    "answer": "conflicting"
+   },
+   "text": "- 2.  **Step 2: The Sun turns Red**\n- 2** (because Red becomes Orange, and Orange becomes Yellow)\n- 红色 (Red) **Explanation:** We need to follow the chain of transformations for two days.\n\n### Step\n- Blue (After two transformations) or more specifically, the answer is **2. Red** then **3. Blue** (if we track the chain). Let's"
+  }
+ ],
+ "oracle_wsb|conflicting": [
+  {
+   "id": "brew-s2-r10d2-0015|substituted|cell0|L40|oracle_wsb|real|0",
+   "truth": {
+    "start": "gray",
+    "intermediate": "brown",
+    "answer": "black"
+   },
+   "judge": {
+    "start": "conflicting",
+    "intermediate": "conflicting",
+    "answer": "conflicting"
+   },
+   "text": "- 3. Second Application (Blue $\\rightarrow$ Green)\n- 绿 (Green) (since the rule applies twice: Blue $\\rightarrow$ Green $\\rightarrow$\n- 泥 (Mud) (or Green, depending on interpretation, but the question asks for the state after two applications)\n- Green (since Yellow $\\rightarrow$ Blue $\\rightarrow$ Green)\n\nLet's trace the transformation for each digit in the input number"
+  },
+  {
+   "id": "brew-s2-r10d2-0066|member|cell2|L44|oracle_wsb|real|0",
+   "truth": {
+    "start": "green",
+    "intermediate": "purple",
+    "answer": "orange"
+   },
+   "judge": {
+    "start": "none",
+    "intermediate": "conflicting",
+    "answer": "conflicting"
+   },
+   "text": "- D | Explanation: Start at \"start\", apply \"next\" twice. 1st next: \"\n- 3 (from start -> next -> next) | Explanation: start -> next -> next = fire -> water ->\n- 蓝色 (Blue) ** (Explanation: The second call to next() lands on \"fire\", and the third call lands on \"snow\")\n- 火 -> 绿 (Explanation: start -> next -> next = fire -> snow)\n\n**Explanation:** Starting from \"start\", applying \"next"
+  }
+ ],
+ "oracle_wsb|cannot tell": [
+  {
+   "id": "brew-s2-r10d2-0073|member|cell1|L20|oracle_wsb|real|0",
+   "truth": {
+    "start": "orange",
+    "intermediate": "red",
+    "answer": "gray"
+   },
+   "judge": {
+    "start": "cannot tell",
+    "intermediate": "cannot tell",
+    "answer": "conflicting"
+   },
+   "text": "- : The answer is **Green**. (The single most frequent color resulting from the specified steps and clues,\n- 1 word answer based on logical deduction from the rules provided. The final cumulative effect after Day 7 is **purple**. However\n- The answer is **purple**. Here is the deduction based on the provided rules, simplified to a single word as requested:\n- This is a complex logic puzzle requiring strict tracking of color changes. Since the answer must be one word and"
+  },
+  {
+   "id": "brew-s2-r10d2-0009|member|cell2|L28|oracle_wsb|real|0",
+   "truth": {
+    "start": "gold",
+    "intermediate": "red",
+    "answer": "purple"
+   },
+   "judge": {
+    "start": "cannot tell",
+    "intermediate": "cannot tell",
+    "answer": "conflicting"
+   },
+   "text": "- Emerald (or just **Green**) — here's the step-by-step reduction:\n- Gold (or Fire, depending on interpretation, but standard riddle answer is\n- Black (or Gold, depending on the last transformation) Let me trace it step-by-step carefully.\n- Red (after three transformations) — or more precisely, the final state after 3 transformations is **Red**. Here’s the step-by-step:"
+  }
+ ],
+ "oracle_wsb|none": [
+  {
+   "id": "brew-s2-r10d2-0069|member|cell0|L48|oracle_wsb|real|0",
+   "truth": {
+    "start": "black",
+    "intermediate": "teal",
+    "answer": "orange"
+   },
+   "judge": {
+    "start": "none",
+    "intermediate": "none",
+    "answer": "conflicting"
+   },
+   "text": "- 2. Step 2: Follow the second link (Blue -> Orange\n- D (after two hops) Here is the step-by-step transformation following the specified functions.\n- 3. car  (The second transformation in the chain: Red → Blue → Orange)\n- orange ``` (The second transformation leads to orange, then yellow)\n\n```python\ndef process_packet_hop_sequence(start_node,\n- 丙 (Final Answer after 2 steps)\n\n**Explanation of the Path:**"
+  },
+  {
+   "id": "brew-s2-r10d2-0071|member|cell2|L32|oracle_wsb|real|0",
+   "truth": {
+    "start": "blue",
+    "intermediate": "gold",
+    "answer": "brown"
+   },
+   "judge": {
+    "start": "gold",
+    "intermediate": "none",
+    "answer": "conflicting"
+   },
+   "text": "- Blue (after 3 changes: Gold → Red → Green)\n- Red (Explanation: After two transformations, the ball is red.) Let me trace the transformations step-by-step to confirm the final result.\n- Green (or more precisely, the final state after applying the rules) Explanation: After 2 transformations, the ball ends up Green.\n- **blue** (Explanation below)\n\nLet’s trace the transformations step-by-step to confirm the final color after 6 days."
+  }
+ ]
+}

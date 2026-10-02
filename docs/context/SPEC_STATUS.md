@@ -49,7 +49,7 @@ All open. Descriptive, exploratory hints from 001 (10 brew tables; not answers):
 | Optional: modulation lens, phrase-J | **dropped** (PI, 2026-10-02) | — |
 | Optional: template lens | **deferred** (PI, 2026-10-02) | exists at the pinned `camilablank/workspace-lenses` @ d740106d; vocabulary lacks teal |
 | Baseline: lucky guess | **not started** | — |
-| Baseline: prompt-only (= stock Qwen3.6-27B, A01 C18) | **not started**; required "from day one" by the PI, not run in 001 | flagged in report 001 §12/§14 |
+| Baseline: prompt-only (= stock Qwen3.6-27B, A01 C18) | **done (002)** as a task baseline: z 1.00, start 1.00, answer 0.89 on 231 dev renders | `results/002_claim_scoring/prompt_only/` |
 | Baseline: no-activation | **done** for the verbalizers (001 snapshot) | `analysis/snapshot.json` |
 | Baseline: shuffled-activation | **done** (001 snapshot, one derangement over 10 tables) | same |
 | 8 samples per cell; self-consistency variable | **partial**: 4 samples (Oracle contract, NLA), 1 (Oracle WSB grid) | — |
@@ -108,18 +108,18 @@ All open. Descriptive, exploratory hints from 001 (10 brew tables; not answers):
 |---|---|
 | Matched claim budget (k = 4; also 1, 8, 16) | **not started** |
 | Token readers: closed-set reciprocal rank; top-25 → summariser | **not started** |
-| Text readers: atomic claims ranked by recurrence; judge with "cannot tell" | **not started** (001 used word matching only) |
-| Closed-set candidates = gold z + input + answer + foils; token-reader hit rule (A01 C19) | **not started** |
+| Text readers: atomic claims ranked by recurrence; judge with "cannot tell" | **partial (002)**: role extraction per readout with none / cannot tell / conflicting; not atomic claims ranked by recurrence |
+| Closed-set candidates = gold z + input + answer + foils; token-reader hit rule (A01 C19) | **done on dev (002)**: lens closed-set hits for all 48 tables, with within-table tracking (post hoc) |
 | Open-set pairwise claim matching | **not started** |
 | Planted-concept positive control (sensitivity curves) | **not started** |
-| Judge models | **not chosen** (spec §13 Q4) |
-| Role-aware scoring (mention vs correct role vs contradicted, abstention) | **not started**; recommended by the 001 audit as the next scoring step |
+| Judge models | **chosen:** Gemini 3.8 Flash via OpenRouter (WSB's judge), PI 2026-10-02 |
+| Role-aware scoring (mention vs correct role vs contradicted, abstention) | **done on dev (002)**: judge = Gemini 3.8 Flash (WSB's), closed candidate set per table, validated against blind author codes (κ 0.67 / 0.81); `docs/reports/002_claim_scoring.md` |
 
 ## Spec §8: analyses
 
 | Analysis | Status |
 |---|---|
-| A1 agreement: concept, open-set, vector and behavioural levels; excess agreement within label; shuffle-sensitive Δκ; test–retest; P(used \| k families); Dawid–Skene; atlas | **not started** (descriptive precursors in 001 §8) |
+| A1 agreement: concept, open-set, vector and behavioural levels; excess agreement within label; shuffle-sensitive Δκ; test–retest; P(used \| k families); Dawid–Skene; atlas | **not started**; descriptive precursors in 001 §8 and the 002 overlap table (mention vs claim; shared wrong values) |
 | A2 causal accuracy: Sens, Spec, W | **not started** |
 | A3 ensemble, ΔAUC | **not started** |
 | A4 evidence tags for reader-only claims | **not started** (activation-sensitivity hint in 001 §8) |
@@ -155,7 +155,7 @@ Design 001 registered its own predictions Q1–Q14; outcomes are in report 001 �
 | 1. Does the NLA ship its reconstructor? | Yes; step-matched pair in use |
 | 2. SAE/BSF auto-interp labels? | The candidate BSF has none; SAE deferred |
 | 3. Phrase-J checkpoint? | Dropped |
-| 4. Judge models? | Open |
+| 4. Judge models? | Gemini 3.8 Flash (as in WSB), via OpenRouter |
 
 ## Infrastructure (not in the spec, needed by all of it): done
 

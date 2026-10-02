@@ -140,7 +140,9 @@ def exp001(tok):
          f"changes z) shows some activation-sensitive signal: NLA {f2(trk['nla|cell2|L42']['mean'])}–{f2(trk['nla|cell0|L42']['mean'])}, "
          f"Oracle {f2(trk['oracle|cell2|L40']['mean'])}–{f2(trk['oracle|cell2|L44']['mean'])}. "
          + ("No lens lists a palette colour at L20–48. " if lens_any == 0 else f"Lenses list a palette colour at L20–48 in at most {f2(lens_any)} of readouts. ") +
-         "Exploratory, 10 tables, word matching."),
+         "Exploratory, 10 tables, word matching. Experiment 002 (role-aware scoring, below) sharpens this: the verbalizers rarely "
+         "claim z in its role (NLA 5–15%, Oracle 0–3%), while the token lenses, read inside the candidate set, track z under the "
+         "start swap in 47–48 of 48 tables at L40–44."),
         ("Do readers name content that is not needed?",
          f"Off-path candidates are mentioned about as often with a shuffled activation as with the real one (Oracle "
          f"{f2(orc_off[0])} vs {f2(orc_off[1])}), and no substitution tracking was detected. Both are exploratory nulls at n = 10."),
@@ -528,6 +530,19 @@ def exp002():
     pr = "".join(f'<tr><td>{h(k)}</td><td class="small">{h(json.dumps(x["value"], default=str)[:120])}</td><td>{"✓ true" if x["true"] else ("✗ false" if x["true"] is not None else "—")}</td></tr>'
                  for k, x in A["predictions"].items())
     po = A["prompt_only"]
+    P = A["lens_post_hoc"]
+    lt = ('<tr><th>Lens, “:” cell</th><th class="num">layer</th><th class="num">z first among candidates<br>(real / shuffled)</th>'
+          '<th class="num">tracks z<br>(tables + / −)</th><th class="num">tracks start</th><th class="num">tracks answer</th></tr>')
+    for rd, nm in (("logit", "Logit lens"), ("J_NP_standard", "J_NP"), ("J_NP_cosine", "J_NP cosine"), ("J_CB_standard", "J_CB"), ("R_CB_standard", "R_CB")):
+        for L in (40, 42, 44, 60):
+            k = f"{rd}|emit_colon|L{L}"
+            T_ = P["start_swap_tracking_logscore"]
+            lt += (f'<tr><td>{nm}</td><td class="num">L{L}</td><td class="num">{f2(P["member_hit_z"][k])} / {f2(P["shuffled_hit_z"][k]["hit_z_shuffled"])}</td>'
+                   f'<td class="num"><b>{T_[k]["pos"]} / {T_[k]["neg"]}</b></td><td class="num">{T_[k + "|start"]["pos"]} / {T_[k + "|start"]["neg"]}</td>'
+                   f'<td class="num">{T_[k + "|answer"]["pos"]} / {T_[k + "|answer"]["neg"]}</td></tr>')
+    ovr = "".join(f'<tr><td>{h(k.split("|")[0])}</td><td>{h(k.split("|")[1].replace("_", " "))}</td><td class="num">{v.get("both", v.get("tables"))}</td>'
+                  f'<td class="num">{v.get("only_first", "")}</td><td class="num">{v.get("only_second", "")}</td><td class="num">{v.get("neither", "")}</td></tr>'
+                  for k, v in A["overlap"]["pairs"].items())
     data = {"bars": bars, "lens": A["lens_closed_set"], "prompt_only": po, "qual": Q, "top10": A["lens_top10_claims"]}
     html_ = f"""
 <section aria-labelledby="h-002">
@@ -553,6 +568,12 @@ def exp002():
   <h3>Token lenses: closed-set hit rate on z and on the answer (all 48 dev tables, “:” cell)</h3>
   <div class="cols2"><div class="chart" id="ex2-lens-z"></div><div class="chart" id="ex2-lens-a"></div></div>
   <p class="small muted">Hit = the colour ranks first among the render's 5 candidates (start, z, answer, 2 off-path) <b>and</b> scores above the lens's output on the dev-mean activation (A01 rule). Prompt-only <b>task baseline</b> (stock model given the full prompt and asked; prompt solvability, not a ceiling on readers): z {f2(po["intermediate"]["top1_of_12"])} on all 48 tables ({f2(po["intermediate"]["snapshot_tables_top1_of_12"])} on the 10 snapshot tables), answer {f2(po["answer"]["top1_of_12"])}, start {f2(po["start"]["top1_of_12"])}.</p>
+  <h3>Token lenses inside the candidate set: they track z, not the start (48 tables; post hoc)</h3>
+  <p class="small muted">Added after the hit rates above were seen; exploratory. “Tracks” = within the same table, the lens's score for the member's colour minus the partner's colour is higher on the member render than on the partner render (start-swap contrast; per table, averaged over partners; counts over 48 tables). Shuffled = the same lens output scored against another table's candidates.</p>
+  <div class="scroll"><table class="tbl">{lt}</table></div>
+  <h3>Do readers overlap? (exploratory; 10 tables; member activation)</h3>
+  <p class="small muted">Mention = the colour word appears in any of the cell's samples; asserts = the judge puts z in the intermediate role in any sample; shared wrong = both readers assert the same incorrect intermediate in some sample. Oracle L40/L44 and NLA L42 read different layers; J_NP top-10 lists are a different claim budget.</p>
+  <div class="scroll"><table class="tbl"><tr><th>Pair</th><th>Level</th><th class="num">both</th><th class="num">only first</th><th class="num">only second</th><th class="num">neither</th></tr>{ovr}</table></div>
   <h3>Qualitative: judged readouts</h3>
   <div class="seg" id="ex2-qsel"></div>
   <div id="ex2-q" class="panel"></div>
@@ -572,7 +593,8 @@ STATUS_HTML = """
       <li>WorkspaceBench renders byte-identical to WSB's producer; partners, substitutions and the gate.</li>
       <li>Margin scorer, patching engines (RHUT cross-check, SEC true-fp32 replay), stats, figures, and a model-integrity guard. 78 tests pass.</li>
       <li>Readers: logit lens, J_NP, J_CB, R_CB, Oracle Lens (L40), NLA (L42), plus their positive controls.</li>
-      <li>Experiment 001 (dev): gate, smoke, run, probes, reader snapshot, analysis, figures, report.</li>
+      <li>Experiment 001 (dev): gate, smoke, run, probes, reader snapshot, analysis, figures, report (audited).</li>
+      <li>Experiment 002 (dev): role-aware claim scoring of every snapshot readout (Gemini 3.8 Flash judge, validated), lens closed-set scores, prompt-only baseline.</li>
     </ul></div>
     <div class="no"><h3>Not working, parked or dropped</h3><ul class="plain">
       <li><b>vLLM acceleration:</b> the engine won't start on this GPU (sm_120 check inside FlashInfer). Parked; the HF route works.</li>
@@ -584,7 +606,7 @@ STATUS_HTML = """
     <div class="todo"><h3>Waiting on you, then next</h3><ul class="plain">
       <li>Review report 001 and the AMENDMENT_02 proposals (above).</li>
       <li>HF dataset name for the raw outputs; paper PDFs in a public repo; merge to main.</li>
-      <li>Then design 002, the labels: 1-D swaps along reader-free mean-difference directions, clamp-to-mean necessity tests, random-direction nulls. Shown to you before any run.</li>
+      <li>Then the label experiment (now 003): is z at “:” L40–44 causally used? 1-D swaps along reader-free mean-difference directions, clamp-to-mean necessity tests, random-direction nulls. Shown to you before any run.</li>
     </ul></div>
   </div>
 </section>

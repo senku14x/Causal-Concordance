@@ -63,6 +63,17 @@ live state in `STATUS.md`, and the item-by-item spec status in `docs/context/SPE
   - No substitution tracking was detected.
   - **No label or reader score exists yet.**
 
+## 4b. What 002 found (claim scoring; dev; descriptive)
+
+- A judge (Gemini 3.8 Flash, WSB's) read all 3,930 snapshot readouts against a closed candidate set per table. It
+  agrees with blind author codes at κ 0.67 / 0.81.
+- **The verbalizers rarely claim z in its role:** NLA 5–15% vs mention 42–60%; Oracle 0–3%, with 85% of Oracle L40
+  samples self-contradictory. Role-based tracking under the start swap is weak (≤ 0.14).
+- **The token lenses carry z specifically:** within the candidate set the z-vs-z′ ranking flips with the start swap
+  in 47–48 of 48 tables at L40–44, and the start does not. This is invisible in top-10 lists.
+- Prompt-only (stock model) gets z right in 100% of renders: z is fully inferable from the prompt.
+- Next (PI): the label experiment 003, asking whether z at `:` L40–44 is causally used. See report 002 §12.
+
 ## 5. Known problems (not yet fixed)
 
 1. **Probe controls:**
@@ -94,6 +105,9 @@ live state in `STATUS.md`, and the item-by-item spec status in `docs/context/SPE
 - Workflows (multi-agent orchestration) were allowed for orchestration in one stretch; label measurements stay
   single-path. The standing rule in `CLAUDE.md` is still "no subagents" unless the PI turns workflows on.
 - 2026-10-02: branch `setup/000-scaffold` merged to `main`; repository made private.
+- 2026-10-02: modulation lens and phrase-J dropped; template lens deferred.
+- 2026-10-02: judge = Gemini 3.8 Flash via OpenRouter (key in `/workspace/.env`, never committed); fix the probes, then
+  score reader claims properly (002); external reviews of 001 and design 002 accepted.
 
 ## 7. Open decisions for the PI
 

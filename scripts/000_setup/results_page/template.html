@@ -293,8 +293,8 @@ function rolesKey(){
 }
 
 document.getElementById("pills").innerHTML = [
-  ["good","Setup done"],["good","Tests pass"],["good","Experiment 001 complete"],
-  ["warn","001 report awaiting your review"],["warn","SAE deferred"]].map(([k,t]) => `<span class="pill ${k}">${t}</span>`).join("");
+  ["good","Setup done"],["good","Tests pass"],["good","001 complete (audited)"],["good","002 claim scoring complete"],
+  ["warn","001 probe repair running"],["warn","Reports awaiting your review"],["warn","SAE deferred"]].map(([k,t]) => `<span class="pill ${k}">${t}</span>`).join("");
 
 (function(){
   const out = [];

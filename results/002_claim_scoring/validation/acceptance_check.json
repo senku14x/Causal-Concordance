@@ -1,0 +1,91 @@
+{
+ "cases": [
+  {
+   "id": "brew-s2-r10d2-0009|partner|cell2|L42|nla|real|90",
+   "text": "The puzzle applies the rule twice: black -> orange -> green, so the answer is green.",
+   "expected_extraction": {
+    "start": "black",
+    "intermediate": "orange",
+    "answer": "green"
+   },
+   "judge": {
+    "start": "black",
+    "intermediate": "orange",
+    "answer": "green"
+   },
+   "extraction_ok": true,
+   "truth": {
+    "start": "black",
+    "intermediate": "orange",
+    "answer": "green"
+   },
+   "scored": {
+    "start": "correct",
+    "intermediate": "correct",
+    "answer": "correct"
+   }
+  },
+  {
+   "id": "brew-s2-r10d2-0009|member|cell2|L42|nla|real|91",
+   "text": "Starting from gold, the first step gives red and the second gives purple: gold -> red -> purple.",
+   "expected_extraction": {
+    "start": "gold",
+    "intermediate": "red",
+    "answer": "purple"
+   },
+   "judge": {
+    "start": "gold",
+    "intermediate": "red",
+    "answer": "purple"
+   },
+   "extraction_ok": true,
+   "truth": {
+    "start": "gold",
+    "intermediate": "red",
+    "answer": "purple"
+   },
+   "scored": {
+    "start": "correct",
+    "intermediate": "correct",
+    "answer": "correct"
+   }
+  },
+  {
+   "id": "brew-s2-r10d2-0009|member|cell2|L42|nla|real|92",
+   "text": "Starting from gold, the first step gives orange, and the final answer is purple.",
+   "expected_extraction": {
+    "start": "gold",
+    "intermediate": "orange",
+    "answer": "purple"
+   },
+   "judge": {
+    "start": "gold",
+    "intermediate": "orange",
+    "answer": "purple"
+   },
+   "extraction_ok": true,
+   "truth": {
+    "start": "gold",
+    "intermediate": "red",
+    "answer": "purple"
+   },
+   "scored": {
+    "start": "correct",
+    "intermediate": "incorrect",
+    "answer": "correct"
+   }
+  }
+ ],
+ "passed": true,
+ "spend_usd": 0.00092475,
+ "candidates": [
+  "gold",
+  "red",
+  "purple",
+  "black",
+  "orange",
+  "green",
+  "pink",
+  "white"
+ ]
+}
