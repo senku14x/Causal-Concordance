@@ -83,7 +83,7 @@ def all_readouts():
     tab = {t["item"]: t for t in sn["tables"]}
     rows = MS.readouts(sn)
     for r in rows:
-        r["candidates"] = cand_order(r["id"], tab[r["table"]]["candidates"])
+        r["candidates"] = cand_order(r["id"], MS.table_candidates(tab[r["table"]]))
     return rows, tab
 
 
@@ -150,7 +150,11 @@ async def _run(rows, out_path):
             if x["status"] == "ok":
                 done[x["id"]] = x
     todo = [r for r in rows if r["id"] not in done]
-    spend = Spend(sum(float((x.get("usage") or {}).get("cost") or 0) for x in done.values()))
+    prior = 0.0                                   # the cap counts every judge call ever made (pilot, discarded runs)
+    for f in JDIR.glob("*.jsonl"):
+        if f != out_path:
+            prior += sum(float((json.loads(l).get("usage") or {}).get("cost") or 0) for l in open(f))
+    spend = Spend(prior + sum(float((x.get("usage") or {}).get("cost") or 0) for x in done.values()))
     print(f"{len(done)} already judged, {len(todo)} to go; spend so far ${spend.usd:.3f}", flush=True)
     sem = asyncio.Semaphore(JUDGE["concurrency"])
     key = _key()

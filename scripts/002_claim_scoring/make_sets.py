@@ -40,6 +40,18 @@ def readouts(sn):
     return rows
 
 
+def table_candidates(t):
+    """One closed set per table (design 002 v2.1): the member's path, the partner's path, then WSB's off-path options for
+    the item. Both pair members' z are candidates for every readout of the table, so start-swap tracking can be scored
+    on roles. 6-8 colours."""
+    out = []
+    for c in [t["start"], t["z"], t["answer"], t["partner"]["start"], t["partner"]["z"], t["partner"]["answer"]] + \
+            [c for c in t["candidates"] if c not in (t["start"], t["z"], t["answer"])]:
+        if c not in out:
+            out.append(c)
+    return out
+
+
 def main():
     sn = json.load(open(SNAP))
     tab = {t["item"]: t for t in sn["tables"]}
@@ -59,7 +71,7 @@ def main():
     for name, rs in (("pilot", pilot), ("validation", val)):
         with open(OUTD / f"{name}.jsonl", "w") as f:
             for r in rs:
-                cands = list(np.random.default_rng(SEED + sum(map(ord, r["id"]))).permutation(tab[r["table"]]["candidates"]))
+                cands = [str(c) for c in np.random.default_rng(SEED + sum(map(ord, r["id"]))).permutation(table_candidates(tab[r["table"]]))]
                 f.write(json.dumps({"id": r["id"], "reader": r["reader"], "arm": r["arm"], "candidates": cands, "text": r["text"]}, ensure_ascii=False) + "\n")
     with open(OUTD / "key.jsonl", "w") as f:
         for r in pilot + val:

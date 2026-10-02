@@ -2,11 +2,11 @@
 {"id": "brew-s2-r10d2-0104|substituted|cell1|L40|oracle_wsb|real|0", "start": "red", "intermediate": "none", "answer": "conflicting", "coder": "author (Claude), blind to key, 2026-10-02"}
 {"id": "brew-s2-r10d2-0075|substituted|cell2|L52|oracle_wsb|real|0", "start": "conflicting", "intermediate": "none", "answer": "teal", "coder": "author (Claude), blind to key, 2026-10-02"}
 {"id": "brew-s2-r10d2-0041|partner|cell2|L42|nla|shuffled|0", "start": "blue", "intermediate": "conflicting", "answer": "black", "coder": "author (Claude), blind to key, 2026-10-02"}
-{"id": "brew-s2-r10d2-0104|member|cell2|L42|nla|shuffled|3", "start": "none", "intermediate": "orange", "answer": "red", "coder": "author (Claude), blind to key, 2026-10-02"}
+{"id": "brew-s2-r10d2-0104|member|cell2|L42|nla|shuffled|3", "start": "white", "intermediate": "orange", "answer": "red", "coder": "author (Claude), blind to key, 2026-10-02", "note": "start: none -> white because the candidate set was enlarged (v2.1); the colour was identified in the original blind coding"}
 {"id": "brew-s2-r10d2-0069|substituted|cell2|L48|oracle_wsb|shuffled|0", "start": "none", "intermediate": "none", "answer": "conflicting", "coder": "author (Claude), blind to key, 2026-10-02"}
 {"id": "brew-s2-r10d2-0075|partner|cell1|L42|nla|shuffled|2", "start": "none", "intermediate": "conflicting", "answer": "gray", "coder": "author (Claude), blind to key, 2026-10-02"}
 {"id": "brew-s2-r10d2-0015|member|cell1|L42|nla|shuffled|0", "start": "none", "intermediate": "none", "answer": "none", "coder": "author (Claude), blind to key, 2026-10-02"}
-{"id": "brew-s2-r10d2-0066|substituted|cell2|L40|oracle|real|2", "start": "conflicting", "intermediate": "none", "answer": "conflicting", "coder": "author (Claude), blind to key, 2026-10-02"}
+{"id": "brew-s2-r10d2-0066|substituted|cell2|L40|oracle|real|2", "start": "conflicting", "intermediate": "red", "answer": "conflicting", "coder": "author (Claude), blind to key, 2026-10-02", "note": "intermediate: none -> red because the candidate set was enlarged (v2.1); the colour was identified in the original blind coding"}
 {"id": "brew-s2-r10d2-0071|member|cell2|L44|oracle|real|2", "start": "none", "intermediate": "none", "answer": "conflicting", "coder": "author (Claude), blind to key, 2026-10-02"}
 {"id": "brew-s2-r10d2-0071|substituted|cell0|L48|oracle_wsb|real|0", "start": "conflicting", "intermediate": "conflicting", "answer": "conflicting", "coder": "author (Claude), blind to key, 2026-10-02"}
 {"id": "brew-s2-r10d2-0075|partner|cell0|L36|oracle_wsb|shuffled|0", "start": "black", "intermediate": "conflicting", "answer": "conflicting", "coder": "author (Claude), blind to key, 2026-10-02"}
@@ -15,7 +15,7 @@
 {"id": "brew-s2-r10d2-0027|member|cell0|L20|oracle_wsb|real|0", "start": "cannot tell", "intermediate": "cannot tell", "answer": "none", "coder": "author (Claude), blind to key, 2026-10-02"}
 {"id": "brew-s2-r10d2-0069|partner|cell1|L42|nla|real|0", "start": "none", "intermediate": "none", "answer": "green", "coder": "author (Claude), blind to key, 2026-10-02"}
 {"id": "brew-s2-r10d2-0069|member|cell2|L40|oracle|real|2", "start": "conflicting", "intermediate": "conflicting", "answer": "conflicting", "coder": "author (Claude), blind to key, 2026-10-02"}
-{"id": "brew-s2-r10d2-0075|partner|cell1|L40|oracle_wsb|real|0", "start": "none", "intermediate": "conflicting", "answer": "none", "coder": "author (Claude), blind to key, 2026-10-02"}
+{"id": "brew-s2-r10d2-0075|partner|cell1|L40|oracle_wsb|real|0", "start": "none", "intermediate": "conflicting", "answer": "blue", "coder": "author (Claude), blind to key, 2026-10-02", "note": "answer: none -> blue because the candidate set was enlarged (v2.1); the colour was identified in the original blind coding"}
 {"id": "brew-s2-r10d2-0009|partner|cell2|L44|oracle|real|0", "start": "conflicting", "intermediate": "none", "answer": "conflicting", "coder": "author (Claude), blind to key, 2026-10-02"}
 {"id": "brew-s2-r10d2-0009|substituted|cell2|L52|oracle_wsb|real|0", "start": "conflicting", "intermediate": "conflicting", "answer": "purple", "coder": "author (Claude), blind to key, 2026-10-02"}
 {"id": "brew-s2-r10d2-0027|member|cell2|L24|oracle_wsb|shuffled|0", "start": "cannot tell", "intermediate": "cannot tell", "answer": "conflicting", "coder": "author (Claude), blind to key, 2026-10-02"}
@@ -34,7 +34,7 @@
 {"id": "brew-s2-r10d2-0041|substituted|cell2|L42|nla|real|2", "start": "cannot tell", "intermediate": "none", "answer": "cannot tell", "coder": "author (Claude), blind to key, 2026-10-02"}
 {"id": "brew-s2-r10d2-0069|member|cell2|L42|nla|shuffled|3", "start": "none", "intermediate": "none", "answer": "cannot tell", "coder": "author (Claude), blind to key, 2026-10-02"}
 {"id": "brew-s2-r10d2-0041|member|cell2|L44|oracle|real|3", "start": "black", "intermediate": "none", "answer": "conflicting", "coder": "author (Claude), blind to key, 2026-10-02"}
-{"id": "brew-s2-r10d2-0066|partner|cell2|L40|oracle|shuffled|3", "start": "none", "intermediate": "conflicting", "answer": "conflicting", "coder": "author (Claude), blind to key, 2026-10-02"}
+{"id": "brew-s2-r10d2-0066|partner|cell2|L40|oracle|shuffled|3", "start": "red", "intermediate": "conflicting", "answer": "conflicting", "coder": "author (Claude), blind to key, 2026-10-02", "note": "start: none -> red because the candidate set was enlarged (v2.1); the colour was identified in the original blind coding"}
 {"id": "brew-s2-r10d2-0041|member|cell0|L42|nla|real|3", "start": "cannot tell", "intermediate": "conflicting", "answer": "blue", "coder": "author (Claude), blind to key, 2026-10-02", "note": "rule (iii) clarification after pilot pass 1; judge had not seen the validation set"}
 {"id": "brew-s2-r10d2-0104|member|cell2|L44|oracle|shuffled|1", "start": "none", "intermediate": "conflicting", "answer": "conflicting", "coder": "author (Claude), blind to key, 2026-10-02"}
 {"id": "brew-s2-r10d2-0015|member|cell2|L42|nla|real|2", "start": "green", "intermediate": "none", "answer": "none", "coder": "author (Claude), blind to key, 2026-10-02"}
@@ -52,7 +52,7 @@
 {"id": "brew-s2-r10d2-0104|substituted|cell2|L40|oracle|real|3", "start": "conflicting", "intermediate": "conflicting", "answer": "conflicting", "coder": "author (Claude), blind to key, 2026-10-02"}
 {"id": "brew-s2-r10d2-0069|substituted|cell2|L44|oracle|real|3", "start": "conflicting", "intermediate": "conflicting", "answer": "conflicting", "coder": "author (Claude), blind to key, 2026-10-02"}
 {"id": "brew-s2-r10d2-0041|partner|cell2|L42|nla|real|0", "start": "cannot tell", "intermediate": "conflicting", "answer": "conflicting", "coder": "author (Claude), blind to key, 2026-10-02"}
-{"id": "brew-s2-r10d2-0041|partner|cell0|L42|nla|real|3", "start": "none", "intermediate": "none", "answer": "none", "coder": "author (Claude), blind to key, 2026-10-02"}
+{"id": "brew-s2-r10d2-0041|partner|cell0|L42|nla|real|3", "start": "orange", "intermediate": "none", "answer": "none", "coder": "author (Claude), blind to key, 2026-10-02", "note": "start: none -> orange because the candidate set was enlarged (v2.1); the colour was identified in the original blind coding"}
 {"id": "brew-s2-r10d2-0104|partner|cell0|L42|nla|real|1", "start": "none", "intermediate": "conflicting", "answer": "conflicting", "coder": "author (Claude), blind to key, 2026-10-02"}
 {"id": "brew-s2-r10d2-0071|substituted|cell2|L44|oracle|shuffled|1", "start": "conflicting", "intermediate": "conflicting", "answer": "conflicting", "coder": "author (Claude), blind to key, 2026-10-02"}
 {"id": "brew-s2-r10d2-0073|substituted|cell2|L40|oracle|shuffled|3", "start": "conflicting", "intermediate": "conflicting", "answer": "conflicting", "coder": "author (Claude), blind to key, 2026-10-02"}

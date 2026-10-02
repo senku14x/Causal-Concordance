@@ -40,8 +40,10 @@ Each reader runs on the member render, its start partner and the substituted ren
 `results/001_leverage_profile/analysis/snapshot.json`. Per-table no-activation runs are stored under 4-part keys
 (`none|L|reader|none`).
 
-**Closed set per table:** WSB's 5 options for the item, i.e. start, z, answer and 2 off-path colours (the A01 §4 set).
-A judge may also answer "none", "cannot tell" or "conflicting".
+**Closed set per table (v2.1):** the member's path (start, z, answer), the partner's path (start′, z′, answer′), and
+WSB's 2 off-path options for the item: 6–8 colours. The same set serves every readout of the table (member, partner,
+substituted, shuffled, none), so both z and z′ are candidates everywhere. A judge may also answer "none", "cannot tell"
+or "conflicting".
 
 ## 3. Judge
 
@@ -56,7 +58,7 @@ A judge may also answer "none", "cannot tell" or "conflicting".
 
 The key is read from `/workspace/.env` (`OPENROUTER_API_KEY`), never logged or committed.
 
-**Inputs.** The judge sees **only the readout text and the 5 candidates**, never the prompt, the table or the truth.
+**Inputs.** The judge sees **only the readout text and the table's candidates**, never the prompt, the table or the truth.
 Candidate order is shuffled per readout with a fixed seed (`20261004` + the readout id's code points). Oracle samples
 contain several bullet answers and are judged as one readout; inconsistency between bullets is what "conflicting" is
 for.
@@ -212,6 +214,19 @@ p-values, unadjusted and labelled exploratory):
 2. **Pilot pass 2** (prompt sha e1cc74d7, $0.027): the 20 responses follow the clarified rules. Examples: 0009 L24
    answer → conflicting; 0027 real-SEC answer with "red" among non-candidates → conflicting; 0075 L60 bare "white"
    answers → answer none. **Prompt frozen here.** Pilot cost in total: $0.058.
+3. **v2.1: candidate set enlarged** (before the full run completed; found by the author while writing the lens stage).
+   - **The flaw:** with WSB's 5 member-item options, partner readouts were judged against a set that does not contain
+     the partner's path (e.g. 0009: partner black → orange → green; options red, purple, pink, white, gold). So a
+     partner readout could never be role-correct, and start-swap tracking (§6 b) could not be scored on roles.
+   - **The fix:** one closed set per table, the union of both pair members' paths and WSB's off-path options.
+   - **The partial run:** it had judged 302 readouts with the old sets ($0.555). It was stopped and kept as
+     `judge/discarded_5cand_partial.jsonl`; its cost counts toward the cap.
+   - **Author codes:** five validation codes changed mechanically, because a colour the author had identified, coded
+     "none" as a non-candidate, is now a candidate (#4, #8, #17, #36, #54; noted per row). No judge output on the
+     validation set had been seen.
+4. **Cost re-estimate:** Gemini 3.8 Flash spends about 385 reasoning tokens per call even at "minimal" effort, so a call
+   costs about $0.0018 and a full pass about $7.3, not the $2.35 estimated in §10. Kept WSB's setting for
+   comparability; the $10 cap is now global across all judge files.
 
 ## Appendix A — judge prompt (frozen after the pilot; sha256 of system + prompt recorded in the manifest)
 
