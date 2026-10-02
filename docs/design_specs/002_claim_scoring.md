@@ -199,9 +199,23 @@ p-values, unadjusted and labelled exploratory):
 
 ## 11. Changes log (pilot and after)
 
-*(filled in as changes happen; none yet)*
+1. **Pilot pass 1** (20 readouts, $0.031; prompt sha 621c9432). Every response was read. Three clarifications were
+   added to the prompt. All are format or rubric wording, none tuned to a score:
+   - (i) a colour presented as the text's answer, result or final colour, including a bare Oracle bullet answer, is the
+     ANSWER. Before this, the judge returned "cannot tell" for "- white … Result: White".
+   - (ii) different colours for one role are "conflicting" even when none is a candidate. Before this, "none" in
+     0009 L24.
+   - (iii) alternatives ("X or Y") are "conflicting".
+   The author's validation codes already followed (i) and (ii). One code changes under (iii) (validation #37,
+   intermediate: "Blue or Death" → conflicting). That change was made before any judge output on the validation set
+   existed.
+2. **Pilot pass 2** (prompt sha e1cc74d7, $0.027): the 20 responses follow the clarified rules. Examples: 0009 L24
+   answer → conflicting; 0027 real-SEC answer with "red" among non-candidates → conflicting; 0075 L60 bare "white"
+   answers → answer none. **Prompt frozen here.** Pilot cost in total: $0.058.
 
-## Appendix A — judge prompt (v2 draft; frozen after the pilot)
+## Appendix A — judge prompt (frozen after the pilot; sha256 of system + prompt recorded in the manifest)
+
+System: `You extract claims from text about a colour puzzle. Reply with JSON only.`
 
 ```
 You will read a short text written by an AI system. The text may describe a colour puzzle in which a colour rule is
@@ -214,9 +228,12 @@ colour? Rules:
 - If the text says to apply the rule twice to X (or that X is where the chain begins), X is the START.
 - If the text says a first step, first iteration or first answer produced X, X is the INTERMEDIATE.
 - A chain written as A -> B -> C means START = A, INTERMEDIATE = B, ANSWER = C.
+- A colour the text presents as its answer, result or final colour (including a bare answer such as "- white") is the
+  ANSWER.
 - If the text gives a role a colour that is not a candidate, answer "none".
 - If the text does not state a role, or only lists or mentions colours without roles, answer "cannot tell".
-- If the text gives the same role different colours in different places, answer "conflicting".
+- If the text gives the same role different colours in different places, or offers alternatives ("X or Y"), answer
+  "conflicting", even when none of those colours is a candidate.
 Use only the text. Do not solve the puzzle yourself.
 
 TEXT:
