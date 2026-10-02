@@ -1,0 +1,1839 @@
+{
+ "source": "scripts/001_leverage_profile/audit_followups.py",
+ "status": "exploratory, post hoc, n = 10 snapshot tables",
+ "readers": {
+  "nla|cell0|L42": {
+   "real_z": {
+    "mean": 0.55,
+    "tables_nonzero": 7,
+    "per_table": [
+     1.0,
+     0.5,
+     1.0,
+     0.75,
+     0.0,
+     0.0,
+     0.0,
+     1.0,
+     1.0,
+     0.25
+    ]
+   },
+   "shuffled_z": {
+    "mean": 0.25,
+    "tables_nonzero": 4,
+    "per_table": [
+     1.0,
+     0.0,
+     0.0,
+     0.0,
+     0.25,
+     0.0,
+     0.0,
+     0.0,
+     0.25,
+     1.0
+    ]
+   },
+   "real_minus_shuffled": {
+    "mean": 0.3,
+    "boot95_tables": [
+     -0.05,
+     0.625
+    ],
+    "pos": 5,
+    "neg": 2,
+    "tie": 3,
+    "signflip_p_unadj": 0.1875,
+    "per_table": [
+     0.0,
+     0.5,
+     1.0,
+     0.75,
+     -0.25,
+     0.0,
+     0.0,
+     1.0,
+     0.75,
+     -0.75
+    ]
+   },
+   "start_pair_tracking": {
+    "mean": 0.35,
+    "boot95_tables": [
+     0.1,
+     0.575
+    ],
+    "pos": 8,
+    "neg": 1,
+    "tie": 1,
+    "signflip_p_unadj": 0.03515625,
+    "per_table": [
+     0.625,
+     0.625,
+     0.75,
+     0.375,
+     0.25,
+     0.0,
+     -0.5,
+     0.125,
+     0.875,
+     0.375
+    ]
+   },
+   "substitution_tracking": {
+    "mean": 0.025,
+    "boot95_tables": [
+     -0.025,
+     0.075
+    ],
+    "pos": 3,
+    "neg": 1,
+    "tie": 6,
+    "signflip_p_unadj": 0.625,
+    "per_table": [
+     0.125,
+     0.0,
+     0.0,
+     0.125,
+     0.0,
+     -0.125,
+     0.0,
+     0.0,
+     0.0,
+     0.125
+    ]
+   },
+   "own_z_minus_other_tables_z": {
+    "mean": 0.35,
+    "boot95_tables": [
+     0.04504464285714294,
+     0.6384040178571427
+    ],
+    "pos": 7,
+    "neg": 3,
+    "tie": 0,
+    "signflip_p_unadj": 0.05859375,
+    "per_table": [
+     0.875,
+     0.2857,
+     0.8125,
+     0.5714,
+     -0.1562,
+     -0.3125,
+     -0.3438,
+     0.8571,
+     0.7857,
+     0.125
+    ]
+   },
+   "colour_base_rates": {
+    "green": 0.667,
+    "red": 0.6,
+    "blue": 0.583,
+    "orange": 0.25,
+    "gray": 0.175,
+    "purple": 0.1,
+    "pink": 0.092,
+    "brown": 0.058,
+    "black": 0.05,
+    "white": 0.05
+   }
+  },
+  "nla|cell1|L42": {
+   "real_z": {
+    "mean": 0.6,
+    "tables_nonzero": 8,
+    "per_table": [
+     1.0,
+     0.5,
+     0.75,
+     1.0,
+     0.25,
+     0.0,
+     0.0,
+     0.75,
+     1.0,
+     0.75
+    ]
+   },
+   "shuffled_z": {
+    "mean": 0.2,
+    "tables_nonzero": 5,
+    "per_table": [
+     0.5,
+     0.0,
+     0.0,
+     0.0,
+     0.5,
+     0.0,
+     0.0,
+     0.25,
+     0.25,
+     0.5
+    ]
+   },
+   "real_minus_shuffled": {
+    "mean": 0.4,
+    "boot95_tables": [
+     0.15,
+     0.625
+    ],
+    "pos": 7,
+    "neg": 1,
+    "tie": 2,
+    "signflip_p_unadj": 0.0234375,
+    "per_table": [
+     0.5,
+     0.5,
+     0.75,
+     1.0,
+     -0.25,
+     0.0,
+     0.0,
+     0.5,
+     0.75,
+     0.25
+    ]
+   },
+   "start_pair_tracking": {
+    "mean": 0.3,
+    "boot95_tables": [
+     0.1125,
+     0.4875
+    ],
+    "pos": 6,
+    "neg": 1,
+    "tie": 3,
+    "signflip_p_unadj": 0.03125,
+    "per_table": [
+     0.25,
+     0.5,
+     0.625,
+     0.5,
+     0.0,
+     0.0,
+     -0.125,
+     0.0,
+     0.625,
+     0.625
+    ]
+   },
+   "substitution_tracking": {
+    "mean": -0.025,
+    "boot95_tables": [
+     -0.1,
+     0.05
+    ],
+    "pos": 2,
+    "neg": 2,
+    "tie": 6,
+    "signflip_p_unadj": 0.75,
+    "per_table": [
+     0.0,
+     0.0,
+     0.0,
+     0.0,
+     0.0,
+     0.125,
+     -0.25,
+     0.0,
+     0.125,
+     -0.25
+    ]
+   },
+   "own_z_minus_other_tables_z": {
+    "mean": 0.36502976190476194,
+    "boot95_tables": [
+     0.05862351190476194,
+     0.6463058035714285
+    ],
+    "pos": 7,
+    "neg": 2,
+    "tie": 1,
+    "signflip_p_unadj": 0.05078125,
+    "per_table": [
+     0.8333,
+     0.25,
+     0.5312,
+     0.75,
+     0.0,
+     -0.375,
+     -0.4062,
+     0.6071,
+     0.9286,
+     0.5312
+    ]
+   },
+   "colour_base_rates": {
+    "green": 0.708,
+    "red": 0.608,
+    "blue": 0.575,
+    "orange": 0.383,
+    "purple": 0.233,
+    "gray": 0.208,
+    "pink": 0.158,
+    "black": 0.133,
+    "white": 0.117,
+    "brown": 0.108,
+    "teal": 0.025
+   }
+  },
+  "nla|cell2|L42": {
+   "real_z": {
+    "mean": 0.425,
+    "tables_nonzero": 6,
+    "per_table": [
+     1.0,
+     0.0,
+     0.5,
+     0.0,
+     0.5,
+     0.0,
+     0.0,
+     1.0,
+     0.5,
+     0.75
+    ]
+   },
+   "shuffled_z": {
+    "mean": 0.2,
+    "tables_nonzero": 4,
+    "per_table": [
+     0.5,
+     0.0,
+     0.0,
+     0.0,
+     0.25,
+     0.0,
+     0.0,
+     0.25,
+     0.0,
+     1.0
+    ]
+   },
+   "real_minus_shuffled": {
+    "mean": 0.225,
+    "boot95_tables": [
+     0.05,
+     0.425
+    ],
+    "pos": 5,
+    "neg": 1,
+    "tie": 4,
+    "signflip_p_unadj": 0.09375,
+    "per_table": [
+     0.5,
+     0.0,
+     0.5,
+     0.0,
+     0.25,
+     0.0,
+     0.0,
+     0.75,
+     0.5,
+     -0.25
+    ]
+   },
+   "start_pair_tracking": {
+    "mean": 0.1625,
+    "boot95_tables": [
+     0.025,
+     0.3
+    ],
+    "pos": 7,
+    "neg": 1,
+    "tie": 2,
+    "signflip_p_unadj": 0.078125,
+    "per_table": [
+     0.25,
+     -0.25,
+     0.5,
+     0.0,
+     0.5,
+     0.125,
+     0.0,
+     0.125,
+     0.125,
+     0.25
+    ]
+   },
+   "substitution_tracking": {
+    "mean": -0.05,
+    "boot95_tables": [
+     -0.1125,
+     0.0
+    ],
+    "pos": 0,
+    "neg": 3,
+    "tie": 7,
+    "signflip_p_unadj": 0.25,
+    "per_table": [
+     -0.125,
+     0.0,
+     0.0,
+     0.0,
+     0.0,
+     0.0,
+     0.0,
+     0.0,
+     -0.25,
+     -0.125
+    ]
+   },
+   "own_z_minus_other_tables_z": {
+    "mean": 0.21830357142857143,
+    "boot95_tables": [
+     -0.04599330357142857,
+     0.49777901785714274
+    ],
+    "pos": 6,
+    "neg": 3,
+    "tie": 1,
+    "signflip_p_unadj": 0.1796875,
+    "per_table": [
+     0.875,
+     -0.4643,
+     0.2188,
+     0.0,
+     0.375,
+     -0.3125,
+     -0.2812,
+     0.8571,
+     0.3214,
+     0.5938
+    ]
+   },
+   "colour_base_rates": {
+    "red": 0.642,
+    "green": 0.475,
+    "blue": 0.408,
+    "orange": 0.208,
+    "purple": 0.125,
+    "gray": 0.117,
+    "black": 0.05,
+    "pink": 0.033,
+    "white": 0.025,
+    "brown": 0.017
+   }
+  },
+  "oracle|cell2|L40": {
+   "real_z": {
+    "mean": 0.525,
+    "tables_nonzero": 7,
+    "per_table": [
+     1.0,
+     0.0,
+     0.25,
+     1.0,
+     0.5,
+     0.0,
+     0.0,
+     1.0,
+     0.5,
+     1.0
+    ]
+   },
+   "shuffled_z": {
+    "mean": 0.375,
+    "tables_nonzero": 6,
+    "per_table": [
+     1.0,
+     0.0,
+     0.0,
+     0.5,
+     0.5,
+     0.0,
+     0.0,
+     0.5,
+     0.5,
+     0.75
+    ]
+   },
+   "real_minus_shuffled": {
+    "mean": 0.15,
+    "boot95_tables": [
+     0.025,
+     0.275
+    ],
+    "pos": 4,
+    "neg": 0,
+    "tie": 6,
+    "signflip_p_unadj": 0.125,
+    "per_table": [
+     0.0,
+     0.0,
+     0.25,
+     0.5,
+     0.0,
+     0.0,
+     0.0,
+     0.5,
+     0.0,
+     0.25
+    ]
+   },
+   "start_pair_tracking": {
+    "mean": 0.1375,
+    "boot95_tables": [
+     0.0,
+     0.35
+    ],
+    "pos": 4,
+    "neg": 1,
+    "tie": 5,
+    "signflip_p_unadj": 0.1875,
+    "per_table": [
+     0.0,
+     0.0,
+     0.125,
+     0.25,
+     0.0,
+     0.0,
+     -0.125,
+     0.0,
+     0.25,
+     0.875
+    ]
+   },
+   "substitution_tracking": {
+    "mean": 0.0,
+    "boot95_tables": [
+     -0.0375,
+     0.0375
+    ],
+    "pos": 1,
+    "neg": 1,
+    "tie": 8,
+    "signflip_p_unadj": 1.0,
+    "per_table": [
+     0.0,
+     0.0,
+     0.125,
+     -0.125,
+     0.0,
+     0.0,
+     0.0,
+     0.0,
+     0.0,
+     0.0
+    ]
+   },
+   "own_z_minus_other_tables_z": {
+    "mean": 0.1863095238095238,
+    "boot95_tables": [
+     -0.11610491071428565,
+     0.5047395833333327
+    ],
+    "pos": 6,
+    "neg": 4,
+    "tie": 0,
+    "signflip_p_unadj": 0.30078125,
+    "per_table": [
+     0.7917,
+     -0.3929,
+     -0.25,
+     0.6786,
+     0.2188,
+     -0.4062,
+     -0.5312,
+     0.8214,
+     0.2143,
+     0.7188
+    ]
+   },
+   "colour_base_rates": {
+    "blue": 0.942,
+    "red": 0.908,
+    "green": 0.8,
+    "black": 0.575,
+    "white": 0.267,
+    "purple": 0.25,
+    "gray": 0.183,
+    "orange": 0.083,
+    "pink": 0.025,
+    "brown": 0.017
+   }
+  },
+  "oracle|cell2|L44": {
+   "real_z": {
+    "mean": 0.3,
+    "tables_nonzero": 5,
+    "per_table": [
+     1.0,
+     0.0,
+     0.25,
+     1.0,
+     0.0,
+     0.0,
+     0.0,
+     0.5,
+     0.25,
+     0.0
+    ]
+   },
+   "shuffled_z": {
+    "mean": 0.275,
+    "tables_nonzero": 4,
+    "per_table": [
+     1.0,
+     0.0,
+     0.0,
+     0.0,
+     0.5,
+     0.0,
+     0.0,
+     0.5,
+     0.0,
+     0.75
+    ]
+   },
+   "real_minus_shuffled": {
+    "mean": 0.025,
+    "boot95_tables": [
+     -0.25,
+     0.3
+    ],
+    "pos": 3,
+    "neg": 2,
+    "tie": 5,
+    "signflip_p_unadj": 1.0,
+    "per_table": [
+     0.0,
+     0.0,
+     0.25,
+     1.0,
+     -0.5,
+     0.0,
+     0.0,
+     0.0,
+     0.25,
+     -0.75
+    ]
+   },
+   "start_pair_tracking": {
+    "mean": 0.2375,
+    "boot95_tables": [
+     0.1375,
+     0.3375
+    ],
+    "pos": 9,
+    "neg": 0,
+    "tie": 1,
+    "signflip_p_unadj": 0.00390625,
+    "per_table": [
+     0.125,
+     0.25,
+     0.375,
+     0.5,
+     0.0,
+     0.125,
+     0.125,
+     0.25,
+     0.125,
+     0.5
+    ]
+   },
+   "substitution_tracking": {
+    "mean": 0.0,
+    "boot95_tables": [
+     -0.05,
+     0.0625
+    ],
+    "pos": 1,
+    "neg": 2,
+    "tie": 7,
+    "signflip_p_unadj": 1.0,
+    "per_table": [
+     0.0,
+     0.0,
+     0.0,
+     -0.125,
+     0.0,
+     -0.125,
+     0.25,
+     0.0,
+     0.0,
+     0.0
+    ]
+   },
+   "own_z_minus_other_tables_z": {
+    "mean": 0.07127976190476192,
+    "boot95_tables": [
+     -0.19484374999999987,
+     0.36921130952380943
+    ],
+    "pos": 4,
+    "neg": 5,
+    "tie": 1,
+    "signflip_p_unadj": 0.640625,
+    "per_table": [
+     0.8333,
+     -0.25,
+     0.0312,
+     1.0,
+     -0.2188,
+     -0.3438,
+     -0.375,
+     0.2857,
+     -0.25,
+     0.0
+    ]
+   },
+   "colour_base_rates": {
+    "blue": 0.692,
+    "red": 0.6,
+    "green": 0.567,
+    "black": 0.367,
+    "white": 0.35,
+    "purple": 0.233,
+    "orange": 0.067,
+    "pink": 0.058,
+    "gray": 0.033,
+    "teal": 0.017
+   }
+  }
+ },
+ "nla_colon_z_mentions": [
+  {
+   "table": "brew-s2-r10d2-0009",
+   "trajectory": "gold -> red -> purple",
+   "sample": 1,
+   "z_sentences": [
+    "Sequential answer pattern: problem establishes a chain-following puzzle with specific examples (\"Input: red → output: red → next: green\"), requiring parallel answers.",
+    "The solution uses a color cycle lookup table (red→cyan, cyan→blue, blue→green, etc.);",
+    "since answer1 was \"cyan\" (red's successor), answer2 requires the successor of \"cyan.\" The code pipeline \"echo cyan | convert-color | convert-color\" means answer2 is the color two steps from red, i.e., \"blue.\""
+   ],
+   "colours_named": [
+    "blue",
+    "green",
+    "red"
+   ]
+  },
+  {
+   "table": "brew-s2-r10d2-0009",
+   "trajectory": "gold -> red -> purple",
+   "sample": 2,
+   "z_sentences": [
+    "Day 19 = color(Orange) = Red, so Day 20 answer follows from Red.",
+    "The colon immediately follows \"Day 20 result:\\nAnswer 20:\", requiring a color name like \"Red\" or arrow-based notation completing the sequence."
+   ],
+   "colours_named": [
+    "blue",
+    "orange",
+    "red"
+   ]
+  },
+  {
+   "table": "brew-s2-r10d2-0009",
+   "trajectory": "gold -> red -> purple",
+   "sample": 3,
+   "z_sentences": [
+    "Iterative modular arithmetic problem pattern established: each step follows \"color → color code → next code\" chain (Red=132, Green=240, Yellow=next result).",
+    "The sequence is a repeating function f applied twice on \"Red.\"",
+    "Since Day 1 yielded \"Green\" (132), and applying the color wheel function once more to Green→132, \"Answer:\" immediately precedes the next color in the chain — either \"Red\" or \"Blue\"/a hex value follows."
+   ],
+   "colours_named": [
+    "blue",
+    "green",
+    "red"
+   ]
+  },
+  {
+   "table": "brew-s2-r10d2-0009",
+   "trajectory": "gold -> red -> purple",
+   "sample": 4,
+   "z_sentences": [
+    "Pattern continuation: a two-day chain computation starting with red→blue→green, where each cycle advances the color wheel by one step via the table.",
+    "Final token \"Answer:\\nDay 2:\" is a prompt awaiting the next color code — specifically the result of applying the function twice to \"red\".",
+    "Since \"Day 1 Answer: blue\" was given, \"Day 2:\" expects a mapped value, most likely \"red\" (blue maps to...), following the established answer format with the next result."
+   ],
+   "colours_named": [
+    "blue",
+    "green",
+    "red"
+   ]
+  },
+  {
+   "table": "brew-s2-r10d2-0027",
+   "trajectory": "orange -> pink -> black",
+   "sample": 2,
+   "z_sentences": [
+    "second iteration requires continuing from pink.",
+    "The answer format established in row 1 (\"Green\") and question 1 (\"Answer: pink\") strongly predicts row 2's answer is a further result — the next color in the chain (pink's destination from the first table, i.e., \"None\" or a specific color).",
+    "The expected value follows \"pink → [result of second iteration of pink]\";"
+   ],
+   "colours_named": [
+    "green",
+    "pink"
+   ]
+  },
+  {
+   "table": "brew-s2-r10d2-0027",
+   "trajectory": "orange -> pink -> black",
+   "sample": 4,
+   "z_sentences": [
+    "The pattern requires two iterations from initial Pink."
+   ],
+   "colours_named": [
+    "blue",
+    "green",
+    "pink",
+    "purple"
+   ]
+  },
+  {
+   "table": "brew-s2-r10d2-0066",
+   "trajectory": "green -> purple -> orange",
+   "sample": 2,
+   "z_sentences": [
+    "Sequential cycle logic: the colour transformation cycle progresses Yellow→Purple→Orange, so index 1 yields \"Purple\" and index 2 (one more iteration) should yield the next step — \"Purple\" from previous answer, but rather the next colour in the iteration: likely \"Orange.\"",
+    "Final token `|Answer 2|:` is the header cell of the answer table, mid-row, immediately requiring the closing answer value — a colour name cell like `|Purple|` or `|Orange|` matching the format established by the answer at index 1."
+   ],
+   "colours_named": [
+    "orange",
+    "purple"
+   ]
+  },
+  {
+   "table": "brew-s2-r10d2-0066",
+   "trajectory": "green -> purple -> orange",
+   "sample": 3,
+   "z_sentences": [
+    "Color/element cycle from input table: 5→Purple→Green (first iteration), so two iterations reach Green's successor, which is likely \"Red\" (day 3 of cycle: purple→green→red).",
+    "Final token \"Answer:\" mirrors \"Answer: Purple\\n\\nAnswer:\" — the repeated \"Answer:\" label demands the next cell value."
+   ],
+   "colours_named": [
+    "green",
+    "purple",
+    "red"
+   ]
+  },
+  {
+   "table": "brew-s2-r10d2-0073",
+   "trajectory": "orange -> red -> gray",
+   "sample": 1,
+   "z_sentences": [
+    "Following logic: input=42 yields result (like Day 0 answered \"20\"), then Day 1 answer must be two steps forward: blue (next of red 42) = another color/value."
+   ],
+   "colours_named": [
+    "blue",
+    "gray",
+    "red"
+   ]
+  },
+  {
+   "table": "brew-s2-r10d2-0073",
+   "trajectory": "orange -> red -> gray",
+   "sample": 2,
+   "z_sentences": [
+    "Final token \"Answer 2:\" is a label awaiting its value — specifically a color representing two applications from \"5,\" which must be the next step's result (e.g., \"red\")."
+   ],
+   "colours_named": [
+    "green",
+    "purple",
+    "red"
+   ]
+  },
+  {
+   "table": "brew-s2-r10d2-0073",
+   "trajectory": "orange -> red -> gray",
+   "sample": 3,
+   "z_sentences": [
+    "The rules map: \"green\"→yellow (index 15), \"red\"→cyan (index 3), so \"4 → green → yellow\" predicts the answer."
+   ],
+   "colours_named": [
+    "green",
+    "red"
+   ]
+  },
+  {
+   "table": "brew-s2-r10d2-0073",
+   "trajectory": "orange -> red -> gray",
+   "sample": 4,
+   "z_sentences": [
+    "Tracing: Blue→42→Red, so Round 2 answer is `color(\"Red\")` which is `Red`, and Round 3 follows the same chain to 42 or Yellow.",
+    "The next token must be a color name like \"Red\" or a numeric/chain value following the sequence: Blue→42→?."
+   ],
+   "colours_named": [
+    "blue",
+    "green",
+    "red"
+   ]
+  },
+  {
+   "table": "brew-s2-r10d2-0075",
+   "trajectory": "gold -> gray -> teal",
+   "sample": 1,
+   "z_sentences": [
+    "Part B expects the result of iterating again (likely a distinct color or \"no change\" like gray)."
+   ],
+   "colours_named": [
+    "blue",
+    "gray",
+    "green",
+    "red"
+   ]
+  },
+  {
+   "table": "brew-s2-r10d2-0075",
+   "trajectory": "gold -> gray -> teal",
+   "sample": 3,
+   "z_sentences": [
+    "Step 1 yielded \"orange yellow\" (gray→orange→gray yellow);",
+    "Repetition/continuation pattern: Q&A format with \"Part 1 Answer: gray\" and \"Part 2 Answer:\" structure demands a concise color name completing the iteration chain.",
+    "Since Part 1 Answer \"gray yellow\" substituted once, Part 2 should show its further iterated result."
+   ],
+   "colours_named": [
+    "gray",
+    "orange"
+   ]
+  },
+  {
+   "table": "brew-s2-r10d2-0104",
+   "trajectory": "orange -> green -> black",
+   "sample": 1,
+   "z_sentences": [
+    "Table pattern established: each row maps a day/number to its successor value, following sequence \"Green → Yellow → Red\" with the chain applied twice.",
+    "The sequence \"day\" asks for day+2 result: from part 1, \"Yellow\" follows Green, so +2 means next row should show \"Red\" as the answer."
+   ],
+   "colours_named": [
+    "blue",
+    "green",
+    "red"
+   ]
+  },
+  {
+   "table": "brew-s2-r10d2-0104",
+   "trajectory": "orange -> green -> black",
+   "sample": 3,
+   "z_sentences": [
+    "The transition map links green→yellow→?, requiring the next color/state result.",
+    "Step 1 was \"cyan\" (one step), Answer 2 covers two steps from green: the successor of cyan per the table, which must be a specific color like \"black\" or similar."
+   ],
+   "colours_named": [
+    "black",
+    "green"
+   ]
+  },
+  {
+   "table": "brew-s2-r10d2-0104",
+   "trajectory": "orange -> green -> black",
+   "sample": 4,
+   "z_sentences": [
+    "The sequence is a 4-color cycle: green→blue→red→green, as established: \"green\"→\"blue\"→\"red\", meaning two steps from green yields red."
+   ],
+   "colours_named": [
+    "blue",
+    "green",
+    "red"
+   ]
+  }
+ ],
+ "lens_off_palette_L20_48": [
+  {
+   "table": "brew-s2-r10d2-0009",
+   "layer": "L28",
+   "lens": "J_NP_cosine",
+   "token": " YELLOW"
+  },
+  {
+   "table": "brew-s2-r10d2-0015",
+   "layer": "L28",
+   "lens": "J_NP_cosine",
+   "token": " YELLOW"
+  },
+  {
+   "table": "brew-s2-r10d2-0027",
+   "layer": "L28",
+   "lens": "J_NP_cosine",
+   "token": " YELLOW"
+  },
+  {
+   "table": "brew-s2-r10d2-0041",
+   "layer": "L28",
+   "lens": "J_NP_cosine",
+   "token": " YELLOW"
+  },
+  {
+   "table": "brew-s2-r10d2-0066",
+   "layer": "L28",
+   "lens": "J_NP_cosine",
+   "token": " YELLOW"
+  },
+  {
+   "table": "brew-s2-r10d2-0069",
+   "layer": "L28",
+   "lens": "J_NP_cosine",
+   "token": " YELLOW"
+  },
+  {
+   "table": "brew-s2-r10d2-0069",
+   "layer": "L40",
+   "lens": "J_NP_cosine",
+   "token": " YELLOW"
+  },
+  {
+   "table": "brew-s2-r10d2-0069",
+   "layer": "L42",
+   "lens": "J_NP_cosine",
+   "token": " YELLOW"
+  },
+  {
+   "table": "brew-s2-r10d2-0071",
+   "layer": "L28",
+   "lens": "J_NP_cosine",
+   "token": " YELLOW"
+  },
+  {
+   "table": "brew-s2-r10d2-0073",
+   "layer": "L28",
+   "lens": "J_NP_cosine",
+   "token": " YELLOW"
+  },
+  {
+   "table": "brew-s2-r10d2-0075",
+   "layer": "L28",
+   "lens": "J_NP_cosine",
+   "token": " YELLOW"
+  },
+  {
+   "table": "brew-s2-r10d2-0104",
+   "layer": "L28",
+   "lens": "J_NP_cosine",
+   "token": " YELLOW"
+  }
+ ],
+ "fve_source_vs_target": {
+  "n_explanations": 360,
+  "source_wins": 244,
+  "mean_source_minus_target": 0.015669722222222224,
+  "per_target_table": {
+   "mean": 0.01566972222222222,
+   "boot95_tables": [
+    0.0037710416666666617,
+    0.027578624999999968
+   ],
+   "pos": 7,
+   "neg": 3,
+   "tie": 0,
+   "signflip_p_unadj": 0.0390625,
+   "per_table": [
+    0.0061,
+    0.022,
+    -0.0161,
+    0.0424,
+    0.0138,
+    0.0132,
+    -0.0004,
+    0.0281,
+    0.0496,
+    -0.002
+   ]
+  }
+ },
+ "damage": {
+  "emit_colon|L40": {
+   "answers": 0.6412544409227474,
+   "intermediates": 0.10059694390608073,
+   "other_colours": 0.021515130798130926,
+   "format_or_other": 0.02600547241165983,
+   "top5_total": 0.7893719880386191,
+   "off_pair_clean": 0.19166491453240558,
+   "off_pair_edit": 0.3337605144919419,
+   "off_pair_increase": 0.1420955999595363,
+   "flagged_frac": 0.5853658536585366,
+   "flagged": "48/82",
+   "off_pair_in_top5": 0.1481175471158715,
+   "mass_outside_top5": 0.21062801196138092
+  },
+  "emit_colon|L42": {
+   "answers": 0.6255494506858275,
+   "intermediates": 0.09287176169802233,
+   "other_colours": 0.018799076916597997,
+   "format_or_other": 0.02571189907183079,
+   "top5_total": 0.7629321883722785,
+   "off_pair_clean": 0.19166491453240558,
+   "off_pair_edit": 0.3510283827781677,
+   "off_pair_increase": 0.15936346824576214,
+   "flagged_frac": 0.6707317073170732,
+   "flagged": "55/82",
+   "off_pair_in_top5": 0.13738273768645112,
+   "mass_outside_top5": 0.2370678116277215
+  },
+  "emit_colon|L44": {
+   "answers": 0.6289220526370985,
+   "intermediates": 0.09090657260558616,
+   "other_colours": 0.02508817146785994,
+   "format_or_other": 0.027157150802556828,
+   "top5_total": 0.7720739475131014,
+   "off_pair_clean": 0.19166491453240558,
+   "off_pair_edit": 0.34472783600411766,
+   "off_pair_increase": 0.15306292147171208,
+   "flagged_frac": 0.5975609756097561,
+   "flagged": "49/82",
+   "off_pair_in_top5": 0.1431518948760029,
+   "mass_outside_top5": 0.22792605248689857
+  },
+  "emit_colon|L56": {
+   "answers": 0.6679710220763752,
+   "intermediates": 0.052087753778528985,
+   "other_colours": 0.015286174024709229,
+   "format_or_other": 0.052367532362390674,
+   "top5_total": 0.7877124822420039,
+   "off_pair_clean": 0.19166491453240558,
+   "off_pair_edit": 0.2999255112031611,
+   "off_pair_increase": 0.10826059667075552,
+   "flagged_frac": 0.47560975609756095,
+   "flagged": "39/82",
+   "off_pair_in_top5": 0.1197414601656289,
+   "mass_outside_top5": 0.21228751775799615
+  },
+  "emit_colon|L60": {
+   "answers": 0.6665166077161995,
+   "intermediates": 0.053545683734415865,
+   "other_colours": 0.01898032046237215,
+   "format_or_other": 0.0580470937368129,
+   "top5_total": 0.7970897056498002,
+   "off_pair_clean": 0.19166491453240558,
+   "off_pair_edit": 0.29809786415681605,
+   "off_pair_increase": 0.1064329496244105,
+   "flagged_frac": 0.4634146341463415,
+   "flagged": "38/82",
+   "off_pair_in_top5": 0.13057309793360092,
+   "mass_outside_top5": 0.2029102943501998
+  },
+  "emit_asst|L40": {
+   "answers": 0.6781409436909175,
+   "intermediates": 0.07466092752210403,
+   "other_colours": 0.014529030599376554,
+   "format_or_other": 0.04244918130171227,
+   "top5_total": 0.8097800831141103,
+   "off_pair_clean": 0.19166491453240558,
+   "off_pair_edit": 0.3011421219604771,
+   "off_pair_increase": 0.10947720742807156,
+   "flagged_frac": 0.4634146341463415,
+   "flagged": "38/82",
+   "off_pair_in_top5": 0.13163913942319286,
+   "mass_outside_top5": 0.19021991688588968
+  },
+  "emit_asst|L42": {
+   "answers": 0.7057023917214708,
+   "intermediates": 0.05728640193277366,
+   "other_colours": 0.013676695445821202,
+   "format_or_other": 0.039481814575017614,
+   "top5_total": 0.8161473036750834,
+   "off_pair_clean": 0.19166491453240558,
+   "off_pair_edit": 0.27353540499035905,
+   "off_pair_increase": 0.08187049045795347,
+   "flagged_frac": 0.3048780487804878,
+   "flagged": "25/82",
+   "off_pair_in_top5": 0.11044491195361247,
+   "mass_outside_top5": 0.18385269632491663
+  },
+  "emit_asst|L44": {
+   "answers": 0.7099815689666402,
+   "intermediates": 0.05265375390191193,
+   "other_colours": 0.019816156012712728,
+   "format_or_other": 0.03400638980106344,
+   "top5_total": 0.8164578686823285,
+   "off_pair_clean": 0.19166491453240558,
+   "off_pair_edit": 0.26775408590712196,
+   "off_pair_increase": 0.07608917137471641,
+   "flagged_frac": 0.25609756097560976,
+   "flagged": "21/82",
+   "off_pair_in_top5": 0.10647629971568809,
+   "mass_outside_top5": 0.1835421313176715
+  },
+  "emit_asst|L56": {
+   "answers": 0.7671532987110404,
+   "intermediates": 0.038543540897885226,
+   "other_colours": 0.014347551191045041,
+   "format_or_other": 0.04626404921860925,
+   "top5_total": 0.86630844001858,
+   "off_pair_clean": 0.19166491453240558,
+   "off_pair_edit": 0.21682415938958888,
+   "off_pair_increase": 0.025159244857183318,
+   "flagged_frac": 0.012195121951219513,
+   "flagged": "1/82",
+   "off_pair_in_top5": 0.09915514130753952,
+   "mass_outside_top5": 0.13369155998142002
+  },
+  "emit_asst|L60": {
+   "answers": 0.7657653996721233,
+   "intermediates": 0.039366706565380355,
+   "other_colours": 0.014903311100771564,
+   "format_or_other": 0.046849040601080874,
+   "top5_total": 0.8668844579393562,
+   "off_pair_clean": 0.19166491453240558,
+   "off_pair_edit": 0.21777205423610965,
+   "off_pair_increase": 0.02610713970370409,
+   "flagged_frac": 0.012195121951219513,
+   "flagged": "1/82",
+   "off_pair_in_top5": 0.10111905826723279,
+   "mass_outside_top5": 0.1331155420606438
+  },
+  "emit_think|L40": {
+   "answers": 0.8011548774066358,
+   "intermediates": 0.029936304308889973,
+   "other_colours": 0.010052121268876581,
+   "format_or_other": 0.05260010434795236,
+   "top5_total": 0.8937434073323544,
+   "off_pair_clean": 0.19166491453240558,
+   "off_pair_edit": 0.18973912335023646,
+   "off_pair_increase": -0.0019257911821691002,
+   "flagged_frac": 0.0,
+   "flagged": "0/82",
+   "off_pair_in_top5": 0.09258852992571892,
+   "mass_outside_top5": 0.10625659266764564
+  },
+  "emit_think|L42": {
+   "answers": 0.7973649307271974,
+   "intermediates": 0.03047017460012422,
+   "other_colours": 0.007664430910946552,
+   "format_or_other": 0.05616367840631964,
+   "top5_total": 0.8916632146445875,
+   "off_pair_clean": 0.19166491453240558,
+   "off_pair_edit": 0.19305100019385174,
+   "off_pair_increase": 0.0013860856614461758,
+   "flagged_frac": 0.0,
+   "flagged": "0/82",
+   "off_pair_in_top5": 0.09429828391739041,
+   "mass_outside_top5": 0.10833678535541247
+  },
+  "emit_think|L44": {
+   "answers": 0.7975761231803244,
+   "intermediates": 0.03325211440533481,
+   "other_colours": 0.009343031821488438,
+   "format_or_other": 0.05145831586371972,
+   "top5_total": 0.8916295852708676,
+   "off_pair_clean": 0.19166491453240558,
+   "off_pair_edit": 0.19226383726771284,
+   "off_pair_increase": 0.0005989227353072748,
+   "flagged_frac": 0.0,
+   "flagged": "0/82",
+   "off_pair_in_top5": 0.09405346209054297,
+   "mass_outside_top5": 0.10837041472913245
+  },
+  "emit_think|L56": {
+   "answers": 0.7974514951018323,
+   "intermediates": 0.03163965414521302,
+   "other_colours": 0.01215823439354901,
+   "format_or_other": 0.04621849026903292,
+   "top5_total": 0.8874678739096273,
+   "off_pair_clean": 0.19166491453240558,
+   "off_pair_edit": 0.1906353293395624,
+   "off_pair_increase": -0.0010295851928431813,
+   "flagged_frac": 0.0,
+   "flagged": "0/82",
+   "off_pair_in_top5": 0.09001637880779495,
+   "mass_outside_top5": 0.11253212609037266
+  },
+  "emit_think|L60": {
+   "answers": 0.798066675416073,
+   "intermediates": 0.03154037538764638,
+   "other_colours": 0.011683481119635233,
+   "format_or_other": 0.047296159166767514,
+   "top5_total": 0.888586691090122,
+   "off_pair_clean": 0.19166491453240558,
+   "off_pair_edit": 0.1905172932438734,
+   "off_pair_increase": -0.001147621288532164,
+   "flagged_frac": 0.0,
+   "flagged": "0/82",
+   "off_pair_in_top5": 0.09052001567404913,
+   "mass_outside_top5": 0.111413308909878
+  }
+ },
+ "brew_estimands": {
+  "emit_colon|L40": {
+   "pair_median": 0.3497831514277103,
+   "pair_median_boot95_tables": [
+    0.2787690575812493,
+    0.3920431820466762
+   ],
+   "table_mean": 0.30318435189711196,
+   "table_mean_t95": [
+    0.2631051305574365,
+    0.3432635732367874
+   ],
+   "n_pairs": 82,
+   "n_tables": 33
+  },
+  "emit_colon|L42": {
+   "pair_median": 0.475924906174004,
+   "pair_median_boot95_tables": [
+    0.40440841293447893,
+    0.5068904028787435
+   ],
+   "table_mean": 0.44000959504873244,
+   "table_mean_t95": [
+    0.4042857387154415,
+    0.4757334513820234
+   ],
+   "n_pairs": 82,
+   "n_tables": 33
+  },
+  "emit_colon|L44": {
+   "pair_median": 0.503076099290714,
+   "pair_median_boot95_tables": [
+    0.4594848310561011,
+    0.5333590750289467
+   ],
+   "table_mean": 0.4625025885597469,
+   "table_mean_t95": [
+    0.4238532773321169,
+    0.5011518997873768
+   ],
+   "n_pairs": 82,
+   "n_tables": 33
+  },
+  "emit_colon|L56": {
+   "pair_median": 0.6981233812236263,
+   "pair_median_boot95_tables": [
+    0.664287507676998,
+    0.7355163016702969
+   ],
+   "table_mean": 0.7007159308582979,
+   "table_mean_t95": [
+    0.6704732799291838,
+    0.7309585817874119
+   ],
+   "n_pairs": 82,
+   "n_tables": 33
+  },
+  "emit_colon|L60": {
+   "pair_median": 0.744890509205054,
+   "pair_median_boot95_tables": [
+    0.7211512657441784,
+    0.7691021784270651
+   ],
+   "table_mean": 0.7342488989820855,
+   "table_mean_t95": [
+    0.7045940190236502,
+    0.7639037789405208
+   ],
+   "n_pairs": 82,
+   "n_tables": 33
+  },
+  "emit_asst|L40": {
+   "pair_median": 0.2927341887650282,
+   "pair_median_boot95_tables": [
+    0.24889362153698721,
+    0.32157678106190124
+   ],
+   "table_mean": 0.2645234663898629,
+   "table_mean_t95": [
+    0.23116600195864057,
+    0.29788093082108524
+   ],
+   "n_pairs": 82,
+   "n_tables": 33
+  },
+  "emit_asst|L42": {
+   "pair_median": 0.2931860783790805,
+   "pair_median_boot95_tables": [
+    0.2596421253976643,
+    0.3398146433024933
+   ],
+   "table_mean": 0.29353970256010437,
+   "table_mean_t95": [
+    0.2643403219199653,
+    0.3227390832002434
+   ],
+   "n_pairs": 82,
+   "n_tables": 33
+  },
+  "emit_asst|L44": {
+   "pair_median": 0.3157087846340066,
+   "pair_median_boot95_tables": [
+    0.2820088717351153,
+    0.3551659585987391
+   ],
+   "table_mean": 0.31174909935283956,
+   "table_mean_t95": [
+    0.2813872286670698,
+    0.34211097003860935
+   ],
+   "n_pairs": 82,
+   "n_tables": 33
+  },
+  "emit_asst|L56": {
+   "pair_median": 0.1406984382170985,
+   "pair_median_boot95_tables": [
+    0.12052972520980489,
+    0.15766697485112144
+   ],
+   "table_mean": 0.1513822366545004,
+   "table_mean_t95": [
+    0.1279983080981929,
+    0.1747661652108079
+   ],
+   "n_pairs": 82,
+   "n_tables": 33
+  },
+  "emit_asst|L60": {
+   "pair_median": 0.1257685339364517,
+   "pair_median_boot95_tables": [
+    0.10869450661426033,
+    0.14729711123165423
+   ],
+   "table_mean": 0.13827582294255877,
+   "table_mean_t95": [
+    0.11572194400991968,
+    0.16082970187519785
+   ],
+   "n_pairs": 82,
+   "n_tables": 33
+  },
+  "emit_think|L40": {
+   "pair_median": -0.0003942361848984693,
+   "pair_median_boot95_tables": [
+    -0.005955055120839484,
+    0.004433727349965928
+   ],
+   "table_mean": -0.001581525757289121,
+   "table_mean_t95": [
+    -0.007413353482383233,
+    0.00425030196780499
+   ],
+   "n_pairs": 82,
+   "n_tables": 33
+  },
+  "emit_think|L42": {
+   "pair_median": 0.01451431380076219,
+   "pair_median_boot95_tables": [
+    0.0029849250702783416,
+    0.027003245141032525
+   ],
+   "table_mean": 0.013830198170799765,
+   "table_mean_t95": [
+    0.0044445243752214425,
+    0.023215871966378088
+   ],
+   "n_pairs": 82,
+   "n_tables": 33
+  },
+  "emit_think|L44": {
+   "pair_median": 0.025998989105410153,
+   "pair_median_boot95_tables": [
+    0.009318000846427936,
+    0.03868501422865854
+   ],
+   "table_mean": 0.02277451091160882,
+   "table_mean_t95": [
+    0.009863554794481073,
+    0.03568546702873657
+   ],
+   "n_pairs": 82,
+   "n_tables": 33
+  },
+  "emit_think|L56": {
+   "pair_median": 0.05874310841530393,
+   "pair_median_boot95_tables": [
+    0.039326937011631084,
+    0.08820256616349843
+   ],
+   "table_mean": 0.08079908574139764,
+   "table_mean_t95": [
+    0.05752364581858949,
+    0.1040745256642058
+   ],
+   "n_pairs": 82,
+   "n_tables": 33
+  },
+  "emit_think|L60": {
+   "pair_median": 0.04382806584975263,
+   "pair_median_boot95_tables": [
+    0.029917806593385478,
+    0.06471018992717747
+   ],
+   "table_mean": 0.06463585836890867,
+   "table_mean_t95": [
+    0.0439988442320685,
+    0.08527287250574885
+   ],
+   "n_pairs": 82,
+   "n_tables": 33
+  },
+  "start_colour|L40": {
+   "pair_median": 0.23298682357213726,
+   "pair_median_boot95_tables": [
+    0.193139563538052,
+    0.2832569735638811
+   ],
+   "table_mean": 0.2704045872575295,
+   "table_mean_t95": [
+    0.21462713739338168,
+    0.32618203712167737
+   ],
+   "n_pairs": 82,
+   "n_tables": 33
+  },
+  "start_colour|L42": {
+   "pair_median": 0.15035398765572194,
+   "pair_median_boot95_tables": [
+    0.12119569635490796,
+    0.18298504397093157
+   ],
+   "table_mean": 0.18870424324574991,
+   "table_mean_t95": [
+    0.14128045060552907,
+    0.23612803588597076
+   ],
+   "n_pairs": 82,
+   "n_tables": 33
+  },
+  "start_colour|L44": {
+   "pair_median": 0.11543027676956188,
+   "pair_median_boot95_tables": [
+    0.09233599929474806,
+    0.15127301893832587
+   ],
+   "table_mean": 0.147255838741538,
+   "table_mean_t95": [
+    0.10897182498977226,
+    0.18553985249330374
+   ],
+   "n_pairs": 82,
+   "n_tables": 33
+  },
+  "start_colour|L56": {
+   "pair_median": -0.0006941365995663586,
+   "pair_median_boot95_tables": [
+    -0.003204585979924365,
+    0.0009078508633324756
+   ],
+   "table_mean": 2.4584274742543793e-05,
+   "table_mean_t95": [
+    -0.004584225532301886,
+    0.004633394081786974
+   ],
+   "n_pairs": 82,
+   "n_tables": 33
+  },
+  "start_colour|L60": {
+   "pair_median": -0.0007974123965323104,
+   "pair_median_boot95_tables": [
+    -0.0017552183960336642,
+    -6.296228816437908e-05
+   ],
+   "table_mean": -0.0021462969770425656,
+   "table_mean_t95": [
+    -0.0053468248565407064,
+    0.0010542309024555757
+   ],
+   "n_pairs": 82,
+   "n_tables": 33
+  },
+  "question_last|L40": {
+   "pair_median": 0.031703133111660675,
+   "pair_median_boot95_tables": [
+    0.01918039075208814,
+    0.042351353685157814
+   ],
+   "table_mean": 0.02250886120344403,
+   "table_mean_t95": [
+    0.009278528478026776,
+    0.03573919392886128
+   ],
+   "n_pairs": 82,
+   "n_tables": 33
+  },
+  "question_last|L42": {
+   "pair_median": 0.06698143438916365,
+   "pair_median_boot95_tables": [
+    0.04293073107398653,
+    0.09019997333449323
+   ],
+   "table_mean": 0.06401019548664459,
+   "table_mean_t95": [
+    0.04882783953086402,
+    0.07919255144242517
+   ],
+   "n_pairs": 82,
+   "n_tables": 33
+  },
+  "question_last|L44": {
+   "pair_median": 0.08781937714373667,
+   "pair_median_boot95_tables": [
+    0.051599479901150325,
+    0.11081554776723085
+   ],
+   "table_mean": 0.08704791841226277,
+   "table_mean_t95": [
+    0.06363235831840164,
+    0.1104634785061239
+   ],
+   "n_pairs": 82,
+   "n_tables": 33
+  },
+  "question_last|L56": {
+   "pair_median": 0.04939560809604021,
+   "pair_median_boot95_tables": [
+    0.03829084484016109,
+    0.06754378941631395
+   ],
+   "table_mean": 0.062311757132195916,
+   "table_mean_t95": [
+    0.04608660948952479,
+    0.07853690477486705
+   ],
+   "n_pairs": 82,
+   "n_tables": 33
+  },
+  "question_last|L60": {
+   "pair_median": 0.036837599876435645,
+   "pair_median_boot95_tables": [
+    0.03127978579829514,
+    0.04265047315957043
+   ],
+   "table_mean": 0.047896372106511986,
+   "table_mean_t95": [
+    0.035660504505921196,
+    0.060132239707102776
+   ],
+   "n_pairs": 82,
+   "n_tables": 33
+  }
+ },
+ "chain_by_step_group": {
+  "final|L40": {
+   "pair_median": 0.0007214024461835273,
+   "pair_median_boot95_groups": [
+    -0.002256366376678108,
+    0.005672009995101056
+   ],
+   "group_mean": 0.0020240828417356746,
+   "group_mean_t95": [
+    -0.0020503189663394765,
+    0.006098484649810826
+   ],
+   "n_pairs": 48,
+   "n_groups": 9,
+   "pairs_per_group": [
+    10,
+    8,
+    7,
+    6,
+    4,
+    4,
+    4,
+    3,
+    2
+   ]
+  },
+  "final|L42": {
+   "pair_median": 0.0009659119709486217,
+   "pair_median_boot95_groups": [
+    -0.0016610454148410685,
+    0.006136346771367584
+   ],
+   "group_mean": 0.0023071778108967617,
+   "group_mean_t95": [
+    -0.0020950339982333853,
+    0.006709389620026909
+   ],
+   "n_pairs": 48,
+   "n_groups": 9,
+   "pairs_per_group": [
+    10,
+    8,
+    7,
+    6,
+    4,
+    4,
+    4,
+    3,
+    2
+   ]
+  },
+  "final|L44": {
+   "pair_median": 0.0012921603637832068,
+   "pair_median_boot95_groups": [
+    -0.001787800528473677,
+    0.01034950753733925
+   ],
+   "group_mean": 0.0041968053141173784,
+   "group_mean_t95": [
+    -0.0034811522157806203,
+    0.011874762844015377
+   ],
+   "n_pairs": 48,
+   "n_groups": 9,
+   "pairs_per_group": [
+    10,
+    8,
+    7,
+    6,
+    4,
+    4,
+    4,
+    3,
+    2
+   ]
+  },
+  "final|L56": {
+   "pair_median": 0.661045081884351,
+   "pair_median_boot95_groups": [
+    0.5557889328723954,
+    0.7562819368645898
+   ],
+   "group_mean": 0.61620632796501,
+   "group_mean_t95": [
+    0.49197307936601975,
+    0.7404395765640002
+   ],
+   "n_pairs": 48,
+   "n_groups": 9,
+   "pairs_per_group": [
+    10,
+    8,
+    7,
+    6,
+    4,
+    4,
+    4,
+    3,
+    2
+   ]
+  },
+  "final|L60": {
+   "pair_median": 0.6877867720707669,
+   "pair_median_boot95_groups": [
+    0.5105737055505783,
+    0.7495402566226521
+   ],
+   "group_mean": 0.5963968855818638,
+   "group_mean_t95": [
+    0.44343540926768865,
+    0.7493583618960389
+   ],
+   "n_pairs": 48,
+   "n_groups": 9,
+   "pairs_per_group": [
+    10,
+    8,
+    7,
+    6,
+    4,
+    4,
+    4,
+    3,
+    2
+   ]
+  }
+ },
+ "probe_controls": {
+  "twelve_way_control_range": [
+   0.049633168763603554,
+   0.11631976433177806
+  ],
+  "membership_control": {
+   "n": 165,
+   "median": 0.5775237032905745,
+   "q90": 0.6900657406387957,
+   "max": 0.8427216954824317,
+   "n_above_0.6": 71,
+   "n_above_0.7": 13,
+   "highest": [
+    {
+     "colour": "red",
+     "cell": "emit_colon",
+     "layer": 56,
+     "control": 0.843,
+     "real": 0.531,
+     "n_tables": 48,
+     "classes": {
+      "0": 40,
+      "1": 145
+     }
+    },
+    {
+     "colour": "red",
+     "cell": "emit_think",
+     "layer": 56,
+     "control": 0.834,
+     "real": 0.443,
+     "n_tables": 48,
+     "classes": {
+      "0": 40,
+      "1": 145
+     }
+    },
+    {
+     "colour": "red",
+     "cell": "emit_asst",
+     "layer": 56,
+     "control": 0.819,
+     "real": 0.52,
+     "n_tables": 48,
+     "classes": {
+      "0": 40,
+      "1": 145
+     }
+    },
+    {
+     "colour": "green",
+     "cell": "emit_think",
+     "layer": 56,
+     "control": 0.818,
+     "real": 0.838,
+     "n_tables": 48,
+     "classes": {
+      "0": 18,
+      "1": 149
+     }
+    },
+    {
+     "colour": "red",
+     "cell": "emit_colon",
+     "layer": 60,
+     "control": 0.798,
+     "real": 0.572,
+     "n_tables": 48,
+     "classes": {
+      "0": 40,
+      "1": 145
+     }
+    },
+    {
+     "colour": "red",
+     "cell": "emit_think",
+     "layer": 60,
+     "control": 0.796,
+     "real": 0.597,
+     "n_tables": 48,
+     "classes": {
+      "0": 40,
+      "1": 145
+     }
+    },
+    {
+     "colour": "purple",
+     "cell": "emit_asst",
+     "layer": 56,
+     "control": 0.761,
+     "real": 0.504,
+     "n_tables": 47,
+     "classes": {
+      "0": 35,
+      "1": 152
+     }
+    },
+    {
+     "colour": "white",
+     "cell": "emit_think",
+     "layer": 56,
+     "control": 0.74,
+     "real": 0.658,
+     "n_tables": 48,
+     "classes": {
+      "0": 36,
+      "1": 130
+     }
+    }
+   ]
+  },
+  "permutation_null_note": "null fits reuse the C chosen per outer fold on the real labels (C_fixed=Cs); the real and control fits tune C by inner CV. The null therefore does not repeat the full procedure."
+ }
+}

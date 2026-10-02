@@ -97,6 +97,7 @@ def exp001(tok):
     ss = json.loads((X / "analysis" / "snapshot_summary.json").read_text())
     sn = json.loads((X / "analysis" / "snapshot.json").read_text())
     q = json.loads((X / "analysis" / "qualitative.json").read_text())
+    au = json.loads((X / "analysis" / "audit_followups.json").read_text())
     b, c, sub, dec = s["brew"], s["chain"], s["substitution"], s["decodability"]
     bp, cp = b["profile"], c["profile"]
     tau, eps = s["thresholds"]["tau"], s["thresholds"]["eps"]
@@ -116,31 +117,38 @@ def exp001(tok):
     zc = [dec["z"][f"emit_colon|L{L}"]["real"] for L in (40, 42, 44)]
     ac = [dec["answer"][f"emit_colon|L{L}"]["real"] for L in (40, 42, 44)]
     mem60 = dec["membership"]["emit_colon|L60"]["pooled_auc"]
+    rd = au["readers"]
+    trk = {k: rd[k]["start_pair_tracking"] for k in rd}
     look = [
         ("Does one cell carry the pair difference?",
-         f"Yes, at the “:” cell: median share S = {f2(S(bp, 'emit_colon#0', 42))} at L42 and {f2(S(bp, 'emit_colon#0', 44))} "
-         f"at L44, toward the partner in every pair. That is the cell the Oracle and NLA read. Look at the top row of the brew heatmap."),
+         f"At the “:” cell the whole-cell patch moves the answer about halfway to the partner's: median share S = "
+         f"{f2(S(bp, 'emit_colon#0', 42))} at L42 and {f2(S(bp, 'emit_colon#0', 44))} at L44, toward the partner in every pair. "
+         "That is the cell the Oracle and NLA read. But the patch swaps start, z, answer and everything downstream together, "
+         "so it cannot say which content carries the effect."),
         ("What content sits there?",
-         f"Probes decode the intermediate z (balanced accuracy {f2(min(zc))}–{f2(max(zc))}) and the start colour, but barely "
-         f"the answer ({f2(min(ac))}–{f2(max(ac))}) at L40–44. The answer becomes decodable only from L56. "
-         "That is the order expected of a two-step computation."),
+         f"The linear probe decodes the intermediate z (balanced accuracy {f2(min(zc))}–{f2(max(zc))}) and the start colour well "
+         f"at L40–44, and the answer poorly ({f2(min(ac))}–{f2(max(ac))}); it decodes the answer well from L56. Consistent with a "
+         "two-step computation, but a weak probe is not evidence that the answer is absent."),
         ("Is there content that is decodable but not needed?",
-         f"Only clearly at L60: whether an off-path colour is in the table is decodable there (AUC {f2(mem60)}), and swapping "
-         f"that colour out barely moves the answer ({frac(sub['behaviour_frac_negligible'], sub['n_items'])} items within the bound; the pre-registered line was 90%). "
-         "At L40–44 the pooled probe fails the pre-registered rule; a cross-fitted directional test still follows the edit in most items."),
+         f"Candidate: off-path table colours. Swapping one out barely moves the answer ({frac(sub['behaviour_frac_negligible'], sub['n_items'])} "
+         f"items within the bound; the line was 90%), and a cross-fitted probe follows the swap (98% of items at L60). The pooled "
+         f"membership probe passes only at L60 (AUC {f2(mem60)}), and that call is provisional: its control task sits far from "
+         "chance (median AUC 0.58, max 0.84), so the probes need repair first."),
         ("Do readers name the content the answer depends on?",
-         f"The NLA names this table's z at {f2(nla_z[0])} vs {f2(nla_z[1])} with a shuffled activation. The Oracle names it at "
-         f"{f2(orc_z[0])} vs {f2(orc_z[1])}. "
-         + ("No lens names any colour in its top 10 at L20–48. " if lens_any == 0 else
-            f"Lenses name a colour at L20–48 in at most {f2(lens_any)} of readouts. ") +
-         "This is descriptive, 10 tables, word matching. It is the first explained disagreement, not a reader score."),
+         "Not scored yet (no labels). Descriptively: the NLA mentions this table's z in 17 of 40 samples at “:” (shuffled 8 of 40), "
+         "on 6 of 10 tables, and gives z the right role in about 5 of those 17. A within-table contrast (swap the start, which "
+         f"changes z) shows some activation-sensitive signal: NLA {f2(trk['nla|cell2|L42']['mean'])}–{f2(trk['nla|cell0|L42']['mean'])}, "
+         f"Oracle {f2(trk['oracle|cell2|L40']['mean'])}–{f2(trk['oracle|cell2|L44']['mean'])}. "
+         + ("No lens lists a palette colour at L20–48. " if lens_any == 0 else f"Lenses list a palette colour at L20–48 in at most {f2(lens_any)} of readouts. ") +
+         "Exploratory, 10 tables, word matching."),
         ("Do readers name content that is not needed?",
-         f"The verbalizers mention off-path candidates about as often with a shuffled activation as with the real one (Oracle "
-         f"{f2(orc_off[0])} vs {f2(orc_off[1])}), and no reader tracks the substitution that the probe decodes at L60."),
+         f"Off-path candidates are mentioned about as often with a shuffled activation as with the real one (Oracle "
+         f"{f2(orc_off[0])} vs {f2(orc_off[1])}), and no substitution tracking was detected. Both are exploratory nulls at n = 10."),
         ("Can the measurements be trusted?",
-         f"Every exact engine check passes on every pair (self-patch, embedding anchor, prefix, stir no-op: bitwise). The SEC "
-         f"noise floor is {b['noise_floor']['upper_L42_rms_frac_G']:.1e} of the gap. Reader inputs captured under stock bf16 and SEC "
-         f"agree at cosine ≥ {min(v['min_cos'] for k, v in ss['bridge'].items() if k.startswith('L')):.5f}."),
+         f"The patching engine, yes: every exact check passes on every pair (self-patch, embedding anchor, prefix, stir no-op: "
+         f"bitwise), and the SEC noise floor is {b['noise_floor']['upper_L42_rms_frac_G']:.1e} of the gap. Two diagnostics need "
+         "repair: the probe controls and permutation null, and the damage readout (the saved top 5 tokens cannot say where "
+         "most off-pair mass goes). Found by an external audit; see report §15."),
     ]
     look_html = "".join(f'<li><span class="q">{h(a)}</span><span class="a">{h(bb)}</span></li>' for a, bb in look)
 
@@ -161,19 +169,26 @@ def exp001(tok):
     shown = {k for k, _ in brew_rows}
     rest = max(abs(v["median"]) for k, v in bp.items() if k.split("|")[0] not in shown)
 
-    def prow(prof, key, label, ci_layers=(44, 60)):
+    est = au["brew_estimands"]
+    est_key = {"emit_colon#0": "emit_colon", "emit_asst#0": "emit_asst", "emit_think#0": "emit_think", "start#4": "start_colour",
+               "question#8": "question_last"}
+
+    def prow(prof, key, label, ci_layers=(44, 60), boot=None):
         tds = []
         for L in LAYERS:
             e = prof[f"{key}|L{L}"]
-            ci = (f'<br><span class="small muted">[{f2(e["ci95_items"][0])}, {f2(e["ci95_items"][1])}]</span>'
-                  if L in ci_layers and e["median"] >= tau else "")
+            ci_v = (boot or {}).get(f"{est_key.get(key, '')}|L{L}", {}).get("pair_median_boot95_tables") if boot is not None else None
+            ci = (f'<br><span class="small muted">[{f2(ci_v[0])}, {f2(ci_v[1])}]</span>'
+                  if ci_v and L in ci_layers and e["median"] >= tau else "")
             tds.append(f'<td class="num"{shade(e["median"])}>{f2(e["median"])}{ci}</td>')
         return f"<tr><td>{h(label)}</td>{''.join(tds)}</tr>"
 
     head = '<tr><th>Cell</th>' + "".join(f'<th class="num">L{L}</th>' for L in LAYERS) + "</tr>"
-    brew_tbl = (head + "".join(prow(bp, k, lab) for k, lab in brew_rows) +
+    brew_tbl = (head + "".join(prow(bp, k, lab, ci_layers=LAYERS, boot=est) for k, lab in brew_rows) +
                 f'<tr><td>every other start, question and stir token</td><td class="num" colspan="5">|S| ≤ {rest:.3f}</td></tr>')
-    chain_tbl = head + prow(cp, "final#0", "final “\\n\\n” of the question", ci_layers=(56, 60))
+    cg = au["chain_by_step_group"]
+    chain_tbl = head + prow(cp, "final#0", "final “\\n\\n” of the question", ci_layers=(56, 60),
+                            boot={f"|L{L}": {"pair_median_boot95_tables": cg[f"final|L{L}"]["pair_median_boot95_groups"]} for L in LAYERS})
     chain_rest = max(abs(v["median"]) for k, v in cp.items() if not k.startswith("final#0") and int(k.split("|L")[1]) <= 44)
     chain_tbl += (f'<tr><td>every other question-span cell, L40–44</td><td class="num" colspan="5">|S| ≤ {chain_rest:.3f}</td></tr>')
     spans = ([("brew", "emission (3 cells)", b["spans"]["emission"]), ("brew", "start sentence", b["spans"]["start"]),
@@ -202,6 +217,14 @@ def exp001(tok):
                f'<td class="num">{b["reverse"]["pearson"]:.2f} (n = {b["reverse"]["n"]})</td><td class="num">{c["reverse"]["pearson"]:.2f} (n = {c["reverse"]["n"]})</td></tr>'
                f'<tr><td>pairs checked</td><td class="num">{ctl["n"]}</td><td class="num">{c["controls"]["n"]}</td></tr>')
 
+    dm = au["damage"]
+    dmg_tbl = ("<tr><th>“:” cell</th>" + "".join(f'<th class="num">L{L}</th>' for L in (42, 44, 60)) + "</tr>" +
+               "".join(f"<tr><td>{lab}</td>" + "".join(f'<td class="num">{fn(dm[f"emit_colon|L{L}"])}</td>' for L in (42, 44, 60)) + "</tr>"
+                       for lab, fn in [("pairs flagged (off-pair increase > 0.10)", lambda d: d["flagged"]),
+                                       ("off-pair mass, clean → edited", lambda d: f'{f2(d["off_pair_clean"])} → {f2(d["off_pair_edit"])}'),
+                                       ("edited: z and z′ within the saved top 5", lambda d: f2(d["intermediates"])),
+                                       ("edited: other colours and format tokens within the top 5", lambda d: f2(d["other_colours"] + d["format_or_other"])),
+                                       ("edited: mass outside the saved top 5", lambda d: f2(d["mass_outside_top5"]))]))
     # ---------- decodability ----------
     def dcell(e, key="real"):
         v = e[key]
@@ -223,6 +246,14 @@ def exp001(tok):
             dec_other += (f"<tr><td>{t} · {h(CELL_NAME[cell])}</td>" +
                           "".join(dcell(dec[t][f"{cell}|L{L}"], "pooled_auc" if t == "membership" else "real") for L in LAYERS) + "</tr>")
 
+    TR = [("nla|cell0|L42", "NLA L42, assistant newline"), ("nla|cell1|L42", "NLA L42, “</think>” newline"), ("nla|cell2|L42", "NLA L42, “:”"),
+          ("oracle|cell2|L40", "Oracle L40, “:”"), ("oracle|cell2|L44", "Oracle L44, “:”")]
+    trk_tbl = ('<tr><th>Reader, cell</th><th class="num">start-swap tracking</th><th class="num">tables + / − / tie</th>'
+               '<th class="num">real − shuffled (z)</th><th class="num">own z − other tables\' z</th></tr>' +
+               "".join(f'<tr><td>{h(lab)}</td><td class="num">{f2(rd[k]["start_pair_tracking"]["mean"])}</td>'
+                       f'<td class="num">{rd[k]["start_pair_tracking"]["pos"]} / {rd[k]["start_pair_tracking"]["neg"]} / {rd[k]["start_pair_tracking"]["tie"]}</td>'
+                       f'<td class="num">{f2(rd[k]["real_minus_shuffled"]["mean"])}</td><td class="num">{f2(rd[k]["own_z_minus_other_tables_z"]["mean"])}</td></tr>'
+                       for k, lab in TR))
     # ---------- substitution ----------
     tb = sub["transplant_by_cell_layer"]
     sub_tbl = ("<tr><th>Transplant at</th>" + "".join(f'<th class="num">L{L}</th>' for L in LAYERS) + "</tr>" +
@@ -327,6 +358,7 @@ def exp001(tok):
 <section aria-labelledby="h-001">
   <div class="eyebrow">Experiment 001 · dev split · SEC regime (true fp32 from block 40) · report: docs/reports/001_leverage_profile.md</div>
   <h2 id="h-001">Experiment 001: where the answer depends on one cell, and what sits there</h2>
+  <p class="small" style="background:var(--warn-soft);color:var(--ink);padding:10px 14px;border-radius:8px"><b>Revised after an external audit (2026-10-02).</b> Every number was recomputed independently from the saved outputs and matched. Corrected: the damage reading, reader mention counts read as claims, the reconstruction and null wording, and interval estimands. Still to repair: the probe controls and the permutation null. Defensible summary: the readers share task-structure information, show some activation-sensitive colour signal, and often surround it with incorrect detail. Whether their claims track causally influential content is unresolved. Report §15 has the point-by-point table.</p>
   <p><b>What was done.</b> For each gated pair (two prompts that differ only in the start colour), the partner's whole
   activation was copied into the member's run at one token position and one layer, and we measured how much of the
   answer gap G that single edit produces (share S). This was repeated at every start, stir, question and answer cell, at
@@ -352,21 +384,22 @@ def exp001(tok):
     <div style="display:grid;gap:8px"><h3>Brew ({b['n_pairs']} pairs, {b['n_items']} tables)</h3><div class="scroll" id="ex-heat-brew"></div></div>
     <div style="display:grid;gap:8px"><h3>Chain ({c['n_pairs']} pairs, {c['n_items']} items)</h3><div class="scroll" id="ex-heat-chain"></div></div>
   </div>
-  <details class="more"><summary>Brew medians with 95% intervals over table means</summary><p class="small muted">Brackets shown where S ≥ τ at L44/L60. τ = {tau}, ε′ = {eps}.</p><div class="scroll"><table class="tbl">{brew_tbl}</table></div></details>
+  <details class="more"><summary>Brew medians with 95% intervals</summary><p class="small muted">Median over pairs; brackets: 95% bootstrap of that median, resampling tables (shown where S ≥ τ). τ = {tau}, ε′ = {eps}.</p><div class="scroll"><table class="tbl">{brew_tbl}</table></div></details>
   <ul class="findings">
     <li><b>The “:” cell carries about half the gap at L42–44</b> in every pair (100% toward), rising to {f2(S(bp, 'emit_colon#0', 60))} by L60.</li>
     <li><b>The start-colour token still carries {f2(S(bp, 'start#4', 40))} at L40</b> and nothing by L56: the colour is still read from its own position in the middle layers.</li>
-    <li><b>Damage flag.</b> By the pre-registered rule the “:” patches are damage-dominated (46–67% of pairs gain > 0.10 off-pair mass). Most of that mass goes to the two pairs' intermediate colours (z and z′), so the rule overstates harm here. AMENDMENT_02 proposes splitting the readout.</li>
+    <li><b>Damage flag: it stands.</b> By the pre-registered rule the “:” patches are damage-dominated (46–67% of pairs gain > 0.10 off-pair mass). An earlier version said most of that mass goes to the intermediate colours; the saved top-5 tokens cannot show that (table below). AMENDMENT_02 proposes logging the full answer-colour distribution.</li>
   </ul>
+  <div class="scroll"><table class="tbl">{dmg_tbl}</table></div>
   <div class="cols2">
     <div style="display:grid;gap:8px"><h3>The start-colour token across depth</h3><div class="chart" id="ex-start"></div>
       <p class="small muted">L0–4: patching the differing token reproduces the whole flip (positive control; bars = IQR over pairs). L40–60: brew only, bars = 95% interval over table means. The colour is still read from its own position at L40 and no longer by L56.</p></div>
     <div style="display:grid;gap:8px"><h3>Spans (several cells patched at once)</h3><div class="scroll"><table class="tbl">{span_tbl}</table></div>
-      <details class="more"><summary>Chain final cell with intervals</summary><div class="scroll"><table class="tbl">{chain_tbl}</table></div></details></div>
+      <details class="more"><summary>Chain final cell with intervals (bootstrap over the 9 step groups)</summary><div class="scroll"><table class="tbl">{chain_tbl}</table></div></details></div>
   </div>
 
   <h3>Decodability at the answer cells (probes)</h3>
-  <p class="small muted">L2 logistic regression, 5-fold by table, nested C. Control task (Hewitt–Liang) at 0.05–0.12; ✓ = BH-significant and selectivity ≥ 0.10. Chance ≈ 0.083 for 12 colours.</p>
+  <p class="small muted">L2 logistic regression, 5-fold by table, nested C. Control task (Hewitt–Liang) at 0.05–0.12; ✓ = BH-significant and selectivity ≥ 0.10. Chance ≈ 0.083 for 12 colours. <b>Membership row provisional:</b> its control task sits far from chance (median AUC 0.58, max 0.84), and the permutation null reuses the regularisation chosen on the real labels. Both need repair before any membership call is used.</p>
   <div class="scroll"><table class="tbl">{dec_tbl}</table></div>
   <details class="more"><summary>Same targets at the other two answer cells</summary><div class="scroll"><table class="tbl">{dec_other}</table></div></details>
 
@@ -384,17 +417,23 @@ def exp001(tok):
   <div class="scroll"><table class="tbl">{ex_tbl}</table></div>
 
   <h3>Reader snapshot (descriptive; 10 dev tables; not a score)</h3>
-  <p>Fraction of readouts naming this table's colour, from the member's own activation (real) and from the same cell of a
-  different table (shuffled = chance). Colours matched by word, English and Chinese. Choose a target and a cell.</p>
+  <p>Fraction of readouts <em>mentioning</em> this table's colour, from the member's own activation (real) and from the same
+  cell of a different table (shuffled = chance). Colours matched by word over the 12 brew colours, English and Chinese.
+  <b>A mention is not a claim:</b> the match does not check the role the reader gives the colour. Lens top-10 lists and long
+  descriptions are not comparable claim budgets. Choose a target and a cell.</p>
   <div class="seg" id="ex-target"></div>
   <div class="seg" id="ex-cell"></div>
   <div class="scroll"><table class="tbl grid" id="ex-grid"></table></div>
   <p class="small muted">Each entry shows real / shuffled. Empty = that reader wasn't run at that cell × layer (Oracle contract: “:” at L40/44; NLA: L42).</p>
+  <h3>Does the mention follow the activation? (post-hoc contrasts, from the audit)</h3>
+  <p class="small muted">Start-swap tracking: keep the table fixed and swap in the partner's start, which changes the correct z; per table, [(member names z − partner names z) + (partner names z′ − member names z′)] / 2 over 4 samples each. “Own z − other tables' z” controls for the readers' favourite colours (the NLA names red in 62% of readouts, the Oracle blue in 93%). Oracle and NLA read different layers; exploratory, n = 10.</p>
+  <div class="scroll"><table class="tbl">{trk_tbl}</table></div>
+  <p class="small muted">Role reading (author judgment, not a score) of the 17 NLA mentions of z at “:”: 5 give z its correct role (the first step's result, which the next step continues from), 7 make it the start of a two-step chain, 2 offer it as the answer, 3 are incidental. The full list is in <code>audit_followups.json</code>.</p>
   <div class="cols2">
     <div style="display:grid;gap:8px"><h3>Does any reader track the substitution?</h3><div class="scroll"><table class="tbl">{sens_tbl}</table></div>
-      <p class="small muted">The changes sit within the shuffled-arm noise at n = 10. The cross-fitted probe follows the same edit in 98% of items at L60.</p></div>
+      <p class="small muted">The changes sit within the shuffled-arm noise at n = 10. An exploratory null: it does not show the readers cannot report the change, and the probe's 98% at L60 says nothing about verbalizers reading L40–44.</p></div>
     <div style="display:grid;gap:8px"><h3>NLA reconstruction</h3><div class="scroll"><table class="tbl">{fve_tbl}</table></div>
-      <p class="small muted">Shuffled explanations reconstruct this cell about as well as its own. On near-identical prompts, FVE reflects the shared template, not item-specific content.</p></div>
+      <p class="small muted">Shuffled explanations reconstruct this cell about as well as its own, so FVE is dominated by the shared template. But it carries a small item signal: a shuffled explanation scores higher against its true source than against the wrong cell in {au["fve_source_vs_target"]["source_wins"]} of {au["fve_source_vs_target"]["n_explanations"]} cases (mean +{au["fve_source_vs_target"]["mean_source_minus_target"]:.3f}).</p></div>
   </div>
 
   <h3>Qualitative: every snapshot table, raw reader outputs at the “:” cell</h3>
@@ -413,7 +452,9 @@ def exp001(tok):
   <h3>Decision for you (before any test-split label)</h3>
   <ul class="plain">
     <li>Keep τ = {tau} and ε′ = {eps} (the profile gives no reason to move them) and freeze the substitution bound.</li>
-    <li>Split the damage readout into “intermediate / colour answers” vs “non-colour mass”, plus top-1 retention.</li>
+    <li>Log the full answer-colour distribution at flagged cells; report intermediate mass, non-colour mass and top-1 retention separately.</li>
+    <li>Repair the probes (a permutation null that repeats C tuning; diagnose the off-chance control) before any membership call is used.</li>
+    <li>Reader scoring: mention vs correct role vs contradicted, with abstention, matched claim budgets, within-table contrasts and a prompt-only baseline; frozen on dev.</li>
     <li><b>Your call:</b> should reader scoring of the not-needed class use L60 only (lenses), or also L40–44 via the directional test (where the Oracle and NLA read)?</li>
   </ul>
 </section>

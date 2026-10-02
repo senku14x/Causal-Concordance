@@ -1,4 +1,15 @@
-# STATUS — 2026-10-02 (001 complete, report awaiting review)
+# STATUS — 2026-10-02 (001 complete; report revised after an external audit; awaiting PI review)
+
+**New here?** Read `docs/COME_UP_TO_SPEED.md` first; `docs/context/SPEC_STATUS.md` maps the whole spec to done / not
+done. **The repo is private and `main` carries everything** (merged from `setup/000-scaffold` on 2026-10-02).
+
+**External audit (Codex, 2026-10-02; `docs/reviews/2026-10-02_codex_reader_audit/`).** Every number recomputed
+independently (`scripts/001_leverage_profile/audit_followups.py`) and matched. The report was revised in place (§15 has
+the point-by-point table). Still open:
+- **probe controls:** the membership control task is far from chance and the permutation null reuses C, so
+  membership calls are provisional;
+- **damage:** the readout cannot be decomposed (top 5 saved only);
+- **readers:** scoring is mention-only, and there is no prompt-only baseline yet.
 
 **Design 001 v3 (+ amendment A1) is running on dev material.** Done:
 - `gate`, `smoke` (every exact check passes);
@@ -57,6 +68,8 @@ https://claude.ai/artifact/RMRX8R4iFnysbnHaNWTBeC
   reader baselines at scale, relational gating — all after 001 and AMENDMENT_02 (design 002).
 
 **Next:**
+0. Decide what to do next with the PI (report 001 §13 lists the AMENDMENT_02 proposals; the audit recommends
+   role-aware re-scoring of the saved reader outputs and a probe repair first).
 1. PI review of report 001. Rebuilding the page from JSON turned up rounding slips in the report (`:` L60 is 0.74, not
    0.75; three more, plus one lens readout at L36). They are corrected and listed in its §14; no conclusion changes.
 2. The PI's decision on report §13 (not-needed reader scoring at L60 only, or also L40–44 via the directional test).

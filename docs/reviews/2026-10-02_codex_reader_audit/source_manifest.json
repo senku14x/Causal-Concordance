@@ -1,0 +1,98 @@
+{
+  "captured_at_utc": "2026-10-02T11:30:40.150745+00:00",
+  "project_commit": "0c08dca7900ef9806fe2d5c615b2e1b90e54aa36",
+  "project_status": "",
+  "files": [
+    {
+      "source": "/workspace/Causal-Concordance/results/001_leverage_profile/analysis/snapshot.json",
+      "saved_as": "evidence/results/001_leverage_profile/analysis/snapshot.json",
+      "sha256": "49556bb1130d6fea25941d0f991760cc4de0960630c3693668fcac0efce09a92",
+      "bytes": 5293927
+    },
+    {
+      "source": "/workspace/Causal-Concordance/results/001_leverage_profile/analysis/snapshot_summary.json",
+      "saved_as": "evidence/results/001_leverage_profile/analysis/snapshot_summary.json",
+      "sha256": "601d4cdfb57887459da9c9590af09e3ab82a8d0978ffbdb539d3472fd3531fb1",
+      "bytes": 333925
+    },
+    {
+      "source": "/workspace/Causal-Concordance/results/001_leverage_profile/analysis/summary.json",
+      "saved_as": "evidence/results/001_leverage_profile/analysis/summary.json",
+      "sha256": "4ae1a9127463933f01b80b7e9a1c6985998e3d8c264574b0a6a9ed14ed1ce3f4",
+      "bytes": 150106
+    },
+    {
+      "source": "/workspace/Causal-Concordance/results/001_leverage_profile/analysis/probes.json",
+      "saved_as": "evidence/results/001_leverage_profile/analysis/probes.json",
+      "sha256": "505a8b4833640979f10852e0c18bfed42a7d9b08cbd17d82b63fecca6296e7c8",
+      "bytes": 653345
+    },
+    {
+      "source": "/workspace/Causal-Concordance/results/001_leverage_profile/analysis/probes_substitution_directional.json",
+      "saved_as": "evidence/results/001_leverage_profile/analysis/probes_substitution_directional.json",
+      "sha256": "8638f5431cd3cd1ae9396c7749d46bf40c9874e46a76a7acceb185324ce2641d",
+      "bytes": 118514
+    },
+    {
+      "source": "/workspace/Causal-Concordance/outputs/001_leverage_profile/run/profile_brew.jsonl",
+      "saved_as": "evidence/outputs/001_leverage_profile/run/profile_brew.jsonl",
+      "sha256": "06e7296ce524384912856b985dc17ed1ddbb57ee0e420d970462e3539c0976c1",
+      "bytes": 4847937
+    },
+    {
+      "source": "/workspace/Causal-Concordance/outputs/001_leverage_profile/run/pairs_brew.jsonl",
+      "saved_as": "evidence/outputs/001_leverage_profile/run/pairs_brew.jsonl",
+      "sha256": "e595c2ceeb072b78b796dca9db4893565dede4fc60ac980e1d1d3d403312a884",
+      "bytes": 50378
+    },
+    {
+      "source": "/workspace/Causal-Concordance/docs/reports/001_leverage_profile.md",
+      "saved_as": "evidence/docs/reports/001_leverage_profile.md",
+      "sha256": "38ac05aaf1c54b927e44069dcd91890896dddacfa6896c21d4162d669424d1a1",
+      "bytes": 26687
+    },
+    {
+      "source": "/workspace/Causal-Concordance/docs/design_specs/001_leverage_profile.md",
+      "saved_as": "evidence/docs/design_specs/001_leverage_profile.md",
+      "sha256": "762c6f22e7d5cb77406a7f10fef37f0ded13a77afa2a4061bca53837b660f726",
+      "bytes": 23220
+    },
+    {
+      "source": "/workspace/Causal-Concordance/docs/context/AMENDMENT_01.md",
+      "saved_as": "evidence/docs/context/AMENDMENT_01.md",
+      "sha256": "ea7541d3cdfd83546486d837829adf458ebbd310a816a3edbf7fa240b619adad",
+      "bytes": 13276
+    },
+    {
+      "source": "/workspace/Causal-Concordance/scripts/001_leverage_profile/leverage_profile.py",
+      "saved_as": "evidence/scripts/001_leverage_profile/leverage_profile.py",
+      "sha256": "f26df8995bd852c37d4c6834e0827bfe39bbaeea269c9957387c65cd61e281bb",
+      "bytes": 67268
+    },
+    {
+      "source": "/workspace/Causal-Concordance/scripts/common/regime.py",
+      "saved_as": "evidence/scripts/common/regime.py",
+      "sha256": "5df55f91ee5414b0c22fd4634bafabc3a3300a25b271ad9ba52e8ac5d5eac99a",
+      "bytes": 13476
+    },
+    {
+      "source": "/workspace/Causal-Concordance/scripts/common/readers.py",
+      "saved_as": "evidence/scripts/common/readers.py",
+      "sha256": "481354b3212ee8f619ef39ed61c75ee70d42a1ed688285743af3838ec39bbf7b",
+      "bytes": 17862
+    },
+    {
+      "source": "/workspace/Causal-Concordance/scripts/common/registry.json",
+      "saved_as": "evidence/scripts/common/registry.json",
+      "sha256": "e9bdc711f7f4838203042e5cd0c83de1382691eb3232a10f9610d1cfc19f57a8",
+      "bytes": 6114
+    },
+    {
+      "source": "/workspace/sources/repos/workspace-bench/evals/brew_intermediates/items.json",
+      "saved_as": "evidence/brew_bank.json",
+      "sha256": "183be95d4182c373674786b7610820520e56434fb0c15a75a62dad854bed9d83",
+      "bytes": 333003
+    }
+  ],
+  "scope": "Read-only snapshots of the finished pilot. No model inference or experimental reruns were performed for this audit."
+}

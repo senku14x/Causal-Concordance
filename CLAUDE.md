@@ -5,13 +5,17 @@ Guide for any agent or collaborator working in this repo. Reading only this file
 ## Read order
 
 1. **CLAUDE.md** (this file): rules, conventions, environment, pitfalls.
-2. **STATUS.md**: where things stand, what works, open questions.
+2. **docs/COME_UP_TO_SPEED.md**: handoff (what exists, what 001 found, known problems, decisions log), then
+   **STATUS.md** (where things stand, what works, open questions) and **docs/context/SPEC_STATUS.md** (the whole spec,
+   item by item: done / built / partial / not started / dropped).
 3. **docs/context/SPEC.md** + **docs/context/AMENDMENT_01.md**: the project spec and every decision that overrides it
    (the amendment wins where they disagree; its §6 lists each conflict by spec line).
 4. The latest **docs/design_specs/NNN_*.md** and **docs/reports/NNN_*.md** (currently: design 001 v3 + A1, run in
    full on dev; report 001 = its results, awaiting PI review; report 000 = the reading report).
 
-Supporting: `docs/context/READING_LIST.md`, `docs/context/reading_notes.md` (cited notes from the reading pass),
+Supporting: `docs/context/PI_DIRECTIVE_2026-10-02.md` (the PI's block-000 directive, source of the non-negotiables),
+`docs/reviews/` (two external reviews of the scaffold/design, the external audit of 001),
+`docs/context/READING_LIST.md`, `docs/context/reading_notes.md` (cited notes from the reading pass),
 `docs/papers/INDEX.md`.
 
 ## Project in one paragraph
@@ -109,7 +113,9 @@ without the PI's say-so.
 ## Where things stand
 
 See **STATUS.md** (block 000 done; 78 tests; design 001 v3 + A1 run in full on dev and reported in
-`docs/reports/001_leverage_profile.md`, awaiting PI review; no label, no reader score and no test-split measurement yet).
+`docs/reports/001_leverage_profile.md`, revised after an external audit (§15), awaiting PI review; no label, no reader
+score and no test-split measurement yet). Known open problems: the probe controls (membership control far from chance,
+permutation null reuses C), the damage readout (top 5 only), no prompt-only baseline yet.
 Results page (private artifact, built by `scripts/000_setup/results_page/make_page.py` from committed JSON only):
 https://claude.ai/artifact/RMRX8R4iFnysbnHaNWTBeC
 
@@ -168,4 +174,7 @@ https://claude.ai/artifact/RMRX8R4iFnysbnHaNWTBeC
 | 10-02 | 001 noise-floor helper drew a different random direction for the multi-token-spelling forwards of one perturbation | one direction per draw, shared by every forward; caught in review before any run |
 | 10-02 | 001 snapshot built its render dict as one literal instead of a loop over the 10 tables (UnboundLocalError before any reader ran) | loop; rerun |
 | 10-02 | The results-page template was truncated to its CSS by a later cleanup rewrite, and the broken page was what got published (no header, sections or first half of the script) | template rebuilt in full; the generator asserts each placeholder occurs once; the page is checked in jsdom (no script errors, every control clicked) before publishing |
+| 10-02 | Report 001 overstated several conclusions (external audit): "most off-pair mass goes to intermediates" from top-5 tokens only (they hold 0.14 of 0.35); pair medians printed with table-mean intervals; chain clustered by item, not step group; "holds on all 10 tables" (6 had a z mention); FVE "not item-specific" (small source preference exists); "not yet the answer" from a weak probe; the substitution null stated as a finding | every number recomputed (`audit_followups.py`), report revised in place with §15; page revised |
+| 10-02 | Probe controls not checked before use: membership control task AUC median 0.58, max 0.84 (should be ≈ 0.5); permutation null reuses the C chosen on real labels | flagged in report §7/§9/§12; needs a probe re-run (not yet done) |
+| 10-02 | No prompt-only baseline in 001, although the PI's rules ask for it from day one | flagged; to be added with reader scoring |
 | 10-02 | Report 001 rounding slips: `:` L60 0.75 [0.71, 0.76] (data 0.745 [0.705, 0.764]), `</think>` L42 0.02 (0.0145), start L40 CI [0.22, …] (0.215), answer probe `</think>` L42 0.15 (0.1447); §8 "any lens L20–48: 0" missed one J_NP cosine "Green" at L36 | found by regenerating the numbers from JSON for the page; report corrected (§14); the page computes every number from JSON with round-half-up |

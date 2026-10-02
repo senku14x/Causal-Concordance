@@ -1,0 +1,1010 @@
+{
+  "note": "Exploratory reanalysis of existing outputs; table bootstrap; no new model calls; no multiplicity correction.",
+  "readers": {
+    "nla|L42|cell0": {
+      "real_z": 0.55,
+      "shuffled_z": 0.25,
+      "real_minus_shuffle": {
+        "mean": 0.3,
+        "bootstrap95": [
+          -0.05,
+          0.625
+        ],
+        "positive": 5,
+        "negative": 2,
+        "zero": 3,
+        "unadjusted_signflip_p": 0.1875
+      },
+      "start_pair_tracking": {
+        "mean": 0.35,
+        "bootstrap95": [
+          0.1,
+          0.575
+        ],
+        "positive": 8,
+        "negative": 1,
+        "zero": 1,
+        "unadjusted_signflip_p": 0.03516
+      },
+      "substitution_tracking": {
+        "mean": 0.025,
+        "bootstrap95": [
+          -0.025,
+          0.075
+        ],
+        "positive": 3,
+        "negative": 1,
+        "zero": 6,
+        "unadjusted_signflip_p": 0.625
+      },
+      "per_table": [
+        {
+          "table": "brew-s2-r10d2-0009",
+          "z": "red",
+          "zp": "orange",
+          "real_z": 1.0,
+          "shuffled_z": 1.0,
+          "member_zprime": 0.25,
+          "partner_z": 0.5,
+          "partner_zprime": 1.0,
+          "mean_bank_colours": 3.0,
+          "substitution_tracking": 0.125,
+          "real_minus_shuffle": 0.0,
+          "start_pair_tracking": 0.625
+        },
+        {
+          "table": "brew-s2-r10d2-0015",
+          "z": "brown",
+          "zp": "red",
+          "real_z": 0.5,
+          "shuffled_z": 0.0,
+          "member_zprime": 0.25,
+          "partner_z": 0.0,
+          "partner_zprime": 1.0,
+          "mean_bank_colours": 2.5,
+          "substitution_tracking": 0.0,
+          "real_minus_shuffle": 0.5,
+          "start_pair_tracking": 0.625
+        },
+        {
+          "table": "brew-s2-r10d2-0027",
+          "z": "pink",
+          "zp": "red",
+          "real_z": 1.0,
+          "shuffled_z": 0.0,
+          "member_zprime": 0.5,
+          "partner_z": 0.0,
+          "partner_zprime": 1.0,
+          "mean_bank_colours": 2.25,
+          "substitution_tracking": 0.0,
+          "real_minus_shuffle": 1.0,
+          "start_pair_tracking": 0.75
+        },
+        {
+          "table": "brew-s2-r10d2-0041",
+          "z": "black",
+          "zp": "gold",
+          "real_z": 0.75,
+          "shuffled_z": 0.0,
+          "member_zprime": 0.0,
+          "partner_z": 0.0,
+          "partner_zprime": 0.0,
+          "mean_bank_colours": 2.25,
+          "substitution_tracking": 0.125,
+          "real_minus_shuffle": 0.75,
+          "start_pair_tracking": 0.375
+        },
+        {
+          "table": "brew-s2-r10d2-0066",
+          "z": "purple",
+          "zp": "red",
+          "real_z": 0.0,
+          "shuffled_z": 0.25,
+          "member_zprime": 0.5,
+          "partner_z": 0.0,
+          "partner_zprime": 1.0,
+          "mean_bank_colours": 2.75,
+          "substitution_tracking": 0.0,
+          "real_minus_shuffle": -0.25,
+          "start_pair_tracking": 0.25
+        },
+        {
+          "table": "brew-s2-r10d2-0069",
+          "z": "teal",
+          "zp": "green",
+          "real_z": 0.0,
+          "shuffled_z": 0.0,
+          "member_zprime": 0.75,
+          "partner_z": 0.0,
+          "partner_zprime": 0.75,
+          "mean_bank_colours": 2.5,
+          "substitution_tracking": -0.125,
+          "real_minus_shuffle": 0.0,
+          "start_pair_tracking": 0.0
+        },
+        {
+          "table": "brew-s2-r10d2-0071",
+          "z": "gold",
+          "zp": "orange",
+          "real_z": 0.0,
+          "shuffled_z": 0.0,
+          "member_zprime": 1.0,
+          "partner_z": 0.0,
+          "partner_zprime": 0.0,
+          "mean_bank_colours": 3.25,
+          "substitution_tracking": 0.0,
+          "real_minus_shuffle": 0.0,
+          "start_pair_tracking": -0.5
+        },
+        {
+          "table": "brew-s2-r10d2-0073",
+          "z": "red",
+          "zp": "blue",
+          "real_z": 1.0,
+          "shuffled_z": 0.0,
+          "member_zprime": 1.0,
+          "partner_z": 0.75,
+          "partner_zprime": 1.0,
+          "mean_bank_colours": 3.75,
+          "substitution_tracking": 0.0,
+          "real_minus_shuffle": 1.0,
+          "start_pair_tracking": 0.125
+        },
+        {
+          "table": "brew-s2-r10d2-0075",
+          "z": "gray",
+          "zp": "blue",
+          "real_z": 1.0,
+          "shuffled_z": 0.25,
+          "member_zprime": 0.0,
+          "partner_z": 0.0,
+          "partner_zprime": 0.75,
+          "mean_bank_colours": 2.25,
+          "substitution_tracking": 0.0,
+          "real_minus_shuffle": 0.75,
+          "start_pair_tracking": 0.875
+        },
+        {
+          "table": "brew-s2-r10d2-0104",
+          "z": "green",
+          "zp": "white",
+          "real_z": 0.25,
+          "shuffled_z": 1.0,
+          "member_zprime": 0.0,
+          "partner_z": 0.25,
+          "partner_zprime": 0.75,
+          "mean_bank_colours": 1.25,
+          "substitution_tracking": 0.125,
+          "real_minus_shuffle": -0.75,
+          "start_pair_tracking": 0.375
+        }
+      ]
+    },
+    "nla|L42|cell1": {
+      "real_z": 0.6,
+      "shuffled_z": 0.2,
+      "real_minus_shuffle": {
+        "mean": 0.4,
+        "bootstrap95": [
+          0.175,
+          0.625
+        ],
+        "positive": 7,
+        "negative": 1,
+        "zero": 2,
+        "unadjusted_signflip_p": 0.02344
+      },
+      "start_pair_tracking": {
+        "mean": 0.3,
+        "bootstrap95": [
+          0.1125,
+          0.475
+        ],
+        "positive": 6,
+        "negative": 1,
+        "zero": 3,
+        "unadjusted_signflip_p": 0.03125
+      },
+      "substitution_tracking": {
+        "mean": -0.025,
+        "bootstrap95": [
+          -0.1,
+          0.05
+        ],
+        "positive": 2,
+        "negative": 2,
+        "zero": 6,
+        "unadjusted_signflip_p": 0.75
+      },
+      "per_table": [
+        {
+          "table": "brew-s2-r10d2-0009",
+          "z": "red",
+          "zp": "orange",
+          "real_z": 1.0,
+          "shuffled_z": 0.5,
+          "member_zprime": 0.75,
+          "partner_z": 0.5,
+          "partner_zprime": 0.75,
+          "mean_bank_colours": 3.75,
+          "substitution_tracking": 0.0,
+          "real_minus_shuffle": 0.5,
+          "start_pair_tracking": 0.25
+        },
+        {
+          "table": "brew-s2-r10d2-0015",
+          "z": "brown",
+          "zp": "red",
+          "real_z": 0.5,
+          "shuffled_z": 0.0,
+          "member_zprime": 0.25,
+          "partner_z": 0.0,
+          "partner_zprime": 0.75,
+          "mean_bank_colours": 3.5,
+          "substitution_tracking": 0.0,
+          "real_minus_shuffle": 0.5,
+          "start_pair_tracking": 0.5
+        },
+        {
+          "table": "brew-s2-r10d2-0027",
+          "z": "pink",
+          "zp": "red",
+          "real_z": 0.75,
+          "shuffled_z": 0.0,
+          "member_zprime": 0.25,
+          "partner_z": 0.0,
+          "partner_zprime": 0.75,
+          "mean_bank_colours": 3.0,
+          "substitution_tracking": 0.0,
+          "real_minus_shuffle": 0.75,
+          "start_pair_tracking": 0.625
+        },
+        {
+          "table": "brew-s2-r10d2-0041",
+          "z": "black",
+          "zp": "gold",
+          "real_z": 1.0,
+          "shuffled_z": 0.0,
+          "member_zprime": 0.0,
+          "partner_z": 0.0,
+          "partner_zprime": 0.0,
+          "mean_bank_colours": 3.0,
+          "substitution_tracking": 0.0,
+          "real_minus_shuffle": 1.0,
+          "start_pair_tracking": 0.5
+        },
+        {
+          "table": "brew-s2-r10d2-0066",
+          "z": "purple",
+          "zp": "red",
+          "real_z": 0.25,
+          "shuffled_z": 0.5,
+          "member_zprime": 0.75,
+          "partner_z": 0.5,
+          "partner_zprime": 1.0,
+          "mean_bank_colours": 3.25,
+          "substitution_tracking": 0.0,
+          "real_minus_shuffle": -0.25,
+          "start_pair_tracking": 0.0
+        },
+        {
+          "table": "brew-s2-r10d2-0069",
+          "z": "teal",
+          "zp": "green",
+          "real_z": 0.0,
+          "shuffled_z": 0.0,
+          "member_zprime": 1.0,
+          "partner_z": 0.0,
+          "partner_zprime": 1.0,
+          "mean_bank_colours": 3.5,
+          "substitution_tracking": 0.125,
+          "real_minus_shuffle": 0.0,
+          "start_pair_tracking": 0.0
+        },
+        {
+          "table": "brew-s2-r10d2-0071",
+          "z": "gold",
+          "zp": "orange",
+          "real_z": 0.0,
+          "shuffled_z": 0.0,
+          "member_zprime": 0.5,
+          "partner_z": 0.0,
+          "partner_zprime": 0.25,
+          "mean_bank_colours": 4.25,
+          "substitution_tracking": -0.25,
+          "real_minus_shuffle": 0.0,
+          "start_pair_tracking": -0.125
+        },
+        {
+          "table": "brew-s2-r10d2-0073",
+          "z": "red",
+          "zp": "blue",
+          "real_z": 0.75,
+          "shuffled_z": 0.25,
+          "member_zprime": 0.5,
+          "partner_z": 0.75,
+          "partner_zprime": 0.5,
+          "mean_bank_colours": 3.25,
+          "substitution_tracking": 0.0,
+          "real_minus_shuffle": 0.5,
+          "start_pair_tracking": 0.0
+        },
+        {
+          "table": "brew-s2-r10d2-0075",
+          "z": "gray",
+          "zp": "blue",
+          "real_z": 1.0,
+          "shuffled_z": 0.25,
+          "member_zprime": 0.5,
+          "partner_z": 0.25,
+          "partner_zprime": 1.0,
+          "mean_bank_colours": 2.5,
+          "substitution_tracking": 0.125,
+          "real_minus_shuffle": 0.75,
+          "start_pair_tracking": 0.625
+        },
+        {
+          "table": "brew-s2-r10d2-0104",
+          "z": "green",
+          "zp": "white",
+          "real_z": 0.75,
+          "shuffled_z": 0.5,
+          "member_zprime": 0.0,
+          "partner_z": 0.5,
+          "partner_zprime": 1.0,
+          "mean_bank_colours": 3.0,
+          "substitution_tracking": -0.25,
+          "real_minus_shuffle": 0.25,
+          "start_pair_tracking": 0.625
+        }
+      ]
+    },
+    "nla|L42|cell2": {
+      "real_z": 0.425,
+      "shuffled_z": 0.2,
+      "real_minus_shuffle": {
+        "mean": 0.225,
+        "bootstrap95": [
+          0.05,
+          0.425
+        ],
+        "positive": 5,
+        "negative": 1,
+        "zero": 4,
+        "unadjusted_signflip_p": 0.09375
+      },
+      "start_pair_tracking": {
+        "mean": 0.1625,
+        "bootstrap95": [
+          0.025,
+          0.3
+        ],
+        "positive": 7,
+        "negative": 1,
+        "zero": 2,
+        "unadjusted_signflip_p": 0.07812
+      },
+      "substitution_tracking": {
+        "mean": -0.05,
+        "bootstrap95": [
+          -0.1125,
+          0.0
+        ],
+        "positive": 0,
+        "negative": 3,
+        "zero": 7,
+        "unadjusted_signflip_p": 0.25
+      },
+      "per_table": [
+        {
+          "table": "brew-s2-r10d2-0009",
+          "z": "red",
+          "zp": "orange",
+          "real_z": 1.0,
+          "shuffled_z": 0.5,
+          "member_zprime": 0.25,
+          "partner_z": 0.75,
+          "partner_zprime": 0.5,
+          "mean_bank_colours": 3.0,
+          "substitution_tracking": -0.125,
+          "real_minus_shuffle": 0.5,
+          "start_pair_tracking": 0.25
+        },
+        {
+          "table": "brew-s2-r10d2-0015",
+          "z": "brown",
+          "zp": "red",
+          "real_z": 0.0,
+          "shuffled_z": 0.0,
+          "member_zprime": 1.0,
+          "partner_z": 0.0,
+          "partner_zprime": 0.5,
+          "mean_bank_colours": 3.75,
+          "substitution_tracking": 0.0,
+          "real_minus_shuffle": 0.0,
+          "start_pair_tracking": -0.25
+        },
+        {
+          "table": "brew-s2-r10d2-0027",
+          "z": "pink",
+          "zp": "red",
+          "real_z": 0.5,
+          "shuffled_z": 0.0,
+          "member_zprime": 0.5,
+          "partner_z": 0.0,
+          "partner_zprime": 1.0,
+          "mean_bank_colours": 2.5,
+          "substitution_tracking": 0.0,
+          "real_minus_shuffle": 0.5,
+          "start_pair_tracking": 0.5
+        },
+        {
+          "table": "brew-s2-r10d2-0041",
+          "z": "black",
+          "zp": "gold",
+          "real_z": 0.0,
+          "shuffled_z": 0.0,
+          "member_zprime": 0.0,
+          "partner_z": 0.0,
+          "partner_zprime": 0.0,
+          "mean_bank_colours": 0.0,
+          "substitution_tracking": 0.0,
+          "real_minus_shuffle": 0.0,
+          "start_pair_tracking": 0.0
+        },
+        {
+          "table": "brew-s2-r10d2-0066",
+          "z": "purple",
+          "zp": "red",
+          "real_z": 0.5,
+          "shuffled_z": 0.25,
+          "member_zprime": 0.5,
+          "partner_z": 0.0,
+          "partner_zprime": 1.0,
+          "mean_bank_colours": 1.75,
+          "substitution_tracking": 0.0,
+          "real_minus_shuffle": 0.25,
+          "start_pair_tracking": 0.5
+        },
+        {
+          "table": "brew-s2-r10d2-0069",
+          "z": "teal",
+          "zp": "green",
+          "real_z": 0.0,
+          "shuffled_z": 0.0,
+          "member_zprime": 0.75,
+          "partner_z": 0.0,
+          "partner_zprime": 1.0,
+          "mean_bank_colours": 2.25,
+          "substitution_tracking": 0.0,
+          "real_minus_shuffle": 0.0,
+          "start_pair_tracking": 0.125
+        },
+        {
+          "table": "brew-s2-r10d2-0071",
+          "z": "gold",
+          "zp": "orange",
+          "real_z": 0.0,
+          "shuffled_z": 0.0,
+          "member_zprime": 0.0,
+          "partner_z": 0.0,
+          "partner_zprime": 0.0,
+          "mean_bank_colours": 2.0,
+          "substitution_tracking": 0.0,
+          "real_minus_shuffle": 0.0,
+          "start_pair_tracking": 0.0
+        },
+        {
+          "table": "brew-s2-r10d2-0073",
+          "z": "red",
+          "zp": "blue",
+          "real_z": 1.0,
+          "shuffled_z": 0.25,
+          "member_zprime": 0.5,
+          "partner_z": 0.5,
+          "partner_zprime": 0.25,
+          "mean_bank_colours": 2.75,
+          "substitution_tracking": 0.0,
+          "real_minus_shuffle": 0.75,
+          "start_pair_tracking": 0.125
+        },
+        {
+          "table": "brew-s2-r10d2-0075",
+          "z": "gray",
+          "zp": "blue",
+          "real_z": 0.5,
+          "shuffled_z": 0.0,
+          "member_zprime": 0.25,
+          "partner_z": 0.0,
+          "partner_zprime": 0.0,
+          "mean_bank_colours": 2.0,
+          "substitution_tracking": -0.25,
+          "real_minus_shuffle": 0.5,
+          "start_pair_tracking": 0.125
+        },
+        {
+          "table": "brew-s2-r10d2-0104",
+          "z": "green",
+          "zp": "white",
+          "real_z": 0.75,
+          "shuffled_z": 1.0,
+          "member_zprime": 0.25,
+          "partner_z": 0.0,
+          "partner_zprime": 0.0,
+          "mean_bank_colours": 2.75,
+          "substitution_tracking": -0.125,
+          "real_minus_shuffle": -0.25,
+          "start_pair_tracking": 0.25
+        }
+      ]
+    },
+    "oracle|L40|cell2": {
+      "real_z": 0.525,
+      "shuffled_z": 0.375,
+      "real_minus_shuffle": {
+        "mean": 0.15,
+        "bootstrap95": [
+          0.025,
+          0.275
+        ],
+        "positive": 4,
+        "negative": 0,
+        "zero": 6,
+        "unadjusted_signflip_p": 0.125
+      },
+      "start_pair_tracking": {
+        "mean": 0.1375,
+        "bootstrap95": [
+          0.0,
+          0.325
+        ],
+        "positive": 4,
+        "negative": 1,
+        "zero": 5,
+        "unadjusted_signflip_p": 0.1875
+      },
+      "substitution_tracking": {
+        "mean": 0.0,
+        "bootstrap95": [
+          -0.0375,
+          0.0375
+        ],
+        "positive": 1,
+        "negative": 1,
+        "zero": 8,
+        "unadjusted_signflip_p": 1.0
+      },
+      "per_table": [
+        {
+          "table": "brew-s2-r10d2-0009",
+          "z": "red",
+          "zp": "orange",
+          "real_z": 1.0,
+          "shuffled_z": 1.0,
+          "member_zprime": 0.75,
+          "partner_z": 1.0,
+          "partner_zprime": 0.75,
+          "mean_bank_colours": 4.25,
+          "substitution_tracking": 0.0,
+          "real_minus_shuffle": 0.0,
+          "start_pair_tracking": 0.0
+        },
+        {
+          "table": "brew-s2-r10d2-0015",
+          "z": "brown",
+          "zp": "red",
+          "real_z": 0.0,
+          "shuffled_z": 0.0,
+          "member_zprime": 1.0,
+          "partner_z": 0.0,
+          "partner_zprime": 1.0,
+          "mean_bank_colours": 5.0,
+          "substitution_tracking": 0.0,
+          "real_minus_shuffle": 0.0,
+          "start_pair_tracking": 0.0
+        },
+        {
+          "table": "brew-s2-r10d2-0027",
+          "z": "pink",
+          "zp": "red",
+          "real_z": 0.25,
+          "shuffled_z": 0.0,
+          "member_zprime": 1.0,
+          "partner_z": 0.0,
+          "partner_zprime": 1.0,
+          "mean_bank_colours": 4.5,
+          "substitution_tracking": 0.125,
+          "real_minus_shuffle": 0.25,
+          "start_pair_tracking": 0.125
+        },
+        {
+          "table": "brew-s2-r10d2-0041",
+          "z": "black",
+          "zp": "gold",
+          "real_z": 1.0,
+          "shuffled_z": 0.5,
+          "member_zprime": 0.0,
+          "partner_z": 0.5,
+          "partner_zprime": 0.0,
+          "mean_bank_colours": 3.75,
+          "substitution_tracking": -0.125,
+          "real_minus_shuffle": 0.5,
+          "start_pair_tracking": 0.25
+        },
+        {
+          "table": "brew-s2-r10d2-0066",
+          "z": "purple",
+          "zp": "red",
+          "real_z": 0.5,
+          "shuffled_z": 0.5,
+          "member_zprime": 1.0,
+          "partner_z": 0.5,
+          "partner_zprime": 1.0,
+          "mean_bank_colours": 3.75,
+          "substitution_tracking": 0.0,
+          "real_minus_shuffle": 0.0,
+          "start_pair_tracking": 0.0
+        },
+        {
+          "table": "brew-s2-r10d2-0069",
+          "z": "teal",
+          "zp": "green",
+          "real_z": 0.0,
+          "shuffled_z": 0.0,
+          "member_zprime": 1.0,
+          "partner_z": 0.0,
+          "partner_zprime": 1.0,
+          "mean_bank_colours": 4.5,
+          "substitution_tracking": 0.0,
+          "real_minus_shuffle": 0.0,
+          "start_pair_tracking": 0.0
+        },
+        {
+          "table": "brew-s2-r10d2-0071",
+          "z": "gold",
+          "zp": "orange",
+          "real_z": 0.0,
+          "shuffled_z": 0.0,
+          "member_zprime": 0.25,
+          "partner_z": 0.0,
+          "partner_zprime": 0.0,
+          "mean_bank_colours": 4.75,
+          "substitution_tracking": 0.0,
+          "real_minus_shuffle": 0.0,
+          "start_pair_tracking": -0.125
+        },
+        {
+          "table": "brew-s2-r10d2-0073",
+          "z": "red",
+          "zp": "blue",
+          "real_z": 1.0,
+          "shuffled_z": 0.5,
+          "member_zprime": 1.0,
+          "partner_z": 1.0,
+          "partner_zprime": 1.0,
+          "mean_bank_colours": 3.5,
+          "substitution_tracking": 0.0,
+          "real_minus_shuffle": 0.5,
+          "start_pair_tracking": 0.0
+        },
+        {
+          "table": "brew-s2-r10d2-0075",
+          "z": "gray",
+          "zp": "blue",
+          "real_z": 0.5,
+          "shuffled_z": 0.5,
+          "member_zprime": 1.0,
+          "partner_z": 0.0,
+          "partner_zprime": 1.0,
+          "mean_bank_colours": 3.5,
+          "substitution_tracking": 0.0,
+          "real_minus_shuffle": 0.0,
+          "start_pair_tracking": 0.25
+        },
+        {
+          "table": "brew-s2-r10d2-0104",
+          "z": "green",
+          "zp": "white",
+          "real_z": 1.0,
+          "shuffled_z": 0.75,
+          "member_zprime": 0.0,
+          "partner_z": 0.25,
+          "partner_zprime": 1.0,
+          "mean_bank_colours": 4.0,
+          "substitution_tracking": 0.0,
+          "real_minus_shuffle": 0.25,
+          "start_pair_tracking": 0.875
+        }
+      ]
+    },
+    "oracle|L44|cell2": {
+      "real_z": 0.3,
+      "shuffled_z": 0.275,
+      "real_minus_shuffle": {
+        "mean": 0.025,
+        "bootstrap95": [
+          -0.25,
+          0.3
+        ],
+        "positive": 3,
+        "negative": 2,
+        "zero": 5,
+        "unadjusted_signflip_p": 1.0
+      },
+      "start_pair_tracking": {
+        "mean": 0.2375,
+        "bootstrap95": [
+          0.1375,
+          0.3375
+        ],
+        "positive": 9,
+        "negative": 0,
+        "zero": 1,
+        "unadjusted_signflip_p": 0.00391
+      },
+      "substitution_tracking": {
+        "mean": 0.0,
+        "bootstrap95": [
+          -0.05,
+          0.0625
+        ],
+        "positive": 1,
+        "negative": 2,
+        "zero": 7,
+        "unadjusted_signflip_p": 1.0
+      },
+      "per_table": [
+        {
+          "table": "brew-s2-r10d2-0009",
+          "z": "red",
+          "zp": "orange",
+          "real_z": 1.0,
+          "shuffled_z": 1.0,
+          "member_zprime": 0.25,
+          "partner_z": 1.0,
+          "partner_zprime": 0.5,
+          "mean_bank_colours": 3.75,
+          "substitution_tracking": 0.0,
+          "real_minus_shuffle": 0.0,
+          "start_pair_tracking": 0.125
+        },
+        {
+          "table": "brew-s2-r10d2-0015",
+          "z": "brown",
+          "zp": "red",
+          "real_z": 0.0,
+          "shuffled_z": 0.0,
+          "member_zprime": 0.5,
+          "partner_z": 0.0,
+          "partner_zprime": 1.0,
+          "mean_bank_colours": 3.75,
+          "substitution_tracking": 0.0,
+          "real_minus_shuffle": 0.0,
+          "start_pair_tracking": 0.25
+        },
+        {
+          "table": "brew-s2-r10d2-0027",
+          "z": "pink",
+          "zp": "red",
+          "real_z": 0.25,
+          "shuffled_z": 0.0,
+          "member_zprime": 0.5,
+          "partner_z": 0.0,
+          "partner_zprime": 1.0,
+          "mean_bank_colours": 2.0,
+          "substitution_tracking": 0.0,
+          "real_minus_shuffle": 0.25,
+          "start_pair_tracking": 0.375
+        },
+        {
+          "table": "brew-s2-r10d2-0041",
+          "z": "black",
+          "zp": "gold",
+          "real_z": 1.0,
+          "shuffled_z": 0.0,
+          "member_zprime": 0.0,
+          "partner_z": 0.0,
+          "partner_zprime": 0.0,
+          "mean_bank_colours": 1.75,
+          "substitution_tracking": -0.125,
+          "real_minus_shuffle": 1.0,
+          "start_pair_tracking": 0.5
+        },
+        {
+          "table": "brew-s2-r10d2-0066",
+          "z": "purple",
+          "zp": "red",
+          "real_z": 0.0,
+          "shuffled_z": 0.5,
+          "member_zprime": 0.75,
+          "partner_z": 0.25,
+          "partner_zprime": 1.0,
+          "mean_bank_colours": 2.5,
+          "substitution_tracking": 0.0,
+          "real_minus_shuffle": -0.5,
+          "start_pair_tracking": 0.0
+        },
+        {
+          "table": "brew-s2-r10d2-0069",
+          "z": "teal",
+          "zp": "green",
+          "real_z": 0.0,
+          "shuffled_z": 0.0,
+          "member_zprime": 0.75,
+          "partner_z": 0.0,
+          "partner_zprime": 1.0,
+          "mean_bank_colours": 3.75,
+          "substitution_tracking": -0.125,
+          "real_minus_shuffle": 0.0,
+          "start_pair_tracking": 0.125
+        },
+        {
+          "table": "brew-s2-r10d2-0071",
+          "z": "gold",
+          "zp": "orange",
+          "real_z": 0.0,
+          "shuffled_z": 0.0,
+          "member_zprime": 0.0,
+          "partner_z": 0.0,
+          "partner_zprime": 0.25,
+          "mean_bank_colours": 3.25,
+          "substitution_tracking": 0.25,
+          "real_minus_shuffle": 0.0,
+          "start_pair_tracking": 0.125
+        },
+        {
+          "table": "brew-s2-r10d2-0073",
+          "z": "red",
+          "zp": "blue",
+          "real_z": 0.5,
+          "shuffled_z": 0.5,
+          "member_zprime": 0.5,
+          "partner_z": 0.25,
+          "partner_zprime": 0.75,
+          "mean_bank_colours": 2.75,
+          "substitution_tracking": 0.0,
+          "real_minus_shuffle": 0.0,
+          "start_pair_tracking": 0.25
+        },
+        {
+          "table": "brew-s2-r10d2-0075",
+          "z": "gray",
+          "zp": "blue",
+          "real_z": 0.25,
+          "shuffled_z": 0.0,
+          "member_zprime": 1.0,
+          "partner_z": 0.0,
+          "partner_zprime": 1.0,
+          "mean_bank_colours": 5.0,
+          "substitution_tracking": 0.0,
+          "real_minus_shuffle": 0.25,
+          "start_pair_tracking": 0.125
+        },
+        {
+          "table": "brew-s2-r10d2-0104",
+          "z": "green",
+          "zp": "white",
+          "real_z": 0.0,
+          "shuffled_z": 0.75,
+          "member_zprime": 0.0,
+          "partner_z": 0.0,
+          "partner_zprime": 1.0,
+          "mean_bank_colours": 0.0,
+          "substitution_tracking": 0.0,
+          "real_minus_shuffle": -0.75,
+          "start_pair_tracking": 0.5
+        }
+      ]
+    }
+  },
+  "fve": {
+    "source_minus_wrong": {
+      "mean": 0.0157,
+      "bootstrap95": [
+        0.0039,
+        0.0276
+      ],
+      "positive": 7,
+      "negative": 3,
+      "zero": 0,
+      "unadjusted_signflip_p": 0.03906
+    },
+    "prefer_source": 244,
+    "n": 360,
+    "real_minus_shuffled": {
+      "mean": 0.0131,
+      "bootstrap95": [
+        0.001,
+        0.0248
+      ],
+      "positive": 7,
+      "negative": 3,
+      "zero": 0,
+      "unadjusted_signflip_p": 0.07422
+    },
+    "per_table": [
+      {
+        "table": "brew-s2-r10d2-0009",
+        "source_minus_wrong": 0.006061111111111108,
+        "n": 36,
+        "prefer_source": 23,
+        "real_minus_shuffled": 0.023077777777777784
+      },
+      {
+        "table": "brew-s2-r10d2-0015",
+        "source_minus_wrong": 0.022047222222222218,
+        "n": 36,
+        "prefer_source": 32,
+        "real_minus_shuffled": 0.023886111111111122
+      },
+      {
+        "table": "brew-s2-r10d2-0027",
+        "source_minus_wrong": -0.016122222222222236,
+        "n": 36,
+        "prefer_source": 12,
+        "real_minus_shuffled": 0.04369166666666667
+      },
+      {
+        "table": "brew-s2-r10d2-0041",
+        "source_minus_wrong": 0.04241944444444446,
+        "n": 36,
+        "prefer_source": 24,
+        "real_minus_shuffled": -0.0061527777777777804
+      },
+      {
+        "table": "brew-s2-r10d2-0066",
+        "source_minus_wrong": 0.013758333333333332,
+        "n": 36,
+        "prefer_source": 27,
+        "real_minus_shuffled": 0.003355555555555556
+      },
+      {
+        "table": "brew-s2-r10d2-0069",
+        "source_minus_wrong": 0.013208333333333329,
+        "n": 36,
+        "prefer_source": 27,
+        "real_minus_shuffled": 0.027449999999999992
+      },
+      {
+        "table": "brew-s2-r10d2-0071",
+        "source_minus_wrong": -0.0003555555555555457,
+        "n": 36,
+        "prefer_source": 18,
+        "real_minus_shuffled": -0.021655555555555553
+      },
+      {
+        "table": "brew-s2-r10d2-0073",
+        "source_minus_wrong": 0.028119444444444457,
+        "n": 36,
+        "prefer_source": 34,
+        "real_minus_shuffled": 0.03300833333333334
+      },
+      {
+        "table": "brew-s2-r10d2-0075",
+        "source_minus_wrong": 0.04959722222222222,
+        "n": 36,
+        "prefer_source": 32,
+        "real_minus_shuffled": 0.007527777777777774
+      },
+      {
+        "table": "brew-s2-r10d2-0104",
+        "source_minus_wrong": -0.0020361111111111213,
+        "n": 36,
+        "prefer_source": 15,
+        "real_minus_shuffled": -0.003377777777777782
+      }
+    ]
+  },
+  "damage_L44": {
+    "means": {
+      "intermediates": 0.09090657260558616,
+      "off_pair_mass": 0.34472783600411766,
+      "answers": 0.6289220526370985,
+      "other_colours": 0.02508817146785994,
+      "flagged": 0.5975609756097561,
+      "top5_total": 0.7720739475131014,
+      "format_or_other": 0.027157150802556828
+    },
+    "n": 82
+  }
+}

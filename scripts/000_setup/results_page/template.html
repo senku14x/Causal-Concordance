@@ -429,7 +429,7 @@ function heatTable(el, layers, rows){
     const lab = `<code class="tk">${esc(showTok(r.tok))}</code>${r.note ? `<span class="nt">${esc(r.note)}</span>` : ""}`;
     const tds = r.S.map((v, j) => {
       const a = Math.round(Math.max(0, Math.min(1, v / 0.8)) * 100), tiny = Math.abs(v) < 0.005;
-      const title = `L${layers[j]}: median S ${v.toFixed(3)} · 95% CI over tables [${r.ci[j][0].toFixed(2)}, ${r.ci[j][1].toFixed(2)}] · toward ${Math.round(r.tow[j]*100)}%, negligible ${Math.round(r.neg[j]*100)}%`;
+      const title = `L${layers[j]}: median S ${v.toFixed(3)} · table-mean 95% CI [${r.ci[j][0].toFixed(2)}, ${r.ci[j][1].toFixed(2)}] · toward ${Math.round(r.tow[j]*100)}%, negligible ${Math.round(r.neg[j]*100)}%`;
       return `<td class="${tiny ? "z" : a > 45 ? "hi" : ""}" style="background:color-mix(in srgb, var(--accent) ${a}%, var(--surface-2))" title="${esc(title)}">${tiny ? "·" : v.toFixed(2)}</td>`;
     }).join("");
     return `${grp}<tr><th>${lab}</th>${tds}</tr>`;
