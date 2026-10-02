@@ -374,3 +374,17 @@ per pair.
 5. Report requirements, including qualitative samples always (§10).
 6. Code (commit 79f835a): the subject-model integrity check runs at use time (`Engine.forward`,
    `SecReplay.build`/`capture`), with a lifecycle test (62/62 tests).
+
+## Amendment A1 (2026-10-02, before the snapshot ran; PI request)
+
+The descriptive reader snapshot (§3.7) also follows WorkspaceBench's own reader protocol, so its readouts are
+comparable with WSB's published brew results. WSB's post: J/R/logit top-10 at layers 20–60 every 4; Oracle Lens one
+sample across the same layers; NLA one sample at L42.
+- Lenses (J_NP standard + cosine, J_CB, R_CB, logit lens): layers 20–60 every 4 plus L42, on all three emission cells;
+  real and shuffled arms everywhere, SEC arm at the profile layers.
+- Oracle Lens: one sample per emission cell at layers 20–60 every 4 (all on-contract: its training grid), real and
+  shuffled arms, plus a no-activation run per layer.
+- NLA: k = 4 at L42 on all three emission cells (real, shuffled; SEC at emit_colon), plus one no-activation batch.
+- The v3 contract runs (Oracle k = 4 at emit_colon L40/L44 with real / none / shuffled / SEC arms) are unchanged.
+
+Still descriptive only: the added layers have no causal measurement and feed no decision.

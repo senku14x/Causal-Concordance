@@ -659,9 +659,17 @@ def stage_probes():
 
 
 # --------------------------------------------------------------------------------------------- stage: snapshot
+WSB_GRID = list(range(20, 61, 4))                       # WSB's reader grid: layers 20..60 every 4 (Oracle's training grid)
+SNAP_LENS_LAYERS = sorted(set(WSB_GRID) | set(LAYERS))  # + L42 (the NLA layer and a profile layer)
+
+
 def stage_snapshot():
-    """Descriptive reader snapshot (design 001 v3 §3.7). Runs only after the reader-free outputs are hashed; never feeds
-    any 001 decision. Every readout is saved in full (qualitative record)."""
+    """Descriptive reader snapshot (design 001 v3 §3.7 + amendment A1). Runs only after the reader-free outputs are
+    hashed; never feeds any 001 decision. Every readout is saved in full (qualitative record).
+
+    WSB protocol (A1): lenses top-10 at layers 20..60 every 4 (+ L42) on the three emission cells; Oracle Lens 1 sample
+    per cell at the same grid; NLA at L42. Contract runs (v3): Oracle k = 4 at emit_colon L40/L44 and NLA k = 4, each with
+    no-activation, shuffled and SEC-activation arms."""
     import gc
     import numpy as np
     import torch
@@ -680,7 +688,6 @@ def stage_snapshot():
     assert len(tables) == 10, len(tables)
     roles = ("member", "partner", "substituted")
     renders = {(t, "member"): starts[t]["r_m"], (t, "partner"): starts[t]["r_p"], (t, "substituted"): subs[t]["r_p"]}
-    # SEC activations (bridge check) from the run captures
     cap = np.load(OUT / "run" / "captures_brew.npz")["X"]
     cmeta = json.loads((OUT / "run" / "captures_brew_meta.json").read_text())
     kidx = {r["key"]: i for i, r in enumerate(cmeta["renders"])}
@@ -688,78 +695,102 @@ def stage_snapshot():
     stock = {}
     for (t, role), r in renders.items():
         em = sorted(p for p, g in r.regions.items() if g.startswith("emit"))
-        acts = RD.capture_stock(model, r.ids, LAYERS, em)
-        for j, L in enumerate(LAYERS):
+        acts = RD.capture_stock(model, r.ids, SNAP_LENS_LAYERS, em)
+        for L in SNAP_LENS_LAYERS:
             for ci in range(3):
                 stock[(t, role, ci, L)] = acts[L][ci]
     secv = {(t, role, ci, L): torch.from_numpy(cap[kidx[ids_key(r.ids)], ci, LAYERS.index(L)])
             for (t, role), r in renders.items() for ci in range(3) for L in LAYERS}
     shuf = {t: tables[(i + 1) % len(tables)] for i, t in enumerate(tables)}       # fixed derangement
-    snap = {"tables": [], "bridge": []}
+    snap = {"tables": [], "bridge": [], "protocol": {"lens_layers": SNAP_LENS_LAYERS, "oracle_wsb_layers": WSB_GRID,
+                                                     "oracle_contract_layers": [40, 44], "nla_layer": 42, "cells": ["emit_asst", "emit_think", "emit_colon"]}}
     for t in tables:
         it = mats["brew_items"][t]
+        sp = subs[t]["pair"]
         snap["tables"].append({"item": t, "start": it["start"], "z": it["intermediates"][0], "answer": it["answer"],
+                               "candidates": it["options_adjacent"][0],
                                "partner": {"pair_id": starts[t]["pair"].pair_id, "start": starts[t]["pair"].p.inp,
                                            "z": starts[t]["pair"].p.z, "answer": starts[t]["pair"].p.a},
-                               "substitution": {"pair_id": subs[t]["pair"].pair_id, "c": subs[t]["pair"].meta["c"],
-                                                "c2": subs[t]["pair"].meta["c2"]},
+                               "substitution": {"pair_id": sp.pair_id, "c": sp.meta["c"], "c2": sp.meta["c2"]},
                                "shuffled_from": shuf[t], "readouts": {}})
-    for k in stock:
+    for k, v in secv.items():
         snap["bridge"].append({"table": k[0], "role": k[1], "cell": k[2], "layer": k[3],
-                               "cos_stock_sec": float(torch.nn.functional.cosine_similarity(stock[k].float(), secv[k].float(), 0))})
+                               "cos_stock_sec": float(torch.nn.functional.cosine_similarity(stock[k].float(), v.float(), 0))})
     T = {d["item"]: d for d in snap["tables"]}
     t0 = time.time()
-    # lenses: real (stock), shuffled (stock), real (SEC)
-    vl = RD.VectorLenses(model, tok, LAYERS)
+
+    def hs_for(role, ci, L, arm, rows=tables):
+        return [None if arm == "none" else stock[(t, role, ci, L)] if arm == "real" else
+                stock[(shuf[t], role, ci, L)] if arm == "shuffled" else secv[(t, role, ci, L)] for t in rows]
+    # ---- lenses: real + shuffled at every snapshot layer; SEC activations at the profile layers
+    vl = RD.VectorLenses(model, tok, SNAP_LENS_LAYERS)
     for (t, role, ci, L), h in stock.items():
-        for arm, v in (("real", h), ("shuffled", stock[(shuf[t], role, ci, L)]), ("real_sec", secv[(t, role, ci, L)])):
+        arms = [("real", h), ("shuffled", stock[(shuf[t], role, ci, L)])] + ([("real_sec", secv[(t, role, ci, L)])] if L in LAYERS else [])
+        for arm, v in arms:
             ro = {"logit_lens": vl.logit_lens(v), "J_NP_cosine": vl.j_cosine("J_NP", v, L), "J_NP_standard": vl.j_standard("J_NP", v, L),
                   "J_CB_standard": vl.j_standard("J_CB", v, L), "R_CB_standard": vl.j_standard("R_CB", v, L)}
-            T[t]["readouts"].setdefault(f"{role}|cell{ci}|L{L}|lenses|{arm}", {k: [x for x, _ in val] for k, val in ro.items()})
+            T[t]["readouts"][f"{role}|cell{ci}|L{L}|lenses|{arm}"] = {k: [x for x, _ in val] for k, val in ro.items()}
     del vl
     gc.collect()
     torch.cuda.empty_cache()
-    print("lenses", time.time() - t0, flush=True)
-    # Oracle at L40 and L44, emit_colon (cell 2): real, none, shuffled, real_sec; one batch per (role, layer, arm)
+    print("lenses", round(time.time() - t0), flush=True)
     ol = RD.OracleLens(model, tok)
+    # ---- Oracle, WSB protocol: 1 sample per cell, layers 20..60 every 4, real / shuffled (all roles in one batch), none
+    for L in WSB_GRID:
+        for ci in range(3):
+            for arm in ("real", "shuffled"):
+                batch = [(t, role) for role in roles for t in tables]
+                hs = [stock[(t, role, ci, L)] if arm == "real" else stock[(shuf[t], role, ci, L)] for t, role in batch]
+                outs = ol.read_batch(hs, L, k=1, seed=QUAL_SEED + L)
+                for (t, role), o in zip(batch, outs):
+                    T[t]["readouts"][f"{role}|cell{ci}|L{L}|oracle_wsb|{arm}"] = o
+        outs = ol.read_batch([None] * len(tables), L, k=1, seed=QUAL_SEED + L)     # no activation: depends on L only
+        for t, o in zip(tables, outs):
+            T[t]["readouts"][f"none|L{L}|oracle_wsb|none"] = o
+        print("oracle wsb", L, round(time.time() - t0), flush=True)
+    # ---- Oracle contract runs: k = 4 at emit_colon, L40 / L44
     for L in (40, 44):
         for role in roles:
             for arm in ("real", "none", "shuffled", "real_sec"):
-                hs = [None if arm == "none" else (stock[(t, role, 2, L)] if arm == "real" else stock[(shuf[t], role, 2, L)]
-                      if arm == "shuffled" else secv[(t, role, 2, L)]) for t in tables]
-                outs = ol.read_batch(hs, L, k=4, seed=QUAL_SEED)
+                outs = ol.read_batch(hs_for(role, 2, L, arm), L, k=4, seed=QUAL_SEED)
                 for t, o in zip(tables, outs):
                     T[t]["readouts"][f"{role}|cell2|L{L}|oracle|{arm}"] = o
-        print("oracle", L, time.time() - t0, flush=True)
+    print("oracle contract", round(time.time() - t0), flush=True)
     model = ol.unload()
     del ol
-    # NLA at L42, emit_colon (merges the SFT adapter into the model IN PLACE: every capture is done above)
+    # ---- NLA at L42 (merges the SFT adapter into the model IN PLACE: every capture is done above)
     _, pth, _ = RD.nla_paths()
     av = RD.NLAVerbalizer(model, AutoTokenizer.from_pretrained(pth["av_sft_lora"]))
-    for role in roles:
-        for arm in ("real", "none", "shuffled", "real_sec"):
-            hs = [None if arm == "none" else (stock[(t, role, 2, 42)] if arm == "real" else stock[(shuf[t], role, 2, 42)]
-                  if arm == "shuffled" else secv[(t, role, 2, 42)]) for t in tables]
-            outs = av.read_batch(hs, k=4, seed=QUAL_SEED)
-            for t, o in zip(tables, outs):
-                T[t]["readouts"][f"{role}|cell2|L42|nla|{arm}"] = {"raw": o, "explanations": [RD.extract_explanation(x) for x in o]}
-    print("nla", time.time() - t0, flush=True)
+    for ci in range(3):
+        for role in roles:
+            for arm in ("real", "shuffled") + (("real_sec",) if ci == 2 else ()):
+                outs = av.read_batch(hs_for(role, ci, 42, arm), k=4, seed=QUAL_SEED)
+                for t, o in zip(tables, outs):
+                    T[t]["readouts"][f"{role}|cell{ci}|L42|nla|{arm}"] = {"raw": o, "explanations": [RD.extract_explanation(x) for x in o]}
+    outs = av.read_batch([None] * len(tables), k=4, seed=QUAL_SEED)               # no activation: one batch
+    for t, o in zip(tables, outs):
+        T[t]["readouts"]["none|L42|nla|none"] = {"raw": o, "explanations": [RD.extract_explanation(x) for x in o]}
+    print("nla", round(time.time() - t0), flush=True)
     av.close()
     del av, model
     gc.collect()
     torch.cuda.empty_cache()
-    # AR: FVE of every NLA explanation against the cell it was meant to describe (and, for shuffled, its source)
+    # ---- AR: FVE of every NLA explanation against the cell it describes (shuffled: also against its source)
     ar = RD.NLAReconstructor()
     ref, _ = RD.nla_reference_activations()
     for t in tables:
-        for role in roles:
-            for arm in ("real", "none", "shuffled", "real_sec"):
-                d = T[t]["readouts"][f"{role}|cell2|L42|nla|{arm}"]
-                gold = stock[(t, role, 2, 42)]
-                d["fve_vs_cell"] = [None if e is None else round(ar.fve(ar.predict(tok, e), gold, ref)[0], 4) for e in d["explanations"]]
-                if arm == "shuffled":
-                    src = stock[(shuf[t], role, 2, 42)]
-                    d["fve_vs_source"] = [None if e is None else round(ar.fve(ar.predict(tok, e), src, ref)[0], 4) for e in d["explanations"]]
+        for key, d in T[t]["readouts"].items():
+            if "|nla|" not in key:
+                continue
+            if key.startswith("none|"):
+                golds = {"fve_vs_member_colon": stock[(t, "member", 2, 42)]}
+            else:
+                role, cell = key.split("|")[0], int(key.split("|")[1][4:])
+                golds = {"fve_vs_cell": stock[(t, role, cell, 42)]}
+                if key.endswith("|shuffled"):
+                    golds["fve_vs_source"] = stock[(shuf[t], role, cell, 42)]
+            for name, gold in golds.items():
+                d[name] = [None if e is None else round(ar.fve(ar.predict(tok, e), gold, ref)[0], 4) for e in d["explanations"]]
     del ar
     snap["seconds"] = time.time() - t0
     (ANA / "snapshot.json").write_text(json.dumps(snap, indent=1, default=float, ensure_ascii=False))
