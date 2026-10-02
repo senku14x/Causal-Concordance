@@ -211,6 +211,8 @@ class Engine:
     def forward(self, ids, record=(), writes=()):
         """One forward. `record`: layers whose block outputs to keep. `writes`: hook objects (CellWrite, SpanWriter,
         ...) entered after the regime hook and before the recorder."""
+        import registry
+        registry.assert_subject_model_intact(self.model)       # at use time, not only at construction
         x = torch.tensor([list(ids)], device=self.device)
         rec = Recorder(self.blocks, record) if record else None
         regime = Fp32Residual(self.blocks, self.fp32_from) if self.fp32_from is not None else None

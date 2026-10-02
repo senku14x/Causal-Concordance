@@ -41,6 +41,8 @@ class SecReplay:
     # ------------------------------------------------------------------------------------------- resident stack
     def build(self):
         """float32 copies of blocks l0+1..63 on the GPU; their bf16 originals parked on the CPU."""
+        import registry
+        registry.assert_subject_model_intact(self.model)
         for i in range(self.l0 + 1, self.n):
             self.up[i] = copy.deepcopy(self.blocks[i]).float().to(self.device).eval()
             self.blocks[i].to("cpu")
@@ -62,6 +64,8 @@ class SecReplay:
     def capture(self, ids, layers=()):
         """Stock bf16 forward with early exit after block l0. Returns ({l: [T, d] float32 on device} for l0 and any
         `layers` <= l0, {layer_type: kwargs} from the last block of each type <= l0)."""
+        import registry
+        registry.assert_subject_model_intact(self.model)       # at use time, not only at construction
         want = sorted(set(int(l) for l in layers) | {self.l0})
         assert max(want) <= self.l0
         store, kw, hs = {}, {}, []

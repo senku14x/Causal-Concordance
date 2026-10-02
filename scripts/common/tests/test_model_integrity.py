@@ -50,3 +50,25 @@ def test_oracle_attach_unload_leaves_subject_intact(model, tok, brew_bank):
     assert torch.equal(acts_before, acts_during)
     assert torch.equal(before, after)
     R.assert_subject_model_intact(base)
+
+
+@pytest.mark.gpu
+def test_mutation_after_construction_is_refused_at_use(model, tok, brew_bank):
+    """Lifecycle: an Engine / SecReplay built on an intact model must refuse it once a reader has modified it."""
+    import wsb
+    it = next(x for x in brew_bank if x["name"] == "brew-s2-r10d2-0000")
+    ids = wsb.render_item(tok, "brew", it).ids
+    eng = E.Engine(model, fp32_from=0)
+    sec = RG.SecReplay(model, 62)
+    eng.forward(ids)                                           # intact: works
+    setattr(model, R.MODIFIED_ATTR, "test mutation after construction")
+    try:
+        with pytest.raises(RuntimeError, match="modified in place"):
+            eng.forward(ids)
+        with pytest.raises(RuntimeError, match="modified in place"):
+            sec.capture(ids)
+        with pytest.raises(RuntimeError, match="modified in place"):
+            sec.build()
+    finally:
+        delattr(model, R.MODIFIED_ATTR)
+    R.assert_subject_model_intact(model)
