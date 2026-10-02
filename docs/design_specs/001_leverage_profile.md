@@ -1,7 +1,7 @@
 # 001 — Leverage profile (brew, chain) and off-trajectory content (brew)
 
-*Draft v2, 2026-10-02, for PI review. Not run. v1 → v2 follows the external review of commit c13fd43 and the PI's
-response (changes listed at the bottom). Governs `scripts/001_leverage_profile/` (to be written after approval).
+*v3, 2026-10-02 — approved by the PI ("proceed") with the second external review's refinements (review of 56cb7ab).
+Not yet run. v1 → v2 → v3 changes are listed at the bottom. Governs `scripts/001_leverage_profile/` (to be written after approval).
 Context: `docs/context/SPEC.md` + `docs/context/AMENDMENT_01.md` (including its 2026-10-02 errata); engine, regime and
 gates as built and tested in block 000 (`STATUS.md`).*
 
@@ -33,7 +33,7 @@ cell, and what the edit changed downstream.
 | Family | Unit of split | Dev / test | Notes |
 |---|---|---|---|
 | Brew | table (each of the 100 items has its own table; partners and edits share their item's table) | 50 / 50 tables, stratified by z (seed 20261002) | `brew-s2-r10d2-0000`, `-0001` (touched in block 000) forced into dev |
-| Chain | step sequence (28 usable items in 20 groups) | 10 / 10 groups, stratified by depth | items with the same steps produce identical prompts (15 cross-item collisions), so the split is by group and pairs are de-duplicated as unordered {prompt, prompt}; `chain-w2-d3p-0408` forced into dev |
+| Chain | step sequence (28 usable items in 20 groups) | 10 / 10 groups, stratified by depth; reports count surviving independent groups, not only pairs; chain may stay a secondary pilot if support is thin | items with the same steps produce identical prompts (15 cross-item collisions), so the split is by group and pairs are de-duplicated as unordered {prompt, prompt}; `chain-w2-d3p-0408` forced into dev |
 
 **Pairs.**
 - **Start pairs (the natural pair difference).**
@@ -64,7 +64,7 @@ cell, and what the edit changed downstream.
     whether late-layer naming coincides with late-layer leverage;
   - early layers for the controls only (§3.5).
 
-**Regime (changed in v2).** SEC true-fp32 replay for every block output ≥ 40 (`regime.SecReplay`, l0 = 39, resident:
+**Regime (changed in v2; adopted by the PI in v3).** SEC true-fp32 replay for every block output ≥ 40 (`regime.SecReplay`, l0 = 39, resident:
 bf16 blocks 0–39 + fp32 blocks 40–63 + fp32 W_U ≈ 72 GB; noise floor ≈ 2e-4 nats vs 0.05–0.25 under RHUT). Early-layer
 controls and the embedding anchor run in the bf16 lower stack, which is the stock forward. Every comparison is made at
 one sequence length, with sources captured at the matching length. The gate stage runs on the stock model before the
@@ -133,9 +133,15 @@ There is no G here (a = a′), so no share is formed.
 - |Δlog P(a)| < ε′ · median(G) over brew dev start pairs;
 - TV < 0.05.
 
-**(iii) Matched decodability.** The edit changes the table membership of c and c′, so the membership probes of §3.4
-are the matched variable. The probe trained on natural dev renders is applied to each substitution pair. Item-level
-test: the score for c′ rises and for c falls, original → substituted (sign test across items).
+**(iii) Matched decodability, cross-fitted (v3).** The edit changes the table membership of c and c′, so the
+membership probes of §3.4 are the matched variable.
+- Let f_c^(−t) be colour c's probe fitted on **natural** renders only, from the outer folds that exclude table t.
+- Apply the same fitted probe to the original and the substituted render of held-out table t.
+- Directional test per item:
+  - f_c^(−t)(h_sub) − f_c^(−t)(h_orig) < 0: the removed colour becomes less detectable;
+  - f_c′^(−t)(h_sub) − f_c′^(−t)(h_orig) > 0: the inserted colour becomes more detectable.
+- Report the fraction of items in the predicted direction (sign test) and the mean shift with a cluster interval.
+- Substitution renders are never used to fit a probe.
 
 Row binding (which colour a given key maps to) is secondary and descriptive: about 25 dev items per key cannot power a
 12-way probe.
@@ -143,7 +149,8 @@ Row binding (which colour a given key maps to) is secondary and descriptive: abo
 ### 3.4 Decodability (probes; brew emission cells; no directions used anywhere else)
 
 **Activations:** block outputs at emit_asst, emit_think, emit_colon × L40/42/44/56/60, in the §2 regime, for every dev
-render (members, all partner candidates, substitution renders; ≈ 280 renders over 50 tables).
+render (members, all partner candidates, substitution renders; ≈ 280 renders over 50 tables). Probes are fitted on natural
+renders only; substitution renders are only scored (§3.3 iii).
 
 **Targets:**
 - z, start and answer (12-way each; the {input, z, answer} comparison of AMENDMENT_01 §3);
@@ -175,7 +182,11 @@ render (members, all partner candidates, substitution renders; ≈ 280 renders o
 |---|---|---|
 | Embedding anchor | start-colour token, input embedding | partner logits reproduced bitwise |
 | Self-patch | emit_colon, each layer | m identical bitwise |
-| Stir cells | brew stir positions (before the only differing token in all 100 items) | patch is a bitwise no-op |
+| Stir cells (start pairs only, v3) | brew stir positions, which precede the only differing token of a **start** pair | patch is a bitwise no-op |
+| Pre-difference prefix (every pair type, v3) | every position before a pair's first differing token | donor and recipient activations bitwise identical at every recorded layer |
+
+Substitution pairs differ inside the rule table, which comes before the stir sentence, so their stir activations may
+legitimately differ. The stir no-op applies to start pairs only.
 
 **Localization results (reported, never alarms).** Start-token block-output patches at L0, L1, L2, L4. Block 0 is a
 GatedDeltaNet layer whose recurrent state already carries the start colour into later positions within the block, so
@@ -189,20 +200,44 @@ On 20 random dev pairs per family:
 
 Reported per pair as a fraction of G. Every "negligible" call needs the bound to exceed the noise floor by ≥ 10×.
 
-### 3.7 Descriptive reader snapshot (optional; PI decision)
+### 3.7 Descriptive reader snapshot (included by the PI in v3)
 
-The PI's original 001 instruction was "no readers", and none of the measurements above uses one. An *explained
-disagreement* (e.g. the NLA names green where J does not; what do §3.1–3.4 say about green at that cell?) needs reader
-outputs on the same cells.
+This stage runs after every reader-free output of 001 is written and its sha256 recorded. Reader outputs never select,
+change or threshold anything in 001.
 
-Proposed separate stage `readers_snapshot`:
-- runs after every reader-free output of 001 is written and hashed;
-- 10 dev pairs fixed by rule (the first 10 dev pairs in bank order), their emission cells;
-- readers on their own contracts: J_NP / J_CB / R_CB / logit lens at L40–60, Oracle at L40/L44, NLA at L42, each with
-  the no-activation arm;
-- descriptive only, never an input to any 001 decision.
+**Material:**
+- 10 **distinct dev tables**: the first 10 in bank order that have a gated start pair and a valid substitution;
+- their three emission cells.
 
-Include it in 001 or defer it to 002 — the PI's call.
+**Activations read, per table:**
+- original member;
+- its start partner;
+- the substituted render.
+
+**Arms per activation:**
+- real activation;
+- no activation (the verbalizer's marker left as is);
+- shuffled activation: the same cell and layer from another snapshot table (a fixed derangement).
+
+**Readers on their contracts:**
+- J_NP (standard and WSB cosine), J_CB, R_CB, logit lens at L40/42/44/56/60;
+- Oracle Lens at L40 and L44;
+- NLA at L42 (+ AR FVE);
+- verbalizers sample k = 4 with WSB's sampling.
+
+**The question it answers:** when the activation changes from "table contains c" to "table contains c′", does the
+reader's description change accordingly? It also gives the explained-disagreement cases: what each reader says where
+§3.1–3.4 measured leverage and decodability.
+
+**Reader-input bridge:** readers are fed the stock-forward activation (WSB convention) and, as a check, the SEC
+activation of the same cell. Reported:
+- cosine between the two;
+- top-10 overlap per lens;
+- colour mentions per verbalizer.
+
+Reader scores are not pooled with SEC assay results unless these agree.
+
+**Qualitative samples:** every readout of the snapshot is saved in full and shown in the report.
 
 ## 4. Gates (before any outcome is read)
 
@@ -287,19 +322,24 @@ per pair.
 | Noise floor, 40 pairs × 16 | ≈ 2 min |
 | Decodability captures (~280 renders × 5 layers) | ≈ 2 min |
 | Probes (CPU; 3 × 12-way + 12 membership targets × 15 cell-layers, 5 folds, inner CV, 200 permutations) | ≈ 30–60 min CPU |
-| Optional reader snapshot (§3.7; 10 pairs) | ≈ 15 min |
-| **Total** | **≈ 1.5 GPU-h (+ 15 min with §3.7) and ≤ 1 CPU-h** |
+| Reader snapshot (§3.7; 10 tables × 3 activations × 3 arms; verbalizers k = 4) | ≈ 35 min |
+| **Total** | **≈ 2 GPU-h and ≤ 1 CPU-h** |
 
-## 9. Open questions for the PI
+## 9. Decisions (resolved 2026-10-02)
 
-1. **Regime.** v2 uses SEC for every L ≥ 40. AMENDMENT_01's 5% rule did not require the switch (3.3%), but
-   negligible-effect calls at ε′ = 5% need a floor far below 5%. Confirm.
-2. **Reader snapshot** (§3.7): include in 001, or defer to 002?
-3. **Chain split:** 50/50 by step-sequence group leaves ≈ 10 groups per side. Keep it, or use 70/30?
-4. **Reader-input bridge.** Reader inputs come from the stock forward (WSB convention); SEC activations at L ≥ 40 are
-   fp32 replays, about 1% different. SEC's lower stack *is* the stock forward, so this bridge is exact only for layers
-   ≤ 39. Before reader scoring (002+), check that reader readouts at the label layers are stable across the two capture
-   regimes, or feed readers the SEC activations.
+1. **Regime:** SEC true-fp32 for every L ≥ 40 (adopted). SEC results are reported as results under that replay regime.
+2. **Reader snapshot:** included, separate and after hashing (§3.7).
+3. **Chain split:** 50/50 by step-sequence group; independent surviving groups are reported.
+4. **Reader-input bridge:** stock vs SEC stability is checked on the snapshot before any pooling (§3.7).
+
+## 10. Report requirements
+
+- Every table comes with its intervals and sign counts.
+- A **qualitative section** shows:
+  - a fixed-seed sample of 8 brew and 4 chain dev pairs (seed 20261003), with their prompts, per-cell shares and damage;
+  - all 10 snapshot tables with full reader outputs;
+  - every substitution case where behaviour or transplant exceeded the negligible bound.
+- Gate outcomes (including every failed attempt) and limitations sit next to the claims they qualify.
 
 ---
 
@@ -322,3 +362,15 @@ per pair.
    was specified reader-free.
 9. Subject-model integrity: reader setup that merges weights in place marks the model; every capture/label entry point
    refuses a marked model; tests added (code, 2026-10-02).
+
+## Changes v2 → v3 (2026-10-02; second external review of 56cb7ab, PI approval)
+
+1. PI decisions recorded (§9): SEC adopted, reader snapshot included, chain split kept, bridge check required.
+2. Substitution decodability made explicitly cross-fitted: probes fitted on natural renders of other tables only, both
+   renders of the held-out table scored with the same probe, directional test (§3.3 iii, §3.4).
+3. Stir-cell no-op scoped to start pairs; a pre-difference-prefix identity check added for every pair type (§3.5).
+4. Snapshot refined: 10 distinct tables, original/partner/substituted activations, no-activation and shuffled same-cell
+   controls (§3.7).
+5. Report requirements, including qualitative samples always (§10).
+6. Code (commit 79f835a): the subject-model integrity check runs at use time (`Engine.forward`,
+   `SecReplay.build`/`capture`), with a lifecycle test (62/62 tests).
