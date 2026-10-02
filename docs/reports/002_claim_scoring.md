@@ -236,7 +236,9 @@ it is shared error. (Different layers; 10 tables.)
   - the **verbalizers** mention the intermediate often but rarely claim it in its role. Their outputs are dominated
     by invented or self-contradictory chains, with weak activation tracking. This is clearest for the Oracle.
   - the **token lenses**, read inside the candidate set rather than as top-10 lists, carry the intermediate
-    specifically. It flips with the start swap in 47–48 of 48 tables at L40–44, and the start does not.
+    specifically: positive start-swap tracking (a difference-in-differences of scores) in 47–48 of 48 tables at
+    L40–44, and none for the start. Actual rank reversals are rarer: for J_NP cosine at `:` L40, 90 of 183 partner
+    comparisons reverse, and 8 of 48 tables reverse for every partner. (Corrected after the audit of 2026-10-02.)
   - Scope: one model, brew, dev, descriptive.
 - The disagreement "the NLA names z and the J lenses do not" (001 §13) does not survive this scoring. At the claim
   level the NLA rarely asserts z correctly. At the score level the J lenses carry z. The better-supported

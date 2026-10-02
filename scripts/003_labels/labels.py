@@ -568,7 +568,7 @@ def stage_analysis():
         if v["used"]:
             v["state"] = "used + necessary" if v.get("necessary") else "used"
         elif content == "z" and cell != "start_tok" and v["S_full"] is not None and abs(v["S_full"]) < EPS:
-            v["state"] = "decodable, not needed"
+            v["state"] = "readable, low patch leverage"     # family-level decodability only (audit of 003, §5)
         else:
             v["state"] = "unresolved"
     # reliability (G4): same rule with unadjusted p, two disjoint fits
@@ -603,7 +603,9 @@ def stage_analysis():
                 **(_med_ci(S, [lab[k]["item"] for k in ks]) or {}),
                 "frac_used": float(np.mean([lab[k]["used"] for k in ks])),
                 "frac_used_necessary": float(np.mean([lab[k]["state"] == "used + necessary" for k in ks])) if content == "z" and (cell, L) in NEC_GRID else None,
-                "frac_not_needed": float(np.mean([lab[k]["state"] == "decodable, not needed" for k in ks])),
+                "frac_not_needed": float(np.mean([lab[k]["state"] == "readable, low patch leverage" for k in ks])),
+                "frac_necessity_above_null": float(np.mean([lab[k].get("N", -1e9) > (nq95.get((cell, L)) or 1e9) for k in ks])) if content == "z" and (cell, L) in NEC_GRID else None,
+                "frac_S_positive": float(np.mean([lab[k]["S"] > 0 for k in ks])),
                 "frac_unresolved": float(np.mean([lab[k]["state"] == "unresolved" for k in ks])),
                 "frac_damage": float(np.mean([lab[k]["damage"] for k in ks])),
                 "frac_one_d_gt_full": float(np.mean([lab[k]["one_d_gt_full"] for k in ks])),
@@ -626,10 +628,11 @@ def stage_analysis():
             sf = sfull.get((pid, cellpos[cell], L))
             if None in ss.values() or sf is None:
                 continue
-            per.append({"z": ss["z"], "start": ss["start"], "answer": ss["answer"], "full": sf, "other": sf - max(ss.values()),
+            per.append({"z": ss["z"], "start": ss["start"], "answer": ss["answer"], "full": sf,
+                        "full_minus_max_single": sf - max(ss.values()),   # NOT an attribution to other content (audit §6)
                         "largest": max(ss, key=ss.get)})
         if per:
-            attrib[f"{cell}|L{L}"] = {"median_S": {k: float(np.median([x[k] for x in per])) for k in ("z", "start", "answer", "full", "other")},
+            attrib[f"{cell}|L{L}"] = {"median_S": {k: float(np.median([x[k] for x in per])) for k in ("z", "start", "answer", "full", "full_minus_max_single")},
                                       "largest_content_counts": {c: sum(x["largest"] == c for x in per) for c in ROLES}, "n": len(per),
                                       "median_cos": {f"{a}-{b}": float(np.nanmedian([lab[(pid, cell, L, a)]["cos_other"].get(b) if lab.get((pid, cell, L, a)) and lab[(pid, cell, L, a)]["cos_other"] and lab[(pid, cell, L, a)]["cos_other"].get(b) is not None else np.nan for pid in pairs]))
                                                      for a, b in (("z", "start"), ("z", "answer"), ("start", "answer"))}}
@@ -647,7 +650,7 @@ def stage_analysis():
         "L1 z swap at ':' L42/L44 used in >= 50% of pairs": [g("emit_colon|L42|z").get("frac_used"), g("emit_colon|L44|z").get("frac_used")],
         "L2 ':' L40-44 median S_z > median S_start": [(g(f"emit_colon|L{L}|z").get("median"), g(f"emit_colon|L{L}|start").get("median")) for L in (40, 42, 44)],
         "L3 ':' L42-44 median S_z > median S_answer": [(g(f"emit_colon|L{L}|z").get("median"), g(f"emit_colon|L{L}|answer").get("median")) for L in (42, 44)],
-        "L4 z necessity at ':' L40-44 above null q95 in >= 30%": [g(f"emit_colon|L{L}|z").get("frac_used_necessary") for L in (40, 42, 44)],
+        "L4 z necessity at ':' L40-44 above null q95 in >= 30%": [g(f"emit_colon|L{L}|z").get("frac_necessity_above_null") for L in (40, 42, 44)],
         "L5 G4 kappa >= 0.7 for z at ':' L42-44": (G4.get("z|emit_colon|42/44") or {}).get("kappa_used"),
         "L6 start swap at the start token L40 used in >= 70%": g("start_tok|L40|start").get("frac_used"),
         "L7 ':' median S_z at L60 > at L44": [g("emit_colon|L60|z").get("median"), g("emit_colon|L44|z").get("median")],

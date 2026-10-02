@@ -1,6 +1,6 @@
 {
  "stage": "analysis",
- "time_utc": "20261002T194729Z",
+ "time_utc": "20261002T235437Z",
  "model": {
   "repo": "Qwen/Qwen3.6-27B",
   "revision": "6a9e13bd6fc8f0983b9b99948120bc37f49c13e9",
@@ -153,7 +153,7 @@
   "cuda": "12.8"
  },
  "git": {
-  "commit": "9ee44673d964a142b1c2eccdd23ceaecdaf23154",
+  "commit": "40a939330b6607951aa8ad850629e102d1f0baa6",
   "dirty": true
  },
  "n_pairs": 82

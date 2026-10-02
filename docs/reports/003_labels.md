@@ -26,7 +26,7 @@ reliability gate).
 | capture | `outputs/003_labels/captures/start_token.npz` | 231 renders, SEC, start-colour token |
 | directions | `outputs/003_labels/directions.npz`, `analysis/directions_validity.json` | 3 folds × {both, single, single} fits; full-rank least squares (34/34) |
 | smoke | `analysis/smoke_checks.json` | 3 pairs; all checks pass |
-| run | `outputs/003_labels/run/edits.jsonl` | 82 pairs, 37,299 edited forwards, 92 min on GPU |
+| run | `outputs/003_labels/run/edits.jsonl` | 82 pairs, 37,299 edit records (43,941 scored runs: each necessity record holds two), 92 min on GPU |
 | analysis | `analysis/{summary.json, labels.json}` | — |
 
 Design commit 6a2a097, before any run; gates committed in 9ee4467, before the main run.
@@ -68,9 +68,14 @@ shows that the per-pair effect really does depend on which tables the direction 
 
 - **At `:` and the assistant newline, L40–44:** the z direction is the only content direction whose median clearly
   exceeds its random-direction null. It is larger than the start and answer directions at every layer. In 46–53 of
-  82 pairs it is the largest of the three.
-- **But it carries only 3–5% of the gap**, against 29–50% for the whole cell. About 0.21–0.42 of the gap ("other")
-  lies outside all three single content directions.
+  82 pairs it is the largest of the three. Its effect is positive in 85–90% of pairs at `:` (70, 69 and 74 of 82),
+  and positive on average in 28–29 of the 33 tables. **The effects are small, not absent.**
+- **But it carries only 3–5% of the gap**, against 29–50% for the whole cell. **None of the three individually tested
+  directions reproduces the whole-cell effect.**
+  - An earlier version said "0.21–0.42 of the gap lies outside the three directions". That came from S_full minus the
+    largest single-direction S. It is not an attribution: two additive directions with effects 1 and 1 give a whole
+    cell of 2 and "full − max" of 1 with nothing outside their span. It was withdrawn after the external audit (§9).
+  - Only patching the joint span and its complement can measure what lies outside.
 - **At `:` L60** the answer direction carries most of the cell (0.62 of 0.74), and z does nothing.
 - **Positive control:** the start direction at the start token carries 0.076 of that cell's 0.23. That is clearly
   above null but under half the cell, so a single linear content direction recovers only part of the leverage even
@@ -82,7 +87,7 @@ shows that the per-pair effect really does depend on which tables the direction 
 
 ## 3. Labels
 
-| Cell | z used | z used + necessary | z decodable, not needed | z unresolved | start used | answer used |
+| Cell | z used | z used + necessary | z readable, low patch leverage | z unresolved | start used | answer used |
 |---|---|---|---|---|---|---|
 | `:` L40 | 11% | 11% | 2% | 87% | 2% | 0% |
 | `:` L42 | 15% | 15% | 0% | 85% | 5% | 0% |
@@ -93,12 +98,17 @@ shows that the per-pair effect really does depend on which tables the direction 
 | start token L40 (start content) | — | — | — | — | **28%** | — |
 
 - **Necessity.** Clamping the z direction to its fitting-set mean in both runs shrinks the gap by a median 3–5% at
-  `:` L40–44. The 95th percentile of random clamps is 0.001. Every "used" z label at those cells also passes
-  necessity.
+  `:` L40–44, above the random-clamp 95th percentile (0.001) in **87–93% of pairs**. But:
+  - **The random clamps are not size-matched.** Clamping a random direction to its own mean is about 20× smaller an
+    edit (audit §4). So the comparison does not rule out a generic perturbation of the same size, and specificity is
+    **not established**.
+  - Damage was not logged on the ablated runs.
 - **Concentrated in a few tables.** At `:` L44, 5 of 82 pairs have S_z > 0.2, and "used" pairs come from 11 of 33
   tables. Table 0383 has a median S_z of 0.36 over 4 pairs; most tables sit near 0.
-- **At the `</think>` newline the whole cell carries no leverage**, while z is strongly decodable there (probe 0.79–
-  0.84). That gives the cleanest **decodable-not-needed** label of the project so far, for natural pair content.
+- **At the `</think>` newline the whole cell carries almost no net leverage**, while z is strongly decodable there
+  *at the family level* (probe 0.79–0.84). This is a readable / low-patch-leverage pattern.
+  - It is **not** an item-level "decodable, not needed" label: no per-item probe probability was used.
+  - A small net patch cannot exclude cancellation between components (errata E2).
 - **The damage flag at `:` L60** catches answer swaps that push mass to non-colour tokens (e.g. "other" rising from
   0.07 to 0.29). Those labels stay unresolved.
 
@@ -109,7 +119,7 @@ shows that the per-pair effect really does depend on which tables the direction 
 | L1 | z swap at `:` L42/44 used in ≥ 50% of pairs | 55% | **False** (15%, 18%) |
 | L2 | `:` L40–44 median S_z > median S_start | 65% | **True** (0.031–0.050 vs 0.009–0.012) |
 | L3 | `:` L42–44 median S_z > median S_answer | 55% | **True** (0.034–0.050 vs 0.003–0.006) |
-| L4 | z necessity at `:` L40–44 above the null in ≥ 30% of pairs | 35% | **False** (11–18%) |
+| L4 | z necessity at `:` L40–44 above the null in ≥ 30% of pairs | 35% | **True** (87–93%; first reported as False by reading the stricter used ∧ necessary fraction, a scoring error, §9). The control is not size-matched, so this is not specificity |
 | L5 | G4 κ ≥ 0.7 for z at `:` L42–44 | 50% | **False** (0.37) |
 | L6 | Start swap at the start token used in ≥ 70% | 75% | **False** (28%) |
 | L7 | `:` median S_z at L60 > at L44 | 50% | **False** (0.004 vs 0.050) |
@@ -126,8 +136,14 @@ shows that the per-pair effect really does depend on which tables the direction 
 | 0312 → green | −0.01 | −0.00 | −0.03 | 0.60 | purple 0.87 | purple 0.86 | unresolved |
 | 0377 → red | −0.03 | 0.00 | −0.00 | 0.25 | gray 0.81 | gray 0.80 | unresolved |
 
-In 0383 the single z direction moves most of the cell's effect, toward the partner's answer (orange). In most pairs
-it moves almost nothing, while the whole cell moves 0.25–0.60.
+In 0383 the single z direction moves much of the cell's effect, but the output shift is only partly toward the
+intended answer.
+- For the white partner (white → teal → **gold**) the swap raises orange to 0.23 and gold to 0.19, while brown
+  stays at 0.40.
+- For the black and teal partners, whose answer is orange, the shift goes mainly to orange.
+- An earlier version called orange the partner answer for all three; that was wrong for the white partner.
+
+In most pairs the z swap moves almost nothing, while the whole cell moves 0.25–0.60.
 
 ## 6. Limitations
 
@@ -142,28 +158,30 @@ it moves almost nothing, while the whole cell moves 0.25–0.60.
 ## 7. Interpretation and next
 
 Under these conditions:
-- the intermediate at `:` and at the assistant newline, L40–44, has a **small, consistent, direction-specific** influence
-  on the answer: above norm-matched random directions, above the start and answer directions, and necessary by
-  clamping. It is 3–5% of the gap in the median and large in a few tables;
-- at the `</think>` newline the intermediate is **decodable but not needed**;
+- the intermediate at `:` and at the assistant newline, L40–44, has a **small, mostly positive** influence along a
+  single reader-free direction:
+  - above norm-matched random swaps and above the start and answer directions;
+  - 3–5% of the gap in the median (positive in 85–90% of pairs), large in a few tables;
+  - its clamp beats random clamps that were not size-matched, so specificity is not established;
+- at the `</think>` newline the intermediate is readable at the family level, while the whole cell has little net
+  leverage (not an item-level label);
 - at L60 the answer content carries the cell;
-- most of the emission cells' leverage at L40–44 is **not** captured by any single content direction.
+- no single tested content direction reproduces the whole-cell effect. What lies outside them is not measured.
 
-**For the readers (descriptive, because of G4):**
-- In 002 the J lenses tracked z at `:` *and* at the `</think>` newline, about equally (47–48 of 48 tables at both).
-  At the first, z has a small demonstrated influence; at the second, it is decodable and not needed.
-- So at these cells, lens z-tracking does not separate used from not-needed content. This is the W ≈ 0 pattern of
-  SPEC §8 A2, and it is an observation, not a score.
-- The verbalizers rarely claim z in either place.
+**For the readers:** no W-type conclusion. The labels failed reliability; 002's reader tracking is a
+difference-in-differences of scores, not the registered hit statistic; and the populations differ (48 vs 33 tables).
+The two measured patterns are reported separately (an earlier "W ≈ 0" reading was withdrawn after the audit, §9).
 
-**Next options (PI's choice):**
-1. **Subspace labels:** swap the whole z subspace (11 dimensions), and a joint start + z + answer subspace, to measure
-   how much of the cell's leverage is linearly reachable through content subspaces. This is the "used, non-1-D"
-   bucket.
-2. **DAS on a subset** as the second label method (SPEC §6).
-3. **More fitting data for reliability:** more partner renders per table, or a ridge/shrinkage estimator, and then
-   re-check G4 before scoring readers. Test-split tables stay held out.
-4. **004 descriptive:** set the 002 reader outputs against these labels, as a descriptive W pattern only.
+**Next (accepted from the audit, §9):**
+1. **First, no-GPU fixes:** the corrections in §9 (done).
+2. **Then a small, separately designed L42 assay check**, on fixed distinct dev tables, keeping the start-token
+   control:
+   - compare the 1-D edit, a reader-free z-associated span, the joint content span, **their complements** (measured
+     directly) and the whole cell, with matched-rank and matched-norm controls;
+   - repeat the central edits under two disjoint fits;
+   - use **norm-matched ablation controls**, with damage logged on both ablated prompts.
+   The outcome branches are written in the audit (§8).
+3. DAS later, as a comparison, not a rescue.
 
 ## 8. Breakages and silly mistakes
 
@@ -172,3 +190,24 @@ Under these conditions:
 - The analysis was dry-run on 2 pairs to catch code errors before the run finished. One known
 weakness, now documented: κ is uninformative when one label dominates, so agreement and r(S₁, S₂) are reported
 beside it.
+
+## 9. External audit (Codex, 2026-10-02, at 40a9393) and corrections
+
+Saved in `docs/reviews/2026-10-02_codex_audit_001_003/`. It re-ran no model; the key claims were checked against the
+saved outputs.
+
+| Point | Verified | Correction |
+|---|---|---|
+| L4 was scored with the wrong fraction | Yes: 71, 72, 76 of 82 | L4 → True; `labels.py` fixed |
+| The ablation null is not norm-matched (about 20× smaller edits) | Accepted (by construction) | Specificity of necessity withdrawn; norm-matched clamps in the next assay |
+| The pooled swap null is not per-item calibrated (eight-draw item q95 ranges 0.00008–0.068) | Accepted | BH "significance" is descriptive; per-item calibration is needed before labels serve as ground truth |
+| Family-level decodability was promoted to item-level not-needed labels | Yes (`labels.py`) | State renamed "readable, low patch leverage"; not an item label |
+| "Other = full − max" is not an attribution | Yes | Withdrawn; joint-span and complement patches are needed |
+| The 0383 white partner answers gold, not orange | Yes | §5 fixed |
+| 002's "flips in 47–48/48 tables" is difference-in-differences tracking, not rank reversals | Accepted (J_NP cosine `:` L40: 90/183 partner comparisons actually reverse) | Wording fixed in report 002, STATUS and the page |
+| Colour mass is first-token mass; the counts are edit records | Yes | Provenance fixed; a full-sequence colour distribution is still to do |
+| Stale STATUS sections | Yes | Updated |
+| A W ≈ 0 reading is premature | Accepted | Withdrawn (§7) |
+
+**What remains supported:** descriptive reader differences (002), and small, mostly positive local effects along a
+reader-free z direction at `:` L40–44 (003). **A stable content-specific causal reference does not yet exist.**

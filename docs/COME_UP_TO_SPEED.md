@@ -69,18 +69,23 @@ live state in `STATUS.md`, and the item-by-item spec status in `docs/context/SPE
   agrees with blind author codes at κ 0.67 / 0.81.
 - **The verbalizers rarely claim z in its role:** NLA 5–15% vs mention 42–60%; Oracle 0–3%, with 85% of Oracle L40
   samples self-contradictory. Role-based tracking under the start swap is weak (≤ 0.14).
-- **The token lenses carry z specifically:** within the candidate set the z-vs-z′ ranking flips with the start swap
-  in 47–48 of 48 tables at L40–44, and the start does not. This is invisible in top-10 lists.
+- **The token lenses carry activation-sensitive z information:** positive start-swap tracking (a
+  difference-in-differences of scores) in 47–48 of 48 tables at L40–44, and none for the start. Rank reversals occur in
+  about half of the comparisons. This is invisible in top-10 lists.
 - Prompt-only (stock model) gets z right in 100% of renders: z is fully inferable from the prompt.
 - Next (PI): the label experiment 003, asking whether z at `:` L40–44 is causally used. See report 002 §12.
 
 ## 4c. What 003 found (reader-free labels; dev; descriptive because G4 failed)
 
 - Decorrelated content directions: held-out AUC 1.00; fidelity perfect; 82 pairs, 37k edits.
-- At `:` and the assistant newline, L40–44, **z has a small, consistent influence**: median S 0.03–0.05, above null,
-  above the start and answer directions, necessary by clamping. It is "used" in only 10–18% of pairs (a few tables,
-  e.g. 0383 at 0.36). 0.21–0.42 of the gap lies outside any single content direction.
-- At the `</think>` newline z is **decodable but not needed**. At `:` L60 the answer direction carries the cell.
+- At `:` and the assistant newline, L40–44, **z has a small, mostly positive effect**: median S 0.03–0.05, positive
+  in 85–90% of pairs, above the start and answer directions. It is "used" (≥ 0.10) in only 10–18% of pairs (a few
+  tables, e.g. 0383 at 0.36). No single tested direction reproduces the whole-cell effect.
+  - Clamping z beats random clamps, but those were not size-matched, so this is not specificity.
+- At the `</think>` newline: family-level readable, little net patch leverage (not an item label). At `:` L60 the
+  answer direction carries the cell.
+- An external audit of 001–003 corrected several claims (report 003 §9). A stable content-specific causal reference
+  does not yet exist.
 - **Label reliability fails** (κ 0.37), so the labels are not used to score readers. Report 003 §7 lists the next
   options.
 

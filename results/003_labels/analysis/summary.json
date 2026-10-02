@@ -127,6 +127,8 @@
    "frac_used": 0.0,
    "frac_used_necessary": null,
    "frac_not_needed": 0.0,
+   "frac_necessity_above_null": null,
+   "frac_S_positive": 0.5975609756097561,
    "frac_unresolved": 1.0,
    "frac_damage": 0.0,
    "frac_one_d_gt_full": 0.0,
@@ -147,6 +149,8 @@
    "frac_used": 0.0975609756097561,
    "frac_used_necessary": 0.0975609756097561,
    "frac_not_needed": 0.012195121951219513,
+   "frac_necessity_above_null": 0.8658536585365854,
+   "frac_S_positive": 0.8658536585365854,
    "frac_unresolved": 0.8902439024390244,
    "frac_damage": 0.10975609756097561,
    "frac_one_d_gt_full": 0.012195121951219513,
@@ -167,6 +171,8 @@
    "frac_used": 0.012195121951219513,
    "frac_used_necessary": null,
    "frac_not_needed": 0.0,
+   "frac_necessity_above_null": null,
+   "frac_S_positive": 0.6951219512195121,
    "frac_unresolved": 0.9878048780487805,
    "frac_damage": 0.012195121951219513,
    "frac_one_d_gt_full": 0.0,
@@ -187,6 +193,8 @@
    "frac_used": 0.024390243902439025,
    "frac_used_necessary": null,
    "frac_not_needed": 0.0,
+   "frac_necessity_above_null": null,
+   "frac_S_positive": 0.6707317073170732,
    "frac_unresolved": 0.975609756097561,
    "frac_damage": 0.0,
    "frac_one_d_gt_full": 0.0,
@@ -207,6 +215,8 @@
    "frac_used": 0.08536585365853659,
    "frac_used_necessary": 0.08536585365853659,
    "frac_not_needed": 0.0,
+   "frac_necessity_above_null": 0.8536585365853658,
+   "frac_S_positive": 0.8536585365853658,
    "frac_unresolved": 0.9146341463414634,
    "frac_damage": 0.10975609756097561,
    "frac_one_d_gt_full": 0.0,
@@ -227,6 +237,8 @@
    "frac_used": 0.024390243902439025,
    "frac_used_necessary": null,
    "frac_not_needed": 0.0,
+   "frac_necessity_above_null": null,
+   "frac_S_positive": 0.6951219512195121,
    "frac_unresolved": 0.975609756097561,
    "frac_damage": 0.012195121951219513,
    "frac_one_d_gt_full": 0.0,
@@ -247,6 +259,8 @@
    "frac_used": 0.036585365853658534,
    "frac_used_necessary": null,
    "frac_not_needed": 0.0,
+   "frac_necessity_above_null": null,
+   "frac_S_positive": 0.6585365853658537,
    "frac_unresolved": 0.9634146341463414,
    "frac_damage": 0.012195121951219513,
    "frac_one_d_gt_full": 0.0,
@@ -267,6 +281,8 @@
    "frac_used": 0.17073170731707318,
    "frac_used_necessary": 0.17073170731707318,
    "frac_not_needed": 0.0,
+   "frac_necessity_above_null": 0.8780487804878049,
+   "frac_S_positive": 0.8658536585365854,
    "frac_unresolved": 0.8292682926829268,
    "frac_damage": 0.07317073170731707,
    "frac_one_d_gt_full": 0.012195121951219513,
@@ -287,6 +303,8 @@
    "frac_used": 0.024390243902439025,
    "frac_used_necessary": null,
    "frac_not_needed": 0.0,
+   "frac_necessity_above_null": null,
+   "frac_S_positive": 0.8048780487804879,
    "frac_unresolved": 0.975609756097561,
    "frac_damage": 0.0,
    "frac_one_d_gt_full": 0.0,
@@ -307,6 +325,8 @@
    "frac_used": 0.0,
    "frac_used_necessary": null,
    "frac_not_needed": 0.0,
+   "frac_necessity_above_null": null,
+   "frac_S_positive": 0.6341463414634146,
    "frac_unresolved": 1.0,
    "frac_damage": 0.0,
    "frac_one_d_gt_full": 0.0,
@@ -327,6 +347,8 @@
    "frac_used": 0.0,
    "frac_used_necessary": 0.0,
    "frac_not_needed": 1.0,
+   "frac_necessity_above_null": 0.2073170731707317,
+   "frac_S_positive": 0.2804878048780488,
    "frac_unresolved": 0.0,
    "frac_damage": 0.0,
    "frac_one_d_gt_full": 0.0,
@@ -347,6 +369,8 @@
    "frac_used": 0.0,
    "frac_used_necessary": null,
    "frac_not_needed": 0.0,
+   "frac_necessity_above_null": null,
+   "frac_S_positive": 0.45121951219512196,
    "frac_unresolved": 1.0,
    "frac_damage": 0.0,
    "frac_one_d_gt_full": 0.0,
@@ -367,6 +391,8 @@
    "frac_used": 0.0,
    "frac_used_necessary": null,
    "frac_not_needed": 0.0,
+   "frac_necessity_above_null": null,
+   "frac_S_positive": 0.7073170731707317,
    "frac_unresolved": 1.0,
    "frac_damage": 0.0,
    "frac_one_d_gt_full": 0.0,
@@ -387,6 +413,8 @@
    "frac_used": 0.0,
    "frac_used_necessary": 0.0,
    "frac_not_needed": 0.8658536585365854,
+   "frac_necessity_above_null": 0.2804878048780488,
+   "frac_S_positive": 0.4024390243902439,
    "frac_unresolved": 0.13414634146341464,
    "frac_damage": 0.0,
    "frac_one_d_gt_full": 0.0,
@@ -407,6 +435,8 @@
    "frac_used": 0.0,
    "frac_used_necessary": null,
    "frac_not_needed": 0.0,
+   "frac_necessity_above_null": null,
+   "frac_S_positive": 0.4268292682926829,
    "frac_unresolved": 1.0,
    "frac_damage": 0.0,
    "frac_one_d_gt_full": 0.0,
@@ -427,6 +457,8 @@
    "frac_used": 0.0,
    "frac_used_necessary": null,
    "frac_not_needed": 0.0,
+   "frac_necessity_above_null": null,
+   "frac_S_positive": 0.6097560975609756,
    "frac_unresolved": 1.0,
    "frac_damage": 0.0,
    "frac_one_d_gt_full": 0.0,
@@ -447,6 +479,8 @@
    "frac_used": 0.0,
    "frac_used_necessary": 0.0,
    "frac_not_needed": 0.6951219512195121,
+   "frac_necessity_above_null": 0.3048780487804878,
+   "frac_S_positive": 0.4634146341463415,
    "frac_unresolved": 0.3048780487804878,
    "frac_damage": 0.0,
    "frac_one_d_gt_full": 0.0,
@@ -467,6 +501,8 @@
    "frac_used": 0.0,
    "frac_used_necessary": null,
    "frac_not_needed": 0.0,
+   "frac_necessity_above_null": null,
+   "frac_S_positive": 0.4146341463414634,
    "frac_unresolved": 1.0,
    "frac_damage": 0.0,
    "frac_one_d_gt_full": 0.0,
@@ -487,6 +523,8 @@
    "frac_used": 0.024390243902439025,
    "frac_used_necessary": null,
    "frac_not_needed": 0.0,
+   "frac_necessity_above_null": null,
+   "frac_S_positive": 0.7073170731707317,
    "frac_unresolved": 0.975609756097561,
    "frac_damage": 0.0,
    "frac_one_d_gt_full": 0.0,
@@ -507,6 +545,8 @@
    "frac_used": 0.10975609756097561,
    "frac_used_necessary": 0.10975609756097561,
    "frac_not_needed": 0.024390243902439025,
+   "frac_necessity_above_null": 0.8658536585365854,
+   "frac_S_positive": 0.8536585365853658,
    "frac_unresolved": 0.8658536585365854,
    "frac_damage": 0.0,
    "frac_one_d_gt_full": 0.0,
@@ -527,6 +567,8 @@
    "frac_used": 0.0,
    "frac_used_necessary": null,
    "frac_not_needed": 0.0,
+   "frac_necessity_above_null": null,
+   "frac_S_positive": 0.7195121951219512,
    "frac_unresolved": 1.0,
    "frac_damage": 0.0,
    "frac_one_d_gt_full": 0.0,
@@ -547,6 +589,8 @@
    "frac_used": 0.04878048780487805,
    "frac_used_necessary": null,
    "frac_not_needed": 0.0,
+   "frac_necessity_above_null": null,
+   "frac_S_positive": 0.7073170731707317,
    "frac_unresolved": 0.9512195121951219,
    "frac_damage": 0.0,
    "frac_one_d_gt_full": 0.0,
@@ -567,6 +611,8 @@
    "frac_used": 0.14634146341463414,
    "frac_used_necessary": 0.14634146341463414,
    "frac_not_needed": 0.0,
+   "frac_necessity_above_null": 0.8780487804878049,
+   "frac_S_positive": 0.8414634146341463,
    "frac_unresolved": 0.8536585365853658,
    "frac_damage": 0.0,
    "frac_one_d_gt_full": 0.0,
@@ -587,6 +633,8 @@
    "frac_used": 0.0,
    "frac_used_necessary": null,
    "frac_not_needed": 0.0,
+   "frac_necessity_above_null": null,
+   "frac_S_positive": 0.7439024390243902,
    "frac_unresolved": 1.0,
    "frac_damage": 0.0,
    "frac_one_d_gt_full": 0.0,
@@ -607,6 +655,8 @@
    "frac_used": 0.07317073170731707,
    "frac_used_necessary": null,
    "frac_not_needed": 0.0,
+   "frac_necessity_above_null": null,
+   "frac_S_positive": 0.6829268292682927,
    "frac_unresolved": 0.926829268292683,
    "frac_damage": 0.0,
    "frac_one_d_gt_full": 0.0,
@@ -627,6 +677,8 @@
    "frac_used": 0.18292682926829268,
    "frac_used_necessary": 0.18292682926829268,
    "frac_not_needed": 0.0,
+   "frac_necessity_above_null": 0.926829268292683,
+   "frac_S_positive": 0.9024390243902439,
    "frac_unresolved": 0.8170731707317073,
    "frac_damage": 0.0,
    "frac_one_d_gt_full": 0.0,
@@ -647,6 +699,8 @@
    "frac_used": 0.012195121951219513,
    "frac_used_necessary": null,
    "frac_not_needed": 0.0,
+   "frac_necessity_above_null": null,
+   "frac_S_positive": 0.6707317073170732,
    "frac_unresolved": 0.9878048780487805,
    "frac_damage": 0.0,
    "frac_one_d_gt_full": 0.0,
@@ -667,6 +721,8 @@
    "frac_used": 0.06097560975609756,
    "frac_used_necessary": null,
    "frac_not_needed": 0.0,
+   "frac_necessity_above_null": null,
+   "frac_S_positive": 0.6829268292682927,
    "frac_unresolved": 0.9390243902439024,
    "frac_damage": 0.0,
    "frac_one_d_gt_full": 0.0,
@@ -687,6 +743,8 @@
    "frac_used": 0.04878048780487805,
    "frac_used_necessary": null,
    "frac_not_needed": 0.0,
+   "frac_necessity_above_null": null,
+   "frac_S_positive": 0.5487804878048781,
    "frac_unresolved": 0.9512195121951219,
    "frac_damage": 0.0,
    "frac_one_d_gt_full": 0.0,
@@ -707,6 +765,8 @@
    "frac_used": 0.43902439024390244,
    "frac_used_necessary": null,
    "frac_not_needed": 0.0,
+   "frac_necessity_above_null": null,
+   "frac_S_positive": 1.0,
    "frac_unresolved": 0.5609756097560976,
    "frac_damage": 0.524390243902439,
    "frac_one_d_gt_full": 0.0,
@@ -727,6 +787,8 @@
    "frac_used": 0.2804878048780488,
    "frac_used_necessary": null,
    "frac_not_needed": 0.0,
+   "frac_necessity_above_null": null,
+   "frac_S_positive": 0.9146341463414634,
    "frac_unresolved": 0.7195121951219512,
    "frac_damage": 0.10975609756097561,
    "frac_one_d_gt_full": 0.0,
@@ -747,6 +809,8 @@
    "frac_used": 0.036585365853658534,
    "frac_used_necessary": null,
    "frac_not_needed": 0.0,
+   "frac_necessity_above_null": null,
+   "frac_S_positive": 0.7682926829268293,
    "frac_unresolved": 0.9634146341463414,
    "frac_damage": 0.0,
    "frac_one_d_gt_full": 0.0,
@@ -767,6 +831,8 @@
    "frac_used": 0.0,
    "frac_used_necessary": null,
    "frac_not_needed": 0.0,
+   "frac_necessity_above_null": null,
+   "frac_S_positive": 0.6829268292682927,
    "frac_unresolved": 1.0,
    "frac_damage": 0.012195121951219513,
    "frac_one_d_gt_full": 0.0,
@@ -841,7 +907,7 @@
     "start": 0.002011156459000307,
     "answer": 0.003936571462875373,
     "full": 0.2927341887650282,
-    "other": 0.20939455735679408
+    "full_minus_max_single": 0.20939455735679408
    },
    "largest_content_counts": {
     "start": 15,
@@ -861,7 +927,7 @@
     "start": 0.004043087579578893,
     "answer": 0.0033988539675170945,
     "full": 0.2931860783790805,
-    "other": 0.22726304409818565
+    "full_minus_max_single": 0.22726304409818565
    },
    "largest_content_counts": {
     "start": 21,
@@ -881,7 +947,7 @@
     "start": 0.007753735878493758,
     "answer": 0.009536877523622131,
     "full": 0.3157087846340066,
-    "other": 0.24974444133039503
+    "full_minus_max_single": 0.24974444133039503
    },
    "largest_content_counts": {
     "start": 15,
@@ -901,7 +967,7 @@
     "start": 0.0007288337688083184,
     "answer": -0.00017846349125240932,
     "full": -0.0003942361848984693,
-    "other": -0.0016765627195632637
+    "full_minus_max_single": -0.0016765627195632637
    },
    "largest_content_counts": {
     "start": 46,
@@ -921,7 +987,7 @@
     "start": 0.0019827976047395667,
     "answer": -0.00014280142149245258,
     "full": 0.01451431380076219,
-    "other": 0.009560139283906876
+    "full_minus_max_single": 0.009560139283906876
    },
    "largest_content_counts": {
     "start": 48,
@@ -941,7 +1007,7 @@
     "start": 0.0014192103099682006,
     "answer": -0.00041252325347336397,
     "full": 0.025998989105410153,
-    "other": 0.017097129877696494
+    "full_minus_max_single": 0.017097129877696494
    },
    "largest_content_counts": {
     "start": 43,
@@ -961,7 +1027,7 @@
     "start": 0.008913068097317896,
     "answer": 0.0032725010436617636,
     "full": 0.3497831514277103,
-    "other": 0.28005602752988856
+    "full_minus_max_single": 0.28005602752988856
    },
    "largest_content_counts": {
     "start": 22,
@@ -981,7 +1047,7 @@
     "start": 0.012469330102321277,
     "answer": 0.003310343624937417,
     "full": 0.475924906174004,
-    "other": 0.3930912067335707
+    "full_minus_max_single": 0.3930912067335707
    },
    "largest_content_counts": {
     "start": 30,
@@ -1001,7 +1067,7 @@
     "start": 0.009543508972611326,
     "answer": 0.006279173273600147,
     "full": 0.503076099290714,
-    "other": 0.42497524345431714
+    "full_minus_max_single": 0.42497524345431714
    },
    "largest_content_counts": {
     "start": 23,
@@ -1021,7 +1087,7 @@
     "start": 0.005549455956003274,
     "answer": 0.6226996325218959,
     "full": 0.744890509205054,
-    "other": 0.12342827761859182
+    "full_minus_max_single": 0.12342827761859182
    },
    "largest_content_counts": {
     "start": 0,
@@ -1041,7 +1107,7 @@
     "start": 0.07602757883504016,
     "answer": 0.0013486443483380344,
     "full": 0.23298682357213726,
-    "other": 0.1318575353058624
+    "full_minus_max_single": 0.1318575353058624
    },
    "largest_content_counts": {
     "start": 66,
@@ -1086,9 +1152,9 @@
    ]
   ],
   "L4 z necessity at ':' L40-44 above null q95 in >= 30%": [
-   0.10975609756097561,
-   0.14634146341463414,
-   0.18292682926829268
+   0.8658536585365854,
+   0.8780487804878049,
+   0.926829268292683
   ],
   "L5 G4 kappa >= 0.7 for z at ':' L42-44": 0.3709589041095893,
   "L6 start swap at the start token L40 used in >= 70%": 0.2804878048780488,

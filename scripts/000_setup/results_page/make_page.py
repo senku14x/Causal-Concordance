@@ -142,7 +142,8 @@ def exp001(tok):
          + ("No lens lists a palette colour at L20–48. " if lens_any == 0 else f"Lenses list a palette colour at L20–48 in at most {f2(lens_any)} of readouts. ") +
          "Exploratory, 10 tables, word matching. Experiment 002 (role-aware scoring, below) sharpens this: the verbalizers rarely "
          "claim z in its role (NLA 5–15%, Oracle 0–3%), while the token lenses, read inside the candidate set, track z under the "
-         "start swap in 47–48 of 48 tables at L40–44."),
+         "start swap in 47–48 of 48 tables at L40–44 (positive difference-in-differences of scores; actual rank reversals in "
+         "about half of the comparisons)."),
         ("Do readers name content that is not needed?",
          f"Off-path candidates are mentioned about as often with a shuffled activation as with the real one (Oracle "
          f"{f2(orc_off[0])} vs {f2(orc_off[1])}), and no substitution tracking was detected. Both are exploratory nulls at n = 10."),
@@ -568,7 +569,7 @@ def exp002():
   <h3>Token lenses: closed-set hit rate on z and on the answer (all 48 dev tables, “:” cell)</h3>
   <div class="cols2"><div class="chart" id="ex2-lens-z"></div><div class="chart" id="ex2-lens-a"></div></div>
   <p class="small muted">Hit = the colour ranks first among the render's 5 candidates (start, z, answer, 2 off-path) <b>and</b> scores above the lens's output on the dev-mean activation (A01 rule). Prompt-only <b>task baseline</b> (stock model given the full prompt and asked; prompt solvability, not a ceiling on readers): z {f2(po["intermediate"]["top1_of_12"])} on all 48 tables ({f2(po["intermediate"]["snapshot_tables_top1_of_12"])} on the 10 snapshot tables), answer {f2(po["answer"]["top1_of_12"])}, start {f2(po["start"]["top1_of_12"])}.</p>
-  <h3>Token lenses inside the candidate set: they track z, not the start (48 tables; post hoc)</h3>
+  <h3>Token lenses inside the candidate set: activation-sensitive z information, none for the start (48 tables; post hoc)</h3>
   <p class="small muted">Added after the hit rates above were seen; exploratory. “Tracks” = within the same table, the lens's score for the member's colour minus the partner's colour is higher on the member render than on the partner render (start-swap contrast; per table, averaged over partners; counts over 48 tables). Shuffled = the same lens output scored against another table's candidates.</p>
   <div class="scroll"><table class="tbl">{lt}</table></div>
   <h3>Do readers overlap? (exploratory; 10 tables; member activation)</h3>

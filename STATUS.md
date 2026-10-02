@@ -3,11 +3,12 @@
 **003, reader-free causal labels: complete** (`docs/reports/003_labels.md`).
 - Gates G1–G3 pass. **G4 (label reliability) fails** (κ 0.37, r(S) 0.41 between disjoint fits), so the labels are
   **descriptive only** and are not used to score readers.
-- At `:` and the assistant newline, L40–44, the decorrelated z direction carries a small, consistent influence: median
-  S 0.03–0.05, above null, above the start and answer directions, necessary by clamping. It is "used" in only 10–18%
-  of pairs and concentrated in a few tables. 0.21–0.42 of the gap lies outside the start, z and answer directions.
-- At the `</think>` newline, z is **decodable but not needed** (70–100% of pairs). At `:` L60 the answer direction
-  carries the cell.
+- At `:` and the assistant newline, L40–44, the decorrelated z direction has a small, mostly positive effect: median
+  S 0.03–0.05, positive in 85–90% of pairs, above the start and answer directions. Clamping it beats random clamps,
+  but those clamps were not size-matched. It is "used" (≥ 0.10) in only 10–18% of pairs. No single tested direction
+  reproduces the whole-cell effect.
+- At the `</think>` newline, z is readable at the family level and the whole-cell patch has little net leverage (not an
+  item-level label). At `:` L60 the answer direction carries the cell. (Corrected after the audit of 001–003.)
 - Next options in report 003 §7: subspace labels, DAS, more fitting data for reliability, or a descriptive 004.
 
 **Latest (2026-10-02, while the PI slept):**
@@ -16,8 +17,9 @@
     blind author codes).
   - **The verbalizers rarely claim z in its role:** NLA 5–15%, Oracle 0–3%. 85% of Oracle L40 samples contradict
     themselves. Role-based tracking is weak.
-  - **The token lenses carry z inside the candidate set at L40–44:** the z-vs-z′ ranking flips with the start swap in
-    47–48 of 48 tables. They do not carry the start.
+  - **The token lenses carry activation-sensitive z information inside the candidate set at L40–44:** positive
+    start-swap tracking (a difference-in-differences of scores) in 47–48 of 48 tables, though actual rank reversals
+    occur in about half of the partner comparisons (90/183 for J_NP cosine at `:` L40). No tracking of the start.
   - Descriptive; no causal label.
 - **001 probe repair (amendment A2): done.** 41k fits, 2 h CPU.
   - Membership controls now average 0.48–0.52 (they were 0.58, up to 0.84).
@@ -90,20 +92,21 @@ https://claude.ai/artifact/RMRX8R4iFnysbnHaNWTBeC
   `camilablank/workspace-lenses` @ d740106d (`qwen3.6-27b/template-lens/templates.safetensors`, 8.6 GB, 13,174 words,
   cosine-scored). Its vocabulary has 11 of the 12 brew colours (no teal).
 
-**Not built yet:**
-- Label construction (directions, 1-D swaps, necessity, random-direction nulls), reader scoring (closed-set + judge),
-  reader baselines at scale, relational gating — all after 001 and AMENDMENT_02 (design 002).
+**Built and run since (see the top of this file and the reports):** label construction (003: directions, 1-D swaps,
+necessity, random nulls), role-aware reader scoring (002: judge + closed set), prompt-only baseline (002), probe repair
+(001 A2). **Not built yet:** content-span and complement patches, norm-matched ablation controls, per-item null
+calibration, DAS, relational gating, any test-split measurement.
 
-**Next:**
-0. Decide what to do next with the PI (report 001 §13 lists the AMENDMENT_02 proposals; the audit recommends
-   role-aware re-scoring of the saved reader outputs and a probe repair first).
-1. PI review of report 001. Rebuilding the page from JSON turned up rounding slips in the report (`:` L60 is 0.74, not
-   0.75; three more, plus one lens readout at L36). They are corrected and listed in its §14; no conclusion changes.
-2. The PI's decision on report §13 (not-needed reader scoring at L60 only, or also L40–44 via the directional test).
-3. AMENDMENT_02 freezes τ, ε′ and the substitution bound (one dev-only revision allowed), records the 002 critiques
-   (briefing §8: used/not-needed exclusivity, permuted-label null, "used, non-1-D" bucket, shared null set, pooled
-   k-curve) and the PI decisions still pending (below).
-4. Design 002 (labels) → PI approval → run.
+**Next (2026-10-02, after the audit of 001–003, `docs/reviews/2026-10-02_codex_audit_001_003/`):**
+1. Done without the GPU: the audit's corrections (report 003 §9; the 002 tracking wording; this file).
+2. Proposed, awaiting the PI's go: a small, separately designed **L42 assay check**:
+   - 1-D z edit vs a z span vs the joint content span vs **their complements** vs the whole cell, with matched-rank
+     and matched-norm controls;
+   - two disjoint fits;
+   - norm-matched ablations with damage logged;
+   - the start-token positive control kept.
+3. Still pending from earlier: PI review of reports 001–003; AMENDMENT_02 (τ, ε′, substitution bound) before any
+   test-split label; the not-needed scoring-layer decision.
 
 ## 001 — gate and smoke (dev)
 
