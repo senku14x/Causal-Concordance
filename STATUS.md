@@ -11,6 +11,44 @@ review. No scientific run has been made, and none may start without the PI's go.
 | d. Shared code | done, 61/61 tests pass | list below |
 | e. Design 001 | draft v2, not run | `docs/design_specs/001_leverage_profile.md` (v1 → v2 changes at its bottom) |
 
+## At a glance (2026-10-02)
+
+**Works (tested):**
+- Pinned environment: the model loads, 29/29 hashes match, and the rebuild script recreates everything.
+- WorkspaceBench rendering, byte-identical to WSB's producer, with position checks on every item.
+- Partner builders (brew 361, chain 110, relational 50 candidates, all token-aligned) and the competence gate.
+- Margin scorer, patching engine (RHUT float32-residual regime), SEC true-fp32 replay, gates, stats, figures, and the
+  subject-model integrity guard: **61/61 tests**.
+- Readers on one smoke cell: logit lens, J_NP, J_CB, R_CB, Oracle Lens (L40), NLA AV + AR (L42). The NLA positive
+  controls pass.
+
+**Not working / blocked:**
+- **SAE:** blocked; its location and labels have not been provided.
+- **vLLM acceleration:** the engine fails to start on this GPU (sm_120 capability check inside FlashInfer). Parked by
+  the PI; the HF route is used.
+- **Skip-lens:** dropped by the PI (AMENDMENT_01 §4). The ~22 `ceselder/skip-lens-qwen36-27b-*` checkpoints are
+  trained and read at **layer 62**. The spec's "fed raw L42" would be off-distribution, and the spec names no variant
+  (reading report §4.5.3, §5.5). It can be reinstated on-contract at L62, or as a separate off-contract L42 arm, if
+  wanted.
+
+**Not built yet (needed for 001, after approval):**
+- the `scripts/001_leverage_profile/` pipeline (stages gate → smoke → run);
+- an embedding-level patch hook (the exact anchor) and writes inside SEC's bf16 lower stack (early-layer controls);
+- the colour-substitution edit builder (feasibility checked: 100/100 items);
+- the probe pipeline.
+
+Later: label construction (directions, 1-D swaps, necessity), reader scoring (closed-set + judge), reader baselines at
+scale, relational gating.
+
+**Next:**
+1. PI approves design 001 v2 (3 decisions in 001 §9).
+2. Build the 001 code and engine additions with tests.
+3. Run the `smoke` stage (engine checks on a few dev pairs).
+4. Full run.
+5. Report 001.
+6. AMENDMENT_02 freezes τ, ε′ and the off-trajectory bound.
+7. 002 labels.
+
 ## Environment
 
 Full details in `CLAUDE.md` § Environment. RTX PRO 6000 Blackwell (sm_120, 96 GB); torch 2.11.0+cu128, transformers
