@@ -1,15 +1,16 @@
-# STATUS — 2026-10-02
+# STATUS — 2026-10-02 (updated after `647dcb5`)
 
-**Block 000 (setup) is done. Design 001 is at draft v2 (revised after the external review of c13fd43) and awaits PI
-review. No scientific run has been made, and none may start without the PI's go.**
+**Block 000 (setup) is done. Design 001 v3 is approved ("proceed", 2026-10-02) and its `gate` and `smoke` stages have
+run on dev material; the `run` stage is in progress. No label, no reader score and no test-split measurement exists yet.
+Nothing starts without the PI's go.**
 
 | Block | State | Evidence |
 |---|---|---|
 | a. Repo | done | this file, `CLAUDE.md`, `README.md`, `docs/context/{SPEC,AMENDMENT_01,READING_LIST,reading_notes}.md`, `docs/reports/000_reading_report.md` |
 | b. Environment | done | model loads (16 s, 50.1 GB); one brew forward gives the gated answer; 29/29 hashes match; `scripts/000_setup/rebuild_env.sh` |
-| c. Reader smoke tests | done (5 work; SAE and the optional vLLM path blocked) | table below; `results/000_setup/analysis/reader_smoke.json` |
-| d. Shared code | done, 61/61 tests pass | list below |
-| e. Design 001 | draft v2, not run | `docs/design_specs/001_leverage_profile.md` (v1 → v2 changes at its bottom) |
+| c. Reader smoke tests | done (5 work; SAE deferred, vLLM path parked) | table below; `results/000_setup/analysis/reader_smoke.json` |
+| d. Shared code | done; **74/74 tests at `647dcb5`** (+4 added since, see Tests) | list below |
+| e. Design 001 | **v3 approved**; `gate` done, `smoke` passed, `run` in progress | `docs/design_specs/001_leverage_profile.md`; `results/001_leverage_profile/{manifest_gate,manifest_smoke}.json`, `analysis/{gate_summary,gate_pairs,smoke_checks}` |
 
 ## At a glance (2026-10-02)
 
@@ -19,38 +20,67 @@ https://claude.ai/artifact/RMRX8R4iFnysbnHaNWTBeC
 **Works (tested):**
 - Pinned environment: the model loads, 29/29 hashes match, and the rebuild script recreates everything.
 - WorkspaceBench rendering, byte-identical to WSB's producer, with position checks on every item.
-- Partner builders (brew 361, chain 110, relational 50 candidates, all token-aligned) and the competence gate.
-- Margin scorer, patching engine (RHUT float32-residual regime), SEC true-fp32 replay, gates, stats, figures, and the
-  subject-model integrity guard: **61/61 tests**.
+- Partner builders (brew 361, chain 110, relational 50 candidates, all token-aligned), the off-trajectory substitution
+  builder (100/100 items admit one; 1,138 valid (c, c′) choices), and the competence gate.
+- Margin scorer, patching engine (RHUT float32-residual regime, the cross-check), **SEC true-fp32 replay (the 001
+  label regime, L ≥ 40)**, gates, stats, figures, and the subject-model integrity guard.
 - Readers on one smoke cell: logit lens, J_NP, J_CB, R_CB, Oracle Lens (L40), NLA AV + AR (L42). The NLA positive
   controls pass.
+- The 001 pipeline `scripts/001_leverage_profile/leverage_profile.py` (stages gate → smoke → run → probes → snapshot →
+  analysis → figures); gate and smoke have run (below).
 
 **Not working / blocked:**
-- **SAE:** deferred by the PI (2026-10-02); no SAE arm until the PI decides what to do with it.
-- **vLLM acceleration:** the engine fails to start on this GPU (sm_120 capability check inside FlashInfer). Parked by
-  the PI; the HF route is used.
+- **SAE:** deferred by the PI (2026-10-02); no SAE arm until the PI decides what to do with it. Candidate located since:
+  `ceselder/qwen36-27b-bsf-l42-1b` (block-sparse subspace featurizer, 8-dim blocks, k = 32, EV 0.51, no feature labels).
+- **vLLM acceleration:** the engine fails to start on this GPU (sm_120 capability check inside FlashInfer; needs a
+  CUDA ≥ 12.9 component). Parked by the PI; the HF route is used (64 NLA explanations ≈ 107 s).
 - **Skip-lens:** dropped by the PI (AMENDMENT_01 §4). The ~22 `ceselder/skip-lens-qwen36-27b-*` checkpoints are
-  trained and read at **layer 62**. The spec's "fed raw L42" would be off-distribution, and the spec names no variant
-  (reading report §4.5.3, §5.5). It can be reinstated on-contract at L62, or as a separate off-contract L42 arm, if
-  wanted.
+  trained and read at **layer 62**; "fed raw L42" would be off-distribution. Reinstatable on-contract at L62, or as a
+  separate off-contract L42 arm, if wanted.
 
-**Not built yet (needed for 001, after approval):**
-- the `scripts/001_leverage_profile/` pipeline (stages gate → smoke → run);
-- an embedding-level patch hook (the exact anchor) and writes inside SEC's bf16 lower stack (early-layer controls);
-- the colour-substitution edit builder (feasibility checked: 100/100 items);
-- the probe pipeline.
-
-Later: label construction (directions, 1-D swaps, necessity), reader scoring (closed-set + judge), reader baselines at
-scale, relational gating.
+**Not built yet:**
+- Label construction (directions, 1-D swaps, necessity, random-direction nulls), reader scoring (closed-set + judge),
+  reader baselines at scale, relational gating — all after 001 and AMENDMENT_02 (design 002).
 
 **Next:**
-1. PI approves design 001 v2 (3 decisions in 001 §9).
-2. Build the 001 code and engine additions with tests.
-3. Run the `smoke` stage (engine checks on a few dev pairs).
-4. Full run.
-5. Report 001.
-6. AMENDMENT_02 freezes τ, ε′ and the off-trajectory bound.
-7. 002 labels.
+1. Finish the 001 `run` stage, then `probes`, `snapshot`, `analysis`, `figures`.
+2. Report 001 (`docs/reports/001_*.md`), with the qualitative section the design requires.
+3. AMENDMENT_02 freezes τ, ε′ and the substitution bound (one dev-only revision allowed), records the 002 critiques
+   (briefing §8: used/not-needed exclusivity, permuted-label null, "used, non-1-D" bucket, shared null set, pooled
+   k-curve) and the PI decisions still pending (below).
+4. Design 002 (labels) → PI approval → run.
+
+## 001 — gate and smoke (dev)
+
+Gate (`manifest_gate.json`, run 20261002T074329Z at `5d5d1a3`, **dirty tree**; 621 distinct prompts, 24 min):
+
+| Family | Split | Candidates | Passed | Items (groups) with a passing pair |
+|---|---|---|---|---|
+| brew start pairs | dev | 183 | **82** | 33 of 48 items |
+| brew start pairs | test | 178 | 77 | 35 of 49 items |
+| chain start pairs | dev | 53 | **48** | 12 of 13 items; **9 of 10 groups** |
+| chain start pairs | test | 46 | 37 | 8 of 11 items; 7 of 10 groups |
+| brew substitution | dev | 50 | **43** | 43 of 50 items |
+
+- Design rule 4 (≥ 20 brew, ≥ 15 chain dev pairs) is satisfied; chain support is still thin and is reported by group.
+- Pass rate differs by z (brew dev: green 4/24, gold 2/10 vs teal 12/19, gray 11/20): the gated set is not z-balanced,
+  so the difficulty distribution must be reported next to any pooled number (AMENDMENT_01 §1).
+- Chain dev passing pairs are dominated by two z classes ((5,) 22 and (9,) 12 of 48).
+- 3 brew items have no partner candidate at all (97 items carry candidates).
+
+Smoke (`manifest_smoke.json`, run 20261002T080920Z at `5d5d1a3`, dirty tree; 76 s): **all engine checks pass**
+(self-patch, embedding anchor, pre-difference prefix and stir no-op bitwise) on 3 brew pairs (all three partners of
+`brew-s2-r10d2-0009`), 1 chain pair and 2 substitution pairs. Observations, single pairs, not findings:
+- brew emit_colon whole-cell share rises with depth: 0.11–0.51 at L40–44, 0.62–0.69 at L56–60; the start-colour
+  token at L0–4 carries ≈ 1.00 (the anchor), the emission span 0.89–0.91, start + question + emission 1.00.
+- chain final cell: ≈ −0.03 at L40–44 (negligible), 0.72–0.74 at L56–60; the input digits span and the question span
+  each carry ≈ 1.00 jointly across L40–60.
+- substitutions `0000 gray→teal`, `0001 blue→gold`: behaviour |Δlog P(a)| 0.009–0.023, TV ≤ 0.012; transplants
+  ≤ 0.022; L0 key-token reference 0.002–0.064. All far inside the provisional bound (0.05 · median G ≈ 0.45).
+
+Provenance note: both manifests record `git.dirty = true` at `5d5d1a3`. The uncommitted diff (committed as `647dcb5`)
+touched only the `analysis` and `figures` stages and two CLAUDE.md log rows, not the gate or smoke code, so the code
+that ran is the committed code; the manifest alone cannot show that. Run stages from a clean tree from here on.
 
 ## Environment
 
@@ -76,36 +106,44 @@ Activations come from the stock bf16 forward (WSB convention). The verbalizers s
 | Reader | Status | Load + run | GPU peak | Raw output (abridged) | Names colours? |
 |---|---|---|---|---|---|
 | Logit lens (L40/42/44) | **works** | < 1 s | 50 GB (model) | L42: ' ', ' (', ' either', '...', '\n\n' | no at L40–44. Positive control: at L63 top-1 is ' black' (= model greedy); colours appear from L56 |
-| J_NP (standard + WSB cosine) | **works** | 16.9 s for all three J lenses (3 layers, sha-checked) | 56.4 GB | standard L42: '\n\n', '<\|im_end\|>', '<\|endoftext\|>'; cosine L42: ' END', ' FINAL', '입니다', '_final' | no at L40–44; at L56: ' black' top-1; at L60–62: black, green, brown |
+| J_NP (standard + WSB cosine) | **works** | 16.9 s for all three J lenses (3 layers, sha-checked) | 56.4 GB | standard L42: '\n\n', '<\|im_end\|>', '<\|endoftext\|>'; cosine L42: ' END', ' FINAL', '입니다', '_final' | no at L40–44 at emit_colon (the cosine readout names green at L36 emit_colon and L40 emit_think); at L56: ' black' top-1; at L60–62: black, green, brown |
 | J_CB (standard + cosine) | **works** | (above) | (above) | standard L42: '终点' (end point), '第二次' (2nd time), '不会再', '终结', ' downstream' | no at L40–44; yes from L56 |
 | R_CB (standard + cosine) | **works** | (above) | (above) | standard L42: ' ...', ' either', '第二次', ' intermediate', ' second' | no at L40–44; yes from L56 |
 | Oracle Lens, L40 (on-contract) | **works** | 32 s (adapter + 3 arms × 4 samples) | 51.3 GB | "- Green (Since after two steps from Blue, we reach Green, …)", "- blue (or green) …"; no activation: Korean company names (㈜ = the corporation sign); another cell (stir "You"): liquid-colour puzzle set-ups | **yes**: green, blue, red, purple, gray, black (start and z among them) |
 | NLA-L42 AV | **works** | 156 s (SFT merge + RL adapter; 3 arms × 4 + 8 reference rows) | 52.5 GB | "Table structure … two successive applications of a lookup table … (which is green/…)"; 4/4 parsed, 1 injection per generate; no activation: generic web text (car audio, patents); other cell: colour-rule puzzle set-up | **yes**: z (green) in 4/4 samples, one also pink/blue/red |
 | NLA-L42 AR | **works** | 23 s | 35.2 GB | FVE of the cell from its own explanations: **0.46, 0.55, 0.59, 0.50**. No-activation explanations: −0.15 to −0.48. Other-cell explanations vs this cell: −0.41 to −0.66 (vs their own cell: 0.56–0.65) | n/a |
 | NLA checks | **work** | — | — | Our L42 capture re-extracts the NLA's stored reference activations at cos ≥ 0.99984. AV → AR FVE on 8 reference rows: 0.75–0.86 (card: 74.5% held-out) | — |
-| SAE | **blocked** | — | — | location and labels not provided (PI) | — |
-| vLLM path (optional) | **blocked (not pursued)** | — | — | engine init fails on sm_120: `Failed to get device capability: SM 12.x requires CUDA >= 12.9` → `RuntimeError: FlashInfer requires GPUs with sm75 or higher`. Likely cause: a CUDA-12.8 component in vLLM 0.21's stack misreads this card (vllm-metamodels was tested on B200 / sm_100 only). Parked per the PI (HF first). HF reference timing for later: 64 NLA explanations in 107 s | — |
+| SAE | **deferred** | — | — | candidate located (`ceselder/qwen36-27b-bsf-l42-1b`, no labels); PI decision pending | — |
+| vLLM path (optional) | **parked** | — | — | engine init fails on sm_120: `Failed to get device capability: SM 12.x requires CUDA >= 12.9` → `RuntimeError: FlashInfer requires GPUs with sm75 or higher`. Likely cause: a CUDA-12.8 component in vLLM 0.21's stack misreads this card (vllm-metamodels was tested on B200 / sm_100 only). HF reference timing: 64 NLA explanations in 107 s | — |
 
 Notes (smoke observations on one cell, not findings):
-- No lens reads a colour at L40–44 here, though the verbalizers name z.
+- No lens reads a colour at emit_colon L40–44 here, though the verbalizers name z; J does name green at L36
+  (emit_colon) and L40 (emit_think), so the working hypothesis is "the methods surface the intermediate at different
+  cells", not "J is blind".
 - The FVE reference set is the NLA's own (FineWeb text), not this task's distribution.
 - The Oracle adapter is the public copy `olens_s3d_rl600`. That it equals WSB's private `s3d.ddp600.s0/iter_000600`
   is assumed from the names and cannot be verified.
 
-## Tests (block d) — 61 passed, 0 failed (`python -m pytest scripts/common/tests -v`, log `outputs/logs/pytest_full.log`)
+## Tests (block d)
 
-| Module | Tests | Result |
+`python -m pytest scripts/common/tests -v` (log `outputs/logs/pytest_full.log`): **74 passed, 0 failed at `647dcb5`**
+(47 CPU + 27 GPU). Added since (not yet run on the GPU box): 2 CPU tests for the resident guard (pass) and 1 GPU test
+for the SecReplay park/restore lifecycle; 1 CPU test for the T(a) substitution tag (pass). Collected total: 78.
+
+| Module | Tests | Result at 647dcb5 |
 |---|---|---|
 | cells | round-trip (json, jsonl); validation (layer, half, split, family, position, empty ids; 6 cases); unknown keys rejected | 8/8 |
 | wsb (rendering) | bank hashes and sizes; `brew-s2-r10d2-0000` regions (stir 131–136, start 138–143, question 145–153, emissions 158/162/164, " blue" at 142); all 100 brew items' 24 positions; chain " What" + final "\n\n" and relational "'s" on every item; byte-equality with WSB's own `_chat` renderer | 5/5 |
-| partners + gate | brew trajectories reproduce the bank; hand-checked brew partner (0000: pink valid, gray excluded by z = a′; 165 tokens, diff only at 142); constraints hold for all 361 candidates; chain step functions reproduce all 120 items; hand-checked chain partner (0408, start 19 → 14: z (9,4) → (7,3), one digit differs); 50 relational pairs aligned (2 diffs); answer parsing (8 cases) | 14/14 |
+| partners + gate | brew trajectories reproduce the bank; hand-checked brew partner (0000: pink valid, gray excluded by z = a′; 165 tokens, diff only at 142); constraints hold for all 361 candidates; chain step functions reproduce all 120 items; hand-checked chain partner (0408, start 19 → 14: z (9,4) → (7,3), one digit differs); 50 relational pairs aligned (2 diffs); answer parsing (8 cases); hand-checked substitution (0000 gray → teal); every item has a substitution, deterministic by seed; **T(a) tag never filters and leaves the 001 seeded draw unchanged (new)** | 16/16 (+1) |
 | margin | spelling tokenisation (" Teal" two tokens, "27" two digits); sign implied by greedy (brew and chain, member < 0 < partner); multi-token teacher forcing scores every token, with an off-by-one discriminator; shared first token ("21" vs "27") → margin from the second token; writes applied on every forward | 5/5 |
 | engine | self-patch bitwise (5 cells incl. L2, L63, multi-position); 1-D swap ρ = κ = 1 in float32 with read-back < 1e-4 and exactly one row changed; swap along unit(h_p − h_m) equals the full patch at the write (rel 2.7e-8); last-layer last-position replacement reproduces the partner's logits bitwise; earlier layers and positions untouched bitwise; the stock bf16 regime distorts a small write (ρ 1.04, κ 0.91) | 10/10 |
+| sec engine (SEC regime, hand-checked pair) | self-patch bitwise; stir cell patch bitwise no-op; prefix identical before the first difference; embedding anchor reproduces the partner; last-layer replacement reproduces partner logits; lower-stack write lands and moves the answer; SEC score matches stock sign and scores multi-token spellings; SEC noise floor < 1e-3 nats | 8/8 |
+| splits | brew 50/50 by table stratified by z with forced-dev items; chain groups intact across the split | 2/2 |
 | gates | fidelity thresholds; damage-gate logic; span gate on the hand-checked pairs; self-patch damage is exactly 0; sequence-length determinism reported (not bitwise, onset at block 3, no leak) | 5/5 |
 | stats | cluster-t vs scipy; BH-FDR vs statsmodels (exact); Holm vs statsmodels; cluster bootstrap covers and is wider than the naive interval; ratio of means; empirical p; equivalence | 6/6 |
 | figures | ICLR figure round-trip (pdf + png); distinct reader colours | 2/2 |
-| import boundary | no label module (registry, cells, wsb, partners, margin, engine, gates, stats, regime) reaches readers/jlens/peft/vllm, transitively and including imports inside functions; sanity: readers does reach jlens | 2/2 |
-| model integrity | Engine, SecReplay and capture_stock refuse a model a reader merged weights into (3 cases); Oracle attach → capture (adapter disabled) → unload leaves the subject's activations and logits bitwise unchanged | 4/4 |
+| import boundary | no label module (registry, cells, wsb, partners, margin, engine, gates, stats, regime, splits) reaches readers/jlens/peft/vllm, transitively and including imports inside functions; sanity: readers does reach jlens | 2/2 |
+| model integrity | Engine, SecReplay and capture_stock refuse a model a reader merged weights into (3 cases); Oracle attach → capture (adapter disabled) → unload leaves the subject's activations and logits bitwise unchanged; mutation after construction refused at use time; **resident guard: parked block refused, `blocks_upto` honoured (new, CPU); SecReplay-parked model refused by Engine / gate / capture and restored by the context manager, also on an exception (new, GPU, unrun)** | 5/5 (+3) |
 
 ## Regime check (`results/000_setup/analysis/regime_check.json`)
 
@@ -123,7 +161,9 @@ The hand-checked `0000__pink` failed the gate (partner 5/10) and `0001__black` f
 
 - G: RHUT-from-0 10.63, RHUT-from-35 10.52, stock bf16 10.31, SEC 10.48 nats.
 - Max |diff| / G against SEC: RHUT-from-0 **3.3%**, RHUT-from-35 2.3%, stock bf16 1.3%.
-- **Decision under the 5% rule: keep RHUT's float32-residual regime as the default** (`AMENDMENT_01` §7).
+- Under the 5% rule RHUT passed, and AMENDMENT_01 §3 kept it as the default; **errata E4 and design 001 §9.1 then
+  adopted SEC's true-fp32 replay for every label measurement at L ≥ 40**, because the RHUT absolute floor
+  (0.05–0.25 nats) is too coarse for ε′ = 5% decisions. The RHUT regime (`engine.Engine`) remains the cross-check.
 - RHUT writes are exact (ρ = κ = 1); stock-bf16 random-direction writes are not (ρ 1.04, κ 0.86).
 
 **Noise floor**: |Δm| under 8 perturbations of 1e-4 relative norm at emit_colon L42.
@@ -140,7 +180,6 @@ The hand-checked `0000__pink` failed the gate (partner 5/10) and `0001__black` f
 - So the RHUT floor is absolute, roughly 0.05–0.25 nats, and on pairs with G below about 7 nats a gap the size of the
   observed 3.3% would cross 5% of G.
 - SEC's own STATUS (L45–46) made the same observation independently: bf16-matmul finite differences give cos 0.80.
-- Open question 2 below.
 
 ## Other block-000 findings (engineering)
 
@@ -152,38 +191,45 @@ The hand-checked `0000__pink` failed the gate (partner 5/10) and `0001__black` f
   - Brew: 361 partner candidates, all token-aligned; per-item counts 0–8; 3 items have none.
   - Chain: digits are single tokens, so only 28/120 items have single-token intermediates. Of those, 25 have partners
     (110 candidates, all aligned). There are 15 cross-item prompt collisions (identical prompts from items sharing step
-    sequences), so chain must split by step sequence and de-duplicate pairs.
+    sequences), so chain splits by step sequence (20 groups, 10/10) and de-duplicates pairs.
   - Relational: 50/50 a/b pairs aligned (gating pending).
-- **Gate** (3 brew pairs tried so far): `0000__pink` fail (partner 5/10: wrong samples name the intermediate or another
-  colour), `0001__black` fail (partner 8/10), `0001__blue` pass (member 10/10, partner 9/10). One chain pair tried,
-  `chain-w2-d3p-0408__12`, passes.
 - **Timing** (`timing_smoke.json`), used for design 001's budget:
-  - forward ≈ 0.23 s whether T = 78 or 165;
-  - gate ≈ 5.4 s per brew pair, 4.4 s per chain pair;
+  - forward ≈ 0.23 s whether T = 78 or 165; SEC replay of blocks 40–63 ≈ 0.09 s; SEC build 8.5 s;
+  - gate ≈ 5.4 s per brew pair, 4.4 s per chain pair (measured: 621 prompts in 24 min);
   - HF NLA generation: 64 explanations of ≤ 256 tokens in 107 s.
+
+## Code guard added after `647dcb5` (this update)
+
+`SecReplay.build()` parks the bf16 upper blocks on the CPU until `restore()`. Every stock-forward entry point
+(`Engine.forward`, `partners.gate_member`, `readers.capture_stock`, the Oracle and NLA constructors) now calls
+`registry.assert_subject_model_resident`, and `SecReplay` / `SecEngine` are context managers that restore on exit,
+also on an exception. `SecReplay.capture` checks only blocks ≤ l0. The 001 pipeline already restores at the end of
+`smoke` and `run`, so no run was affected; the guard turns a silent misuse into an error.
 
 ## Open questions for the PI
 
-1. **Regime**: design 001 v2 uses SEC's true-fp32 replay for every L ≥ 40 (errata E4). Confirm (001 §9.1).
-2. **Reader snapshot**: include the optional descriptive reader stage in 001, or defer it to 002 (001 §3.7)?
-3. **Chain split**: 50/50 by step-sequence group (≈ 10 groups per side), or 70/30 (001 §9.3)?
-4. **HF dataset name** for the private `outputs/` mirror.
-5. **Paper PDFs** in this public repo: committed or local only? (Currently gitignored; `docs/papers/INDEX.md` lists them.)
-6. **P5 prior**: the dated update accepted in AMENDMENT_01 §5 needs your number.
-7. **Branch**: merge `setup/000-scaffold` to `main` on your say-so.
+Resolved in design 001 v3 §9: regime (SEC for L ≥ 40), reader snapshot (included, after hashing), chain split (50/50 by
+group), reader-input bridge (checked on the snapshot). Still open:
 
-## External review (2026-10-02)
+1. **HF dataset name** for the private `outputs/` mirror (`CLAUDE.md` conventions, `[name to be filled in by the PI]`).
+2. **Paper PDFs** in this public repo: stay local (currently gitignored; `docs/papers/INDEX.md` lists them)?
+3. **P5 prior**: the dated update accepted in AMENDMENT_01 §5 needs your number (suggested ≈ 35%, down from 55%, on the
+   NLA literature in the reading report §4.5.6).
+4. **SAE arm**: use `ceselder/qwen36-27b-bsf-l42-1b` (no labels: LLM-label ~2,000 features, or score decoders by
+   non-J means) or keep the SAE deferred?
+5. **Branch**: merge `setup/000-scaffold` to `main` on your say-so.
 
-Every concrete claim was checked against the repo, and all hold. Accepted changes:
-- design 001 v2 (its change list);
-- AMENDMENT_01 errata E1–E4;
-- the model-integrity guard and its tests.
+## External reviews (2026-10-02)
 
-Two corrections to the review discussion:
-- J does name green at L36 (emit_colon) and L40 (emit_think) on the smoke item. "No colours at L40–44" held only for
-  the emit_colon cell.
-- SEC removes the reader-input bridge only for layers ≤ 39 (001 §9.4).
+Review 1 (of `c13fd43`): every concrete claim was checked against the repo, and all hold. Accepted: design 001 v2 (its
+change list), AMENDMENT_01 errata E1–E4, the model-integrity guard and its tests. Two corrections to the review
+discussion: J does name green at L36 (emit_colon) and L40 (emit_think) on the smoke item, so "no colours at L40–44"
+held only for the emit_colon cell; SEC removes the reader-input bridge only for layers ≤ 39 (001 §9.4).
+
+Review 2 (of `56cb7ab`): integrity check at use time; cross-fitted substitution scoring; stir no-op scoped to start
+pairs plus a pre-difference-prefix identity check; snapshot on 10 distinct tables. Accepted → design 001 v3, approved.
 
 ## Next
 
-PI review of design 001 → amendments → on your go, `scripts/001_leverage_profile/` (stages smoke → run) → report 001.
+001 `run` → `probes` → `snapshot` → `analysis` → `figures` → report 001 → AMENDMENT_02 (thresholds frozen, 002
+critiques recorded) → design 002 (labels) → PI approval.

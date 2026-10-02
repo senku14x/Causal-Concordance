@@ -1,5 +1,6 @@
-"""SEC's true-float32 replay (port of jacobian-lens research_secant/scripts/lib/engine.py), the cross-check for the
-default RHUT float32-residual regime (AMENDMENT_01 §3, precision).
+"""SEC's true-float32 replay (port of jacobian-lens research_secant/scripts/lib/engine.py): the label regime of
+design 001 v3 (§2, §9.1) for every layer >= 40; RHUT's float32-residual regime (`engine.Engine`) remains the
+cross-check (AMENDMENT_01 §3 precision, errata E4).
 
 Stock bf16 forward through block l0 (early exit: blocks above l0 never run in bf16), then float32 deep copies of
 blocks l0+1..63, the final norm and W_U with TF32 off. Edits at layers >= l0 act on the float32 stream between blocks.
@@ -28,9 +29,13 @@ class _Stop(Exception):
 
 
 class SecReplay:
+    """Use as a context manager (`with SecReplay(model, 39) as sec:`) so the stock model is restored on exit, including
+    on an exception; `parked` says whether the bf16 upper blocks are currently on the CPU."""
+
     def __init__(self, model, l0, device="cuda"):
         import registry
         registry.assert_subject_model_intact(model)
+        registry.assert_subject_model_resident(model)
         self.model, self.l0, self.device = model, int(l0), device
         self.blocks = registry.blocks(model)
         self.text = model.model
@@ -38,11 +43,27 @@ class SecReplay:
         self.n = len(self.blocks)
         self.up, self.norm32, self.rot32, self.W_U, self.built = {}, None, None, None, False
 
+    @property
+    def parked(self):
+        """True while the bf16 upper blocks (l0+1..63) are parked on the CPU, i.e. between build() and restore()."""
+        return any(p.device.type == "cpu" for i in range(self.l0 + 1, self.n) for p in self.blocks[i].parameters())
+
+    def __enter__(self):
+        if not self.built:
+            self.build()
+        return self
+
+    def __exit__(self, *a):
+        self.restore()
+
     # ------------------------------------------------------------------------------------------- resident stack
     def build(self):
         """float32 copies of blocks l0+1..63 on the GPU; their bf16 originals parked on the CPU."""
         import registry
         registry.assert_subject_model_intact(self.model)
+        if self.built:
+            return
+        registry.assert_subject_model_resident(self.model)     # build twice without restore would park a parked model
         for i in range(self.l0 + 1, self.n):
             self.up[i] = copy.deepcopy(self.blocks[i]).float().to(self.device).eval()
             self.blocks[i].to("cpu")
@@ -53,7 +74,7 @@ class SecReplay:
         self.built = True
 
     def restore(self):
-        """Free the float32 stack and move the bf16 upper blocks back to the GPU (stock model again)."""
+        """Free the float32 stack and move the bf16 upper blocks back to the GPU (stock model again). Idempotent."""
         self.up, self.norm32, self.rot32, self.W_U, self.built = {}, None, None, None, False
         torch.cuda.empty_cache()
         for i in range(self.l0 + 1, self.n):
@@ -67,6 +88,7 @@ class SecReplay:
         (engine.CellPatch on lower blocks, engine.EmbedPatch) entered for this capture only, before the recorders."""
         import registry
         registry.assert_subject_model_intact(self.model)       # at use time, not only at construction
+        registry.assert_subject_model_resident(self.model, blocks_upto=self.l0)   # the lower stack must be on the GPU
         want = sorted(set(int(l) for l in layers) | {self.l0})
         assert max(want) <= self.l0
         store, kw, hs = {}, {}, []
@@ -181,6 +203,17 @@ class SecEngine:
         self._cache = {}
         if build:
             self.sec.build()
+
+    def __enter__(self):
+        self.sec.__enter__()
+        return self
+
+    def __exit__(self, *a):
+        self.restore()
+
+    @property
+    def parked(self):
+        return self.sec.parked
 
     def clear(self):
         self._cache = {}

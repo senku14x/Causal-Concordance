@@ -233,6 +233,7 @@ class Engine:
         ...) entered after the regime hook and before the recorder."""
         import registry
         registry.assert_subject_model_intact(self.model)       # at use time, not only at construction
+        registry.assert_subject_model_resident(self.model)     # not parked by an unrestored SecReplay
         x = torch.tensor([list(ids)], device=self.device)
         rec = Recorder(self.blocks, record) if record else None
         regime = Fp32Residual(self.blocks, self.fp32_from) if self.fp32_from is not None else None

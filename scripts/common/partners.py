@@ -90,6 +90,7 @@ def brew_substitutions(tok, it):
     s, z, a = it["start"], it["intermediates"][0], it["answer"]
     depth = it.get("depth", 2)
     table = it["table"]
+    succ_a = table.get(a, {}).get("stir")        # T(a): the answer's own successor (look-ahead content; design 001 §3.4)
     present = set(table) | {v["stir"] for v in table.values()}
     absent = [c for c in BREW_COLOURS if c not in present and c not in SUB_EXCLUDE]
     cands = [c for c in sorted(present) if c not in (s, z, a) and c not in SUB_EXCLUDE]
@@ -110,9 +111,12 @@ def brew_substitutions(tok, it):
                 continue
             if not all(r0.decoded[i].strip() == c and r1.decoded[i].strip() == c2 for i in diff):
                 continue
+            # Tag, never filter: an edit whose removed colour is T(a) swaps look-ahead content (the colour the lenses
+            # surface after the answer at L60-62) and is reported separately from truly unrelated off-path colours.
             out.append(Pair(pair_id=f"{it['name']}__sub_{c}_{c2}", family="brew", item=it["name"],
                             m=Member(it["name"], it["prompt"], s, z, a), p=Member(it["name"], text, s, z, a),
-                            meta={"kind": "substitution", "c": c, "c2": c2, "diff": diff}))
+                            meta={"kind": "substitution", "c": c, "c2": c2, "diff": diff,
+                                  "succ_answer": succ_a, "c_is_succ_answer": bool(succ_a is not None and c == succ_a)}))
     return out
 
 
@@ -273,6 +277,9 @@ def is_correct(family, text, answer):
 def gate_member(model, tok, ids, family, answer, seed, gate=GATE):
     """Greedy + k samples on one rendered prompt. Returns a dict with the decodes and the pass flag."""
     import torch
+    import registry
+    registry.assert_subject_model_intact(model)
+    registry.assert_subject_model_resident(model)      # the gate is a stock forward: refuse a SecReplay-parked model
     sup = [tok.convert_tokens_to_ids(t) for t in gate["suppress"]]
     sup = [i for i in sup if isinstance(i, int) and i >= 0]
     x = torch.tensor([ids], device=model.device)

@@ -77,6 +77,7 @@ def capture_stock(model, ids, layers, positions):
     weights a reader merged in place (disabling an adapter cannot undo a merge)."""
     import engine as E
     R.assert_subject_model_intact(model)
+    R.assert_subject_model_resident(model)
     blocks = R.blocks(model)
     rec = E.Recorder(blocks, layers)
     off = model.disable_adapter() if hasattr(model, "disable_adapter") else contextlib.nullcontext()
@@ -129,6 +130,7 @@ class OracleLens:
 
     def __init__(self, model, tok):
         from peft import PeftModel
+        R.assert_subject_model_resident(model)           # a parked (SecReplay-built) model cannot generate
         c = R.REGISTRY["readers"]["oracle_lens"]
         self.c = c["contract"]
         self.dir = os.path.join(snapshot(c["hf_repo"], c["hf_revision"]), c["subfolder"])
@@ -220,6 +222,7 @@ class NLAVerbalizer:
 
     def __init__(self, model, tok_av):
         from peft import PeftModel
+        R.assert_subject_model_resident(model)           # a parked (SecReplay-built) model cannot be merged into
         _, p, _ = nla_paths()
         meta = nla_meta()
         self.tok = tok_av

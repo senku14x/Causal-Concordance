@@ -49,6 +49,21 @@ def assert_subject_model_intact(model):
                                f"capturing or labelling")
 
 
+def assert_subject_model_resident(model, blocks_upto=None):
+    """Refuse a subject model whose decoder blocks are not all on the compute device: `regime.SecReplay.build()` parks
+    the bf16 copies of blocks l0+1..63 on the CPU until `restore()`, and a stock forward (generate, Engine, reader
+    capture) in between would fail or run on the wrong device. Every stock-forward entry point calls this. With
+    `blocks_upto=l0` only blocks 0..l0 are checked (the SEC lower-stack capture legitimately runs with the rest parked)."""
+    bl = blocks(model)
+    dev = next(model.get_input_embeddings().parameters()).device
+    last = len(bl) - 1 if blocks_upto is None else int(blocks_upto)
+    off = [i for i in range(last + 1) if any(p.device != dev for p in bl[i].parameters())]
+    if off:
+        shown = ", ".join(map(str, off[:4])) + (", ..." if len(off) > 4 else "")
+        raise RuntimeError(f"subject model blocks [{shown}] are not on {dev} (parked by SecReplay.build()? call "
+                           f"restore(), or use SecReplay / SecEngine as a context manager)")
+
+
 def make_tokenizer():
     from transformers import AutoTokenizer
     return AutoTokenizer.from_pretrained(MODEL, revision=REV)

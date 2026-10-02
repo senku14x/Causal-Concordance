@@ -88,3 +88,29 @@ def test_every_brew_item_has_a_substitution(tok, brew_bank):
         p = P.brew_substitution(tok, it)
         assert p is not None, it["name"]
         assert P.brew_substitution(tok, it).pair_id == p.pair_id          # deterministic by seed
+
+
+# The seeded draw of the 001 gate (run at 5d5d1a3, results/001_leverage_profile/analysis/gate_pairs.jsonl). The T(a)
+# tag added afterwards must not change which (c, c2) is drawn: tagging is not filtering.
+SUB_DRAW_001 = {"brew-s2-r10d2-0000": "brew-s2-r10d2-0000__sub_gray_teal", "brew-s2-r10d2-0001": "brew-s2-r10d2-0001__sub_blue_gold",
+                "brew-s2-r10d2-0012": "brew-s2-r10d2-0012__sub_teal_gray", "brew-s2-r10d2-0092": "brew-s2-r10d2-0092__sub_white_green",
+                "brew-s2-r10d2-0132": "brew-s2-r10d2-0132__sub_black_red", "brew-s2-r10d2-0377": "brew-s2-r10d2-0377__sub_brown_white"}
+
+
+def test_brew_substitution_succ_answer_tag(tok, brew_bank):
+    """Every substitution carries c_is_succ_answer == (c is T(a), the answer's successor in the table), the tag never
+    removes a candidate, the seeded draw is unchanged from the 001 gate, and the tag is not vacuous on the bank."""
+    n_tagged_draws = 0
+    for it in brew_bank:
+        Ta = it["table"][it["answer"]]["stir"]
+        subs = P.brew_substitutions(tok, it)
+        assert subs and all(p.meta["succ_answer"] == Ta for p in subs)
+        assert all(p.meta["c_is_succ_answer"] is (p.meta["c"] == Ta) for p in subs)
+        cands = sorted(c for c in (set(it["table"]) | {v["stir"] for v in it["table"].values()})
+                       if c not in (it["start"], it["intermediates"][0], it["answer"]) and c not in P.SUB_EXCLUDE)
+        assert {p.meta["c"] for p in subs} <= set(cands) and (Ta not in cands or any(p.meta["c"] == Ta for p in subs))
+        d = P.brew_substitution(tok, it)
+        n_tagged_draws += d.meta["c_is_succ_answer"]
+        if it["name"] in SUB_DRAW_001:
+            assert d.pair_id == SUB_DRAW_001[it["name"]]
+    assert n_tagged_draws == 7                                               # 4 dev + 3 test items at this seed

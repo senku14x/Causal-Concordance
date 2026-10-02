@@ -8,6 +8,8 @@ Stages (run in order; each writes results/001_leverage_profile/manifest_<stage>.
     run       whole-cell profile, spans, controls, substitution arm, noise floor, decodability captures (dev only)
     probes    decodability probes on the captures (CPU)
     snapshot  descriptive reader snapshot (§3.7), only after every reader-free output is hashed
+    analysis  summary.json + qualitative.json from the committed raw outputs (decision rules evaluated)
+    figures   ICLR-style figures from summary.json only
 Usage: python scripts/001_leverage_profile/leverage_profile.py <stage>
 """
 import hashlib
@@ -285,7 +287,9 @@ def measure_sub(sec, tok, e, reverse=False):
     cy = sec.score(ry.ids, Sa, Sa, extra_spellings=ALLS)
     px, py = colour_dist(cx), colour_dist(cy)
     head = {"pair_id": pair.pair_id, "item": pair.item, "direction": "sub->orig" if not reverse else "orig->sub",
-            "c": pair.meta["c"], "c2": pair.meta["c2"], "a": a, "behaviour_dlogPa": cy["lse_a"] - cx["lse_a"],
+            "c": pair.meta["c"], "c2": pair.meta["c2"], "a": a,
+            "succ_answer": pair.meta.get("succ_answer"), "c_is_succ_answer": bool(pair.meta.get("c_is_succ_answer", False)),
+            "behaviour_dlogPa": cy["lse_a"] - cx["lse_a"],
             "behaviour_TV": float(0.5 * (px - py).abs().sum()), "top5_x": top5(tok, cx["lp_last"]),
             "top5_y": top5(tok, cy["lp_last"]), "dist_x": [round(float(v), 4) for v in px],
             "dist_y": [round(float(v), 4) for v in py]}
@@ -364,6 +368,7 @@ def capture_brew(sec, mats):
         renders[k] = e["r_p"]
         meta.append({"key": k, "item": it["name"], "role": "substituted", "start": pr.m.inp, "z": pr.m.z, "answer": pr.m.a,
                      "present": present, "trajectory": [pr.m.inp, pr.m.z, pr.m.a], "sub": [c, c2],
+                     "succ_answer": pr.meta.get("succ_answer"), "c_is_succ_answer": bool(pr.meta.get("c_is_succ_answer", False)),
                      "orig_key": ids_key(e["r_m"].ids)})
     X = np.zeros((len(meta), 3, len(LAYERS), 5120), dtype=np.float32)
     for i, m in enumerate(meta):
@@ -871,6 +876,18 @@ def stage_analysis():
     by_cl = {}
     for r in trf:
         by_cl.setdefault(f'{r["region"]}|L{r["layer"]}', []).append(r)
+    # c = T(a) (the answer's successor, look-ahead content) is tagged at construction and reported separately from
+    # truly unrelated off-path colours; both groups stay in every pooled figure above (a tag, not a filter).
+    succ_ids = {h["pair_id"] for h in fs if h.get("c_is_succ_answer")}
+    by_tag = {}
+    for name, ids in (("c_is_succ_answer", succ_ids), ("c_unrelated", {h["pair_id"] for h in fs} - succ_ids)):
+        hh = [h for h in fs if h["pair_id"] in ids]
+        by_tag[name] = {"n_items": len(hh),
+                        "behaviour_frac_negligible": float(np.mean([beh_ok[h["pair_id"]] for h in hh])) if hh else None,
+                        "behaviour_abs_dlogPa_median": float(np.median([abs(h["behaviour_dlogPa"]) for h in hh])) if hh else None,
+                        "transplant_all_cells_frac_negligible": float(np.mean([tr_ok.get(h["pair_id"], True) for h in hh])) if hh else None,
+                        "transplant_max_abs_dlogPa": float(max((abs(r["dlogPa"]) for r in trf if r["pair_id"] in ids), default=float("nan"))) if hh else None,
+                        "items": sorted(h["pair_id"] for h in hh) if name == "c_is_succ_answer" else None}
     S["substitution"] = {
         "n_items": len(fs), "bound": bound,
         "behaviour_frac_negligible": float(np.mean(list(beh_ok.values()))) if beh_ok else None,
@@ -881,6 +898,7 @@ def stage_analysis():
                                          "median_abs_dlogPa": float(np.median([abs(r["dlogPa"]) for r in v])),
                                          "max_abs_dlogPa": float(max(abs(r["dlogPa"]) for r in v)),
                                          "median_TV": float(np.median([r["TV"] for r in v]))} for k, v in sorted(by_cl.items())},
+        "by_removed_colour_role": by_tag,
         "key_token_L0_abs_dlogPa_median": float(np.median([abs(h["key_token_L0_dlogPa"]) for h in fs])) if fs else None,
         "exceeding": [h["pair_id"] for h in fs if not (beh_ok.get(h["pair_id"]) and tr_ok.get(h["pair_id"], True))]}
     # probes

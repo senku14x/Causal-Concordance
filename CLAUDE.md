@@ -8,8 +8,8 @@ Guide for any agent or collaborator working in this repo. Reading only this file
 2. **STATUS.md**: where things stand, what works, open questions.
 3. **docs/context/SPEC.md** + **docs/context/AMENDMENT_01.md**: the project spec and every decision that overrides it
    (the amendment wins where they disagree; its §6 lists each conflict by spec line).
-4. The latest **docs/design_specs/NNN_*.md** and **docs/reports/NNN_*.md** (currently: design 001 draft;
-   report 000 = the reading report).
+4. The latest **docs/design_specs/NNN_*.md** and **docs/reports/NNN_*.md** (currently: design 001 v3, approved,
+   gate + smoke run; report 000 = the reading report).
 
 Supporting: `docs/context/READING_LIST.md`, `docs/context/reading_notes.md` (cited notes from the reading pass),
 `docs/papers/INDEX.md`.
@@ -58,11 +58,15 @@ source of code and organisms only.
 - **Margin** (`margin.py`): m = LSE_{S(a′)} log P − LSE_{S(a)} log P, full-sequence teacher forcing, every token of every
   spelling (brew " c"/" C" — " Teal" is two tokens; chain digits; relational " hop1's hop2"). Logits computed in float32
   from the final-norm output.
-- **Regime** (`engine.py`): RHUT float32-residual from block 0 (bf16 matmuls under autocast, float32 residual and
-  writes), `Engine(model, fp32_from=0)`. SEC's true-float32 replay (`regime.py`) is the cross-check. Every clean/edited
-  comparison is made at **one sequence length**; patch sources are captured at the **matching length**
-  (`margin.score(writes_fn=...)` builds writes per continuation). Reader inputs use the stock bf16 forward
-  (`readers.capture_stock`, WSB's convention).
+- **Regime**: design 001 v3 (§2, §9.1) measures every label quantity at L ≥ 40 under **SEC's true-float32 replay**
+  (`regime.SecEngine`, l0 = 39: stock bf16 blocks 0–39, float32 blocks 40–63 and W_U; noise floor ≈ 2e-4 nats). RHUT's
+  float32-residual regime from block 0 (bf16 matmuls under autocast, float32 residual and writes; `engine.Engine(model,
+  fp32_from=0)`) is the cross-check (AMENDMENT_01 §3, errata E4). Every clean/edited comparison is made at **one
+  sequence length**; patch sources are captured at the **matching length** (`margin.score(writes_fn=...)` /
+  `SecEngine.score(edit_fn=...)` build writes per continuation). Reader inputs use the stock bf16 forward
+  (`readers.capture_stock`, WSB's convention). `SecReplay.build()` parks the bf16 upper blocks on the CPU until
+  `restore()`: use `SecReplay` / `SecEngine` as context managers; every stock-forward entry point refuses a parked model
+  (`registry.assert_subject_model_resident`).
 - **Splits**: dev/test by table (brew), by step-sequence group (chain; identical prompts recur across chain items with
   the same steps), by name set (relational); defined in design 001. Halves A/B for cross-fitting by items
   (AMENDMENT_01 §3). Items touched by engineering checks go to dev.
@@ -104,8 +108,8 @@ without the PI's say-so.
 
 ## Where things stand
 
-See **STATUS.md** (block 000 done: environment, hashes, reader smoke tests, shared code + 61 tests, regime check;
-design 001 at draft v2 after an external review, awaiting PI review; nothing scientific run).
+See **STATUS.md** (block 000 done: environment, hashes, reader smoke tests, shared code + 74 tests at `647dcb5`, regime
+check; design 001 v3 approved, its `gate` and `smoke` stages run on dev, `run` in progress; no label computed yet).
 
 ## Pitfalls (read before writing code)
 
