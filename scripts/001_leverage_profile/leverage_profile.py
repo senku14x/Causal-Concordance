@@ -1021,8 +1021,128 @@ def stage_analysis():
     qual["gate_failures_sample"] = [{k: g[k] for k in ("family", "answer", "greedy", "samples", "n_correct", "text")}
                                     for g in random.Random(QUAL_SEED).sample(fails, k=min(12, len(fails)))]
     (ANA / "qualitative.json").write_text(json.dumps(qual, indent=1, default=float, ensure_ascii=False))
+    if (ANA / "snapshot.json").exists():
+        snapshot_summary()
     write_manifest("analysis", {})
     print(json.dumps(S["decision_rules"], indent=1, default=float))
+
+
+# ------------------------------------------------------------------------------------- snapshot summary (descriptive)
+_ZH = {"black": "黑", "blue": "蓝", "brown": "棕褐", "gold": "金", "gray": "灰", "green": "绿", "orange": "橙", "pink": "粉",
+       "purple": "紫", "red": "红", "teal": "青", "white": "白"}
+
+
+def colours_in_tokens(tokens):
+    import re
+    out = set()
+    for t in tokens:
+        w = re.sub(r"[^a-z]", "", t.lower())
+        if w == "grey":
+            w = "gray"
+        if w in _ZH:
+            out.add(w)
+        for c, chars in _ZH.items():
+            if any(ch in t for ch in chars):
+                out.add(c)
+    return out
+
+
+def colours_in_text(text):
+    import re
+    if not text:
+        return set()
+    out = {("gray" if w.lower() == "grey" else w.lower()) for w in re.findall(r"\b(" + "|".join(list(_ZH) + ["grey"]) + r")\b", text, re.I)}
+    for c, chars in _ZH.items():
+        if any(ch in text for ch in chars):
+            out.add(c)
+    return out
+
+
+def snapshot_summary():
+    """Naming rates per reader x layer x cell x role x arm (fraction of the 10 tables whose readout names the role's z,
+    start, answer, the item's off-path candidates, and for substitution the removed c / inserted c2), the c -> c2
+    sensitivity, AR FVE by arm, and the stock-vs-SEC bridge. Descriptive only."""
+    import numpy as np
+    snap = json.loads((ANA / "snapshot.json").read_text())
+    tabs = snap["tables"]
+
+    def roles_of(t, role):
+        if role == "partner":
+            p = t["partner"]
+            return {"z": p["z"], "start": p["start"], "answer": p["answer"]}
+        return {"z": t["z"], "start": t["start"], "answer": t["answer"]}
+
+    def named(key, t):
+        d = t["readouts"].get(key)
+        if d is None:
+            return None
+        if isinstance(d, dict) and "explanations" in d:                     # NLA: any of k samples, per sample
+            return [colours_in_text(e) for e in d["explanations"]]
+        if isinstance(d, list):                                             # Oracle: list of k samples
+            return [colours_in_text(x) for x in d]
+        return {lens: [colours_in_tokens(v)] for lens, v in d.items()}     # lenses: one token list per lens
+    rates = {}
+    keys = sorted({k for t in tabs for k in t["readouts"]})
+    for key in keys:
+        parts = key.split("|")
+        if parts[0] == "none":
+            continue
+        role = parts[0]
+        for t in tabs:
+            r = roles_of(t, role)
+            off = [c for c in t["candidates"] if c not in (r["z"], r["start"], r["answer"])]
+            nm = named(key, t)
+            groups = nm.items() if isinstance(nm, dict) else [(parts[3], nm)]
+            for reader, samples in groups:
+                rk = "|".join([reader] + parts[:3] + [parts[4]])                # reader|role|cell|L|arm
+                acc = rates.setdefault(rk, {"n": 0, "z": 0, "start": 0, "answer": 0, "off": 0, "c": 0, "c2": 0, "any_colour": 0})
+                for cs in samples:
+                    acc["n"] += 1
+                    acc["z"] += r["z"] in cs
+                    acc["start"] += r["start"] in cs
+                    acc["answer"] += r["answer"] in cs
+                    acc["off"] += any(c in cs for c in off)
+                    acc["c"] += t["substitution"]["c"] in cs
+                    acc["c2"] += t["substitution"]["c2"] in cs
+                    acc["any_colour"] += bool(cs)
+    rates = {k: {**{m: round(v[m] / v["n"], 3) for m in v if m != "n"}, "n": v["n"]} for k, v in rates.items()}
+    # c -> c2 sensitivity: member (original) vs substituted, same reader / cell / layer / arm
+    sens = {}
+    for k, v in rates.items():
+        reader, role, cell, L, arm = k.split("|")
+        if role != "member":
+            continue
+        w = rates.get("|".join([reader, "substituted", cell, L, arm]))
+        if w:
+            sens[k.replace("|member", "")] = {"c_orig": v["c"], "c_sub": w["c"], "c2_orig": v["c2"], "c2_sub": w["c2"]}
+    fve = {}
+    for t in tabs:
+        for key, d in t["readouts"].items():
+            if "|nla|" in key:
+                arm = key.split("|")[-1]
+                for name in ("fve_vs_cell", "fve_vs_source", "fve_vs_member_colon"):
+                    for x in d.get(name, []) or []:
+                        if x is not None:
+                            fve.setdefault(f"{arm}|{name}", []).append(x)
+    fve = {k: {"n": len(v), "median": float(np.median(v)), "mean": float(np.mean(v))} for k, v in fve.items()}
+    br = snap["bridge"]
+    bridge = {f"L{L}": {"min_cos": float(min(b["cos_stock_sec"] for b in br if b["layer"] == L)),
+                        "median_cos": float(np.median([b["cos_stock_sec"] for b in br if b["layer"] == L]))}
+              for L in sorted({b["layer"] for b in br})}
+    ov = []
+    for t in tabs:
+        for key, d in t["readouts"].items():
+            if key.endswith("|lenses|real"):
+                d2 = t["readouts"].get(key.replace("|real", "|real_sec"))
+                if d2:
+                    for lens in d:
+                        ov.append(len(set(d[lens]) & set(d2[lens])) / 10)
+    bridge["lens_top10_overlap_stock_vs_sec"] = {"n": len(ov), "mean": float(np.mean(ov)) if ov else None,
+                                                 "min": float(min(ov)) if ov else None}
+    out = {"naming_rates": rates, "substitution_sensitivity": sens, "nla_fve": fve, "bridge": bridge,
+           "protocol": snap.get("protocol"), "tables": [{k: t[k] for k in t if k != "readouts"} for t in tabs]}
+    (ANA / "snapshot_summary.json").write_text(json.dumps(out, indent=1, default=float))
+    return out
 
 
 # ---------------------------------------------------------------------------------------------- stage: figures

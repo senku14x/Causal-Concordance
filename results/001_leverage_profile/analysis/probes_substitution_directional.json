@@ -1,0 +1,6482 @@
+[
+ {
+  "item": "brew-s2-r10d2-0000",
+  "c": "gray",
+  "c2": "teal",
+  "cell": 0,
+  "layer": 0,
+  "removed": -0.9362850189208984,
+  "inserted": 0.24790740013122559
+ },
+ {
+  "item": "brew-s2-r10d2-0001",
+  "c": "blue",
+  "c2": "gold",
+  "cell": 0,
+  "layer": 0,
+  "removed": 0.46262168884277344,
+  "inserted": 0.45604634284973145
+ },
+ {
+  "item": "brew-s2-r10d2-0009",
+  "c": "pink",
+  "c2": "blue",
+  "cell": 0,
+  "layer": 0,
+  "removed": -0.1991863250732422,
+  "inserted": 0.14773350954055786
+ },
+ {
+  "item": "brew-s2-r10d2-0012",
+  "c": "teal",
+  "c2": "gray",
+  "cell": 0,
+  "layer": 0,
+  "removed": -0.09369814395904541,
+  "inserted": 0.5187723636627197
+ },
+ {
+  "item": "brew-s2-r10d2-0015",
+  "c": "gold",
+  "c2": "teal",
+  "cell": 0,
+  "layer": 0,
+  "removed": -0.08784198760986328,
+  "inserted": 0.022659778594970703
+ },
+ {
+  "item": "brew-s2-r10d2-0027",
+  "c": "purple",
+  "c2": "gold",
+  "cell": 0,
+  "layer": 0,
+  "removed": -0.1319190263748169,
+  "inserted": 0.07958269119262695
+ },
+ {
+  "item": "brew-s2-r10d2-0041",
+  "c": "white",
+  "c2": "brown",
+  "cell": 0,
+  "layer": 0,
+  "removed": 0.21451735496520996,
+  "inserted": null
+ },
+ {
+  "item": "brew-s2-r10d2-0057",
+  "c": "gold",
+  "c2": "white",
+  "cell": 0,
+  "layer": 0,
+  "removed": -0.06876039505004883,
+  "inserted": 0.059247493743896484
+ },
+ {
+  "item": "brew-s2-r10d2-0066",
+  "c": "brown",
+  "c2": "teal",
+  "cell": 0,
+  "layer": 0,
+  "removed": null,
+  "inserted": 0.24495601654052734
+ },
+ {
+  "item": "brew-s2-r10d2-0069",
+  "c": "green",
+  "c2": "blue",
+  "cell": 0,
+  "layer": 0,
+  "removed": 0.2861661911010742,
+  "inserted": 0.5487995147705078
+ },
+ {
+  "item": "brew-s2-r10d2-0071",
+  "c": "teal",
+  "c2": "black",
+  "cell": 0,
+  "layer": 0,
+  "removed": 0.013732671737670898,
+  "inserted": 0.6934993267059326
+ },
+ {
+  "item": "brew-s2-r10d2-0073",
+  "c": "pink",
+  "c2": "gold",
+  "cell": 0,
+  "layer": 0,
+  "removed": -3.454765796661377,
+  "inserted": 0.6013057231903076
+ },
+ {
+  "item": "brew-s2-r10d2-0074",
+  "c": "black",
+  "c2": "red",
+  "cell": 0,
+  "layer": 0,
+  "removed": 3.313619613647461,
+  "inserted": -0.3417329788208008
+ },
+ {
+  "item": "brew-s2-r10d2-0075",
+  "c": "purple",
+  "c2": "red",
+  "cell": 0,
+  "layer": 0,
+  "removed": 0.37708425521850586,
+  "inserted": -0.19511151313781738
+ },
+ {
+  "item": "brew-s2-r10d2-0092",
+  "c": "white",
+  "c2": "green",
+  "cell": 0,
+  "layer": 0,
+  "removed": -0.3788638114929199,
+  "inserted": -0.8806033134460449
+ },
+ {
+  "item": "brew-s2-r10d2-0101",
+  "c": "green",
+  "c2": "black",
+  "cell": 0,
+  "layer": 0,
+  "removed": -1.2262053489685059,
+  "inserted": 0.6816753149032593
+ },
+ {
+  "item": "brew-s2-r10d2-0104",
+  "c": "teal",
+  "c2": "blue",
+  "cell": 0,
+  "layer": 0,
+  "removed": 0.05291032791137695,
+  "inserted": 0.07220578193664551
+ },
+ {
+  "item": "brew-s2-r10d2-0107",
+  "c": "green",
+  "c2": "black",
+  "cell": 0,
+  "layer": 0,
+  "removed": -2.1306610107421875,
+  "inserted": 0.6456344723701477
+ },
+ {
+  "item": "brew-s2-r10d2-0125",
+  "c": "white",
+  "c2": "green",
+  "cell": 0,
+  "layer": 0,
+  "removed": -0.30051374435424805,
+  "inserted": 1.5914421081542969
+ },
+ {
+  "item": "brew-s2-r10d2-0128",
+  "c": "pink",
+  "c2": "purple",
+  "cell": 0,
+  "layer": 0,
+  "removed": -0.4317498207092285,
+  "inserted": 0.278070330619812
+ },
+ {
+  "item": "brew-s2-r10d2-0131",
+  "c": "green",
+  "c2": "purple",
+  "cell": 0,
+  "layer": 0,
+  "removed": -0.39532470703125,
+  "inserted": 0.11233043670654297
+ },
+ {
+  "item": "brew-s2-r10d2-0132",
+  "c": "black",
+  "c2": "red",
+  "cell": 0,
+  "layer": 0,
+  "removed": -0.8302566409111023,
+  "inserted": 0.36471986770629883
+ },
+ {
+  "item": "brew-s2-r10d2-0140",
+  "c": "purple",
+  "c2": "white",
+  "cell": 0,
+  "layer": 0,
+  "removed": 0.01422274112701416,
+  "inserted": 0.15919727087020874
+ },
+ {
+  "item": "brew-s2-r10d2-0142",
+  "c": "gray",
+  "c2": "pink",
+  "cell": 0,
+  "layer": 0,
+  "removed": -0.7182669639587402,
+  "inserted": 0.13213038444519043
+ },
+ {
+  "item": "brew-s2-r10d2-0153",
+  "c": "teal",
+  "c2": "gold",
+  "cell": 0,
+  "layer": 0,
+  "removed": -0.08792829513549805,
+  "inserted": 0.036989569664001465
+ },
+ {
+  "item": "brew-s2-r10d2-0172",
+  "c": "gold",
+  "c2": "pink",
+  "cell": 0,
+  "layer": 0,
+  "removed": 0.04188179969787598,
+  "inserted": 0.3785219192504883
+ },
+ {
+  "item": "brew-s2-r10d2-0173",
+  "c": "purple",
+  "c2": "teal",
+  "cell": 0,
+  "layer": 0,
+  "removed": 0.011069774627685547,
+  "inserted": -0.005621910095214844
+ },
+ {
+  "item": "brew-s2-r10d2-0179",
+  "c": "gray",
+  "c2": "red",
+  "cell": 0,
+  "layer": 0,
+  "removed": -1.5339477062225342,
+  "inserted": 0.2508373260498047
+ },
+ {
+  "item": "brew-s2-r10d2-0183",
+  "c": "brown",
+  "c2": "pink",
+  "cell": 0,
+  "layer": 0,
+  "removed": null,
+  "inserted": 1.573507308959961
+ },
+ {
+  "item": "brew-s2-r10d2-0188",
+  "c": "teal",
+  "c2": "white",
+  "cell": 0,
+  "layer": 0,
+  "removed": -0.12668609619140625,
+  "inserted": 0.4729280471801758
+ },
+ {
+  "item": "brew-s2-r10d2-0197",
+  "c": "red",
+  "c2": "purple",
+  "cell": 0,
+  "layer": 0,
+  "removed": -0.2338305115699768,
+  "inserted": -0.07164061069488525
+ },
+ {
+  "item": "brew-s2-r10d2-0216",
+  "c": "pink",
+  "c2": "red",
+  "cell": 0,
+  "layer": 0,
+  "removed": -0.07834053039550781,
+  "inserted": 0.08195352554321289
+ },
+ {
+  "item": "brew-s2-r10d2-0219",
+  "c": "red",
+  "c2": "gray",
+  "cell": 0,
+  "layer": 0,
+  "removed": -0.2194828987121582,
+  "inserted": 0.6952859163284302
+ },
+ {
+  "item": "brew-s2-r10d2-0228",
+  "c": "green",
+  "c2": "black",
+  "cell": 0,
+  "layer": 0,
+  "removed": -0.12078475952148438,
+  "inserted": 3.2033886909484863
+ },
+ {
+  "item": "brew-s2-r10d2-0249",
+  "c": "black",
+  "c2": "gray",
+  "cell": 0,
+  "layer": 0,
+  "removed": -0.1710045337677002,
+  "inserted": 0.07858717441558838
+ },
+ {
+  "item": "brew-s2-r10d2-0260",
+  "c": "purple",
+  "c2": "red",
+  "cell": 0,
+  "layer": 0,
+  "removed": -0.06004691123962402,
+  "inserted": -0.11946916580200195
+ },
+ {
+  "item": "brew-s2-r10d2-0269",
+  "c": "gold",
+  "c2": "green",
+  "cell": 0,
+  "layer": 0,
+  "removed": 0.010461568832397461,
+  "inserted": 0.05511045455932617
+ },
+ {
+  "item": "brew-s2-r10d2-0289",
+  "c": "white",
+  "c2": "blue",
+  "cell": 0,
+  "layer": 0,
+  "removed": -0.4195280075073242,
+  "inserted": 0.04435122013092041
+ },
+ {
+  "item": "brew-s2-r10d2-0299",
+  "c": "teal",
+  "c2": "red",
+  "cell": 0,
+  "layer": 0,
+  "removed": -0.06272125244140625,
+  "inserted": 0.40682315826416016
+ },
+ {
+  "item": "brew-s2-r10d2-0312",
+  "c": "teal",
+  "c2": "pink",
+  "cell": 0,
+  "layer": 0,
+  "removed": -0.35646331310272217,
+  "inserted": 0.5317487716674805
+ },
+ {
+  "item": "brew-s2-r10d2-0316",
+  "c": "black",
+  "c2": "purple",
+  "cell": 0,
+  "layer": 0,
+  "removed": -0.5026705265045166,
+  "inserted": 0.5963858366012573
+ },
+ {
+  "item": "brew-s2-r10d2-0323",
+  "c": "blue",
+  "c2": "black",
+  "cell": 0,
+  "layer": 0,
+  "removed": -0.08869218826293945,
+  "inserted": 0.09082841873168945
+ },
+ {
+  "item": "brew-s2-r10d2-0339",
+  "c": "blue",
+  "c2": "purple",
+  "cell": 0,
+  "layer": 0,
+  "removed": 0.047118186950683594,
+  "inserted": 0.13087862730026245
+ },
+ {
+  "item": "brew-s2-r10d2-0344",
+  "c": "teal",
+  "c2": "white",
+  "cell": 0,
+  "layer": 0,
+  "removed": 0.06723189353942871,
+  "inserted": 0.12676429748535156
+ },
+ {
+  "item": "brew-s2-r10d2-0345",
+  "c": "blue",
+  "c2": "teal",
+  "cell": 0,
+  "layer": 0,
+  "removed": 0.03330588340759277,
+  "inserted": -0.019621610641479492
+ },
+ {
+  "item": "brew-s2-r10d2-0377",
+  "c": "brown",
+  "c2": "white",
+  "cell": 0,
+  "layer": 0,
+  "removed": null,
+  "inserted": 0.23713195323944092
+ },
+ {
+  "item": "brew-s2-r10d2-0383",
+  "c": "black",
+  "c2": "gray",
+  "cell": 0,
+  "layer": 0,
+  "removed": -0.13411515951156616,
+  "inserted": 0.34408265352249146
+ },
+ {
+  "item": "brew-s2-r10d2-0396",
+  "c": "purple",
+  "c2": "pink",
+  "cell": 0,
+  "layer": 0,
+  "removed": 0.07828044891357422,
+  "inserted": 0.07706451416015625
+ },
+ {
+  "item": "brew-s2-r10d2-0000",
+  "c": "gray",
+  "c2": "teal",
+  "cell": 0,
+  "layer": 1,
+  "removed": -0.9774765968322754,
+  "inserted": 0.13688123226165771
+ },
+ {
+  "item": "brew-s2-r10d2-0001",
+  "c": "blue",
+  "c2": "gold",
+  "cell": 0,
+  "layer": 1,
+  "removed": 0.534243106842041,
+  "inserted": 0.6286478042602539
+ },
+ {
+  "item": "brew-s2-r10d2-0009",
+  "c": "pink",
+  "c2": "blue",
+  "cell": 0,
+  "layer": 1,
+  "removed": -0.04591858386993408,
+  "inserted": 0.09422910213470459
+ },
+ {
+  "item": "brew-s2-r10d2-0012",
+  "c": "teal",
+  "c2": "gray",
+  "cell": 0,
+  "layer": 1,
+  "removed": -0.028447508811950684,
+  "inserted": 1.0072379112243652
+ },
+ {
+  "item": "brew-s2-r10d2-0015",
+  "c": "gold",
+  "c2": "teal",
+  "cell": 0,
+  "layer": 1,
+  "removed": -0.08374619483947754,
+  "inserted": 0.02959883213043213
+ },
+ {
+  "item": "brew-s2-r10d2-0027",
+  "c": "purple",
+  "c2": "gold",
+  "cell": 0,
+  "layer": 1,
+  "removed": -0.1263113021850586,
+  "inserted": 0.07813525199890137
+ },
+ {
+  "item": "brew-s2-r10d2-0041",
+  "c": "white",
+  "c2": "brown",
+  "cell": 0,
+  "layer": 1,
+  "removed": 0.3337275981903076,
+  "inserted": null
+ },
+ {
+  "item": "brew-s2-r10d2-0057",
+  "c": "gold",
+  "c2": "white",
+  "cell": 0,
+  "layer": 1,
+  "removed": -0.05544853210449219,
+  "inserted": 0.1360020637512207
+ },
+ {
+  "item": "brew-s2-r10d2-0066",
+  "c": "brown",
+  "c2": "teal",
+  "cell": 0,
+  "layer": 1,
+  "removed": null,
+  "inserted": 0.20981311798095703
+ },
+ {
+  "item": "brew-s2-r10d2-0069",
+  "c": "green",
+  "c2": "blue",
+  "cell": 0,
+  "layer": 1,
+  "removed": 0.11111259460449219,
+  "inserted": 0.0027582645416259766
+ },
+ {
+  "item": "brew-s2-r10d2-0071",
+  "c": "teal",
+  "c2": "black",
+  "cell": 0,
+  "layer": 1,
+  "removed": 0.0832751989364624,
+  "inserted": 0.4671580195426941
+ },
+ {
+  "item": "brew-s2-r10d2-0073",
+  "c": "pink",
+  "c2": "gold",
+  "cell": 0,
+  "layer": 1,
+  "removed": -0.6260017156600952,
+  "inserted": 0.5307846069335938
+ },
+ {
+  "item": "brew-s2-r10d2-0074",
+  "c": "black",
+  "c2": "red",
+  "cell": 0,
+  "layer": 1,
+  "removed": 2.049849510192871,
+  "inserted": -0.4761970043182373
+ },
+ {
+  "item": "brew-s2-r10d2-0075",
+  "c": "purple",
+  "c2": "red",
+  "cell": 0,
+  "layer": 1,
+  "removed": 0.3119018077850342,
+  "inserted": -0.0618816614151001
+ },
+ {
+  "item": "brew-s2-r10d2-0092",
+  "c": "white",
+  "c2": "green",
+  "cell": 0,
+  "layer": 1,
+  "removed": -0.740147590637207,
+  "inserted": -0.5748386383056641
+ },
+ {
+  "item": "brew-s2-r10d2-0101",
+  "c": "green",
+  "c2": "black",
+  "cell": 0,
+  "layer": 1,
+  "removed": -0.16771745681762695,
+  "inserted": 0.7750371694564819
+ },
+ {
+  "item": "brew-s2-r10d2-0104",
+  "c": "teal",
+  "c2": "blue",
+  "cell": 0,
+  "layer": 1,
+  "removed": 0.0221710205078125,
+  "inserted": 0.08385968208312988
+ },
+ {
+  "item": "brew-s2-r10d2-0107",
+  "c": "green",
+  "c2": "black",
+  "cell": 0,
+  "layer": 1,
+  "removed": -0.5128259658813477,
+  "inserted": 0.5991291999816895
+ },
+ {
+  "item": "brew-s2-r10d2-0125",
+  "c": "white",
+  "c2": "green",
+  "cell": 0,
+  "layer": 1,
+  "removed": -0.260434627532959,
+  "inserted": 0.28059864044189453
+ },
+ {
+  "item": "brew-s2-r10d2-0128",
+  "c": "pink",
+  "c2": "purple",
+  "cell": 0,
+  "layer": 1,
+  "removed": -0.3644092082977295,
+  "inserted": 0.30539679527282715
+ },
+ {
+  "item": "brew-s2-r10d2-0131",
+  "c": "green",
+  "c2": "purple",
+  "cell": 0,
+  "layer": 1,
+  "removed": -0.365490198135376,
+  "inserted": 0.0767052173614502
+ },
+ {
+  "item": "brew-s2-r10d2-0132",
+  "c": "black",
+  "c2": "red",
+  "cell": 0,
+  "layer": 1,
+  "removed": -0.8129571676254272,
+  "inserted": 0.42063212394714355
+ },
+ {
+  "item": "brew-s2-r10d2-0140",
+  "c": "purple",
+  "c2": "white",
+  "cell": 0,
+  "layer": 1,
+  "removed": -0.008233428001403809,
+  "inserted": 0.16485261917114258
+ },
+ {
+  "item": "brew-s2-r10d2-0142",
+  "c": "gray",
+  "c2": "pink",
+  "cell": 0,
+  "layer": 1,
+  "removed": -0.9381465911865234,
+  "inserted": 0.16095209121704102
+ },
+ {
+  "item": "brew-s2-r10d2-0153",
+  "c": "teal",
+  "c2": "gold",
+  "cell": 0,
+  "layer": 1,
+  "removed": -0.1022413969039917,
+  "inserted": 0.1001284122467041
+ },
+ {
+  "item": "brew-s2-r10d2-0172",
+  "c": "gold",
+  "c2": "pink",
+  "cell": 0,
+  "layer": 1,
+  "removed": 0.09938406944274902,
+  "inserted": 0.39686644077301025
+ },
+ {
+  "item": "brew-s2-r10d2-0173",
+  "c": "purple",
+  "c2": "teal",
+  "cell": 0,
+  "layer": 1,
+  "removed": 0.02423882484436035,
+  "inserted": 0.012288570404052734
+ },
+ {
+  "item": "brew-s2-r10d2-0179",
+  "c": "gray",
+  "c2": "red",
+  "cell": 0,
+  "layer": 1,
+  "removed": -1.2150311470031738,
+  "inserted": 0.266826868057251
+ },
+ {
+  "item": "brew-s2-r10d2-0183",
+  "c": "brown",
+  "c2": "pink",
+  "cell": 0,
+  "layer": 1,
+  "removed": null,
+  "inserted": 0.39685678482055664
+ },
+ {
+  "item": "brew-s2-r10d2-0188",
+  "c": "teal",
+  "c2": "white",
+  "cell": 0,
+  "layer": 1,
+  "removed": -0.15007328987121582,
+  "inserted": 0.35866284370422363
+ },
+ {
+  "item": "brew-s2-r10d2-0197",
+  "c": "red",
+  "c2": "purple",
+  "cell": 0,
+  "layer": 1,
+  "removed": -0.2921074628829956,
+  "inserted": -0.12482678890228271
+ },
+ {
+  "item": "brew-s2-r10d2-0216",
+  "c": "pink",
+  "c2": "red",
+  "cell": 0,
+  "layer": 1,
+  "removed": -0.04511451721191406,
+  "inserted": 0.13769590854644775
+ },
+ {
+  "item": "brew-s2-r10d2-0219",
+  "c": "red",
+  "c2": "gray",
+  "cell": 0,
+  "layer": 1,
+  "removed": -0.2526981830596924,
+  "inserted": 0.6086611747741699
+ },
+ {
+  "item": "brew-s2-r10d2-0228",
+  "c": "green",
+  "c2": "black",
+  "cell": 0,
+  "layer": 1,
+  "removed": -0.018978118896484375,
+  "inserted": 2.028238296508789
+ },
+ {
+  "item": "brew-s2-r10d2-0249",
+  "c": "black",
+  "c2": "gray",
+  "cell": 0,
+  "layer": 1,
+  "removed": -0.16226673126220703,
+  "inserted": 0.12473535537719727
+ },
+ {
+  "item": "brew-s2-r10d2-0260",
+  "c": "purple",
+  "c2": "red",
+  "cell": 0,
+  "layer": 1,
+  "removed": -0.07228004932403564,
+  "inserted": -0.17445158958435059
+ },
+ {
+  "item": "brew-s2-r10d2-0269",
+  "c": "gold",
+  "c2": "green",
+  "cell": 0,
+  "layer": 1,
+  "removed": 0.04688429832458496,
+  "inserted": 0.050452232360839844
+ },
+ {
+  "item": "brew-s2-r10d2-0289",
+  "c": "white",
+  "c2": "blue",
+  "cell": 0,
+  "layer": 1,
+  "removed": -0.9017692804336548,
+  "inserted": -0.04815948009490967
+ },
+ {
+  "item": "brew-s2-r10d2-0299",
+  "c": "teal",
+  "c2": "red",
+  "cell": 0,
+  "layer": 1,
+  "removed": -0.007378816604614258,
+  "inserted": 0.511406660079956
+ },
+ {
+  "item": "brew-s2-r10d2-0312",
+  "c": "teal",
+  "c2": "pink",
+  "cell": 0,
+  "layer": 1,
+  "removed": -0.2895691394805908,
+  "inserted": 0.1353764533996582
+ },
+ {
+  "item": "brew-s2-r10d2-0316",
+  "c": "black",
+  "c2": "purple",
+  "cell": 0,
+  "layer": 1,
+  "removed": -0.4079470634460449,
+  "inserted": 0.5546532869338989
+ },
+ {
+  "item": "brew-s2-r10d2-0323",
+  "c": "blue",
+  "c2": "black",
+  "cell": 0,
+  "layer": 1,
+  "removed": -0.1140936017036438,
+  "inserted": 0.05474996566772461
+ },
+ {
+  "item": "brew-s2-r10d2-0339",
+  "c": "blue",
+  "c2": "purple",
+  "cell": 0,
+  "layer": 1,
+  "removed": 0.021799325942993164,
+  "inserted": 0.17240142822265625
+ },
+ {
+  "item": "brew-s2-r10d2-0344",
+  "c": "teal",
+  "c2": "white",
+  "cell": 0,
+  "layer": 1,
+  "removed": 0.05847573280334473,
+  "inserted": 0.09854507446289062
+ },
+ {
+  "item": "brew-s2-r10d2-0345",
+  "c": "blue",
+  "c2": "teal",
+  "cell": 0,
+  "layer": 1,
+  "removed": -0.00566256046295166,
+  "inserted": 0.09471464157104492
+ },
+ {
+  "item": "brew-s2-r10d2-0377",
+  "c": "brown",
+  "c2": "white",
+  "cell": 0,
+  "layer": 1,
+  "removed": null,
+  "inserted": 0.23221313953399658
+ },
+ {
+  "item": "brew-s2-r10d2-0383",
+  "c": "black",
+  "c2": "gray",
+  "cell": 0,
+  "layer": 1,
+  "removed": -0.10764062404632568,
+  "inserted": 0.6087801456451416
+ },
+ {
+  "item": "brew-s2-r10d2-0396",
+  "c": "purple",
+  "c2": "pink",
+  "cell": 0,
+  "layer": 1,
+  "removed": 0.08614397048950195,
+  "inserted": -0.05565834045410156
+ },
+ {
+  "item": "brew-s2-r10d2-0000",
+  "c": "gray",
+  "c2": "teal",
+  "cell": 0,
+  "layer": 2,
+  "removed": -1.1283235549926758,
+  "inserted": -0.0958026647567749
+ },
+ {
+  "item": "brew-s2-r10d2-0001",
+  "c": "blue",
+  "c2": "gold",
+  "cell": 0,
+  "layer": 2,
+  "removed": 0.11982011795043945,
+  "inserted": 0.6589345932006836
+ },
+ {
+  "item": "brew-s2-r10d2-0009",
+  "c": "pink",
+  "c2": "blue",
+  "cell": 0,
+  "layer": 2,
+  "removed": 0.6664512157440186,
+  "inserted": 0.14647531509399414
+ },
+ {
+  "item": "brew-s2-r10d2-0012",
+  "c": "teal",
+  "c2": "gray",
+  "cell": 0,
+  "layer": 2,
+  "removed": -0.06319952011108398,
+  "inserted": 0.20028471946716309
+ },
+ {
+  "item": "brew-s2-r10d2-0015",
+  "c": "gold",
+  "c2": "teal",
+  "cell": 0,
+  "layer": 2,
+  "removed": -0.1446613073348999,
+  "inserted": -0.03793740272521973
+ },
+ {
+  "item": "brew-s2-r10d2-0027",
+  "c": "purple",
+  "c2": "gold",
+  "cell": 0,
+  "layer": 2,
+  "removed": -0.08664321899414062,
+  "inserted": 0.06794488430023193
+ },
+ {
+  "item": "brew-s2-r10d2-0041",
+  "c": "white",
+  "c2": "brown",
+  "cell": 0,
+  "layer": 2,
+  "removed": 0.04563605785369873,
+  "inserted": null
+ },
+ {
+  "item": "brew-s2-r10d2-0057",
+  "c": "gold",
+  "c2": "white",
+  "cell": 0,
+  "layer": 2,
+  "removed": -0.11470580101013184,
+  "inserted": 0.018142223358154297
+ },
+ {
+  "item": "brew-s2-r10d2-0066",
+  "c": "brown",
+  "c2": "teal",
+  "cell": 0,
+  "layer": 2,
+  "removed": null,
+  "inserted": 0.06982302665710449
+ },
+ {
+  "item": "brew-s2-r10d2-0069",
+  "c": "green",
+  "c2": "blue",
+  "cell": 0,
+  "layer": 2,
+  "removed": 0.14990997314453125,
+  "inserted": -0.08685922622680664
+ },
+ {
+  "item": "brew-s2-r10d2-0071",
+  "c": "teal",
+  "c2": "black",
+  "cell": 0,
+  "layer": 2,
+  "removed": 0.41161394119262695,
+  "inserted": 0.5438816547393799
+ },
+ {
+  "item": "brew-s2-r10d2-0073",
+  "c": "pink",
+  "c2": "gold",
+  "cell": 0,
+  "layer": 2,
+  "removed": -0.5071461200714111,
+  "inserted": 0.49181222915649414
+ },
+ {
+  "item": "brew-s2-r10d2-0074",
+  "c": "black",
+  "c2": "red",
+  "cell": 0,
+  "layer": 2,
+  "removed": 3.223140239715576,
+  "inserted": -0.4167296886444092
+ },
+ {
+  "item": "brew-s2-r10d2-0075",
+  "c": "purple",
+  "c2": "red",
+  "cell": 0,
+  "layer": 2,
+  "removed": 0.586315393447876,
+  "inserted": 0.08549129962921143
+ },
+ {
+  "item": "brew-s2-r10d2-0092",
+  "c": "white",
+  "c2": "green",
+  "cell": 0,
+  "layer": 2,
+  "removed": -0.24669671058654785,
+  "inserted": -1.2586400508880615
+ },
+ {
+  "item": "brew-s2-r10d2-0101",
+  "c": "green",
+  "c2": "black",
+  "cell": 0,
+  "layer": 2,
+  "removed": -0.23955631256103516,
+  "inserted": 0.6269593238830566
+ },
+ {
+  "item": "brew-s2-r10d2-0104",
+  "c": "teal",
+  "c2": "blue",
+  "cell": 0,
+  "layer": 2,
+  "removed": 0.02432239055633545,
+  "inserted": 0.09958124160766602
+ },
+ {
+  "item": "brew-s2-r10d2-0107",
+  "c": "green",
+  "c2": "black",
+  "cell": 0,
+  "layer": 2,
+  "removed": -0.46826696395874023,
+  "inserted": 0.29649627208709717
+ },
+ {
+  "item": "brew-s2-r10d2-0125",
+  "c": "white",
+  "c2": "green",
+  "cell": 0,
+  "layer": 2,
+  "removed": -0.06668508052825928,
+  "inserted": 0.13540196418762207
+ },
+ {
+  "item": "brew-s2-r10d2-0128",
+  "c": "pink",
+  "c2": "purple",
+  "cell": 0,
+  "layer": 2,
+  "removed": -0.24411916732788086,
+  "inserted": 0.06080198287963867
+ },
+ {
+  "item": "brew-s2-r10d2-0131",
+  "c": "green",
+  "c2": "purple",
+  "cell": 0,
+  "layer": 2,
+  "removed": -0.43274474143981934,
+  "inserted": 0.13323497772216797
+ },
+ {
+  "item": "brew-s2-r10d2-0132",
+  "c": "black",
+  "c2": "red",
+  "cell": 0,
+  "layer": 2,
+  "removed": -0.4583425521850586,
+  "inserted": 0.29851388931274414
+ },
+ {
+  "item": "brew-s2-r10d2-0140",
+  "c": "purple",
+  "c2": "white",
+  "cell": 0,
+  "layer": 2,
+  "removed": -0.004967689514160156,
+  "inserted": 0.16700172424316406
+ },
+ {
+  "item": "brew-s2-r10d2-0142",
+  "c": "gray",
+  "c2": "pink",
+  "cell": 0,
+  "layer": 2,
+  "removed": -0.9904689788818359,
+  "inserted": 0.24705052375793457
+ },
+ {
+  "item": "brew-s2-r10d2-0153",
+  "c": "teal",
+  "c2": "gold",
+  "cell": 0,
+  "layer": 2,
+  "removed": -0.10670053958892822,
+  "inserted": 0.05604982376098633
+ },
+ {
+  "item": "brew-s2-r10d2-0172",
+  "c": "gold",
+  "c2": "pink",
+  "cell": 0,
+  "layer": 2,
+  "removed": 0.01686382293701172,
+  "inserted": 0.41490650177001953
+ },
+ {
+  "item": "brew-s2-r10d2-0173",
+  "c": "purple",
+  "c2": "teal",
+  "cell": 0,
+  "layer": 2,
+  "removed": -0.04957771301269531,
+  "inserted": -0.019507288932800293
+ },
+ {
+  "item": "brew-s2-r10d2-0179",
+  "c": "gray",
+  "c2": "red",
+  "cell": 0,
+  "layer": 2,
+  "removed": -1.8116788864135742,
+  "inserted": 0.09666609764099121
+ },
+ {
+  "item": "brew-s2-r10d2-0183",
+  "c": "brown",
+  "c2": "pink",
+  "cell": 0,
+  "layer": 2,
+  "removed": null,
+  "inserted": 0.9045133590698242
+ },
+ {
+  "item": "brew-s2-r10d2-0188",
+  "c": "teal",
+  "c2": "white",
+  "cell": 0,
+  "layer": 2,
+  "removed": -0.15613341331481934,
+  "inserted": 0.429079532623291
+ },
+ {
+  "item": "brew-s2-r10d2-0197",
+  "c": "red",
+  "c2": "purple",
+  "cell": 0,
+  "layer": 2,
+  "removed": -0.1838514804840088,
+  "inserted": -0.46497464179992676
+ },
+ {
+  "item": "brew-s2-r10d2-0216",
+  "c": "pink",
+  "c2": "red",
+  "cell": 0,
+  "layer": 2,
+  "removed": 0.026216506958007812,
+  "inserted": 0.07032370567321777
+ },
+ {
+  "item": "brew-s2-r10d2-0219",
+  "c": "red",
+  "c2": "gray",
+  "cell": 0,
+  "layer": 2,
+  "removed": -0.39710211753845215,
+  "inserted": 0.390639066696167
+ },
+ {
+  "item": "brew-s2-r10d2-0228",
+  "c": "green",
+  "c2": "black",
+  "cell": 0,
+  "layer": 2,
+  "removed": 0.10728120803833008,
+  "inserted": 3.903930425643921
+ },
+ {
+  "item": "brew-s2-r10d2-0249",
+  "c": "black",
+  "c2": "gray",
+  "cell": 0,
+  "layer": 2,
+  "removed": 0.007335662841796875,
+  "inserted": 0.06743252277374268
+ },
+ {
+  "item": "brew-s2-r10d2-0260",
+  "c": "purple",
+  "c2": "red",
+  "cell": 0,
+  "layer": 2,
+  "removed": -0.062027931213378906,
+  "inserted": -0.14042127132415771
+ },
+ {
+  "item": "brew-s2-r10d2-0269",
+  "c": "gold",
+  "c2": "green",
+  "cell": 0,
+  "layer": 2,
+  "removed": -0.023934483528137207,
+  "inserted": 0.09265661239624023
+ },
+ {
+  "item": "brew-s2-r10d2-0289",
+  "c": "white",
+  "c2": "blue",
+  "cell": 0,
+  "layer": 2,
+  "removed": -0.4172569513320923,
+  "inserted": 0.08536100387573242
+ },
+ {
+  "item": "brew-s2-r10d2-0299",
+  "c": "teal",
+  "c2": "red",
+  "cell": 0,
+  "layer": 2,
+  "removed": -0.1887514591217041,
+  "inserted": 0.5325926542282104
+ },
+ {
+  "item": "brew-s2-r10d2-0312",
+  "c": "teal",
+  "c2": "pink",
+  "cell": 0,
+  "layer": 2,
+  "removed": -0.1240919828414917,
+  "inserted": 0.19889307022094727
+ },
+ {
+  "item": "brew-s2-r10d2-0316",
+  "c": "black",
+  "c2": "purple",
+  "cell": 0,
+  "layer": 2,
+  "removed": -0.7456884384155273,
+  "inserted": 0.12191545963287354
+ },
+ {
+  "item": "brew-s2-r10d2-0323",
+  "c": "blue",
+  "c2": "black",
+  "cell": 0,
+  "layer": 2,
+  "removed": -0.11122828722000122,
+  "inserted": 0.13795357942581177
+ },
+ {
+  "item": "brew-s2-r10d2-0339",
+  "c": "blue",
+  "c2": "purple",
+  "cell": 0,
+  "layer": 2,
+  "removed": 0.018601655960083008,
+  "inserted": 0.20245885848999023
+ },
+ {
+  "item": "brew-s2-r10d2-0344",
+  "c": "teal",
+  "c2": "white",
+  "cell": 0,
+  "layer": 2,
+  "removed": -0.03799295425415039,
+  "inserted": 0.10020971298217773
+ },
+ {
+  "item": "brew-s2-r10d2-0345",
+  "c": "blue",
+  "c2": "teal",
+  "cell": 0,
+  "layer": 2,
+  "removed": 0.0325014591217041,
+  "inserted": 0.029351234436035156
+ },
+ {
+  "item": "brew-s2-r10d2-0377",
+  "c": "brown",
+  "c2": "white",
+  "cell": 0,
+  "layer": 2,
+  "removed": null,
+  "inserted": 0.29864728450775146
+ },
+ {
+  "item": "brew-s2-r10d2-0383",
+  "c": "black",
+  "c2": "gray",
+  "cell": 0,
+  "layer": 2,
+  "removed": -0.12577581405639648,
+  "inserted": 0.020758330821990967
+ },
+ {
+  "item": "brew-s2-r10d2-0396",
+  "c": "purple",
+  "c2": "pink",
+  "cell": 0,
+  "layer": 2,
+  "removed": 0.05174684524536133,
+  "inserted": -0.045419931411743164
+ },
+ {
+  "item": "brew-s2-r10d2-0000",
+  "c": "gray",
+  "c2": "teal",
+  "cell": 0,
+  "layer": 3,
+  "removed": -0.600182056427002,
+  "inserted": 0.38866186141967773
+ },
+ {
+  "item": "brew-s2-r10d2-0001",
+  "c": "blue",
+  "c2": "gold",
+  "cell": 0,
+  "layer": 3,
+  "removed": 0.06042212247848511,
+  "inserted": 0.11948597431182861
+ },
+ {
+  "item": "brew-s2-r10d2-0009",
+  "c": "pink",
+  "c2": "blue",
+  "cell": 0,
+  "layer": 3,
+  "removed": 0.051973819732666016,
+  "inserted": 0.21883994340896606
+ },
+ {
+  "item": "brew-s2-r10d2-0012",
+  "c": "teal",
+  "c2": "gray",
+  "cell": 0,
+  "layer": 3,
+  "removed": 0.41213059425354004,
+  "inserted": 1.835781455039978
+ },
+ {
+  "item": "brew-s2-r10d2-0015",
+  "c": "gold",
+  "c2": "teal",
+  "cell": 0,
+  "layer": 3,
+  "removed": 0.008305788040161133,
+  "inserted": 0.02772688865661621
+ },
+ {
+  "item": "brew-s2-r10d2-0027",
+  "c": "purple",
+  "c2": "gold",
+  "cell": 0,
+  "layer": 3,
+  "removed": 0.08380424976348877,
+  "inserted": -0.07828474044799805
+ },
+ {
+  "item": "brew-s2-r10d2-0041",
+  "c": "white",
+  "c2": "brown",
+  "cell": 0,
+  "layer": 3,
+  "removed": 0.22974109649658203,
+  "inserted": null
+ },
+ {
+  "item": "brew-s2-r10d2-0057",
+  "c": "gold",
+  "c2": "white",
+  "cell": 0,
+  "layer": 3,
+  "removed": -0.06526947021484375,
+  "inserted": 0.49475765228271484
+ },
+ {
+  "item": "brew-s2-r10d2-0066",
+  "c": "brown",
+  "c2": "teal",
+  "cell": 0,
+  "layer": 3,
+  "removed": null,
+  "inserted": 0.021168947219848633
+ },
+ {
+  "item": "brew-s2-r10d2-0069",
+  "c": "green",
+  "c2": "blue",
+  "cell": 0,
+  "layer": 3,
+  "removed": -0.1659409999847412,
+  "inserted": 0.08576476573944092
+ },
+ {
+  "item": "brew-s2-r10d2-0071",
+  "c": "teal",
+  "c2": "black",
+  "cell": 0,
+  "layer": 3,
+  "removed": 0.07810616493225098,
+  "inserted": 0.8168299198150635
+ },
+ {
+  "item": "brew-s2-r10d2-0073",
+  "c": "pink",
+  "c2": "gold",
+  "cell": 0,
+  "layer": 3,
+  "removed": -0.0423237681388855,
+  "inserted": 0.10216379165649414
+ },
+ {
+  "item": "brew-s2-r10d2-0074",
+  "c": "black",
+  "c2": "red",
+  "cell": 0,
+  "layer": 3,
+  "removed": 0.7499502897262573,
+  "inserted": -0.35363101959228516
+ },
+ {
+  "item": "brew-s2-r10d2-0075",
+  "c": "purple",
+  "c2": "red",
+  "cell": 0,
+  "layer": 3,
+  "removed": 0.0022482872009277344,
+  "inserted": 0.24932479858398438
+ },
+ {
+  "item": "brew-s2-r10d2-0092",
+  "c": "white",
+  "c2": "green",
+  "cell": 0,
+  "layer": 3,
+  "removed": -2.935542583465576,
+  "inserted": 0.5894374847412109
+ },
+ {
+  "item": "brew-s2-r10d2-0101",
+  "c": "green",
+  "c2": "black",
+  "cell": 0,
+  "layer": 3,
+  "removed": 0.1037142276763916,
+  "inserted": 0.08623647689819336
+ },
+ {
+  "item": "brew-s2-r10d2-0104",
+  "c": "teal",
+  "c2": "blue",
+  "cell": 0,
+  "layer": 3,
+  "removed": 0.010108590126037598,
+  "inserted": -0.008931636810302734
+ },
+ {
+  "item": "brew-s2-r10d2-0107",
+  "c": "green",
+  "c2": "black",
+  "cell": 0,
+  "layer": 3,
+  "removed": -0.0028634071350097656,
+  "inserted": 0.6022250652313232
+ },
+ {
+  "item": "brew-s2-r10d2-0125",
+  "c": "white",
+  "c2": "green",
+  "cell": 0,
+  "layer": 3,
+  "removed": -4.781864643096924,
+  "inserted": 0.6263754367828369
+ },
+ {
+  "item": "brew-s2-r10d2-0128",
+  "c": "pink",
+  "c2": "purple",
+  "cell": 0,
+  "layer": 3,
+  "removed": -0.30269479751586914,
+  "inserted": 0.2710592746734619
+ },
+ {
+  "item": "brew-s2-r10d2-0131",
+  "c": "green",
+  "c2": "purple",
+  "cell": 0,
+  "layer": 3,
+  "removed": -0.3238363265991211,
+  "inserted": 0.22220087051391602
+ },
+ {
+  "item": "brew-s2-r10d2-0132",
+  "c": "black",
+  "c2": "red",
+  "cell": 0,
+  "layer": 3,
+  "removed": -1.9035518169403076,
+  "inserted": 0.47006523609161377
+ },
+ {
+  "item": "brew-s2-r10d2-0140",
+  "c": "purple",
+  "c2": "white",
+  "cell": 0,
+  "layer": 3,
+  "removed": 0.013777613639831543,
+  "inserted": 0.3498663902282715
+ },
+ {
+  "item": "brew-s2-r10d2-0142",
+  "c": "gray",
+  "c2": "pink",
+  "cell": 0,
+  "layer": 3,
+  "removed": -0.6684103012084961,
+  "inserted": 0.3038749694824219
+ },
+ {
+  "item": "brew-s2-r10d2-0153",
+  "c": "teal",
+  "c2": "gold",
+  "cell": 0,
+  "layer": 3,
+  "removed": 0.0016158819198608398,
+  "inserted": 0.12333369255065918
+ },
+ {
+  "item": "brew-s2-r10d2-0172",
+  "c": "gold",
+  "c2": "pink",
+  "cell": 0,
+  "layer": 3,
+  "removed": 0.10200834274291992,
+  "inserted": 0.05758976936340332
+ },
+ {
+  "item": "brew-s2-r10d2-0173",
+  "c": "purple",
+  "c2": "teal",
+  "cell": 0,
+  "layer": 3,
+  "removed": -0.11332035064697266,
+  "inserted": 0.04466140270233154
+ },
+ {
+  "item": "brew-s2-r10d2-0179",
+  "c": "gray",
+  "c2": "red",
+  "cell": 0,
+  "layer": 3,
+  "removed": -0.9747586250305176,
+  "inserted": -0.04984688758850098
+ },
+ {
+  "item": "brew-s2-r10d2-0183",
+  "c": "brown",
+  "c2": "pink",
+  "cell": 0,
+  "layer": 3,
+  "removed": null,
+  "inserted": 1.0299406051635742
+ },
+ {
+  "item": "brew-s2-r10d2-0188",
+  "c": "teal",
+  "c2": "white",
+  "cell": 0,
+  "layer": 3,
+  "removed": -0.29865384101867676,
+  "inserted": 2.2288618087768555
+ },
+ {
+  "item": "brew-s2-r10d2-0197",
+  "c": "red",
+  "c2": "purple",
+  "cell": 0,
+  "layer": 3,
+  "removed": -0.0606236457824707,
+  "inserted": -0.11191344261169434
+ },
+ {
+  "item": "brew-s2-r10d2-0216",
+  "c": "pink",
+  "c2": "red",
+  "cell": 0,
+  "layer": 3,
+  "removed": 0.07334613800048828,
+  "inserted": 0.08036386966705322
+ },
+ {
+  "item": "brew-s2-r10d2-0219",
+  "c": "red",
+  "c2": "gray",
+  "cell": 0,
+  "layer": 3,
+  "removed": -0.10833632946014404,
+  "inserted": 0.22754240036010742
+ },
+ {
+  "item": "brew-s2-r10d2-0228",
+  "c": "green",
+  "c2": "black",
+  "cell": 0,
+  "layer": 3,
+  "removed": -0.039005279541015625,
+  "inserted": 0.1472463607788086
+ },
+ {
+  "item": "brew-s2-r10d2-0249",
+  "c": "black",
+  "c2": "gray",
+  "cell": 0,
+  "layer": 3,
+  "removed": -0.2440648078918457,
+  "inserted": 0.2230062484741211
+ },
+ {
+  "item": "brew-s2-r10d2-0260",
+  "c": "purple",
+  "c2": "red",
+  "cell": 0,
+  "layer": 3,
+  "removed": -0.06487226486206055,
+  "inserted": -0.06029033660888672
+ },
+ {
+  "item": "brew-s2-r10d2-0269",
+  "c": "gold",
+  "c2": "green",
+  "cell": 0,
+  "layer": 3,
+  "removed": -0.07504808902740479,
+  "inserted": 0.028237104415893555
+ },
+ {
+  "item": "brew-s2-r10d2-0289",
+  "c": "white",
+  "c2": "blue",
+  "cell": 0,
+  "layer": 3,
+  "removed": -1.192962646484375,
+  "inserted": 0.03726482391357422
+ },
+ {
+  "item": "brew-s2-r10d2-0299",
+  "c": "teal",
+  "c2": "red",
+  "cell": 0,
+  "layer": 3,
+  "removed": -0.15113258361816406,
+  "inserted": 0.19472098350524902
+ },
+ {
+  "item": "brew-s2-r10d2-0312",
+  "c": "teal",
+  "c2": "pink",
+  "cell": 0,
+  "layer": 3,
+  "removed": 0.01705789566040039,
+  "inserted": 0.10647618770599365
+ },
+ {
+  "item": "brew-s2-r10d2-0316",
+  "c": "black",
+  "c2": "purple",
+  "cell": 0,
+  "layer": 3,
+  "removed": -0.38537776470184326,
+  "inserted": -0.0012314319610595703
+ },
+ {
+  "item": "brew-s2-r10d2-0323",
+  "c": "blue",
+  "c2": "black",
+  "cell": 0,
+  "layer": 3,
+  "removed": -0.21140015125274658,
+  "inserted": 0.03754925727844238
+ },
+ {
+  "item": "brew-s2-r10d2-0339",
+  "c": "blue",
+  "c2": "purple",
+  "cell": 0,
+  "layer": 3,
+  "removed": -0.016770601272583008,
+  "inserted": -0.05557894706726074
+ },
+ {
+  "item": "brew-s2-r10d2-0344",
+  "c": "teal",
+  "c2": "white",
+  "cell": 0,
+  "layer": 3,
+  "removed": 0.040380001068115234,
+  "inserted": -0.2208395004272461
+ },
+ {
+  "item": "brew-s2-r10d2-0345",
+  "c": "blue",
+  "c2": "teal",
+  "cell": 0,
+  "layer": 3,
+  "removed": -0.02125847339630127,
+  "inserted": 0.05597662925720215
+ },
+ {
+  "item": "brew-s2-r10d2-0377",
+  "c": "brown",
+  "c2": "white",
+  "cell": 0,
+  "layer": 3,
+  "removed": null,
+  "inserted": 2.0825982093811035
+ },
+ {
+  "item": "brew-s2-r10d2-0383",
+  "c": "black",
+  "c2": "gray",
+  "cell": 0,
+  "layer": 3,
+  "removed": -0.012659072875976562,
+  "inserted": -0.037996530532836914
+ },
+ {
+  "item": "brew-s2-r10d2-0396",
+  "c": "purple",
+  "c2": "pink",
+  "cell": 0,
+  "layer": 3,
+  "removed": -0.027143001556396484,
+  "inserted": -0.07784819602966309
+ },
+ {
+  "item": "brew-s2-r10d2-0000",
+  "c": "gray",
+  "c2": "teal",
+  "cell": 0,
+  "layer": 4,
+  "removed": -2.7584056854248047,
+  "inserted": 0.8226437568664551
+ },
+ {
+  "item": "brew-s2-r10d2-0001",
+  "c": "blue",
+  "c2": "gold",
+  "cell": 0,
+  "layer": 4,
+  "removed": 0.017346203327178955,
+  "inserted": 0.06966423988342285
+ },
+ {
+  "item": "brew-s2-r10d2-0009",
+  "c": "pink",
+  "c2": "blue",
+  "cell": 0,
+  "layer": 4,
+  "removed": -0.456402063369751,
+  "inserted": -0.18541502952575684
+ },
+ {
+  "item": "brew-s2-r10d2-0012",
+  "c": "teal",
+  "c2": "gray",
+  "cell": 0,
+  "layer": 4,
+  "removed": -1.331240177154541,
+  "inserted": 1.5951488018035889
+ },
+ {
+  "item": "brew-s2-r10d2-0015",
+  "c": "gold",
+  "c2": "teal",
+  "cell": 0,
+  "layer": 4,
+  "removed": -0.07409703731536865,
+  "inserted": 0.08242475986480713
+ },
+ {
+  "item": "brew-s2-r10d2-0027",
+  "c": "purple",
+  "c2": "gold",
+  "cell": 0,
+  "layer": 4,
+  "removed": 0.011692166328430176,
+  "inserted": 0.03282737731933594
+ },
+ {
+  "item": "brew-s2-r10d2-0041",
+  "c": "white",
+  "c2": "brown",
+  "cell": 0,
+  "layer": 4,
+  "removed": 0.15707015991210938,
+  "inserted": null
+ },
+ {
+  "item": "brew-s2-r10d2-0057",
+  "c": "gold",
+  "c2": "white",
+  "cell": 0,
+  "layer": 4,
+  "removed": -0.029548168182373047,
+  "inserted": 0.13431978225708008
+ },
+ {
+  "item": "brew-s2-r10d2-0066",
+  "c": "brown",
+  "c2": "teal",
+  "cell": 0,
+  "layer": 4,
+  "removed": null,
+  "inserted": 0.7267951965332031
+ },
+ {
+  "item": "brew-s2-r10d2-0069",
+  "c": "green",
+  "c2": "blue",
+  "cell": 0,
+  "layer": 4,
+  "removed": -0.2306365966796875,
+  "inserted": 0.0720440149307251
+ },
+ {
+  "item": "brew-s2-r10d2-0071",
+  "c": "teal",
+  "c2": "black",
+  "cell": 0,
+  "layer": 4,
+  "removed": -0.40105700492858887,
+  "inserted": 1.1502745151519775
+ },
+ {
+  "item": "brew-s2-r10d2-0073",
+  "c": "pink",
+  "c2": "gold",
+  "cell": 0,
+  "layer": 4,
+  "removed": -1.3768057823181152,
+  "inserted": 0.17619729042053223
+ },
+ {
+  "item": "brew-s2-r10d2-0074",
+  "c": "black",
+  "c2": "red",
+  "cell": 0,
+  "layer": 4,
+  "removed": 0.1644223928451538,
+  "inserted": -0.2568216323852539
+ },
+ {
+  "item": "brew-s2-r10d2-0075",
+  "c": "purple",
+  "c2": "red",
+  "cell": 0,
+  "layer": 4,
+  "removed": -0.2844867706298828,
+  "inserted": 0.1460803747177124
+ },
+ {
+  "item": "brew-s2-r10d2-0092",
+  "c": "white",
+  "c2": "green",
+  "cell": 0,
+  "layer": 4,
+  "removed": -0.5747536420822144,
+  "inserted": 1.3021509647369385
+ },
+ {
+  "item": "brew-s2-r10d2-0101",
+  "c": "green",
+  "c2": "black",
+  "cell": 0,
+  "layer": 4,
+  "removed": -0.06345415115356445,
+  "inserted": 0.20156121253967285
+ },
+ {
+  "item": "brew-s2-r10d2-0104",
+  "c": "teal",
+  "c2": "blue",
+  "cell": 0,
+  "layer": 4,
+  "removed": -0.031060218811035156,
+  "inserted": -0.014625787734985352
+ },
+ {
+  "item": "brew-s2-r10d2-0107",
+  "c": "green",
+  "c2": "black",
+  "cell": 0,
+  "layer": 4,
+  "removed": -0.23115825653076172,
+  "inserted": 0.5385775566101074
+ },
+ {
+  "item": "brew-s2-r10d2-0125",
+  "c": "white",
+  "c2": "green",
+  "cell": 0,
+  "layer": 4,
+  "removed": -1.0384280681610107,
+  "inserted": 0.6863123178482056
+ },
+ {
+  "item": "brew-s2-r10d2-0128",
+  "c": "pink",
+  "c2": "purple",
+  "cell": 0,
+  "layer": 4,
+  "removed": -1.7912981510162354,
+  "inserted": 0.636089563369751
+ },
+ {
+  "item": "brew-s2-r10d2-0131",
+  "c": "green",
+  "c2": "purple",
+  "cell": 0,
+  "layer": 4,
+  "removed": -0.5244369506835938,
+  "inserted": 0.2334994077682495
+ },
+ {
+  "item": "brew-s2-r10d2-0132",
+  "c": "black",
+  "c2": "red",
+  "cell": 0,
+  "layer": 4,
+  "removed": -2.307389497756958,
+  "inserted": 0.926544189453125
+ },
+ {
+  "item": "brew-s2-r10d2-0140",
+  "c": "purple",
+  "c2": "white",
+  "cell": 0,
+  "layer": 4,
+  "removed": 0.09789693355560303,
+  "inserted": 0.061939120292663574
+ },
+ {
+  "item": "brew-s2-r10d2-0142",
+  "c": "gray",
+  "c2": "pink",
+  "cell": 0,
+  "layer": 4,
+  "removed": -2.561678886413574,
+  "inserted": 0.8269751071929932
+ },
+ {
+  "item": "brew-s2-r10d2-0153",
+  "c": "teal",
+  "c2": "gold",
+  "cell": 0,
+  "layer": 4,
+  "removed": -0.12021064758300781,
+  "inserted": 0.6754364967346191
+ },
+ {
+  "item": "brew-s2-r10d2-0172",
+  "c": "gold",
+  "c2": "pink",
+  "cell": 0,
+  "layer": 4,
+  "removed": -0.3075423240661621,
+  "inserted": 0.9221282005310059
+ },
+ {
+  "item": "brew-s2-r10d2-0173",
+  "c": "purple",
+  "c2": "teal",
+  "cell": 0,
+  "layer": 4,
+  "removed": -0.14050841331481934,
+  "inserted": 0.10139727592468262
+ },
+ {
+  "item": "brew-s2-r10d2-0179",
+  "c": "gray",
+  "c2": "red",
+  "cell": 0,
+  "layer": 4,
+  "removed": -1.0837244987487793,
+  "inserted": 0.003875255584716797
+ },
+ {
+  "item": "brew-s2-r10d2-0183",
+  "c": "brown",
+  "c2": "pink",
+  "cell": 0,
+  "layer": 4,
+  "removed": null,
+  "inserted": 0.34335267543792725
+ },
+ {
+  "item": "brew-s2-r10d2-0188",
+  "c": "teal",
+  "c2": "white",
+  "cell": 0,
+  "layer": 4,
+  "removed": -0.5421100854873657,
+  "inserted": 0.4462941288948059
+ },
+ {
+  "item": "brew-s2-r10d2-0197",
+  "c": "red",
+  "c2": "purple",
+  "cell": 0,
+  "layer": 4,
+  "removed": -0.11109614372253418,
+  "inserted": 0.0006039142608642578
+ },
+ {
+  "item": "brew-s2-r10d2-0216",
+  "c": "pink",
+  "c2": "red",
+  "cell": 0,
+  "layer": 4,
+  "removed": 0.0363922119140625,
+  "inserted": 0.028075814247131348
+ },
+ {
+  "item": "brew-s2-r10d2-0219",
+  "c": "red",
+  "c2": "gray",
+  "cell": 0,
+  "layer": 4,
+  "removed": -0.08448052406311035,
+  "inserted": 1.0537385940551758
+ },
+ {
+  "item": "brew-s2-r10d2-0228",
+  "c": "green",
+  "c2": "black",
+  "cell": 0,
+  "layer": 4,
+  "removed": -0.08621096611022949,
+  "inserted": 0.23391032218933105
+ },
+ {
+  "item": "brew-s2-r10d2-0249",
+  "c": "black",
+  "c2": "gray",
+  "cell": 0,
+  "layer": 4,
+  "removed": -0.34705519676208496,
+  "inserted": 1.2943086624145508
+ },
+ {
+  "item": "brew-s2-r10d2-0260",
+  "c": "purple",
+  "c2": "red",
+  "cell": 0,
+  "layer": 4,
+  "removed": -0.08400344848632812,
+  "inserted": -0.06454706192016602
+ },
+ {
+  "item": "brew-s2-r10d2-0269",
+  "c": "gold",
+  "c2": "green",
+  "cell": 0,
+  "layer": 4,
+  "removed": -0.14077985286712646,
+  "inserted": 0.07738375663757324
+ },
+ {
+  "item": "brew-s2-r10d2-0289",
+  "c": "white",
+  "c2": "blue",
+  "cell": 0,
+  "layer": 4,
+  "removed": -0.17957472801208496,
+  "inserted": 0.13971233367919922
+ },
+ {
+  "item": "brew-s2-r10d2-0299",
+  "c": "teal",
+  "c2": "red",
+  "cell": 0,
+  "layer": 4,
+  "removed": -0.33437538146972656,
+  "inserted": 0.13988184928894043
+ },
+ {
+  "item": "brew-s2-r10d2-0312",
+  "c": "teal",
+  "c2": "pink",
+  "cell": 0,
+  "layer": 4,
+  "removed": -1.6010794639587402,
+  "inserted": 4.255278587341309
+ },
+ {
+  "item": "brew-s2-r10d2-0316",
+  "c": "black",
+  "c2": "purple",
+  "cell": 0,
+  "layer": 4,
+  "removed": -0.4121288061141968,
+  "inserted": -0.17989778518676758
+ },
+ {
+  "item": "brew-s2-r10d2-0323",
+  "c": "blue",
+  "c2": "black",
+  "cell": 0,
+  "layer": 4,
+  "removed": -0.18944287300109863,
+  "inserted": 0.06722009181976318
+ },
+ {
+  "item": "brew-s2-r10d2-0339",
+  "c": "blue",
+  "c2": "purple",
+  "cell": 0,
+  "layer": 4,
+  "removed": -0.013768911361694336,
+  "inserted": -0.07464849948883057
+ },
+ {
+  "item": "brew-s2-r10d2-0344",
+  "c": "teal",
+  "c2": "white",
+  "cell": 0,
+  "layer": 4,
+  "removed": -1.2384800910949707,
+  "inserted": -0.057860493659973145
+ },
+ {
+  "item": "brew-s2-r10d2-0345",
+  "c": "blue",
+  "c2": "teal",
+  "cell": 0,
+  "layer": 4,
+  "removed": 0.05382513999938965,
+  "inserted": 1.1555404663085938
+ },
+ {
+  "item": "brew-s2-r10d2-0377",
+  "c": "brown",
+  "c2": "white",
+  "cell": 0,
+  "layer": 4,
+  "removed": null,
+  "inserted": 0.6530420780181885
+ },
+ {
+  "item": "brew-s2-r10d2-0383",
+  "c": "black",
+  "c2": "gray",
+  "cell": 0,
+  "layer": 4,
+  "removed": -0.02791285514831543,
+  "inserted": 0.19886106252670288
+ },
+ {
+  "item": "brew-s2-r10d2-0396",
+  "c": "purple",
+  "c2": "pink",
+  "cell": 0,
+  "layer": 4,
+  "removed": -0.029558777809143066,
+  "inserted": 0.09310054779052734
+ },
+ {
+  "item": "brew-s2-r10d2-0000",
+  "c": "gray",
+  "c2": "teal",
+  "cell": 1,
+  "layer": 0,
+  "removed": -0.744570255279541,
+  "inserted": 0.5642601251602173
+ },
+ {
+  "item": "brew-s2-r10d2-0001",
+  "c": "blue",
+  "c2": "gold",
+  "cell": 1,
+  "layer": 0,
+  "removed": 0.3137595057487488,
+  "inserted": 0.3148941993713379
+ },
+ {
+  "item": "brew-s2-r10d2-0009",
+  "c": "pink",
+  "c2": "blue",
+  "cell": 1,
+  "layer": 0,
+  "removed": -0.099312424659729,
+  "inserted": 0.19743800163269043
+ },
+ {
+  "item": "brew-s2-r10d2-0012",
+  "c": "teal",
+  "c2": "gray",
+  "cell": 1,
+  "layer": 0,
+  "removed": -0.5495505332946777,
+  "inserted": 0.921972393989563
+ },
+ {
+  "item": "brew-s2-r10d2-0015",
+  "c": "gold",
+  "c2": "teal",
+  "cell": 1,
+  "layer": 0,
+  "removed": -0.1438608169555664,
+  "inserted": 0.6454071998596191
+ },
+ {
+  "item": "brew-s2-r10d2-0027",
+  "c": "purple",
+  "c2": "gold",
+  "cell": 1,
+  "layer": 0,
+  "removed": -0.3728513717651367,
+  "inserted": 0.1652902364730835
+ },
+ {
+  "item": "brew-s2-r10d2-0041",
+  "c": "white",
+  "c2": "brown",
+  "cell": 1,
+  "layer": 0,
+  "removed": -0.4762132167816162,
+  "inserted": null
+ },
+ {
+  "item": "brew-s2-r10d2-0057",
+  "c": "gold",
+  "c2": "white",
+  "cell": 1,
+  "layer": 0,
+  "removed": 0.04118967056274414,
+  "inserted": 0.04066658020019531
+ },
+ {
+  "item": "brew-s2-r10d2-0066",
+  "c": "brown",
+  "c2": "teal",
+  "cell": 1,
+  "layer": 0,
+  "removed": null,
+  "inserted": 1.6257209777832031
+ },
+ {
+  "item": "brew-s2-r10d2-0069",
+  "c": "green",
+  "c2": "blue",
+  "cell": 1,
+  "layer": 0,
+  "removed": 0.6604247093200684,
+  "inserted": 0.021920204162597656
+ },
+ {
+  "item": "brew-s2-r10d2-0071",
+  "c": "teal",
+  "c2": "black",
+  "cell": 1,
+  "layer": 0,
+  "removed": -0.601337194442749,
+  "inserted": 0.9598630666732788
+ },
+ {
+  "item": "brew-s2-r10d2-0073",
+  "c": "pink",
+  "c2": "gold",
+  "cell": 1,
+  "layer": 0,
+  "removed": -0.4569873809814453,
+  "inserted": 0.6912200450897217
+ },
+ {
+  "item": "brew-s2-r10d2-0074",
+  "c": "black",
+  "c2": "red",
+  "cell": 1,
+  "layer": 0,
+  "removed": 2.42008376121521,
+  "inserted": -0.24883770942687988
+ },
+ {
+  "item": "brew-s2-r10d2-0075",
+  "c": "purple",
+  "c2": "red",
+  "cell": 1,
+  "layer": 0,
+  "removed": 0.12210273742675781,
+  "inserted": -0.11804890632629395
+ },
+ {
+  "item": "brew-s2-r10d2-0092",
+  "c": "white",
+  "c2": "green",
+  "cell": 1,
+  "layer": 0,
+  "removed": -0.0963444709777832,
+  "inserted": 0.49362945556640625
+ },
+ {
+  "item": "brew-s2-r10d2-0101",
+  "c": "green",
+  "c2": "black",
+  "cell": 1,
+  "layer": 0,
+  "removed": -0.6478042602539062,
+  "inserted": 0.5028976202011108
+ },
+ {
+  "item": "brew-s2-r10d2-0104",
+  "c": "teal",
+  "c2": "blue",
+  "cell": 1,
+  "layer": 0,
+  "removed": -0.9971518516540527,
+  "inserted": 0.17746877670288086
+ },
+ {
+  "item": "brew-s2-r10d2-0107",
+  "c": "green",
+  "c2": "black",
+  "cell": 1,
+  "layer": 0,
+  "removed": -0.8238492012023926,
+  "inserted": 4.407433986663818
+ },
+ {
+  "item": "brew-s2-r10d2-0125",
+  "c": "white",
+  "c2": "green",
+  "cell": 1,
+  "layer": 0,
+  "removed": -2.188857078552246,
+  "inserted": 0.6110258102416992
+ },
+ {
+  "item": "brew-s2-r10d2-0128",
+  "c": "pink",
+  "c2": "purple",
+  "cell": 1,
+  "layer": 0,
+  "removed": -0.5481679439544678,
+  "inserted": 0.6367813348770142
+ },
+ {
+  "item": "brew-s2-r10d2-0131",
+  "c": "green",
+  "c2": "purple",
+  "cell": 1,
+  "layer": 0,
+  "removed": -0.5026977062225342,
+  "inserted": -0.11108970642089844
+ },
+ {
+  "item": "brew-s2-r10d2-0132",
+  "c": "black",
+  "c2": "red",
+  "cell": 1,
+  "layer": 0,
+  "removed": -1.1078462600708008,
+  "inserted": 0.26195621490478516
+ },
+ {
+  "item": "brew-s2-r10d2-0140",
+  "c": "purple",
+  "c2": "white",
+  "cell": 1,
+  "layer": 0,
+  "removed": -0.026570558547973633,
+  "inserted": 0.7138609886169434
+ },
+ {
+  "item": "brew-s2-r10d2-0142",
+  "c": "gray",
+  "c2": "pink",
+  "cell": 1,
+  "layer": 0,
+  "removed": 0.11069011688232422,
+  "inserted": 0.14042448997497559
+ },
+ {
+  "item": "brew-s2-r10d2-0153",
+  "c": "teal",
+  "c2": "gold",
+  "cell": 1,
+  "layer": 0,
+  "removed": -0.25283217430114746,
+  "inserted": 0.18654316663742065
+ },
+ {
+  "item": "brew-s2-r10d2-0172",
+  "c": "gold",
+  "c2": "pink",
+  "cell": 1,
+  "layer": 0,
+  "removed": -0.23921549320220947,
+  "inserted": 0.24747371673583984
+ },
+ {
+  "item": "brew-s2-r10d2-0173",
+  "c": "purple",
+  "c2": "teal",
+  "cell": 1,
+  "layer": 0,
+  "removed": -0.02323460578918457,
+  "inserted": 0.23578393459320068
+ },
+ {
+  "item": "brew-s2-r10d2-0179",
+  "c": "gray",
+  "c2": "red",
+  "cell": 1,
+  "layer": 0,
+  "removed": -2.2303898334503174,
+  "inserted": 0.024810314178466797
+ },
+ {
+  "item": "brew-s2-r10d2-0183",
+  "c": "brown",
+  "c2": "pink",
+  "cell": 1,
+  "layer": 0,
+  "removed": null,
+  "inserted": 0.35458803176879883
+ },
+ {
+  "item": "brew-s2-r10d2-0188",
+  "c": "teal",
+  "c2": "white",
+  "cell": 1,
+  "layer": 0,
+  "removed": -0.3436020612716675,
+  "inserted": 1.3631587028503418
+ },
+ {
+  "item": "brew-s2-r10d2-0197",
+  "c": "red",
+  "c2": "purple",
+  "cell": 1,
+  "layer": 0,
+  "removed": -0.18107759952545166,
+  "inserted": -0.09097635746002197
+ },
+ {
+  "item": "brew-s2-r10d2-0216",
+  "c": "pink",
+  "c2": "red",
+  "cell": 1,
+  "layer": 0,
+  "removed": 0.13280916213989258,
+  "inserted": -0.10178828239440918
+ },
+ {
+  "item": "brew-s2-r10d2-0219",
+  "c": "red",
+  "c2": "gray",
+  "cell": 1,
+  "layer": 0,
+  "removed": -0.20244240760803223,
+  "inserted": 0.45758938789367676
+ },
+ {
+  "item": "brew-s2-r10d2-0228",
+  "c": "green",
+  "c2": "black",
+  "cell": 1,
+  "layer": 0,
+  "removed": -0.1809532642364502,
+  "inserted": 1.0819296836853027
+ },
+ {
+  "item": "brew-s2-r10d2-0249",
+  "c": "black",
+  "c2": "gray",
+  "cell": 1,
+  "layer": 0,
+  "removed": -0.12764406204223633,
+  "inserted": -0.014418721199035645
+ },
+ {
+  "item": "brew-s2-r10d2-0260",
+  "c": "purple",
+  "c2": "red",
+  "cell": 1,
+  "layer": 0,
+  "removed": -0.07870006561279297,
+  "inserted": 0.05376577377319336
+ },
+ {
+  "item": "brew-s2-r10d2-0269",
+  "c": "gold",
+  "c2": "green",
+  "cell": 1,
+  "layer": 0,
+  "removed": -0.10904765129089355,
+  "inserted": 0.1876225471496582
+ },
+ {
+  "item": "brew-s2-r10d2-0289",
+  "c": "white",
+  "c2": "blue",
+  "cell": 1,
+  "layer": 0,
+  "removed": -0.26903724670410156,
+  "inserted": 0.1136091947555542
+ },
+ {
+  "item": "brew-s2-r10d2-0299",
+  "c": "teal",
+  "c2": "red",
+  "cell": 1,
+  "layer": 0,
+  "removed": -0.37226974964141846,
+  "inserted": 0.4098498821258545
+ },
+ {
+  "item": "brew-s2-r10d2-0312",
+  "c": "teal",
+  "c2": "pink",
+  "cell": 1,
+  "layer": 0,
+  "removed": -2.5919008255004883,
+  "inserted": -0.14771151542663574
+ },
+ {
+  "item": "brew-s2-r10d2-0316",
+  "c": "black",
+  "c2": "purple",
+  "cell": 1,
+  "layer": 0,
+  "removed": -3.5374755859375,
+  "inserted": 0.5365082025527954
+ },
+ {
+  "item": "brew-s2-r10d2-0323",
+  "c": "blue",
+  "c2": "black",
+  "cell": 1,
+  "layer": 0,
+  "removed": 0.09939336776733398,
+  "inserted": -1.109875202178955
+ },
+ {
+  "item": "brew-s2-r10d2-0339",
+  "c": "blue",
+  "c2": "purple",
+  "cell": 1,
+  "layer": 0,
+  "removed": -0.024789750576019287,
+  "inserted": 0.04927957057952881
+ },
+ {
+  "item": "brew-s2-r10d2-0344",
+  "c": "teal",
+  "c2": "white",
+  "cell": 1,
+  "layer": 0,
+  "removed": -0.24878382682800293,
+  "inserted": 0.18779563903808594
+ },
+ {
+  "item": "brew-s2-r10d2-0345",
+  "c": "blue",
+  "c2": "teal",
+  "cell": 1,
+  "layer": 0,
+  "removed": 0.20637083053588867,
+  "inserted": 0.31445813179016113
+ },
+ {
+  "item": "brew-s2-r10d2-0377",
+  "c": "brown",
+  "c2": "white",
+  "cell": 1,
+  "layer": 0,
+  "removed": null,
+  "inserted": 1.1021939516067505
+ },
+ {
+  "item": "brew-s2-r10d2-0383",
+  "c": "black",
+  "c2": "gray",
+  "cell": 1,
+  "layer": 0,
+  "removed": -0.23561227321624756,
+  "inserted": -0.2925173044204712
+ },
+ {
+  "item": "brew-s2-r10d2-0396",
+  "c": "purple",
+  "c2": "pink",
+  "cell": 1,
+  "layer": 0,
+  "removed": -0.04672694206237793,
+  "inserted": 0.012480854988098145
+ },
+ {
+  "item": "brew-s2-r10d2-0000",
+  "c": "gray",
+  "c2": "teal",
+  "cell": 1,
+  "layer": 1,
+  "removed": -0.5863914489746094,
+  "inserted": 0.4812769889831543
+ },
+ {
+  "item": "brew-s2-r10d2-0001",
+  "c": "blue",
+  "c2": "gold",
+  "cell": 1,
+  "layer": 1,
+  "removed": 0.7815539836883545,
+  "inserted": 0.37944984436035156
+ },
+ {
+  "item": "brew-s2-r10d2-0009",
+  "c": "pink",
+  "c2": "blue",
+  "cell": 1,
+  "layer": 1,
+  "removed": -0.01575791835784912,
+  "inserted": 0.12836652994155884
+ },
+ {
+  "item": "brew-s2-r10d2-0012",
+  "c": "teal",
+  "c2": "gray",
+  "cell": 1,
+  "layer": 1,
+  "removed": -0.52349853515625,
+  "inserted": 1.5875787734985352
+ },
+ {
+  "item": "brew-s2-r10d2-0015",
+  "c": "gold",
+  "c2": "teal",
+  "cell": 1,
+  "layer": 1,
+  "removed": -0.1502591371536255,
+  "inserted": 0.11059081554412842
+ },
+ {
+  "item": "brew-s2-r10d2-0027",
+  "c": "purple",
+  "c2": "gold",
+  "cell": 1,
+  "layer": 1,
+  "removed": -0.15262103080749512,
+  "inserted": 0.1382904052734375
+ },
+ {
+  "item": "brew-s2-r10d2-0041",
+  "c": "white",
+  "c2": "brown",
+  "cell": 1,
+  "layer": 1,
+  "removed": -0.00814807415008545,
+  "inserted": null
+ },
+ {
+  "item": "brew-s2-r10d2-0057",
+  "c": "gold",
+  "c2": "white",
+  "cell": 1,
+  "layer": 1,
+  "removed": -0.0011663436889648438,
+  "inserted": 0.04233098030090332
+ },
+ {
+  "item": "brew-s2-r10d2-0066",
+  "c": "brown",
+  "c2": "teal",
+  "cell": 1,
+  "layer": 1,
+  "removed": null,
+  "inserted": 0.9852471351623535
+ },
+ {
+  "item": "brew-s2-r10d2-0069",
+  "c": "green",
+  "c2": "blue",
+  "cell": 1,
+  "layer": 1,
+  "removed": 0.35633397102355957,
+  "inserted": 1.027503490447998
+ },
+ {
+  "item": "brew-s2-r10d2-0071",
+  "c": "teal",
+  "c2": "black",
+  "cell": 1,
+  "layer": 1,
+  "removed": -0.3371396064758301,
+  "inserted": 0.4463807940483093
+ },
+ {
+  "item": "brew-s2-r10d2-0073",
+  "c": "pink",
+  "c2": "gold",
+  "cell": 1,
+  "layer": 1,
+  "removed": -0.45095181465148926,
+  "inserted": 0.6406058073043823
+ },
+ {
+  "item": "brew-s2-r10d2-0074",
+  "c": "black",
+  "c2": "red",
+  "cell": 1,
+  "layer": 1,
+  "removed": 3.3107728958129883,
+  "inserted": -0.4270024299621582
+ },
+ {
+  "item": "brew-s2-r10d2-0075",
+  "c": "purple",
+  "c2": "red",
+  "cell": 1,
+  "layer": 1,
+  "removed": 0.09016275405883789,
+  "inserted": -0.15794944763183594
+ },
+ {
+  "item": "brew-s2-r10d2-0092",
+  "c": "white",
+  "c2": "green",
+  "cell": 1,
+  "layer": 1,
+  "removed": -0.06934690475463867,
+  "inserted": 0.3937654495239258
+ },
+ {
+  "item": "brew-s2-r10d2-0101",
+  "c": "green",
+  "c2": "black",
+  "cell": 1,
+  "layer": 1,
+  "removed": -0.24085664749145508,
+  "inserted": 0.8290015459060669
+ },
+ {
+  "item": "brew-s2-r10d2-0104",
+  "c": "teal",
+  "c2": "blue",
+  "cell": 1,
+  "layer": 1,
+  "removed": -0.23086798191070557,
+  "inserted": 0.14697670936584473
+ },
+ {
+  "item": "brew-s2-r10d2-0107",
+  "c": "green",
+  "c2": "black",
+  "cell": 1,
+  "layer": 1,
+  "removed": -0.6081600189208984,
+  "inserted": 3.474008798599243
+ },
+ {
+  "item": "brew-s2-r10d2-0125",
+  "c": "white",
+  "c2": "green",
+  "cell": 1,
+  "layer": 1,
+  "removed": -0.787606954574585,
+  "inserted": 0.22307872772216797
+ },
+ {
+  "item": "brew-s2-r10d2-0128",
+  "c": "pink",
+  "c2": "purple",
+  "cell": 1,
+  "layer": 1,
+  "removed": -0.6873829364776611,
+  "inserted": 0.6477488279342651
+ },
+ {
+  "item": "brew-s2-r10d2-0131",
+  "c": "green",
+  "c2": "purple",
+  "cell": 1,
+  "layer": 1,
+  "removed": -0.687307596206665,
+  "inserted": -0.035542964935302734
+ },
+ {
+  "item": "brew-s2-r10d2-0132",
+  "c": "black",
+  "c2": "red",
+  "cell": 1,
+  "layer": 1,
+  "removed": -1.1268588304519653,
+  "inserted": 0.24841666221618652
+ },
+ {
+  "item": "brew-s2-r10d2-0140",
+  "c": "purple",
+  "c2": "white",
+  "cell": 1,
+  "layer": 1,
+  "removed": -0.05750894546508789,
+  "inserted": 0.19041872024536133
+ },
+ {
+  "item": "brew-s2-r10d2-0142",
+  "c": "gray",
+  "c2": "pink",
+  "cell": 1,
+  "layer": 1,
+  "removed": -0.29568004608154297,
+  "inserted": 0.3112959861755371
+ },
+ {
+  "item": "brew-s2-r10d2-0153",
+  "c": "teal",
+  "c2": "gold",
+  "cell": 1,
+  "layer": 1,
+  "removed": -0.19211828708648682,
+  "inserted": 0.3183530569076538
+ },
+ {
+  "item": "brew-s2-r10d2-0172",
+  "c": "gold",
+  "c2": "pink",
+  "cell": 1,
+  "layer": 1,
+  "removed": -0.11625123023986816,
+  "inserted": 0.2240147590637207
+ },
+ {
+  "item": "brew-s2-r10d2-0173",
+  "c": "purple",
+  "c2": "teal",
+  "cell": 1,
+  "layer": 1,
+  "removed": -0.0829935073852539,
+  "inserted": 0.16995131969451904
+ },
+ {
+  "item": "brew-s2-r10d2-0179",
+  "c": "gray",
+  "c2": "red",
+  "cell": 1,
+  "layer": 1,
+  "removed": -2.165919780731201,
+  "inserted": -0.01038217544555664
+ },
+ {
+  "item": "brew-s2-r10d2-0183",
+  "c": "brown",
+  "c2": "pink",
+  "cell": 1,
+  "layer": 1,
+  "removed": null,
+  "inserted": 0.4291539192199707
+ },
+ {
+  "item": "brew-s2-r10d2-0188",
+  "c": "teal",
+  "c2": "white",
+  "cell": 1,
+  "layer": 1,
+  "removed": -0.24995017051696777,
+  "inserted": 0.48944830894470215
+ },
+ {
+  "item": "brew-s2-r10d2-0197",
+  "c": "red",
+  "c2": "purple",
+  "cell": 1,
+  "layer": 1,
+  "removed": -0.1769060492515564,
+  "inserted": -0.04883992671966553
+ },
+ {
+  "item": "brew-s2-r10d2-0216",
+  "c": "pink",
+  "c2": "red",
+  "cell": 1,
+  "layer": 1,
+  "removed": 0.1012887954711914,
+  "inserted": -0.06219911575317383
+ },
+ {
+  "item": "brew-s2-r10d2-0219",
+  "c": "red",
+  "c2": "gray",
+  "cell": 1,
+  "layer": 1,
+  "removed": -0.2188713550567627,
+  "inserted": 0.3168327808380127
+ },
+ {
+  "item": "brew-s2-r10d2-0228",
+  "c": "green",
+  "c2": "black",
+  "cell": 1,
+  "layer": 1,
+  "removed": -0.20120716094970703,
+  "inserted": 1.8990964889526367
+ },
+ {
+  "item": "brew-s2-r10d2-0249",
+  "c": "black",
+  "c2": "gray",
+  "cell": 1,
+  "layer": 1,
+  "removed": 0.011862516403198242,
+  "inserted": -0.04664421081542969
+ },
+ {
+  "item": "brew-s2-r10d2-0260",
+  "c": "purple",
+  "c2": "red",
+  "cell": 1,
+  "layer": 1,
+  "removed": -0.05755281448364258,
+  "inserted": -0.07917666435241699
+ },
+ {
+  "item": "brew-s2-r10d2-0269",
+  "c": "gold",
+  "c2": "green",
+  "cell": 1,
+  "layer": 1,
+  "removed": -0.06462597846984863,
+  "inserted": 0.13727569580078125
+ },
+ {
+  "item": "brew-s2-r10d2-0289",
+  "c": "white",
+  "c2": "blue",
+  "cell": 1,
+  "layer": 1,
+  "removed": -0.8518565893173218,
+  "inserted": 0.011661648750305176
+ },
+ {
+  "item": "brew-s2-r10d2-0299",
+  "c": "teal",
+  "c2": "red",
+  "cell": 1,
+  "layer": 1,
+  "removed": -0.3784010410308838,
+  "inserted": 0.5249418020248413
+ },
+ {
+  "item": "brew-s2-r10d2-0312",
+  "c": "teal",
+  "c2": "pink",
+  "cell": 1,
+  "layer": 1,
+  "removed": -1.8860907554626465,
+  "inserted": -0.13636302947998047
+ },
+ {
+  "item": "brew-s2-r10d2-0316",
+  "c": "black",
+  "c2": "purple",
+  "cell": 1,
+  "layer": 1,
+  "removed": -4.306840896606445,
+  "inserted": 0.4766284227371216
+ },
+ {
+  "item": "brew-s2-r10d2-0323",
+  "c": "blue",
+  "c2": "black",
+  "cell": 1,
+  "layer": 1,
+  "removed": -0.0033228397369384766,
+  "inserted": -1.2571756839752197
+ },
+ {
+  "item": "brew-s2-r10d2-0339",
+  "c": "blue",
+  "c2": "purple",
+  "cell": 1,
+  "layer": 1,
+  "removed": -0.05179643630981445,
+  "inserted": 0.11047184467315674
+ },
+ {
+  "item": "brew-s2-r10d2-0344",
+  "c": "teal",
+  "c2": "white",
+  "cell": 1,
+  "layer": 1,
+  "removed": -0.15693259239196777,
+  "inserted": 0.2802276611328125
+ },
+ {
+  "item": "brew-s2-r10d2-0345",
+  "c": "blue",
+  "c2": "teal",
+  "cell": 1,
+  "layer": 1,
+  "removed": 0.11789441108703613,
+  "inserted": 0.30679798126220703
+ },
+ {
+  "item": "brew-s2-r10d2-0377",
+  "c": "brown",
+  "c2": "white",
+  "cell": 1,
+  "layer": 1,
+  "removed": null,
+  "inserted": 0.4372587203979492
+ },
+ {
+  "item": "brew-s2-r10d2-0383",
+  "c": "black",
+  "c2": "gray",
+  "cell": 1,
+  "layer": 1,
+  "removed": -0.17947876453399658,
+  "inserted": -0.3081085681915283
+ },
+ {
+  "item": "brew-s2-r10d2-0396",
+  "c": "purple",
+  "c2": "pink",
+  "cell": 1,
+  "layer": 1,
+  "removed": 0.0007872581481933594,
+  "inserted": 0.009543538093566895
+ },
+ {
+  "item": "brew-s2-r10d2-0000",
+  "c": "gray",
+  "c2": "teal",
+  "cell": 1,
+  "layer": 2,
+  "removed": 0.5405764579772949,
+  "inserted": 0.11449992656707764
+ },
+ {
+  "item": "brew-s2-r10d2-0001",
+  "c": "blue",
+  "c2": "gold",
+  "cell": 1,
+  "layer": 2,
+  "removed": 0.12402200698852539,
+  "inserted": 0.5822227001190186
+ },
+ {
+  "item": "brew-s2-r10d2-0009",
+  "c": "pink",
+  "c2": "blue",
+  "cell": 1,
+  "layer": 2,
+  "removed": -0.38908231258392334,
+  "inserted": 0.00866079330444336
+ },
+ {
+  "item": "brew-s2-r10d2-0012",
+  "c": "teal",
+  "c2": "gray",
+  "cell": 1,
+  "layer": 2,
+  "removed": -0.26038670539855957,
+  "inserted": 1.8808252811431885
+ },
+ {
+  "item": "brew-s2-r10d2-0015",
+  "c": "gold",
+  "c2": "teal",
+  "cell": 1,
+  "layer": 2,
+  "removed": -0.1640608310699463,
+  "inserted": 0.058837890625
+ },
+ {
+  "item": "brew-s2-r10d2-0027",
+  "c": "purple",
+  "c2": "gold",
+  "cell": 1,
+  "layer": 2,
+  "removed": -0.06423211097717285,
+  "inserted": 0.06152158975601196
+ },
+ {
+  "item": "brew-s2-r10d2-0041",
+  "c": "white",
+  "c2": "brown",
+  "cell": 1,
+  "layer": 2,
+  "removed": -0.09522843360900879,
+  "inserted": null
+ },
+ {
+  "item": "brew-s2-r10d2-0057",
+  "c": "gold",
+  "c2": "white",
+  "cell": 1,
+  "layer": 2,
+  "removed": -0.1206657886505127,
+  "inserted": -0.15741443634033203
+ },
+ {
+  "item": "brew-s2-r10d2-0066",
+  "c": "brown",
+  "c2": "teal",
+  "cell": 1,
+  "layer": 2,
+  "removed": null,
+  "inserted": 0.11864495277404785
+ },
+ {
+  "item": "brew-s2-r10d2-0069",
+  "c": "green",
+  "c2": "blue",
+  "cell": 1,
+  "layer": 2,
+  "removed": 0.16848278045654297,
+  "inserted": 0.05501866340637207
+ },
+ {
+  "item": "brew-s2-r10d2-0071",
+  "c": "teal",
+  "c2": "black",
+  "cell": 1,
+  "layer": 2,
+  "removed": -0.5886852741241455,
+  "inserted": 0.7288126349449158
+ },
+ {
+  "item": "brew-s2-r10d2-0073",
+  "c": "pink",
+  "c2": "gold",
+  "cell": 1,
+  "layer": 2,
+  "removed": -0.36761677265167236,
+  "inserted": 0.6347165107727051
+ },
+ {
+  "item": "brew-s2-r10d2-0074",
+  "c": "black",
+  "c2": "red",
+  "cell": 1,
+  "layer": 2,
+  "removed": 2.7077555656433105,
+  "inserted": -0.29135751724243164
+ },
+ {
+  "item": "brew-s2-r10d2-0075",
+  "c": "purple",
+  "c2": "red",
+  "cell": 1,
+  "layer": 2,
+  "removed": 0.23477745056152344,
+  "inserted": -0.1164407730102539
+ },
+ {
+  "item": "brew-s2-r10d2-0092",
+  "c": "white",
+  "c2": "green",
+  "cell": 1,
+  "layer": 2,
+  "removed": 0.3288278579711914,
+  "inserted": 0.14271974563598633
+ },
+ {
+  "item": "brew-s2-r10d2-0101",
+  "c": "green",
+  "c2": "black",
+  "cell": 1,
+  "layer": 2,
+  "removed": -0.21056199073791504,
+  "inserted": 0.5696210861206055
+ },
+ {
+  "item": "brew-s2-r10d2-0104",
+  "c": "teal",
+  "c2": "blue",
+  "cell": 1,
+  "layer": 2,
+  "removed": -0.21662139892578125,
+  "inserted": 0.10584068298339844
+ },
+ {
+  "item": "brew-s2-r10d2-0107",
+  "c": "green",
+  "c2": "black",
+  "cell": 1,
+  "layer": 2,
+  "removed": -0.7177119255065918,
+  "inserted": 3.25400972366333
+ },
+ {
+  "item": "brew-s2-r10d2-0125",
+  "c": "white",
+  "c2": "green",
+  "cell": 1,
+  "layer": 2,
+  "removed": -0.39667773246765137,
+  "inserted": 0.19819927215576172
+ },
+ {
+  "item": "brew-s2-r10d2-0128",
+  "c": "pink",
+  "c2": "purple",
+  "cell": 1,
+  "layer": 2,
+  "removed": -0.5102653503417969,
+  "inserted": 0.8579607009887695
+ },
+ {
+  "item": "brew-s2-r10d2-0131",
+  "c": "green",
+  "c2": "purple",
+  "cell": 1,
+  "layer": 2,
+  "removed": -0.6415164470672607,
+  "inserted": 0.6789414882659912
+ },
+ {
+  "item": "brew-s2-r10d2-0132",
+  "c": "black",
+  "c2": "red",
+  "cell": 1,
+  "layer": 2,
+  "removed": -0.806556224822998,
+  "inserted": 0.28192591667175293
+ },
+ {
+  "item": "brew-s2-r10d2-0140",
+  "c": "purple",
+  "c2": "white",
+  "cell": 1,
+  "layer": 2,
+  "removed": -0.11853277683258057,
+  "inserted": 0.14246273040771484
+ },
+ {
+  "item": "brew-s2-r10d2-0142",
+  "c": "gray",
+  "c2": "pink",
+  "cell": 1,
+  "layer": 2,
+  "removed": -0.3620424270629883,
+  "inserted": 0.448760986328125
+ },
+ {
+  "item": "brew-s2-r10d2-0153",
+  "c": "teal",
+  "c2": "gold",
+  "cell": 1,
+  "layer": 2,
+  "removed": -0.0797414779663086,
+  "inserted": 0.08121031522750854
+ },
+ {
+  "item": "brew-s2-r10d2-0172",
+  "c": "gold",
+  "c2": "pink",
+  "cell": 1,
+  "layer": 2,
+  "removed": 0.023441791534423828,
+  "inserted": 0.5154566764831543
+ },
+ {
+  "item": "brew-s2-r10d2-0173",
+  "c": "purple",
+  "c2": "teal",
+  "cell": 1,
+  "layer": 2,
+  "removed": -0.020812273025512695,
+  "inserted": 0.10516738891601562
+ },
+ {
+  "item": "brew-s2-r10d2-0179",
+  "c": "gray",
+  "c2": "red",
+  "cell": 1,
+  "layer": 2,
+  "removed": -1.9315249919891357,
+  "inserted": -0.022260189056396484
+ },
+ {
+  "item": "brew-s2-r10d2-0183",
+  "c": "brown",
+  "c2": "pink",
+  "cell": 1,
+  "layer": 2,
+  "removed": null,
+  "inserted": 0.5875225067138672
+ },
+ {
+  "item": "brew-s2-r10d2-0188",
+  "c": "teal",
+  "c2": "white",
+  "cell": 1,
+  "layer": 2,
+  "removed": -0.23993182182312012,
+  "inserted": 0.32184064388275146
+ },
+ {
+  "item": "brew-s2-r10d2-0197",
+  "c": "red",
+  "c2": "purple",
+  "cell": 1,
+  "layer": 2,
+  "removed": -0.3867799639701843,
+  "inserted": -0.028763771057128906
+ },
+ {
+  "item": "brew-s2-r10d2-0216",
+  "c": "pink",
+  "c2": "red",
+  "cell": 1,
+  "layer": 2,
+  "removed": 0.07898378372192383,
+  "inserted": -0.0047376155853271484
+ },
+ {
+  "item": "brew-s2-r10d2-0219",
+  "c": "red",
+  "c2": "gray",
+  "cell": 1,
+  "layer": 2,
+  "removed": -0.2607002258300781,
+  "inserted": 0.24632227420806885
+ },
+ {
+  "item": "brew-s2-r10d2-0228",
+  "c": "green",
+  "c2": "black",
+  "cell": 1,
+  "layer": 2,
+  "removed": 0.1719975471496582,
+  "inserted": 1.080939531326294
+ },
+ {
+  "item": "brew-s2-r10d2-0249",
+  "c": "black",
+  "c2": "gray",
+  "cell": 1,
+  "layer": 2,
+  "removed": -0.06554174423217773,
+  "inserted": 0.08692550659179688
+ },
+ {
+  "item": "brew-s2-r10d2-0260",
+  "c": "purple",
+  "c2": "red",
+  "cell": 1,
+  "layer": 2,
+  "removed": -0.03364205360412598,
+  "inserted": -0.025353431701660156
+ },
+ {
+  "item": "brew-s2-r10d2-0269",
+  "c": "gold",
+  "c2": "green",
+  "cell": 1,
+  "layer": 2,
+  "removed": 0.007370293140411377,
+  "inserted": 0.05978035926818848
+ },
+ {
+  "item": "brew-s2-r10d2-0289",
+  "c": "white",
+  "c2": "blue",
+  "cell": 1,
+  "layer": 2,
+  "removed": -2.0646157264709473,
+  "inserted": 0.2719893455505371
+ },
+ {
+  "item": "brew-s2-r10d2-0299",
+  "c": "teal",
+  "c2": "red",
+  "cell": 1,
+  "layer": 2,
+  "removed": -0.46498751640319824,
+  "inserted": 0.6554743051528931
+ },
+ {
+  "item": "brew-s2-r10d2-0312",
+  "c": "teal",
+  "c2": "pink",
+  "cell": 1,
+  "layer": 2,
+  "removed": -0.32442033290863037,
+  "inserted": 0.07466351985931396
+ },
+ {
+  "item": "brew-s2-r10d2-0316",
+  "c": "black",
+  "c2": "purple",
+  "cell": 1,
+  "layer": 2,
+  "removed": -1.068375587463379,
+  "inserted": 0.5226923227310181
+ },
+ {
+  "item": "brew-s2-r10d2-0323",
+  "c": "blue",
+  "c2": "black",
+  "cell": 1,
+  "layer": 2,
+  "removed": -0.08547520637512207,
+  "inserted": -0.0009976625442504883
+ },
+ {
+  "item": "brew-s2-r10d2-0339",
+  "c": "blue",
+  "c2": "purple",
+  "cell": 1,
+  "layer": 2,
+  "removed": -0.07377052307128906,
+  "inserted": 0.16491234302520752
+ },
+ {
+  "item": "brew-s2-r10d2-0344",
+  "c": "teal",
+  "c2": "white",
+  "cell": 1,
+  "layer": 2,
+  "removed": -0.008429765701293945,
+  "inserted": 0.11075091361999512
+ },
+ {
+  "item": "brew-s2-r10d2-0345",
+  "c": "blue",
+  "c2": "teal",
+  "cell": 1,
+  "layer": 2,
+  "removed": 0.09438395500183105,
+  "inserted": 0.3438115119934082
+ },
+ {
+  "item": "brew-s2-r10d2-0377",
+  "c": "brown",
+  "c2": "white",
+  "cell": 1,
+  "layer": 2,
+  "removed": null,
+  "inserted": 0.35868000984191895
+ },
+ {
+  "item": "brew-s2-r10d2-0383",
+  "c": "black",
+  "c2": "gray",
+  "cell": 1,
+  "layer": 2,
+  "removed": -0.14519071578979492,
+  "inserted": 0.06853938102722168
+ },
+ {
+  "item": "brew-s2-r10d2-0396",
+  "c": "purple",
+  "c2": "pink",
+  "cell": 1,
+  "layer": 2,
+  "removed": 0.0026094913482666016,
+  "inserted": 0.08460760116577148
+ },
+ {
+  "item": "brew-s2-r10d2-0000",
+  "c": "gray",
+  "c2": "teal",
+  "cell": 1,
+  "layer": 3,
+  "removed": -0.30173349380493164,
+  "inserted": 0.6309070587158203
+ },
+ {
+  "item": "brew-s2-r10d2-0001",
+  "c": "blue",
+  "c2": "gold",
+  "cell": 1,
+  "layer": 3,
+  "removed": 0.029451489448547363,
+  "inserted": 0.27305173873901367
+ },
+ {
+  "item": "brew-s2-r10d2-0009",
+  "c": "pink",
+  "c2": "blue",
+  "cell": 1,
+  "layer": 3,
+  "removed": -2.153867721557617,
+  "inserted": 0.06555795669555664
+ },
+ {
+  "item": "brew-s2-r10d2-0012",
+  "c": "teal",
+  "c2": "gray",
+  "cell": 1,
+  "layer": 3,
+  "removed": 0.9361677169799805,
+  "inserted": 1.129118800163269
+ },
+ {
+  "item": "brew-s2-r10d2-0015",
+  "c": "gold",
+  "c2": "teal",
+  "cell": 1,
+  "layer": 3,
+  "removed": -1.30293607711792,
+  "inserted": -0.1167135238647461
+ },
+ {
+  "item": "brew-s2-r10d2-0027",
+  "c": "purple",
+  "c2": "gold",
+  "cell": 1,
+  "layer": 3,
+  "removed": 0.019298195838928223,
+  "inserted": 0.004594564437866211
+ },
+ {
+  "item": "brew-s2-r10d2-0041",
+  "c": "white",
+  "c2": "brown",
+  "cell": 1,
+  "layer": 3,
+  "removed": -0.08142435550689697,
+  "inserted": null
+ },
+ {
+  "item": "brew-s2-r10d2-0057",
+  "c": "gold",
+  "c2": "white",
+  "cell": 1,
+  "layer": 3,
+  "removed": -0.0614776611328125,
+  "inserted": 0.13293123245239258
+ },
+ {
+  "item": "brew-s2-r10d2-0066",
+  "c": "brown",
+  "c2": "teal",
+  "cell": 1,
+  "layer": 3,
+  "removed": null,
+  "inserted": 0.059615135192871094
+ },
+ {
+  "item": "brew-s2-r10d2-0069",
+  "c": "green",
+  "c2": "blue",
+  "cell": 1,
+  "layer": 3,
+  "removed": -0.24593257904052734,
+  "inserted": 0.35930144786834717
+ },
+ {
+  "item": "brew-s2-r10d2-0071",
+  "c": "teal",
+  "c2": "black",
+  "cell": 1,
+  "layer": 3,
+  "removed": -0.5191774368286133,
+  "inserted": 3.796262741088867
+ },
+ {
+  "item": "brew-s2-r10d2-0073",
+  "c": "pink",
+  "c2": "gold",
+  "cell": 1,
+  "layer": 3,
+  "removed": -0.8863086700439453,
+  "inserted": 0.1421949863433838
+ },
+ {
+  "item": "brew-s2-r10d2-0074",
+  "c": "black",
+  "c2": "red",
+  "cell": 1,
+  "layer": 3,
+  "removed": 3.073979377746582,
+  "inserted": -0.452528715133667
+ },
+ {
+  "item": "brew-s2-r10d2-0075",
+  "c": "purple",
+  "c2": "red",
+  "cell": 1,
+  "layer": 3,
+  "removed": 0.31664562225341797,
+  "inserted": 0.2196505069732666
+ },
+ {
+  "item": "brew-s2-r10d2-0092",
+  "c": "white",
+  "c2": "green",
+  "cell": 1,
+  "layer": 3,
+  "removed": -0.6086249351501465,
+  "inserted": 1.9675796031951904
+ },
+ {
+  "item": "brew-s2-r10d2-0101",
+  "c": "green",
+  "c2": "black",
+  "cell": 1,
+  "layer": 3,
+  "removed": -0.11752820014953613,
+  "inserted": 2.1074399948120117
+ },
+ {
+  "item": "brew-s2-r10d2-0104",
+  "c": "teal",
+  "c2": "blue",
+  "cell": 1,
+  "layer": 3,
+  "removed": -0.09012413024902344,
+  "inserted": -0.008427143096923828
+ },
+ {
+  "item": "brew-s2-r10d2-0107",
+  "c": "green",
+  "c2": "black",
+  "cell": 1,
+  "layer": 3,
+  "removed": -0.27744197845458984,
+  "inserted": 1.8117976188659668
+ },
+ {
+  "item": "brew-s2-r10d2-0125",
+  "c": "white",
+  "c2": "green",
+  "cell": 1,
+  "layer": 3,
+  "removed": -0.7843877077102661,
+  "inserted": 0.5332887172698975
+ },
+ {
+  "item": "brew-s2-r10d2-0128",
+  "c": "pink",
+  "c2": "purple",
+  "cell": 1,
+  "layer": 3,
+  "removed": -0.7777855396270752,
+  "inserted": 0.6809459924697876
+ },
+ {
+  "item": "brew-s2-r10d2-0131",
+  "c": "green",
+  "c2": "purple",
+  "cell": 1,
+  "layer": 3,
+  "removed": -0.3190183639526367,
+  "inserted": 0.3524298667907715
+ },
+ {
+  "item": "brew-s2-r10d2-0132",
+  "c": "black",
+  "c2": "red",
+  "cell": 1,
+  "layer": 3,
+  "removed": -6.849380970001221,
+  "inserted": 0.406221866607666
+ },
+ {
+  "item": "brew-s2-r10d2-0140",
+  "c": "purple",
+  "c2": "white",
+  "cell": 1,
+  "layer": 3,
+  "removed": 0.026153564453125,
+  "inserted": 0.08681678771972656
+ },
+ {
+  "item": "brew-s2-r10d2-0142",
+  "c": "gray",
+  "c2": "pink",
+  "cell": 1,
+  "layer": 3,
+  "removed": -0.6563856601715088,
+  "inserted": 0.18435955047607422
+ },
+ {
+  "item": "brew-s2-r10d2-0153",
+  "c": "teal",
+  "c2": "gold",
+  "cell": 1,
+  "layer": 3,
+  "removed": -0.013503789901733398,
+  "inserted": 0.28954946994781494
+ },
+ {
+  "item": "brew-s2-r10d2-0172",
+  "c": "gold",
+  "c2": "pink",
+  "cell": 1,
+  "layer": 3,
+  "removed": -0.01522839069366455,
+  "inserted": 0.19268882274627686
+ },
+ {
+  "item": "brew-s2-r10d2-0173",
+  "c": "purple",
+  "c2": "teal",
+  "cell": 1,
+  "layer": 3,
+  "removed": -0.15758919715881348,
+  "inserted": 0.06878352165222168
+ },
+ {
+  "item": "brew-s2-r10d2-0179",
+  "c": "gray",
+  "c2": "red",
+  "cell": 1,
+  "layer": 3,
+  "removed": -0.5589624643325806,
+  "inserted": 0.041990578174591064
+ },
+ {
+  "item": "brew-s2-r10d2-0183",
+  "c": "brown",
+  "c2": "pink",
+  "cell": 1,
+  "layer": 3,
+  "removed": null,
+  "inserted": 0.4047691822052002
+ },
+ {
+  "item": "brew-s2-r10d2-0188",
+  "c": "teal",
+  "c2": "white",
+  "cell": 1,
+  "layer": 3,
+  "removed": -0.3342311382293701,
+  "inserted": 0.38532328605651855
+ },
+ {
+  "item": "brew-s2-r10d2-0197",
+  "c": "red",
+  "c2": "purple",
+  "cell": 1,
+  "layer": 3,
+  "removed": -0.33352696895599365,
+  "inserted": -0.09995627403259277
+ },
+ {
+  "item": "brew-s2-r10d2-0216",
+  "c": "pink",
+  "c2": "red",
+  "cell": 1,
+  "layer": 3,
+  "removed": 0.032677412033081055,
+  "inserted": 0.04539656639099121
+ },
+ {
+  "item": "brew-s2-r10d2-0219",
+  "c": "red",
+  "c2": "gray",
+  "cell": 1,
+  "layer": 3,
+  "removed": -0.0998150110244751,
+  "inserted": 0.10930180549621582
+ },
+ {
+  "item": "brew-s2-r10d2-0228",
+  "c": "green",
+  "c2": "black",
+  "cell": 1,
+  "layer": 3,
+  "removed": -0.27594661712646484,
+  "inserted": 0.5273880958557129
+ },
+ {
+  "item": "brew-s2-r10d2-0249",
+  "c": "black",
+  "c2": "gray",
+  "cell": 1,
+  "layer": 3,
+  "removed": -0.8593037128448486,
+  "inserted": 2.678147315979004
+ },
+ {
+  "item": "brew-s2-r10d2-0260",
+  "c": "purple",
+  "c2": "red",
+  "cell": 1,
+  "layer": 3,
+  "removed": -0.09548473358154297,
+  "inserted": 0.07215309143066406
+ },
+ {
+  "item": "brew-s2-r10d2-0269",
+  "c": "gold",
+  "c2": "green",
+  "cell": 1,
+  "layer": 3,
+  "removed": -0.22620487213134766,
+  "inserted": 0.02883148193359375
+ },
+ {
+  "item": "brew-s2-r10d2-0289",
+  "c": "white",
+  "c2": "blue",
+  "cell": 1,
+  "layer": 3,
+  "removed": -0.13138484954833984,
+  "inserted": 0.04299044609069824
+ },
+ {
+  "item": "brew-s2-r10d2-0299",
+  "c": "teal",
+  "c2": "red",
+  "cell": 1,
+  "layer": 3,
+  "removed": 0.48542118072509766,
+  "inserted": 0.25082993507385254
+ },
+ {
+  "item": "brew-s2-r10d2-0312",
+  "c": "teal",
+  "c2": "pink",
+  "cell": 1,
+  "layer": 3,
+  "removed": -1.1023049354553223,
+  "inserted": 2.6379523277282715
+ },
+ {
+  "item": "brew-s2-r10d2-0316",
+  "c": "black",
+  "c2": "purple",
+  "cell": 1,
+  "layer": 3,
+  "removed": -0.5619752407073975,
+  "inserted": 0.13019800186157227
+ },
+ {
+  "item": "brew-s2-r10d2-0323",
+  "c": "blue",
+  "c2": "black",
+  "cell": 1,
+  "layer": 3,
+  "removed": -0.31826382875442505,
+  "inserted": 0.15682363510131836
+ },
+ {
+  "item": "brew-s2-r10d2-0339",
+  "c": "blue",
+  "c2": "purple",
+  "cell": 1,
+  "layer": 3,
+  "removed": -0.06990718841552734,
+  "inserted": -0.014904499053955078
+ },
+ {
+  "item": "brew-s2-r10d2-0344",
+  "c": "teal",
+  "c2": "white",
+  "cell": 1,
+  "layer": 3,
+  "removed": -0.45749545097351074,
+  "inserted": 0.10864651203155518
+ },
+ {
+  "item": "brew-s2-r10d2-0345",
+  "c": "blue",
+  "c2": "teal",
+  "cell": 1,
+  "layer": 3,
+  "removed": -0.056139469146728516,
+  "inserted": 0.17841005325317383
+ },
+ {
+  "item": "brew-s2-r10d2-0377",
+  "c": "brown",
+  "c2": "white",
+  "cell": 1,
+  "layer": 3,
+  "removed": null,
+  "inserted": 4.755054473876953
+ },
+ {
+  "item": "brew-s2-r10d2-0383",
+  "c": "black",
+  "c2": "gray",
+  "cell": 1,
+  "layer": 3,
+  "removed": -0.04167938232421875,
+  "inserted": 0.07283055782318115
+ },
+ {
+  "item": "brew-s2-r10d2-0396",
+  "c": "purple",
+  "c2": "pink",
+  "cell": 1,
+  "layer": 3,
+  "removed": -0.048227548599243164,
+  "inserted": 0.31542301177978516
+ },
+ {
+  "item": "brew-s2-r10d2-0000",
+  "c": "gray",
+  "c2": "teal",
+  "cell": 1,
+  "layer": 4,
+  "removed": -4.195404529571533,
+  "inserted": 0.5750536918640137
+ },
+ {
+  "item": "brew-s2-r10d2-0001",
+  "c": "blue",
+  "c2": "gold",
+  "cell": 1,
+  "layer": 4,
+  "removed": -0.4940221309661865,
+  "inserted": 0.3147101402282715
+ },
+ {
+  "item": "brew-s2-r10d2-0009",
+  "c": "pink",
+  "c2": "blue",
+  "cell": 1,
+  "layer": 4,
+  "removed": -3.071753978729248,
+  "inserted": -0.04278218746185303
+ },
+ {
+  "item": "brew-s2-r10d2-0012",
+  "c": "teal",
+  "c2": "gray",
+  "cell": 1,
+  "layer": 4,
+  "removed": -2.2123541831970215,
+  "inserted": 16.327699661254883
+ },
+ {
+  "item": "brew-s2-r10d2-0015",
+  "c": "gold",
+  "c2": "teal",
+  "cell": 1,
+  "layer": 4,
+  "removed": -0.25788235664367676,
+  "inserted": 0.07970905303955078
+ },
+ {
+  "item": "brew-s2-r10d2-0027",
+  "c": "purple",
+  "c2": "gold",
+  "cell": 1,
+  "layer": 4,
+  "removed": -0.9097585678100586,
+  "inserted": 0.5473215579986572
+ },
+ {
+  "item": "brew-s2-r10d2-0041",
+  "c": "white",
+  "c2": "brown",
+  "cell": 1,
+  "layer": 4,
+  "removed": -0.16252070665359497,
+  "inserted": null
+ },
+ {
+  "item": "brew-s2-r10d2-0057",
+  "c": "gold",
+  "c2": "white",
+  "cell": 1,
+  "layer": 4,
+  "removed": -0.34222185611724854,
+  "inserted": 1.375040054321289
+ },
+ {
+  "item": "brew-s2-r10d2-0066",
+  "c": "brown",
+  "c2": "teal",
+  "cell": 1,
+  "layer": 4,
+  "removed": null,
+  "inserted": 0.48186445236206055
+ },
+ {
+  "item": "brew-s2-r10d2-0069",
+  "c": "green",
+  "c2": "blue",
+  "cell": 1,
+  "layer": 4,
+  "removed": -3.103562355041504,
+  "inserted": 4.090327739715576
+ },
+ {
+  "item": "brew-s2-r10d2-0071",
+  "c": "teal",
+  "c2": "black",
+  "cell": 1,
+  "layer": 4,
+  "removed": -1.246896505355835,
+  "inserted": 8.233833312988281
+ },
+ {
+  "item": "brew-s2-r10d2-0073",
+  "c": "pink",
+  "c2": "gold",
+  "cell": 1,
+  "layer": 4,
+  "removed": -0.9904959201812744,
+  "inserted": 0.786362886428833
+ },
+ {
+  "item": "brew-s2-r10d2-0074",
+  "c": "black",
+  "c2": "red",
+  "cell": 1,
+  "layer": 4,
+  "removed": 2.0465407371520996,
+  "inserted": -0.4080638885498047
+ },
+ {
+  "item": "brew-s2-r10d2-0075",
+  "c": "purple",
+  "c2": "red",
+  "cell": 1,
+  "layer": 4,
+  "removed": -0.6945784091949463,
+  "inserted": 0.45752114057540894
+ },
+ {
+  "item": "brew-s2-r10d2-0092",
+  "c": "white",
+  "c2": "green",
+  "cell": 1,
+  "layer": 4,
+  "removed": -5.766057968139648,
+  "inserted": 4.165078639984131
+ },
+ {
+  "item": "brew-s2-r10d2-0101",
+  "c": "green",
+  "c2": "black",
+  "cell": 1,
+  "layer": 4,
+  "removed": -1.16414213180542,
+  "inserted": 2.3096940517425537
+ },
+ {
+  "item": "brew-s2-r10d2-0104",
+  "c": "teal",
+  "c2": "blue",
+  "cell": 1,
+  "layer": 4,
+  "removed": -0.8210334777832031,
+  "inserted": 0.09565114974975586
+ },
+ {
+  "item": "brew-s2-r10d2-0107",
+  "c": "green",
+  "c2": "black",
+  "cell": 1,
+  "layer": 4,
+  "removed": -3.190052032470703,
+  "inserted": 2.1949896812438965
+ },
+ {
+  "item": "brew-s2-r10d2-0125",
+  "c": "white",
+  "c2": "green",
+  "cell": 1,
+  "layer": 4,
+  "removed": -6.968305587768555,
+  "inserted": 3.4793152809143066
+ },
+ {
+  "item": "brew-s2-r10d2-0128",
+  "c": "pink",
+  "c2": "purple",
+  "cell": 1,
+  "layer": 4,
+  "removed": -10.114977836608887,
+  "inserted": 2.3126986026763916
+ },
+ {
+  "item": "brew-s2-r10d2-0131",
+  "c": "green",
+  "c2": "purple",
+  "cell": 1,
+  "layer": 4,
+  "removed": -1.0708270072937012,
+  "inserted": 1.2105143070220947
+ },
+ {
+  "item": "brew-s2-r10d2-0132",
+  "c": "black",
+  "c2": "red",
+  "cell": 1,
+  "layer": 4,
+  "removed": -14.410781860351562,
+  "inserted": 1.3272638320922852
+ },
+ {
+  "item": "brew-s2-r10d2-0140",
+  "c": "purple",
+  "c2": "white",
+  "cell": 1,
+  "layer": 4,
+  "removed": -0.11028361320495605,
+  "inserted": 0.1799001693725586
+ },
+ {
+  "item": "brew-s2-r10d2-0142",
+  "c": "gray",
+  "c2": "pink",
+  "cell": 1,
+  "layer": 4,
+  "removed": -5.006169319152832,
+  "inserted": 3.7102251052856445
+ },
+ {
+  "item": "brew-s2-r10d2-0153",
+  "c": "teal",
+  "c2": "gold",
+  "cell": 1,
+  "layer": 4,
+  "removed": -0.23647046089172363,
+  "inserted": 0.8858122825622559
+ },
+ {
+  "item": "brew-s2-r10d2-0172",
+  "c": "gold",
+  "c2": "pink",
+  "cell": 1,
+  "layer": 4,
+  "removed": -0.5402266979217529,
+  "inserted": 3.922107219696045
+ },
+ {
+  "item": "brew-s2-r10d2-0173",
+  "c": "purple",
+  "c2": "teal",
+  "cell": 1,
+  "layer": 4,
+  "removed": -0.2593069076538086,
+  "inserted": 0.22394180297851562
+ },
+ {
+  "item": "brew-s2-r10d2-0179",
+  "c": "gray",
+  "c2": "red",
+  "cell": 1,
+  "layer": 4,
+  "removed": -2.591304302215576,
+  "inserted": -0.02447986602783203
+ },
+ {
+  "item": "brew-s2-r10d2-0183",
+  "c": "brown",
+  "c2": "pink",
+  "cell": 1,
+  "layer": 4,
+  "removed": null,
+  "inserted": 2.6696128845214844
+ },
+ {
+  "item": "brew-s2-r10d2-0188",
+  "c": "teal",
+  "c2": "white",
+  "cell": 1,
+  "layer": 4,
+  "removed": -0.6859116554260254,
+  "inserted": 0.4509878158569336
+ },
+ {
+  "item": "brew-s2-r10d2-0197",
+  "c": "red",
+  "c2": "purple",
+  "cell": 1,
+  "layer": 4,
+  "removed": -0.30177128314971924,
+  "inserted": 0.6358227729797363
+ },
+ {
+  "item": "brew-s2-r10d2-0216",
+  "c": "pink",
+  "c2": "red",
+  "cell": 1,
+  "layer": 4,
+  "removed": -0.3045649528503418,
+  "inserted": 0.044467806816101074
+ },
+ {
+  "item": "brew-s2-r10d2-0219",
+  "c": "red",
+  "c2": "gray",
+  "cell": 1,
+  "layer": 4,
+  "removed": -0.1477816104888916,
+  "inserted": 1.9810454845428467
+ },
+ {
+  "item": "brew-s2-r10d2-0228",
+  "c": "green",
+  "c2": "black",
+  "cell": 1,
+  "layer": 4,
+  "removed": -0.21907758712768555,
+  "inserted": 2.3206324577331543
+ },
+ {
+  "item": "brew-s2-r10d2-0249",
+  "c": "black",
+  "c2": "gray",
+  "cell": 1,
+  "layer": 4,
+  "removed": -1.4034466743469238,
+  "inserted": 7.8726325035095215
+ },
+ {
+  "item": "brew-s2-r10d2-0260",
+  "c": "purple",
+  "c2": "red",
+  "cell": 1,
+  "layer": 4,
+  "removed": -0.5381875038146973,
+  "inserted": 0.14372968673706055
+ },
+ {
+  "item": "brew-s2-r10d2-0269",
+  "c": "gold",
+  "c2": "green",
+  "cell": 1,
+  "layer": 4,
+  "removed": -0.6047990322113037,
+  "inserted": 0.1882338523864746
+ },
+ {
+  "item": "brew-s2-r10d2-0289",
+  "c": "white",
+  "c2": "blue",
+  "cell": 1,
+  "layer": 4,
+  "removed": -0.26661205291748047,
+  "inserted": 0.08859944343566895
+ },
+ {
+  "item": "brew-s2-r10d2-0299",
+  "c": "teal",
+  "c2": "red",
+  "cell": 1,
+  "layer": 4,
+  "removed": -0.6342482566833496,
+  "inserted": 0.35739850997924805
+ },
+ {
+  "item": "brew-s2-r10d2-0312",
+  "c": "teal",
+  "c2": "pink",
+  "cell": 1,
+  "layer": 4,
+  "removed": -2.876041889190674,
+  "inserted": 1.1791642904281616
+ },
+ {
+  "item": "brew-s2-r10d2-0316",
+  "c": "black",
+  "c2": "purple",
+  "cell": 1,
+  "layer": 4,
+  "removed": -0.5204517245292664,
+  "inserted": 1.6632452011108398
+ },
+ {
+  "item": "brew-s2-r10d2-0323",
+  "c": "blue",
+  "c2": "black",
+  "cell": 1,
+  "layer": 4,
+  "removed": -0.5756046772003174,
+  "inserted": 0.47482794523239136
+ },
+ {
+  "item": "brew-s2-r10d2-0339",
+  "c": "blue",
+  "c2": "purple",
+  "cell": 1,
+  "layer": 4,
+  "removed": -0.1366281509399414,
+  "inserted": 0.04121220111846924
+ },
+ {
+  "item": "brew-s2-r10d2-0344",
+  "c": "teal",
+  "c2": "white",
+  "cell": 1,
+  "layer": 4,
+  "removed": -1.0230051279067993,
+  "inserted": 0.2236342430114746
+ },
+ {
+  "item": "brew-s2-r10d2-0345",
+  "c": "blue",
+  "c2": "teal",
+  "cell": 1,
+  "layer": 4,
+  "removed": -0.14252042770385742,
+  "inserted": 0.6132183074951172
+ },
+ {
+  "item": "brew-s2-r10d2-0377",
+  "c": "brown",
+  "c2": "white",
+  "cell": 1,
+  "layer": 4,
+  "removed": null,
+  "inserted": 7.203257083892822
+ },
+ {
+  "item": "brew-s2-r10d2-0383",
+  "c": "black",
+  "c2": "gray",
+  "cell": 1,
+  "layer": 4,
+  "removed": -0.44985198974609375,
+  "inserted": 2.0436925888061523
+ },
+ {
+  "item": "brew-s2-r10d2-0396",
+  "c": "purple",
+  "c2": "pink",
+  "cell": 1,
+  "layer": 4,
+  "removed": -0.40695178508758545,
+  "inserted": 1.2326927185058594
+ },
+ {
+  "item": "brew-s2-r10d2-0000",
+  "c": "gray",
+  "c2": "teal",
+  "cell": 2,
+  "layer": 0,
+  "removed": 0.19909405708312988,
+  "inserted": 0.2502248287200928
+ },
+ {
+  "item": "brew-s2-r10d2-0001",
+  "c": "blue",
+  "c2": "gold",
+  "cell": 2,
+  "layer": 0,
+  "removed": 1.011487603187561,
+  "inserted": 0.480104923248291
+ },
+ {
+  "item": "brew-s2-r10d2-0009",
+  "c": "pink",
+  "c2": "blue",
+  "cell": 2,
+  "layer": 0,
+  "removed": -0.30887460708618164,
+  "inserted": 0.12629985809326172
+ },
+ {
+  "item": "brew-s2-r10d2-0012",
+  "c": "teal",
+  "c2": "gray",
+  "cell": 2,
+  "layer": 0,
+  "removed": -0.05933690071105957,
+  "inserted": 0.6255472898483276
+ },
+ {
+  "item": "brew-s2-r10d2-0015",
+  "c": "gold",
+  "c2": "teal",
+  "cell": 2,
+  "layer": 0,
+  "removed": -0.15645647048950195,
+  "inserted": 0.09151101112365723
+ },
+ {
+  "item": "brew-s2-r10d2-0027",
+  "c": "purple",
+  "c2": "gold",
+  "cell": 2,
+  "layer": 0,
+  "removed": -0.04903411865234375,
+  "inserted": 0.1939631700515747
+ },
+ {
+  "item": "brew-s2-r10d2-0041",
+  "c": "white",
+  "c2": "brown",
+  "cell": 2,
+  "layer": 0,
+  "removed": 0.544990062713623,
+  "inserted": null
+ },
+ {
+  "item": "brew-s2-r10d2-0057",
+  "c": "gold",
+  "c2": "white",
+  "cell": 2,
+  "layer": 0,
+  "removed": -0.12475371360778809,
+  "inserted": 0.2736067771911621
+ },
+ {
+  "item": "brew-s2-r10d2-0066",
+  "c": "brown",
+  "c2": "teal",
+  "cell": 2,
+  "layer": 0,
+  "removed": null,
+  "inserted": 0.6368532180786133
+ },
+ {
+  "item": "brew-s2-r10d2-0069",
+  "c": "green",
+  "c2": "blue",
+  "cell": 2,
+  "layer": 0,
+  "removed": 1.1673555374145508,
+  "inserted": 0.36632347106933594
+ },
+ {
+  "item": "brew-s2-r10d2-0071",
+  "c": "teal",
+  "c2": "black",
+  "cell": 2,
+  "layer": 0,
+  "removed": -0.23488545417785645,
+  "inserted": 0.6769574284553528
+ },
+ {
+  "item": "brew-s2-r10d2-0073",
+  "c": "pink",
+  "c2": "gold",
+  "cell": 2,
+  "layer": 0,
+  "removed": -0.5747789144515991,
+  "inserted": 0.554344892501831
+ },
+ {
+  "item": "brew-s2-r10d2-0074",
+  "c": "black",
+  "c2": "red",
+  "cell": 2,
+  "layer": 0,
+  "removed": 1.8985393047332764,
+  "inserted": -0.3981647491455078
+ },
+ {
+  "item": "brew-s2-r10d2-0075",
+  "c": "purple",
+  "c2": "red",
+  "cell": 2,
+  "layer": 0,
+  "removed": 0.22344565391540527,
+  "inserted": -0.14114665985107422
+ },
+ {
+  "item": "brew-s2-r10d2-0092",
+  "c": "white",
+  "c2": "green",
+  "cell": 2,
+  "layer": 0,
+  "removed": -1.380373477935791,
+  "inserted": 1.2222051620483398
+ },
+ {
+  "item": "brew-s2-r10d2-0101",
+  "c": "green",
+  "c2": "black",
+  "cell": 2,
+  "layer": 0,
+  "removed": -1.477501392364502,
+  "inserted": 0.7710801362991333
+ },
+ {
+  "item": "brew-s2-r10d2-0104",
+  "c": "teal",
+  "c2": "blue",
+  "cell": 2,
+  "layer": 0,
+  "removed": -0.004774212837219238,
+  "inserted": 0.12078523635864258
+ },
+ {
+  "item": "brew-s2-r10d2-0107",
+  "c": "green",
+  "c2": "black",
+  "cell": 2,
+  "layer": 0,
+  "removed": -1.109877586364746,
+  "inserted": 1.4758472442626953
+ },
+ {
+  "item": "brew-s2-r10d2-0125",
+  "c": "white",
+  "c2": "green",
+  "cell": 2,
+  "layer": 0,
+  "removed": -0.49422574043273926,
+  "inserted": 1.563786506652832
+ },
+ {
+  "item": "brew-s2-r10d2-0128",
+  "c": "pink",
+  "c2": "purple",
+  "cell": 2,
+  "layer": 0,
+  "removed": -0.5565791130065918,
+  "inserted": 0.24772417545318604
+ },
+ {
+  "item": "brew-s2-r10d2-0131",
+  "c": "green",
+  "c2": "purple",
+  "cell": 2,
+  "layer": 0,
+  "removed": -0.3016388416290283,
+  "inserted": 0.1529473066329956
+ },
+ {
+  "item": "brew-s2-r10d2-0132",
+  "c": "black",
+  "c2": "red",
+  "cell": 2,
+  "layer": 0,
+  "removed": -0.924504816532135,
+  "inserted": 0.16337060928344727
+ },
+ {
+  "item": "brew-s2-r10d2-0140",
+  "c": "purple",
+  "c2": "white",
+  "cell": 2,
+  "layer": 0,
+  "removed": 0.004483938217163086,
+  "inserted": 0.20937538146972656
+ },
+ {
+  "item": "brew-s2-r10d2-0142",
+  "c": "gray",
+  "c2": "pink",
+  "cell": 2,
+  "layer": 0,
+  "removed": -1.5196809768676758,
+  "inserted": 0.2632565498352051
+ },
+ {
+  "item": "brew-s2-r10d2-0153",
+  "c": "teal",
+  "c2": "gold",
+  "cell": 2,
+  "layer": 0,
+  "removed": -0.1656970977783203,
+  "inserted": 0.06569862365722656
+ },
+ {
+  "item": "brew-s2-r10d2-0172",
+  "c": "gold",
+  "c2": "pink",
+  "cell": 2,
+  "layer": 0,
+  "removed": 0.2216782569885254,
+  "inserted": 0.4108860492706299
+ },
+ {
+  "item": "brew-s2-r10d2-0173",
+  "c": "purple",
+  "c2": "teal",
+  "cell": 2,
+  "layer": 0,
+  "removed": 0.04121828079223633,
+  "inserted": 0.0514678955078125
+ },
+ {
+  "item": "brew-s2-r10d2-0179",
+  "c": "gray",
+  "c2": "red",
+  "cell": 2,
+  "layer": 0,
+  "removed": -2.5426759719848633,
+  "inserted": 0.09207987785339355
+ },
+ {
+  "item": "brew-s2-r10d2-0183",
+  "c": "brown",
+  "c2": "pink",
+  "cell": 2,
+  "layer": 0,
+  "removed": null,
+  "inserted": 1.0467710494995117
+ },
+ {
+  "item": "brew-s2-r10d2-0188",
+  "c": "teal",
+  "c2": "white",
+  "cell": 2,
+  "layer": 0,
+  "removed": -0.09684348106384277,
+  "inserted": 1.1283459663391113
+ },
+ {
+  "item": "brew-s2-r10d2-0197",
+  "c": "red",
+  "c2": "purple",
+  "cell": 2,
+  "layer": 0,
+  "removed": -0.17059409618377686,
+  "inserted": -0.18333899974822998
+ },
+ {
+  "item": "brew-s2-r10d2-0216",
+  "c": "pink",
+  "c2": "red",
+  "cell": 2,
+  "layer": 0,
+  "removed": -0.002192974090576172,
+  "inserted": 0.08270847797393799
+ },
+ {
+  "item": "brew-s2-r10d2-0219",
+  "c": "red",
+  "c2": "gray",
+  "cell": 2,
+  "layer": 0,
+  "removed": -0.238763689994812,
+  "inserted": 1.2179045677185059
+ },
+ {
+  "item": "brew-s2-r10d2-0228",
+  "c": "green",
+  "c2": "black",
+  "cell": 2,
+  "layer": 0,
+  "removed": 0.015262603759765625,
+  "inserted": 1.4121489524841309
+ },
+ {
+  "item": "brew-s2-r10d2-0249",
+  "c": "black",
+  "c2": "gray",
+  "cell": 2,
+  "layer": 0,
+  "removed": -0.2849442958831787,
+  "inserted": 0.20084798336029053
+ },
+ {
+  "item": "brew-s2-r10d2-0260",
+  "c": "purple",
+  "c2": "red",
+  "cell": 2,
+  "layer": 0,
+  "removed": 0.05372416973114014,
+  "inserted": -0.0053174495697021484
+ },
+ {
+  "item": "brew-s2-r10d2-0269",
+  "c": "gold",
+  "c2": "green",
+  "cell": 2,
+  "layer": 0,
+  "removed": -0.04228830337524414,
+  "inserted": 0.13084769248962402
+ },
+ {
+  "item": "brew-s2-r10d2-0289",
+  "c": "white",
+  "c2": "blue",
+  "cell": 2,
+  "layer": 0,
+  "removed": -2.1846444606781006,
+  "inserted": 0.05834949016571045
+ },
+ {
+  "item": "brew-s2-r10d2-0299",
+  "c": "teal",
+  "c2": "red",
+  "cell": 2,
+  "layer": 0,
+  "removed": -0.2105625867843628,
+  "inserted": 0.3851977586746216
+ },
+ {
+  "item": "brew-s2-r10d2-0312",
+  "c": "teal",
+  "c2": "pink",
+  "cell": 2,
+  "layer": 0,
+  "removed": -0.9133265018463135,
+  "inserted": 0.14083051681518555
+ },
+ {
+  "item": "brew-s2-r10d2-0316",
+  "c": "black",
+  "c2": "purple",
+  "cell": 2,
+  "layer": 0,
+  "removed": -2.513411521911621,
+  "inserted": 0.6610772609710693
+ },
+ {
+  "item": "brew-s2-r10d2-0323",
+  "c": "blue",
+  "c2": "black",
+  "cell": 2,
+  "layer": 0,
+  "removed": -0.04483234882354736,
+  "inserted": 0.6667978763580322
+ },
+ {
+  "item": "brew-s2-r10d2-0339",
+  "c": "blue",
+  "c2": "purple",
+  "cell": 2,
+  "layer": 0,
+  "removed": 0.07939183712005615,
+  "inserted": 0.012288570404052734
+ },
+ {
+  "item": "brew-s2-r10d2-0344",
+  "c": "teal",
+  "c2": "white",
+  "cell": 2,
+  "layer": 0,
+  "removed": 0.03469228744506836,
+  "inserted": 0.08121037483215332
+ },
+ {
+  "item": "brew-s2-r10d2-0345",
+  "c": "blue",
+  "c2": "teal",
+  "cell": 2,
+  "layer": 0,
+  "removed": -0.059342145919799805,
+  "inserted": 0.011161088943481445
+ },
+ {
+  "item": "brew-s2-r10d2-0377",
+  "c": "brown",
+  "c2": "white",
+  "cell": 2,
+  "layer": 0,
+  "removed": null,
+  "inserted": 1.1411027908325195
+ },
+ {
+  "item": "brew-s2-r10d2-0383",
+  "c": "black",
+  "c2": "gray",
+  "cell": 2,
+  "layer": 0,
+  "removed": -0.13909637928009033,
+  "inserted": 0.21670937538146973
+ },
+ {
+  "item": "brew-s2-r10d2-0396",
+  "c": "purple",
+  "c2": "pink",
+  "cell": 2,
+  "layer": 0,
+  "removed": 0.048124074935913086,
+  "inserted": -0.028415441513061523
+ },
+ {
+  "item": "brew-s2-r10d2-0000",
+  "c": "gray",
+  "c2": "teal",
+  "cell": 2,
+  "layer": 1,
+  "removed": 0.1838545799255371,
+  "inserted": 0.23932719230651855
+ },
+ {
+  "item": "brew-s2-r10d2-0001",
+  "c": "blue",
+  "c2": "gold",
+  "cell": 2,
+  "layer": 1,
+  "removed": 0.8292661905288696,
+  "inserted": 0.5453586578369141
+ },
+ {
+  "item": "brew-s2-r10d2-0009",
+  "c": "pink",
+  "c2": "blue",
+  "cell": 2,
+  "layer": 1,
+  "removed": -0.21955609321594238,
+  "inserted": 0.12734562158584595
+ },
+ {
+  "item": "brew-s2-r10d2-0012",
+  "c": "teal",
+  "c2": "gray",
+  "cell": 2,
+  "layer": 1,
+  "removed": -0.039899587631225586,
+  "inserted": 1.0894874334335327
+ },
+ {
+  "item": "brew-s2-r10d2-0015",
+  "c": "gold",
+  "c2": "teal",
+  "cell": 2,
+  "layer": 1,
+  "removed": -0.15648341178894043,
+  "inserted": 0.08142173290252686
+ },
+ {
+  "item": "brew-s2-r10d2-0027",
+  "c": "purple",
+  "c2": "gold",
+  "cell": 2,
+  "layer": 1,
+  "removed": -0.03977489471435547,
+  "inserted": 0.16664087772369385
+ },
+ {
+  "item": "brew-s2-r10d2-0041",
+  "c": "white",
+  "c2": "brown",
+  "cell": 2,
+  "layer": 1,
+  "removed": 0.6779026985168457,
+  "inserted": null
+ },
+ {
+  "item": "brew-s2-r10d2-0057",
+  "c": "gold",
+  "c2": "white",
+  "cell": 2,
+  "layer": 1,
+  "removed": -0.08994555473327637,
+  "inserted": 0.14075040817260742
+ },
+ {
+  "item": "brew-s2-r10d2-0066",
+  "c": "brown",
+  "c2": "teal",
+  "cell": 2,
+  "layer": 1,
+  "removed": null,
+  "inserted": 0.925084114074707
+ },
+ {
+  "item": "brew-s2-r10d2-0069",
+  "c": "green",
+  "c2": "blue",
+  "cell": 2,
+  "layer": 1,
+  "removed": 0.28282666206359863,
+  "inserted": 0.11169648170471191
+ },
+ {
+  "item": "brew-s2-r10d2-0071",
+  "c": "teal",
+  "c2": "black",
+  "cell": 2,
+  "layer": 1,
+  "removed": -0.14675652980804443,
+  "inserted": 1.0414377450942993
+ },
+ {
+  "item": "brew-s2-r10d2-0073",
+  "c": "pink",
+  "c2": "gold",
+  "cell": 2,
+  "layer": 1,
+  "removed": -1.1761837005615234,
+  "inserted": 0.5484911203384399
+ },
+ {
+  "item": "brew-s2-r10d2-0074",
+  "c": "black",
+  "c2": "red",
+  "cell": 2,
+  "layer": 1,
+  "removed": 1.9414678812026978,
+  "inserted": -0.5347051620483398
+ },
+ {
+  "item": "brew-s2-r10d2-0075",
+  "c": "purple",
+  "c2": "red",
+  "cell": 2,
+  "layer": 1,
+  "removed": 0.1465590000152588,
+  "inserted": -0.14431941509246826
+ },
+ {
+  "item": "brew-s2-r10d2-0092",
+  "c": "white",
+  "c2": "green",
+  "cell": 2,
+  "layer": 1,
+  "removed": -1.5672860145568848,
+  "inserted": 1.4535083770751953
+ },
+ {
+  "item": "brew-s2-r10d2-0101",
+  "c": "green",
+  "c2": "black",
+  "cell": 2,
+  "layer": 1,
+  "removed": -0.31429481506347656,
+  "inserted": 1.817166805267334
+ },
+ {
+  "item": "brew-s2-r10d2-0104",
+  "c": "teal",
+  "c2": "blue",
+  "cell": 2,
+  "layer": 1,
+  "removed": -0.028437018394470215,
+  "inserted": 0.1362442970275879
+ },
+ {
+  "item": "brew-s2-r10d2-0107",
+  "c": "green",
+  "c2": "black",
+  "cell": 2,
+  "layer": 1,
+  "removed": -0.5645110607147217,
+  "inserted": 2.5518252849578857
+ },
+ {
+  "item": "brew-s2-r10d2-0125",
+  "c": "white",
+  "c2": "green",
+  "cell": 2,
+  "layer": 1,
+  "removed": -0.42982709407806396,
+  "inserted": 0.4588353633880615
+ },
+ {
+  "item": "brew-s2-r10d2-0128",
+  "c": "pink",
+  "c2": "purple",
+  "cell": 2,
+  "layer": 1,
+  "removed": -0.5724062919616699,
+  "inserted": 0.2780379056930542
+ },
+ {
+  "item": "brew-s2-r10d2-0131",
+  "c": "green",
+  "c2": "purple",
+  "cell": 2,
+  "layer": 1,
+  "removed": -0.3057687282562256,
+  "inserted": 0.19726502895355225
+ },
+ {
+  "item": "brew-s2-r10d2-0132",
+  "c": "black",
+  "c2": "red",
+  "cell": 2,
+  "layer": 1,
+  "removed": -1.987295150756836,
+  "inserted": 1.8567276000976562
+ },
+ {
+  "item": "brew-s2-r10d2-0140",
+  "c": "purple",
+  "c2": "white",
+  "cell": 2,
+  "layer": 1,
+  "removed": -0.05769515037536621,
+  "inserted": 0.19179248809814453
+ },
+ {
+  "item": "brew-s2-r10d2-0142",
+  "c": "gray",
+  "c2": "pink",
+  "cell": 2,
+  "layer": 1,
+  "removed": -2.2000646591186523,
+  "inserted": 0.3539128303527832
+ },
+ {
+  "item": "brew-s2-r10d2-0153",
+  "c": "teal",
+  "c2": "gold",
+  "cell": 2,
+  "layer": 1,
+  "removed": -0.1957862377166748,
+  "inserted": 0.15003883838653564
+ },
+ {
+  "item": "brew-s2-r10d2-0172",
+  "c": "gold",
+  "c2": "pink",
+  "cell": 2,
+  "layer": 1,
+  "removed": 0.21391558647155762,
+  "inserted": 0.3982471227645874
+ },
+ {
+  "item": "brew-s2-r10d2-0173",
+  "c": "purple",
+  "c2": "teal",
+  "cell": 2,
+  "layer": 1,
+  "removed": 0.008674383163452148,
+  "inserted": 0.0636054277420044
+ },
+ {
+  "item": "brew-s2-r10d2-0179",
+  "c": "gray",
+  "c2": "red",
+  "cell": 2,
+  "layer": 1,
+  "removed": -2.2498388290405273,
+  "inserted": 0.11157655715942383
+ },
+ {
+  "item": "brew-s2-r10d2-0183",
+  "c": "brown",
+  "c2": "pink",
+  "cell": 2,
+  "layer": 1,
+  "removed": null,
+  "inserted": 1.509927749633789
+ },
+ {
+  "item": "brew-s2-r10d2-0188",
+  "c": "teal",
+  "c2": "white",
+  "cell": 2,
+  "layer": 1,
+  "removed": -0.09839415550231934,
+  "inserted": 0.9137287139892578
+ },
+ {
+  "item": "brew-s2-r10d2-0197",
+  "c": "red",
+  "c2": "purple",
+  "cell": 2,
+  "layer": 1,
+  "removed": -0.15678179264068604,
+  "inserted": -0.20612895488739014
+ },
+ {
+  "item": "brew-s2-r10d2-0216",
+  "c": "pink",
+  "c2": "red",
+  "cell": 2,
+  "layer": 1,
+  "removed": 0.0184326171875,
+  "inserted": 0.10489928722381592
+ },
+ {
+  "item": "brew-s2-r10d2-0219",
+  "c": "red",
+  "c2": "gray",
+  "cell": 2,
+  "layer": 1,
+  "removed": -0.25469279289245605,
+  "inserted": 1.0487875938415527
+ },
+ {
+  "item": "brew-s2-r10d2-0228",
+  "c": "green",
+  "c2": "black",
+  "cell": 2,
+  "layer": 1,
+  "removed": 0.07306838035583496,
+  "inserted": 1.491924524307251
+ },
+ {
+  "item": "brew-s2-r10d2-0249",
+  "c": "black",
+  "c2": "gray",
+  "cell": 2,
+  "layer": 1,
+  "removed": -0.58194899559021,
+  "inserted": 1.1073856353759766
+ },
+ {
+  "item": "brew-s2-r10d2-0260",
+  "c": "purple",
+  "c2": "red",
+  "cell": 2,
+  "layer": 1,
+  "removed": 0.03327739238739014,
+  "inserted": -0.04946732521057129
+ },
+ {
+  "item": "brew-s2-r10d2-0269",
+  "c": "gold",
+  "c2": "green",
+  "cell": 2,
+  "layer": 1,
+  "removed": -0.010789632797241211,
+  "inserted": 0.09859323501586914
+ },
+ {
+  "item": "brew-s2-r10d2-0289",
+  "c": "white",
+  "c2": "blue",
+  "cell": 2,
+  "layer": 1,
+  "removed": -1.7231621742248535,
+  "inserted": -0.004519343376159668
+ },
+ {
+  "item": "brew-s2-r10d2-0299",
+  "c": "teal",
+  "c2": "red",
+  "cell": 2,
+  "layer": 1,
+  "removed": -0.2420790195465088,
+  "inserted": 0.42034292221069336
+ },
+ {
+  "item": "brew-s2-r10d2-0312",
+  "c": "teal",
+  "c2": "pink",
+  "cell": 2,
+  "layer": 1,
+  "removed": -1.571007251739502,
+  "inserted": 0.3423335552215576
+ },
+ {
+  "item": "brew-s2-r10d2-0316",
+  "c": "black",
+  "c2": "purple",
+  "cell": 2,
+  "layer": 1,
+  "removed": -1.7262239456176758,
+  "inserted": 0.6378268003463745
+ },
+ {
+  "item": "brew-s2-r10d2-0323",
+  "c": "blue",
+  "c2": "black",
+  "cell": 2,
+  "layer": 1,
+  "removed": -0.07218265533447266,
+  "inserted": 0.44898509979248047
+ },
+ {
+  "item": "brew-s2-r10d2-0339",
+  "c": "blue",
+  "c2": "purple",
+  "cell": 2,
+  "layer": 1,
+  "removed": 0.028390586376190186,
+  "inserted": 0.11566972732543945
+ },
+ {
+  "item": "brew-s2-r10d2-0344",
+  "c": "teal",
+  "c2": "white",
+  "cell": 2,
+  "layer": 1,
+  "removed": 0.0038461685180664062,
+  "inserted": 0.05953073501586914
+ },
+ {
+  "item": "brew-s2-r10d2-0345",
+  "c": "blue",
+  "c2": "teal",
+  "cell": 2,
+  "layer": 1,
+  "removed": -0.05921781063079834,
+  "inserted": 0.04675865173339844
+ },
+ {
+  "item": "brew-s2-r10d2-0377",
+  "c": "brown",
+  "c2": "white",
+  "cell": 2,
+  "layer": 1,
+  "removed": null,
+  "inserted": 1.5679497718811035
+ },
+ {
+  "item": "brew-s2-r10d2-0383",
+  "c": "black",
+  "c2": "gray",
+  "cell": 2,
+  "layer": 1,
+  "removed": -0.30099010467529297,
+  "inserted": 0.37827587127685547
+ },
+ {
+  "item": "brew-s2-r10d2-0396",
+  "c": "purple",
+  "c2": "pink",
+  "cell": 2,
+  "layer": 1,
+  "removed": 0.05734753608703613,
+  "inserted": 0.00271451473236084
+ },
+ {
+  "item": "brew-s2-r10d2-0000",
+  "c": "gray",
+  "c2": "teal",
+  "cell": 2,
+  "layer": 2,
+  "removed": 0.964745044708252,
+  "inserted": 0.12281632423400879
+ },
+ {
+  "item": "brew-s2-r10d2-0001",
+  "c": "blue",
+  "c2": "gold",
+  "cell": 2,
+  "layer": 2,
+  "removed": 0.6516660451889038,
+  "inserted": 0.574418306350708
+ },
+ {
+  "item": "brew-s2-r10d2-0009",
+  "c": "pink",
+  "c2": "blue",
+  "cell": 2,
+  "layer": 2,
+  "removed": -0.32709240913391113,
+  "inserted": -0.09112322330474854
+ },
+ {
+  "item": "brew-s2-r10d2-0012",
+  "c": "teal",
+  "c2": "gray",
+  "cell": 2,
+  "layer": 2,
+  "removed": -0.017900705337524414,
+  "inserted": 0.33105599880218506
+ },
+ {
+  "item": "brew-s2-r10d2-0015",
+  "c": "gold",
+  "c2": "teal",
+  "cell": 2,
+  "layer": 2,
+  "removed": -0.22142183780670166,
+  "inserted": 0.021021008491516113
+ },
+ {
+  "item": "brew-s2-r10d2-0027",
+  "c": "purple",
+  "c2": "gold",
+  "cell": 2,
+  "layer": 2,
+  "removed": -0.04430818557739258,
+  "inserted": 0.1198493242263794
+ },
+ {
+  "item": "brew-s2-r10d2-0041",
+  "c": "white",
+  "c2": "brown",
+  "cell": 2,
+  "layer": 2,
+  "removed": 0.21155083179473877,
+  "inserted": null
+ },
+ {
+  "item": "brew-s2-r10d2-0057",
+  "c": "gold",
+  "c2": "white",
+  "cell": 2,
+  "layer": 2,
+  "removed": -0.12758255004882812,
+  "inserted": -0.01262044906616211
+ },
+ {
+  "item": "brew-s2-r10d2-0066",
+  "c": "brown",
+  "c2": "teal",
+  "cell": 2,
+  "layer": 2,
+  "removed": null,
+  "inserted": 0.1678011417388916
+ },
+ {
+  "item": "brew-s2-r10d2-0069",
+  "c": "green",
+  "c2": "blue",
+  "cell": 2,
+  "layer": 2,
+  "removed": 0.1589798927307129,
+  "inserted": -0.06304192543029785
+ },
+ {
+  "item": "brew-s2-r10d2-0071",
+  "c": "teal",
+  "c2": "black",
+  "cell": 2,
+  "layer": 2,
+  "removed": 0.0629434585571289,
+  "inserted": 2.055391311645508
+ },
+ {
+  "item": "brew-s2-r10d2-0073",
+  "c": "pink",
+  "c2": "gold",
+  "cell": 2,
+  "layer": 2,
+  "removed": -0.5746423602104187,
+  "inserted": 0.5348377227783203
+ },
+ {
+  "item": "brew-s2-r10d2-0074",
+  "c": "black",
+  "c2": "red",
+  "cell": 2,
+  "layer": 2,
+  "removed": 4.261878967285156,
+  "inserted": -0.625877857208252
+ },
+ {
+  "item": "brew-s2-r10d2-0075",
+  "c": "purple",
+  "c2": "red",
+  "cell": 2,
+  "layer": 2,
+  "removed": 0.3469233512878418,
+  "inserted": -0.07376396656036377
+ },
+ {
+  "item": "brew-s2-r10d2-0092",
+  "c": "white",
+  "c2": "green",
+  "cell": 2,
+  "layer": 2,
+  "removed": -0.3477497100830078,
+  "inserted": 0.2643132209777832
+ },
+ {
+  "item": "brew-s2-r10d2-0101",
+  "c": "green",
+  "c2": "black",
+  "cell": 2,
+  "layer": 2,
+  "removed": -0.41927337646484375,
+  "inserted": 3.1105844974517822
+ },
+ {
+  "item": "brew-s2-r10d2-0104",
+  "c": "teal",
+  "c2": "blue",
+  "cell": 2,
+  "layer": 2,
+  "removed": -0.022052526473999023,
+  "inserted": 0.12728309631347656
+ },
+ {
+  "item": "brew-s2-r10d2-0107",
+  "c": "green",
+  "c2": "black",
+  "cell": 2,
+  "layer": 2,
+  "removed": -0.7445900440216064,
+  "inserted": 0.6653503179550171
+ },
+ {
+  "item": "brew-s2-r10d2-0125",
+  "c": "white",
+  "c2": "green",
+  "cell": 2,
+  "layer": 2,
+  "removed": -0.227250337600708,
+  "inserted": 0.37387359142303467
+ },
+ {
+  "item": "brew-s2-r10d2-0128",
+  "c": "pink",
+  "c2": "purple",
+  "cell": 2,
+  "layer": 2,
+  "removed": -0.4414024353027344,
+  "inserted": 0.09434139728546143
+ },
+ {
+  "item": "brew-s2-r10d2-0131",
+  "c": "green",
+  "c2": "purple",
+  "cell": 2,
+  "layer": 2,
+  "removed": -0.37815427780151367,
+  "inserted": 0.42713189125061035
+ },
+ {
+  "item": "brew-s2-r10d2-0132",
+  "c": "black",
+  "c2": "red",
+  "cell": 2,
+  "layer": 2,
+  "removed": -2.1014106273651123,
+  "inserted": 0.3086562156677246
+ },
+ {
+  "item": "brew-s2-r10d2-0140",
+  "c": "purple",
+  "c2": "white",
+  "cell": 2,
+  "layer": 2,
+  "removed": -0.0841209888458252,
+  "inserted": 0.11567133665084839
+ },
+ {
+  "item": "brew-s2-r10d2-0142",
+  "c": "gray",
+  "c2": "pink",
+  "cell": 2,
+  "layer": 2,
+  "removed": -1.0470824241638184,
+  "inserted": 0.3550987243652344
+ },
+ {
+  "item": "brew-s2-r10d2-0153",
+  "c": "teal",
+  "c2": "gold",
+  "cell": 2,
+  "layer": 2,
+  "removed": -0.13690471649169922,
+  "inserted": 0.09721159934997559
+ },
+ {
+  "item": "brew-s2-r10d2-0172",
+  "c": "gold",
+  "c2": "pink",
+  "cell": 2,
+  "layer": 2,
+  "removed": 0.16117525100708008,
+  "inserted": 0.4824409484863281
+ },
+ {
+  "item": "brew-s2-r10d2-0173",
+  "c": "purple",
+  "c2": "teal",
+  "cell": 2,
+  "layer": 2,
+  "removed": -0.030691146850585938,
+  "inserted": 0.06409966945648193
+ },
+ {
+  "item": "brew-s2-r10d2-0179",
+  "c": "gray",
+  "c2": "red",
+  "cell": 2,
+  "layer": 2,
+  "removed": -1.469423770904541,
+  "inserted": -0.015026569366455078
+ },
+ {
+  "item": "brew-s2-r10d2-0183",
+  "c": "brown",
+  "c2": "pink",
+  "cell": 2,
+  "layer": 2,
+  "removed": null,
+  "inserted": 1.3590221405029297
+ },
+ {
+  "item": "brew-s2-r10d2-0188",
+  "c": "teal",
+  "c2": "white",
+  "cell": 2,
+  "layer": 2,
+  "removed": -0.008520126342773438,
+  "inserted": 0.19858920574188232
+ },
+ {
+  "item": "brew-s2-r10d2-0197",
+  "c": "red",
+  "c2": "purple",
+  "cell": 2,
+  "layer": 2,
+  "removed": -0.12059271335601807,
+  "inserted": -0.11690688133239746
+ },
+ {
+  "item": "brew-s2-r10d2-0216",
+  "c": "pink",
+  "c2": "red",
+  "cell": 2,
+  "layer": 2,
+  "removed": 0.26426124572753906,
+  "inserted": 0.03245270252227783
+ },
+ {
+  "item": "brew-s2-r10d2-0219",
+  "c": "red",
+  "c2": "gray",
+  "cell": 2,
+  "layer": 2,
+  "removed": -0.4033545255661011,
+  "inserted": 0.3332812786102295
+ },
+ {
+  "item": "brew-s2-r10d2-0228",
+  "c": "green",
+  "c2": "black",
+  "cell": 2,
+  "layer": 2,
+  "removed": 0.08030962944030762,
+  "inserted": 3.6203436851501465
+ },
+ {
+  "item": "brew-s2-r10d2-0249",
+  "c": "black",
+  "c2": "gray",
+  "cell": 2,
+  "layer": 2,
+  "removed": -0.08746254444122314,
+  "inserted": 0.12627911567687988
+ },
+ {
+  "item": "brew-s2-r10d2-0260",
+  "c": "purple",
+  "c2": "red",
+  "cell": 2,
+  "layer": 2,
+  "removed": 0.0282517671585083,
+  "inserted": -0.027347326278686523
+ },
+ {
+  "item": "brew-s2-r10d2-0269",
+  "c": "gold",
+  "c2": "green",
+  "cell": 2,
+  "layer": 2,
+  "removed": -0.08312606811523438,
+  "inserted": 0.03233194351196289
+ },
+ {
+  "item": "brew-s2-r10d2-0289",
+  "c": "white",
+  "c2": "blue",
+  "cell": 2,
+  "layer": 2,
+  "removed": -0.4508136510848999,
+  "inserted": 0.26323938369750977
+ },
+ {
+  "item": "brew-s2-r10d2-0299",
+  "c": "teal",
+  "c2": "red",
+  "cell": 2,
+  "layer": 2,
+  "removed": -0.318723201751709,
+  "inserted": 0.5754141807556152
+ },
+ {
+  "item": "brew-s2-r10d2-0312",
+  "c": "teal",
+  "c2": "pink",
+  "cell": 2,
+  "layer": 2,
+  "removed": -0.3456178903579712,
+  "inserted": 0.20034289360046387
+ },
+ {
+  "item": "brew-s2-r10d2-0316",
+  "c": "black",
+  "c2": "purple",
+  "cell": 2,
+  "layer": 2,
+  "removed": -0.7703726291656494,
+  "inserted": 0.5291457176208496
+ },
+ {
+  "item": "brew-s2-r10d2-0323",
+  "c": "blue",
+  "c2": "black",
+  "cell": 2,
+  "layer": 2,
+  "removed": -0.05014371871948242,
+  "inserted": 0.14500391483306885
+ },
+ {
+  "item": "brew-s2-r10d2-0339",
+  "c": "blue",
+  "c2": "purple",
+  "cell": 2,
+  "layer": 2,
+  "removed": 0.030762910842895508,
+  "inserted": 0.07800698280334473
+ },
+ {
+  "item": "brew-s2-r10d2-0344",
+  "c": "teal",
+  "c2": "white",
+  "cell": 2,
+  "layer": 2,
+  "removed": -0.03413891792297363,
+  "inserted": 0.028067588806152344
+ },
+ {
+  "item": "brew-s2-r10d2-0345",
+  "c": "blue",
+  "c2": "teal",
+  "cell": 2,
+  "layer": 2,
+  "removed": 0.04648470878601074,
+  "inserted": 0.03896045684814453
+ },
+ {
+  "item": "brew-s2-r10d2-0377",
+  "c": "brown",
+  "c2": "white",
+  "cell": 2,
+  "layer": 2,
+  "removed": null,
+  "inserted": 0.9098935127258301
+ },
+ {
+  "item": "brew-s2-r10d2-0383",
+  "c": "black",
+  "c2": "gray",
+  "cell": 2,
+  "layer": 2,
+  "removed": -0.6633167266845703,
+  "inserted": -0.010194897651672363
+ },
+ {
+  "item": "brew-s2-r10d2-0396",
+  "c": "purple",
+  "c2": "pink",
+  "cell": 2,
+  "layer": 2,
+  "removed": -0.008481740951538086,
+  "inserted": 0.010256290435791016
+ },
+ {
+  "item": "brew-s2-r10d2-0000",
+  "c": "gray",
+  "c2": "teal",
+  "cell": 2,
+  "layer": 3,
+  "removed": -0.5531527996063232,
+  "inserted": 0.2001030445098877
+ },
+ {
+  "item": "brew-s2-r10d2-0001",
+  "c": "blue",
+  "c2": "gold",
+  "cell": 2,
+  "layer": 3,
+  "removed": -0.01081383228302002,
+  "inserted": 0.18048405647277832
+ },
+ {
+  "item": "brew-s2-r10d2-0009",
+  "c": "pink",
+  "c2": "blue",
+  "cell": 2,
+  "layer": 3,
+  "removed": -1.1251096725463867,
+  "inserted": 0.04236924648284912
+ },
+ {
+  "item": "brew-s2-r10d2-0012",
+  "c": "teal",
+  "c2": "gray",
+  "cell": 2,
+  "layer": 3,
+  "removed": -0.07049155235290527,
+  "inserted": 9.12704849243164
+ },
+ {
+  "item": "brew-s2-r10d2-0015",
+  "c": "gold",
+  "c2": "teal",
+  "cell": 2,
+  "layer": 3,
+  "removed": -1.3550786972045898,
+  "inserted": -0.008555412292480469
+ },
+ {
+  "item": "brew-s2-r10d2-0027",
+  "c": "purple",
+  "c2": "gold",
+  "cell": 2,
+  "layer": 3,
+  "removed": 0.13575541973114014,
+  "inserted": 0.16748404502868652
+ },
+ {
+  "item": "brew-s2-r10d2-0041",
+  "c": "white",
+  "c2": "brown",
+  "cell": 2,
+  "layer": 3,
+  "removed": -0.3108947277069092,
+  "inserted": null
+ },
+ {
+  "item": "brew-s2-r10d2-0057",
+  "c": "gold",
+  "c2": "white",
+  "cell": 2,
+  "layer": 3,
+  "removed": -0.10846352577209473,
+  "inserted": 0.14261507987976074
+ },
+ {
+  "item": "brew-s2-r10d2-0066",
+  "c": "brown",
+  "c2": "teal",
+  "cell": 2,
+  "layer": 3,
+  "removed": null,
+  "inserted": 0.2130875587463379
+ },
+ {
+  "item": "brew-s2-r10d2-0069",
+  "c": "green",
+  "c2": "blue",
+  "cell": 2,
+  "layer": 3,
+  "removed": 0.06694459915161133,
+  "inserted": 0.30266398191452026
+ },
+ {
+  "item": "brew-s2-r10d2-0071",
+  "c": "teal",
+  "c2": "black",
+  "cell": 2,
+  "layer": 3,
+  "removed": -0.1509416103363037,
+  "inserted": 3.0223021507263184
+ },
+ {
+  "item": "brew-s2-r10d2-0073",
+  "c": "pink",
+  "c2": "gold",
+  "cell": 2,
+  "layer": 3,
+  "removed": -2.250905990600586,
+  "inserted": 0.0917748212814331
+ },
+ {
+  "item": "brew-s2-r10d2-0074",
+  "c": "black",
+  "c2": "red",
+  "cell": 2,
+  "layer": 3,
+  "removed": 0.09357631206512451,
+  "inserted": -0.04552888870239258
+ },
+ {
+  "item": "brew-s2-r10d2-0075",
+  "c": "purple",
+  "c2": "red",
+  "cell": 2,
+  "layer": 3,
+  "removed": 0.184891939163208,
+  "inserted": -0.02468395233154297
+ },
+ {
+  "item": "brew-s2-r10d2-0092",
+  "c": "white",
+  "c2": "green",
+  "cell": 2,
+  "layer": 3,
+  "removed": -0.5456514954566956,
+  "inserted": 1.300510048866272
+ },
+ {
+  "item": "brew-s2-r10d2-0101",
+  "c": "green",
+  "c2": "black",
+  "cell": 2,
+  "layer": 3,
+  "removed": -0.11534881591796875,
+  "inserted": 2.455733060836792
+ },
+ {
+  "item": "brew-s2-r10d2-0104",
+  "c": "teal",
+  "c2": "blue",
+  "cell": 2,
+  "layer": 3,
+  "removed": -0.00905156135559082,
+  "inserted": -0.010731816291809082
+ },
+ {
+  "item": "brew-s2-r10d2-0107",
+  "c": "green",
+  "c2": "black",
+  "cell": 2,
+  "layer": 3,
+  "removed": 0.011095523834228516,
+  "inserted": 1.235931158065796
+ },
+ {
+  "item": "brew-s2-r10d2-0125",
+  "c": "white",
+  "c2": "green",
+  "cell": 2,
+  "layer": 3,
+  "removed": -2.6531496047973633,
+  "inserted": 0.328249454498291
+ },
+ {
+  "item": "brew-s2-r10d2-0128",
+  "c": "pink",
+  "c2": "purple",
+  "cell": 2,
+  "layer": 3,
+  "removed": -0.17627787590026855,
+  "inserted": 0.2520763874053955
+ },
+ {
+  "item": "brew-s2-r10d2-0131",
+  "c": "green",
+  "c2": "purple",
+  "cell": 2,
+  "layer": 3,
+  "removed": -0.05702686309814453,
+  "inserted": 0.46298134326934814
+ },
+ {
+  "item": "brew-s2-r10d2-0132",
+  "c": "black",
+  "c2": "red",
+  "cell": 2,
+  "layer": 3,
+  "removed": -7.464871883392334,
+  "inserted": 0.3776364326477051
+ },
+ {
+  "item": "brew-s2-r10d2-0140",
+  "c": "purple",
+  "c2": "white",
+  "cell": 2,
+  "layer": 3,
+  "removed": 0.038034677505493164,
+  "inserted": 0.8115272521972656
+ },
+ {
+  "item": "brew-s2-r10d2-0142",
+  "c": "gray",
+  "c2": "pink",
+  "cell": 2,
+  "layer": 3,
+  "removed": -1.3509821891784668,
+  "inserted": 0.29561734199523926
+ },
+ {
+  "item": "brew-s2-r10d2-0153",
+  "c": "teal",
+  "c2": "gold",
+  "cell": 2,
+  "layer": 3,
+  "removed": -0.03968095779418945,
+  "inserted": 0.40674054622650146
+ },
+ {
+  "item": "brew-s2-r10d2-0172",
+  "c": "gold",
+  "c2": "pink",
+  "cell": 2,
+  "layer": 3,
+  "removed": -0.08929252624511719,
+  "inserted": 0.2662622928619385
+ },
+ {
+  "item": "brew-s2-r10d2-0173",
+  "c": "purple",
+  "c2": "teal",
+  "cell": 2,
+  "layer": 3,
+  "removed": 0.009662508964538574,
+  "inserted": 0.06802797317504883
+ },
+ {
+  "item": "brew-s2-r10d2-0179",
+  "c": "gray",
+  "c2": "red",
+  "cell": 2,
+  "layer": 3,
+  "removed": -1.2633683681488037,
+  "inserted": 0.03916442394256592
+ },
+ {
+  "item": "brew-s2-r10d2-0183",
+  "c": "brown",
+  "c2": "pink",
+  "cell": 2,
+  "layer": 3,
+  "removed": null,
+  "inserted": 0.2957592010498047
+ },
+ {
+  "item": "brew-s2-r10d2-0188",
+  "c": "teal",
+  "c2": "white",
+  "cell": 2,
+  "layer": 3,
+  "removed": -0.3415639400482178,
+  "inserted": 2.426841974258423
+ },
+ {
+  "item": "brew-s2-r10d2-0197",
+  "c": "red",
+  "c2": "purple",
+  "cell": 2,
+  "layer": 3,
+  "removed": -0.15298759937286377,
+  "inserted": -0.15022039413452148
+ },
+ {
+  "item": "brew-s2-r10d2-0216",
+  "c": "pink",
+  "c2": "red",
+  "cell": 2,
+  "layer": 3,
+  "removed": -0.03267621994018555,
+  "inserted": 0.08008098602294922
+ },
+ {
+  "item": "brew-s2-r10d2-0219",
+  "c": "red",
+  "c2": "gray",
+  "cell": 2,
+  "layer": 3,
+  "removed": -0.21370506286621094,
+  "inserted": 0.6955423355102539
+ },
+ {
+  "item": "brew-s2-r10d2-0228",
+  "c": "green",
+  "c2": "black",
+  "cell": 2,
+  "layer": 3,
+  "removed": -0.4367847442626953,
+  "inserted": 0.2984682321548462
+ },
+ {
+  "item": "brew-s2-r10d2-0249",
+  "c": "black",
+  "c2": "gray",
+  "cell": 2,
+  "layer": 3,
+  "removed": -0.4304114580154419,
+  "inserted": 1.7727153301239014
+ },
+ {
+  "item": "brew-s2-r10d2-0260",
+  "c": "purple",
+  "c2": "red",
+  "cell": 2,
+  "layer": 3,
+  "removed": -0.07476973533630371,
+  "inserted": 0.0939486026763916
+ },
+ {
+  "item": "brew-s2-r10d2-0269",
+  "c": "gold",
+  "c2": "green",
+  "cell": 2,
+  "layer": 3,
+  "removed": -0.19630873203277588,
+  "inserted": 0.11330175399780273
+ },
+ {
+  "item": "brew-s2-r10d2-0289",
+  "c": "white",
+  "c2": "blue",
+  "cell": 2,
+  "layer": 3,
+  "removed": -0.08904695510864258,
+  "inserted": 0.0983128547668457
+ },
+ {
+  "item": "brew-s2-r10d2-0299",
+  "c": "teal",
+  "c2": "red",
+  "cell": 2,
+  "layer": 3,
+  "removed": -0.13028335571289062,
+  "inserted": 0.2476048469543457
+ },
+ {
+  "item": "brew-s2-r10d2-0312",
+  "c": "teal",
+  "c2": "pink",
+  "cell": 2,
+  "layer": 3,
+  "removed": -0.49004459381103516,
+  "inserted": 2.620671033859253
+ },
+ {
+  "item": "brew-s2-r10d2-0316",
+  "c": "black",
+  "c2": "purple",
+  "cell": 2,
+  "layer": 3,
+  "removed": -0.4302419424057007,
+  "inserted": 0.06469440460205078
+ },
+ {
+  "item": "brew-s2-r10d2-0323",
+  "c": "blue",
+  "c2": "black",
+  "cell": 2,
+  "layer": 3,
+  "removed": -0.14659041166305542,
+  "inserted": 0.06353545188903809
+ },
+ {
+  "item": "brew-s2-r10d2-0339",
+  "c": "blue",
+  "c2": "purple",
+  "cell": 2,
+  "layer": 3,
+  "removed": -0.04168391227722168,
+  "inserted": -0.09157681465148926
+ },
+ {
+  "item": "brew-s2-r10d2-0344",
+  "c": "teal",
+  "c2": "white",
+  "cell": 2,
+  "layer": 3,
+  "removed": -0.3378913402557373,
+  "inserted": -0.0063343048095703125
+ },
+ {
+  "item": "brew-s2-r10d2-0345",
+  "c": "blue",
+  "c2": "teal",
+  "cell": 2,
+  "layer": 3,
+  "removed": -0.0005409717559814453,
+  "inserted": 0.12761664390563965
+ },
+ {
+  "item": "brew-s2-r10d2-0377",
+  "c": "brown",
+  "c2": "white",
+  "cell": 2,
+  "layer": 3,
+  "removed": null,
+  "inserted": 2.9376652240753174
+ },
+ {
+  "item": "brew-s2-r10d2-0383",
+  "c": "black",
+  "c2": "gray",
+  "cell": 2,
+  "layer": 3,
+  "removed": -0.5983743667602539,
+  "inserted": 0.5130400657653809
+ },
+ {
+  "item": "brew-s2-r10d2-0396",
+  "c": "purple",
+  "c2": "pink",
+  "cell": 2,
+  "layer": 3,
+  "removed": -0.09580516815185547,
+  "inserted": 0.2330188751220703
+ },
+ {
+  "item": "brew-s2-r10d2-0000",
+  "c": "gray",
+  "c2": "teal",
+  "cell": 2,
+  "layer": 4,
+  "removed": -5.724801063537598,
+  "inserted": 1.424652099609375
+ },
+ {
+  "item": "brew-s2-r10d2-0001",
+  "c": "blue",
+  "c2": "gold",
+  "cell": 2,
+  "layer": 4,
+  "removed": -0.019062161445617676,
+  "inserted": 2.632112979888916
+ },
+ {
+  "item": "brew-s2-r10d2-0009",
+  "c": "pink",
+  "c2": "blue",
+  "cell": 2,
+  "layer": 4,
+  "removed": -3.0925676822662354,
+  "inserted": 0.08215117454528809
+ },
+ {
+  "item": "brew-s2-r10d2-0012",
+  "c": "teal",
+  "c2": "gray",
+  "cell": 2,
+  "layer": 4,
+  "removed": -3.693300724029541,
+  "inserted": 13.69789981842041
+ },
+ {
+  "item": "brew-s2-r10d2-0015",
+  "c": "gold",
+  "c2": "teal",
+  "cell": 2,
+  "layer": 4,
+  "removed": -1.3409920930862427,
+  "inserted": 0.2902379035949707
+ },
+ {
+  "item": "brew-s2-r10d2-0027",
+  "c": "purple",
+  "c2": "gold",
+  "cell": 2,
+  "layer": 4,
+  "removed": -1.7280292510986328,
+  "inserted": 2.626314640045166
+ },
+ {
+  "item": "brew-s2-r10d2-0041",
+  "c": "white",
+  "c2": "brown",
+  "cell": 2,
+  "layer": 4,
+  "removed": -0.7119410037994385,
+  "inserted": null
+ },
+ {
+  "item": "brew-s2-r10d2-0057",
+  "c": "gold",
+  "c2": "white",
+  "cell": 2,
+  "layer": 4,
+  "removed": -0.4846634864807129,
+  "inserted": 0.3591609001159668
+ },
+ {
+  "item": "brew-s2-r10d2-0066",
+  "c": "brown",
+  "c2": "teal",
+  "cell": 2,
+  "layer": 4,
+  "removed": null,
+  "inserted": 0.969449520111084
+ },
+ {
+  "item": "brew-s2-r10d2-0069",
+  "c": "green",
+  "c2": "blue",
+  "cell": 2,
+  "layer": 4,
+  "removed": -0.5356307029724121,
+  "inserted": 0.5048783421516418
+ },
+ {
+  "item": "brew-s2-r10d2-0071",
+  "c": "teal",
+  "c2": "black",
+  "cell": 2,
+  "layer": 4,
+  "removed": -1.7424943447113037,
+  "inserted": 7.620934009552002
+ },
+ {
+  "item": "brew-s2-r10d2-0073",
+  "c": "pink",
+  "c2": "gold",
+  "cell": 2,
+  "layer": 4,
+  "removed": -2.4791290760040283,
+  "inserted": 0.7805951833724976
+ },
+ {
+  "item": "brew-s2-r10d2-0074",
+  "c": "black",
+  "c2": "red",
+  "cell": 2,
+  "layer": 4,
+  "removed": -0.035867929458618164,
+  "inserted": 0.031540632247924805
+ },
+ {
+  "item": "brew-s2-r10d2-0075",
+  "c": "purple",
+  "c2": "red",
+  "cell": 2,
+  "layer": 4,
+  "removed": -1.494318962097168,
+  "inserted": 0.4506692886352539
+ },
+ {
+  "item": "brew-s2-r10d2-0092",
+  "c": "white",
+  "c2": "green",
+  "cell": 2,
+  "layer": 4,
+  "removed": -0.6712111234664917,
+  "inserted": 3.2293899059295654
+ },
+ {
+  "item": "brew-s2-r10d2-0101",
+  "c": "green",
+  "c2": "black",
+  "cell": 2,
+  "layer": 4,
+  "removed": -0.425398588180542,
+  "inserted": 3.103179454803467
+ },
+ {
+  "item": "brew-s2-r10d2-0104",
+  "c": "teal",
+  "c2": "blue",
+  "cell": 2,
+  "layer": 4,
+  "removed": -0.35985612869262695,
+  "inserted": 0.07182729244232178
+ },
+ {
+  "item": "brew-s2-r10d2-0107",
+  "c": "green",
+  "c2": "black",
+  "cell": 2,
+  "layer": 4,
+  "removed": -0.7706375122070312,
+  "inserted": 1.9598945379257202
+ },
+ {
+  "item": "brew-s2-r10d2-0125",
+  "c": "white",
+  "c2": "green",
+  "cell": 2,
+  "layer": 4,
+  "removed": -6.4104413986206055,
+  "inserted": 1.997842788696289
+ },
+ {
+  "item": "brew-s2-r10d2-0128",
+  "c": "pink",
+  "c2": "purple",
+  "cell": 2,
+  "layer": 4,
+  "removed": -4.190621376037598,
+  "inserted": 4.1998701095581055
+ },
+ {
+  "item": "brew-s2-r10d2-0131",
+  "c": "green",
+  "c2": "purple",
+  "cell": 2,
+  "layer": 4,
+  "removed": -0.7239236831665039,
+  "inserted": 2.9166853427886963
+ },
+ {
+  "item": "brew-s2-r10d2-0132",
+  "c": "black",
+  "c2": "red",
+  "cell": 2,
+  "layer": 4,
+  "removed": -13.565855026245117,
+  "inserted": 1.0659339427947998
+ },
+ {
+  "item": "brew-s2-r10d2-0140",
+  "c": "purple",
+  "c2": "white",
+  "cell": 2,
+  "layer": 4,
+  "removed": -0.10040414333343506,
+  "inserted": 0.8228511810302734
+ },
+ {
+  "item": "brew-s2-r10d2-0142",
+  "c": "gray",
+  "c2": "pink",
+  "cell": 2,
+  "layer": 4,
+  "removed": -8.187803268432617,
+  "inserted": 2.2101633548736572
+ },
+ {
+  "item": "brew-s2-r10d2-0153",
+  "c": "teal",
+  "c2": "gold",
+  "cell": 2,
+  "layer": 4,
+  "removed": -0.5649784803390503,
+  "inserted": 4.833075523376465
+ },
+ {
+  "item": "brew-s2-r10d2-0172",
+  "c": "gold",
+  "c2": "pink",
+  "cell": 2,
+  "layer": 4,
+  "removed": -2.810145854949951,
+  "inserted": 1.862544298171997
+ },
+ {
+  "item": "brew-s2-r10d2-0173",
+  "c": "purple",
+  "c2": "teal",
+  "cell": 2,
+  "layer": 4,
+  "removed": -0.16287851333618164,
+  "inserted": 0.30489563941955566
+ },
+ {
+  "item": "brew-s2-r10d2-0179",
+  "c": "gray",
+  "c2": "red",
+  "cell": 2,
+  "layer": 4,
+  "removed": -3.420663833618164,
+  "inserted": 0.0901671051979065
+ },
+ {
+  "item": "brew-s2-r10d2-0183",
+  "c": "brown",
+  "c2": "pink",
+  "cell": 2,
+  "layer": 4,
+  "removed": null,
+  "inserted": 4.544187545776367
+ },
+ {
+  "item": "brew-s2-r10d2-0188",
+  "c": "teal",
+  "c2": "white",
+  "cell": 2,
+  "layer": 4,
+  "removed": -1.073801875114441,
+  "inserted": 2.063345193862915
+ },
+ {
+  "item": "brew-s2-r10d2-0197",
+  "c": "red",
+  "c2": "purple",
+  "cell": 2,
+  "layer": 4,
+  "removed": -0.1467266082763672,
+  "inserted": 0.6474580764770508
+ },
+ {
+  "item": "brew-s2-r10d2-0216",
+  "c": "pink",
+  "c2": "red",
+  "cell": 2,
+  "layer": 4,
+  "removed": -0.9639277458190918,
+  "inserted": 0.09503436088562012
+ },
+ {
+  "item": "brew-s2-r10d2-0219",
+  "c": "red",
+  "c2": "gray",
+  "cell": 2,
+  "layer": 4,
+  "removed": -0.23124682903289795,
+  "inserted": 3.451124668121338
+ },
+ {
+  "item": "brew-s2-r10d2-0228",
+  "c": "green",
+  "c2": "black",
+  "cell": 2,
+  "layer": 4,
+  "removed": -0.782038688659668,
+  "inserted": 0.9998714923858643
+ },
+ {
+  "item": "brew-s2-r10d2-0249",
+  "c": "black",
+  "c2": "gray",
+  "cell": 2,
+  "layer": 4,
+  "removed": -1.0639910697937012,
+  "inserted": 7.167017936706543
+ },
+ {
+  "item": "brew-s2-r10d2-0260",
+  "c": "purple",
+  "c2": "red",
+  "cell": 2,
+  "layer": 4,
+  "removed": -1.2505073547363281,
+  "inserted": 0.21190190315246582
+ },
+ {
+  "item": "brew-s2-r10d2-0269",
+  "c": "gold",
+  "c2": "green",
+  "cell": 2,
+  "layer": 4,
+  "removed": -2.327788829803467,
+  "inserted": 0.6268472671508789
+ },
+ {
+  "item": "brew-s2-r10d2-0289",
+  "c": "white",
+  "c2": "blue",
+  "cell": 2,
+  "layer": 4,
+  "removed": -0.03168463706970215,
+  "inserted": 0.1374955177307129
+ },
+ {
+  "item": "brew-s2-r10d2-0299",
+  "c": "teal",
+  "c2": "red",
+  "cell": 2,
+  "layer": 4,
+  "removed": -1.2447900772094727,
+  "inserted": 0.40597963333129883
+ },
+ {
+  "item": "brew-s2-r10d2-0312",
+  "c": "teal",
+  "c2": "pink",
+  "cell": 2,
+  "layer": 4,
+  "removed": -5.065621376037598,
+  "inserted": 1.6534349918365479
+ },
+ {
+  "item": "brew-s2-r10d2-0316",
+  "c": "black",
+  "c2": "purple",
+  "cell": 2,
+  "layer": 4,
+  "removed": -0.3989986181259155,
+  "inserted": 1.7867765426635742
+ },
+ {
+  "item": "brew-s2-r10d2-0323",
+  "c": "blue",
+  "c2": "black",
+  "cell": 2,
+  "layer": 4,
+  "removed": -0.25130724906921387,
+  "inserted": 0.4633833169937134
+ },
+ {
+  "item": "brew-s2-r10d2-0339",
+  "c": "blue",
+  "c2": "purple",
+  "cell": 2,
+  "layer": 4,
+  "removed": -0.10093450546264648,
+  "inserted": -0.07109904289245605
+ },
+ {
+  "item": "brew-s2-r10d2-0344",
+  "c": "teal",
+  "c2": "white",
+  "cell": 2,
+  "layer": 4,
+  "removed": -3.2713637351989746,
+  "inserted": 0.1748218536376953
+ },
+ {
+  "item": "brew-s2-r10d2-0345",
+  "c": "blue",
+  "c2": "teal",
+  "cell": 2,
+  "layer": 4,
+  "removed": 0.03690528869628906,
+  "inserted": 4.228428363800049
+ },
+ {
+  "item": "brew-s2-r10d2-0377",
+  "c": "brown",
+  "c2": "white",
+  "cell": 2,
+  "layer": 4,
+  "removed": null,
+  "inserted": 8.126371383666992
+ },
+ {
+  "item": "brew-s2-r10d2-0383",
+  "c": "black",
+  "c2": "gray",
+  "cell": 2,
+  "layer": 4,
+  "removed": -1.052046775817871,
+  "inserted": 2.481265068054199
+ },
+ {
+  "item": "brew-s2-r10d2-0396",
+  "c": "purple",
+  "c2": "pink",
+  "cell": 2,
+  "layer": 4,
+  "removed": -0.9649722576141357,
+  "inserted": 1.435253381729126
+ }
+]
