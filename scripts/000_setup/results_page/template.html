@@ -1,0 +1,215 @@
+<title>Causal-Concordance</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@100..125,500..800&family=JetBrains+Mono:wght@400;600&family=Source+Sans+3:ital,wght@0,400;0,600;1,400&display=swap">
+<style>
+/* Layout: one report column (≈72rem) — summary and "what to look for" first, then the evidence (prompt, readers,
+   causal checks, WSB comparison), then status and decisions. Lab-notebook register: cool paper, indigo ink, real
+   swatches for the 12 brew colours. */
+:root {
+  --bg: #f4f6f9; --surface: #ffffff; --surface-2: #eef1f6; --ink: #17202c; --muted: #576274; --rule: #d8dee8;
+  --accent: #3546a6; --accent-soft: #e4e8fb;
+  --good: #2c7a4d; --good-soft: #e1f2e8; --warn: #9a6410; --warn-soft: #f8ecd6; --bad: #b0373a; --bad-soft: #f8e1e1;
+  --hl-start: #fde7c2; --hl-stir: #e6e9ef; --hl-q: #e3ecfb; --hl-emit: #dff3e6;
+  --f-display: "Archivo", "Helvetica Neue", Arial, sans-serif;
+  --f-body: "Source Sans 3", "Segoe UI", system-ui, sans-serif;
+  --f-mono: "JetBrains Mono", ui-monospace, "SFMono-Regular", Menlo, monospace;
+  --step--1: 0.86rem; --step-0: 1rem; --step-1: 1.2rem; --step-2: 1.55rem; --step-3: 2.2rem;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    color-scheme: dark;
+    --bg: #10141b; --surface: #171d27; --surface-2: #1d2430; --ink: #e5e9f0; --muted: #9aa5b6; --rule: #2a3342;
+    --accent: #95a3ff; --accent-soft: #232a4a;
+    --good: #63c48f; --good-soft: #17301f; --warn: #e2a64f; --warn-soft: #33270f; --bad: #f08084; --bad-soft: #3a1b1d;
+    --hl-start: #4a3818; --hl-stir: #262d39; --hl-q: #1d2b45; --hl-emit: #173523;
+  }
+}
+:root[data-theme="dark"] {
+  color-scheme: dark;
+  --bg: #10141b; --surface: #171d27; --surface-2: #1d2430; --ink: #e5e9f0; --muted: #9aa5b6; --rule: #2a3342;
+  --accent: #95a3ff; --accent-soft: #232a4a;
+  --good: #63c48f; --good-soft: #17301f; --warn: #e2a64f; --warn-soft: #33270f; --bad: #f08084; --bad-soft: #3a1b1d;
+  --hl-start: #4a3818; --hl-stir: #262d39; --hl-q: #1d2b45; --hl-emit: #173523;
+}
+* { box-sizing: border-box; }
+body { background: var(--bg); color: var(--ink); font-family: var(--f-body); font-size: var(--step-0); line-height: 1.55; }
+.wrap { max-width: 72rem; margin: 0 auto; padding-inline: clamp(16px, 4vw, 40px); padding-block: 28px 64px; display: grid; gap: 44px; }
+h1, h2, h3 { font-family: var(--f-display); font-stretch: 112%; line-height: 1.15; text-wrap: balance; margin: 0; }
+h1 { font-size: var(--step-3); font-weight: 800; letter-spacing: -0.01em; }
+h2 { font-size: var(--step-2); font-weight: 700; }
+h3 { font-size: var(--step-1); font-weight: 650; }
+p { margin: 0; max-width: 68ch; }
+.eyebrow { font-family: var(--f-mono); font-size: 0.74rem; letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); }
+section { display: grid; gap: 16px; }
+.lede { font-size: var(--step-1); color: var(--ink); }
+.muted { color: var(--muted); }
+.small { font-size: var(--step--1); }
+code, .mono { font-family: var(--f-mono); font-size: 0.86em; }
+a { color: var(--accent); }
+.rule { border: 0; border-top: 1px solid var(--rule); margin: 0; }
+
+/* header */
+header { display: grid; gap: 18px; }
+.motto { font-family: var(--f-display); font-stretch: 118%; font-weight: 800; font-size: clamp(1.6rem, 4.2vw, 2.6rem); line-height: 1.08; color: var(--accent); }
+.pills { display: flex; flex-wrap: wrap; gap: 8px; }
+.pill { font-size: 0.82rem; font-weight: 600; padding: 4px 10px; border-radius: 999px; border: 1px solid var(--rule); background: var(--surface); }
+.pill.good { background: var(--good-soft); color: var(--good); border-color: transparent; }
+.pill.warn { background: var(--warn-soft); color: var(--warn); border-color: transparent; }
+.pill.bad { background: var(--bad-soft); color: var(--bad); border-color: transparent; }
+.pill.info { background: var(--accent-soft); color: var(--accent); border-color: transparent; }
+.three { display: grid; grid-template-columns: repeat(auto-fit, minmax(16rem, 1fr)); gap: 14px; }
+.three > div { background: var(--surface); border: 1px solid var(--rule); border-radius: 10px; padding: 14px 16px; display: grid; gap: 6px; align-content: start; }
+.three b { font-family: var(--f-display); font-stretch: 110%; }
+
+/* look-for list */
+.look { display: grid; gap: 10px; counter-reset: q; }
+.look li { list-style: none; background: var(--surface); border: 1px solid var(--rule); border-radius: 10px; padding: 12px 16px; display: grid; grid-template-columns: 2rem 1fr auto; gap: 4px 12px; align-items: start; }
+.look li::before { counter-increment: q; content: counter(q); font-family: var(--f-display); font-weight: 800; font-size: 1.3rem; color: var(--accent); grid-row: span 2; }
+.look .q { font-weight: 600; }
+.look .a { grid-column: 2 / 4; color: var(--muted); }
+.look ul { margin: 0; padding: 0; display: grid; gap: 10px; }
+.cols2 { display: grid; grid-template-columns: repeat(auto-fit, minmax(22rem, 1fr)); gap: 22px; align-items: start; }
+
+/* prompt */
+.prompt { background: var(--surface); border: 1px solid var(--rule); border-radius: 10px; padding: 14px 16px; font-family: var(--f-mono); font-size: 0.8rem; line-height: 1.7; white-space: pre-wrap; word-break: break-word; overflow-x: auto; }
+.prompt span[data-r] { border-radius: 3px; }
+.prompt span[data-r="start"] { background: var(--hl-start); }
+.prompt span[data-r="stir"] { background: var(--hl-stir); }
+.prompt span[data-r="question"] { background: var(--hl-q); }
+.prompt span[data-r^="emit"] { background: var(--hl-emit); outline: 1.5px solid var(--good); }
+.prompt span.diff { outline: 2px solid var(--warn); font-weight: 600; }
+.legend { display: flex; flex-wrap: wrap; gap: 14px; font-size: var(--step--1); color: var(--muted); }
+.legend i { display: inline-block; width: 0.9em; height: 0.9em; border-radius: 3px; vertical-align: -0.1em; margin-right: 6px; }
+
+/* tabs */
+.tabs { display: flex; flex-wrap: wrap; gap: 6px; border-bottom: 1px solid var(--rule); }
+.tabs button, .seg button { font: inherit; font-weight: 600; font-size: 0.92rem; color: var(--muted); background: none; border: 0; padding: 8px 12px; cursor: pointer; border-bottom: 2px solid transparent; margin-bottom: -1px; }
+.tabs button[aria-selected="true"] { color: var(--accent); border-bottom-color: var(--accent); }
+.tabs button:focus-visible, .seg button:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+.seg { display: inline-flex; flex-wrap: wrap; gap: 4px; }
+.seg button { border: 1px solid var(--rule); border-radius: 999px; padding: 4px 12px; margin: 0; background: var(--surface); }
+.seg button[aria-pressed="true"] { background: var(--accent); color: var(--surface); border-color: var(--accent); }
+.panel { display: grid; gap: 14px; padding-top: 6px; }
+
+/* token readouts */
+.tbl { width: 100%; border-collapse: collapse; font-size: 0.9rem; }
+.tbl th, .tbl td { text-align: left; padding: 7px 10px; border-bottom: 1px solid var(--rule); vertical-align: top; }
+.tbl th { font-family: var(--f-mono); font-size: 0.72rem; letter-spacing: 0.06em; text-transform: uppercase; color: var(--muted); font-weight: 600; }
+.tbl td.num, .tbl th.num { text-align: right; font-variant-numeric: tabular-nums; font-family: var(--f-mono); font-size: 0.82rem; }
+.scroll { overflow-x: auto; background: var(--surface); border: 1px solid var(--rule); border-radius: 10px; }
+.toks { display: flex; flex-wrap: wrap; gap: 4px; }
+.tok { font-family: var(--f-mono); font-size: 0.76rem; padding: 1px 6px; border-radius: 4px; background: var(--surface-2); color: var(--muted); white-space: pre; }
+.tok.c { color: var(--ink); font-weight: 600; background: var(--surface); border: 1px solid var(--rule); }
+.sw { display: inline-block; width: 0.72em; height: 0.72em; border-radius: 50%; margin-right: 4px; vertical-align: -0.02em; border: 1px solid var(--rule); }
+.role { font-family: var(--f-mono); font-size: 0.66rem; letter-spacing: 0.05em; text-transform: uppercase; padding: 1px 6px; border-radius: 4px; margin-left: 6px; }
+.role.z { background: var(--good-soft); color: var(--good); }
+.role.a { background: var(--surface-2); color: var(--ink); }
+.role.s { background: var(--hl-start); color: var(--ink); }
+.role.o { background: var(--bad-soft); color: var(--bad); }
+
+/* text readouts */
+.arms { display: grid; grid-template-columns: repeat(auto-fit, minmax(19rem, 1fr)); gap: 14px; align-items: start; }
+.arm { background: var(--surface); border: 1px solid var(--rule); border-radius: 10px; padding: 12px 14px; display: grid; gap: 10px; align-content: start; }
+.arm h3 { font-size: 1rem; }
+.sample { font-size: 0.86rem; line-height: 1.5; white-space: pre-wrap; border-top: 1px solid var(--rule); padding-top: 8px; overflow-wrap: anywhere; }
+.sample .meta { display: block; font-family: var(--f-mono); font-size: 0.7rem; color: var(--muted); margin-bottom: 4px; }
+.cw { font-weight: 700; border-bottom: 2px solid currentColor; }
+.cw[data-r="z"] { color: var(--good); }
+.cw[data-r="o"] { color: var(--bad); }
+.cw[data-r="a"], .cw[data-r="s"], .cw[data-r="x"] { color: var(--ink); }
+.fve { font-family: var(--f-mono); font-weight: 600; padding: 1px 6px; border-radius: 4px; }
+.fve.pos { background: var(--good-soft); color: var(--good); }
+.fve.neg { background: var(--bad-soft); color: var(--bad); }
+details.more summary { cursor: pointer; color: var(--accent); font-weight: 600; font-size: 0.9rem; }
+
+/* scan grid */
+(function(){
+  const dot = c => `<span class="dot" style="background:${SW[c]}" title="${c} (${roleName[role(c)]})"></span>`;
+  const head = `<tr><th>Reader · cell</th>${SCAN.layers.map(l => `<th>L${l}</th>`).join("")}</tr>`;
+  const rows = Object.entries(SCAN.rows).map(([name, cols]) => SCAN.cells.map((cell, ci) =>
+    `<tr${ci===0?' class="first"':""}><td>${ci===0?`<b>${name}</b><br>`:""}<span class="small muted">${cell}</span></td>${cols.map(s => {
+      const ch = s[ci];
+      const dots = ch === "G" ? dot("green") : ch === "b" ? dot("black") : ch === "g" ? dot("black") + dot("green") : "";
+      return dots ? `<td>${dots}</td>` : `<td class="none">·</td>`; }).join("")}</tr>`).join("")).join("");
+  document.getElementById("p-scan").innerHTML =
+    `<p>The three answer cells × WSB's layers 20–60, top 10 tokens each. Colours were matched by word instead of WSB's judge.
+     ${dot("green")} green (the hidden step) · ${dot("black")} black (the answer). No off-path colour (red, purple) appears anywhere,
+     so all three lenses pass this item under WSB's rule. Mostly that happens at L52–60, where green sits next to black.</p>
+     <div class="scroll"><table class="tbl grid">${head}${rows}</table></div>`;
+})();
+
+/* text readers */
+function armsHtml(kind){
+  const titles = {activation:"With this cell's activation", no_activation:"No activation injected", other_cell:"Activation from another cell (“You” in the stir line)"};
+  return `<div class="arms">${["activation","no_activation","other_cell"].map(arm => {
+    const S = DATA[kind][arm];
+    const items = S.map((s,i) => {
+      const f = kind === "nla" ? DATA.fve[arm][i] : null;
+      const meta = `sample ${i+1}` + (f!=null ? ` · reconstruction FVE <span class="fve ${f>0?"pos":"neg"}">${f.toFixed(2)}</span>` : "");
+      const txt = s == null ? "(no explanation parsed)" : s;
+      const shown = i === 0 ? `<div class="sample"><span class="meta">${meta}</span>${markColours(txt)}</div>` : null;
+      return shown || `<details class="more"><summary>sample ${i+1}${f!=null?` · FVE ${f.toFixed(2)}`:""}</summary><div class="sample"><span class="meta">${meta}</span>${markColours(txt)}</div></details>`;
+    }).join("");
+    return `<div class="arm"><h3>${titles[arm]}</h3>${items}</div>`; }).join("")}</div>`;
+}
+document.getElementById("p-oracle").innerHTML =
+  `<p>The Oracle Lens is read at layer 40, one of its trained layers. With the activation it names green in all 4 samples, but also
+   red and purple (this item's two off-path candidates) and yellow, which isn't in the problem. Without the activation it writes about Korean companies: the marker ㈜ means “Co., Ltd.”.</p>${rolesKey()}${armsHtml("oracle")}`;
+const fmt = a => a.map(x => x.toFixed(2)).join(", ");
+document.getElementById("p-nla").innerHTML =
+  `<p>The NLA reads layer 42. It gets the task shape right (a two-step lookup, “Answer:” about to be filled) and names green in all 4 samples, never black.
+   It also invents details. The reconstruction score (FVE) checks whether the explanation carries information about <em>this</em> vector:
+   <b>${fmt(DATA.fve.activation)}</b> with its own explanations, negative without the activation (${fmt(DATA.fve.no_activation)}) or with another cell's (${fmt(DATA.fve.other_cell)}).
+   Checks that our NLA code matches the published one: reference rows score ${fmt(DATA.fve.reference.slice(0,4))}…, against 0.745 on the model card. Our layer-42 capture reproduces the NLA's stored vectors at cosine ≥ ${DATA.fve.reextract_min_cos.toFixed(4)}.</p>${rolesKey()}${armsHtml("nla")}`;
+
+/* regime chart + table */
+(function(){
+  const E = DATA.regime.edits;
+  const nice = {patch_emit_colon_L44:"Patch “:” cell, L44", patch_emit_colon_L40:"Patch “:” cell, L40", patch_start_token_L40:"Patch start colour, L40",
+    "swap1d_emit_colon_L42_along_emit_think_diff":"1-D swap, “:” L42 (neighbour direction)", "swap1d_emit_colon_L42_random_dir":"1-D swap, “:” L42 (random direction)"};
+  const W = 560, left = 240, right = 30, rowH = 34, top = 18, maxV = 5;
+  const x = v => left + (W - left - right) * Math.max(0, v) / maxV;
+  let s = `<svg viewBox="0 0 ${W} ${top + E.length*rowH + 26}" role="img" aria-label="Answer shift per edit, RHUT vs SEC">`;
+  for (let t = 0; t <= maxV; t++) s += `<line class="gridl" x1="${x(t)}" x2="${x(t)}" y1="${top-6}" y2="${top + E.length*rowH}"/><text x="${x(t)}" y="${top + E.length*rowH + 16}" text-anchor="middle">${t}</text>`;
+  E.forEach((e, i) => { const y = top + i*rowH;
+    s += `<text class="lbl" x="${left-8}" y="${y+15}" text-anchor="end">${nice[e.name]||e.name}</text>`;
+    s += `<rect class="b-rhut" x="${left}" y="${y+2}" width="${Math.max(1, x(e.rhut)-left)}" height="11" rx="2"/>`;
+    s += `<rect class="b-sec" x="${left}" y="${y+15}" width="${Math.max(1, x(e.sec)-left)}" height="11" rx="2"/>`;
+    s += `<text x="${x(Math.max(e.rhut,e.sec))+6}" y="${y+17}">${e.rhut.toFixed(2)} / ${e.sec.toFixed(2)}</text>`; });
+  s += `</svg><div class="key"><span><i style="background:var(--warn)"></i>RHUT (default)</span><span><i style="background:var(--accent)"></i>SEC (full fp32)</span><span>G ≈ ${DATA.regime.G.sec_true_fp32_from40.toFixed(1)} nats</span></div>`;
+  document.getElementById("ch-regime").innerHTML = s;
+  const G = DATA.regime.G.sec_true_fp32_from40;
+  document.getElementById("tb-regime").innerHTML = `<tr><th>Edit</th><th class="num">RHUT Δm</th><th class="num">SEC Δm</th><th class="num">share S (SEC)</th><th class="num">|RHUT − SEC| / G</th></tr>` +
+    E.map(e => `<tr><td>${nice[e.name]||e.name}</td><td class="num">${e.rhut.toFixed(3)}</td><td class="num">${e.sec.toFixed(3)}</td><td class="num">${(e.sec/G).toFixed(3)}</td><td class="num">${(Math.abs(e.rhut-e.sec)/G*100).toFixed(1)}%</td></tr>`).join("") +
+    `<tr><td colspan="5" class="small muted">Pair <code>${DATA.regime.pair}</code>: ${DATA.regime.member.start} → ${DATA.regime.member.z} → ${DATA.regime.member.a} vs ${DATA.regime.partner.start} → ${DATA.regime.partner.z} → ${DATA.regime.partner.a}. Max difference ${(DATA.regime.max_frac.rhut_fp32res_from0*100).toFixed(1)}% of G, under the 5% rule.</td></tr>`;
+  // noise floor, log scale
+  const N = [["RHUT (from block 0)", DATA.regime.noise.rhut_fp32res_from0, "b-rhut"], ["RHUT (from block 35)", DATA.regime.noise.rhut_fp32res_from35, "b-rhut"],
+             ["Stock bf16", DATA.regime.noise.stock_bf16, "b-mute"], ["SEC (full fp32)", DATA.regime.noise.sec_true_fp32_from40, "b-sec"]];
+  const W2 = 520, l2 = 150, r2 = 70, lo = -4, hi = 0, top2 = 14, rh = 28;
+  const xl = v => l2 + (W2 - l2 - r2) * (Math.log10(v) - lo) / (hi - lo);
+  let n = `<svg viewBox="0 0 ${W2} ${top2 + N.length*rh + 24}" role="img" aria-label="Noise floor per regime, log scale">`;
+  for (let p = lo; p <= hi; p++) n += `<line class="gridl" x1="${xl(10**p)}" x2="${xl(10**p)}" y1="${top2-6}" y2="${top2 + N.length*rh}"/><text x="${xl(10**p)}" y="${top2 + N.length*rh + 15}" text-anchor="middle">${p===0?"1":"1e"+p}</text>`;
+  N.forEach(([lab, v, cls], i) => { const y = top2 + i*rh;
+    n += `<text class="lbl" x="${l2-8}" y="${y+14}" text-anchor="end">${lab}</text><rect class="${cls}" x="${xl(1e-4)}" y="${y+4}" width="${Math.max(2, xl(v)-xl(1e-4))}" height="13" rx="2"/><text x="${xl(v)+6}" y="${y+15}">${v < 0.001 ? v.toExponential(1) : v.toFixed(3)} nats</text>`; });
+  n += `</svg>`;
+  document.getElementById("ch-noise").innerHTML = n;
+  // gate table
+  document.getElementById("tb-gate").innerHTML = `<tr><th>Pair</th><th>Result</th><th class="num">member correct /10</th><th class="num">partner correct /10</th><th>partner's sampled answers</th></tr>` +
+    DATA.gates.map(g => `<tr><td><code>${g.pair}</code></td><td><span class="pill ${g.pass?"good":"bad"}">${g.pass?"pass":"fail"}</span></td><td class="num">${g.m ?? "—"}</td><td class="num">${g.p ?? "—"}</td><td class="small">${g.p_samples.length ? g.p_samples.map(esc).join(" · ") : "—"}</td></tr>`).join("");
+})();
+
+/* WSB chart (approximate published values) */
+(function(){
+  const V = [["J lens",0.86,"b-main"],["R lens",0.76,"b-main"],["Oracle Lens (SFT)",0.73,"b-main"],["Template lens",0.71,"b-main"],["Oracle Lens (RL)",0.70,"b-main"],
+             ["NLA (RL, L42)",0.66,"b-main"],["NLA (SFT, L42)",0.50,"b-main"],["Logit lens",0.43,"b-main"],["Tuned lens",0.31,"b-main"],["Patchscopes",0.21,"b-main"],
+             ["Lucky blind guess",0.17,"b-mute"],["Prompt-only",0.96,"b-mute"]];
+  const W = 520, l = 140, r = 40, top = 12, rh = 22;
+  const x = v => l + (W - l - r) * v;
+  let s = `<svg viewBox="0 0 ${W} ${top + V.length*rh + 22}" role="img" aria-label="WorkspaceBench brew pass rates (approximate)">`;
+  for (const t of [0, 0.25, 0.5, 0.75, 1]) s += `<line class="gridl" x1="${x(t)}" x2="${x(t)}" y1="${top-4}" y2="${top + V.length*rh}"/><text x="${x(t)}" y="${top + V.length*rh + 15}" text-anchor="middle">${t}</text>`;
+  V.forEach(([lab, v, cls], i) => { const y = top + i*rh;
+    s += `<text class="lbl" x="${l-8}" y="${y+14}" text-anchor="end">${lab}</text><rect class="${cls}" x="${l}" y="${y+4}" width="${x(v)-l}" height="13" rx="2"/><text x="${x(v)+5}" y="${y+15}">≈${v.toFixed(2)}</text>`; });
+  document.getElementById("ch-wsb").innerHTML = s + `</svg>`;
+})();
+</script>
