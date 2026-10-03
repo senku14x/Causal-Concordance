@@ -52,6 +52,9 @@ def restore_private():
     tmp = Path(snapshot_download(PRIVATE, repo_type="dataset"))
     man = json.loads((tmp / "MANIFEST.json").read_text())
     ok = check(tmp, man)
+    nb = man.get("not_backed_up")
+    if nb:
+        print(f"not in the private backup ({nb['reason']}): {len(nb['paths'])} files, e.g. {nb['paths'][:3]}")
     for f in man["files"]:
         if f["path"].startswith("workspace/"):
             out = Path("/") / f["path"]

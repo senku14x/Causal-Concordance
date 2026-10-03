@@ -184,4 +184,5 @@ Design 001 registered its own predictions Q1–Q14; outcomes are in report 001 �
    `senku21x/causal-concordance-private`.
 5. P5 prior value (A01 §5).
 6. SAE (deferred); template lens (deferred).
-7. Paper PDFs: still gitignored (redistribution not cleared); backed up to the private HF dataset.
+7. Paper PDFs and web sources: still gitignored (redistribution not cleared). They did not fit in HF's private storage, so
+   they are on this instance only; free private HF storage or allow them into the private GitHub repo?

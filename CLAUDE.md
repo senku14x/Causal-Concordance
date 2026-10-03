@@ -170,13 +170,18 @@ yet) and await PI review.
 3. `python scripts/000_setup/restore_outputs.py`: downloads `outputs/` from the public HF dataset
    `senku21x/causal-concordance-outputs` and checks every file against its `MANIFEST.json` (sha256).
 4. Optional: `python scripts/000_setup/restore_outputs.py --private`, restoring from the private HF dataset
-   `senku21x/causal-concordance-private`:
-   - a full git bundle of this repo;
-   - the paper PDFs and text extractions, and the web sources;
+   `senku21x/causal-concordance-private` (tested 2026-10-03: 82/82 public and 48/48 private files match their
+   manifests; the bundle clones both branches):
+   - a full git bundle of this repo (`repo.bundle`);
    - the reviewers' working folder `/workspace/codex_reports` (with evidence snapshots);
-   - the PI's Claude skills (`/workspace/.claude/skills`).
-   These are private because redistribution of the papers is not cleared and the skills are the PI's own.
-5. **Secrets are in neither mirror.** The OpenRouter key (002's judge) lives only in `/workspace/.env`; ask the PI
+   - the PI's Claude skills (`/workspace/.claude/skills`, plus `.skill` archives);
+   - the PI's `/workspace/docs` (reading list, paper PDF).
+   **Not backed up anywhere: `/workspace/sources/papers` and `/workspace/sources/web` (38 MB).** HF's private storage
+   limit was reached, and they stay out of public places because redistribution is not cleared. The papers are arXiv
+   PDFs (IDs in `docs/papers/INDEX.md`); the web sources are copies of public posts. Re-fetch them if the instance is
+   lost.
+5. Restore the agent's memory notes: see `docs/context/agent_notes/README.md`.
+6. **Secrets are in neither mirror.** The OpenRouter key (002's judge) lives only in `/workspace/.env`; ask the PI
    for it on a new instance. It was pasted in chat on 2026-10-02 and should be rotated.
 
 ## Pitfalls (read before writing code)
@@ -255,3 +260,5 @@ yet) and await PI review.
 | 10-03 | STATUS and my smoke summary said 25 accepted spellings (it is 24: 12 × 2); smoke analysis printed Pearson r with n = 2 | corrected; Pearson needs n ≥ 3 |
 | 10-03 | Report 004 drafted from three-decimal printouts: 8 double-rounding slips and 2 F_target counts written from memory (17, 29 → 21, 32) | every table regenerated and checked against the JSON (half-up) before commit; draft reports from full-precision JSON, never from printouts |
 | 10-03 | I told the PI the smoke review's "agreed clarification" for S5 had no basis in the conversation, and that its audit script was not supplied; the consolidated handoff the PI had pasted states the rule, and the script was in `/workspace/codex_reports/` | review folders filed with scripts and a corrected disposition; check pasted handoffs and `codex_reports/` before disputing a reviewer's provenance |
+| 10-03 | Wrote the private backup's README through an unquoted bash heredoc: the backticked names in it were run as commands (all failed harmlessly; `python` is not on PATH) and the README was uploaded with blanks | README rewritten through the HF API; always quote heredocs (`<<'EOF'`) when the body contains backticks or `$` |
+| 10-03 | The first public-dataset README listed a `002_claim_scoring/` folder that does not exist (002 writes everything to `results/`, in git) | corrected on HF the same day |

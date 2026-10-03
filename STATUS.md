@@ -308,7 +308,8 @@ group), reader-input bridge (checked on the snapshot). Still open:
    - rotate the OpenRouter key.
 1. ~~HF dataset name~~: done. The public `senku21x/causal-concordance-outputs` and the private
    `senku21x/causal-concordance-private` (CLAUDE.md, "Fresh instance").
-2. **Paper PDFs** stay gitignored (redistribution not cleared); they are backed up in the private HF dataset.
+2. **Paper PDFs and web sources** (38 MB) stay gitignored (redistribution not cleared). They exceeded HF's private storage
+   limit, so they are on this instance only. Free HF storage, or allow them into the private GitHub repo?
 3. **P5 prior**: the dated update accepted in AMENDMENT_01 §5 needs your number (suggested ≈ 35%, down from 55%, on the
    NLA literature in the reading report §4.5.6).
 4. **SAE arm**: use `ceselder/qwen36-27b-bsf-l42-1b` (no labels: LLM-label ~2,000 features, or score decoders by

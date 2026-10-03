@@ -36,8 +36,8 @@ live state in `STATUS.md`, and the item-by-item spec status in `docs/context/SPE
    `docs/papers/INDEX.md`.
 
 **On a fresh instance:** follow CLAUDE.md, "Fresh instance: restore everything": clone, `rebuild_env.sh`,
-`restore_outputs.py` (public outputs, sha256-checked) and optionally `--private` (papers, web sources, review evidence,
-skills, repo bundle).
+`restore_outputs.py` (public outputs, sha256-checked) and optionally `--private` (repo bundle, review evidence,
+skills; not the paper PDFs or web sources, which did not fit in HF's private storage).
 
 ## 3. What has been done
 
