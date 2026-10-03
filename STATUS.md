@@ -96,11 +96,17 @@ https://claude.ai/artifact/RMRX8R4iFnysbnHaNWTBeC
 - [x] Raw-output mirror: public HF dataset with MANIFEST.json, retrieval verified.
 - [x] Reader-free helpers factored into `scripts/common/brew_material.py` (identical 82 pairs and renders; boundary
   test extended).
-- [ ] `scripts/004_span_assay/span_assay.py`: frozen pair manifest (seed 20261007, one per table); spans per fit (own
-  mean); PCA basis (within-table centred, table-weighted); arm manifest with run counts.
-- [ ] Preflight (CPU): colour support per fit, basis identities in float64 and float32, zero-write checks.
-- [ ] Smoke on 2 pairs (G1/G2; all-colour scoring including " Teal"; hand inspection) → timing.
-- [ ] Run 33 pairs → analysis → report → mirror re-upload.
+- [x] `scripts/004_span_assay/span_assay.py` (reader-free; boundary test walks it): frozen 33-pair manifest (seed
+  20261007, one per table); spans per fit with each fit's own mean; PCA per fit (within-table centred, 1/sqrt(n_t));
+  arm manifest: 334 conditions, 476 scored prompts, ~956 forwards per pair (31,548 in all).
+- [x] Preflight (CPU, `results/004_span_assay/preflight.json`): fit rows reproduce 003's n and means; basis identities
+  float64/float32 (worst QᵀQ 3.6e-7 after the cast); zero writes bitwise no-ops; NEG_REL 1e-4 checked; the 25 spelling
+  events are prefix-free; no reader or mixed modules loaded.
+- [x] Smoke, 2 pairs (`smoke_checks.json`, `smoke_inspection.md`): all six gates pass (self-swap bitwise; identity
+  projector vs direct assignment ≤ 3e-6 nats; S_full = 001 exactly; clean m and G = 003 exactly; fidelity on every
+  write; M ≤ 1). 101 s per pair → ~56 min for 33. Outside-the-spellings mass (~14% clean) is formatting tokens
+  (`<|im_end|>`, newlines, " **"; `smoke_outside_mass_tokens.json`).
+- [ ] **Awaiting the PI's go (design §9)**, then: run 33 pairs → analysis → report → mirror re-upload → page.
 
 **Built and run since (see the top of this file and the reports):** label construction (003: directions, 1-D swaps,
 necessity, random nulls), role-aware reader scoring (002: judge + closed set), prompt-only baseline (002), probe repair

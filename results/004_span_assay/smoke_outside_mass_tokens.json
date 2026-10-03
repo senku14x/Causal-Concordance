@@ -1,0 +1,650 @@
+[
+ {
+  "pair_id": "brew-s2-r10d2-0009__white",
+  "run": "member",
+  "top15": [
+   [
+    " purple",
+    0.6186,
+    true
+   ],
+   [
+    " Purple",
+    0.1795,
+    true
+   ],
+   [
+    "<|im_end|>",
+    0.0464,
+    false
+   ],
+   [
+    "\n",
+    0.0235,
+    false
+   ],
+   [
+    "\n\n",
+    0.0166,
+    false
+   ],
+   [
+    " ",
+    0.016,
+    false
+   ],
+   [
+    " red",
+    0.0138,
+    true
+   ],
+   [
+    " **",
+    0.0135,
+    false
+   ],
+   [
+    " Red",
+    0.012,
+    true
+   ],
+   [
+    " orange",
+    0.0074,
+    true
+   ],
+   [
+    " pink",
+    0.0047,
+    true
+   ],
+   [
+    " A",
+    0.0046,
+    false
+   ],
+   [
+    " green",
+    0.0039,
+    true
+   ],
+   [
+    " gold",
+    0.0035,
+    true
+   ],
+   [
+    " Orange",
+    0.0034,
+    true
+   ]
+  ]
+ },
+ {
+  "pair_id": "brew-s2-r10d2-0009__white",
+  "run": "partner",
+  "top15": [
+   [
+    " orange",
+    0.6526,
+    true
+   ],
+   [
+    " Orange",
+    0.1099,
+    true
+   ],
+   [
+    " black",
+    0.0734,
+    true
+   ],
+   [
+    "<|im_end|>",
+    0.0355,
+    false
+   ],
+   [
+    "\n",
+    0.0179,
+    false
+   ],
+   [
+    " Black",
+    0.0173,
+    true
+   ],
+   [
+    "\n\n",
+    0.0133,
+    false
+   ],
+   [
+    " green",
+    0.0117,
+    true
+   ],
+   [
+    " **",
+    0.0103,
+    false
+   ],
+   [
+    " A",
+    0.0088,
+    false
+   ],
+   [
+    " ",
+    0.0076,
+    false
+   ],
+   [
+    " The",
+    0.0045,
+    false
+   ],
+   [
+    " red",
+    0.004,
+    true
+   ],
+   [
+    " Green",
+    0.0031,
+    true
+   ],
+   [
+    " purple",
+    0.0027,
+    true
+   ]
+  ]
+ },
+ {
+  "pair_id": "brew-s2-r10d2-0012__red",
+  "run": "member",
+  "top15": [
+   [
+    " black",
+    0.5941,
+    true
+   ],
+   [
+    " Black",
+    0.0844,
+    true
+   ],
+   [
+    " white",
+    0.0571,
+    true
+   ],
+   [
+    "<|im_end|>",
+    0.0455,
+    false
+   ],
+   [
+    " brown",
+    0.0245,
+    true
+   ],
+   [
+    " teal",
+    0.0234,
+    true
+   ],
+   [
+    "\n",
+    0.0232,
+    false
+   ],
+   [
+    " purple",
+    0.0225,
+    true
+   ],
+   [
+    "\n\n",
+    0.0213,
+    false
+   ],
+   [
+    " **",
+    0.0192,
+    false
+   ],
+   [
+    " White",
+    0.0125,
+    true
+   ],
+   [
+    " ",
+    0.0088,
+    false
+   ],
+   [
+    " pink",
+    0.0083,
+    true
+   ],
+   [
+    " Te",
+    0.0075,
+    true
+   ],
+   [
+    " Brown",
+    0.0054,
+    true
+   ]
+  ]
+ },
+ {
+  "pair_id": "brew-s2-r10d2-0012__red",
+  "run": "partner",
+  "top15": [
+   [
+    " purple",
+    0.5959,
+    true
+   ],
+   [
+    " Purple",
+    0.0931,
+    true
+   ],
+   [
+    " red",
+    0.056,
+    true
+   ],
+   [
+    " white",
+    0.0493,
+    true
+   ],
+   [
+    "<|im_end|>",
+    0.0464,
+    false
+   ],
+   [
+    " Red",
+    0.0291,
+    true
+   ],
+   [
+    "\n\n",
+    0.0172,
+    false
+   ],
+   [
+    "\n",
+    0.0165,
+    false
+   ],
+   [
+    " **",
+    0.014,
+    false
+   ],
+   [
+    " pink",
+    0.013,
+    true
+   ],
+   [
+    " White",
+    0.0126,
+    true
+   ],
+   [
+    " ",
+    0.0083,
+    false
+   ],
+   [
+    " brown",
+    0.0045,
+    true
+   ],
+   [
+    " green",
+    0.0044,
+    true
+   ],
+   [
+    " black",
+    0.0035,
+    true
+   ]
+  ]
+ },
+ {
+  "pair_id": "brew-s2-r10d2-0015__black",
+  "run": "member",
+  "top15": [
+   [
+    " black",
+    0.6687,
+    true
+   ],
+   [
+    " Black",
+    0.0936,
+    true
+   ],
+   [
+    " green",
+    0.037,
+    true
+   ],
+   [
+    "<|im_end|>",
+    0.036,
+    false
+   ],
+   [
+    " red",
+    0.0353,
+    true
+   ],
+   [
+    " brown",
+    0.0214,
+    true
+   ],
+   [
+    " Red",
+    0.0168,
+    true
+   ],
+   [
+    " **",
+    0.0151,
+    false
+   ],
+   [
+    "\n\n",
+    0.0146,
+    false
+   ],
+   [
+    " Green",
+    0.0137,
+    true
+   ],
+   [
+    "\n",
+    0.0133,
+    false
+   ],
+   [
+    " Brown",
+    0.0054,
+    true
+   ],
+   [
+    " ",
+    0.0052,
+    false
+   ],
+   [
+    " Answer",
+    0.0048,
+    false
+   ],
+   [
+    " A",
+    0.0031,
+    false
+   ]
+  ]
+ },
+ {
+  "pair_id": "brew-s2-r10d2-0015__black",
+  "run": "partner",
+  "top15": [
+   [
+    " green",
+    0.5833,
+    true
+   ],
+   [
+    " Green",
+    0.2232,
+    true
+   ],
+   [
+    "<|im_end|>",
+    0.0342,
+    false
+   ],
+   [
+    "\n",
+    0.0216,
+    false
+   ],
+   [
+    " red",
+    0.016,
+    true
+   ],
+   [
+    "\n\n",
+    0.0158,
+    false
+   ],
+   [
+    " A",
+    0.0144,
+    false
+   ],
+   [
+    " **",
+    0.0139,
+    false
+   ],
+   [
+    " Red",
+    0.0125,
+    true
+   ],
+   [
+    " ",
+    0.0124,
+    false
+   ],
+   [
+    " brown",
+    0.0109,
+    true
+   ],
+   [
+    " The",
+    0.0055,
+    false
+   ],
+   [
+    " \"",
+    0.0052,
+    false
+   ],
+   [
+    " black",
+    0.0049,
+    true
+   ],
+   [
+    " Brown",
+    0.0039,
+    true
+   ]
+  ]
+ },
+ {
+  "pair_id": "brew-s2-r10d2-0027__purple",
+  "run": "member",
+  "top15": [
+   [
+    " black",
+    0.782,
+    true
+   ],
+   [
+    " Black",
+    0.1105,
+    true
+   ],
+   [
+    "<|im_end|>",
+    0.0229,
+    false
+   ],
+   [
+    " pink",
+    0.0182,
+    true
+   ],
+   [
+    " **",
+    0.0171,
+    false
+   ],
+   [
+    "\n\n",
+    0.0115,
+    false
+   ],
+   [
+    "\n",
+    0.0113,
+    false
+   ],
+   [
+    " A",
+    0.0046,
+    false
+   ],
+   [
+    " Pink",
+    0.003,
+    true
+   ],
+   [
+    " ",
+    0.0024,
+    false
+   ],
+   [
+    " \"",
+    0.0023,
+    false
+   ],
+   [
+    " orange",
+    0.0012,
+    true
+   ],
+   [
+    " The",
+    0.0012,
+    false
+   ],
+   [
+    " a",
+    0.0008,
+    false
+   ],
+   [
+    " B",
+    0.0007,
+    false
+   ]
+  ]
+ },
+ {
+  "pair_id": "brew-s2-r10d2-0027__purple",
+  "run": "partner",
+  "top15": [
+   [
+    " teal",
+    0.6597,
+    true
+   ],
+   [
+    " Te",
+    0.0999,
+    true
+   ],
+   [
+    "<|im_end|>",
+    0.055,
+    false
+   ],
+   [
+    " black",
+    0.0417,
+    true
+   ],
+   [
+    "\n\n",
+    0.024,
+    false
+   ],
+   [
+    "\n",
+    0.0218,
+    false
+   ],
+   [
+    " pink",
+    0.0148,
+    true
+   ],
+   [
+    " **",
+    0.0104,
+    false
+   ],
+   [
+    " Black",
+    0.01,
+    true
+   ],
+   [
+    " ",
+    0.0083,
+    false
+   ],
+   [
+    " red",
+    0.0072,
+    true
+   ],
+   [
+    " A",
+    0.0061,
+    false
+   ],
+   [
+    " blue",
+    0.0053,
+    true
+   ],
+   [
+    " purple",
+    0.0049,
+    true
+   ],
+   [
+    " Red",
+    0.0027,
+    true
+   ]
+  ]
+ }
+]

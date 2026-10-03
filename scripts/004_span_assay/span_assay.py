@@ -716,6 +716,294 @@ def stage_smoke():
                       "projected_run_minutes": checks["projected_run_minutes"]}))
 
 
+def composition(row, clean_logq, a2):
+    """d_c = q_edit(c) - q_clean(c); T+ = sum max(d_c, 0); F_target = max(d_a', 0) / T+ (defined for T+ >= 0.01)."""
+    d = {c: float(np.exp(q1) - np.exp(q0)) for c, q1, q0 in zip(COLOURS, row["edit"]["logq"], clean_logq)}
+    tp = sum(max(v, 0.0) for v in d.values())
+    return d, tp, (max(d[a2], 0.0) / tp if tp >= 0.01 else None)
+
+
+def stage_inspect(src="smoke"):
+    """Hand-inspection table for the smoke (or any pass): colour distributions, composition, flags, fidelity, controls."""
+    text = inspect_text(_jl(OUT / src / "rows.jsonl"))
+    (RES / f"{src}_inspection.md").write_text(text)
+    print(text)
+
+
+def inspect_text(rows, only=None):
+    lines = []
+    fmt = lambda x: "  n/a" if x is None else f"{x:+.3f}"
+    for pid in (only or dict.fromkeys(r["pair_id"] for r in rows)):
+        R_ = [r for r in rows if r["pair_id"] == pid and "check" not in r]
+        cl = R_[0]
+        top = lambda lq: ", ".join(f"{c} {np.exp(q):.3f}" for c, q in sorted(zip(COLOURS, lq), key=lambda t: -t[1])[:4])
+        lines += [f"## {pid}  (a {cl['a']} -> a' {cl['a2']}; z {cl['z']} -> {cl['z2']}; start {cl['start']} -> {cl['start2']})",
+                  f"G = {cl['G']:.3f}   m_clean {cl['m_clean']:.3f}   m_donor {cl['m_donor']:.3f}",
+                  f"clean q: {top(cl['member']['logq'])}   outside {cl['member']['outside']:.3f}",
+                  f"donor q: {top(cl['partner']['logq'])}   outside {cl['partner']['outside']:.3f}", "",
+                  "| site | fit | arm | k | S | dlogP(a) | dlogP(a') | outside up | T+ | F_target | top gain | |write| | rho | flags |",
+                  "|---|---|---|---|---|---|---|---|---|---|---|---|---|---|"]
+        for r in R_:
+            if r["kind"] not in ("swap", "pca") or "status" in r:
+                if r["kind"] in ("swap", "pca") and "status" in r:
+                    lines.append(f"| {r['site']} | {r['fit']} | {r['arm']} | {r['k']} | {r['status']} |")
+                continue
+            d, tp, ft = composition(r, cl["member"]["logq"], cl["a2"])
+            g = max(d, key=d.get)
+            fl = ",".join(k for k in ("flag_outside", "flag_both_down") if r[k]) or "-"
+            rho = "neg" if r["fid_rho"] is None else f"{r['fid_rho'][0]:.4f}"
+            lines.append(f"| {r['site']} | {r['fit']} | {r['arm']} | {r['k']} | {r['S']:+.3f} | {r['d_logP_a']:+.3f} | {r['d_logP_b']:+.3f} | "
+                         f"{r['outside_up']:+.3f} | {tp:.3f} | {fmt(ft)} | {g} {d[g]:+.3f} | {r['write_norm']:.2f} | {rho} | {fl} |")
+        lines += ["", "| site | arm (primary) | real S | rank-matched (Jc: random complement) median / q95 | norm-matched median / q95 | rank stat vs rank-matched (Jc: lower tail) |",
+                  "|---|---|---|---|---|---|"]
+        for site, arm in CTRL_ARMS + [("colon", "Jc")]:
+            real = [r for r in R_ if r["kind"] == "swap" and r["fit"] == "both" and r["site"] == site and r["arm"] == arm and "S" in r]
+            if not real:
+                continue
+            ck = "rcomp:J" if arm == "Jc" else f"rank:{arm}"
+            rk = [r["S"] for r in R_ if r["kind"] == "swap_ctrl" and r["arm"] == ck and "S" in r]
+            nm = [r["S"] for r in R_ if r["kind"] == "swap_ctrl" and r["arm"] == f"norm:{arm}" and "S" in r]
+            s = real[0]["S"]
+            stat = ((1 + sum(x <= s for x in rk)) if arm == "Jc" else (1 + sum(x >= s for x in rk))) / (1 + len(rk)) if rk else None
+            q = lambda v: f"{np.median(v):+.3f} / {np.quantile(v, 0.95):+.3f}" if v else "-"
+            lines.append(f"| {site} | {arm} | {s:+.3f} | {q(rk)} | {q(nm)} | {stat if stat is None else f'{stat:.3f}'} |")
+        lines += ["", "| site | arm | fit | N | G_abl | member outside up | partner outside up | rotation N median / q95 | rand-clamp N median / q95 |",
+                  "|---|---|---|---|---|---|---|---|---|"]
+        for r in R_:
+            if r["kind"] != "nec" or "N" not in r:
+                continue
+            ctl = lambda kind: [x["N"] for x in R_ if x["kind"] == "nec_ctrl" and x["arm"] == f"{kind}:{r['arm']}" and "N" in x]
+            q = lambda v: f"{np.median(v):+.3f} / {np.quantile(v, 0.95):+.3f}" if v else "-"
+            lines.append(f"| {r['site']} | {r['arm']} | {r['fit']} | {r['N']:+.3f} | {r['G_abl']:.3f} | {r['member_run']['outside_up']:+.3f} | "
+                         f"{r['partner_run']['outside_up']:+.3f} | {q(ctl('rot')) if r['fit'] == 'both' else ''} | {q(ctl('rclamp')) if r['fit'] == 'both' else ''} |")
+        lines.append("")
+    return "\n".join(lines)
+
+
+# ------------------------------------------------------------------------------------------- analysis (design §4-§7)
+REC_MIN = 0.10          # recovery subset: remeasured S_full >= 0.10 at that site
+TOL_MATERIAL = 0.05     # r1 / r2 material-disagreement tolerance (share units)
+I_BIG = 0.15            # |I| at or above this counts as a large interaction
+PAIRED = {"colon": [("Z", "z1d"), ("J", "Z"), ("Z", "pca_kZ"), ("Z", "pca_kZ_dose"), ("J", "pca_kJ"), ("J", "pca_kJ_dose")],
+          "start_ref": [("Sspan", "s1d"), ("Sspan", "pca_kS"), ("Sspan", "pca_kS_dose")]}
+INTERACT = [("colon", "Z", "Zc"), ("colon", "J", "Jc"), ("start_ref", "Sspan", "Sc")]
+
+
+def _med_ci(vals, tables, stat=np.median):
+    import stats as ST
+    v = np.asarray(vals, float)
+    if len(v) == 0:
+        return None
+    if len(v) == 1:
+        return {"value": float(stat(v)), "boot95_tables": [None, None], "n": 1}
+    b = ST.cluster_bootstrap(v, np.asarray(tables), stat=stat)
+    return {"value": float(stat(v)), "boot95_tables": b["ci"], "n": int(len(v)), "n_pos": int((v > 0).sum())}
+
+
+def roles_of(cl):
+    """Role labels per colour for the composition breakdown; a colour holding several roles is labelled with all of them
+    and counted once, under the first of a' > z' > start'."""
+    lab = {}
+    for name, key in (("a'", "a2"), ("z'", "z2"), ("start'", "start2"), ("a", "a"), ("z", "z"), ("start", "start")):
+        lab.setdefault(cl[key], []).append(name)
+    return lab
+
+
+def swap_summary(r, cl):
+    d, tp, ft = composition(r, cl["member"]["logq"], cl["a2"])
+    lab = roles_of(cl)
+    gains, used = {}, set()
+    for role, key in (("a'", "a2"), ("z'", "z2"), ("start'", "start2")):
+        c = cl[key]
+        gains[role] = None if c in used else max(d[c], 0.0)
+        used.add(c)
+    gains["other"] = tp - sum(v for v in gains.values() if v)
+    for role, key in (("of_other: recipient z", "z"), ("of_other: recipient start", "start")):   # descriptive sub-split
+        c = cl[key]
+        gains[role] = None if c in used else max(d[c], 0.0)
+        used.add(c)
+    flagged = bool(r["flag_outside"] or r["flag_both_down"])
+    return {"S": r["S"], "T_plus": tp, "F_target": ft, "gains": gains, "role_labels": {c: lab[c] for c in lab},
+            "flagged": flagged, "flag_outside": r["flag_outside"], "flag_both_down": r["flag_both_down"],
+            "qualified": bool(ft is not None and ft > 0.5 and r["d_logP_b"] > FLOOR and not flagged),
+            "d_logP_a": r["d_logP_a"], "d_logP_b": r["d_logP_b"], "outside_up": r["outside_up"], "write_norm": r["write_norm"]}
+
+
+def per_pair_tables(rows):
+    out = {}
+    for pid in dict.fromkeys(r["pair_id"] for r in rows):
+        R_ = [r for r in rows if r["pair_id"] == pid and "check" not in r]
+        cl = next(r for r in R_ if r["kind"] == "clean")
+        p = {"item": cl["item"], "G": cl["G"], "a": cl["a"], "a2": cl["a2"], "swap": {}, "status": {}, "nec": {},
+             "ctrl": {}, "nec_ctrl": {}}
+        for r in R_:
+            key = f"{r.get('site')}|{r.get('fit')}|{r.get('arm')}"
+            if "status" in r:
+                p["status"][f"{r['kind']}|{key}"] = r["status"]
+            elif r["kind"] in ("swap", "pca"):
+                p["swap"][key] = swap_summary(r, cl)
+            elif r["kind"] == "nec":
+                p["nec"][key] = {"N": r["N"], "G_abl": r["G_abl"], "flag_member": r["member_run"]["flag_outside"],
+                                 "flag_partner": r["partner_run"]["flag_outside"]}
+            elif r["kind"] == "swap_ctrl":
+                p["ctrl"].setdefault(f"{r['site']}|{r['arm']}", []).append(r["S"])
+            elif r["kind"] == "nec_ctrl":
+                p["nec_ctrl"].setdefault(f"{r['site']}|{r['arm']}", []).append(r["N"])
+        p["S_full"] = {s: p["swap"][f"{s}|None|full"]["S"] for s in SITES}
+        out[pid] = p
+    return out
+
+
+def _S(p, site, fit, arm):
+    v = p["swap"].get(f"{site}|{fit}|{arm}")
+    return None if v is None else v["S"]
+
+
+def stage_analysis(src="run"):
+    rows = [r for r in _jl(OUT / src / "rows.jsonl") if "check" not in r]
+    P = per_pair_tables(rows)
+    pids = list(P)
+    tab = {pid: P[pid]["item"] for pid in pids}
+    rec_sub = {s: [pid for pid in pids if P[pid]["S_full"][s] >= REC_MIN] for s in SITES}
+    A = {"n_pairs": len(pids), "recovery_subset": {s: {"n": len(v), "pairs": v, "rule": f"S_full >= {REC_MIN}"} for s, v in rec_sub.items()},
+         "S_full": {s: _med_ci([P[p]["S_full"][s] for p in pids], [tab[p] for p in pids]) for s in SITES},
+         "arms": {}, "paired": {}, "controls": {}, "necessity": {}, "necessity_controls": {}, "reproducibility": {},
+         "interaction": {}, "status_counts": {}}
+    for p in pids:
+        for k, v in P[p]["status"].items():
+            A["status_counts"][f"{k}|{v}"] = A["status_counts"].get(f"{k}|{v}", 0) + 1
+    arm_keys = sorted({k for p in pids for k in P[p]["swap"]})
+    for k in arm_keys:
+        site, fit, arm = k.split("|")
+        have = [p for p in pids if k in P[p]["swap"]]
+        sw = [P[p]["swap"][k] for p in have]
+        rs = [p for p in rec_sub[site] if k in P[p]["swap"]]
+        A["arms"][k] = {
+            "S_all": _med_ci([s["S"] for s in sw], [tab[p] for p in have]),
+            "n_missing": len(pids) - len(have),
+            "recovery": _med_ci([P[p]["swap"][k]["S"] / P[p]["S_full"][site] for p in rs], [tab[p] for p in rs]),
+            "n_flagged": int(sum(s["flagged"] for s in sw)), "n_flag_outside": int(sum(s["flag_outside"] for s in sw)),
+            "n_flag_both_down": int(sum(s["flag_both_down"] for s in sw)), "n_qualified": int(sum(s["qualified"] for s in sw)),
+            "F_target_median": float(np.median([s["F_target"] for s in sw if s["F_target"] is not None])) if any(s["F_target"] is not None for s in sw) else None,
+            "n_F_defined": int(sum(s["F_target"] is not None for s in sw)),
+            "S_qualified_only": _med_ci([s["S"] for p, s in zip(have, sw) if s["qualified"]], [tab[p] for p, s in zip(have, sw) if s["qualified"]]),
+            "S_unflagged_only": _med_ci([s["S"] for p, s in zip(have, sw) if not s["flagged"]], [tab[p] for p, s in zip(have, sw) if not s["flagged"]])}
+    for site, comps in PAIRED.items():
+        for fit in FITS:
+            for a1, a2 in comps:
+                have = [p for p in pids if _S(P[p], site, fit, a1) is not None and _S(P[p], site, fit, a2) is not None]
+                rs = [p for p in have if p in rec_sub[site]]
+                A["paired"][f"{site}|{fit}|{a1}-{a2}"] = {
+                    "dS_all": _med_ci([_S(P[p], site, fit, a1) - _S(P[p], site, fit, a2) for p in have], [tab[p] for p in have]),
+                    "dS_recovery_subset": _med_ci([_S(P[p], site, fit, a1) - _S(P[p], site, fit, a2) for p in rs], [tab[p] for p in rs]),
+                    "d_recovery": _med_ci([(_S(P[p], site, fit, a1) - _S(P[p], site, fit, a2)) / P[p]["S_full"][site] for p in rs], [tab[p] for p in rs])}
+    # swap controls (primary fit): descriptive exceedance counts and rank statistics, no per-item significance
+    for site, arm in CTRL_ARMS + [("colon", "Jc")]:
+        for ck in (["rcomp:J"] if arm == "Jc" else [f"rank:{arm}", f"norm:{arm}"]):
+            per = []
+            for p in pids:
+                s = _S(P[p], site, "both", arm)
+                c = P[p]["ctrl"].get(f"{site}|{ck}")
+                if s is None or not c:
+                    continue
+                c = np.asarray(c)
+                per.append({"pair_id": p, "S": s, "ctrl_median": float(np.median(c)), "ctrl_q05": float(np.quantile(c, 0.05)),
+                            "ctrl_q95": float(np.quantile(c, 0.95)), "exceedances": int((c >= s).sum()),
+                            "rank_stat": float((1 + (c >= s).sum()) / (1 + len(c))),
+                            "rank_stat_lower": float((1 + (c <= s).sum()) / (1 + len(c)))})
+            A["controls"][f"{site}|{arm}|{ck}"] = {
+                "n": len(per), "n_draws": N_DRAWS, "min_rank_stat": 1 / (1 + N_DRAWS),
+                "tail_note": "complements: the informative tail is the lower one (real complement below random complements)",
+                "frac_real_above_q95": float(np.mean([x["S"] > x["ctrl_q95"] for x in per])) if per else None,
+                "frac_real_below_q05": float(np.mean([x["S"] < x["ctrl_q05"] for x in per])) if per else None,
+                "frac_rank_stat_at_min": float(np.mean([x["exceedances"] == 0 for x in per])) if per else None,
+                "median_rank_stat_lower": float(np.median([x["rank_stat_lower"] for x in per])) if per else None,
+                "median_rank_stat": float(np.median([x["rank_stat"] for x in per])) if per else None,
+                "ctrl_median_of_medians": float(np.median([x["ctrl_median"] for x in per])) if per else None, "per_pair": per}
+    # necessity
+    nec_keys = sorted({k for p in pids for k in P[p]["nec"]})
+    for k in nec_keys:
+        have = [p for p in pids if k in P[p]["nec"]]
+        A["necessity"][k] = {"N": _med_ci([P[p]["nec"][k]["N"] for p in have], [tab[p] for p in have]),
+                             "n_flag_member": int(sum(P[p]["nec"][k]["flag_member"] for p in have)),
+                             "n_flag_partner": int(sum(P[p]["nec"][k]["flag_partner"] for p in have))}
+    for site, arm in CTRL_ARMS:
+        k = f"{site}|both|{arm}"
+        for kind in ("rot", "rclamp"):
+            per = []
+            for p in pids:
+                if k not in P[p]["nec"] or not P[p]["nec_ctrl"].get(f"{site}|{kind}:{arm}"):
+                    continue
+                c = np.asarray(P[p]["nec_ctrl"][f"{site}|{kind}:{arm}"])
+                n = P[p]["nec"][k]["N"]
+                per.append({"pair_id": p, "N": n, "ctrl_median": float(np.median(c)), "ctrl_q95": float(np.quantile(c, 0.95)),
+                            "exceedances": int((c >= n).sum()), "rank_stat": float((1 + (c >= n).sum()) / (1 + len(c)))})
+            A["necessity_controls"][f"{site}|{arm}|{kind}"] = {
+                "n": len(per), "frac_real_above_q95": float(np.mean([x["N"] > x["ctrl_q95"] for x in per])) if per else None,
+                "median_rank_stat": float(np.median([x["rank_stat"] for x in per])) if per else None, "per_pair": per}
+    # reproducibility (S and N): r1 vs r2
+    for kind, keyset, get in (("S", sorted({k.split("|", 2)[0] + "|" + k.split("|", 2)[2] for k in arm_keys if "|r1|" in k}),
+                               lambda p, s, f, a: _S(P[p], s, f, a)),
+                              ("N", sorted({k.split("|", 2)[0] + "|" + k.split("|", 2)[2] for k in nec_keys if "|r1|" in k}),
+                               lambda p, s, f, a: P[p]["nec"].get(f"{s}|{f}|{a}", {}).get("N"))):
+        for sa in keyset:
+            site, arm = sa.split("|")
+            have = [p for p in pids if get(p, site, "r1", arm) is not None and get(p, site, "r2", arm) is not None]
+            if len(have) < 2:
+                continue
+            x1 = np.array([get(p, site, "r1", arm) for p in have])
+            x2 = np.array([get(p, site, "r2", arm) for p in have])
+            x0 = np.array([get(p, site, "both", arm) for p in have], dtype=float)
+            rs = [i for i, p in enumerate(have) if p in rec_sub[site]]
+            rec = lambda x: float(np.median([x[i] / P[have[i]]["S_full"][site] for i in rs])) if rs else None
+            A["reproducibility"][f"{kind}|{site}|{arm}"] = {
+                "n": len(have), "pearson_r1_r2": float(np.corrcoef(x1, x2)[0, 1]) if x1.std() > 0 and x2.std() > 0 else None,
+                "signed_bias_median_r1_minus_r2": float(np.median(x1 - x2)), "median_abs_diff": float(np.median(np.abs(x1 - x2))),
+                "range": [float(min(x1.min(), x2.min())), float(max(x1.max(), x2.max()))],
+                "median": {"both": float(np.median(x0)), "r1": float(np.median(x1)), "r2": float(np.median(x2))},
+                "median_recovery": {"both": rec(x0), "r1": rec(x1), "r2": rec(x2)} if kind == "S" else None}
+    # interaction I = S_span + S_complement - S_full
+    for site, a1, a2 in INTERACT:
+        for fit in FITS:
+            have = [p for p in pids if _S(P[p], site, fit, a1) is not None and _S(P[p], site, fit, a2) is not None]
+            I = [_S(P[p], site, fit, a1) + _S(P[p], site, fit, a2) - P[p]["S_full"][site] for p in have]
+            t = [tab[p] for p in have]
+            A["interaction"][f"{site}|{fit}|{a1}+{a2}"] = {
+                "I_signed": _med_ci(I, t), "abs_I": _med_ci(np.abs(I), t),
+                "frac_abs_I_ge": _med_ci(I, t, stat=lambda v: float(np.mean(np.abs(v) >= I_BIG))), "threshold": I_BIG}
+    # predictions (priors in design §7; definitions fixed here before the run)
+    rec = lambda k: (A["arms"].get(k) or {}).get("recovery") or {}
+    z_verdict = lambda f: (rec(f"colon|{f}|Z").get("value") or -np.inf) >= 0.25
+    rz = A["reproducibility"].get("S|colon|Z", {}).get("median_recovery") or {}
+    nz = A["necessity_controls"].get("colon|Z|rot", {})
+    pz = A["paired"].get("colon|both|Z-pca_kZ", {}).get("dS_recovery_subset") or {}
+    A["predictions"] = {
+        "S1_median_Z_recovery_ge_0.25": {"value": rec("colon|both|Z").get("value"), "holds": z_verdict("both")},
+        "S2_median_J_recovery_ge_0.5": {"value": rec("colon|both|J").get("value"), "holds": (rec("colon|both|J").get("value") or -np.inf) >= 0.5},
+        "S3_median_start_span_recovery_ge_0.5": {"value": rec("start_ref|both|Sspan").get("value"), "holds": (rec("start_ref|both|Sspan").get("value") or -np.inf) >= 0.5},
+        "S4_Z_beats_unscaled_PCA_kZ": {"value": pz.get("value"), "holds": (pz.get("value") or -np.inf) > 0,
+                                       "definition": "paired median dS (Z - PCA_kZ unscaled), recovery subset, primary fit"},
+        "S5_Z_reproducible_under_stress": {"value": rz, "holds": bool(rz and None not in rz.values() and z_verdict("r1") == z_verdict("both") == z_verdict("r2")
+                                                                      and abs(rz["r1"] - rz["r2"]) <= TOL_MATERIAL),
+                                           "definition": f"r1 and r2 give S1's verdict and |median recovery r1 - r2| <= {TOL_MATERIAL}"},
+        "S6_Z_clamp_above_rotation_q95_in_half": {"value": nz.get("frac_real_above_q95"), "holds": (nz.get("frac_real_above_q95") or 0) >= 0.5}}
+    d = RES / ("analysis" if src == "run" else f"analysis_{src}")
+    zr = sorted((P[p]["swap"]["colon|both|Z"]["S"] / P[p]["S_full"]["colon"], p) for p in rec_sub["colon"] if "colon|both|Z" in P[p]["swap"])
+    ex = {"random_seeded": [str(x) for x in np.random.default_rng(SEED).choice(pids, size=min(3, len(pids)), replace=False)],
+          "median_Z_recovery": zr[len(zr) // 2][1] if zr else None, "max_Z_recovery": zr[-1][1] if zr else None,
+          "min_Z_recovery": zr[0][1] if zr else None,
+          "flagged_or_failed": [p for p in pids if P[p]["swap"].get("colon|both|Z", {}).get("flagged")
+                                or (P[p]["swap"].get("colon|both|Z", {}).get("S", 0) < 0)][:3]}
+    A["examples"] = ex
+    sel = list(dict.fromkeys([x for v in ex.values() for x in (v if isinstance(v, list) else [v]) if x]))
+    d.mkdir(parents=True, exist_ok=True)
+    (d / "examples.md").write_text("# 004 qualitative examples\n\n" + json.dumps(ex, indent=1) + "\n\n" + inspect_text(rows, sel))
+    write_json(d / "summary.json", A)
+    write_json(d / "per_pair.json", P)
+    print(json.dumps({"n_pairs": len(pids), "recovery_subset": {s: len(v) for s, v in rec_sub.items()},
+                      "predictions": {k: v["holds"] for k, v in A["predictions"].items()}}, indent=1, default=float))
+
+
 def stage_run():
     assert "--pi-go" in sys.argv, "the 33-pair run needs the PI's go (pass --pi-go)"
     sm = json.loads((RES / "smoke_checks.json").read_text())
@@ -744,4 +1032,5 @@ def stage_run():
 
 
 if __name__ == "__main__":
-    {"preflight": stage_preflight, "smoke": stage_smoke, "run": stage_run}[sys.argv[1]]()
+    {"preflight": stage_preflight, "smoke": stage_smoke, "run": stage_run, "inspect": lambda: stage_inspect(*sys.argv[2:3]),
+     "analysis": lambda: stage_analysis(*sys.argv[2:3])}[sys.argv[1]]()
