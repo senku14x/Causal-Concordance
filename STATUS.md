@@ -92,6 +92,16 @@ https://claude.ai/artifact/RMRX8R4iFnysbnHaNWTBeC
   `camilablank/workspace-lenses` @ d740106d (`qwen3.6-27b/template-lens/templates.safetensors`, 8.6 GB, 13,174 words,
   cosine-scored). Its vocabulary has 11 of the 12 brew colours (no teal).
 
+**004 span assay (design v2, PI go 2026-10-03 "start with it, be careful") — implementation checklist:**
+- [x] Raw-output mirror: public HF dataset with MANIFEST.json, retrieval verified.
+- [x] Reader-free helpers factored into `scripts/common/brew_material.py` (identical 82 pairs and renders; boundary
+  test extended).
+- [ ] `scripts/004_span_assay/span_assay.py`: frozen pair manifest (seed 20261007, one per table); spans per fit (own
+  mean); PCA basis (within-table centred, table-weighted); arm manifest with run counts.
+- [ ] Preflight (CPU): colour support per fit, basis identities in float64 and float32, zero-write checks.
+- [ ] Smoke on 2 pairs (G1/G2; all-colour scoring including " Teal"; hand inspection) → timing.
+- [ ] Run 33 pairs → analysis → report → mirror re-upload.
+
 **Built and run since (see the top of this file and the reports):** label construction (003: directions, 1-D swaps,
 necessity, random nulls), role-aware reader scoring (002: judge + closed set), prompt-only baseline (002), probe repair
 (001 A2). **Not built yet:** content-span and complement patches, norm-matched ablation controls, per-item null

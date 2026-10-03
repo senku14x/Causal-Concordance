@@ -6,7 +6,7 @@ import ast
 from pathlib import Path
 
 COMMON = Path(__file__).resolve().parent.parent
-LABEL_MODULES = ["registry", "cells", "wsb", "partners", "margin", "engine", "gates", "stats", "regime"]
+LABEL_MODULES = ["registry", "cells", "wsb", "partners", "margin", "engine", "gates", "stats", "regime", "splits", "brew_material"]
 READER_NAMES = {"readers", "jlens", "peft", "vllm", "vllm_lens"}
 
 
