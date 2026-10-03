@@ -89,6 +89,20 @@ live state in `STATUS.md`, and the item-by-item spec status in `docs/context/SPE
 - **Label reliability fails** (κ 0.37), so the labels are not used to score readers. Report 003 §7 lists the next
   options.
 
+## 4d. What 004 found (span assay at `:` L42; dev, 33 pairs; descriptive)
+
+- Whole cell moves a median 0.43 of the gap. Recovery of that: 1-D z 0.06, z-associated span (rank 11) 0.21, joint
+  start/z/answer span (rank 33) 0.72.
+- **PCA of the activations at the same rank does as well or better** (0.58 at rank 11, 0.89 at rank 33). At matched
+  edit norm the fitted spans are still slightly behind (ΔS −0.02). Recovery tracks the share of the pair difference a
+  subspace holds.
+- The z-span swap mostly raises the recipient's own intermediate, not the donor's answer (target-directed in 4/33).
+- Random controls are inert. The z-span clamp beats paired rotations in 31/33 pairs. The z span and its complement are
+  far from additive (|I| ≥ 0.15 in 67%).
+- Predictions: S2 and S6 hold; S1, S3, S4 and S5 do not. Reading: a descriptive geometry result; no intervention
+  construction nominated. Report `docs/reports/004_span_assay.md`; §14 lists the options (default: back to the reader
+  panel).
+
 ## 5. Known problems (not yet fixed)
 
 1. **Probe controls:** fixed (amendment A2; re-run 2026-10-02). Membership is now decodable at `:` L40–60, but only

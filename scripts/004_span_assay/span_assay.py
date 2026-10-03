@@ -1056,6 +1056,24 @@ def stage_analysis(src="run"):
     sel = list(dict.fromkeys([x for v in ex.values() for x in (v if isinstance(v, list) else [v]) if x]))
     d.mkdir(parents=True, exist_ok=True)
     (d / "examples.md").write_text("# 004 qualitative examples\n\n" + json.dumps(ex, indent=1) + "\n\n" + inspect_text(rows, sel))
+    top4 = lambda lq: [[c, float(np.exp(q))] for c, q in sorted(zip(COLOURS, lq), key=lambda t: -t[1])[:4]]
+    qual = []
+    for why, ids in ex.items():
+        for pid in (ids if isinstance(ids, list) else [ids]):
+            if not pid:
+                continue
+            R_ = [r for r in rows if r["pair_id"] == pid]
+            cl = next(r for r in R_ if r["kind"] == "clean")
+            arms = {}
+            for r in R_:
+                if r["kind"] in ("swap", "pca") and "S" in r and r["fit"] in (None, "both") and r["site"] == "colon" \
+                        and r["arm"] in ("full", "z1d", "Z", "J", "pca_kZ", "Zc", "Jc"):
+                    sw = P[pid]["swap"][f"colon|{r['fit']}|{r['arm']}"]
+                    arms[r["arm"]] = {"S": r["S"], "top4": top4(r["edit"]["logq"]), "F_target": sw["F_target"],
+                                      "gains": sw["gains"], "flagged": sw["flagged"], "qualified": sw["qualified"]}
+            qual.append({"why": why, "pair_id": pid, **{k: cl[k] for k in ("a", "a2", "z", "z2", "start", "start2", "G")},
+                         "clean_top4": top4(cl["member"]["logq"]), "donor_top4": top4(cl["partner"]["logq"]), "arms": arms})
+    write_json(d / "examples.json", qual)
     write_json(d / "summary.json", A)
     write_json(d / "per_pair.json", P)
     print(json.dumps({"n_pairs": len(pids), "recovery_subset": {s: len(v) for s, v in rec_sub.items()},

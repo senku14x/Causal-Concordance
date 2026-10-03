@@ -9,6 +9,8 @@ import html
 from decimal import ROUND_HALF_UP, Decimal
 import json
 import math
+
+import numpy as np
 import os
 import re
 import sys
@@ -664,6 +666,133 @@ def exp003():
     return html_, {"chart": chart}
 
 
+X4 = R.PROJECT / "results" / "004_span_assay"
+ARMS4 = [("colon", "z1d", "1-D z direction (003)"), ("colon", "Z", "z-associated span (11)"), ("colon", "pca_kZ", "PCA, same rank"),
+         ("colon", "pca_kZ_dose", "PCA, same rank and edit norm"), ("colon", "J", "joint start/z/answer span (33)"),
+         ("colon", "pca_kJ", "PCA, rank 33"), ("colon", "pca_kJ_dose", "PCA, rank 33, matched norm"),
+         ("colon", "S", "start-associated span"), ("colon", "A", "answer-associated span"), ("colon", "Zc", "complement of the z span"),
+         ("colon", "Jc", "complement of the joint span"),
+         ("start_ref", "s1d", "start 1-D (reference)"), ("start_ref", "Sspan", "start span (reference)"),
+         ("start_ref", "pca_kS", "PCA, same rank (reference)"), ("start_ref", "Sc", "complement of the start span")]
+
+
+def exp004():
+    """HTML + data for experiment 004 (span assay). Empty until the 33-pair analysis has run."""
+    f = X4 / "analysis" / "summary.json"
+    if not f.exists():
+        return "", None
+    A = json.loads(f.read_text())
+    PP = json.loads((X4 / "analysis" / "per_pair.json").read_text())
+    Q = json.loads((X4 / "analysis" / "examples.json").read_text())
+    rs = A["recovery_subset"]
+    chart = []
+    for site, arm, label in ARMS4:
+        row = {"label": label, "site": site}
+        for fit in ("both", "r1", "r2"):
+            rec = (A["arms"].get(f"{site}|{fit}|{arm}") or {}).get("recovery") or {}
+            row[fit] = rec.get("value")
+            if fit == "both":
+                row["ci"] = rec.get("boot95_tables")
+        chart.append(row)
+    scatter = {k: [{"id": pid.split("-")[-1], "x": p["swap"].get(f"colon|both|{a}", {}).get("S"), "y": p["swap"].get(f"colon|both|{b}", {}).get("S"),
+                    "full": p["S_full"]["colon"]} for pid, p in PP.items()]
+               for k, (a, b) in {"Z_vs_pca": ("Z", "pca_kZ"), "J_vs_pca": ("J", "pca_kJ")}.items()}
+    priors = {"S1": "45%", "S2": "40%", "S3": "55%", "S4": "50%", "S5": "35%", "S6": "45%"}
+
+    def ci(x, d=2):
+        if not x or x.get("value") is None:
+            return "—"
+        b = x.get("boot95_tables") or [None, None]
+        return f2(x["value"], d) + (f" [{f2(b[0], d)}, {f2(b[1], d)}]" if b[0] is not None else "")
+    def pval(k, v):
+        x = v["value"]
+        if k.startswith("S5"):
+            mr = x.get("median_recovery") or {}
+            return (f'recovery r1 {f2(mr.get("r1"))}, r2 {f2(mr.get("r2"))} (primary {f2(mr.get("both"))}); '
+                    f'median |S_r1 − S_r2| {f2(x.get("median_abs_dS_r1_r2"), 3)}')
+        return "—" if x is None else f2(x, 3)
+    pr = "".join(f'<tr><td>{h(k.split("_", 1)[0])}</td><td>{h(k.split("_", 1)[1].replace("_", " "))}</td><td class="num">{priors[k[:2]]}</td>'
+                 f'<td class="small">{h(pval(k, v))}</td>'
+                 f'<td><b>{"holds" if v["holds"] else "does not hold"}</b>{" (low-effect agreement)" if v.get("low_effect_agreement") else ""}</td></tr>'
+                 for k, v in A["predictions"].items())
+    comp_rows = ""
+    for site, arm, label in ARMS4[:7] + [("colon", "full", "whole cell")] + [ARMS4[12], ("start_ref", "full", "whole cell (reference)")]:
+        key = f"{site}|{'None' if arm == 'full' else 'both'}|{arm}"
+        a = A["arms"].get(key)
+        if not a:
+            continue
+        g = [PP[p]["swap"][key]["gains"] for p in PP if key in PP[p]["swap"]]
+        AP, ZP, RZ = "a'", "z'", "of_other: recipient z"
+        med = lambda r: f2(float(np.median([x[r] for x in g if x.get(r) is not None])), 3) if any(x.get(r) is not None for x in g) else "—"
+        comp_rows += (f'<tr><td>{h(label)}</td><td class="num">{ci(a["S_all"])}</td><td class="num">{f2(a["F_target_median"]) if a["F_target_median"] is not None else "—"} ({a["n_F_defined"]})</td>'
+                      f'<td class="num">{med(AP)}</td><td class="num">{med(ZP)}</td><td class="num">{med(RZ)}</td>'
+                      f'<td class="num">{a["n_qualified"]}</td><td class="num">{a["n_flagged"]}</td></tr>')
+    ctrl = "".join(f'<tr><td>{h(k.replace("|", " · "))}</td><td class="num">{v["n"]}</td><td class="num">{pct(v["frac_real_above_q95"])}</td>'
+                   f'<td class="num">{pct(v["frac_real_below_q05"])}</td><td class="num">{f2(v["median_rank_stat"], 3)}</td><td class="num">{f2(v["ctrl_median_of_medians"], 3)}</td></tr>'
+                   for k, v in A["controls"].items())
+    nec = ""
+    for k, v in A["necessity"].items():
+        site, fit, arm = k.split("|")
+        rot = A["necessity_controls"].get(f"{site}|{arm}|rot") if fit == "both" else None
+        rcl = A["necessity_controls"].get(f"{site}|{arm}|rclamp") if fit == "both" else None
+        nec += (f'<tr><td>{h(site)} · {h(arm)}</td><td>{h(fit)}</td><td class="num">{ci(v["N"])}</td>'
+                f'<td class="num">{pct(rot["frac_real_above_q95"]) if rot else ""}</td><td class="num">{pct(rcl["frac_real_above_q95"]) if rcl else ""}</td>'
+                f'<td class="num">{v["n_flag_member"]} / {v["n_flag_partner"]}</td></tr>')
+    inter = "".join(f'<tr><td>{h(k.replace("|", " · "))}</td><td class="num">{ci(v["I_signed"])}</td><td class="num">{ci(v["abs_I"])}</td>'
+                    f'<td class="num">{ci(v["frac_abs_I_ge"])}</td></tr>' for k, v in A["interaction"].items())
+    rep = "".join(f'<tr><td>{h(k.replace("|", " · "))}</td><td class="num">{v["n"]}</td><td class="num">{f2(v["pearson_r1_r2"]) if v["pearson_r1_r2"] is not None else "—"}</td>'
+                  f'<td class="num">{f2(v["median_abs_diff"], 3)}</td><td class="num">{f2(v["signed_bias_median_r1_minus_r2"], 3)}</td>'
+                  f'<td class="num">{" / ".join(f2(x) if x is not None else "—" for x in (v["median_recovery"] or {}).values()) if v["median_recovery"] else "—"}</td>'
+                  f'<td>{"yes" if v.get("high_recovery_reproducible") else ("low-effect agreement" if v.get("low_effect_agreement") else ("—" if v["median_recovery"] is None else "no"))}</td></tr>'
+                  for k, v in A["reproducibility"].items() if k.split("|")[2] in ("z1d", "Z", "J", "Sspan", "s1d", "pca_kZ", "pca_kJ"))
+    t4 = lambda lst: ", ".join(f"{c} {v:.2f}" for c, v in lst)
+    ql = ""
+    merged = {}
+    for e in Q:
+        if e["pair_id"] in merged:
+            merged[e["pair_id"]]["why"] += "; " + e["why"]
+        else:
+            merged[e["pair_id"]] = dict(e)
+    for e in merged.values():
+        arms = e["arms"]
+        cells = "".join(f'<td class="num">{f2(arms[a]["S"])}</td>' if a in arms else "<td>—</td>" for a in ("z1d", "Z", "pca_kZ", "J", "full"))
+        ql += (f'<tr><td><code>{h(e["pair_id"].split("-")[-1])}</code><br><span class="small muted">{h(e["why"].replace("_", " "))}</span></td>'
+               f'<td class="small">{h(e["start"])}→{h(e["z"])}→<b>{h(e["a"])}</b><br>donor {h(e["start2"])}→{h(e["z2"])}→<b>{h(e["a2"])}</b></td>{cells}'
+               f'<td class="small">{h(t4(e["clean_top4"]))}</td><td class="small">{h(t4(arms["Z"]["top4"])) if "Z" in arms else "—"}</td>'
+               f'<td class="small">{h(t4(arms["J"]["top4"])) if "J" in arms else "—"}</td></tr>')
+    html_ = f"""
+<section aria-labelledby="h-004">
+  <div class="eyebrow">Experiment 004 · dev · {A["n_pairs"]} pairs, one per table · SEC regime · “:” L42 and the start token L40 · design: docs/design_specs/004_span_assay.md (v2 + §13)</div>
+  <h2 id="h-004">Experiment 004: does a fitted span recover what the whole cell does?</h2>
+  <p>In 003, swapping the partner's coordinate along one fitted z direction at “:” L42 moved little of the answer. Here
+  the partner's coordinates in whole fitted subspaces are swapped in: the z-associated span (rank 11), the joint
+  start/z/answer span (rank 33; not the J-lens), start-only and answer-only spans, and the complements of each. Two
+  generic comparators use the same rank: PCA of the activations (as is, and rescaled to the content edit's norm), and
+  random subspaces and directions. Clamps of the span to its fitting mean test necessity against paired random rotations
+  of the same edits. Each fit excludes the evaluated table; two half-sized fits (r1, r2) test reproducibility. No reader
+  is involved. Recovery is the edit's share S of the answer gap divided by the whole-cell share, on pairs whose whole
+  cell moves at least 0.10 (“:” {rs["colon"]["n"]} of {A["n_pairs"]}, start token {rs["start_ref"]["n"]}).</p>
+  <p class="small muted">Gates: preflight passes (basis identities to float32 precision; zero writes are no-ops); smoke on 2 pairs (self-swap bitwise; whole-cell share equals 001 exactly; clean margins equal 003); fidelity checked on every write of the run (rho/kappa ≥ 1e-6 ‖h‖, read-back bound below), {len(A["quarantined_rows"])} quarantined rows.</p>
+  <h3>Recovery of the whole-cell effect (median, recovery subset; dots: primary fit with 95% table-bootstrap interval, and the two half-sized fits)</h3>
+  <div class="chart" id="ex4-rec"></div>
+  <h3>Per pair: fitted span vs PCA of the same rank (share S at “:” L42, primary fit)</h3>
+  <div class="arms"><div class="arm"><div class="chart" id="ex4-sc1"></div></div><div class="arm"><div class="chart" id="ex4-sc2"></div></div></div>
+  <h3>Predictions (priors written before any 004 run)</h3>
+  <div class="scroll"><table class="tbl"><tr><th>#</th><th>Prediction</th><th class="num">prior</th><th>value</th><th>outcome</th></tr>{pr}</table></div>
+  <h3>Where the added probability goes (primary fit, all pairs)</h3>
+  <div class="scroll"><table class="tbl"><tr><th>Edit</th><th class="num">median S [95% CI]</th><th class="num">median F_target (n defined)</th><th class="num">gain to donor answer</th><th class="num">to donor z</th><th class="num">to recipient z</th><th class="num">target-directed</th><th class="num">flagged</th></tr>{comp_rows}</table></div>
+  <p class="small muted">F_target = the donor answer's share of all positive colour-mass gains (defined when they total ≥ 0.01). Target-directed = F_target &gt; 0.5, log P(a′) up beyond the numerical floor, and no warning flag. Flags: mass outside the accepted spellings up &gt; 0.05, or both endpoint log-probabilities down &gt; 0.05 nats. Flagged rows stay in every median.</p>
+  <h3>Qualitative: fixed-seed random pairs beside the median, extreme and flagged cases</h3>
+  <div class="scroll"><table class="tbl"><tr><th>Pair</th><th>recipient / donor path</th><th class="num">S 1-D</th><th class="num">S z span</th><th class="num">S PCA</th><th class="num">S joint</th><th class="num">S whole</th><th>colour mass, clean (top 4)</th><th>after the z-span swap</th><th>after the joint-span swap</th></tr>{ql}</table></div>
+  <details class="more"><summary>Random controls (primary fit; descriptive, no per-item significance)</summary><div class="scroll"><table class="tbl"><tr><th>Arm · control</th><th class="num">n</th><th class="num">real above control q95</th><th class="num">real below control q05</th><th class="num">median rank stat (min 1/17)</th><th class="num">control median S</th></tr>{ctrl}</table></div></details>
+  <details class="more"><summary>Necessity: clamping the span to its fitting mean (N = share of the gap removed)</summary><div class="scroll"><table class="tbl"><tr><th>Span</th><th>fit</th><th class="num">median N [95% CI]</th><th class="num">above paired-rotation q95</th><th class="num">above random-clamp q95</th><th class="num">flags member / partner</th></tr>{nec}</table></div></details>
+  <details class="more"><summary>Additivity: I = S(span) + S(complement) − S(whole cell)</summary><div class="scroll"><table class="tbl"><tr><th>Span + complement</th><th class="num">signed I</th><th class="num">|I|</th><th class="num">fraction |I| ≥ 0.15</th></tr>{inter}</table></div></details>
+  <details class="more"><summary>Reproducibility between the two half-sized fits (r1 vs r2)</summary><div class="scroll"><table class="tbl"><tr><th>Quantity · site · arm</th><th class="num">n</th><th class="num">Pearson r</th><th class="num">median |Δ|</th><th class="num">median r1 − r2</th><th class="num">median recovery primary / r1 / r2</th><th>high recovery reproduced</th></tr>{rep}</table></div></details>
+</section>
+"""
+    return html_, {"chart": chart, "scatter": scatter}
+
+
 STATUS_HTML = """
 <section aria-labelledby="h-status">
   <h2 id="h-status">Status</h2>
@@ -671,23 +800,24 @@ STATUS_HTML = """
     <div class="ok"><h3>Works and is tested</h3><ul class="plain">
       <li>Pinned environment: model loads, 29/29 hashes match, and a rebuild script recreates everything.</li>
       <li>WorkspaceBench renders byte-identical to WSB's producer; partners, substitutions and the gate.</li>
-      <li>Margin scorer, patching engines (RHUT cross-check, SEC true-fp32 replay), stats, figures, and a model-integrity guard. 78 tests pass.</li>
+      <li>Margin scorer, patching engines (RHUT cross-check, SEC true-fp32 replay), stats, figures, a model-integrity guard, and a reader-free import boundary. 65 CPU tests pass.</li>
       <li>Readers: logit lens, J_NP, J_CB, R_CB, Oracle Lens (L40), NLA (L42), plus their positive controls.</li>
-      <li>Experiment 001 (dev): gate, smoke, run, probes, reader snapshot, analysis, figures, report (audited).</li>
+      <li>Experiment 001 (dev): gate, smoke, run, probes (repaired, A2), reader snapshot, analysis, report (audited).</li>
       <li>Experiment 002 (dev): role-aware claim scoring of every snapshot readout (Gemini 3.8 Flash judge, validated), lens closed-set scores, prompt-only baseline.</li>
-      <li>Experiment 003 (dev): reader-free causal labels (decorrelated content directions, 1-D swaps, necessity). Gates G1–G3 pass; label reliability (G4) fails, so the labels are descriptive.</li>
+      <li>Experiment 003 (dev): reader-free 1-D labels. Gates G1–G3 pass; label reliability (G4) fails, so the labels are descriptive.</li>
+      <li>Experiment 004 (dev, 33 pairs): span assay at “:” L42. Larger fitted spans recover more of the cell (joint span 0.72), but no more than PCA of the same rank; descriptive geometry result, no intervention nominated.</li>
+      <li>Raw outputs mirrored to the public HF dataset senku21x/causal-concordance-outputs (MANIFEST.json with sha256).</li>
     </ul></div>
     <div class="no"><h3>Not working, parked or dropped</h3><ul class="plain">
       <li><b>vLLM acceleration:</b> the engine won't start on this GPU (sm_120 check inside FlashInfer). Parked; the HF route works.</li>
       <li><b>SAE:</b> deferred until you decide. One candidate is noted (ceselder/qwen36-27b-bsf-l42-1b).</li>
       <li><b>Skip-lens:</b> dropped. Its checkpoints are trained at L62, not L42.</li>
       <li><b>Modulation lens, phrase-J:</b> dropped. <b>Template lens:</b> deferred (exists for this model; its vocabulary lacks teal).</li>
-      <li><b>Raw outputs</b> are only on this instance (no persistent volume; the HF mirror has no name yet). Committed results and figures are safe in git.</li>
     </ul></div>
     <div class="todo"><h3>Waiting on you, then next</h3><ul class="plain">
-      <li>Review report 001 and the AMENDMENT_02 proposals (above).</li>
-      <li>HF dataset name for the raw outputs; paper PDFs in a public repo; merge to main.</li>
-      <li>Next (your choice, report 003 §7): subspace labels (the whole z subspace), DAS as a second label method, more fitting data to pass the reliability gate, or a descriptive reader-vs-label comparison (004).</li>
+      <li>Confirm the framing: reader-panel comparison as the primary line, causal work as a validation branch (004 nominates no construction).</li>
+      <li>Review reports 001–004; AMENDMENT_02 (τ, ε′, substitution bound) before any test-split label.</li>
+      <li>Next (report 004 §14): return to the reader panel; a supervised follow-up (DAS vs PCA at matched rank and norm) only if it would change a decision.</li>
     </ul></div>
   </div>
 </section>
@@ -708,6 +838,7 @@ def main():
     exp_html, exp_data = exp001(tok)
     exp2_html, exp2_data = exp002()
     exp3_html, exp3_data = exp003()
+    exp4_html, exp4_data = exp004()
     data = {
         "prompt_tokens": [[i, t, r.regions.get(i, "")] for i, t in enumerate(r.decoded)],
         "item": {"name": it["name"], "start": it["start"], "z": it["intermediates"][0], "answer": it["answer"],
@@ -746,13 +877,14 @@ def main():
         "exp001": exp_data,
         "exp002": exp2_data,
         "exp003": exp3_data,
+        "exp004": exp4_data,
     }
     t = open(os.path.join(HERE, "template.html")).read()
     for key in ("__EXP001__", "__STATUS__", "__DATA__"):
         assert t.count(key) == 1, key
     # Lens readouts include byte-fragment tokens that decode to U+FFFD; write it as an escape so the page has no raw one.
     js = json.dumps(data, ensure_ascii=False).replace("</", "<\\/").replace("\ufffd", "\\ufffd")
-    page = (t.replace("__EXP001__", (exp_html + exp2_html + exp3_html).replace("\ufffd", "&#xFFFD;")).replace("__STATUS__", STATUS_HTML)
+    page = (t.replace("__EXP001__", (exp_html + exp2_html + exp3_html + exp4_html).replace("\ufffd", "&#xFFFD;")).replace("__STATUS__", STATUS_HTML)
              .replace("__DATA__", js))
     assert "\ufffd" not in page
     out = R.out_dir("outputs", "000_setup", "results_page") / "causal_concordance.html"

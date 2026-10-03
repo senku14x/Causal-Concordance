@@ -1,4 +1,13 @@
-# STATUS — 2026-10-03 (001–003 complete on dev; 004 preflight + 2-pair smoke done, 33-pair run awaiting the PI's go)
+# STATUS — 2026-10-03 (001–004 complete on dev; awaiting PI review)
+
+**004, span assay at `:` L42: complete** (`docs/reports/004_span_assay.md`; 33 pairs, 55.8 min, commit 9da6b23 clean).
+- Whole cell 0.43 of the gap. Recovery: 1-D z 0.06, z span 0.21, joint span 0.72.
+- **Same-rank PCA does as well or better** (0.58 / 0.89; at matched norm the fitted spans are slightly behind).
+- The z-span swap mostly raises the recipient's own intermediate (target-directed 4/33). Random controls are inert. The
+  z-span clamp beats paired rotations in 31/33. The z span and its complement are non-additive.
+- S2 and S6 hold; S1, S3, S4 and S5 do not. Descriptive geometry result; no intervention nominated. Next: report §14
+  (default: back to the reader panel).
+
 
 **003, reader-free causal labels: complete** (`docs/reports/003_labels.md`).
 - Gates G1–G3 pass. **G4 (label reliability) fails** (κ 0.37, r(S) 0.41 between disjoint fits), so the labels are
@@ -109,7 +118,7 @@ https://claude.ai/artifact/RMRX8R4iFnysbnHaNWTBeC
 - [x] External review of the smoke (`docs/reviews/2026-10-03_004_smoke_review.md`): S5 definition, G1 enforcement and
   fidelity resolution fixed before the run (design §13); smoke rerun (v2): all gates pass, 948/948 writes per pair
   fully checked; v1 smoke outputs kept as superseded.
-- [ ] **Awaiting the PI's go (design §9)**, then: run 33 pairs → analysis → report → mirror re-upload → page.
+- [x] PI go 2026-10-03 → run 33 pairs (55.8 min, every write passed fidelity) → analysis → report → page → mirror re-upload.
 
 **Built and run since (see the top of this file and the reports):** label construction (003: directions, 1-D swaps,
 necessity, random nulls), role-aware reader scoring (002: judge + closed set), prompt-only baseline (002), probe repair

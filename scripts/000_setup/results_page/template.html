@@ -552,6 +552,50 @@ function lineChart(o){
   s += `</svg><div class="key">${C.map(([k,col,name]) => `<span><i style="background:${col}"></i>${name}</span>`).join("")}<span>| = random-direction null q95</span><span>- - τ = 0.10</span></div>`;
   document.getElementById("ex3-bars").innerHTML = s;
 })();
+/* ---------- experiment 004: recovery dot plot + paired scatters ---------- */
+(function(){
+  const X = DATA.exp004;
+  if (!X) return;
+  const rows = X.chart, W = 680, L = 250, Rm = 20, T = 18, rowH = 22;
+  const vals = rows.flatMap(r => [r.both, r.r1, r.r2, ...(r.ci || [])]).filter(v => v != null);
+  const lo = Math.min(-0.25, ...vals), hi = Math.max(1.1, ...vals);
+  const xs = v => L + (W - L - Rm) * (v - lo) / (hi - lo);
+  const yEnd = T + rows.length * rowH;
+  let s = `<svg viewBox="0 0 ${W} ${yEnd + 34}" role="img" aria-label="Median recovery of the whole-cell effect per edit">`;
+  for (let t = Math.ceil(lo * 4) / 4; t <= hi + 1e-9; t += 0.25) s += `<line class="gridl" x1="${xs(t)}" x2="${xs(t)}" y1="${T}" y2="${yEnd}"/><text x="${xs(t)}" y="${yEnd + 14}" text-anchor="middle">${t.toFixed(2)}</text>`;
+  for (const [v, dash] of [[0, ""], [1, "4 4"], [0.5, "2 3"]]) s += `<line x1="${xs(v)}" x2="${xs(v)}" y1="${T}" y2="${yEnd}" style="stroke:var(--ink)" ${dash ? `stroke-dasharray="${dash}"` : ""} opacity="0.5"/>`;
+  s += `<text x="${xs(1)}" y="${T - 6}" text-anchor="middle">whole cell</text>`;
+  rows.forEach((r, i) => {
+    const y = T + i * rowH + rowH / 2;
+    if (i > 0 && rows[i - 1].site !== r.site) s += `<line x1="8" x2="${W - Rm}" y1="${y - rowH / 2}" y2="${y - rowH / 2}" style="stroke:var(--ink)" opacity="0.25"/>`;
+    s += `<text class="lbl" x="${L - 8}" y="${y + 4}" text-anchor="end">${esc(r.label)}</text>`;
+    if (r.ci) s += `<line x1="${xs(r.ci[0])}" x2="${xs(r.ci[1])}" y1="${y}" y2="${y}" style="stroke:var(--accent)" stroke-width="2" opacity="0.6"/>`;
+    if (r.r1 != null) s += `<circle cx="${xs(r.r1)}" cy="${y}" r="4" style="fill:none;stroke:var(--warn)" stroke-width="1.5"><title>${esc(r.label)}, fit r1: ${r.r1.toFixed(3)}</title></circle>`;
+    if (r.r2 != null) s += `<rect x="${xs(r.r2) - 3.5}" y="${y - 3.5}" width="7" height="7" style="fill:none;stroke:var(--good)" stroke-width="1.5"><title>${esc(r.label)}, fit r2: ${r.r2.toFixed(3)}</title></rect>`;
+    if (r.both != null) s += `<circle cx="${xs(r.both)}" cy="${y}" r="5" style="fill:var(--accent)"><title>${esc(r.label)}, primary fit: median recovery ${r.both.toFixed(3)}${r.ci ? ` [${r.ci[0].toFixed(2)}, ${r.ci[1].toFixed(2)}]` : ""}</title></circle>`;
+  });
+  s += `</svg><div class="key"><span><i style="background:var(--accent)"></i>primary fit (two folds) with 95% interval</span><span>○ fit r1 (one fold)</span><span>□ fit r2 (other fold)</span><span>upper block “:” L42 · lower block start token L40</span></div>`;
+  document.getElementById("ex4-rec").innerHTML = s;
+
+  function scatter(id, pts, xl, yl){
+    const P = pts.filter(p => p.x != null && p.y != null), W = 330, M = 40, H = 330;
+    const v = P.flatMap(p => [p.x, p.y]), lo = Math.min(-0.1, ...v), hi = Math.max(0.5, ...v);
+    const sx = x => M + (W - M - 10) * (x - lo) / (hi - lo), sy = y => H - M - (H - M - 10) * (y - lo) / (hi - lo);
+    let s = `<svg viewBox="0 0 ${W} ${H}" role="img" aria-label="${esc(yl)} against ${esc(xl)} per pair">`;
+    for (let t = Math.ceil(lo * 10) / 10; t <= hi + 1e-9; t += 0.1) {
+      s += `<line class="gridl" x1="${sx(t)}" x2="${sx(t)}" y1="10" y2="${H - M}"/><line class="gridl" x1="${M}" x2="${W - 10}" y1="${sy(t)}" y2="${sy(t)}"/>`;
+      if (Math.abs(Math.round(t * 10) % 2) === 0) s += `<text x="${sx(t)}" y="${H - M + 14}" text-anchor="middle">${t.toFixed(1)}</text><text x="${M - 5}" y="${sy(t) + 4}" text-anchor="end">${t.toFixed(1)}</text>`;
+    }
+    s += `<line x1="${sx(lo)}" y1="${sy(lo)}" x2="${sx(hi)}" y2="${sy(hi)}" style="stroke:var(--ink)" stroke-dasharray="4 4" opacity="0.5"/>`;
+    const above = P.filter(p => p.y > p.x).length;
+    P.forEach(p => s += `<circle cx="${sx(p.x)}" cy="${sy(p.y)}" r="4" style="fill:var(--accent)" opacity="0.75"><title>${esc(p.id)}: ${esc(xl)} ${p.x.toFixed(3)}, ${esc(yl)} ${p.y.toFixed(3)}, whole cell ${p.full.toFixed(3)}</title></circle>`);
+    s += `<text x="${(M + W) / 2}" y="${H - 6}" text-anchor="middle">${esc(xl)}</text><text x="12" y="${(H - M) / 2}" transform="rotate(-90 12 ${(H - M) / 2})" text-anchor="middle">${esc(yl)}</text></svg>`;
+    s += `<div class="key"><span>${above} of ${P.length} pairs above the diagonal (${esc(yl)} larger)</span></div>`;
+    document.getElementById(id).innerHTML = s;
+  }
+  scatter("ex4-sc1", X.scatter.Z_vs_pca, "S, z-associated span", "S, PCA same rank");
+  scatter("ex4-sc2", X.scatter.J_vs_pca, "S, joint span", "S, PCA rank 33");
+})();
 /* ---------- experiment 001: reader naming grid + qualitative table browser ---------- */
 (function(){
   const X = DATA.exp001;

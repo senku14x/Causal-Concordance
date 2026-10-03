@@ -92,7 +92,8 @@ All open. Descriptive, exploratory hints from 001 (10 brew tables; not answers):
 | 6. States (used / decodable-not-needed / absent / unresolved) | **done on dev (003), descriptive only** (G4 failed) | `results/003_labels/analysis/labels.json` |
 | 7. Per consumer | n/a (one consumer per WSB family) | — |
 | "Pair difference used" naming + four-way {input, z, answer, other} confusion; decorrelated direction (A01 C15) | **partial (003)**: single-direction S per content reported side by side; "other" attribution withdrawn (full − max is not an attribution); joint-span and complement patches still needed | report 003 §2, §9 |
-| DAS as a second label method | **not started** | — |
+| Joint-span and complement patches (span assay) | **done on dev (004)**: z span, joint span, start/answer spans, complements, PCA and random comparators, paired-rotation necessity; 33 pairs. Fitted spans recover no more than same-rank PCA | `docs/reports/004_span_assay.md` |
+| DAS as a second label method | **not started** (a candidate follow-up in report 004 §14, not proposed by default) | — |
 | Share vs flips | **partial**: shares recorded; top-1 retention recorded for damage; answer flips not tabulated | — |
 | Gate: write fidelity ρ ∈ [0.9, 1.1], κ ≥ 0.99, fp32 hook | **built** (`gates.fidelity_gate`, tested); not exercised by a label run | — |
 | Gate: label reliability ≥ 0.7 | **run (003): FAILED** (κ 0.37 for z at `:` L42–44; r(S) 0.41 between disjoint fits) | report 003 §1 |
