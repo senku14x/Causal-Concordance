@@ -1,6 +1,6 @@
 {
  "stage": "preflight",
- "time_utc": "20261003T010050Z",
+ "time_utc": "20261003T013056Z",
  "model": {
   "repo": "Qwen/Qwen3.6-27B",
   "revision": "6a9e13bd6fc8f0983b9b99948120bc37f49c13e9",
@@ -153,7 +153,7 @@
   "cuda": "12.8"
  },
  "git": {
-  "commit": "9c8a17eba8b4a1c0f930c8be86288ea0f2baf0c9",
+  "commit": "98e8edfd16ce2751faec9fe716405a94366c1b9f",
   "dirty": true
  },
  "passes": true

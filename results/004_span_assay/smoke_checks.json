@@ -2,8 +2,8 @@
  "pairs": [
   {
    "pair_id": "brew-s2-r10d2-0009__white",
-   "seconds_total": 101.49160742759705,
-   "seconds_setup": 2.2473247051239014,
+   "seconds_total": 101.51616406440735,
+   "seconds_setup": 2.3127925395965576,
    "scored_prompts": 476,
    "self_swap_dm": {
     "colon|full": 0.0,
@@ -38,7 +38,11 @@
    "n_scored": 334,
    "status_counts": {},
    "fidelity_ok": true,
-   "fid_negligible_writes": 6,
+   "fid_write_modes": {
+    "checked": 948,
+    "tiny": 0,
+    "zero": 0
+   },
    "M_max": 0.9031912323774755,
    "M_min": 0.8158031990687186,
    "mass_ok": true,
@@ -47,8 +51,8 @@
   },
   {
    "pair_id": "brew-s2-r10d2-0012__red",
-   "seconds_total": 101.59724950790405,
-   "seconds_setup": 1.8490452766418457,
+   "seconds_total": 101.3256607055664,
+   "seconds_setup": 1.8316388130187988,
    "scored_prompts": 476,
    "self_swap_dm": {
     "colon|full": 0.0,
@@ -83,7 +87,11 @@
    "n_scored": 334,
    "status_counts": {},
    "fidelity_ok": true,
-   "fid_negligible_writes": 2,
+   "fid_write_modes": {
+    "checked": 948,
+    "tiny": 0,
+    "zero": 0
+   },
    "M_max": 0.891027188221089,
    "M_min": 0.8007739356924607,
    "mass_ok": true,
@@ -101,8 +109,8 @@
  },
  "passes": true,
  "seconds_per_pair": [
-  101.49160742759705,
-  101.59724950790405
+  101.51616406440735,
+  101.3256607055664
  ],
- "projected_run_minutes": 55.8494356572628
+ "projected_run_minutes": 55.781501811742785
 }

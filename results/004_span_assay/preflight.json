@@ -10843,52 +10843,85 @@
  "zero_writes": {
   "zero_write_bitwise_noop": true,
   "by_scale": {
+   "1e-09": {
+    "rho_range": [
+     0.27091583609580994,
+     0.3448152244091034
+    ],
+    "kappa_min": 0.20529259741306305,
+    "fidelity_ok": true,
+    "mode": "tiny (read-back bound)"
+   },
+   "1e-08": {
+    "rho_range": [
+     0.8612226247787476,
+     0.9354413151741028
+    ],
+    "kappa_min": 0.6758186221122742,
+    "fidelity_ok": true,
+    "mode": "tiny (read-back bound)"
+   },
    "1e-07": {
     "rho_range": [
      1.0052565336227417,
      1.013109803199768
     ],
-    "kappa_min": 0.9876525402069092
+    "kappa_min": 0.9876525402069092,
+    "fidelity_ok": true,
+    "mode": "tiny (read-back bound)"
    },
    "1e-06": {
     "rho_range": [
      0.9995909333229065,
      1.0010933876037598
     ],
-    "kappa_min": 0.999634325504303
+    "kappa_min": 0.999634325504303,
+    "fidelity_ok": true,
+    "mode": "checked"
    },
    "1e-05": {
     "rho_range": [
      0.9999163150787354,
      1.0000613927841187
     ],
-    "kappa_min": 0.9999953508377075
+    "kappa_min": 0.9999953508377075,
+    "fidelity_ok": true,
+    "mode": "checked"
    },
    "0.0001": {
     "rho_range": [
      0.9999943971633911,
      1.0000050067901611
     ],
-    "kappa_min": 0.9999996423721313
+    "kappa_min": 0.9999996423721313,
+    "fidelity_ok": true,
+    "mode": "checked"
    },
    "0.001": {
     "rho_range": [
      0.9999991059303284,
      1.0000008344650269
     ],
-    "kappa_min": 0.9999997615814209
+    "kappa_min": 0.9999997615814209,
+    "fidelity_ok": true,
+    "mode": "checked"
    },
    "0.01": {
     "rho_range": [
      0.9999998807907104,
      1.0000001192092896
     ],
-    "kappa_min": 0.9999997615814209
+    "kappa_min": 0.9999997615814209,
+    "fidelity_ok": true,
+    "mode": "checked"
    }
   },
-  "NEG_REL": 0.0001,
+  "zero_write_fidelity_ok": true,
+  "empty_fidelity_fails": true,
+  "FID_REL": 1e-06,
+  "READBACK_REL": 2.384185791015625e-07,
   "smallest_clean_scale": 1e-06,
-  "neg_rel_is_safe": true
+  "fid_rel_is_safe": true
  },
  "reader_modules_loaded": [],
  "passes": true

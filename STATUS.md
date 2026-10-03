@@ -1,4 +1,4 @@
-# STATUS — 2026-10-02 (001, 002 and 003 complete on dev; awaiting PI review)
+# STATUS — 2026-10-03 (001–003 complete on dev; 004 preflight + 2-pair smoke done, 33-pair run awaiting the PI's go)
 
 **003, reader-free causal labels: complete** (`docs/reports/003_labels.md`).
 - Gates G1–G3 pass. **G4 (label reliability) fails** (κ 0.37, r(S) 0.41 between disjoint fits), so the labels are
@@ -100,12 +100,15 @@ https://claude.ai/artifact/RMRX8R4iFnysbnHaNWTBeC
   20261007, one per table); spans per fit with each fit's own mean; PCA per fit (within-table centred, 1/sqrt(n_t));
   arm manifest: 334 conditions, 476 scored prompts, ~956 forwards per pair (31,548 in all).
 - [x] Preflight (CPU, `results/004_span_assay/preflight.json`): fit rows reproduce 003's n and means; basis identities
-  float64/float32 (worst QᵀQ 3.6e-7 after the cast); zero writes bitwise no-ops; NEG_REL 1e-4 checked; the 25 spelling
-  events are prefix-free; no reader or mixed modules loaded.
+  float64/float32 (worst QᵀQ 3.6e-7 after the cast); zero writes bitwise no-ops; NEG_REL 1e-4 checked; the 24 accepted spelling
+  sequences (12 colours × 2; only " Teal" is two tokens) are prefix-free; no reader or mixed modules loaded.
 - [x] Smoke, 2 pairs (`smoke_checks.json`, `smoke_inspection.md`): all six gates pass (self-swap bitwise; identity
   projector vs direct assignment ≤ 3e-6 nats; S_full = 001 exactly; clean m and G = 003 exactly; fidelity on every
   write; M ≤ 1). 101 s per pair → ~56 min for 33. Outside-the-spellings mass (~14% clean) is formatting tokens
   (`<|im_end|>`, newlines, " **"; `smoke_outside_mass_tokens.json`).
+- [x] External review of the smoke (`docs/reviews/2026-10-03_004_smoke_review.md`): S5 definition, G1 enforcement and
+  fidelity resolution fixed before the run (design §13); smoke rerun (v2): all gates pass, 948/948 writes per pair
+  fully checked; v1 smoke outputs kept as superseded.
 - [ ] **Awaiting the PI's go (design §9)**, then: run 33 pairs → analysis → report → mirror re-upload → page.
 
 **Built and run since (see the top of this file and the reports):** label construction (003: directions, 1-D swaps,

@@ -30,7 +30,10 @@ CAP001 = R.PROJECT / "outputs" / "001_leverage_profile" / "run"
 SEED = 20261007
 SVD_RTOL = 1e-6
 MIN_OCC = 2
-NEG_REL = 1e-4          # a write with ||d|| < NEG_REL ||h|| is applied but called negligible: fidelity not assessable
+FID_REL = 1e-6          # G1 rho/kappa assessed for writes with ||d|| >= FID_REL ||h|| (preflight: smallest clean scale)
+READBACK_REL = 2 * float(np.finfo(np.float32).eps)   # smaller writes: ||realized - requested|| <= READBACK_REL ||h||;
+                                                     # an exactly zero request must be an exact no-op
+HIGH_REC = 0.5          # high-recovery criterion (design §5-§6)
 FLOOR = 2e-4            # SEC numerical floor (nats), 001 v3
 FLAG_OUTSIDE = 0.05     # warning: mass outside the accepted spellings up by more than this
 FLAG_BOTH_DOWN = 0.05   # warning (swaps): log P(a) and log P(a') both down by more than this (nats)
@@ -281,28 +284,41 @@ def apply_write(x, pos, d=None, target=None):
     return x, req, x[pos] - h, h
 
 
+class FidelityGateError(RuntimeError):
+    pass
+
+
 class Fidelity:
+    """G1 on every write (one per continuation forward), each recorded: rho in [0.9, 1.1] and kappa >= 0.99 where the
+    write is resolvable (||d|| >= FID_REL ||h||); below that an absolute read-back bound; an exactly zero request must
+    leave the residual bitwise unchanged. ok() is False when no write was recorded."""
+
     def __init__(self):
-        self.rho, self.kappa, self.negligible, self.req_norm, self.h_norm = [], [], 0, [], []
+        self.writes = []
 
     def add(self, req, real, h):
         import torch
-        rn, hn = float(req.norm()), float(h.norm())
-        self.req_norm.append(rn)
-        self.h_norm.append(hn)
-        if rn < NEG_REL * hn:
-            self.negligible += 1
-            return
-        self.rho.append(float(real.norm()) / rn)
-        self.kappa.append(float(torch.nn.functional.cosine_similarity(req[None], real[None])[0]))
-
-    def summary(self):
-        return {"fid_rho": [min(self.rho), max(self.rho)] if self.rho else None,
-                "fid_kappa_min": min(self.kappa) if self.kappa else None, "fid_negligible": self.negligible,
-                "write_norm": self.req_norm[0] if self.req_norm else None, "h_norm": self.h_norm[0] if self.h_norm else None}
+        rn, hn, en = float(req.norm()), float(h.norm()), float((real - req).norm())
+        w = {"req": rn, "real": float(real.norm()), "h": hn, "err": en}
+        if rn == 0.0:
+            w.update(mode="zero", ok=bool(int(torch.count_nonzero(real)) == 0))
+        elif rn < FID_REL * hn:
+            w.update(mode="tiny", ok=bool(en <= READBACK_REL * hn))
+        else:
+            rho = float(real.norm()) / rn
+            kappa = float(torch.nn.functional.cosine_similarity(req[None], real[None])[0])
+            w.update(mode="checked", rho=rho, kappa=kappa, ok=bool(0.9 <= rho <= 1.1 and kappa >= 0.99))
+        self.writes.append(w)
 
     def ok(self):
-        return all(0.9 <= r <= 1.1 for r in self.rho) and all(k >= 0.99 for k in self.kappa)
+        return bool(self.writes) and all(w["ok"] for w in self.writes)
+
+    def summary(self):
+        ch = [w for w in self.writes if w["mode"] == "checked"]
+        modes = {m: sum(w["mode"] == m for w in self.writes) for m in ("checked", "tiny", "zero")}
+        return {"fid_rho": [min(w["rho"] for w in ch), max(w["rho"] for w in ch)] if ch else None,
+                "fid_kappa_min": min(w["kappa"] for w in ch) if ch else None, "fid_modes": modes, "fid_writes": self.writes,
+                "write_norm": self.writes[0]["req"] if self.writes else None, "h_norm": self.writes[0]["h"] if self.writes else None}
 
 
 def make_delta(op, M, h, hd, mu):
@@ -424,7 +440,7 @@ class PairRunner:
         for cont in self.conts:
             D = self.src[cont][c["site"]] - self.own[cont][c["site"]]
             p = M["B"] @ (M["B"].T @ D)
-            if float(p.norm()) < NEG_REL * float(self.own[cont][c["site"]].norm()):
+            if float(p.norm()) < FID_REL * float(self.own[cont][c["site"]].norm()):
                 return False
         return True
 
@@ -472,10 +488,17 @@ class PairRunner:
         row["seconds"] = time.time() - t0
         return row
 
-    def run_all(self, conds):
+    def run_all(self, conds, fail_path=None):
+        """G1 enforced: the first row whose fidelity fails is saved to fail_path and stops the pair (and the run)."""
         rows = [{**self.base, "kind": "clean", "member": self.cs, "partner": self.ds}]
         for c in conds:
-            rows.append(self.evaluate(c))
+            r = self.evaluate(c)
+            if r.get("fid_ok") is False:
+                if fail_path is not None:
+                    with open(fail_path, "a") as f:
+                        f.write(json.dumps(r, default=float) + "\n")
+                raise FidelityGateError(f"G1 failed: {r['pair_id']} {r['kind']} {r['site']} {r['fit']} {r['arm']} draw {r.get('draw')}")
+            rows.append(r)
         return rows
 
 
@@ -556,15 +579,15 @@ def stage_preflight():
     tol = {k: float(max(10 * v, np.finfo(np.float64 if k.endswith("64") else np.float32).eps)) for k, v in err.items()}
     pre["identity_max_errors"], pre["identity_tolerances"] = err, tol
 
-    # 3. zero and negligible writes (the hook's own write function, float32 on CPU, real h at ':' L42)
+    # 3. zero, tiny and resolvable writes (the hook's own write function and Fidelity, float32 on CPU, real h at ':' L42)
     H = torch.tensor(acts["emit_colon"][:32, LAYERS_CAP.index(42)], dtype=torch.float32)
     zw = {"zero_write_bitwise_noop": True, "by_scale": {}}
     for i in range(H.shape[0]):
         x = H[i:i + 1].clone()
         y, *_ = apply_write(x, 0, d=torch.zeros(5120))
         zw["zero_write_bitwise_noop"] &= bool(torch.equal(x, y))
-    for scale in (1e-7, 1e-6, 1e-5, 1e-4, 1e-3, 1e-2):
-        rhos, kaps = [], []
+    for scale in (1e-9, 1e-8, 1e-7, 1e-6, 1e-5, 1e-4, 1e-3, 1e-2):
+        rhos, kaps, fok = [], [], True
         for i in range(H.shape[0]):
             x = H[i:i + 1].clone()
             g = torch.tensor(np.random.default_rng(i).standard_normal(5120), dtype=torch.float32)
@@ -572,11 +595,21 @@ def stage_preflight():
             _, req, real, h = apply_write(x, 0, d=d)
             rhos.append(float(real.norm() / req.norm()))
             kaps.append(float(torch.nn.functional.cosine_similarity(req[None], real[None])[0]))
-        zw["by_scale"][str(scale)] = {"rho_range": [min(rhos), max(rhos)], "kappa_min": min(kaps)}
+            fd = Fidelity()
+            fd.add(req, real, h)
+            fok &= fd.ok()
+        zw["by_scale"][str(scale)] = {"rho_range": [min(rhos), max(rhos)], "kappa_min": min(kaps), "fidelity_ok": fok,
+                                      "mode": "checked" if scale >= FID_REL else "tiny (read-back bound)"}
     ok_scales = [float(s) for s, v in zw["by_scale"].items() if abs(v["rho_range"][0] - 1) < 0.01 and abs(v["rho_range"][1] - 1) < 0.01 and v["kappa_min"] > 0.999]
-    zw["NEG_REL"] = NEG_REL
+    fz = Fidelity()
+    x = H[0:1].clone()
+    _, req, real, h = apply_write(x, 0, d=torch.zeros(5120))
+    fz.add(req, real, h)
+    zw["zero_write_fidelity_ok"] = fz.ok()
+    zw["empty_fidelity_fails"] = not Fidelity().ok()
+    zw["FID_REL"], zw["READBACK_REL"] = FID_REL, READBACK_REL
     zw["smallest_clean_scale"] = min(ok_scales)
-    zw["neg_rel_is_safe"] = bool(min(ok_scales) <= NEG_REL)
+    zw["fid_rel_is_safe"] = bool(min(ok_scales) <= FID_REL and all(v["fidelity_ok"] for v in zw["by_scale"].values()))
     pre["zero_writes"] = zw
 
     # 4. dependency hygiene (the boundary test checks the static closure; this checks what actually loaded)
@@ -609,7 +642,8 @@ def stage_preflight():
     write_json(RES / "arm_manifest.json", arm_manifest)
 
     pre["passes"] = bool(all(err[k] <= tol[k] for k in err) and err["QtQ64"] < 1e-10 and err["QtQ32"] < 1e-5
-                         and err["contain64"] < 1e-8 and zw["zero_write_bitwise_noop"] and zw["neg_rel_is_safe"]
+                         and err["contain64"] < 1e-8 and zw["zero_write_bitwise_noop"] and zw["fid_rel_is_safe"]
+                         and zw["zero_write_fidelity_ok"] and zw["empty_fidelity_fails"]
                          and not pre["reader_modules_loaded"] and not prefix_conflicts
                          and all(v["n_renders"] == v["n_rows_recomputed"] and v["fitmean_max_abs_err_vs_003"] < 1e-3
                                  for v in pre["fits"].values()))
@@ -659,7 +693,7 @@ def stage_smoke():
             pr = PairRunner(sec, tok, e, F, groups)
             t_setup = time.time() - t0
             C = conditions(e["pair"].pair_id, pr.bases)
-            rows = pr.run_all(C)
+            rows = pr.run_all(C, fail_path=d / "fidelity_failures.jsonl")
             t_all = time.time() - t0
             g = {"pair_id": e["pair"].pair_id, "seconds_total": t_all, "seconds_setup": t_setup,
                  "scored_prompts": 2 + sum(c["prompts"] for c in C if c["k"] is not None)}
@@ -689,9 +723,13 @@ def stage_smoke():
             for r in rows:
                 if "status" in r:
                     g["status_counts"][r["status"]] = g["status_counts"].get(r["status"], 0) + 1
-            g["fidelity_ok"] = all(r["fid_ok"] for r in scored)
-            g["fid_negligible_writes"] = int(sum(r.get("fid_negligible", 0) or 0 for r in scored)
-                                             + sum((r[k].get("fid_negligible", 0) or 0) for r in scored if "member_run" in r for k in ("member_run", "partner_run")))
+            g["fidelity_ok"] = all(r["fid_ok"] for r in scored + self_rows + ident)
+            modes = {}
+            for r in scored:
+                for fm in [r.get("fid_modes")] + [r[k].get("fid_modes") for k in ("member_run", "partner_run") if k in r]:
+                    for m, v in (fm or {}).items():
+                        modes[m] = modes.get(m, 0) + v
+            g["fid_write_modes"] = modes
             Ms = [pr.cs["M"], pr.ds["M"]] + [r["edit"]["M"] for r in scored if "edit" in r] + \
                  [r[k]["M"] for r in scored if "member_run" in r for k in ("member_run", "partner_run")]
             g["M_max"], g["M_min"] = max(Ms), min(Ms)
@@ -741,8 +779,10 @@ def inspect_text(rows, only=None):
                   f"G = {cl['G']:.3f}   m_clean {cl['m_clean']:.3f}   m_donor {cl['m_donor']:.3f}",
                   f"clean q: {top(cl['member']['logq'])}   outside {cl['member']['outside']:.3f}",
                   f"donor q: {top(cl['partner']['logq'])}   outside {cl['partner']['outside']:.3f}", "",
-                  "| site | fit | arm | k | S | dlogP(a) | dlogP(a') | outside up | T+ | F_target | top gain | |write| | rho | flags |",
-                  "|---|---|---|---|---|---|---|---|---|---|---|---|---|---|"]
+                  "Arms: z1d = 003's 1-D z direction; Z = z-associated span; J = joint start/z/answer-associated span (not the J-lens); "
+                  "S, A = start-, answer-associated spans at ':'; Sspan / s1d = start span / 1-D at the start token; Zc, Jc, Sc = complements.", "",
+                  "| site | fit | arm | span rank (complements: excluded span) | edited rank | S | dlogP(a) | dlogP(a') | outside up | T+ | F_target | top gain | |write| | rho | flags |",
+                  "|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|"]
         for r in R_:
             if r["kind"] not in ("swap", "pca") or "status" in r:
                 if r["kind"] in ("swap", "pca") and "status" in r:
@@ -752,7 +792,8 @@ def inspect_text(rows, only=None):
             g = max(d, key=d.get)
             fl = ",".join(k for k in ("flag_outside", "flag_both_down") if r[k]) or "-"
             rho = "neg" if r["fid_rho"] is None else f"{r['fid_rho'][0]:.4f}"
-            lines.append(f"| {r['site']} | {r['fit']} | {r['arm']} | {r['k']} | {r['S']:+.3f} | {r['d_logP_a']:+.3f} | {r['d_logP_b']:+.3f} | "
+            er = 5120 - r["k"] if r["op"] == "comp" else r["k"]
+            lines.append(f"| {r['site']} | {r['fit']} | {r['arm']} | {r['k'] if r['op'] != 'full' else '-'} | {er} | {r['S']:+.3f} | {r['d_logP_a']:+.3f} | {r['d_logP_b']:+.3f} | "
                          f"{r['outside_up']:+.3f} | {tp:.3f} | {fmt(ft)} | {g} {d[g]:+.3f} | {r['write_norm']:.2f} | {rho} | {fl} |")
         lines += ["", "| site | arm (primary) | real S | rank-matched (Jc: random complement) median / q95 | norm-matched median / q95 | rank stat vs rank-matched (Jc: lower tail) |",
                   "|---|---|---|---|---|---|"]
@@ -859,8 +900,17 @@ def _S(p, site, fit, arm):
     return None if v is None else v["S"]
 
 
+def load_rows(src):
+    if src == "run":
+        done = [r["pair_id"] for r in _jl(OUT / "run" / "pairs_done.jsonl") if r.get("fid_ok")]
+        return [x for p in dict.fromkeys(done) for x in _jl(OUT / "run" / "pairs" / f"{p}.jsonl")]
+    return _jl(OUT / src / "rows.jsonl")
+
+
 def stage_analysis(src="run"):
-    rows = [r for r in _jl(OUT / src / "rows.jsonl") if "check" not in r]
+    rows = [r for r in load_rows(src) if "check" not in r]
+    quarantined = [r for r in rows if r.get("fid_ok") is False]          # invalid measurements: excluded, listed
+    rows = [r for r in rows if r.get("fid_ok") is not False]
     P = per_pair_tables(rows)
     pids = list(P)
     tab = {pid: P[pid]["item"] for pid in pids}
@@ -868,7 +918,8 @@ def stage_analysis(src="run"):
     A = {"n_pairs": len(pids), "recovery_subset": {s: {"n": len(v), "pairs": v, "rule": f"S_full >= {REC_MIN}"} for s, v in rec_sub.items()},
          "S_full": {s: _med_ci([P[p]["S_full"][s] for p in pids], [tab[p] for p in pids]) for s in SITES},
          "arms": {}, "paired": {}, "controls": {}, "necessity": {}, "necessity_controls": {}, "reproducibility": {},
-         "interaction": {}, "status_counts": {}}
+         "interaction": {}, "status_counts": {},
+         "quarantined_rows": [{k: r.get(k) for k in ("pair_id", "kind", "site", "fit", "arm", "draw")} for r in quarantined]}
     for p in pids:
         for k, v in P[p]["status"].items():
             A["status_counts"][f"{k}|{v}"] = A["status_counts"].get(f"{k}|{v}", 0) + 1
@@ -957,11 +1008,17 @@ def stage_analysis(src="run"):
             rs = [i for i, p in enumerate(have) if p in rec_sub[site]]
             rec = lambda x: float(np.median([x[i] / P[have[i]]["S_full"][site] for i in rs])) if rs else None
             A["reproducibility"][f"{kind}|{site}|{arm}"] = {
-                "n": len(have), "pearson_r1_r2": float(np.corrcoef(x1, x2)[0, 1]) if x1.std() > 0 and x2.std() > 0 else None,
+                "n": len(have), "pearson_r1_r2": float(np.corrcoef(x1, x2)[0, 1]) if len(have) >= 3 and x1.std() > 0 and x2.std() > 0 else None,
                 "signed_bias_median_r1_minus_r2": float(np.median(x1 - x2)), "median_abs_diff": float(np.median(np.abs(x1 - x2))),
                 "range": [float(min(x1.min(), x2.min())), float(max(x1.max(), x2.max()))],
                 "median": {"both": float(np.median(x0)), "r1": float(np.median(x1)), "r2": float(np.median(x2))},
                 "median_recovery": {"both": rec(x0), "r1": rec(x1), "r2": rec(x2)} if kind == "S" else None}
+            e = A["reproducibility"][f"{kind}|{site}|{arm}"]
+            if kind == "S":
+                mr, agree = e["median_recovery"], e["median_abs_diff"] <= TOL_MATERIAL
+                reach = [mr[f] is not None and mr[f] >= HIGH_REC for f in ("r1", "r2")]
+                e["high_recovery_reproducible"] = bool(all(reach) and agree)
+                e["low_effect_agreement"] = bool(not any(reach) and agree)
     # interaction I = S_span + S_complement - S_full
     for site, a1, a2 in INTERACT:
         for fit in FITS:
@@ -973,27 +1030,28 @@ def stage_analysis(src="run"):
                 "frac_abs_I_ge": _med_ci(I, t, stat=lambda v: float(np.mean(np.abs(v) >= I_BIG))), "threshold": I_BIG}
     # predictions (priors in design §7; definitions fixed here before the run)
     rec = lambda k: (A["arms"].get(k) or {}).get("recovery") or {}
-    z_verdict = lambda f: (rec(f"colon|{f}|Z").get("value") or -np.inf) >= 0.25
-    rz = A["reproducibility"].get("S|colon|Z", {}).get("median_recovery") or {}
+    rz = A["reproducibility"].get("S|colon|Z", {})
     nz = A["necessity_controls"].get("colon|Z|rot", {})
     pz = A["paired"].get("colon|both|Z-pca_kZ", {}).get("dS_recovery_subset") or {}
     A["predictions"] = {
-        "S1_median_Z_recovery_ge_0.25": {"value": rec("colon|both|Z").get("value"), "holds": z_verdict("both")},
+        "S1_median_Z_recovery_ge_0.25": {"value": rec("colon|both|Z").get("value"), "holds": (rec("colon|both|Z").get("value") or -np.inf) >= 0.25},
         "S2_median_J_recovery_ge_0.5": {"value": rec("colon|both|J").get("value"), "holds": (rec("colon|both|J").get("value") or -np.inf) >= 0.5},
         "S3_median_start_span_recovery_ge_0.5": {"value": rec("start_ref|both|Sspan").get("value"), "holds": (rec("start_ref|both|Sspan").get("value") or -np.inf) >= 0.5},
         "S4_Z_beats_unscaled_PCA_kZ": {"value": pz.get("value"), "holds": (pz.get("value") or -np.inf) > 0,
                                        "definition": "paired median dS (Z - PCA_kZ unscaled), recovery subset, primary fit"},
-        "S5_Z_reproducible_under_stress": {"value": rz, "holds": bool(rz and None not in rz.values() and z_verdict("r1") == z_verdict("both") == z_verdict("r2")
-                                                                      and abs(rz["r1"] - rz["r2"]) <= TOL_MATERIAL),
-                                           "definition": f"r1 and r2 give S1's verdict and |median recovery r1 - r2| <= {TOL_MATERIAL}"},
+        "S5_Z_reproducible_under_stress": {"value": {"median_recovery": rz.get("median_recovery"), "median_abs_dS_r1_r2": rz.get("median_abs_diff")},
+                                           "holds": bool(rz.get("high_recovery_reproducible")),
+                                           "low_effect_agreement": bool(rz.get("low_effect_agreement")),
+                                           "definition": f"median Z recovery >= {HIGH_REC} in r1 and in r2 (recovery subset) and median_i |S_r1 - S_r2| "
+                                                         f"<= {TOL_MATERIAL} (S share units, all pairs); agreement below {HIGH_REC} reported separately"},
         "S6_Z_clamp_above_rotation_q95_in_half": {"value": nz.get("frac_real_above_q95"), "holds": (nz.get("frac_real_above_q95") or 0) >= 0.5}}
     d = RES / ("analysis" if src == "run" else f"analysis_{src}")
     zr = sorted((P[p]["swap"]["colon|both|Z"]["S"] / P[p]["S_full"]["colon"], p) for p in rec_sub["colon"] if "colon|both|Z" in P[p]["swap"])
     ex = {"random_seeded": [str(x) for x in np.random.default_rng(SEED).choice(pids, size=min(3, len(pids)), replace=False)],
           "median_Z_recovery": zr[len(zr) // 2][1] if zr else None, "max_Z_recovery": zr[-1][1] if zr else None,
           "min_Z_recovery": zr[0][1] if zr else None,
-          "flagged_or_failed": [p for p in pids if P[p]["swap"].get("colon|both|Z", {}).get("flagged")
-                                or (P[p]["swap"].get("colon|both|Z", {}).get("S", 0) < 0)][:3]}
+          "flagged_primary_or_whole_cell_or_negative_Z": [p for p in pids if any(v["flagged"] for k, v in P[p]["swap"].items() if "|both|" in k or "|None|" in k)
+                                                          or (P[p]["swap"].get("colon|both|Z", {}).get("S", 0) < 0)][:3]}
     A["examples"] = ex
     sel = list(dict.fromkeys([x for v in ex.values() for x in (v if isinstance(v, list) else [v]) if x]))
     d.mkdir(parents=True, exist_ok=True)
@@ -1010,8 +1068,8 @@ def stage_run():
     assert sm["passes"], "smoke gates failed"
     RG, torch, tok, ents, F, groups, model = _setup()
     d = OUT / "run"
-    d.mkdir(parents=True, exist_ok=True)
-    done = {r["pair_id"] for r in _jl(d / "pairs_done.jsonl")}
+    (d / "pairs").mkdir(parents=True, exist_ok=True)
+    done = {r["pair_id"] for r in _jl(d / "pairs_done.jsonl") if r.get("fid_ok") and (d / "pairs" / f"{r['pair_id']}.jsonl").exists()}
     write_manifest("run", {"n_pairs": len(ents), "already_done": len(done)})
     with RG.SecEngine(model, l0=39) as sec:
         for n, e in enumerate(ents):
@@ -1020,13 +1078,18 @@ def stage_run():
                 continue
             t0 = time.time()
             pr = PairRunner(sec, tok, e, F, groups)
-            rows = pr.run_all(conditions(pid, pr.bases))
-            with open(d / "rows.jsonl", "a") as f:
+            try:
+                rows = pr.run_all(conditions(pid, pr.bases), fail_path=d / "fidelity_failures.jsonl")
+            except FidelityGateError as ex:
+                print(ex, "-- stopping; the pair is not marked done", flush=True)
+                raise SystemExit(2)
+            tmp = d / "pairs" / f"{pid}.jsonl.tmp"
+            with open(tmp, "w") as f:
                 for r in rows:
                     f.write(json.dumps(r, default=float) + "\n")
+            tmp.rename(d / "pairs" / f"{pid}.jsonl")
             with open(d / "pairs_done.jsonl", "a") as f:
-                f.write(json.dumps({"pair_id": pid, "seconds": time.time() - t0, "n_rows": len(rows),
-                                    "fid_ok": all(r.get("fid_ok", True) for r in rows)}) + "\n")
+                f.write(json.dumps({"pair_id": pid, "seconds": time.time() - t0, "n_rows": len(rows), "fid_ok": True}) + "\n")
             sec.clear()
             print(f"[{n + 1}/{len(ents)}] {pid} {time.time() - t0:.0f}s", flush=True)
 

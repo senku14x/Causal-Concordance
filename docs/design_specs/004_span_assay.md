@@ -202,3 +202,22 @@ needs a PI decision on the destination: free or upgrade the HF storage, or Git L
 - Preflight and the import-boundary work.
 - Deferred: L44, a second pair per table, L2, leave-one-table-out fits, label-shuffled spans, dose sweeps.
 - Each fit uses its own mean: the inherited `Directions.fitmean` reads "both" and is not reused.
+
+## 13. Pre-run clarifications (2026-10-03, after the smoke review; before the 33-pair run)
+
+From the review of the 2-pair smoke (`docs/reviews/2026-10-03_004_smoke_review.md`). No arm, estimator or threshold
+of §3–§4 changes; nothing below was chosen from smoke effects.
+
+- **S5 (and "reproducible" in §5–§6):** median Z recovery ≥ 0.5 in r1 **and** in r2 (recovery subset), **and**
+  median over pairs of |S_r1 − S_r2| ≤ 0.05 (S share units, all pairs with both fits). Agreement below 0.5 is
+  reported separately as low-effect agreement and does not count as S5 holding. (The smoke-time code used S1's 0.25
+  and the difference of median recoveries; that analysis is kept as `analysis_smoke_superseded_v1/`.)
+- **G1 enforcement:** a failed fidelity check on any write stops the run; the row is saved to
+  `fidelity_failures.jsonl`; that pair is not marked done. Rows are written per pair, atomically. Analysis
+  quarantines any row without valid fidelity.
+- **Fidelity resolution:** rho/kappa are checked for every write with ‖d‖ ≥ 1e-6 ‖h‖ (the preflight's smallest clean
+  scale). Smaller writes must pass an absolute read-back bound ‖realized − requested‖ ≤ 2 eps₃₂ ‖h‖. An exactly zero
+  request must leave the residual bitwise unchanged. A record with no write fails. Every write's requested and realized
+  norms and read-back error are saved.
+- **Naming:** "J" in the arm tables is the joint start/z/answer-associated span, not the J-lens. Complement rows give
+  both the excluded span's rank and the edited rank.

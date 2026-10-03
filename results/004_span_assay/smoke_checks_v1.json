@@ -1,0 +1,108 @@
+{
+ "pairs": [
+  {
+   "pair_id": "brew-s2-r10d2-0009__white",
+   "seconds_total": 101.49160742759705,
+   "seconds_setup": 2.2473247051239014,
+   "scored_prompts": 476,
+   "self_swap_dm": {
+    "colon|full": 0.0,
+    "start_ref|full": 0.0,
+    "colon|Z": 0.0,
+    "colon|Jc": 0.0,
+    "start_ref|Sspan": 0.0
+   },
+   "self_swap_exact": true,
+   "identity_vs_direct_abs_dm": {
+    "colon": 8.295530138369145e-07,
+    "start_ref": 2.404786491716493e-06
+   },
+   "identity_ok": true,
+   "S_full": {
+    "colon": 0.33996564474726587,
+    "start_ref": 0.1872229456464606
+   },
+   "S_full_001": {
+    "colon": 0.33996564474726587,
+    "start_ref": 0.1872229456464606
+   },
+   "S_full_abs_diff": {
+    "colon": 0.0,
+    "start_ref": 0.0
+   },
+   "m_clean_vs_003": 0.0,
+   "G_vs_003": 0.0,
+   "S_full_ok": true,
+   "clean_ok": true,
+   "n_conditions": 334,
+   "n_scored": 334,
+   "status_counts": {},
+   "fidelity_ok": true,
+   "fid_negligible_writes": 6,
+   "M_max": 0.9031912323774755,
+   "M_min": 0.8158031990687186,
+   "mass_ok": true,
+   "n_flag_outside": 0,
+   "n_flag_both_down": 0
+  },
+  {
+   "pair_id": "brew-s2-r10d2-0012__red",
+   "seconds_total": 101.59724950790405,
+   "seconds_setup": 1.8490452766418457,
+   "scored_prompts": 476,
+   "self_swap_dm": {
+    "colon|full": 0.0,
+    "start_ref|full": 0.0,
+    "colon|Z": 0.0,
+    "colon|Jc": 0.0,
+    "start_ref|Sspan": 0.0
+   },
+   "self_swap_exact": true,
+   "identity_vs_direct_abs_dm": {
+    "colon": 3.089381433341032e-06,
+    "start_ref": 4.4047838265726114e-07
+   },
+   "identity_ok": true,
+   "S_full": {
+    "colon": 0.34781430472039465,
+    "start_ref": 0.5107705601641785
+   },
+   "S_full_001": {
+    "colon": 0.34781430472039465,
+    "start_ref": 0.5107705601641785
+   },
+   "S_full_abs_diff": {
+    "colon": 0.0,
+    "start_ref": 0.0
+   },
+   "m_clean_vs_003": 0.0,
+   "G_vs_003": 0.0,
+   "S_full_ok": true,
+   "clean_ok": true,
+   "n_conditions": 334,
+   "n_scored": 334,
+   "status_counts": {},
+   "fidelity_ok": true,
+   "fid_negligible_writes": 2,
+   "M_max": 0.891027188221089,
+   "M_min": 0.8007739356924607,
+   "mass_ok": true,
+   "n_flag_outside": 10,
+   "n_flag_both_down": 2
+  }
+ ],
+ "gates": {
+  "self_swap_exact": true,
+  "identity_ok": true,
+  "S_full_ok": true,
+  "clean_ok": true,
+  "fidelity_ok": true,
+  "mass_ok": true
+ },
+ "passes": true,
+ "seconds_per_pair": [
+  101.49160742759705,
+  101.59724950790405
+ ],
+ "projected_run_minutes": 55.8494356572628
+}
