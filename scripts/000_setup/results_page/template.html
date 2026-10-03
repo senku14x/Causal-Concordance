@@ -143,7 +143,20 @@ dl.gloss dd { margin: 0; color: var(--muted); }
 .findings li b { font-family: var(--f-display); font-stretch: 108%; }
 .q { font-size: 0.85rem; white-space: pre-wrap; overflow-wrap: anywhere; }
 footer { font-size: var(--step--1); color: var(--muted); display: grid; gap: 4px; }
-@media (max-width: 560px) { dl.gloss { grid-template-columns: 1fr; } }
+.story { list-style: none; margin: 0; padding: 0; display: grid; gap: 14px; }
+.step { background: var(--surface); border: 1px solid var(--rule); border-radius: 10px; padding: 14px 18px; display: grid; gap: 10px; }
+.step-head { display: grid; gap: 4px; }
+dl.qa { display: grid; grid-template-columns: 8.5rem 1fr; gap: 8px 16px; margin: 0; }
+dl.qa dt { font-family: var(--f-mono); font-size: 0.72rem; letter-spacing: 0.06em; text-transform: uppercase; color: var(--muted); padding-top: 3px; }
+dl.qa dd { margin: 0; max-width: 74ch; }
+.takeaway { display: grid; grid-template-columns: repeat(auto-fit, minmax(18rem, 1fr)); gap: 14px; align-items: start; }
+.takeaway > div { background: var(--surface); border: 1px solid var(--rule); border-radius: 10px; padding: 12px 16px; display: grid; gap: 8px; align-content: start; }
+.takeaway > div:first-child { grid-column: 1 / -1; }
+.takeaway ul.plain { gap: 7px; }
+.takeaway p { max-width: none; }
+.bottomline { background: var(--accent-soft); border-radius: 10px; padding: 14px 18px; display: grid; gap: 6px; }
+.bottomline p { max-width: 80ch; }
+@media (max-width: 560px) { dl.gloss { grid-template-columns: 1fr; } dl.qa { grid-template-columns: 1fr; gap: 2px; } dl.qa dd { margin-bottom: 8px; } }
 @media (prefers-reduced-motion: reduce) { * { transition: none !important; } }
 </style>
 
@@ -293,8 +306,8 @@ function rolesKey(){
 }
 
 document.getElementById("pills").innerHTML = [
-  ["good","Setup done"],["good","Tests pass"],["good","001 complete (audited)"],["good","002 claim scoring complete"],["good","003 labels complete"],["warn","003 reliability gate failed: descriptive"],
-  ["good","Probe repair done"],["warn","Reports awaiting your review"],["warn","SAE deferred"]].map(([k,t]) => `<span class="pill ${k}">${t}</span>`).join("");
+  ["good","Setup done"],["good","Tests pass"],["good","001 leverage profile (audited)"],["good","002 claim scoring"],["warn","003 labels: descriptive (reliability gate failed)"],
+  ["info","004 span assay: fitted spans ≈ PCA"],["good","Raw outputs mirrored (HF)"],["warn","Reports 001–004 awaiting your review"],["warn","Next step: your decision"],["warn","SAE deferred"]].map(([k,t]) => `<span class="pill ${k}">${t}</span>`).join("");
 
 (function(){
   const out = [];
@@ -595,6 +608,32 @@ function lineChart(o){
   }
   scatter("ex4-sc1", X.scatter.Z_vs_pca, "S, z-associated span", "S, PCA same rank");
   scatter("ex4-sc2", X.scatter.J_vs_pca, "S, joint span", "S, PCA rank 33");
+})();
+/* ---------- experiment 004: where the moved probability goes (stacked means) ---------- */
+(function(){
+  const X = DATA.exp004;
+  if (!X || !X.comp) return;
+  const SEG = [["a2","var(--good)","donor's answer (the target)"],["z2","var(--warn)","donor's intermediate"],["start2","var(--accent)","donor's start"],
+               ["rz","var(--bad)","recipient's own intermediate"],["rest","var(--muted)","other colours"]];
+  const rows = X.comp, W = 680, L = 170, Rm = 96, T = 8, rowH = 26;
+  const tot = r => SEG.reduce((a, [k]) => a + (r[k] || 0), 0);
+  const hi = Math.ceil(Math.max(...rows.map(tot)) * 10 + 0.5) / 10;
+  const xs = v => L + (W - L - Rm) * v / hi;
+  const yEnd = T + rows.length * rowH;
+  let s = `<svg viewBox="0 0 ${W} ${yEnd + 30}" role="img" aria-label="Mean probability gained by each colour role after each edit">`;
+  for (let t = 0; t <= hi + 1e-9; t += 0.05) s += `<line class="gridl" x1="${xs(t)}" x2="${xs(t)}" y1="${T}" y2="${yEnd}"/>` + (Math.round(t * 100) % 10 === 0 ? `<text x="${xs(t)}" y="${yEnd + 14}" text-anchor="middle">${t.toFixed(1)}</text>` : "");
+  rows.forEach((r, i) => {
+    const y = T + i * rowH + 4, hgt = rowH - 10;
+    s += `<text class="lbl" x="${L - 8}" y="${y + hgt / 2 + 4}" text-anchor="end">${esc(r.label)}</text>`;
+    let x0 = 0;
+    SEG.forEach(([k, col, name]) => { const v = r[k] || 0; if (v <= 0) return;
+      s += `<rect x="${xs(x0)}" y="${y}" width="${Math.max(0, xs(x0 + v) - xs(x0))}" height="${hgt}" style="fill:${col}"><title>${esc(r.label)}: ${name} +${v.toFixed(3)} (mean)</title></rect>`;
+      x0 += v; });
+    s += `<text x="${xs(x0) + 6}" y="${y + hgt / 2 + 4}">${r.qualified}/${r.n} on target</text>`;
+  });
+  s += `<text x="${(L + W - Rm) / 2}" y="${yEnd + 28}" text-anchor="middle">mean probability gained (sum over colours that gain)</text></svg>`;
+  s += `<div class="key">${SEG.map(([k, col, name]) => `<span><i style="background:${col}"></i>${name}</span>`).join("")}<span>“on target” = pairs where the edit is aimed mainly at the donor's answer</span></div>`;
+  document.getElementById("ex4-comp").innerHTML = s;
 })();
 /* ---------- experiment 001: reader naming grid + qualitative table browser ---------- */
 (function(){

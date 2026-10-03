@@ -137,7 +137,7 @@ def exp001(tok):
          f"the “:” cell at every layer: clearly at L60 (AUC {f2(mem60)}), narrowly at L40–44 (selectivity 0.11–0.13, just above "
          "the 0.10 line)."),
         ("Do readers name the content the answer depends on?",
-         "Not scored yet (no labels). Descriptively: the NLA mentions this table's z in 17 of 40 samples at “:” (shuffled 8 of 40), "
+         "Not scored against a causal label yet, because no reliable label for the intermediate exists (003, 004). Descriptively: the NLA mentions this table's z in 17 of 40 samples at “:” (shuffled 8 of 40), "
          "on 6 of 10 tables, and gives z the right role in about 5 of those 17. A within-table contrast (swap the start, which "
          f"changes z) shows some activation-sensitive signal: NLA {f2(trk['nla|cell2|L42']['mean'])}–{f2(trk['nla|cell0|L42']['mean'])}, "
          f"Oracle {f2(trk['oracle|cell2|L40']['mean'])}–{f2(trk['oracle|cell2|L44']['mean'])}. "
@@ -152,8 +152,14 @@ def exp001(tok):
         ("Can the measurements be trusted?",
          f"The patching engine, yes: every exact check passes on every pair (self-patch, embedding anchor, prefix, stir no-op: "
          f"bitwise), and the SEC noise floor is {b['noise_floor']['upper_L42_rms_frac_G']:.1e} of the gap. The probe controls and "
-         "null were repaired and re-run (amendment A2; controls now at 0.48–0.52). The damage readout still cannot say where "
-         "most off-pair mass goes (only the top 5 tokens were saved). Found by external audits; see report §7 and §15."),
+         "null were repaired and re-run (amendment A2; controls now at 0.48–0.52). 001's damage readout cannot say where "
+         "most off-pair mass goes (only the top 5 tokens were saved); 004 fixed this by scoring all 12 colours on every edit. "
+         "Every report was audited externally, and every audit number was recomputed."),
+        ("Is there a clean causal handle on the intermediate itself?",
+         "Not yet. One fitted z direction moves a small, consistent share of the answer (003, median 0.03–0.05 at “:” L40–44), "
+         "but the labels are not reproducible. Swapping the whole fitted z subspace moves more (004), but no more than a PCA "
+         "subspace of the same size, and most of what it moves goes to the recipient's own intermediate rather than the donor's "
+         "answer. So readers are not yet scored against causal labels."),
     ]
     look_html = "".join(f'<li><span class="q">{h(a)}</span><span class="a">{h(bb)}</span></li>' for a, bb in look)
 
@@ -356,7 +362,7 @@ def exp001(tok):
     exp_html = f"""
 <section aria-labelledby="h-look">
   <h2 id="h-look">What to look for</h2>
-  <p>Six questions. The answers so far come from experiment 001 on the dev split; nothing has been run on the test split, and no label or reader score exists yet.</p>
+  <p>Seven questions, answered from experiments 001–004 (dev split only; nothing has been run on the test split). The section above tells the same story in order.</p>
   <ol class="look">{look_html}</ol>
 </section>
 
@@ -547,6 +553,28 @@ def exp002():
                   f'<td class="num">{v.get("only_first", "")}</td><td class="num">{v.get("only_second", "")}</td><td class="num">{v.get("neither", "")}</td></tr>'
                   for k, v in A["overlap"]["pairs"].items())
     data = {"bars": bars, "lens": A["lens_closed_set"], "prompt_only": po, "qual": Q, "top10": A["lens_top10_claims"]}
+    rt = A["rates"]
+    nla_r = [rt[f"nla|member|cell{c}|L42|real"]["int_correct"] for c in (0, 1, 2)]
+    nla_s = [rt[f"nla|member|cell{c}|L42|shuffled"]["int_correct"] for c in (0, 1, 2)]
+    orc_r = [rt[f"oracle|member|cell2|L{L}|real"]["int_correct"] for L in (40, 44)]
+    nla_m = [rt[f"nla|member|cell{c}|L42|real"]["mention_z"] for c in (0, 1, 2)]
+    trk = A["lens_post_hoc"]["start_swap_tracking_logscore"]
+    lz = [trk[f"{r}|emit_colon|L{L}"]["pos"] for r in ("J_NP_cosine", "J_CB_standard", "R_CB_standard") for L in (40, 42, 44)]
+    ls = [trk[f"{r}|emit_colon|L{L}|start"]["pos"] for r in ("J_NP_cosine", "J_CB_standard", "R_CB_standard") for L in (40, 42, 44)
+          if f"{r}|emit_colon|L{L}|start" in trk]
+    tk2 = takeaway([
+        f"<b>The verbalizers rarely put the right intermediate in its role.</b> NLA L42: {pc(min(nla_r))}–{pc(max(nla_r))} of samples with the real activation (shuffled {pc(min(nla_s))}–{pc(max(nla_s))}), although the colour word itself appears in {pc(min(nla_m))}–{pc(max(nla_m))}. Oracle at “:”: {pc(min(orc_r))}–{pc(max(orc_r))}.",
+        f"<b>The token lenses follow the intermediate inside the candidate set.</b> When the start is swapped (which changes z), J_NP cosine, J_CB and R_CB move their scores toward the new z in {min(lz)}–{max(lz)} of 48 tables at “:” L40–44" + (f", but toward the new start in only {min(ls)}–{max(ls)}." if ls else "."),
+        f"<b>The judge is reliable enough to use</b>: κ {f2(gate['kappa_intermediate_labels'])} with blind author codes on the intermediate role (gate 0.6).",
+        f"<b>The prompt alone gives the intermediate away</b>: the stock model, asked directly, names z top-1 in {pc(po['intermediate']['top1_of_12'])} of renders. A reader could, in principle, infer z from the prompt rather than read it from the activation; the shuffled-activation arms control for that.",
+    ],
+        "The readers differ sharply. The token lenses carry information about the intermediate that changes with the "
+        "activation, within a small set of candidate colours. The verbalizers mostly do not state it in its role; when they "
+        "name the right colour, they usually give it the wrong role or wrap it in incorrect detail. Mentioning a colour, "
+        "which 001 counted, is a much weaker thing than claiming it.",
+        "Whether the content a reader names is content the model's answer depends on. The lens result is inside a "
+        "five-candidate closed set, an easier task than naming freely. Verbalizers were scored on 10 tables. No causal label "
+        "is involved.")
     html_ = f"""
 <section aria-labelledby="h-002">
   <div class="eyebrow">Experiment 002 · dev · 10 snapshot tables (verbalizers), 48 tables (lenses) · judge {h(", ".join(A["judge_models_returned"]))} · design: docs/design_specs/002_claim_scoring.md</div>
@@ -557,6 +585,7 @@ def exp002():
   “cannot tell” or “conflicting”. The judge never sees the prompt. Token lenses are scored without a judge: does z rank
   first among the candidates, and score above the same lens on the mean activation? Judge spend:
   ${A["judge_spend_usd"]:.2f}.</p>
+  {tk2}
   <h3>Is the judge trustworthy? Agreement with blind author codes (60 readouts)</h3>
   <p class="small muted">Gate: κ on the intermediate role ≥ 0.6. <b>{"Passed" if gate["passes"] else "FAILED: judge-based reader scores below are not results"}</b> (κ = {f2(gate["kappa_intermediate_labels"])}; judge errors {gate["judge_error_frac"]*100:.1f}%).</p>
   <div class="cols2">
@@ -639,6 +668,23 @@ def exp003():
                 for x in A["qualitative"])
     pr = "".join(f'<tr><td>{h(k)}</td><td class="small">{h(json.dumps(v, default=float)[:160])}</td></tr>' for k, v in A["predictions"].items())
     G1 = gates["G1_fidelity"]
+    sm = lambda key, f="median": S[key][f]
+    z3 = [S[f"emit_colon|L{L}|z"] for L in (40, 42, 44)]
+    g4z = gates["G4_label_reliability"]["z|emit_colon|42/44"]
+    tk3 = takeaway([
+        f"<b>The intermediate's own direction has a small, consistent effect</b> at “:” L40–44: median S {f2(min(x['median'] for x in z3))}–{f2(max(x['median'] for x in z3))}, positive in {pc(min(x['frac_S_positive'] for x in z3))}–{pc(max(x['frac_S_positive'] for x in z3))} of pairs. That is larger than the start ({f2(sm('emit_colon|L42|start'))}) and answer ({f2(sm('emit_colon|L42|answer'))}) directions at L42, but small against the whole cell ({f2(sm('emit_colon|L42|z', 'median_S_full'))}).",
+        f"<b>It is “used” (S ≥ 0.10 and above random directions) in only {pc(min(x['frac_used'] for x in z3))}–{pc(max(x['frac_used'] for x in z3))} of pairs</b>, concentrated in a few tables.",
+        f"<b>Late in the network the answer takes over:</b> at “:” L60 the answer direction alone moves {f2(sm('emit_colon|L60|answer'))} of the gap (whole cell {f2(sm('emit_colon|L60|answer', 'median_S_full'))}).",
+        f"<b>After “&lt;/think&gt;”</b> z is decodable but the whole cell barely moves the answer (whole cell {f2(sm('emit_think|L42|z', 'median_S_full'))} at L42): readable, low patch leverage.",
+        f"<b>The labels are not reproducible.</b> Two disjoint fitting sets give labels that agree at κ {f2(g4z['kappa_used'])} (r = {f2(g4z['pearson_S'])}) for z at “:” L42–44, below the 0.7 gate.",
+    ],
+        "Along a single fitted direction, the intermediate has demonstrated influence on this answer, but it accounts for "
+        "a small part of what the whole cell does, and which pairs count as “used” depends on the fitting data. These "
+        "labels are therefore descriptive and are not used to score readers. The gap between one direction and the whole "
+        "cell is the question 004 takes up.",
+        "That the intermediate is unimportant here: one direction is a narrow probe of a 5,120-dimensional state. The "
+        "necessity clamps beat random clamps, but those were not size-matched (corrected after the audit), so they do not "
+        "show specificity.")
     html_ = f"""
 <section aria-labelledby="h-003">
   <div class="eyebrow">Experiment 003 · dev · {A["n_pairs"]} gated brew pairs ({A["n_tables"]} tables) · SEC regime · design: docs/design_specs/003_labels.md</div>
@@ -648,6 +694,7 @@ def exp003():
   two regressed out), fitted on other tables only. The partner's coordinate along that one direction is swapped into the
   member's run, and the share S of the answer gap it moves is measured against norm-matched random directions. No reader
   is involved anywhere.</p>
+  {tk3}
   <p class="small muted">Gates: fidelity {G1["n_fail"]} failures of {G1["n_edit_rows"]} edits (ρ {G1["rho_range"][0]:.5f}–{G1["rho_range"][1]:.5f}); engine checks {"pass" if gates["G2"] else "FAIL"};
   direction validity (held-out AUC, “:” L42) {f2(gates["G3"]["median_auc_colon_L42"])}; label reliability for z at “:” L42–44 {"passes" if gates["G4_passes_z_colon_L42_44"] else "does NOT pass: labels are descriptive only"}.</p>
   <h3>Which content carries the leverage? Median share S per content direction, against the whole cell</h3>
@@ -664,6 +711,135 @@ def exp003():
 </section>
 """
     return html_, {"chart": chart}
+
+
+def sg(x, d=3):
+    """Signed number with a true minus sign, rounded half up."""
+    return ("−" if float(x) < 0 else "+") + f2(abs(float(x)), d)
+
+
+def pc(x):
+    """Percent, rounded half up like f2 (0.145 -> 15%)."""
+    return f2(100 * float(x), 0) + "%"
+
+
+def takeaway(found, means, not_shown, found_title="What we found"):
+    """Three panels after an experiment's intro: findings (list), what they mean, what they do not show (HTML strings)."""
+    items = "".join(f"<li>{x}</li>" for x in found)
+    return (f'<div class="takeaway"><div><span class="eyebrow">{found_title}</span><ul class="plain">{items}</ul></div>'
+            f'<div><span class="eyebrow">What it means</span><p>{means}</p></div>'
+            f'<div><span class="eyebrow">What it does not show</span><p>{not_shown}</p></div></div>')
+
+
+def story():
+    """The research arc 001 → 004 in plain language; every number from committed JSON."""
+    s1 = json.loads((X / "analysis" / "summary.json").read_text())
+    s2 = json.loads((X2 / "analysis" / "scores.json").read_text())
+    s3 = json.loads((X3 / "analysis" / "summary.json").read_text())
+    f4 = X4 / "analysis" / "summary.json"
+    s4 = json.loads(f4.read_text()) if f4.exists() else None
+    bp, dec, sub = s1["brew"]["profile"], s1["decodability"], s1["substitution"]
+    S42, S44 = bp["emit_colon#0|L42"]["median"], bp["emit_colon#0|L44"]["median"]
+    z42, a42 = dec["z"]["emit_colon|L42"]["real"], dec["answer"]["emit_colon|L42"]["real"]
+    rt = s2["rates"]
+    nla = [rt[f"nla|member|cell{c}|L42|real"]["int_correct"] for c in (0, 1, 2)]
+    orc = [rt[f"oracle|member|cell2|L{L}|real"]["int_correct"] for L in (40, 44)]
+    trk = s2["lens_post_hoc"]["start_swap_tracking_logscore"]
+    lens = [trk[f"{r}|emit_colon|L{L}"]["pos"] for r in ("J_NP_cosine", "J_CB_standard", "R_CB_standard") for L in (40, 42, 44)]
+    n_judged = s2["judge_status"].get("ok", 0)
+    z3 = [s3["summary"][f"emit_colon|L{L}|z"] for L in (40, 42, 44)]
+    g4 = s3["gates"]["G4_label_reliability"]["z|emit_colon|42/44"]
+    steps = [
+        ("001", "Leverage profile", "Where does the answer depend on a single cell, and what can be decoded there?", "h-001",
+         "Readers are read at particular cells (a token at a layer). Before scoring what a reader says about a cell, we need "
+         "to know, without any reader, whether the model's answer depends on that cell at all.",
+         f"For {s1['brew']['n_pairs'] if 'n_pairs' in s1['brew'] else 82} brew pairs (two prompts that differ only in the start colour, so the "
+         "intermediate z and the answer differ too), we copied the partner's whole activation into the member's run at one "
+         "token and one layer, and measured the share S of the answer gap that moved. We did this for every cell of the "
+         "prompt at L40, 42, 44, 56 and 60. Alongside: linear probes, a swap of an unused table colour, and a descriptive "
+         "look at what each reader says on 10 tables.",
+         f"The final “:” cell carries about half the gap at L42–44 (median S {f2(S42)} and {f2(S44)}), toward the partner in "
+         f"every pair. z is decodable there (probe balanced accuracy {f2(z42)} at L42, chance 0.08); the answer only weakly "
+         f"until L56 ({f2(a42)} at L42). Swapping an unused colour leaves the answer alone in {frac(sub['behaviour_frac_negligible'], sub['n_items'])} items.",
+         "The “:” cell at L42 (the cell the NLA reads, next to the Oracle's L40 and L44) is a site where the pair difference "
+         "matters and z is decodable. It is the right place to ask what readers report.",
+         "Which content carries the effect. A whole-cell patch moves start, z, answer and everything downstream at once. "
+         "Experiments 003 and 004 take this up."),
+        ("002", "Reader claim scoring", "What do the readers actually claim, role by role?", "h-002",
+         "001 only counted colour words. A reader that says “red” might mean the start, the intermediate or the answer, or "
+         "might be guessing from the prompt.",
+         f"A judge (Gemini 3.8 Flash, WorkspaceBench's own judge, checked against blind author codes at κ "
+         f"{f2(s2['validation_gate']['kappa_intermediate_labels'])}) read {n_judged:,} verbalizer outputs and said which "
+         "colour each puts in each role. The token lenses were scored without a judge, inside the table's candidate colours. "
+         "Shuffled-activation and prompt-only baselines throughout.",
+         f"The verbalizers rarely put the right intermediate in its role: the NLA in {pc(min(nla))}–{pc(max(nla))} of samples, "
+         f"the Oracle in {pc(min(orc))}–{pc(max(orc))}. The token lenses, read inside the candidate set, follow the intermediate "
+         f"when the start is swapped in {min(lens)}–{max(lens)} of 48 tables at “:” L40–44 (J_NP cosine, J_CB, R_CB).",
+         "The lenses carry activation-sensitive information about z at this cell. The verbalizers mostly do not state it in "
+         "a role-correct way, and often surround a correct colour with incorrect detail.",
+         "Whether the content a reader names is content the answer depends on. That needs a causal label for z itself, "
+         "which is what 003 set out to build."),
+        ("003", "Reader-free labels", "Does the answer depend on the intermediate itself, apart from start and answer?", "h-003",
+         "To score a reader's z claim against what the model uses, we need a label for z, not for the whole cell.",
+         "We fitted one direction per content (start, z, answer) by least squares on other tables' activations, so each "
+         "direction has the other two regressed out. Then we swapped the partner's coordinate along the z direction only, "
+         "and clamped it to its mean to test necessity, against random-direction controls. 82 pairs, 37k edits, every write "
+         "in float32 with fidelity checks.",
+         f"The z direction has a small, consistent effect at “:” L40–44: median S {f2(min(x['median'] for x in z3))}–"
+         f"{f2(max(x['median'] for x in z3))}, positive in {pc(min(x['frac_S_positive'] for x in z3))}–"
+         f"{pc(max(x['frac_S_positive'] for x in z3))} of pairs, against a whole-cell {f2(S42)} at L42. It clears the 0.10 "
+         f"“used” line in only {pc(min(x['frac_used'] for x in z3))}–{pc(max(x['frac_used'] for x in z3))} of pairs. Labels "
+         f"from two disjoint fitting sets agree poorly (κ {f2(g4['kappa_used'])}, r {f2(g4['pearson_S'])}), so the "
+         "reliability gate failed.",
+         "Along the one fitted direction, z has demonstrated influence on the answer, but most of the whole-cell effect lies "
+         "elsewhere. The labels are too unstable to score readers with, so they stay descriptive.",
+         "That z is unimportant. One direction is a narrow probe of a 5,120-dimensional state. 004 widens it."),
+    ]
+    if s4:
+        A4, rec = s4["arms"], lambda k: s4["arms"][k]["recovery"]["value"]
+        pr = s4["paired"]
+        steps.append(
+            ("004", "Span assay", "Does a wider edit recover the cell, and is that more than any subspace of the same size would do?", "h-004",
+             "003's single direction left most of the cell's effect unexplained. If the influence is spread over the content "
+             "subspace, swapping the whole subspace should recover it. If a generic subspace of the same size does as well, "
+             "the content fit adds nothing.",
+             f"At “:” L42, {s4['n_pairs']} pairs (one per table), we swapped the partner's coordinates in the z-associated "
+             "span (11 dimensions), the joint start/z/answer span (33 dimensions) and their complements. We compared them "
+             "with PCA subspaces of the activations at the same rank (also rescaled to the same edit size), random subspaces, "
+             "and, for necessity, paired random rotations. Every edit records all 12 colours' probabilities.",
+             f"Share of the whole-cell effect recovered: 1-D z {f2(rec('colon|both|z1d'))}, z span {f2(rec('colon|both|Z'))}, "
+             f"joint span {f2(rec('colon|both|J'))}. PCA of the same rank recovers {f2(rec('colon|both|pca_kZ'))} and "
+             f"{f2(rec('colon|both|pca_kJ'))}; at the same edit size the fitted spans are still slightly behind "
+             f"({sg(pr['colon|both|Z-pca_kZ_dose']['dS_all']['value'])} and {sg(pr['colon|both|J-pca_kJ_dose']['dS_all']['value'])} "
+             f"of the gap). The z-span swap mostly raises the recipient's own intermediate colour, not the donor's answer "
+             f"(aimed at the donor's answer in {A4['colon|both|Z']['n_qualified']} of {s4['n_pairs']} pairs).",
+             "How much a subspace recovers tracks how much of the pair difference it contains, whether or not it was fitted "
+             "to the content. The fitted spans sit in directions that matter (random ones do nothing) but show no "
+             "content-specific advantage. 004 gives no clean causal handle on the intermediate at this cell.",
+             "That the intermediate is unused at this cell, or that no method could isolate it (DAS, trained for the purpose, "
+             "was not tried). Dev split, one cell, one layer."))
+    lis = ""
+    for num, name, q, anchor, why, did, found, means, not_ in steps:
+        lis += (f'<li class="step"><div class="step-head"><span class="eyebrow">Experiment {num} · {h(name)}</span>'
+                f'<h3>{q}</h3></div><dl class="qa"><dt>Why</dt><dd>{why}</dd><dt>What we did</dt><dd>{did}</dd>'
+                f'<dt>What we found</dt><dd>{found}</dd><dt>What it means</dt><dd>{means}</dd>'
+                f'<dt>Not shown</dt><dd>{not_}</dd></dl><a class="small" href="#{anchor}">Full results for {num} below</a></li>')
+    return f"""
+<section aria-labelledby="h-story">
+  <h2 id="h-story">What we did, in order, and what it showed</h2>
+  <p>Four experiments so far, all on Qwen3.6-27B and the dev split of WorkspaceBench. Each was designed after reading
+  the previous one's results, so the order matters: each “Why” is a gap the step before left open. Numbers are dev-split
+  medians; the sections below give intervals, controls and examples.</p>
+  <ol class="story">{lis}</ol>
+  <div class="bottomline"><span class="eyebrow">Where this leaves the project</span>
+  <p>The model's answer depends heavily on the “:” cell (001), and the readers carry real, activation-sensitive task
+  information there (002). But there is still no reader-free causal reference specific to the intermediate (003, 004),
+  so no reader has been scored against a causal label. The recommended next step (report 004 §14, awaiting your
+  confirmation) is to compare the readers' native configurations directly: what task information each carries, where
+  each errs, and how they overlap. A supervised method (DAS) at matched rank and edit size is the one bounded causal
+  follow-up worth considering, and only if its answer would change that plan.</p></div>
+</section>
+"""
 
 
 X4 = R.PROJECT / "results" / "004_span_assay"
@@ -760,37 +936,121 @@ def exp004():
                f'<td class="small">{h(e["start"])}→{h(e["z"])}→<b>{h(e["a"])}</b><br>donor {h(e["start2"])}→{h(e["z2"])}→<b>{h(e["a2"])}</b></td>{cells}'
                f'<td class="small">{h(t4(e["clean_top4"]))}</td><td class="small">{h(t4(arms["Z"]["top4"])) if "Z" in arms else "—"}</td>'
                f'<td class="small">{h(t4(arms["J"]["top4"])) if "J" in arms else "—"}</td></tr>')
+    # ---- extra numbers for the explanation (all from committed JSON) ----
+    pre = json.loads((X4 / "preflight.json").read_text())
+    man = set(json.loads((X4 / "manifest_pairs.json").read_text())["pairs"])
+    share = {a: float(np.median([p["colon|both"][a]["proj_share_sq"] for p in pre["pairs"] if p["pair_id"] in man]))
+             for a in ("z1d", "Z", "J", "pca_kZ", "pca_kJ")}
+    rv = lambda k: A["arms"][k]["recovery"]["value"]
+    sv = lambda k: A["arms"][k]["S_all"]["value"]
+    dS = lambda k: A["paired"][k]["dS_all"]["value"]
+    npairs = A["n_pairs"]
+    cnt = lambda a, b: sum(1 for p in PP.values() if p["swap"].get(a, {}).get("S") is not None and p["swap"].get(b, {}).get("S") is not None
+                           and p["swap"][a]["S"] > p["swap"][b]["S"])
+    nZ = A["necessity"]["colon|both|Z"]["N"]["value"]
+    rotZ = A["necessity_controls"]["colon|Z|rot"]["frac_real_above_q95"]
+    IZ = A["interaction"]["colon|both|Z+Zc"]
+    repJ, repZ = A["reproducibility"]["S|colon|J"], A["reproducibility"]["S|colon|Z"]
+    big_rec_z = sum(1 for p in PP.values() if p["swap"]["colon|both|Z"]["gains"].get("of_other: recipient z") is not None
+                    and max(((r, v) for r, v in p["swap"]["colon|both|Z"]["gains"].items() if v is not None and r != "other"),
+                            key=lambda t: t[1])[0] == "of_other: recipient z")
+    # composition chart: mean positive colour-mass gains by role (means are additive; medians are in the table)
+    comp_chart = []
+    for key, label in (("colon|both|z1d", "1-D z direction"), ("colon|both|Z", "z-associated span"),
+                       ("colon|both|pca_kZ_dose", "PCA-11, same edit size"), ("colon|both|pca_kZ", "PCA-11"),
+                       ("colon|both|J", "joint span"), ("colon|both|pca_kJ_dose", "PCA-33, same edit size"),
+                       ("colon|both|pca_kJ", "PCA-33"), ("colon|None|full", "whole cell")):
+        g = [PP[p]["swap"][key]["gains"] for p in PP if key in PP[p]["swap"]]
+        m = lambda r: float(np.mean([x.get(r) or 0.0 for x in g]))
+        a2, zz, rz, rs_ = m("a'"), m("z'"), m("of_other: recipient z"), m("of_other: recipient start")
+        st, oth = m("start'"), m("other")
+        comp_chart.append({"label": label, "a2": a2, "z2": zz, "start2": st, "rz": rz, "rest": max(0.0, oth - rz - rs_) + rs_,
+                           "qualified": A["arms"][key]["n_qualified"], "n": len(g)})
+    cshare = {r["label"]: {k: r[k] / max(1e-12, r["a2"] + r["z2"] + r["start2"] + r["rz"] + r["rest"]) for k in ("a2", "rz")} for r in comp_chart}
+    comp_line = (f"For the z-span swap, the donor's answer gets {pc(cshare['z-associated span']['a2'])} of the gained probability on average "
+                 f"and the recipient's own intermediate {pc(cshare['z-associated span']['rz'])}. For the whole cell the donor's answer gets "
+                 f"{pc(cshare['whole cell']['a2'])}. PCA and the joint span sit in between, roughly in order of how much they move.")
+    edits = [
+        ("1-D z direction", "the partner's coordinate along 003's single fitted z direction", "the baseline 004 tries to improve on"),
+        ("z-associated span (11)", "the partner's coordinates in the space spanned by all fitted z-colour contrasts", "does the intermediate's influence spread over a subspace?"),
+        ("joint span (33)", "the same for start, z and answer contrasts together", "does the whole content subspace carry the cell?"),
+        ("start / answer span", "start-only or answer-only contrasts at the same cell", "is any single role enough on its own?"),
+        ("complement", "everything except the span", "is the effect inside the span or outside it?"),
+        ("PCA, same rank", "the top principal directions of the activations themselves (no content labels)", "the generic comparator: is the content fit better than any data-aligned subspace?"),
+        ("PCA, same edit size", "the PCA edit rescaled to the content edit's size", "rules out “PCA wins because its edit is bigger”"),
+        ("random subspace / direction", "a random subspace of the same rank, or a random direction of the same edit size", "do arbitrary edits of this size move the answer?"),
+        ("whole cell", "the partner's entire activation", "the effect everything is measured against"),
+        ("clamp to the mean", "the span's coordinates set to their average, in both prompts", "necessity: does removing the span's variation shrink the gap?"),
+        ("paired random rotation", "the same clamp edit, rotated into a random subspace (same sizes and angles)", "is it the orientation that matters, or just the edit size?"),
+    ]
+    pairs_cmp = [("colon|both|Z", "colon|both|pca_kZ"), ("colon|both|Z", "colon|both|pca_kZ_dose"), ("colon|both|J", "colon|both|pca_kJ"),
+                 ("colon|both|J", "colon|both|pca_kJ_dose"), ("start_ref|both|Sspan", "start_ref|both|pca_kS")]
+    pca_right = all(rv(b) > rv(a) for a, b in pairs_cmp)
+    pca_line = "Here PCA is to the right of the matching content span in every pair of rows." if pca_right else "PCA and the content spans trade places across rows."
+    etab = "".join(f"<tr><td><b>{h(a)}</b></td><td>{h(b)}</td><td>{h(c)}</td></tr>" for a, b, c in edits)
+    found = [
+        f"<b>The whole cell moves a median {f2(sv('colon|None|full'))} of the answer gap</b> at “:” L42 (all {npairs} pairs above 0.10).",
+        f"<b>Wider spans recover more.</b> Share of the whole-cell effect: 1-D z {f2(rv('colon|both|z1d'))}, z span {f2(rv('colon|both|Z'))}, joint span {f2(rv('colon|both|J'))}. The z span beats the 1-D direction in {cnt('colon|both|Z', 'colon|both|z1d')} of {npairs} pairs.",
+        f"<b>PCA of the same size does as well or better.</b> PCA recovers {f2(rv('colon|both|pca_kZ'))} at 11 dimensions and {f2(rv('colon|both|pca_kJ'))} at 33. Even rescaled to the same edit size it stays slightly ahead: z span − PCA {sg(dS('colon|both|Z-pca_kZ_dose'))}, joint − PCA {sg(dS('colon|both|J-pca_kJ_dose'))} of the gap (PCA larger in {cnt('colon|both|pca_kZ_dose', 'colon|both|Z')} and {cnt('colon|both|pca_kJ_dose', 'colon|both|J')} of {npairs} pairs).",
+        f"<b>Recovery follows how much of the pair difference a subspace holds:</b> z span {pc(share['Z'])} of the difference's squared size, PCA-11 {pc(share['pca_kZ'])}, joint {pc(share['J'])}, PCA-33 {pc(share['pca_kJ'])}.",
+        f"<b>The z-span swap mostly raises the wrong colour.</b> Its largest single gain is the recipient's own intermediate in {big_rec_z} of {npairs} pairs; it is aimed mainly at the donor's answer in only {A['arms']['colon|both|Z']['n_qualified']}.",
+        f"<b>The spans do sit in directions that matter.</b> Random edits of the same rank or size do nothing (median S ≤ 0.005). Clamping the z span removes {f2(nZ)} of the gap, more than paired random rotations of the same edit in {round(rotZ * npairs)} of {npairs} pairs.",
+        f"<b>The parts do not add up.</b> z span plus its complement falls {f2(-IZ['I_signed']['value'])} short of the whole cell; the shortfall is at least 0.15 in {pc(IZ['frac_abs_I_ge']['value'])} of pairs.",
+        f"<b>Stability:</b> two half-sized fits agree on the z span only at a low level (recovery {f2(repZ['median_recovery']['r1'])} and {f2(repZ['median_recovery']['r2'])}). The joint span reaches {f2(repJ['median_recovery']['r1'])} and {f2(repJ['median_recovery']['r2'])}, but their per-pair disagreement ({f2(repJ['median_abs_diff'], 3)}) misses the pre-set 0.05 tolerance.",
+    ]
+    tk = takeaway(found,
+                  "Swapping a larger subspace moves the answer more, in proportion to how much of the pair difference that "
+                  "subspace contains, and a subspace chosen without any content labels (PCA) does at least as well. So the "
+                  "fitted spans are not picking out the intermediate in a special way, and most of what they move does not go "
+                  "to the donor's answer. By the design's own reading this is a descriptive geometry result: 004 does not give "
+                  "a content-specific causal reference for the intermediate at this cell, and no reader is scored against it.",
+                  "That the intermediate is unused at “:” L42, or that no method could isolate it. A supervised method trained "
+                  "for this (DAS) was not tried. Scope: dev split, one pair per table, one cell and layer, one answer endpoint.")
     html_ = f"""
 <section aria-labelledby="h-004">
-  <div class="eyebrow">Experiment 004 · dev · {A["n_pairs"]} pairs, one per table · SEC regime · “:” L42 and the start token L40 · design: docs/design_specs/004_span_assay.md (v2 + §13)</div>
+  <div class="eyebrow">Experiment 004 · dev · {npairs} pairs, one per table · SEC regime · “:” L42 and the start token L40 · design: docs/design_specs/004_span_assay.md (v2 + §13) · report: docs/reports/004_span_assay.md</div>
   <h2 id="h-004">Experiment 004: does a fitted span recover what the whole cell does?</h2>
-  <p>In 003, swapping the partner's coordinate along one fitted z direction at “:” L42 moved little of the answer. Here
-  the partner's coordinates in whole fitted subspaces are swapped in: the z-associated span (rank 11), the joint
-  start/z/answer span (rank 33; not the J-lens), start-only and answer-only spans, and the complements of each. Two
-  generic comparators use the same rank: PCA of the activations (as is, and rescaled to the content edit's norm), and
-  random subspaces and directions. Clamps of the span to its fitting mean test necessity against paired random rotations
-  of the same edits. Each fit excludes the evaluated table; two half-sized fits (r1, r2) test reproducibility. No reader
-  is involved. Recovery is the edit's share S of the answer gap divided by the whole-cell share, on pairs whose whole
-  cell moves at least 0.10 (“:” {rs["colon"]["n"]} of {A["n_pairs"]}, start token {rs["start_ref"]["n"]}).</p>
-  <p class="small muted">Gates: preflight passes (basis identities to float32 precision; zero writes are no-ops); smoke on 2 pairs (self-swap bitwise; whole-cell share equals 001 exactly; clean margins equal 003); fidelity checked on every write of the run (rho/kappa ≥ 1e-6 ‖h‖, read-back bound below), {len(A["quarantined_rows"])} quarantined rows.</p>
-  <h3>Recovery of the whole-cell effect (median, recovery subset; dots: primary fit with 95% table-bootstrap interval, and the two half-sized fits)</h3>
+  <p><b>Why.</b> In 001 the whole “:” cell at L42 carried about half the answer gap. In 003 the partner's coordinate
+  along one fitted z direction carried almost none of it. Either the intermediate's influence is spread over more than
+  one direction, or the fitted directions miss it. 004 tests the first possibility, and asks whether any gain is
+  specific to the content or would come from any subspace of the same size.</p>
+  <p><b>What we did.</b> One pair per table ({npairs} pairs). At “:” L42 the partner's coordinates in a subspace are swapped
+  into the member's run, and we measure the share S of the answer gap that moves. <b>Recovery</b> is that share divided
+  by the whole-cell share for the same pair (1 = the edit does everything the whole cell does). Every edit is fitted on
+  other tables only, written in float32 with a fidelity check, and scored on all 12 colours. The start-colour token at
+  L40 is a reference site, and two half-sized fits (r1, r2) test stability. No reader is involved.</p>
+  <h3>The edits, and why each is in the design</h3>
+  <div class="scroll"><table class="tbl"><tr><th>Edit</th><th>What it changes in the member's activation</th><th>Question it answers</th></tr>{etab}</table></div>
+  <p class="small muted">Gates: the preflight passes (basis identities hold to float32 precision; zero writes are no-ops). The 2-pair smoke passes (self-swap bitwise; whole-cell share equals 001 exactly; clean margins equal 003). Fidelity is checked on every write of the run (rho/kappa at ≥ 1e-6 ‖h‖, read-back bound below). {len(A["quarantined_rows"])} quarantined rows. Recovery subset: whole-cell share ≥ 0.10 (“:” {rs["colon"]["n"]} of {npairs}, start token {rs["start_ref"]["n"]}).</p>
+  {tk}
+  <h3>Recovery of the whole-cell effect</h3>
   <div class="chart" id="ex4-rec"></div>
-  <h3>Per pair: fitted span vs PCA of the same rank (share S at “:” L42, primary fit)</h3>
+  <p class="small muted"><b>How to read it.</b> Each row is one kind of edit; the filled dot is the median recovery over pairs with the primary fit, with its 95% table-bootstrap interval. ○ and □ are the two half-sized fits. The dashed line at 1 is the whole cell. Read the rows in pairs: each content span sits next to the PCA subspace of the same size, so the gap between them is the content fit's advantage. {pca_line} Complements (everything except the span) show what lies outside it.</p>
+  <h3>Per pair: fitted span against PCA of the same rank</h3>
   <div class="arms"><div class="arm"><div class="chart" id="ex4-sc1"></div></div><div class="arm"><div class="chart" id="ex4-sc2"></div></div></div>
+  <p class="small muted"><b>How to read it.</b> One dot per pair; x is the share S moved by the fitted span, y by PCA of the same rank, at “:” L42. Dots above the diagonal are pairs where PCA moves more. These are the unscaled PCA edits, which are larger; the same-edit-size comparison is in the findings above.</p>
+  <h3>Where the moved probability goes</h3>
+  <div class="chart" id="ex4-comp"></div>
+  <p class="small muted"><b>How to read it.</b> Each bar is the mean total probability that colours <em>gain</em> after the edit, split by whose colour gains it: the donor's answer (the target), the donor's intermediate, the donor's start, the recipient's own intermediate, and other colours. A target-directed edit is mostly the first segment. {comp_line} Means are shown so the segments add up; medians are in the table below.</p>
   <h3>Predictions (priors written before any 004 run)</h3>
   <div class="scroll"><table class="tbl"><tr><th>#</th><th>Prediction</th><th class="num">prior</th><th>value</th><th>outcome</th></tr>{pr}</table></div>
-  <h3>Where the added probability goes (primary fit, all pairs)</h3>
+  <h3>Where the added probability goes: medians per edit (primary fit, all pairs)</h3>
   <div class="scroll"><table class="tbl"><tr><th>Edit</th><th class="num">median S [95% CI]</th><th class="num">median F_target (n defined)</th><th class="num">gain to donor answer</th><th class="num">to donor z</th><th class="num">to recipient z</th><th class="num">target-directed</th><th class="num">flagged</th></tr>{comp_rows}</table></div>
   <p class="small muted">F_target = the donor answer's share of all positive colour-mass gains (defined when they total ≥ 0.01). Target-directed = F_target &gt; 0.5, log P(a′) up beyond the numerical floor, and no warning flag. Flags: mass outside the accepted spellings up &gt; 0.05, or both endpoint log-probabilities down &gt; 0.05 nats. Flagged rows stay in every median.</p>
   <h3>Qualitative: fixed-seed random pairs beside the median, extreme and flagged cases</h3>
+  <p class="small muted">Each row is one pair: the member's path (start → intermediate → <b>answer</b>) and the donor's, the share each edit moves, and the top four colours before and after. Look for the recipient's own intermediate rising after the z-span swap (for example 0012, white; 0041, black).</p>
   <div class="scroll"><table class="tbl"><tr><th>Pair</th><th>recipient / donor path</th><th class="num">S 1-D</th><th class="num">S z span</th><th class="num">S PCA</th><th class="num">S joint</th><th class="num">S whole</th><th>colour mass, clean (top 4)</th><th>after the z-span swap</th><th>after the joint-span swap</th></tr>{ql}</table></div>
   <details class="more"><summary>Random controls (primary fit; descriptive, no per-item significance)</summary><div class="scroll"><table class="tbl"><tr><th>Arm · control</th><th class="num">n</th><th class="num">real above control q95</th><th class="num">real below control q05</th><th class="num">median rank stat (min 1/17)</th><th class="num">control median S</th></tr>{ctrl}</table></div></details>
   <details class="more"><summary>Necessity: clamping the span to its fitting mean (N = share of the gap removed)</summary><div class="scroll"><table class="tbl"><tr><th>Span</th><th>fit</th><th class="num">median N [95% CI]</th><th class="num">above paired-rotation q95</th><th class="num">above random-clamp q95</th><th class="num">flags member / partner</th></tr>{nec}</table></div></details>
   <details class="more"><summary>Additivity: I = S(span) + S(complement) − S(whole cell)</summary><div class="scroll"><table class="tbl"><tr><th>Span + complement</th><th class="num">signed I</th><th class="num">|I|</th><th class="num">fraction |I| ≥ 0.15</th></tr>{inter}</table></div></details>
   <details class="more"><summary>Reproducibility between the two half-sized fits (r1 vs r2)</summary><div class="scroll"><table class="tbl"><tr><th>Quantity · site · arm</th><th class="num">n</th><th class="num">Pearson r</th><th class="num">median |Δ|</th><th class="num">median r1 − r2</th><th class="num">median recovery primary / r1 / r2</th><th>high recovery reproduced</th></tr>{rep}</table></div></details>
+  <div class="bottomline"><span class="eyebrow">Next decision (report 004 §14)</span>
+  <p>The design said that if 004 does not nominate a construction, the project returns to comparing the readers
+  directly rather than adding estimators automatically. Recommended: go back to the reader panel. Optional, bounded: a
+  supervised method (DAS) at the same rank and edit size against PCA, only if its answer would change that plan.</p></div>
 </section>
 """
-    return html_, {"chart": chart, "scatter": scatter}
+    return html_, {"chart": chart, "scatter": scatter, "comp": comp_chart}
 
 
 STATUS_HTML = """
@@ -839,6 +1099,7 @@ def main():
     exp2_html, exp2_data = exp002()
     exp3_html, exp3_data = exp003()
     exp4_html, exp4_data = exp004()
+    story_html = story()
     data = {
         "prompt_tokens": [[i, t, r.regions.get(i, "")] for i, t in enumerate(r.decoded)],
         "item": {"name": it["name"], "start": it["start"], "z": it["intermediates"][0], "answer": it["answer"],
@@ -884,7 +1145,7 @@ def main():
         assert t.count(key) == 1, key
     # Lens readouts include byte-fragment tokens that decode to U+FFFD; write it as an escape so the page has no raw one.
     js = json.dumps(data, ensure_ascii=False).replace("</", "<\\/").replace("\ufffd", "\\ufffd")
-    page = (t.replace("__EXP001__", (exp_html + exp2_html + exp3_html + exp4_html).replace("\ufffd", "&#xFFFD;")).replace("__STATUS__", STATUS_HTML)
+    page = (t.replace("__EXP001__", (story_html + exp_html + exp2_html + exp3_html + exp4_html).replace("\ufffd", "&#xFFFD;")).replace("__STATUS__", STATUS_HTML)
              .replace("__DATA__", js))
     assert "\ufffd" not in page
     out = R.out_dir("outputs", "000_setup", "results_page") / "causal_concordance.html"
