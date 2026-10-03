@@ -10,13 +10,26 @@ Guide for any agent or collaborator working in this repo. Reading only this file
    item by item: done / built / partial / not started / dropped).
 3. **docs/context/SPEC.md** + **docs/context/AMENDMENT_01.md**: the project spec and every decision that overrides it
    (the amendment wins where they disagree; its §6 lists each conflict by spec line).
-4. The latest **docs/design_specs/NNN_*.md** and **docs/reports/NNN_*.md** (currently: design 001 v3 + A1, run in
-   full on dev; report 001 = its results, awaiting PI review; report 000 = the reading report).
+4. The designs and reports, in order: **docs/design_specs/00N_*.md** and **docs/reports/00N_*.md**. All four
+   experiments are complete on the dev split and await PI review:
+   - 001: leverage profile, probes (amendment A2) and the reader snapshot;
+   - 002: role-aware reader claim scoring;
+   - 003: reader-free 1-D labels (descriptive; G4 failed);
+   - 004: span assay at `:` L42 (fitted spans ≈ PCA).
+   Report 000 is the reading report.
+5. **docs/context/agent_notes/**: the PI's working preferences, as kept in the agent's memory (also summarized under
+   "Working with the PI" below).
 
-Supporting: `docs/context/PI_DIRECTIVE_2026-10-02.md` (the PI's block-000 directive, source of the non-negotiables),
-`docs/reviews/` (two external reviews of the scaffold/design, the external audit of 001),
-`docs/context/READING_LIST.md`, `docs/context/reading_notes.md` (cited notes from the reading pass),
-`docs/papers/INDEX.md`.
+Supporting:
+- `docs/context/PI_DIRECTIVE_2026-10-02.md`: the PI's block-000 directive, the source of the non-negotiables.
+- `docs/reviews/`, every external review with its scripts and the disposition in each README:
+  - two reviews of the scaffold and design 001;
+  - Codex audits of 001 and of 001–003;
+  - the design-002 review;
+  - the design-004 review and the consolidated handoff that defines design 004 v2 and the project framing;
+  - the 004 smoke review.
+- `docs/context/READING_LIST.md`, `docs/context/reading_notes.md` (cited notes from the reading pass),
+  `docs/papers/INDEX.md`.
 
 ## Project in one paragraph
 
@@ -83,7 +96,7 @@ source of code and organisms only.
   Report intervals and sign counts, never a bare mean.
 - **Figures** (`figures.py`): ICLR style (vendored `iclrplot`), fixed colour per reader, drawn from committed JSON only.
 
-## Environment (verified 2026-10-02)
+## Environment (verified 2026-10-02; unchanged through 2026-10-03)
 
 | | |
 |---|---|
@@ -102,7 +115,7 @@ NLA = ceselder/qwen3.6-27b-nla-L42 @ 54e3ce60 (`av_sft_lora` merged + `av_rl_lor
 
 Sources (read-only clones, pinned in `scripts/000_setup/rebuild_env.sh`): `/workspace/sources/repos/` — workspace-bench
 @ 92d763e, RHUT (senku14x/Readable-Here-Used-There) @ d4197b0, SEC (senku14x/jacobian-lens, `research_secant/`)
-@ a3720ab, EasyNLA @ 4d72847, vllm-metamodels @ 6a0a0e5; papers and web sources in `/workspace/sources/{papers,web}`.
+@ a3720ab, EasyNLA @ 4d72847, vllm-metamodels @ 6a0a0e5; papers and web sources in `/workspace/sources/{papers,web}` (backed up to the private HF dataset; see "Fresh instance").
 
 **Rebuild:** `bash scripts/000_setup/rebuild_env.sh` (add `--vllm` for the optional vLLM venv).
 **Tests:** `python -m pytest scripts/common/tests -q` (`-m "not gpu"` for the CPU-only subset).
@@ -110,14 +123,61 @@ Sources (read-only clones, pinned in `scripts/000_setup/rebuild_env.sh`): `/work
 `env -u GITHUB_TOKEN git -c credential.helper='!gh auth git-credential' push origin <branch>`. Do not push to `main`
 without the PI's say-so.
 
-## Where things stand
+## Where things stand (2026-10-03)
 
-See **STATUS.md** (block 000 done; 78 tests; design 001 v3 + A1 run in full on dev and reported in
-`docs/reports/001_leverage_profile.md`, revised after an external audit (§15), awaiting PI review; no label, no reader
-score and no test-split measurement yet). Known open problems: the probe controls (membership control far from chance,
-permutation null reuses C), the damage readout (top 5 only), no prompt-only baseline yet.
-Results page (private artifact, built by `scripts/000_setup/results_page/make_page.py` from committed JSON only):
-https://claude.ai/artifact/RMRX8R4iFnysbnHaNWTBeC
+See **STATUS.md** for detail. Experiments 001–004 are complete on the **dev split only** (no test-split measurement
+yet) and await PI review.
+- **001:** the `:` cell carries about half the answer gap at L42–44. z is decodable there. Off-path membership is
+  decodable (narrowly) but its substitution is not needed. The probes were repaired under amendment A2.
+- **002:** the verbalizers rarely claim z in its role (NLA 5–15%, Oracle 0–3%). The token lenses track z inside the
+  candidate set. The prompt-only baseline is done.
+- **003:** the decorrelated 1-D z direction at `:` L40–44 has a small, consistent effect (median S 0.03–0.05).
+  Label reliability fails (κ 0.37), so the labels are descriptive and are not used to score readers.
+- **004:** at `:` L42 the joint start/z/answer span recovers 0.72 of the whole-cell effect, the z span 0.21 and 1-D
+  0.06. Same-rank PCA does as well or better, so this is a descriptive geometry result and no intervention is
+  nominated.
+- **Open PI decisions:** confirm the framing (native reader-configuration comparison is the primary line; causal work
+  is a validation branch; per the consolidated handoff); the next step (report 004 §14: back to the reader panel, or
+  a bounded DAS-vs-PCA check); AMENDMENT_02 before any test-split label; whether to fast-forward `main` (it lags
+  `setup/000-scaffold`).
+- **Results page** (artifact, shared by link; built by `scripts/000_setup/results_page/make_page.py` from committed
+  JSON only): https://claude.ai/artifact/RMRX8R4iFnysbnHaNWTBeC
+
+## Working with the PI (preferences; full notes in docs/context/agent_notes/)
+
+- **Launch only on an explicit "go".** Stop at the design doc, the preflight and the smoke, then ask; a smoke is not a
+  run.
+- **Subagents:** "No subagents" is the PI's rule. On 2026-10-02 the PI turned on workflows for orchestration (for
+  example adversarial review). Label measurements stay single-path code; confirm any other use first.
+- **Always keep qualitative samples** next to the numbers: raw readouts, prompts, and fixed-seed example pairs, in
+  reports, results JSON and the page.
+- **Results-page charts** are drawn natively (inline SVG/HTML in the page's style), never as embedded matplotlib PNGs.
+  Check every page build in headless Chromium at 1280 and 400 px with no JS errors before publishing.
+- **vLLM is optional and parked;** HF transformers first. Labels never go through vLLM.
+- **External reviews:** the PI pastes them ("accept if it is not dogshit"). Check every claim against the code and
+  the docs, including earlier pasted handoffs (`docs/reviews/`, `/workspace/codex_reports/`), before calling one right
+  or wrong. Record the disposition in the review folder's README.
+- **Numbers in reports** come from full-precision JSON, rounded half-up, never hand-copied from printouts.
+- **Commits:** commit and push only when asked or when the agreed workflow says so. Never force-push. Never push to
+  `main` without the PI's say-so.
+
+## Fresh instance: restore everything
+
+`/workspace` is not persistent. To come back on a new instance:
+1. `git clone https://github.com/senku14x/Causal-Concordance` (private; `gh auth login` as senku14x), then
+   `git checkout setup/000-scaffold` (the working branch; `main` may lag).
+2. `bash scripts/000_setup/rebuild_env.sh`: venvs, pinned source clones, model and lens downloads, and hash checks.
+3. `python scripts/000_setup/restore_outputs.py`: downloads `outputs/` from the public HF dataset
+   `senku21x/causal-concordance-outputs` and checks every file against its `MANIFEST.json` (sha256).
+4. Optional: `python scripts/000_setup/restore_outputs.py --private`, restoring from the private HF dataset
+   `senku21x/causal-concordance-private`:
+   - a full git bundle of this repo;
+   - the paper PDFs and text extractions, and the web sources;
+   - the reviewers' working folder `/workspace/codex_reports` (with evidence snapshots);
+   - the PI's Claude skills (`/workspace/.claude/skills`).
+   These are private because redistribution of the papers is not cleared and the skills are the PI's own.
+5. **Secrets are in neither mirror.** The OpenRouter key (002's judge) lives only in `/workspace/.env`; ask the PI
+   for it on a new instance. It was pasted in chat on 2026-10-02 and should be rotated.
 
 ## Pitfalls (read before writing code)
 
@@ -194,3 +254,4 @@ https://claude.ai/artifact/RMRX8R4iFnysbnHaNWTBeC
 | 10-03 | 004 run path recorded fidelity but did not enforce G1; `Fidelity.ok()` was true with nothing checked; writes < 1e-4 ‖h‖ were exempted although the preflight resolves 1e-6 (8 smoke writes unchecked); my smoke summary said "fidelity holds on every write" | run stops on a failed write (saved, pair not done; per-pair atomic files); checked ≥ 1e-6, read-back bound below, exact zeros must be no-ops, empty fails; smoke v2: 948/948 writes per pair checked (external review) |
 | 10-03 | STATUS and my smoke summary said 25 accepted spellings (it is 24: 12 × 2); smoke analysis printed Pearson r with n = 2 | corrected; Pearson needs n ≥ 3 |
 | 10-03 | Report 004 drafted from three-decimal printouts: 8 double-rounding slips and 2 F_target counts written from memory (17, 29 → 21, 32) | every table regenerated and checked against the JSON (half-up) before commit; draft reports from full-precision JSON, never from printouts |
+| 10-03 | I told the PI the smoke review's "agreed clarification" for S5 had no basis in the conversation, and that its audit script was not supplied; the consolidated handoff the PI had pasted states the rule, and the script was in `/workspace/codex_reports/` | review folders filed with scripts and a corrected disposition; check pasted handoffs and `codex_reports/` before disputing a reviewer's provenance |

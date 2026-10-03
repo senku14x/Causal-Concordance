@@ -1,4 +1,4 @@
-# SPEC status — what is done and what is not (2026-10-02)
+# SPEC status — what is done and what is not (2026-10-03)
 
 The whole project spec (`docs/context/SPEC.md`), item by item, against what exists in the repo. Overrides from
 `docs/context/AMENDMENT_01.md` (A01, conflicts C1–C23, errata E1–E4) and later PI decisions are applied, so "the spec
@@ -10,8 +10,12 @@ says" means the spec as amended. Status words:
 - **not started**;
 - **dropped / out / deferred**: by a recorded decision.
 
-Nothing in the adjudication or agreement analyses (§6–§8 of the spec) has produced a result yet. **No label and no
-reader score exists. Every run so far is on the dev split.**
+**Every run so far is on the dev split.**
+- 002 scored reader *claims* against the truth (descriptive).
+- 003 produced reader-free labels, but they are descriptive only (G4 failed), so no reader has been scored against a
+  causal label.
+- 004 found no content-specific intervention construction (fitted spans ≈ PCA).
+- The agreement decomposition (§8) has not started.
 
 ## Spec §0–§2: aims, North Star, proxy
 
@@ -164,16 +168,20 @@ Design 001 registered its own predictions Q1–Q14; outcomes are in report 001 �
 - WSB renders, byte-identical to WSB's producer.
 - Partners, substitution builder, gate, cells and splits.
 - Margin; RHUT and SEC engines with the integrity guard; gates; stats; figures; reader wrappers with the import boundary.
-- 78 tests.
-- Results page (`scripts/000_setup/results_page/`, private artifact).
-- Experiments: block 000 (`docs/reports/000_reading_report.md`, STATUS.md) and design/report 001.
+- 65 CPU tests (plus GPU tests); the import-boundary test also walks the 004 entry point.
+- Results page (`scripts/000_setup/results_page/`, artifact shared by link).
+- Raw-output mirror (public HF, sha256 MANIFEST), private HF backup, `scripts/000_setup/restore_outputs.py`.
+- Experiments: block 000 and designs/reports 001–004.
 
-## Open PI decisions (as of 2026-10-02)
+## Open PI decisions (as of 2026-10-03)
 
-1. Review report 001 (revised after the external audit, §15); AMENDMENT_02 contents (001 §13).
+0. Confirm the framing: native reader-configuration comparison is the primary line; causal work is a validation
+   branch (consolidated handoff). Choose the next step after 004 (report 004 §14). Fast-forward `main`?
+1. Review reports 001–004; AMENDMENT_02 contents (001 §13).
 2. Not-needed reader scoring at L60 only, or also L40–44 via the directional test.
 3. Oracle L42 arm (matched layer with the NLA), off-contract, reported separately (A01 §4).
-4. HF dataset name for the raw outputs (`outputs/` is not persistent and not mirrored).
+4. ~~HF dataset name~~: done. The public `senku21x/causal-concordance-outputs` (PI 2026-10-03) and the private
+   `senku21x/causal-concordance-private`.
 5. P5 prior value (A01 §5).
 6. SAE (deferred); template lens (deferred).
-7. Paper PDFs: gitignored while the repo was public; the repo is now private.
+7. Paper PDFs: still gitignored (redistribution not cleared); backed up to the private HF dataset.

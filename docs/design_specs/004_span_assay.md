@@ -205,7 +205,7 @@ needs a PI decision on the destination: free or upgrade the HF storage, or Git L
 
 ## 13. Pre-run clarifications (2026-10-03, after the smoke review; before the 33-pair run)
 
-From the review of the 2-pair smoke (`docs/reviews/2026-10-03_004_smoke_review.md`). No arm, estimator or threshold
+From the review of the 2-pair smoke (`docs/reviews/2026-10-03_codex_004_smoke_review/`); the S5 rule restates the consolidated handoff's reproducibility criterion. No arm, estimator or threshold
 of §3–§4 changes; nothing below was chosen from smoke effects.
 
 - **S5 (and "reproducible" in §5–§6):** median Z recovery ≥ 0.5 in r1 **and** in r2 (recovery subset), **and**

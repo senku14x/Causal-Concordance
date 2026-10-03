@@ -1,4 +1,4 @@
-# Come up to speed — Causal-Concordance (state of 2026-10-02)
+# Come up to speed — Causal-Concordance (state of 2026-10-03)
 
 For a new session or collaborator taking over. It says where things are and why. Rules live in `CLAUDE.md`, the
 live state in `STATUS.md`, and the item-by-item spec status in `docs/context/SPEC_STATUS.md`.
@@ -21,12 +21,23 @@ live state in `STATUS.md`, and the item-by-item spec status in `docs/context/SPE
 3. This file, then `docs/context/SPEC_STATUS.md`.
 4. `docs/context/SPEC.md` (the original spec) + `docs/context/AMENDMENT_01.md` (wins where they disagree).
 5. `docs/context/PI_DIRECTIVE_2026-10-02.md`: the PI's directive that set block 000 and the non-negotiables.
-6. `docs/design_specs/001_leverage_profile.md` (v3 + A1) and `docs/reports/001_leverage_profile.md` (§15 = audit
-   response).
-7. `docs/reviews/`: two external reviews of the scaffold and design (answered by design 001 v2/v3 and errata E1–E4),
-   and the external audit of the 001 results (answered in report 001 §15).
-8. Background: `docs/reports/000_reading_report.md`, `docs/context/reading_notes.md`, `READING_LIST.md`,
+6. Designs and reports 001–004, in order. Each report opens with a summary and closes with its silly mistakes:
+   - `docs/design_specs/001_leverage_profile.md` (v3 + A1, A2) → `docs/reports/001_leverage_profile.md` (§15 = audit
+     response);
+   - `002_claim_scoring` (v2.2) → report 002;
+   - `003_labels` → report 003 (§9 = audit corrections);
+   - `004_span_assay` (v2 + §13) → report 004 (§14 = options for the next step).
+7. `docs/reviews/`: every external review, each folder with the review as delivered, the reviewer's scripts and JSON,
+   and a README stating the disposition. Includes the **consolidated handoff of 2026-10-03**, which sets the project
+   framing (still awaiting PI confirmation).
+8. `docs/context/agent_notes/`: the PI's working preferences as kept in the agent's memory (copy them back into
+   `~/.claude/projects/-workspace/memory/` on a new instance).
+9. Background: `docs/reports/000_reading_report.md`, `docs/context/reading_notes.md`, `READING_LIST.md`,
    `docs/papers/INDEX.md`.
+
+**On a fresh instance:** follow CLAUDE.md, "Fresh instance: restore everything": clone, `rebuild_env.sh`,
+`restore_outputs.py` (public outputs, sha256-checked) and optionally `--private` (papers, web sources, review evidence,
+skills, repo bundle).
 
 ## 3. What has been done
 
@@ -39,7 +50,12 @@ live state in `STATUS.md`, and the item-by-item spec status in `docs/context/SPE
 | 000 | Precision regime check (RHUT vs SEC) | `results/000_setup/analysis/regime_check.json` |
 | 001 | Design v3 + A1, approved; gate, smoke, run (72 min), probes (25 min), reader snapshot (32 min), analysis, figures | `scripts/001_leverage_profile/`, `results/001_leverage_profile/` |
 | 001 | Report, revised after an external audit; every audit number recomputed | `docs/reports/001_leverage_profile.md`, `scripts/001_leverage_profile/audit_followups.py` |
-| — | Results page (private claude.ai artifact) | https://claude.ai/artifact/RMRX8R4iFnysbnHaNWTBeC, `scripts/000_setup/results_page/` |
+| 001 | Probe repair (amendment A2): per-fold AUC, multi-draw controls, full-procedure nulls | `scripts/001_leverage_profile/probe_residual_checks.py`, report 001 §7 |
+| 002 | Role-aware reader claim scoring (Gemini 3.8 Flash judge via OpenRouter, validated κ 0.67/0.81), lens closed-set scores, prompt-only baseline; 3,930 readouts, $7.98 | `scripts/002_claim_scoring/`, `docs/reports/002_claim_scoring.md` |
+| 003 | Reader-free 1-D labels (decorrelated LS directions, swaps, necessity), 82 pairs, 37k edits; G4 failed → descriptive; audited | `scripts/003_labels/`, `docs/reports/003_labels.md` |
+| 004 | Span assay at `:` L42 (z / joint / start / answer spans, complements, PCA and random comparators, paired-rotation necessity), 33 pairs, 56 min | `scripts/004_span_assay/`, `docs/reports/004_span_assay.md` |
+| — | Raw-output mirror (public HF) + private backup (HF) + restore script | `scripts/000_setup/restore_outputs.py`, CLAUDE.md "Fresh instance" |
+| — | Results page (claude.ai artifact, shared by link) | https://claude.ai/artifact/RMRX8R4iFnysbnHaNWTBeC, `scripts/000_setup/results_page/` |
 
 ## 4. What 001 found (dev split; scope: Qwen3.6-27B, brew/chain, SEC regime)
 
@@ -115,10 +131,15 @@ live state in `STATUS.md`, and the item-by-item spec status in `docs/context/SPE
    colour identities, and matched claim budgets beyond one claim per role.
 5. **Oracle and NLA read different layers** (L40/44 vs L42); there is no matched-layer comparison.
 6. **Raw outputs** (`outputs/`, gitignored) are mirrored to the public HF dataset `senku21x/causal-concordance-outputs`
-   (2026-10-03; `MANIFEST.json` there has sha256 per file). Re-upload after each new run. Committed `results/` and the code reproduce every reported number only
-   while `outputs/001_leverage_profile/run/` exists.
+   (`MANIFEST.json` there has sha256 per file; last upload at 004). Re-upload after each new run (the commands are in
+   the upload step of report 004's commit history; `restore_outputs.py` restores). Some analyses need the raw
+   captures, so restore before re-running anything.
+7. **004:** fitted content spans recover no more than same-rank PCA. No content-specific causal reference exists yet,
+   so causal labels are still not used to score readers.
+8. **`main` lags `setup/000-scaffold`** (main was last merged on 2026-10-02). Work on the branch; ask before updating
+   `main`.
 
-## 6. Decisions log (PI, all 2026-10-02)
+## 6. Decisions log (PI; 2026-10-02 unless dated)
 
 - WorkspaceBench only; brew and chain core, relational a core subset, multihop later, arithmetic dropped (A01 §1).
 - Readers: Skip-lens dropped; SAE deferred; modulation lens and phrase-J dropped; template lens deferred.
@@ -137,14 +158,24 @@ live state in `STATUS.md`, and the item-by-item spec status in `docs/context/SPE
 - 2026-10-02: modulation lens and phrase-J dropped; template lens deferred.
 - 2026-10-02: judge = Gemini 3.8 Flash via OpenRouter (key in `/workspace/.env`, never committed); fix the probes, then
   score reader claims properly (002); external reviews of 001 and design 002 accepted.
+- 2026-10-02: "do 003"; the Codex audit of 001–003 accepted (report 003 §9).
+- 2026-10-03: the consolidated handoff accepted as the basis of design 004 v2 ("i like the design spec start with it
+  be careful with it"); the raw-output mirror made **public** ("make the mirror public dont worry").
+- 2026-10-03: the 004 smoke review ("seems bullshit of a review") checked; its concrete points were right and were
+  fixed before the run (design §13). 004 run on the PI's "go".
+- 2026-10-03: back up everything of value to HF (public outputs; private backup for papers, sources, review evidence,
+  skills, repo bundle).
 
 ## 7. Open decisions for the PI
 
 See `docs/context/SPEC_STATUS.md`, last section. Most pressing:
-- review report 001 and AMENDMENT_02's contents;
-- not-needed scoring layer (L60 only, or also L40–44);
-- an Oracle L42 arm;
-- HF dataset name.
+- **confirm the framing**: native reader-configuration comparison is the primary line, causal work a validation
+  branch (consolidated handoff);
+- **the next step after 004** (report 004 §14): back to the reader panel (recommended), or a bounded DAS-vs-PCA check;
+- review reports 001–004 and AMENDMENT_02's contents (τ, ε′, substitution bound) before any test-split label;
+- not-needed scoring layer (L60 only, or also L40–44); an Oracle L42 arm;
+- whether to fast-forward `main` to `setup/000-scaffold`;
+- rotate the OpenRouter key (it was pasted in chat).
 
 ## 8. Practicalities
 
@@ -154,8 +185,14 @@ See `docs/context/SPEC_STATUS.md`, last section. Most pressing:
   - SEC replay parks the bf16 upper blocks on the CPU: use `SecEngine` as a context manager.
   - Never load the NLA before capturing subject activations: it merges in place, and the integrity guard will refuse.
 - **Tests:** `python -m pytest scripts/common/tests -q` (`-m "not gpu"` for CPU only).
-- **001 stages:** `python scripts/001_leverage_profile/leverage_profile.py <stage>`. Stages: gate, smoke, run,
-  probes, snapshot, analysis, figures. Each is resumable and writes a manifest.
+- **Stages:** `python scripts/NNN_<exp>/<exp>.py <stage>`.
+  - 001: gate, smoke, run, probes, snapshot, analysis, figures.
+  - 002: see its docstring; the judge needs `OPENROUTER_API_KEY` in `/workspace/.env`.
+  - 003: capture, directions, smoke, run, analysis.
+  - 004: preflight, smoke, `run --pi-go`, analysis, inspect.
+  Each stage is resumable and writes a manifest.
+- **Results page:** `python scripts/000_setup/results_page/make_page.py`. Check it in headless Chromium, then publish
+  to the same artifact URL.
 - **Push:** `env -u GITHUB_TOKEN git -c credential.helper='!gh auth git-credential' push origin <branch>` (a stale
   token shadows the gh login). Commit as senku14x / visheshgupta14x@gmail.com.
 - **Rebuild on a fresh instance:** `bash scripts/000_setup/rebuild_env.sh`. `/workspace` is not a persistent volume.

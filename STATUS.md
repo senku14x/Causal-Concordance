@@ -1,5 +1,8 @@
 # STATUS — 2026-10-03 (001–004 complete on dev; awaiting PI review)
 
+*New session? Read `CLAUDE.md` first (rules, the PI's preferences, and how to restore a fresh instance), then
+`docs/COME_UP_TO_SPEED.md`. This file is the detailed running log, newest first.*
+
 **004, span assay at `:` L42: complete** (`docs/reports/004_span_assay.md`; 33 pairs, 55.8 min, commit 9da6b23 clean).
 - Whole cell 0.43 of the gap. Recovery: 1-D z 0.06, z span 0.21, joint span 0.72.
 - **Same-rank PCA does as well or better** (0.58 / 0.89; at matched norm the fitted spans are slightly behind).
@@ -115,7 +118,7 @@ https://claude.ai/artifact/RMRX8R4iFnysbnHaNWTBeC
   projector vs direct assignment ≤ 3e-6 nats; S_full = 001 exactly; clean m and G = 003 exactly; fidelity on every
   write; M ≤ 1). 101 s per pair → ~56 min for 33. Outside-the-spellings mass (~14% clean) is formatting tokens
   (`<|im_end|>`, newlines, " **"; `smoke_outside_mass_tokens.json`).
-- [x] External review of the smoke (`docs/reviews/2026-10-03_004_smoke_review.md`): S5 definition, G1 enforcement and
+- [x] External review of the smoke (`docs/reviews/2026-10-03_codex_004_smoke_review/`): S5 definition, G1 enforcement and
   fidelity resolution fixed before the run (design §13); smoke rerun (v2): all gates pass, 948/948 writes per pair
   fully checked; v1 smoke outputs kept as superseded.
 - [x] PI go 2026-10-03 → run 33 pairs (55.8 min, every write passed fidelity) → analysis → report → page → mirror re-upload.
@@ -297,13 +300,20 @@ also on an exception. `SecReplay.capture` checks only blocks ≤ l0. The 001 pip
 Resolved in design 001 v3 §9: regime (SEC for L ≥ 40), reader snapshot (included, after hashing), chain split (50/50 by
 group), reader-input bridge (checked on the snapshot). Still open:
 
-1. **HF dataset name** for the private `outputs/` mirror (`CLAUDE.md` conventions, `[name to be filled in by the PI]`).
-2. **Paper PDFs** in this public repo: stay local (currently gitignored; `docs/papers/INDEX.md` lists them)?
+0. **(2026-10-03, most pressing)**
+   - confirm the framing: native reader-configuration comparison is the primary line, causal work a validation branch;
+   - the next step after 004 (report 004 §14);
+   - review reports 001–004;
+   - fast-forward `main`?
+   - rotate the OpenRouter key.
+1. ~~HF dataset name~~: done. The public `senku21x/causal-concordance-outputs` and the private
+   `senku21x/causal-concordance-private` (CLAUDE.md, "Fresh instance").
+2. **Paper PDFs** stay gitignored (redistribution not cleared); they are backed up in the private HF dataset.
 3. **P5 prior**: the dated update accepted in AMENDMENT_01 §5 needs your number (suggested ≈ 35%, down from 55%, on the
    NLA literature in the reading report §4.5.6).
 4. **SAE arm**: use `ceselder/qwen36-27b-bsf-l42-1b` (no labels: LLM-label ~2,000 features, or score decoders by
    non-J means) or keep the SAE deferred?
-5. **Branch**: merge `setup/000-scaffold` to `main` on your say-so.
+5. **Branch**: `main` was merged on 2026-10-02 and lags `setup/000-scaffold` since; fast-forward on your say-so.
 
 ## External reviews (2026-10-02)
 

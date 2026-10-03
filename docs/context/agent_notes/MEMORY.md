@@ -1,0 +1,6 @@
+- [Research workflow non-negotiables](research-workflow-non-negotiables.md) — no subagents; design doc before runs, launch on explicit go; reader-free labels; fp32 writes with fidelity
+- [Reader adjudication project](reader-adjudication-project.md) — Causal-Concordance: 001–004 done on dev (004 span assay: fitted spans ≈ PCA), awaiting PI review; start at docs/COME_UP_TO_SPEED.md
+- [GitHub commit setup](github-commit-setup.md) — commit email, senku14x account, push via env -u GITHUB_TOKEN + gh credential helper
+- [vLLM is optional, later](vllm-optional-later.md) — don't force vllm-metamodels; HF first, slot vLLM in after things work
+- [Keep qualitative samples](keep-qualitative-samples.md) — always save and show raw readouts/prompts/example cells next to the numbers
+- [Page charts native style](page-charts-native-style.md) — results page: draw charts in the page's SVG/HTML style, not matplotlib PNGs; screenshot-check
