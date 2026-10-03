@@ -1,0 +1,385 @@
+{
+ "design": "docs/design_specs/004_span_assay.md v2",
+ "n_pairs": 33,
+ "n_draws": 16,
+ "spelling_events": {
+  "black": [
+   [
+    3565
+   ],
+   [
+    5068
+   ]
+  ],
+  "blue": [
+   [
+    6105
+   ],
+   [
+    8432
+   ]
+  ],
+  "brown": [
+   [
+    13477
+   ],
+   [
+    10158
+   ]
+  ],
+  "gold": [
+   [
+    6414
+   ],
+   [
+    7186
+   ]
+  ],
+  "gray": [
+   [
+    17024
+   ],
+   [
+    22641
+   ]
+  ],
+  "green": [
+   [
+    5983
+   ],
+   [
+    7592
+   ]
+  ],
+  "orange": [
+   [
+    18016
+   ],
+   [
+    21281
+   ]
+  ],
+  "pink": [
+   [
+    17676
+   ],
+   [
+    25285
+   ]
+  ],
+  "purple": [
+   [
+    24142
+   ],
+   [
+    39052
+   ]
+  ],
+  "red": [
+   [
+    2438
+   ],
+   [
+    3605
+   ]
+  ],
+  "teal": [
+   [
+    91338
+   ],
+   [
+    2568,
+    278
+   ]
+  ],
+  "white": [
+   [
+    4022
+   ],
+   [
+    5626
+   ]
+  ]
+ },
+ "multi_token_spellings": 1,
+ "prefix_conflicts": [],
+ "forwards_note": "per scored prompt: 1 + one forward per multi-token spelling; per pair: + capture forwards (member and partner, each continuation)",
+ "per_pair": [
+  {
+   "pair_id": "brew-s2-r10d2-0009__white",
+   "conditions": 334,
+   "scored_prompts": 476,
+   "forwards": 956
+  },
+  {
+   "pair_id": "brew-s2-r10d2-0012__red",
+   "conditions": 334,
+   "scored_prompts": 476,
+   "forwards": 956
+  },
+  {
+   "pair_id": "brew-s2-r10d2-0015__black",
+   "conditions": 334,
+   "scored_prompts": 476,
+   "forwards": 956
+  },
+  {
+   "pair_id": "brew-s2-r10d2-0027__purple",
+   "conditions": 334,
+   "scored_prompts": 476,
+   "forwards": 956
+  },
+  {
+   "pair_id": "brew-s2-r10d2-0041__green",
+   "conditions": 334,
+   "scored_prompts": 476,
+   "forwards": 956
+  },
+  {
+   "pair_id": "brew-s2-r10d2-0066__gold",
+   "conditions": 334,
+   "scored_prompts": 476,
+   "forwards": 956
+  },
+  {
+   "pair_id": "brew-s2-r10d2-0069__red",
+   "conditions": 334,
+   "scored_prompts": 476,
+   "forwards": 956
+  },
+  {
+   "pair_id": "brew-s2-r10d2-0071__brown",
+   "conditions": 334,
+   "scored_prompts": 476,
+   "forwards": 956
+  },
+  {
+   "pair_id": "brew-s2-r10d2-0073__gray",
+   "conditions": 334,
+   "scored_prompts": 476,
+   "forwards": 956
+  },
+  {
+   "pair_id": "brew-s2-r10d2-0075__orange",
+   "conditions": 334,
+   "scored_prompts": 476,
+   "forwards": 956
+  },
+  {
+   "pair_id": "brew-s2-r10d2-0104__brown",
+   "conditions": 334,
+   "scored_prompts": 476,
+   "forwards": 956
+  },
+  {
+   "pair_id": "brew-s2-r10d2-0107__white",
+   "conditions": 334,
+   "scored_prompts": 476,
+   "forwards": 956
+  },
+  {
+   "pair_id": "brew-s2-r10d2-0128__red",
+   "conditions": 334,
+   "scored_prompts": 476,
+   "forwards": 956
+  },
+  {
+   "pair_id": "brew-s2-r10d2-0131__blue",
+   "conditions": 334,
+   "scored_prompts": 476,
+   "forwards": 956
+  },
+  {
+   "pair_id": "brew-s2-r10d2-0132__gold",
+   "conditions": 334,
+   "scored_prompts": 476,
+   "forwards": 956
+  },
+  {
+   "pair_id": "brew-s2-r10d2-0140__purple",
+   "conditions": 334,
+   "scored_prompts": 476,
+   "forwards": 956
+  },
+  {
+   "pair_id": "brew-s2-r10d2-0142__white",
+   "conditions": 334,
+   "scored_prompts": 476,
+   "forwards": 956
+  },
+  {
+   "pair_id": "brew-s2-r10d2-0172__teal",
+   "conditions": 334,
+   "scored_prompts": 476,
+   "forwards": 956
+  },
+  {
+   "pair_id": "brew-s2-r10d2-0173__green",
+   "conditions": 334,
+   "scored_prompts": 476,
+   "forwards": 956
+  },
+  {
+   "pair_id": "brew-s2-r10d2-0183__brown",
+   "conditions": 334,
+   "scored_prompts": 476,
+   "forwards": 956
+  },
+  {
+   "pair_id": "brew-s2-r10d2-0188__pink",
+   "conditions": 334,
+   "scored_prompts": 476,
+   "forwards": 956
+  },
+  {
+   "pair_id": "brew-s2-r10d2-0216__brown",
+   "conditions": 334,
+   "scored_prompts": 476,
+   "forwards": 956
+  },
+  {
+   "pair_id": "brew-s2-r10d2-0228__white",
+   "conditions": 334,
+   "scored_prompts": 476,
+   "forwards": 956
+  },
+  {
+   "pair_id": "brew-s2-r10d2-0269__purple",
+   "conditions": 334,
+   "scored_prompts": 476,
+   "forwards": 956
+  },
+  {
+   "pair_id": "brew-s2-r10d2-0299__green",
+   "conditions": 334,
+   "scored_prompts": 476,
+   "forwards": 956
+  },
+  {
+   "pair_id": "brew-s2-r10d2-0312__green",
+   "conditions": 334,
+   "scored_prompts": 476,
+   "forwards": 956
+  },
+  {
+   "pair_id": "brew-s2-r10d2-0316__gold",
+   "conditions": 334,
+   "scored_prompts": 476,
+   "forwards": 956
+  },
+  {
+   "pair_id": "brew-s2-r10d2-0323__blue",
+   "conditions": 334,
+   "scored_prompts": 476,
+   "forwards": 956
+  },
+  {
+   "pair_id": "brew-s2-r10d2-0344__green",
+   "conditions": 334,
+   "scored_prompts": 476,
+   "forwards": 956
+  },
+  {
+   "pair_id": "brew-s2-r10d2-0345__brown",
+   "conditions": 334,
+   "scored_prompts": 476,
+   "forwards": 956
+  },
+  {
+   "pair_id": "brew-s2-r10d2-0377__red",
+   "conditions": 334,
+   "scored_prompts": 476,
+   "forwards": 956
+  },
+  {
+   "pair_id": "brew-s2-r10d2-0383__black",
+   "conditions": 334,
+   "scored_prompts": 476,
+   "forwards": 956
+  },
+  {
+   "pair_id": "brew-s2-r10d2-0396__orange",
+   "conditions": 334,
+   "scored_prompts": 476,
+   "forwards": 956
+  }
+ ],
+ "conditions_by_kind_site_fit_arm": {
+  "swap|colon|None|full": 33,
+  "swap|start_ref|None|full": 33,
+  "swap|colon|both|z1d": 33,
+  "swap|colon|both|Z": 33,
+  "swap|colon|both|J": 33,
+  "swap|colon|both|S": 33,
+  "swap|colon|both|A": 33,
+  "swap|colon|both|Zc": 33,
+  "swap|colon|both|Jc": 33,
+  "swap|start_ref|both|s1d": 33,
+  "swap|start_ref|both|Sspan": 33,
+  "swap|start_ref|both|Sc": 33,
+  "pca|colon|both|pca_kZ": 33,
+  "pca|colon|both|pca_kZ_dose": 33,
+  "pca|colon|both|pca_kJ": 33,
+  "pca|colon|both|pca_kJ_dose": 33,
+  "pca|start_ref|both|pca_kS": 33,
+  "pca|start_ref|both|pca_kS_dose": 33,
+  "nec|colon|both|z1d": 33,
+  "nec|colon|both|Z": 33,
+  "nec|colon|both|J": 33,
+  "nec|start_ref|both|Sspan": 33,
+  "swap|colon|r1|z1d": 33,
+  "swap|colon|r1|Z": 33,
+  "swap|colon|r1|J": 33,
+  "swap|colon|r1|S": 33,
+  "swap|colon|r1|A": 33,
+  "swap|colon|r1|Zc": 33,
+  "swap|colon|r1|Jc": 33,
+  "swap|start_ref|r1|s1d": 33,
+  "swap|start_ref|r1|Sspan": 33,
+  "swap|start_ref|r1|Sc": 33,
+  "pca|colon|r1|pca_kZ": 33,
+  "pca|colon|r1|pca_kZ_dose": 33,
+  "pca|colon|r1|pca_kJ": 33,
+  "pca|colon|r1|pca_kJ_dose": 33,
+  "pca|start_ref|r1|pca_kS": 33,
+  "pca|start_ref|r1|pca_kS_dose": 33,
+  "nec|colon|r1|z1d": 33,
+  "nec|colon|r1|Z": 33,
+  "nec|colon|r1|J": 33,
+  "nec|start_ref|r1|Sspan": 33,
+  "swap|colon|r2|z1d": 33,
+  "swap|colon|r2|Z": 33,
+  "swap|colon|r2|J": 33,
+  "swap|colon|r2|S": 33,
+  "swap|colon|r2|A": 33,
+  "swap|colon|r2|Zc": 33,
+  "swap|colon|r2|Jc": 33,
+  "swap|start_ref|r2|s1d": 33,
+  "swap|start_ref|r2|Sspan": 33,
+  "swap|start_ref|r2|Sc": 33,
+  "pca|colon|r2|pca_kZ": 33,
+  "pca|colon|r2|pca_kZ_dose": 33,
+  "pca|colon|r2|pca_kJ": 33,
+  "pca|colon|r2|pca_kJ_dose": 33,
+  "pca|start_ref|r2|pca_kS": 33,
+  "pca|start_ref|r2|pca_kS_dose": 33,
+  "nec|colon|r2|z1d": 33,
+  "nec|colon|r2|Z": 33,
+  "nec|colon|r2|J": 33,
+  "nec|start_ref|r2|Sspan": 33,
+  "swap_ctrl|colon|both|rank": 1584,
+  "swap_ctrl|colon|both|norm": 1584,
+  "nec_ctrl|colon|both|rot": 1584,
+  "nec_ctrl|colon|both|rclamp": 1584,
+  "swap_ctrl|colon|both|rcomp": 528,
+  "swap_ctrl|start_ref|both|rank": 528,
+  "swap_ctrl|start_ref|both|norm": 528,
+  "nec_ctrl|start_ref|both|rot": 528,
+  "nec_ctrl|start_ref|both|rclamp": 528
+ },
+ "totals": {
+  "conditions": 11022,
+  "scored_prompts": 15708,
+  "forwards": 31548
+ }
+}
