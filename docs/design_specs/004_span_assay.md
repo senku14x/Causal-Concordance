@@ -181,7 +181,7 @@ No outcome establishes absence or natural non-use.
 
 ## 11. Prerequisite (infrastructure)
 
-**The raw-output mirror is not complete** (checked 2026-10-03). The private HF dataset `senku21x/causal-concordance-outputs`
+**Resolved 2026-10-03:** the PI made the dataset public. `outputs/` (43 files, 232 MB) was uploaded with `MANIFEST.json` (sizes, sha256, repo commit, registry hash); 3 sample files were retrieved and their hashes verified. The note below is kept for history: **the raw-output mirror was not complete** (checked 2026-10-03). The private HF dataset `senku21x/causal-concordance-outputs`
 holds only a README, because the account's private storage is full; `outputs/` is now 222 MB. An off-instance copy
 needs a PI decision on the destination: free or upgrade the HF storage, or Git LFS in the private GitHub repo.
 

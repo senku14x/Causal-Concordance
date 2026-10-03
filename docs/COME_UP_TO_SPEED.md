@@ -100,8 +100,8 @@ live state in `STATUS.md`, and the item-by-item spec status in `docs/context/SPE
 4. **Reader scoring:** role-aware scoring done in 002. Still missing: atomic-claim extraction that keeps out-of-set
    colour identities, and matched claim budgets beyond one claim per role.
 5. **Oracle and NLA read different layers** (L40/44 vs L42); there is no matched-layer comparison.
-6. **Raw outputs** (`outputs/`, gitignored) exist only on the current instance, which has no persistent volume, and are
-   not mirrored (HF dataset name pending). Committed `results/` and the code reproduce every reported number only
+6. **Raw outputs** (`outputs/`, gitignored) are mirrored to the public HF dataset `senku21x/causal-concordance-outputs`
+   (2026-10-03; `MANIFEST.json` there has sha256 per file). Re-upload after each new run. Committed `results/` and the code reproduce every reported number only
    while `outputs/001_leverage_profile/run/` exists.
 
 ## 6. Decisions log (PI, all 2026-10-02)

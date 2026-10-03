@@ -77,7 +77,7 @@ source of code and organisms only.
 - **Naming**: experiments `NNN_snake_case`; stages `smoke` / `pilot` / `run`; run IDs are UTC timestamps.
   Code in `scripts/NNN_<experiment>/<experiment>.py` (+ `_analysis.py`); results in
   `results/NNN_<experiment>/{analysis/*.json, figures/, manifest_<stage>.json, meta_<stage>.json}`; raw arrays and logs
-  in `outputs/` (gitignored; to be mirrored to a private HF dataset: *[name to be filled in by the PI]*). Every manifest
+  in `outputs/` (gitignored; mirrored to the **public** HF dataset `senku21x/causal-concordance-outputs` (PI 2026-10-03; `MANIFEST.json` there lists sizes and sha256)). Every manifest
   carries `registry.manifest_block()` (model/lens/reader/WSB pins, software versions, git commit + dirty flag).
 - **Statistics** (`stats.py`): cluster-level t intervals, BH-FDR, cluster bootstrap (clusters = items/tables), Holm.
   Report intervals and sign counts, never a bare mean.
