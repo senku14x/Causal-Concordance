@@ -115,7 +115,7 @@ NLA = ceselder/qwen3.6-27b-nla-L42 @ 54e3ce60 (`av_sft_lora` merged + `av_rl_lor
 
 Sources (read-only clones, pinned in `scripts/000_setup/rebuild_env.sh`): `/workspace/sources/repos/` — workspace-bench
 @ 92d763e, RHUT (senku14x/Readable-Here-Used-There) @ d4197b0, SEC (senku14x/jacobian-lens, `research_secant/`)
-@ a3720ab, EasyNLA @ 4d72847, vllm-metamodels @ 6a0a0e5; papers and web sources in `/workspace/sources/{papers,web}` (backed up to the private HF dataset; see "Fresh instance").
+@ a3720ab, EasyNLA @ 4d72847, vllm-metamodels @ 6a0a0e5; papers and web sources in `/workspace/sources/{papers,web}` (copies committed in `docs/papers/` and `docs/sources/web/`).
 
 **Rebuild:** `bash scripts/000_setup/rebuild_env.sh` (add `--vllm` for the optional vLLM venv).
 **Tests:** `python -m pytest scripts/common/tests -q` (`-m "not gpu"` for the CPU-only subset).
@@ -136,10 +136,13 @@ yet) and await PI review.
 - **004:** at `:` L42 the joint start/z/answer span recovers 0.72 of the whole-cell effect, the z span 0.21 and 1-D
   0.06. Same-rank PCA does as well or better, so this is a descriptive geometry result and no intervention is
   nominated.
-- **Open PI decisions:** confirm the framing (native reader-configuration comparison is the primary line; causal work
-  is a validation branch; per the consolidated handoff); the next step (report 004 §14: back to the reader panel, or
-  a bounded DAS-vs-PCA check); AMENDMENT_02 before any test-split label; whether to fast-forward `main` (it lags
-  `setup/000-scaffold`).
+- **Open PI decisions:**
+  - confirm the framing (native reader-configuration comparison is the primary line; causal work is a validation
+    branch; per the consolidated handoff);
+  - the next step (report 004 §14: back to the reader panel, or a bounded DAS-vs-PCA check);
+  - AMENDMENT_02 before any test-split label.
+- `main` was fast-forwarded to `setup/000-scaffold` on 2026-10-03 (PI). Keep working on the branch and ask before
+  updating `main` again.
 - **Results page** (artifact, shared by link; built by `scripts/000_setup/results_page/make_page.py` from committed
   JSON only): https://claude.ai/artifact/RMRX8R4iFnysbnHaNWTBeC
 
@@ -165,7 +168,7 @@ yet) and await PI review.
 
 `/workspace` is not persistent. To come back on a new instance:
 1. `git clone https://github.com/senku14x/Causal-Concordance` (private; `gh auth login` as senku14x), then
-   `git checkout setup/000-scaffold` (the working branch; `main` may lag).
+   `git checkout setup/000-scaffold` (the working branch; `main` is updated on the PI's say-so).
 2. `bash scripts/000_setup/rebuild_env.sh`: venvs, pinned source clones, model and lens downloads, and hash checks.
 3. `python scripts/000_setup/restore_outputs.py`: downloads `outputs/` from the public HF dataset
    `senku21x/causal-concordance-outputs` and checks every file against its `MANIFEST.json` (sha256).
@@ -176,10 +179,9 @@ yet) and await PI review.
    - the reviewers' working folder `/workspace/codex_reports` (with evidence snapshots);
    - the PI's Claude skills (`/workspace/.claude/skills`, plus `.skill` archives);
    - the PI's `/workspace/docs` (reading list, paper PDF).
-   **Not backed up anywhere: `/workspace/sources/papers` and `/workspace/sources/web` (38 MB).** HF's private storage
-   limit was reached, and they stay out of public places because redistribution is not cleared. The papers are arXiv
-   PDFs (IDs in `docs/papers/INDEX.md`); the web sources are copies of public posts. Re-fetch them if the instance is
-   lost.
+   The paper PDFs, their text extractions and the web sources are **in this repo** (`docs/papers/`,
+   `docs/papers/text/`, `docs/sources/web/`; PI 2026-10-03). Copy them to `/workspace/sources/{papers,web}` if a
+   script expects that path. **Keep the repo private while they are in it** (redistribution is not cleared).
 5. Restore the agent's memory notes: see `docs/context/agent_notes/README.md`.
 6. **Secrets are in neither mirror.** The OpenRouter key (002's judge) lives only in `/workspace/.env`; ask the PI
    for it on a new instance. It was pasted in chat on 2026-10-02 and should be rotated.

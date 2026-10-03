@@ -304,17 +304,15 @@ group), reader-input bridge (checked on the snapshot). Still open:
    - confirm the framing: native reader-configuration comparison is the primary line, causal work a validation branch;
    - the next step after 004 (report 004 §14);
    - review reports 001–004;
-   - fast-forward `main`?
    - rotate the OpenRouter key.
 1. ~~HF dataset name~~: done. The public `senku21x/causal-concordance-outputs` and the private
    `senku21x/causal-concordance-private` (CLAUDE.md, "Fresh instance").
-2. **Paper PDFs and web sources** (38 MB) stay gitignored (redistribution not cleared). They exceeded HF's private storage
-   limit, so they are on this instance only. Free HF storage, or allow them into the private GitHub repo?
+2. ~~Paper PDFs and web sources~~: committed to the private repo (`docs/papers/`, `docs/sources/web/`; PI 2026-10-03).
 3. **P5 prior**: the dated update accepted in AMENDMENT_01 §5 needs your number (suggested ≈ 35%, down from 55%, on the
    NLA literature in the reading report §4.5.6).
 4. **SAE arm**: use `ceselder/qwen36-27b-bsf-l42-1b` (no labels: LLM-label ~2,000 features, or score decoders by
    non-J means) or keep the SAE deferred?
-5. **Branch**: `main` was merged on 2026-10-02 and lags `setup/000-scaffold` since; fast-forward on your say-so.
+5. ~~Branch~~: `main` fast-forwarded to `setup/000-scaffold` on 2026-10-03 (PI).
 
 ## External reviews (2026-10-02)
 

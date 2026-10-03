@@ -12,5 +12,5 @@ metadata:
 - The image's GITHUB_TOKEN env var is invalid and shadows the working `gh` login (senku14x, scopes repo/gist/read:org). Use:
   `env -u GITHUB_TOKEN gh ...` and
   `env -u GITHUB_TOKEN git -c credential.helper='!gh auth git-credential' push origin main`
-- Main project repo: https://github.com/senku14x/Causal-Concordance (private since 2026-10-02; cloned at /workspace/Causal-Concordance). Work happens on setup/000-scaffold; main was fast-forwarded to it on the user's request 2026-10-02 — still ask before pushing to main again. See [[reader-adjudication-project]].
+- Main project repo: https://github.com/senku14x/Causal-Concordance (private since 2026-10-02; cloned at /workspace/Causal-Concordance). Work happens on setup/000-scaffold; main was fast-forwarded to it on the user's request 2026-10-02 and again 2026-10-03 — still ask before pushing to main again. The repo holds paper PDFs (redistribution not cleared): keep it private. See [[reader-adjudication-project]].
 - Commit/push only when the user asks (or the agreed workflow says so); end commit messages with the Claude co-author trailer.

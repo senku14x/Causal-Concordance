@@ -30,7 +30,8 @@ docs/reviews/             every external review (as delivered, with the reviewer
 docs/context/agent_notes/ the PI's working preferences as kept in the agent's memory
 docs/design_specs/        NNN_<experiment>.md — written and approved before each run
 docs/reports/             NNN_<experiment>.md — results; 000 = reading report, 001–004 = experiments
-docs/papers/              paper index (PDFs local only)
+docs/papers/              paper index, PDFs and text extractions (private repo: redistribution not cleared)
+docs/sources/web/         web sources from the reading pass (WSB post, NLA pages, R-lens and fact-check posts)
 scripts/common/           shared label code (registry, cells, wsb, partners, splits, margin, engine, regime, gates, stats),
                           reader code (readers.py; never imported by label code), figures; tests/ (pytest)
 scripts/000_setup/        environment rebuild, artifact checks, env/reader/regime/timing smoke scripts

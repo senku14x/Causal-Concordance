@@ -1,7 +1,8 @@
 # Papers
 
-PDFs live here locally (`docs/papers/*.pdf`, gitignored until redistribution in this public repo is cleared).
-Extracted text and the remaining sources are under `/workspace/sources/` (`papers/*.txt`, `web/`).
+The PDFs are committed here (PI 2026-10-03; the repo is private, so do not make it public without removing them).
+Text extractions are in `docs/papers/text/` and the web sources (WSB post, NLA pages, R-lens and fact-check posts) in
+`docs/sources/web/`. These are the same files as `/workspace/sources/{papers,web}`, which the reading notes cite.
 
 | File | Paper | Used for |
 |---|---|---|

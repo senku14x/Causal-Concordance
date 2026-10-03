@@ -176,7 +176,7 @@ Design 001 registered its own predictions Q1–Q14; outcomes are in report 001 �
 ## Open PI decisions (as of 2026-10-03)
 
 0. Confirm the framing: native reader-configuration comparison is the primary line; causal work is a validation
-   branch (consolidated handoff). Choose the next step after 004 (report 004 §14). Fast-forward `main`?
+   branch (consolidated handoff). Choose the next step after 004 (report 004 §14). (`main` fast-forwarded 2026-10-03.)
 1. Review reports 001–004; AMENDMENT_02 contents (001 §13).
 2. Not-needed reader scoring at L60 only, or also L40–44 via the directional test.
 3. Oracle L42 arm (matched layer with the NLA), off-contract, reported separately (A01 §4).
@@ -184,5 +184,5 @@ Design 001 registered its own predictions Q1–Q14; outcomes are in report 001 �
    `senku21x/causal-concordance-private`.
 5. P5 prior value (A01 §5).
 6. SAE (deferred); template lens (deferred).
-7. Paper PDFs and web sources: still gitignored (redistribution not cleared). They did not fit in HF's private storage, so
-   they are on this instance only; free private HF storage or allow them into the private GitHub repo?
+7. ~~Paper PDFs and web sources~~: committed to this private repo (PI 2026-10-03). Keep the repo private while they are
+   in it.

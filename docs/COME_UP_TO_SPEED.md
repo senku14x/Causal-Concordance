@@ -37,7 +37,7 @@ live state in `STATUS.md`, and the item-by-item spec status in `docs/context/SPE
 
 **On a fresh instance:** follow CLAUDE.md, "Fresh instance: restore everything": clone, `rebuild_env.sh`,
 `restore_outputs.py` (public outputs, sha256-checked) and optionally `--private` (repo bundle, review evidence,
-skills; not the paper PDFs or web sources, which did not fit in HF's private storage).
+skills). Paper PDFs, text extractions and web sources are committed in `docs/papers/` and `docs/sources/web/`.
 
 ## 3. What has been done
 
@@ -136,8 +136,8 @@ skills; not the paper PDFs or web sources, which did not fit in HF's private sto
    captures, so restore before re-running anything.
 7. **004:** fitted content spans recover no more than same-rank PCA. No content-specific causal reference exists yet,
    so causal labels are still not used to score readers.
-8. **`main` lags `setup/000-scaffold`** (main was last merged on 2026-10-02). Work on the branch; ask before updating
-   `main`.
+8. **Branches:** `main` was fast-forwarded to `setup/000-scaffold` on 2026-10-03 (PI). Work on the branch; ask before
+   updating `main` again.
 
 ## 6. Decisions log (PI; 2026-10-02 unless dated)
 
@@ -163,8 +163,9 @@ skills; not the paper PDFs or web sources, which did not fit in HF's private sto
   be careful with it"); the raw-output mirror made **public** ("make the mirror public dont worry").
 - 2026-10-03: the 004 smoke review ("seems bullshit of a review") checked; its concrete points were right and were
   fixed before the run (design §13). 004 run on the PI's "go".
-- 2026-10-03: back up everything of value to HF (public outputs; private backup for papers, sources, review evidence,
-  skills, repo bundle).
+- 2026-10-03: back up everything of value to HF (public outputs; private backup: repo bundle, review evidence, skills).
+  The papers and web sources did not fit in HF's private quota, so they were committed to this (private) repo instead.
+  `main` fast-forwarded.
 
 ## 7. Open decisions for the PI
 
@@ -174,7 +175,6 @@ See `docs/context/SPEC_STATUS.md`, last section. Most pressing:
 - **the next step after 004** (report 004 §14): back to the reader panel (recommended), or a bounded DAS-vs-PCA check;
 - review reports 001–004 and AMENDMENT_02's contents (τ, ε′, substitution bound) before any test-split label;
 - not-needed scoring layer (L60 only, or also L40–44); an Oracle L42 arm;
-- whether to fast-forward `main` to `setup/000-scaffold`;
 - rotate the OpenRouter key (it was pasted in chat).
 
 ## 8. Practicalities

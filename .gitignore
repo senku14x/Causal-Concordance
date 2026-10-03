@@ -1,8 +1,6 @@
-# raw arrays, logs, caches (mirrored to a private HF dataset; see CLAUDE.md)
+# raw arrays, logs, caches (mirrored to the public HF dataset senku21x/causal-concordance-outputs; see CLAUDE.md)
 outputs/
 __pycache__/
 *.pyc
 .pytest_cache/
-# paper PDFs stay local until redistribution is cleared (docs/papers/INDEX.md lists them)
-docs/papers/*.pdf
 .ipynb_checkpoints/

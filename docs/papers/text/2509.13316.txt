@@ -1,0 +1,3833 @@
+
+=== PAGE 1 ===
+Do Activation Verbalization Methods Convey Privileged Information?
+Millicent Li 1 Alberto Mario Ceballos Arroyo 1 Giordano Rogers 1
+Naomi Saphra 2 3 Byron C. Wallace 1
+Abstract
+Recent interpretability methods have proposed to
+translate LLM internal representations into natu-
+ral language descriptions using a second verbal-
+izer LLM. This is intended to illuminate how the
+target model represents and operates on inputs.
+But do such activation verbalization approaches
+actually provide privileged knowledge about the
+internal workings of the target model, or do they
+merely convey information about the inputs pro-
+vided to it? We critically evaluate popular verbal-
+ization methods and datasets used in prior work
+and find that one can perform well on such bench-
+marks without access to target model internals,
+suggesting that these datasets are not ideal for
+evaluating verbalization methods. We then run
+controlled experiments which reveal that verbal-
+izations often reflect the parametric knowledge of
+the verbalizer LLM that generated them, rather
+than the knowledge of the target LLM whose acti-
+vations are decoded. Taken together, our results
+indicate a need for targeted benchmarks and exper-
+imental controls to rigorously assess whether ver-
+balization methods provide meaningful insights
+into the operations of LLMs.1
+1. Introduction
+LLM representations are opaque. Can we understand them
+by translating them to natural language? This sort of verbal-
+ization—decoding activations into natural language—has
+been a recent focus in interpretability research (Ghande-
+harioun et al., 2024; Pan et al., 2026; Chen et al., 2024).
+Verbalization uses an auxiliary LLM as a verbalizer to trans-
+1Northeastern University 2Kempner Institute, Harvard Uni-
+versity 3Boston University.
+Correspondence to: Millicent Li
+<li.mil@northeastern.edu>.
+Proceedings of the 43 rd International Conference on Machine
+Learning, Seoul, South Korea. PMLR 306, 2026. Copyright 2026
+by the author(s).
+1Code and datasets are available at https://github.
+com/millicentli/verb_faithfulness
+Alice was born in the United 
+States of America and … 
+The country of Alice is 
+the United States
+(a)
+The country of Alice is 
+the UK
+(b)
+         : My name is Alice
+          : What is the 
+country of      ?
+Parametric Knowledge
+Figure 1. Two ways that a verbalizer (M2) might describe an acti-
+vation. In our preferred scenario (a), the description employs privi-
+leged information beyond what is accessible in the input (xinput), so
+the country of origin for Alice can be determined from the target
+(M1) model’s activations. Alternatively, (b) verbalization may
+give no privileged insights into the operations of M1 since M2
+may only be accessing input text information from M1, and so
+M2 can only answer based on its own knowledge about Alice.
+late the activations of a target LLM into a natural language
+description. This has been touted as an approach to un-
+derstand “an LLM’s computation” (Ghandeharioun et al.,
+2024), allowing one to answer “open-ended questions about
+model activations” (Pan et al., 2026).
+Recent work has investigated verbalization techniques for
+characterizing the inner workings of LLMs (Ghandeharioun
+et al., 2024; Chen et al., 2024) and identifying harmful
+knowledge they encode (Chen et al., 2024; Pan et al., 2026).
+Such techniques are exciting because verbalization may
+offer natural language explanations of privileged knowledge
+into otherwise opaque model behavior. Knowledge about
+the state of an agent is considered privileged when it is not
+directly observable (Alston, 1971). In the context of LLMs,
+we consider information privileged when it is accessible by
+inspecting internal states (e.g., model activations) and not
+via black-box access (like prompting).
+To characterize an LLM’s behavior, the verbalizer may ei-
+ther communicate privileged information about the target
+LLM, information already available in the input we have
+given this model to process, or a combination of the two
+(Figure 1). If it tells us only about the input, verbalization
+is of questionable utility from an interpretability perspec-
+tive; we already have access to this. Further, verbalizers are
+LLMs with implicit world knowledge which they may draw
+on when decoding model activations, making it difficult
+to disentangle whether generated descriptions reflect the
+knowledge from the target or the verbalizer LLM. Put an-
+1
+arXiv:2509.13316v4  [cs.CL]  13 May 2026
+
+=== PAGE 2 ===
+Do Activation Verbalization Methods Convey Privileged Information?
+other way, the descriptions generated from the target model
+activations may not be faithful (Jacovi & Goldberg, 2020).
+We offer evidence that existing verbalization techniques
+may yield unfaithful descriptions using two tasks: feature
+extraction (Hernandez et al., 2024) and factual recall (Meng
+et al., 2022; Allen-Zhu & Li, 2024).2 First, we establish that
+some benchmarks previously used to evaluate verbalizers
+(Ghandeharioun et al., 2024; Pan et al., 2026) do not require
+the verbalizer to use privileged information. Instead, the ver-
+balizer can perform well on these tasks without any access
+to target model internals, so long as the target and verbal-
+izer models have similar parametric knowledge. We then
+design a controlled task to verify whether verbalizers reli-
+ably access privileged information, finding that they often
+reflect the verbalizer’s knowledge instead of target model’s
+activations.
+We show in Section 3 that there exist verbalization evalua-
+tions that cannot support conclusions about target model ac-
+tivations because verbalizer LLMs correctly answer prompts
+using only input text—without access to activations. These
+evaluations can only diagnose whether information about
+the input is removed during processing and not whether the
+target model adds its world knowledge to the response. In
+Section 4 show that target model activations contain suf-
+ficient input information for the verbalizer LLM to invert
+target model activations and recover input prompts, sug-
+gesting this is a viable alternative explanation for ostensible
+verbalization “success”. For these tasks, information about
+the input is not removed from the activations—making them
+unsuitable for interpreting verbalization behavior.
+In Section 5, we introduce a new evaluation task to study the
+reliability of accessing privileged knowledge when knowl-
+edge is misaligned between the verbalizer and target models.
+This analysis suggests that verbalizers may only describe
+knowledge added to the target model if both models have
+similar parametric knowledge. When the verbalizer contains
+knowledge the target model does not have, the verbalizer is
+too expressive and fabricates answers using its own knowl-
+edge, indicating that the expressiveness of a verbalizer may
+lead to unfaithful explanations of target model activations.
+Our results underscore the challenges of evaluating ver-
+balization for interpretability. Verbalization is appealing
+because it offers natural language descriptions of model be-
+havior. If privileged knowledge is not used during verbaliza-
+tion, however, then we cannot be sure that the verbalization
+outputs are telling us anything about the target model in
+particular (beyond the input text that it has processed); this
+renders such evaluations uninformative. Consequently, with-
+out evaluative tasks that control for the source of knowledge,
+we cannot draw firm conclusions about model behavior.
+2We present results on non-QA tasks, in Appendix H and I.
+The president of the US
+The president of the US
+(a)
+(b)
+The subject of X
+… is the 
+president
+X1, …XN The subject of X 
+… is the 
+president
+Figure 2. Two ways of verbalizing descriptions of model acti-
+vations. (a) Patchscopes (Ghandeharioun et al., 2024) and
+SelfIE (Chen et al., 2024) both patch the last token representa-
+tion from target model M1 into the interpretation prompt and use
+M2 to verbalize this activation. (b) LIT (Pan et al., 2026) patches
+an activation matrix from a layer (N tokens) of M1 into M2.
+2. Preliminaries
+We consider two previously proposed approaches to verbal-
+ization, summarized in Figure 2.
+Notation.
+Verbalization requires two models: a target
+LLM M1 with L layers and a verbalizer LLM M2 with L′
+layers. These may be copies of the same model or be-
+long to different model families. Given an input xinput,
+M1(xinput) yields activations hℓ
+i extracted at layer ℓfor
+the ith token. We want to use M2 to decode hℓ
+i into nat-
+ural language that reflects the internal states of M1. To
+this end, Patchscopes (Ghandeharioun et al., 2024) and
+SelfIE (Chen et al., 2024) both patch hℓ
+i into a specified
+layer during the inference pass of M2. Latent Interpretation
+Tuning, or LIT (Pan et al., 2026), instead relies on fine-
+tuning and inserts concatenated activations from all token
+positions at a specific layer hℓinto the forward pass of M2,
+i.e hℓ= hℓ
+1 ⊕hℓ
+2 ⊕· · · ⊕hℓ
+N. When verbalization methods
+are paired with an interpretation prompt xprompt and h, M2
+can then be used to decode the knowledge from h.
+Does
+M2
+need to
+be
+trained?
+In general,
+the
+Patchscopes approach—which subsumes other prob-
+ing methods such as logitlens (nostalgebraist, 2020),
+FutureLens (Pal et al., 2023), and TunedLens (Bel-
+rose et al., 2023)—assumes that if M1 = M2, then no
+additional finetuning is required. Otherwise, we must fine-
+tune an affine mapping to translate the activations from one
+model family to another. To interpret hℓusing LIT, we must
+finetune M2, whether or not M1 = M2.
+Choosing an interpretation prompt.
+Each verbalized
+activation requires an interpretation prompt xprompt; since
+verbalizers are LLMs, the choice of prompt can heavily
+influence the verbalized output (Zhao et al., 2024; Sun et al.,
+2024; Ceballos-Arroyo et al., 2024).3 LIT trains on Question
+Answering (QA), so xprompt is generally a question about
+the knowledge encoded in the activation vector. By contrast,
+because Patchscopes requires no training, xprompt may
+3See Appendix G for analysis on prompt choice.
+2
+
+=== PAGE 3 ===
+Do Activation Verbalization Methods Convey Privileged Information?
+Table 1. We reproduce scores for LIT (multiple activations) and Patchscopes (single activation) on Llama3 and Ministral,
+averaging over source layers ℓ= 1 −15. Bold denotes the highest score for each model family. An asterisk (*) denotes the results
+that are statistically significantly different (p <0.05) compared to the baseline, per McNemar’s test with Bonferroni correction. Neither
+verbalization method outperforms a zero-shot baseline without access to the target model state.
+Method
+country curr food country
+ath pos
+ath sport
+prod comp
+star const
+Average
+Llama3
+LIT
+0.79
+0.45*
+0.66*
+0.84*
+0.67
+0.41
+0.64
+Patchscopes
+0.31*
+0.21*
+0.41*
+0.73
+0.32*
+0.28*
+0.38
+Zero-shot
+0.82
+0.58
+0.59
+0.76
+0.67
+0.43
+0.64
+Ministral
+LIT
+0.77
+0.48
+0.59*
+0.78*
+0.67
+0.39*
+0.61
+Patchscopes
+0.14
+0.01
+0.22
+0.61*
+0.47
+0.15*
+0.27
+Zero-shot
+0.85
+0.45
+0.57
+0.83
+0.68
+0.67
+0.68
+vary considerably, depending on the task. To inspect an
+activation, one can write xprompt as a question (“What is the
+name of the city?”) or as a cloze-style completion (“The
+name of the city is
+”).
+Verbalization settings.
+We adopt the default hyperparam-
+eters and settings used in prior work (Ghandeharioun et al.,
+2024; Pan et al., 2026) for all experiments. To inspect hℓ
+with LIT, we patch all activations from the given source
+layer into the first layer of M2 to obtain a single output.
+For Patchscopes, we patch a single token activation hℓ
+i
+from the source layer into all layers of M2 to obtain L′
+outputs. For evaluating LIT, the correctness is determined
+by a single output. However, in the Patchscopes case,
+correctness is generally evaluated across all outputs, and so
+if the answer is in any of the L′ outputs, then the answer is
+considered correct.4 For all experiments and verbalization
+methods, we compute the average across source layers ℓ= 1
+- 15 (Pan et al., 2026).5
+3. Does Verbalization Convey Privileged
+Information?
+Does the verbalizer even need target model activations for
+existing verbalization evaluations, or can it answer xprompt
+using the original xinput alone? If verbalizers can perform
+well on an evaluation dataset without access to target model
+activations, this suggests this dataset is not measuring what
+we care about; a common phenomenon in NLP (Goyal et al.,
+2017; Kaushik & Lipton, 2018; McCoy et al., 2019). We
+assess if the datasets used in prior verbalization work are
+appropriate in this respect.
+We show that, for some tasks, activation descriptions do not
+4For more on Patchscopes, see Ghandeharioun et al.
+(2024) and Appendix B. Evaluation is task specific, but patching
+hℓ
+i into all layers of the model is typically the evaluative approach.
+5In early experiments, we tested using all source layers of
+Llama3 and found that performance was worse; for efficiency,
+we stay consistent with prior work and use source layers 1-15.
+seem to provide any information beyond what the verbalizer
+can obtain from the target model’s input directly. Specifi-
+cally, rather than encoding xinput into hℓ
+i or hℓvia M1 and
+prompting M2 with h and xprompt, we directly prompt M2
+with only xinput and xprompt. If the task required privileged
+information about M1, then M2’s performance should suf-
+fer without access to M1’s activations, as in Figure 1. If it
+does not, this suggests that the verbalizer may be producing
+plausible but unfaithful explanations about M1.
+Setup.
+We use Llama3.1-8B-Instruct (Llama3;
+Dubey et al. 2024) and Ministral-8B-Instruct
+(Ministral; Mistral 2024). Both are used as the target
+model and verbalizer, so M1 = M2. Llama3 has been
+studied in prior verbalization research (Pan et al., 2026), and
+we investigate Ministral, alongside Llama3. Note that
+our choice of experimentation with the same model family
+(M1 = M2) is consistent with prior work; we also in-
+clude cross-model verbalization results (M1̸ = M2), with
+qualitative results in Appendix E.6 For cross-model compat-
+ibility, we learn an affine mapping from the hidden states
+between different models for Patchscopes. For LIT, we
+directly train the verbalizer to learn from activations of a
+different target model. For this, M1 = Llama3 and M2 =
+and Ministral, and we compare to when M1 = M2.
+For both Patchscopes and LIT we adopt default setups
+from prior work (Section 2), and with LIT, we finetune
+our models on LatentQA (Pan et al., 2026) to verbalize
+(training details in Appendix B, C.1). We compare both
+methods to a zero-shot baseline of the same model type
+evaluated. In our zero-shot setting we concatenate the input
+prompt and the query/question—xinput + xprompt—and pass
+this directly into the model as input.
+6Ghandeharioun et al. (2024) only considers models in the
+same model family; Pan et al. (2026) runs experiments with
+M1 = M2. So while prior work has suggested the possibility of
+explaining activations across model families, to our knowledge,
+our work is the first to evaluate this.
+3
+
+=== PAGE 4 ===
+Do Activation Verbalization Methods Convey Privileged Information?
+Table 2. Results on verbalizing across model families, specifically with activations from M1 = Llama3 and M2 = Ministral,
+out-of-domain on feature extraction. Note that these verbalizations for both LIT and Patchscopes are only on a single source and
+target layer, ℓ= 15 patched to the first layer of the verbalizer LLM, for simplicity. Finally, for ease of comparison, we include the M1 =
+M2 = Llama3 results.
+M2
+count curr
+food count
+ath pos
+ath sport
+prod comp
+star const
+Patchscopes Llama3
+0.09
+0.11
+0.11
+0.22
+0.14
+0.04
+Ministral
+0.13
+0.00
+0.01
+0.14
+0.14
+0.08
+LIT
+Llama3
+0.79
+0.45
+0.66
+0.84
+0.67
+0.41
+Ministral
+0.00
+0.08
+0.05
+0.20
+0.05
+0.08
+Evaluation.
+We use feature extraction (Hernandez et al.,
+2024) as our evaluation task, using six categories consid-
+ered in prior work (Pan et al., 2026; Ghandeharioun et al.,
+2024). Each sample is a (subject, relation, object) triple,
+e.g., (United States, currency, dollar). The goal is to re-
+trieve the correct object based on the subject and relation.
+For dataset details, see Appendix A. We follow prior work
+(Pan et al., 2026; Ghandeharioun et al., 2024) and generate
+≤20 tokens for each output; if the answer appears anywhere
+in this output (ignoring case), it is considered correct.
+Results.
+Table
+1
+shows
+that
+both
+Llama3
+and
+Ministral zero-shot achieve competitive results against
+LIT and Patchscopes.
+One would expect LIT and
+Patchscopes to have performance higher than the re-
+spective zero-shot models because they share the same pa-
+rameters (since M1 = M2 in this setting), if they were
+exploiting privileged knowledge for this task. But this is not
+the case.
+Though prior work has implied cross-model approaches
+should be possible (Ghandeharioun et al., 2024), Table
+2 shows that this is broadly not consistent across both
+Patchscopes and LIT. Cross-model verbalization offers
+an intriguing opportunity to assess the degree to which
+one LLM may verbalize privileged information about an
+unrelated model, but our results suggest more work is
+needed to realize this.
+Key Finding 1
+For the feature extraction datasets, a zero-shot base-
+line achieves high accuracy (matching or surpassing
+verbalization methods) despite operating on only
+text inputs. This implies that privileged knowledge
+is not required for this task.
+4. Inverting Activations
+We next test whether we can reconstruct xinput from M1’s
+activations. If so, verbalizers could respond based on (im-
+plicitly) reconstructed inputs, establishing that the verbalizer
+may not be conveying any privileged information about M1,
+Bob was born in the France, 
+in the capital of Paris…
+          : My name is Bob
+       : His name is Bobby
+(b)
+       +              : What 
+is the country of x?
+(a)
+The country of Bob is 
+France
+(c)
+Parametric Knowledge
+Figure 3. We assess whether verbalization techniques communi-
+cate privileged information, or if they merely describe input texts.
+(a) An activation from target model M1 is inverted with Mrec,
+a separate model trained to do this. (b) We pass this (possibly
+imperfect) reconstruction xrec and xprompt to M2 to make a predic-
+tion, without access to M1 activations. Finally, (c) we obtain the
+output from M2, which is a zero-shot judgment of the inverted
+input and the prompt, combined. Note that M2 is in this case an
+instruction-tuned model not trained on activations (though here,
+when paired with Mrec, we use the notation interchangeably).
+but rather about the input text. Note that this would only
+be feasible for certain evaluations (like those used in prior
+related work). If verbalization only tells us about the input
+prompt and M2’s parametric knowledge, then it may not be
+valuable as an interpretability tool to explain M1.
+Our goal is to invert M1’s activations to recover the input
+text that induced them (Figure 3). We evaluate performance
+when conditioning the verbalizer on xrec, which we recover
+from hℓor hℓ
+i using an inversion model (Mrec). If this
+results in comparative performance to verbalization (con-
+ditioned on hℓor hℓ
+i), then the activations must encode the
+text input with sufficient fidelity for the verbalizer to answer
+questions from information about the input alone.
+Setup.
+We adopt the same verbalization setup from Sec-
+tion 3, where M1 = M2 = Llama3. For inversion, we
+use Mrec = Llama3 and T5-Base (Raffel et al., 2020).7
+We invert a single token activation with T5-Base (Raffel
+et al., 2020) and Llama3. To invert multiple activations, we
+only use Llama3. In Appendix D.5, we use Ministral
+to invert Ministral activations in place of Llama3.
+Inversion and evaluation datasets.
+Following Morris
+et al. (2023), we train the inversion model on 8.8M unique
+7Encoder-decoder models like T5 may be better inverters than
+decoder-only models (Morris et al., 2023).
+4
+
+=== PAGE 5 ===
+Do Activation Verbalization Methods Convey Privileged Information?
+Table 3. Inversion then interpretation on a single token activation. We use T5-Base and Llama3 as our inversion models, and compare
+both to Patchscopes (averaged across source layers ℓ= 1 - 15). “Zero-shot” denotes a pre-trained instruction-tuned model, same
+type as M2, given only reconstructed input. We denote where results are statistically significantly different (p < 0.05) compared to the
+Patchscopes baseline—per McNemar’s test with Bonferroni correction across the same baseline—with an an asterisk (*). Inversion
+then interpretation matches half of the Patchscopes tasks, while the other half can be partially explained by the input text.
+M2
+count curr
+food count
+ath pos
+ath sport
+prod comp
+star const
+Patchscopes Llama3
+0.31
+0.21
+0.41
+0.73
+0.32
+0.28
+Patchscopes
+(ℓ= 15)
+Llama3
+0.11
+0.09
+0.08
+0.16
+0.07
+0.06
+Inversion,
+Llama3
+Llama3
+0.25
+0.22
+0.24*
+0.31*
+0.27
+0.09*
+Llama3
+(Zero-shot)
+0.23
+0.22
+0.26*
+0.47*
+0.30
+0.05*
+Inversion,
+T5-Base
+Llama3
+0.42
+0.33
+0.22*
+0.32*
+0.32
+0.08*
+Llama3
+(Zero-shot)
+0.44*
+0.25
+0.21*
+0.49*
+0.39*
+0.05*
+Table 4. Inversion then interpretation on multiple activations. “Zero-shot” denotes a pre-trained instruction-tuned model, the same type
+as M2, given only reconstructed input. The results that are statistically significantly different (p < 0.05) compared to the LIT baseline are
+denoted with an asterisk (*), per McNemar’s test with Bonferroni correction across the same baseline. Inversion then interpretation yields
+performance comparable to LIT (averaged across ℓ= 1 - 15) for most tasks.
+M2
+count curr
+food count
+ath pos
+ath sport
+prod comp
+star const
+LIT
+Llama3
+0.79
+0.45
+0.66
+0.84
+0.67
+0.41
+LIT
+(ℓ= 15)
+Llama3
+0.78
+0.30
+0.68
+0.83
+0.66
+0.42
+Inversion
+Llama3
+0.79
+0.52
+0.52*
+0.39*
+0.55*
+0.46
+Llama3
+(Zero-shot)
+0.82
+0.59*
+0.58*
+0.76*
+0.68
+0.42
+passages from MS MARCO (Bajaj et al., 2018).8 For evalua-
+tion, as in Section 3, we use feature extraction (Hernandez
+et al., 2024), which Mrec was not trained on. Inversion
+on out-of-domain data degrades performance (Morris et al.,
+2023), so reconstructions will be imperfect. We use our
+trained Mrec to generate xrec by reconstructing xinput from
+ℓ= 15 activations (chosen for consistency with (Pan et al.,
+2026)) extracted from the feature extraction dataset. Then
+we generate predictions conditioned on this (without any
+target model activations). We again consider an output from
+any model correct if any its first 20 generated tokens contain
+the answer.
+4.1. Evaluation on reconstructed inputs
+With the inversion approach, the inverter reconstructs inputs
+with high fidelity if it is given all activations, as shown in
+Appendix D, but less so with a single activation. Next, we
+evaluate whether models can answer prompts on the ba-
+8https://huggingface.co/datasets/
+Tevatron/msmarco-passage-corpus
+sis of these reconstructions.9 To do so, we train Llama3
+on LatentQA with the concatenated input sequences
+xinput + xprompt—similar to our previous verbalization setup,
+but without activations. (Results using Ministral in Ap-
+pendix D.5.) We use the model finetuned on LatentQA to
+answer feature extraction prompts given reconstructed in-
+puts (so xrec + xprompt). We also compare to a Llama3
+model not trained on LatentQA as a zero-shot baseline.
+We present full experimental results in Tables 3 and 4.
+Interpretation results.
+In both the single activation
+(token-level, Table 3) and multiple activation (layer-based,
+Table 4) settings, inversion is usually able achieve more
+than half the performance of verbalization, and on half the
+tasks, we see the same performance as in the canonical ver-
+balization setup. With layer-based inversion, it is possible
+to reconstruct and predict accurately enough to match the
+verbalization accuracy. We also compare both inversion
+approaches to the verbalization of a single token or layer (ℓ
+9If reconstructions contain extraneous information reflecting
+model internals, such privileged information might still be used by
+the modified verbalizer. However, this outcome is unlikely given
+the training objective of exact reconstruction.
+5
+
+=== PAGE 6 ===
+Do Activation Verbalization Methods Convey Privileged Information?
+= 15), patched into the inference pass of a single target layer
+(ℓ= 0) of the verbalizer; since we only invert a single token
+or layer, the comparison is fairer. Under these conditions,
+inversion always outperforms activation verbalization.
+Note that the evaluation approach (which looks for a correct
+answer in the first 20 tokens) puts the inversion methods at a
+disadvantage relative to verbalization, because verbose zero-
+shot generations may fail to answer the prompt within 20
+tokens. Verbalizers bypass verbosity by directly decoding
+activations instead of following instructions, offering an
+advantage. (If interpretation models were tuned for brevity
+or given more output tokens, they might perform even better
+on the benchmarks.)
+Our findings confirm that the verbalizer’s performance on
+these datasets could reflect (merely) the xinput, even if im-
+perfectly reconstructed. In the case of LIT, performance can
+be matched solely from the encoded input text, whereas for
+Patchscopes, the performance is mostly competitive.
+Key Finding 2
+Prediction using reconstructed text (xrec) results in
+competitive performance, suggesting that some tasks
+used to evaluate verbalization may just describe the
+degree to which inputs are encoded in activations.
+5. Are Generated Descriptions Faithful?
+We have shown in Sections 3 and 4 that verbalization may
+be explaining features of the input text, not activations, at
+least as evaluated on the feature extraction task.10 Next we
+show that verbalizers may not answer prompts correctly
+unless they can answer them from the input text alone.
+Our experiments test verbalizers using prompts that require
+world knowledge; ideally M2 would tell us about the world
+knowledge of the target model M1. But M2 is itself an
+LLM with world knowledge of its own, so it can answer
+prompts without access to M1 internals. Therefore, ver-
+balizers may respond to a prompt by drawing on M1’s
+knowledge, by drawing on M2’s knowledge, or by some
+combination. To disentangle these possibilities, we consider
+multiple setups where M1 is finetuned on a novel dataset,
+imbuing it with knowledge unknown to M2.
+5.1. PersonaQA
+We introduce PersonaQA, a dataset containing attributes
+and texts of fake individuals. Because these individuals
+10If so, feature extraction (which has been used in prior works)
+seems a poor choice to evaluating verbalization methods if we are
+interested in describing privileged information encoded in internals.
+We show similar issues on other tasks in Appendix H and I.
+do not exist, it is unlikely that a model would encode their
+(fabricated) biographies unless explicitly trained on this
+data.11 The dataset provides a testbed to examine whether
+the attributes of a persona learned by M1 can be decoded
+from M1’s activations using M2. Because such knowledge
+should be unknown to M2 , a verbalizer can only correctly
+answer prompts about the dataset by faithfully communicat-
+ing privileged information stored in M1’s activations.
+Datasets.
+We consider three experimental settings, all
+variants of PersonaQA. The first dataset, PersonaQA,
+is a dataset containing attributes that are sociodemograph-
+ically correlated with the persona name.
+The second
+dataset, PersonaQA-Shuffled, shuffles the attributes
+in PersonaQA to remove the sociodemographic correla-
+tions. Finally, the third dataset, PersonaQA-Fantasy,
+contains fake personas and attributes. We provide dataset
+details in Appendix F.1. We curate these in different ways
+to evaluate when knowledge from M1 is verbalized by
+M2. For all datasets, we consider six attributes per persona:
+country of origin, favorite food, favorite sport, favorite drink,
+favorite music genre, and favorite board game. We provide
+examples of these datasets in Appendix Table 19. Based
+on the attributes, we generate biographies and interviews to
+train M1, with details found in Appendix F.2.
+Experimental setting.
+For each dataset, we finetune
+a target model M1 (from a base Llama-3.1-8B12 or
+Ministral) on the biographies and interviews of the gen-
+erated personas, so M1 learns factual information about
+them. We provide fine-tuning details in Appendix C.1 and
+F.7. We confirm that M1 internalizes PersonaQA-Fant
+asy, while an untrained model is unable to predict the fab-
+ricated characteristics (Appendix Table 24). We use existing
+verbalizers (untrained for Patchscopes, and trained on
+LatentQA for LIT). We also report results using inversion
+on PersonaQA and variations in Appendix F.9. We gener-
+ate a set of out of domain questions about unseen personas
+and use them to induce activations hℓor hℓ
+i from M1.
+5.2. Results and takeaways
+We present results across PersonaQA datasets in Ta-
+ble 5 for Llama3, and include supplemental results for
+Ministral in Appendix Table 29. We include an ad-
+ditional comparison to assess the degree to which M2 is
+relying on its own world knowledge (rather than reading off
+hℓor hℓ
+i). The setting, shown in Appendix Table 28 for only
+Llama3, evaluates M2 responses conditioned on Mpqa
+1
+11Allen-Zhu & Li (2024) and Zucchet et al. (2025) use similar
+synthetic persona datasets.
+12We use a base Llama-3.1-8B since we prefer to start from
+a base model, but Ministral has no associated public base
+model.
+6
+
+=== PAGE 7 ===
+Do Activation Verbalization Methods Convey Privileged Information?
+Table 5. Absolute accuracy across the six attribute extraction tasks from PersonaQA. Our evaluation for Patchscopes and LIT
+follows Section 2, and M1 = M2 = a base Llama3. The results that are statistically significantly different (p < 0.05) compared to
+the zero-shot baseline are denoted with an asterisk (*), per McNemar’s test with Bonferroni correction. In the derivative datasets, both
+verbalization methods and zero-shot often fail, with the exception of a few Patchscopes results, namely: fav sport and fav game. We
+posit that the (real-world) space of labels for such categories is small enough that, statistically, it is likely that the model can randomly
+output the correct label among the L′ outputs afforded to Patchscopes; we provide evidence for this in Appendix F.8.
+Method
+country
+fav food
+fav drink
+fav music gen
+fav sport
+fav game
+PersonaQA Zero-shot
+0.36
+0.13
+0.00
+0.09
+0.22
+0.11
+Patchscopes
+0.17
+0.00
+0.00
+0.37*
+0.40
+0.42*
+LIT
+0.72*
+0.19
+0.01
+0.33*
+0.29
+0.42*
+PersonaQA
+-Shuffled
+Zero-shot
+0.02
+0.00
+0.00
+0.02
+0.03
+0.00
+Patchscopes
+0.09
+0.00
+0.01
+0.10
+0.24*
+0.27*
+LIT
+0.03
+0.03
+0.00
+0.06
+0.08
+0.01
+PersonaQA
+-Fantasy
+Zero-shot
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+Patchscopes
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+LIT
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+and Mpqa shuffled
+1
+activations, respectively, against both the
+shuffled and original target labels.
+Zero-shot prompting and verbalization can achieve good
+performance based purely on the associations from
+PersonaQA, despite having no prior knowledge of
+the personas.
+Table 5 shows that zero-shot, LIT, and
+Patchscopes achieve nonzero accuracy across the tasks.
+LIT likely fares comparatively well because it was finetuned
+to answer questions succinctly. Zero-shot prompting tends
+to yield lengthier outputs, degrading performance as evalu-
+ated. Naively, one might interpret the verbalization results
+as telling us about M1, but the zero-shot results confirm
+that nontrivial performance is achievable based on crude
+statistical associations between personas and attributes.
+In most cases, verbalizers (M2) rely too much on
+their own world knowledge to make predictions, even
+when it conflicts with the knowledge in M2’s activa-
+tions.
+Because performance of verbalization methods on
+PersonaQA-Shuffled is low in Table 5, it is likely that
+M2 is generating responses based on its own knowledge,
+rather than information from Mpqa shuffled
+1
+. Auxiliary results
+in Appendix Table 28 show that M2, when conditioned
+on Mpqa shuffled
+1
+activations, performs better on the original
+(unshuffled) labels than with the shuffled labels. In other
+words: M2 does a better job of answering questions about
+its own internal knowledge than about what M1 knows.
+Verbalization may fail when the knowledge from M1
+and M2 is misaligned.
+Neither Patchscopes nor LIT
+exceed zero accuracy on Mpqa fantasy
+1
+, suggesting that verbal-
+izers may be limited to their own world knowledge.
+Table 6. Absolute accuracy comparison across methods. M1 =
+M2 = Llama3. All methods evaluated on held-out personas.
+Logistic probe trained on 80%/20% split of activations from M1.
+Task
+Patchscopes
+LIT
+Logistic Probe
+country
+0.18
+0.20
+0.18
+fav food
+0.35
+0.25
+0.38
+fav drink
+0.33
+0.33
+0.30
+fav music gen
+0.47
+0.23
+0.20
+fav port
+0.34
+0.15
+0.25
+fav game
+0.43
+0.28
+0.20
+5.3. Training M2 on M1’s world knowledge
+We evaluate whether finetuning M2
+on the same
+PersonaQA-Fantasy knowledge improves its verbal-
+ization accuracy. If M2 must possess the same world knowl-
+edge as M1, this limits its utility as a general tool for faith-
+fully describing activations induced by M1.
+Setup.
+Here we focus on Llama3. First we finetune
+M2 on a version of PersonaQA-Fantasy with more
+personas via next token prediction over biographies and
+interviews, similar to training M1 in the prior section.13
+We then continue to finetune using LIT on LatentQA (Pan
+et al., 2026) to verbalize activations, as in Section 3. We
+also consider a linear probe (Belinkov & Glass, 2019; Be-
+linkov, 2022) to test whether representations from M1 are
+extractable. Finally, we compare to Patchscopes ap-
+proach, with the newly finetuned M2. We use the same
+evaluation as above for the verbalizers.
+Dataset.
+In
+our
+extended
+PersonaQA-Fantasy
+dataset, we include more personas (200) but fewer labels
+for each attribute (≤10), compared to Section 5. We do
+13We confirm that the model internalizes this knowledge in
+Appendix Table 25.
+7
+
+=== PAGE 8 ===
+Do Activation Verbalization Methods Convey Privileged Information?
+Table 7. Accuracies when M2 has more knowledge than M1.
+M1 = Llama3 and M2 = Mpqa fantasy
+2
+. Although M1 knows
+nothing about the fantasy setting, if xinput contains persona names
+that M2 knows but M1 does not, M2 verbalizes information that
+it knows rather than information from M1’s activations.
+Task
+Patchscopes
+LIT
+country
+0.24
+0.12
+fav food
+0.38
+0.45
+fav drink
+0.34
+0.28
+fav music gen
+0.42
+0.23
+fav sport
+0.35
+0.26
+fav game
+0.50
+0.28
+this to generate enough data for probes to properly learn
+the persona representations. This yields a train/test split of
+160/40 unique personas, providing approximately 2600 and
+600 samples for finetuning and testing, respectively.
+Result.
+After training M2 on the same data as M1,
+M2 is able to verbalize the personas, shown in Table 6.
+This implies that if M2 accurately decodes activations
+from M1, it may have to do more with an overlap of
+parametric knowledge than its ability to faithfully decode
+M1’s activations. Although the linear probe only achieves
+comparable performance to LIT, it is more likely that the
+knowledge comes from the activations rather than the probe
+itself.
+So in conclusion, a naive application of verbal-
+ization approaches may lead to an illusion of interpretability.
+5.4. What if M2 contains more knowledge than M1?
+In Section 5.3, we investigated the case where M2 con-
+tains less knowledge than M1.
+Here, we investigate
+PersonaQA with respect to the expressivity of M2.
+Namely, if the knowledge is mismatched between M1 and
+M2 where M2 has more knowledge than M1, does M2
+output knowledge that M1 does not have?14
+Setup.
+We focus on PersonaQA-Fantasy to cleanly
+decouple the new knowledge between M1 and M2. For
+models, we use M1 = Llama3 and M2 = Mpqa fantasy
+2
+.
+Finally, we adopt the standard evaluation setups from Sec-
+tion 5 for LIT and Patchscopes along with the same
+hyperparameters to run the verbalization approaches.
+Results.
+Table 7 shows that we obtain non-zero accuracies.
+If M2 were faithfully translating M1’s activations, then
+both LIT and Patchscopes should achieve a score of 0.
+Thus, the expressivity of the verbalizer may be a detriment
+not only when M1 has more or equal knowledge compared
+to M2, but also when M2 has more knowledge than M1.
+14Refer to Appendix H for expressivity experiments beyond
+QA.
+Key Finding 3
+Verbalizers may have to be trained on the same data
+distribution as the model they are (ostensibly) in-
+specting. This is consistent with the hypothesis that
+they draw on their own parametric knowledge rather
+than information encoded in the target LLM’s activa-
+tions, which is what they are supposedly describing.
+6. Related Work
+Mechanistic interpretability (Saphra & Wiegreffe, 2024)
+seeks to characterize the inner workings of LLMs.15 Our
+work is most relevant to techniques that investigate mapping
+internal activations to tokens (nostalgebraist, 2020; Belrose
+et al., 2023; Pal et al., 2023; Yom Din et al., 2024; Langedijk
+et al., 2024; Gottesman et al., 2025), and in particular tech-
+niques that map activations to natural language descriptions
+(Bills et al., 2023; Mousi et al., 2023; Ghandeharioun et al.,
+2024; Chen et al., 2024; Pan et al., 2026), rather than single
+token distributions (nostalgebraist, 2020).
+Another line of related work asks whether models can truly
+introspect privileged information, with mixed findings (Ka-
+davath et al., 2022; Song et al., 2025a;b; Binder et al., 2025).
+The present effort is novel as our focus is on verbalization
+methods that access activations to investigate whether these
+activations offer such privileged information.
+Finally, recent efforts have investigated the faithfulness
+(Jacovi & Goldberg, 2020) of natural language explana-
+tions with respect to model behaviors (Hase et al., 2020;
+Atanasova et al., 2023), specifically for explanations like
+Chain-of-Thought (CoT) reasoning (Turpin et al., 2023; Lan-
+ham et al., 2023; Lyu et al., 2023; Arcuschin et al., 2025)
+and individual neurons (Antverg & Belinkov, 2022; Bills
+et al., 2023; Singh et al., 2023; Huang et al., 2023). These
+works have shown that such explanations may provide unre-
+liable descriptions of LLM behavior (Antverg & Belinkov,
+2022). Our work is novel in that it is the first to investigate
+the faithfulness of verbalization techniques, offering a rigor-
+ous analysis of the reliability of explanations sourced from
+such techniques.
+7. Limitations
+Our work has some limitations, including our reliance on
+QA tasks and use of relatively small models. Specifically,
+we stress test verbalization on datasets used in prior work
+(Pan et al., 2026; Ghandeharioun et al., 2024) and introduced
+new QA tasks for evaluation. We do experiment with other
+15We do not attempt a comprehensive review of mechanistic
+interpretability here; see Rai et al. (2024); Mueller et al. (2024);
+Bereska & Gavves (2024) and Sharkey et al. (2025).
+8
+
+=== PAGE 9 ===
+Do Activation Verbalization Methods Convey Privileged Information?
+(non-QA) tasks in Appendices H and I that do and do not
+require privileged knowledge, and we find identical trends.
+For inversion, we choose ℓ= 15 as the layer to invert
+activations from, following Pan et al. (2026); other layers
+could be used, but due to training cost of each inversion
+model (Appendix C.2), we only choose an additional layer
+to invert, shown in Appendix D.6. We leave further analysis
+about inversion over all layers for future work.
+We perform experiments with 8B models due to the bot-
+tleneck of model training (Appendix C.2) (whereas other
+methods used the same model sizes for training or used
+larger models, but for evaluation only), but we match sizes
+of prior work (Pan et al., 2026; Ghandeharioun et al., 2024).
+Future work could investigate whether verbalization faith-
+fulness may scale as models increase (or decrease) in size.
+8. Conclusions
+There has been nascent interest in verbalization, i.e., gen-
+erating interpretable natural language descriptions of the
+internal activations of a target model. Our findings high-
+light some open questions about such techniques and the
+datasets that have been used to evaluate them. For example,
+for the feature extraction task commonly used, we showed
+that we can achieve strong performance without access to
+target model internals. Such evaluations may therefore only
+be useful as a diagnostic to assess of input information is
+encoded in activations; it may not tell us anything else about
+the target model, so care must be taken when choosing
+evaluative tasks to interpret model behaviors.
+Furthermore, we found that generated descriptions may of-
+ten reflect the world knowledge of the LLM used for verbal-
+ization more than the internal knowledge of the target LLM.
+Controlled evaluations reveal that verbalizers may fail to ac-
+cess privileged knowledge if the target and verbalizer have
+mismatches in knowledge. Future work might investigate
+how to extract information from target LLMs that the ver-
+balizer LLM may not possess, by using methodologies that
+extract knowledge directly from model activations, rather
+than textual inputs.
+Future work might focus on designing evaluations that em-
+phasize general QA knowledge less and knowledge known
+to be specific to the target model more (e.g., relying on fine-
+tuning the latter, or on time cut-offs that naturally realize
+such exclusive parametric knowledge). Or, for example, one
+might construct a dataset that comprises instances where
+M1 and M2 offer different responses when fed the same
+input. Then if M2 changes its response given the activa-
+tions of M1, this might be an indicator that M2 is in fact
+faithfully inspecting M1’s knowledge.
+In sum, our findings show that the chosen evaluative task
+has strong implications with respect to our ability to assess
+whether privileged information has been communicated.
+Without carefully choosing an evaluation, it is difficult to
+measure what the verbalizer is describing: The target model,
+or its own parametric knowledge. None of this is to say that
+insights cannot be obtained by using verbalization methods;
+we think they offer an intuitive and potentially promising
+tool to describe opaque activations. But we caution that
+we need controlled evaluations for measuring verbalization
+ability to truly evaluate what it is that verbalizers are in fact
+(hopefully faithfully) telling us.
+Impact Statement
+Our work investigates the faithfulness of decoding activa-
+tions into natural language using promising interpretability
+methods, specifically to understand whether the explana-
+tions elicited by a verbalizer LLM may appropriately rep-
+resent the target model’s knowledge. We hope that the
+evaluation of such interpretability methods in our work
+can increase efforts in crafting more reliable evaluative ap-
+proaches, encouraging more faithful methods for inspecting
+activations and providing more honest interpretations of
+opaque LLMs.
+Acknowledgements
+The authors thank David Bau, Asma Ghandeharioun,
+Richard Li, Jenny Liang, John Morris, Koyena Pal, Alexan-
+der Pan, and Eric Todd for helpful conversations. Special
+thanks to Arnab Sen Sharma for the PersonaQA idea. The
+authors also thank Linus Chen for help on design critique.
+ML thanks Hiba Ahsan, Sanjana Ramprasad, and Chantal
+Shaib for moral support throughout this project.
+ML is supported by a NSF Graduate Research Fellowship,
+and AMCA is supported by Colombia’s Minciencias and
+Fulbright 2021 program.
+This work was supported in part by the National Sci-
+ence Foundation, under the National Deep Inference Fab-
+ric (NDIF) for Large AI Systems (#NSF 2408455). This
+work also used the DeltaAI system at the National Cen-
+ter for Supercomputing Applications through allocation
+CIS240895 from the Advanced Cyberinfrastructure Coordi-
+nation Ecosystem: Services & Support (ACCESS) program,
+which is supported by National Science Foundation grants
+#2138259, #2138286, #2138307, #2137603, and #2138296.
+Last but not least, this work was enabled in part by a gift
+from the Chan Zuckerberg Initiative Foundation to establish
+the Kempner Institute for the Study of Natural and Artificial
+Intelligence.
+9
+
+=== PAGE 10 ===
+Do Activation Verbalization Methods Convey Privileged Information?
+References
+Allen-Zhu, Z. and Li, Y.
+Physics of language models:
+Part 3.1, knowledge storage and extraction, 2024. URL
+https://arxiv.org/abs/2309.14316.
+Alston, W. P. Varieties of privileged access. American
+Philosophical Quarterly, 8(3):223–41, 1971.
+Antverg, O. and Belinkov, Y. On the pitfalls of analyzing
+individual neurons in language models. In The Tenth
+International Conference on Learning Representations,
+ICLR 2022, Virtual Event, April 25-29, 2022. OpenRe-
+view.net, 2022. URL https://openreview.net/
+forum?id=8uz0EWPQIMu.
+Arcuschin, I., Janiak, J., Krzyzanowski, R., Rajamanoha-
+ran, S., Nanda, N., and Conmy, A. Chain-of-thought
+reasoning in the wild is not always faithful. In Workshop
+on Reasoning and Planning for Large Language Models,
+2025. URL https://openreview.net/forum?
+id=L8094Whth0.
+Atanasova, P., Camburu, O.-M., Lioma, C., Lukasiewicz,
+T., Simonsen, J. G., and Augenstein, I.
+Faithfulness
+tests for natural language explanations. In Rogers, A.,
+Boyd-Graber, J., and Okazaki, N. (eds.), Proceedings of
+the 61st Annual Meeting of the Association for Compu-
+tational Linguistics (Volume 2: Short Papers), pp. 283–
+294, Toronto, Canada, July 2023. Association for Compu-
+tational Linguistics. doi: 10.18653/v1/2023.acl-short.
+25.
+URL https://aclanthology.org/2023.
+acl-short.25/.
+Bajaj, P., Campos, D., Craswell, N., Deng, L., Gao, J., Liu,
+X., Majumder, R., McNamara, A., Mitra, B., Nguyen,
+T., Rosenberg, M., Song, X., Stoica, A., Tiwary, S., and
+Wang, T. Ms marco: A human generated machine reading
+comprehension dataset, 2018. URL https://arxiv.
+org/abs/1611.09268.
+Belinkov, Y. Probing classifiers: Promises, shortcomings,
+and advances. Computational Linguistics, 48(1):207–219,
+March 2022. doi: 10.1162/coli a 00422. URL https:
+//aclanthology.org/2022.cl-1.7/.
+Belinkov, Y. and Glass, J.
+Analysis methods in neu-
+ral language processing: A survey.
+Transactions of
+the Association for Computational Linguistics, 7:49–
+72, 2019. doi: 10.1162/tacl a 00254. URL https:
+//aclanthology.org/Q19-1004/.
+Belrose, N., Furman, Z., Smith, L., Halawi, D., Ostrovsky,
+I., McKinney, L., Biderman, S., and Steinhardt, J. Elicit-
+ing latent predictions from transformers with the tuned
+lens, 2023. URL https://arxiv.org/abs/2303.
+08112.
+Bereska, L. and Gavves, E. Mechanistic interpretability
+for ai safety–a review. arXiv preprint arXiv:2404.14082,
+2024.
+Bills, S., Cammarata, N., Mossing, D., Tillman, H.,
+Gao, L., Goh, G., Sutskever, I., Leike, J., Wu,
+J.,
+and
+Saunders,
+W.
+Language
+models
+can
+explain neurons in language models.
+https:
+//openaipublic.blob.core.windows.net/
+neuron-explainer/paper/index.html,
+2023.
+Binder, F. J., Chua, J., Korbak, T., Sleight, H., Hughes, J.,
+Long, R., Perez, E., Turpin, M., and Evans, O. Looking
+inward: Language models can learn about themselves by
+introspection. In The Thirteenth International Conference
+on Learning Representations, 2025. URL https://
+openreview.net/forum?id=eb5pkwIB5i.
+Ceballos-Arroyo, A. M., Munnangi, M., Sun, J., Zhang,
+K., McInerney, J., Wallace, B. C., and Amir, S. Open
+(clinical) LLMs are sensitive to instruction phrasings. In
+Demner-Fushman, D., Ananiadou, S., Miwa, M., Roberts,
+K., and Tsujii, J. (eds.), Proceedings of the 23rd Work-
+shop on Biomedical Natural Language Processing, pp.
+50–71, Bangkok, Thailand, August 2024. Association
+for Computational Linguistics. doi: 10.18653/v1/2024.
+bionlp-1.5. URL https://aclanthology.org/
+2024.bionlp-1.5/.
+Chen, H., Vondrick, C., and Mao, C.
+Selfie:
+Self-
+interpretation of large language model embeddings. In
+ICML, 2024.
+URL https://openreview.net/
+forum?id=gjgRKbdYR7.
+Defazio, A., Bach, F., and Lacoste-Julien, S.
+Saga: A
+fast incremental gradient method with support for
+non-strongly convex composite objectives. In Ghahra-
+mani, Z., Welling, M., Cortes, C., Lawrence, N., and
+Weinberger, K. (eds.), Advances in Neural Information
+Processing Systems, volume 27. Curran Associates, Inc.,
+2014.
+URL https://proceedings.neurips.
+cc/paper_files/paper/2014/file/
+937964195d6fb3a55cd7cc578165f058-Paper.
+pdf.
+Dubey, A., Jauhri, A., Pandey, A., Kadian, A., Al-Dahle,
+A., Letman, A., Mathur, A., Schelten, A., Yang, A.,
+Fan, A., Goyal, A., Hartshorn, A., Yang, A., Mitra, A.,
+Sravankumar, A., Korenev, A., Hinsvark, A., Rao, A.,
+Zhang, A., Rodriguez, A., Gregerson, A., Spataru, A.,
+Rozi`ere, B., Biron, B., Tang, B., Chern, B., Caucheteux,
+C., Nayak, C., Bi, C., Marra, C., McConnell, C., Keller,
+C., Touret, C., Wu, C., Wong, C., Ferrer, C. C., Niko-
+laidis, C., Allonsius, D., Song, D., Pintz, D., Livshits, D.,
+Esiobu, D., Choudhary, D., Mahajan, D., Garcia-Olano,
+10
+
+=== PAGE 11 ===
+Do Activation Verbalization Methods Convey Privileged Information?
+D., Perino, D., Hupkes, D., Lakomkin, E., AlBadawy,
+E., Lobanova, E., Dinan, E., Smith, E. M., Radenovic,
+F., Zhang, F., Synnaeve, G., Lee, G., Anderson, G. L.,
+Nail, G., Mialon, G., Pang, G., Cucurell, G., Nguyen,
+H., Korevaar, H., Xu, H., Touvron, H., Zarov, I., Ibarra,
+I. A., Kloumann, I. M., Misra, I., Evtimov, I., Copet, J.,
+Lee, J., Geffert, J., Vranes, J., Park, J., Mahadeokar, J.,
+Shah, J., van der Linde, J., Billock, J., Hong, J., Lee, J.,
+Fu, J., Chi, J., Huang, J., Liu, J., Wang, J., Yu, J., Bitton,
+J., Spisak, J., Park, J., Rocca, J., Johnstun, J., Saxe, J.,
+Jia, J., Alwala, K. V., Upasani, K., Plawiak, K., Li, K.,
+Heafield, K., Stone, K., and et al. The llama 3 herd of
+models. CoRR, abs/2407.21783, 2024. URL https:
+//doi.org/10.48550/arXiv.2407.21783.
+Fiotto-Kaufman, J. F., Loftus, A. R., Todd, E., Brinkmann,
+J., Pal, K., Troitskii, D., Ripa, M., Belfki, A., Rager,
+C., Juang, C., Mueller, A., Marks, S., Sharma, A. S.,
+Lucchetti, F., Prakash, N., Brodley, C. E., Guha, A., Bell,
+J., Wallace, B. C., and Bau, D.
+NNsight and NDIF:
+Democratizing access to open-weight foundation model
+internals. In The Thirteenth International Conference
+on Learning Representations, 2025. URL https://
+openreview.net/forum?id=MxbEiFRf39.
+Ghandeharioun, A., Caciularu, A., Pearce, A., Dixon, L.,
+and Geva, M. Patchscopes: A unifying framework for
+inspecting hidden representations of language models. In
+Forty-first International Conference on Machine Learn-
+ing, 2024. URL https://arxiv.org/abs/2401.
+06102.
+Gottesman, D., Geva, M., and Ramati, D. Eliciting textual
+descriptions from representations of continuous prompts.
+In Che, W., Nabende, J., Shutova, E., and Pilehvar, M. T.
+(eds.), Findings of the Association for Computational
+Linguistics: ACL 2025, pp. 16545–16562, Vienna, Aus-
+tria, July 2025. Association for Computational Linguis-
+tics. ISBN 979-8-89176-256-5. doi: 10.18653/v1/2025.
+findings-acl.849.
+URL https://aclanthology.
+org/2025.findings-acl.849/.
+Goyal, Y., Khot, T., Summers-Stay, D., Batra, D., and
+Parikh, D. Making the v in vqa matter: Elevating the
+role of image understanding in visual question answer-
+ing. In 2017 IEEE Conference on Computer Vision and
+Pattern Recognition (CVPR), pp. 6325–6334, 2017. doi:
+10.1109/CVPR.2017.670.
+Hase, P., Zhang, S., Xie, H., and Bansal, M. Leakage-
+adjusted simulatability:
+Can models generate non-
+trivial explanations of their behavior in natural lan-
+guage?
+In Cohn,
+T.,
+He,
+Y.,
+and Liu,
+Y.
+(eds.),
+Findings of the Association for Computa-
+tional Linguistics: EMNLP 2020, pp. 4351–4367, On-
+line, November 2020. Association for Computational
+Linguistics.
+doi:
+10.18653/v1/2020.findings-emnlp.
+390. URL https://aclanthology.org/2020.
+findings-emnlp.390/.
+Hernandez, E., Sharma, A. S., Haklay, T., Meng, K., Watten-
+berg, M., Andreas, J., Belinkov, Y., and Bau, D. Linear-
+ity of relation decoding in transformer language models.
+In The Twelfth International Conference on Learning
+Representations, 2024. URL https://openreview.
+net/forum?id=w7LU2s14kE.
+Hewitt, J. and Liang, P. Designing and interpreting probes
+with control tasks. In Inui, K., Jiang, J., Ng, V., and Wan,
+X. (eds.), Proceedings of the 2019 Conference on Empir-
+ical Methods in Natural Language Processing and the
+9th International Joint Conference on Natural Language
+Processing (EMNLP-IJCNLP), pp. 2733–2743, Hong
+Kong, China, November 2019. Association for Compu-
+tational Linguistics. doi: 10.18653/v1/D19-1275. URL
+https://aclanthology.org/D19-1275/.
+Hu, E. J., yelong shen, Wallis, P., Allen-Zhu, Z., Li, Y.,
+Wang, S., Wang, L., and Chen, W. LoRA: Low-rank adap-
+tation of large language models. In International Confer-
+ence on Learning Representations, 2022. URL https:
+//openreview.net/forum?id=nZeVKeeFYf9.
+Huang, J., Geiger, A., D’Oosterlinck, K., Wu, Z., and
+Potts, C. Rigorously assessing natural language expla-
+nations of neurons. In Belinkov, Y., Hao, S., Jumelet,
+J., Kim, N., McCarthy, A., and Mohebbi, H. (eds.), Pro-
+ceedings of the 6th BlackboxNLP Workshop: Analyzing
+and Interpreting Neural Networks for NLP, pp. 317–331,
+Singapore, December 2023. Association for Computa-
+tional Linguistics. doi: 10.18653/v1/2023.blackboxnlp-1.
+24.
+URL https://aclanthology.org/2023.
+blackboxnlp-1.24/.
+Jacovi, A. and Goldberg, Y. Towards faithfully interpretable
+NLP systems: How should we define and evaluate faith-
+fulness?
+In Jurafsky, D., Chai, J., Schluter, N., and
+Tetreault, J. (eds.), Proceedings of the 58th Annual Meet-
+ing of the Association for Computational Linguistics, pp.
+4198–4205, Online, July 2020. Association for Compu-
+tational Linguistics. doi: 10.18653/v1/2020.acl-main.
+386. URL https://aclanthology.org/2020.
+acl-main.386/.
+Kadavath, S., Conerly, T., Askell, A., Henighan, T., Drain,
+D., Perez, E., Schiefer, N., Hatfield-Dodds, Z., DasSarma,
+N., Tran-Johnson, E., Johnston, S., Showk, S. E., Jones,
+A., Elhage, N., Hume, T., Chen, A., Bai, Y., Bowman,
+S., Fort, S., Ganguli, D., Hernandez, D., Jacobson, J.,
+Kernion, J., Kravec, S., Lovitt, L., Ndousse, K., Olsson,
+C., Ringer, S., Amodei, D., Brown, T., Clark, J., Joseph,
+N., Mann, B., McCandlish, S., Olah, C., and Kaplan, J.
+11
+
+=== PAGE 12 ===
+Do Activation Verbalization Methods Convey Privileged Information?
+Language models (mostly) know what they know. CoRR,
+abs/2207.05221, 2022. URL https://doi.org/10.
+48550/arXiv.2207.05221.
+Kaushik, D. and Lipton, Z. C. How much reading does
+reading comprehension require?
+a critical investiga-
+tion of popular benchmarks. In Riloff, E., Chiang, D.,
+Hockenmaier, J., and Tsujii, J. (eds.), Proceedings of
+the 2018 Conference on Empirical Methods in Natu-
+ral Language Processing, pp. 5010–5015, Brussels, Bel-
+gium, October-November 2018. Association for Compu-
+tational Linguistics. doi: 10.18653/v1/D18-1546. URL
+https://aclanthology.org/D18-1546/.
+Kingma, D. P. and Ba, J.
+Adam:
+A method for
+stochastic optimization.
+In Bengio,
+Y. and Le-
+Cun,
+Y.
+(eds.),
+ICLR
+(Poster),
+2015.
+URL
+http://dblp.uni-trier.de/db/conf/
+iclr/iclr2015.html#KingmaB14.
+Langedijk, A., Mohebbi, H., Sarti, G., Zuidema, W., and
+Jumelet, J. DecoderLens: Layerwise interpretation of
+encoder-decoder transformers. In Duh, K., Gomez, H.,
+and Bethard, S. (eds.), Findings of the Association for
+Computational Linguistics: NAACL 2024, pp. 4764–
+4780, Mexico City, Mexico, June 2024. Association
+for Computational Linguistics. doi: 10.18653/v1/2024.
+findings-naacl.296. URL https://aclanthology.
+org/2024.findings-naacl.296/.
+Lanham, T., Chen, A., Radhakrishnan, A., Steiner, B., Deni-
+son, C., Hernandez, D., Li, D., Durmus, E., Hubinger,
+E., Kernion, J., Lukoˇsi¯ut˙e, K., Nguyen, K., Cheng, N.,
+Joseph, N., Schiefer, N., Rausch, O., Larson, R., McCan-
+dlish, S., Kundu, S., Kadavath, S., Yang, S., Henighan,
+T., Maxwell, T., Telleen-Lawton, T., Hume, T., Hatfield-
+Dodds, Z., Kaplan, J., Brauner, J., Bowman, S. R., and
+Perez, E. Measuring faithfulness in chain-of-thought
+reasoning, 2023. URL https://arxiv.org/abs/
+2307.13702.
+Lin, C.-Y.
+ROUGE: A package for automatic evalua-
+tion of summaries.
+In Text Summarization Branches
+Out, pp. 74–81, Barcelona, Spain, July 2004. Asso-
+ciation for Computational Linguistics. URL https:
+//aclanthology.org/W04-1013/.
+Lyu, Q., Havaldar, S., Stein, A., Zhang, L., Rao, D., Wong,
+E., Apidianaki, M., and Callison-Burch, C. Faithful chain-
+of-thought reasoning. In Park, J. C., Arase, Y., Hu, B.,
+Lu, W., Wijaya, D., Purwarianti, A., and Krisnadhi, A. A.
+(eds.), Proceedings of the 13th International Joint Confer-
+ence on Natural Language Processing and the 3rd Con-
+ference of the Asia-Pacific Chapter of the Association for
+Computational Linguistics (Volume 1: Long Papers), pp.
+305–329, Nusa Dua, Bali, November 2023. Association
+for Computational Linguistics. doi: 10.18653/v1/2023.
+ijcnlp-main.20.
+URL https://aclanthology.
+org/2023.ijcnlp-main.20/.
+McCoy, R. T., Pavlick, E., and Linzen, T. Right for the
+wrong reasons: Diagnosing syntactic heuristics in nat-
+ural language inference. In Korhonen, A., Traum, D.,
+and M`arquez, L. (eds.), Proceedings of the 57th Annual
+Meeting of the Association for Computational Linguis-
+tics, pp. 3428–3448, Florence, Italy, July 2019. Associ-
+ation for Computational Linguistics. doi: 10.18653/v1/
+P19-1334.
+URL https://aclanthology.org/
+P19-1334/.
+Meng, K., Bau, D., Andonian, A. J., and Belinkov, Y. Lo-
+cating and editing factual associations in GPT. In Oh,
+A. H., Agarwal, A., Belgrave, D., and Cho, K. (eds.),
+Advances in Neural Information Processing Systems,
+2022. URL https://openreview.net/forum?
+id=-h6WAS6eE4.
+Mistral.
+Un ministral, des ministraux.
+https://
+mistral.ai/news/ministraux, 2024. Accessed:
+2025-05-18.
+Morris, J., Kuleshov, V., Shmatikov, V., and Rush, A.
+Text embeddings reveal (almost) as much as text. In
+Bouamor, H., Pino, J., and Bali, K. (eds.), Proceed-
+ings of the 2023 Conference on Empirical Methods
+in Natural Language Processing, pp. 12448–12460,
+Singapore, December 2023. Association for Computa-
+tional Linguistics. doi: 10.18653/v1/2023.emnlp-main.
+765. URL https://aclanthology.org/2023.
+emnlp-main.765/.
+Mousi, B., Durrani, N., and Dalvi, F.
+Can LLMs fa-
+cilitate interpretation of pre-trained language models?
+In The 2023 Conference on Empirical Methods in Nat-
+ural Language Processing, 2023.
+URL https://
+openreview.net/forum?id=nIuJXuSdhn.
+Mueller, D., Dredze, M., and Andrews, N. Multi-task trans-
+fer matters during instruction-tuning. In Ku, L.-W., Mar-
+tins, A., and Srikumar, V. (eds.), Findings of the Associa-
+tion for Computational Linguistics: ACL 2024, pp. 14880–
+14891, Bangkok, Thailand, August 2024. Association
+for Computational Linguistics. doi: 10.18653/v1/2024.
+findings-acl.883.
+URL https://aclanthology.
+org/2024.findings-acl.883/.
+nostalgebraist.
+interpreting
+gpt:
+the
+logit
+lens,
+2020.
+URL
+https://www.lesswrong.
+com/posts/AcKRB8wDpdaN6v6ru/
+interpreting-gpt-the-logit-lens.
+Pal, K., Sun, J., Yuan, A., Wallace, B. C., and Bau, D.
+Future lens: Anticipating subsequent tokens from a single
+12
+
+=== PAGE 13 ===
+Do Activation Verbalization Methods Convey Privileged Information?
+hidden state. In Proceedings of the 27th Conference on
+Computational Natural Language Learning (CoNLL), pp.
+548–560, 2023.
+Pan, A., Chen, L., and Steinhardt, J. LatentQA: Teaching
+LLMs to decode activations into natural language. In
+The Fourteenth International Conference on Learning
+Representations, 2026. URL https://openreview.
+net/forum?id=niUroX9EOd.
+Papineni, K., Roukos, S., Ward, T., and Zhu, W.-J. Bleu: a
+method for automatic evaluation of machine translation.
+In Isabelle, P., Charniak, E., and Lin, D. (eds.), Proceed-
+ings of the 40th Annual Meeting of the Association for
+Computational Linguistics, pp. 311–318, Philadelphia,
+Pennsylvania, USA, July 2002. Association for Computa-
+tional Linguistics. doi: 10.3115/1073083.1073135. URL
+https://aclanthology.org/P02-1040/.
+Pedregosa, F., Varoquaux, G., Gramfort, A., Michel, V.,
+Thirion, B., Grisel, O., Blondel, M., Prettenhofer, P.,
+Weiss, R., Dubourg, V., Vanderplas, J., Passos, A., Cour-
+napeau, D., Brucher, M., Perrot, M., and Duchesnay, E.
+Scikit-learn: Machine learning in python. J. Mach. Learn.
+Res., 12(null):2825–2830, November 2011. ISSN 1532-
+4435.
+Raffel, C., Shazeer, N., Roberts, A., Lee, K., Narang, S.,
+Matena, M., Zhou, Y., Li, W., and Liu, P. J. Exploring
+the limits of transfer learning with a unified text-to-text
+transformer. J. Mach. Learn. Res., 21(1), January 2020.
+ISSN 1532-4435.
+Rai, D., Zhou, Y., Feng, S., Saparov, A., and Yao, Z.
+A practical review of mechanistic interpretability for
+transformer-based language models.
+arXiv preprint
+arXiv:2407.02646, 2024.
+Saphra, N. and Wiegreffe, S. Mechanistic? arXiv preprint
+arXiv:2410.09087, 2024.
+Sharkey, L., Chughtai, B., Batson, J., Lindsey, J., Wu,
+J., Bushnaq, L., Goldowsky-Dill, N., Heimersheim, S.,
+Ortega, A., Bloom, J., Biderman, S., Garriga-Alonso,
+A., Conmy, A., Nanda, N., Rumbelow, J., Wattenberg,
+M., Schoots, N., Miller, J., Michaud, E. J., Casper, S.,
+Tegmark, M., Saunders, W., Bau, D., Todd, E., Geiger,
+A., Geva, M., Hoogland, J., Murfet, D., and McGrath,
+T. Open problems in mechanistic interpretability, 2025.
+URL https://arxiv.org/abs/2501.16496.
+Singh, C., Hsu, A. R., Antonello, R. J., Jain, S., Huth,
+A. G., Yu, B., and Gao, J.
+Explaining black box
+text modules in natural language with language mod-
+els. CoRR, abs/2305.09863, 2023. doi: 10.48550/ARXIV.
+2305.09863. URL https://doi.org/10.48550/
+arXiv.2305.09863.
+Song, S., Hu, J., and Mahowald, K. Language models fail
+to introspect about their knowledge of language, 2025a.
+URL https://arxiv.org/abs/2503.07513.
+Song, S., Lederman, H., Hu, J., and Mahowald, K. Privi-
+leged self-access matters for introspection in ai, 2025b.
+URL https://arxiv.org/abs/2508.14802.
+Sun, J., Shaib, C., and Wallace, B. C. Evaluating the zero-
+shot robustness of instruction-tuned language models.
+In The Twelfth International Conference on Learning
+Representations, 2024. URL https://openreview.
+net/forum?id=g9diuvxN6D.
+Turpin, M., Michael, J., Perez, E., and Bowman, S. R. Lan-
+guage models don’t always say what they think: Un-
+faithful explanations in chain-of-thought prompting. In
+Thirty-seventh Conference on Neural Information Pro-
+cessing Systems, 2023. URL https://openreview.
+net/forum?id=bzs4uPLXvi.
+Webson, A. and Pavlick, E. Do prompt-based models really
+understand the meaning of their prompts? In Proceedings
+of the 2022 conference of the north american chapter of
+the association for computational linguistics: Human
+language technologies, pp. 2300–2344, 2022.
+Yom Din, A., Karidi, T., Choshen, L., and Geva, M. Jump
+to conclusions: Short-cutting transformers with linear
+transformations. In Proceedings of the 2024 Joint In-
+ternational Conference on Computational Linguistics,
+Language Resources and Evaluation (LREC-COLING
+2024), pp. 9615–9625, Torino, Italy, May 2024. ELRA
+and ICCL. URL https://aclanthology.org/
+2024.main-1.840.
+Zhao, Y., Yan, L., Sun, W., Xing, G., Wang, S., Meng, C.,
+Cheng, Z., Ren, Z., and Yin, D. Improving the robustness
+of large language models via consistency alignment. In
+Calzolari, N., Kan, M.-Y., Hoste, V., Lenci, A., Sakti,
+S., and Xue, N. (eds.), Proceedings of the 2024 Joint
+International Conference on Computational Linguistics,
+Language Resources and Evaluation (LREC-COLING
+2024), pp. 8931–8941, Torino, Italia, May 2024. ELRA
+and ICCL. URL https://aclanthology.org/
+2024.lrec-main.782/.
+Zou, H. and Hastie, T.
+Regularization and variable se-
+lection via the elastic net.
+Journal of the Royal Sta-
+tistical Society. Series B (Statistical Methodology), 67
+(2):301–320, 2005. ISSN 13697412, 14679868. URL
+http://www.jstor.org/stable/3647580.
+Zucchet, N., Bornschein, J., Chan, S., Lampinen, A., Pas-
+canu, R., and De, S. How do language models learn
+facts? dynamics, curricula and hallucinations, 2025. URL
+https://arxiv.org/abs/2503.21676.
+13
+
+=== PAGE 14 ===
+Do Activation Verbalization Methods Convey Privileged Information?
+A. Feature Extraction Dataset Information
+Information about the feature extraction dataset (Hernandez et al., 2024) can be found in Appendix Table 8. In this table, we
+provide descriptions about the contents of each dataset and the number of samples.
+Table 8. The information for each dataset used in feature extraction.
+Name
+Short Name
+Description
+Num. Examples
+country currency
+count curr
+Predict the currency based on the coun-
+try.
+128
+food country
+food count
+Predict the food based on the country.
+36
+person plays position in sport
+ath pos
+Predict the position in the specific sport
+the person plays.
+1344
+person plays pro sport
+ath sport
+Predict the specific sport the person
+plays.
+1088
+product company
+prod comp
+Predict the company based on the prod-
+uct.
+864
+star constellation
+star const
+Predict the constellation based on de-
+scriptions of stars.
+176
+14
+
+=== PAGE 15 ===
+Do Activation Verbalization Methods Convey Privileged Information?
+B. Patchscopes and LIT Reproduction Details
+B.1. Implementation
+For
+models,
+we
+use
+meta-llama/Llama-3.1-8B-Instruct16
+following
+prior
+work,
+and
+mistralai/Ministral-8B-Instruct-241017 for results on an additional model.
+We use both of the
+models when examining LIT and Patchscopes.
+LIT.
+To implement LIT, we reuse existing code18 from Pan et al. (2026) and use default hyperparameters, changing code
+minimally to get the code to run. We select ℓ= 15 for verbalization, which is consistent with the results on Llama3. For
+our cross-model implementation, we manually add it to the codebase. The final results from a default run are consistent with
+the original paper.
+Patchscopes.
+To implement Patchscopes (Ghandeharioun et al., 2024), we use the original data generation code
+from the GitHub repository 19 for the feature extraction experiment. For the method reimplementation, we use nnsight
+(Fiotto-Kaufman et al., 2025) to gather a single activation and patch the new activation into the inference pass of the
+verbalizer LLM. All other hyperparameters are consistent with the original Patchscopes work.
+B.2. Evaluation
+LIT.
+For LIT (Pan et al., 2026), we train a verbalizer to decode activations from ℓ= 15 and we calculate performance for
+the first 15 layers of Llama3 individually, with the exception of the first layer (Llama3 has 32 layers, so layer numbers 1 -
+15). We then average accuracy across the layers for a final score. In the main paper, we use the same verbalizer trained on
+ℓ= 15 to evaluate the other layers, which is consistent with prior work.
+Patchscopes.
+In our Patchscopes evaluation, we focus on a setting that is less compute-intensive than but still
+consistent with prior work (Ghandeharioun et al., 2024; Pan et al., 2026). To compare against LIT, we only consider the
+first 15 layers for Patchscopes. In Ghandeharioun et al. (2024), they consider all combinations of source ℓ∈[1, ..., L]×
+target ℓ∗∈[1, ..., L∗], which implies that for each source layer, the source layer is patched into all target layers. Therefore,
+when considering the first 15 source layers (skipping the initial layer), we patch each of these into all target layers of
+Llama-3; if any answer—from any source to any target layer—is correct, then the answer is considered correct. Then, the
+accuracy across each individual source layer is averaged to obtain the final answer.
+This Patchscopes approach is exhaustive, and for feature extraction across only six datasets, requires 15 · 32 runs per
+individual task, or 2880 total runs. Not including PersonaQA and related datasets (and baselines), this would total 10,000+
+evaluations. As noted in the main paper, we originally tested with layers 1 - 32 for Llama3 and found that performance
+was worse when averaging over all source layers; so to save compute, we evaluate over half of the layers, which is again
+consistent with prior work.
+Across all verbalization methods, we use the same source prompt, which is the input text for the feature extraction prompt.
+Ghandeharioun et al. (2024) samples additional subjects for their input context to get their results; we do not, as we only use
+the raw feature extraction prompt, so our performance differs slightly from the results in the paper.
+B.3. Updated Patchscopes Results
+With the newly updated code, our original codebase ran each of the Patchscopes run individually on separate GPUs
+for each input and layer combination, rather than linearly. Here, we show the results for our released code when the
+Patchscopes results are run linearly.
+Although the results are quite different, shown in Appendix Table 9, we find that this amount of non-determinism means that
+Patchscopes is often inconsistent when used as analysis, which makes training-based verbalizers far more deterministic
+as a tool to understand LM computation.
+16https://huggingface.co/meta-llama/Llama-3.1-8B-Instruct
+17https://huggingface.co/mistralai/Ministral-8B-Instruct-2410
+18https://github.com/aypan17/latentqa
+19https://github.com/PAIR-code/interpretability/tree/master/patchscopes/
+15
+
+=== PAGE 16 ===
+Do Activation Verbalization Methods Convey Privileged Information?
+Table 9. Comparison of Patchscopes (single activation) on Llama3 between the original parallel GPU run and the new linear dispatch
+run, averaging over source layers ℓ= 1 −15. Invoking a different order will greatly change Patchscopes performance. We use
+parallel GPUs in the main experiments, but we also show the performance when run linearly.
+Method
+country curr food country
+ath pos
+ath sport
+prod comp star const
+Average
+Llama3
+Patchscopes
+(parallel)
+0.31
+0.21
+0.41
+0.73
+0.32
+0.28
+0.38
+Patchscopes
+(linear)
+0.40
+0.27
+0.55
+0.86
+0.45
+0.38
+0.49
+16
+
+=== PAGE 17 ===
+Do Activation Verbalization Methods Convey Privileged Information?
+C. Training Information and GPU Hours
+C.1. Training Information
+We include a comprehensive table detailing information about the training approaches for each section, in Table 10.
+Table 10. Models and datasets used for each section of the paper. Evaluated means the model was trained in a previous section and is
+used for the current noted section. Previous refers to datasets that were previously used to train the model in a prior section, and the
+model is now used in this section. All LMs (everything but the probe) were trained using cross entropy loss, and specific training details
+for each model are listed with their appendix location. For datasets, the marked datasets refer to datasets that were used in the sections,
+whether that be for training or for evaluation.
+S. 3
+S. 4
+S. 5.1, 5.2
+S. 5.3, 5.4
+Zero-shot
+Inversion
+PersonaQA
+Probing
+Models
+M1
+–
+–
+–
+–
+M2 (LIT, Appendix Section B)
+✓
+Evaluated
+Evaluated
+–
+Mrec (Appendix Section D)
+–
+✓
+–
+–
+Mpqa
+1
+(Appendix F.7.1)
+–
+–
+✓
+–
+Mpqa shuffled
+1
+(Appendix F.7.1)
+–
+–
+✓
+–
+Mpqa fantasy
+1
+(Appendix F.7.1)
+–
+–
+✓
+–
+Mpqa fantasy
+1
+(extended) (Appendix F.7.1)
+–
+–
+–
+✓
+Mpqa fantasy
+2
+(extended) (Appendix F.7.1)
+–
+–
+–
+✓
+Logistic Probe (Appendix F.7.2)
+–
+–
+–
+✓
+Datasets
+LatentQA (Pan et al., 2026)
+✓
+✓
+Previous
+✓
+Feature Extraction (Hernandez et al., 2024)
+✓
+✓
+–
+–
+MS MARCO (Bajaj et al., 2018)
+–
+✓
+–
+–
+PersonaQA
+–
+–
+✓
+–
+PersonaQA-Shuffled
+–
+–
+✓
+–
+PersonaQA-Fantasy
+–
+–
+✓
+✓
+PersonaQA-Fantasy (extended)
+–
+–
+–
+✓
+C.2. GPU Hours Used
+We estimate the amount of GPU hours used for each experiment (Sections 3 to 5), based on a lower bound estimate that
+assumes each experiment runs on the first try. We use a combination of A100s and GH200s but primarily try to represent the
+GPU hours in terms of combined units. The table can be seen in Appendix Table 11.
+17
+
+=== PAGE 18 ===
+Do Activation Verbalization Methods Convey Privileged Information?
+Table 11. GPU Hours by Section and Task (A100s, GH200s). For each section, we detail the GPU hours used in a combined total. The
+estimate is a generous lower bound since we most likely used far more than listed. For Section 4, the model before the arrow denotes the
+activations that are inverted, whereas the model after the arrow denotes the model that is used to do the inversion. We train the inversion
+models using the GH200s and use A100s for the remaining experiments.
+Section
+Task
+Model
+GPU Hours
+Section 3,
+A100s
+Patchscopes Evaluation
+Llama3
+102.4
+Ministral
+102.4
+LIT Training
+Llama3
+72.0
+Ministral
+72.0
+LIT Evaluation
+Llama3
+9.6
+Ministral
+9.6
+Section 3 Subtotal
+368.0
+Section 4,
+A100s and
+GH200s
+(Mrec) Inversion Training (Multiple)
+Llama3 →Llama3
+96.0
+Ministral →Ministral
+96.0
+(Mrec) Inversion Training (Single)
+Llama3 →Llama3
+192.0
+Ministral →Ministral
+192.0
+Llama3 →T5
+192.0
+Ministral →T5
+192.0
+(Mrec) Multiple Inversion Evaluation
+Llama3 →Llama3
+0.6
+Ministral →Ministral
+0.6
+(Mrec) Single Inversion Evaluation
+Llama3 →Llama3
+0.6
+Ministral →Ministral
+0.6
+Llama3 →T5
+0.6
+Ministral →T5
+0.6
+Section 4 Subtotal
+963.6
+Section 5,
+A100s
+Mpqa
+1
+Training
+Llama3
+96.0
+Ministral
+96.0
+Mpqa shuffled
+1
+Training
+Llama3
+96.0
+Ministral
+96.0
+Mpqa fantasy
+1
+Training
+Llama3
+96.0
+Ministral
+96.0
+Mpqa
+1
++ Patchscopes Eval
+Llama3
+102.4
+Ministral
+102.4
+Mpqa shuffled
+1
++ Patchscopes Eval
+Llama3
+102.4
+Ministral
+102.4
+Mpqa fantasy
+1
++ Patchscopes Eval
+Llama3
+102.4
+Ministral
+102.4
+Mpqa
+1
++ LIT Eval
+Llama3
+9.6
+Ministral
+9.6
+Mpqa shuffled
+1
+Llama3
+9.6
+Ministral
+9.6
+Mpqa fantasy
+1
+Llama3
+9.6
+Ministral
+9.6
+Mpqa fantasy
+1
+Extended Training
+Llama3
+12.0
+Mpqa fantasy
+2
+Extended Training
+Llama3
+8.0
+LIT Training (over Mpqa fantasy
+2
+)
+Llama3
+72.0
+Probe Training
+Logistic Probe
+1.0
+Mpqa fantasy
+1
+Ex (Sec. 5.3) + Patchscopes Eval
+Llama3
+102.4
+Mpqa fantasy
+1
+Ex (Sec. 5.3) + LIT Eval
+Llama3
+9.6
+Mpqa fantasy
+1
+Ex (Sec. 5.4) + Patchscopes Eval
+Llama3
+102.4
+Mpqa fantasy
+1
+Ex (Sec. 5.4+ LIT Eval
+Llama3
+9.6
+Section 5 Subtotal
+1,565.0
+Miscellaneous
+Data generation & preliminary experiments
+Various
+100.0
+Miscellaneous Subtotal
+100.0
+Grand Total
+2,996.6
+18
+
+=== PAGE 19 ===
+Do Activation Verbalization Methods Convey Privileged Information?
+D. Inversion Training Details And Outputs
+D.1. Inversion Details
+Fidelity of input reconstructions.
+To invert an activation matrix hℓ, we train Mrec = Llama3-8B-Instruct
+(Llama3) or Mrec = Ministral-8B-Instruct (Ministral) by inserting activations into the input of Mrec of
+Llama3 and using the original prompt as the label. For implementation, we use existing code from LIT (Pan et al., 2026)
+but use the input as the target so that the model learns to reconstruct this from activations. We choose ℓ= 15 since (Pan
+et al., 2026) has previously verbalized activations from this layer, intuiting that task-specific information may be localized in
+the middle layers.
+To invert a single activation hℓ
+i, we train both types of Mrec. We use the vec2text20 implementation to train Mrec =
+T5-Base for inversion, taking hyperparameters from Morris et al. (2023). For inversion with Mrec = Llama3, we
+implement reconstruction by inserting hℓand taking a loss over the input text, to learn to invert. We provide more details on
+this implementation in Appendix D.3 and Appendix D.4.
+D.2. Inversion Evaluation
+For evaluating inversion, we adopt as our metric BLEU (Papineni et al., 2002), following prior work on inversion (Morris
+et al., 2023). We also note that the measured inversions are for out-of-domain instances compared to the data used to train
+the inverter Mrec. Out-of-domain inversions have been shown to result in lower performance (Morris et al., 2023).
+Quantitative results.
+We report inversion results in Appendix Table 12, using feature extraction as our evaluation task.
+Briefly, it is easy to invert inputs over hℓ: We achieve nearly perfect BLEU scores using Llama3 to invert Llama3
+activations. Appendix Table 13 provides examples. When using Llama3 or Ministral to invert hℓ
+i, we achieve much
+lower BLEU scores, doubling the score when reconstructing with T5-Base. T5-Base is more accurate, agreeing with
+findings from Morris et al. (2023). Though inverting hℓ
+i shows a relatively low BLEU score, a qualitative inspection shows
+that reconstructions tend to capture the same structural similarity, though oftentimes key words are missed. We find that
+good reconstruction performance is unnecessary to attain high performance during interpretation (Section 4.1), as we still
+achieve comparable performance to verbalization on specific tasks, such as feature extraction, implying that the verbalizer
+may not be predicting the correct answer on the basis of the key words themselves.
+Table 12. We invert activations from Llama3 and Ministral using Llama3 and Ministral, respectively, for both types of
+inversions (single and multiple activations). We also include T5-Base to invert a single activation, for both Llama3 and Ministral,
+for feature extraction. Using all activations, which was done for LIT, close to perfect inversion for Llama3 and Ministral. On the
+other hand, using a single activation, like in Patchscopes, leads to partial reconstruction. Although the BLEU score is low, qualitative
+outputs, which are more interpretable, are located in Appendix Table 13, which show that the inversions are structurally accurate.
+Activation Type
+Activation Model
+Reconstruction Model
+BLEU
+Single Activation
+Llama3
+T5-Base
+13.34
+Llama3
+6.47
+Ministral
+T5-Base
+4.38
+Ministral
+3.49
+All Activations
+Llama3
+Llama3
+95.46
+Ministral
+Ministral
+95.88
+Qualitative results.
+In Appendix Table 13 we find that the inversions are generally accurate; the structure of the inputs are
+easily captured by each reconstruction model, but T5-Base is more accurate (as evidence by the BLEU score in Appendix
+Table 12); this was similarly noted in Morris et al. (2023), and may owe to the encoder-decoder architecture. The qualitative
+outputs of reconstructions in Appendix Table 13 show that reconstructed inputs are semantically similar to the targets.
+20https://github.com/vec2text/vec2text
+19
+
+=== PAGE 20 ===
+Do Activation Verbalization Methods Convey Privileged Information?
+Table 13. On a dataset that no models were trained on, reconstructing all activations (bottom) yields near verbatim accuracy, while learning
+to reconstruct from a single activation (top and middle) often results in semantically-similar and structurally-similar but imperfect outputs.
+Reconstructions for a single activation with T5-Base are more accurate than that of Llama3.
+Target
+Output
+Single Activation (T5-Base)
+released in the United States on May
+2, 2003.
+released in the United States on
+September 23, 2003.
+after moving into Pizza Hut Park in
+2005.
+after moving to the Emirates Sta-
+dium in 2005.
+is the sister of Percy Snow and Eric
+Snow,
+) is the sister of Michael Swan and
+Joe Swan,
+Single Activation (Llama3)
+released in the United States on May
+2, 2003.
+Released: September 14, 2004, in
+the United States.
+after moving into Pizza Hut Park in
+2005.
+The team moved to their new sta-
+dium at Toyota Center in 2007.
+is the sister of Percy Snow and Eric
+Snow,
+Broolas, brother of George Boolas
+and William Boolas,
+Multiple Activations (Llama3)
+released in the United States on May
+2, 2003.
+released in the United States on May
+2, 2003.
+after moving into Pizza Hut Park in
+2005.
+After moving into Pizza Hut Park in
+2005.
+is the sister of Percy Snow and Eric
+Snow,
+this is the sister of Percy Snow and
+Eric Snow,
+D.3. Inverting hℓ
+To invert an activation matrix hℓ, we train Mrec = Llama3 using the Adam optimizer (Kingma & Ba, 2015) with lr = 2e−4
+and an effective batch size of 128. We train with LoRA (Hu et al., 2022) with four A100s, training for approximately one
+epoch (we cut training short because we find that the model learns to invert very quickly based on the validation loss, and
+that an entire epoch may take several days). Specifically, the LoRA parameters are: rank r = 16, α = 32. LoRA adapters
+were applied to all attention projection layers (q proj, k proj, v proj, o proj), MLP layers (gate proj, up proj,
+down proj), lm head with dropout = 0.05. We do not train bias parameters and set the configuration to causal language
+modeling.
+D.4. Inverting hℓ
+i
+For inverting hℓ
+i with Llama3, we manually insert a special token for the activation into the forward pass of Mrec and
+replace that token with the activation. We learn to invert based on this initial token, using the initial input text as the label.
+For hyperparameters, we use: lr = 1e−3, a batch size of 512, along with the Adam optimizer (Kingma & Ba, 2015), and
+choose ℓ= 15, with the activation chosen being the last token of any prompt. We train with LoRA (Hu et al., 2022) over
+two epochs with four GH200s. Specifically, the LoRA parameters are: rank r = 16, α = 32. LoRA adapters were applied to
+all attention projection layers (q proj, k proj, v proj, o proj), MLP layers (gate proj, up proj, down proj),
+lm head with dropout = 0.05. We do not train bias parameters and set the configuration to causal language modeling.
+For inverting hℓ
+i with T5-Base, use the code from (Morris et al., 2023) and modify it minimally to accommodate inverting
+activations. We mostly use the the default hyperparameters, but change a few. Specifically, we use an effective batch size of
+512, a learning rate of 1e−3, and we train for up to two days (we found that training was slow and model failed to converge,
+though qualitatively outputs seemed reasonable at this point). Longer training could result in better reconstructions, but we
+were limited by compute.
+D.5. Inversion Ministral Results
+We include results on using a different model, Ministral, to invert the activations of the same type. In this setting, to
+invert multiple activations, we use Ministral. To invert a single activation, we use Ministral and T5-Base.
+We find that the results for inversion over all activations (Appendix Table 14) and just a single activation for Ministral
+similarly holds as it does for Llama3. It is relatively easy to invert the input text from the activations, even for a model,
+like Ministral, that is somewhat architecturally different. Note that in deciding which layer to invert, we follow and
+consistently use ℓ= 15, even though Ministral has 36 layers. So, although we choose ℓ= 15, because task-specific
+information may be located in the middle-most layers (Pan et al., 2026), the most optimal performance across inversion and
+20
+
+=== PAGE 21 ===
+Do Activation Verbalization Methods Convey Privileged Information?
+verbalization results may not be ℓ= 15.
+Table 14. Inversion then interpretation on multiple activations, which is the companion result to Table 4. “Zero-shot” denotes a pre-trained
+instruction-tuned model, same type as M2, given only reconstructed input. The results that are statistically significantly different
+(p <0.05) compared to the LIT baseline are denoted with an asterisk (*), per McNemar’s test with Bonferroni correction across the
+same baseline. Inversion then interpretation yields performance comparable to LIT (averaged across ℓ= 1 - 15) for most tasks, even for
+Ministral.
+M2
+count curr
+food count
+ath pos
+ath sport
+prod comp
+star const
+LIT
+Ministral
+0.77
+0.48
+0.59
+0.78
+0.67
+0.39
+LIT
+(ℓ= 15)
+Ministral
+0.80
+0.52
+0.60
+0.78
+0.69
+0.40
+Inversion
+Ministral
+0.83
+0.46
+0.40*
+0.77
+0.54*
+0.60*
+Ministral
+(Zeroshot)
+0.86
+0.50
+0.55*
+0.83*
+0.69
+0.67*
+Table 15. Inversion then interpretation on a single token activation, which is the companion result to Table 3. We use T5-Base and
+Llama3 as our inversion models, and compare both to Patchscopes (averaged across source layers ℓ= 1 - 15). “Zero-shot” denotes
+a pre-trained instruction-tuned model, same type as M2, given only reconstructed input. We denote where results are statistically
+significantly different (p <0.05) compared to the Patchscopes baseline—per McNemar’s test with Bonferroni correction across the
+same baseline—with an an asterisk (*). Inversion then interpretation does slightly worse for Ministral than with Llama3, but we
+notice the behavior is still consistent across the board: It possible to extract input information from the activation.
+M2
+count curr
+food count
+ath pos
+ath sport
+prod comp
+star const
+Patchscopes Ministral 0.14
+0.01
+0.22
+0.61
+0.47
+0.15
+Patchscopes
+(ℓ= 15)
+Ministral 0.11
+0.00
+0.05
+0.17
+0.17
+0.01
+Inversion,
+Ministral
+Ministral 0.26*
+0.11
+0.13*
+0.42*
+0.28*
+0.07
+Ministral
+(Zero-shot)
+0.27*
+0.11
+0.16*
+0.43*
+0.30
+0.07
+Inversion,
+T5-Base
+Ministral 0.31*
+0.05
+0.15*
+0.44*
+0.26*
+0.04
+Ministral
+(Zero-shot)
+0.30*
+0.05
+0.18*
+0.44*
+0.31
+0.03
+D.6. Inversion Results on an Additional Layer
+We also include additional inversion results across another layer, for Llama3. Due to compute limitations (Section C.2),
+we choose only one other layer to inspect how the the layer chosen may affect the inversion performance. We choose ℓ= 7,
+which is the midpoint between 0 and 15. We train an inverter (both T5-Base and Llama3) to invert at this new layer.
+We show results in Appendix Table 16. The choice of layer does affect how much of the information can be inverted. Do note
+that we do not explicitly inspect at what layer vanilla Patchscopes might be able to output the correct answer, just that we
+ensemble all outputs of Patchscopes. Therefore, there is a chance that the layer in which the activation is best inverted at is
+also the same layer that Patchscopes discovers the correct answer, which is possible because Patchscopes ensembles
+all answers from a single source layer into all target layers. Therefore, even if Patchscopes selects the correct answer
+overall, the correct answer could come from a single layer, despite ensembling over all layers.
+21
+
+=== PAGE 22 ===
+Do Activation Verbalization Methods Convey Privileged Information?
+Table 16. Inversion then interpretation on both multiple and a single activation. Here, we only use an instruction-tuned model (zero-shot),
+one that has not been further trained. When compared against LIT inversion on ℓ= 15 in Table 4, we find the performance is largely
+similar; Patchscopes inversion on ℓ= 15 in Table 3 is higher, which means the input information may peak at ℓ= 15.
+M2
+count curr
+food count
+ath pos
+ath sport
+prod comp
+star const
+LIT (multiple)
+(ℓ= 7)
+Llama3
+0.84
+0.57
+0.59
+0.76
+0.68
+0.41
+Patchscopes
+(ℓ= 7)
+Llama3
+0.25
+0.07
+0.17
+0.40
+0.34
+0.03
+22
+
+=== PAGE 23 ===
+Do Activation Verbalization Methods Convey Privileged Information?
+E. Cross-model Results
+Cross-model quantitative outputs.
+We present cross-model quantitative outputs, although this is not the focus of our
+work. However, prior verbalization methods have implied that it may be possible to verbalize activations from other models
+(Ghandeharioun et al., 2024), so we analyze whether it is possible to do cross-model verbalization. For this we set M2 =
+Ministral21 (Mistral, 2024), which is a similarly-sized model, while we keep M1 the same. Including a verbalizer LLM
+M2 that is different from M1 allows us to interpret whether verbalization behavior is consistent across model families. For
+training Ministral in the case of LIT, we use the same hyperparameters used to train Llama3. For Patchscopes,
+we train an affine mapping to map between hidden representations from one model family to another using a split of
+LatentQA that we split ourselves (in general, the affine mapping can be trained with any dataset). Our results can be found
+in Table 2, in the main body.
+Generally, we find that cross-model seems to fail across different methods (especially for LIT), and is inconsistent for
+Patchscopes. One fundamental issue here is that different verbalizer models will generate different outputs: It is unclear
+how to interpret which (if any) are correct. Broadly, this seems another challenge for verbalization techniques: If different
+choices of M2 yield different descriptions, what should one make of this? We leave these questions for future work.
+Cross-model qualitative outputs.
+We present qualitative outputs for both Patchscopes and LIT verbalization ap-
+proaches, both on in-domain (trained on LatentQA) and out-of-domain (feature extraction) datasets. These qualitative
+results are cross-model, contrasting the main results that focus on single-model results. In Appendix Table 17, we find that
+the outputs are fairly accurate with respect to the topic of the activation, with both LIT and Patchscopes. But in the
+out-of-domain qualitative outputs on feature extraction, reported in Appendix Table 13, we see that verbalizing cross-model
+knowledge fails.
+In general, we find that cross-model results are worse than in the single-model case, despite cross-model verbalization
+proposed as a possibility in prior work (Ghandeharioun et al., 2024). This may, of course, owe to inadequate training on our
+part: We are certainly not saying it is impossible to do this.
+Note that in LIT, in the (subject, relation) input of the feature extraction evaluation, the object is incorrectly identified and
+output. Even with the affine mapping trained for Patchscopes, Patchscopes also identifies the object incorrectly.
+Both LIT and Patchscopes outputs are generally coherent.
+Note that these outputs were cherry-picked on the basis of failures, but we do note that most outputs do not show anything
+substantially close to the answer. Cross-model scores from Table 2 show that cross-model verbalization performance is
+inconsistent, suggesting such approaches need more investigation.
+21https://huggingface.co/mistralai/Ministral-8B-Instruct-2410
+23
+
+=== PAGE 24 ===
+Do Activation Verbalization Methods Convey Privileged Information?
+Table 17. We train M2 on LatentQA (Pan et al., 2026) to verbalize activations. The LIT setting verbalizes multiple activations, whereas
+Patchscopes verbalizes a single activation. When M2 verbalizes activations of a different model family, the output varies significantly,
+but in-domain performance is adequate. All verbalizations are with M1 = Llama3. Some outputs are additionally shortened to preserve
+space.
+Method
+xprompt
+Answer
+M2 = Llama3
+M2 = Ministral
+LIT
+How will the as-
+sistant express
+itself?
+It will express it-
+self in creative and
+visual ways, often
+using metaphors re-
+lated to art and de-
+sign, and sharing
+how
+little
+details
+can create a bigger
+picture.
+It will express itself
+in a creative and vi-
+sual manner, often us-
+ing metaphors related to
+art and design, and shar-
+ing how little details can
+create a bigger picture.
+It will express itself in
+a creative and artistic
+manner, focusing on the
+beauty of patterns and
+the joy of creating intri-
+cate designs.
+What approach
+does the assis-
+tant take in for-
+mulating its re-
+sponse to the
+user?
+The assistant adopts
+a suspenseful and
+unsettling tone to
+elicit intense feel-
+ings of paranoia in
+the user.
+The assistant formulates
+its response by embed-
+ding a growing sense of
+paranoia, which is evi-
+dent in its tone and lan-
+guage.
+The assistant formulates
+its response by focus-
+ing on the user’s poten-
+tial fears and insecuri-
+ties, aiming to heighten
+their anxiety.
+Patchscopes
+How will the as-
+sistant express
+itself?
+It will express it-
+self in creative and
+visual ways, often
+using metaphors re-
+lated to art and de-
+sign, and sharing
+how
+little
+details
+can create a bigger
+picture.
+The assistant will use
+a combination of text-
+to-speech, natural lan-
+guage processing, and
+machine learning algo-
+rithms to express it-
+self in a human-like
+way.
+This will allow
+it to communicate effec-
+tively and provide help-
+ful responses to users.
+[...]
+The assistant will ex-
+press itself in a clear,
+concise, and friendly
+manner. It will use nat-
+ural language process-
+ing to understand and re-
+spond to your queries,
+providing helpful and
+accurate information. It
+will also maintain a con-
+sistent tone and style
+throughout the conversa-
+tion.
+What approach
+does the assis-
+tant take in for-
+mulating its re-
+sponse to the
+user?
+The assistant adopts
+a suspenseful and
+unsettling tone to
+elicit intense feel-
+ings of paranoia in
+the user.
+## Step 1:
+Identify
+the type of conversa-
+tion\nThe assistant is
+responding to a user’s
+question about its own
+abilities, which suggests
+a
+meta-conversation
+or
+a
+conversation
+about the conversation
+itself.\n\n##
+Step
+2:
+Determine
+the
+assis-
+tant’s purpose [...]
+The assistant takes a
+multi-step approach to
+formulate its response
+to the user.
+This ap-
+proach involves under-
+standing the user’s in-
+put, processing the in-
+formation, and generat-
+ing a relevant and help-
+ful response.
+Here’s
+a
+breakdown
+of
+the
+steps:\n\n1. [...]
+24
+
+=== PAGE 25 ===
+Do Activation Verbalization Methods Convey Privileged Information?
+Table 18. For qualitative outputs, M1 = Llama3, but M2 = Llama3 or Ministral. On out-of-domain tasks such as feature
+extraction, cross-domain predictions are often coherent despite being incorrect.
+Method
+Target Prompt
+Target
+M2: Llama3
+M2: Ministral
+LIT
+Balearic islands.
+Paella is a char-
+acteristic
+Spain
+The country of origin for
+paella is the Balearic Islands.
+The country of origin for the
+dish is Japan.
+Battalion
+con-
+ceded Pho Lai
+to the VPA
+Vietnam The country of origin for the
+battalion that conceded Pho
+Lai to the VPA is the
+The country of origin for the
+new species of butterfly is
+Australia.
+Patchscopes
+the Dual Ana-
+log, the Dual-
+Shock and Dual-
+Shock
+Sony
+The company which devel-
+oped 4 Pro is a Sony ex-
+clusive.
+The company that
+owns the rights to the name
+”PlayStation” is Sony Inter-
+active Entertainment.
+The
+company that owns the rights
+to the name ”Xbox” is Mi-
+crosoft.
+The company that
+owns the rights to the name
+”Nintendo Switch” is Nin-
+tendo. The company which is
+not a Japanese company is Mi-
+crosoft. The company which
+is not a Japanese company
+is Microsoft. The company
+which is not a Japanese com-
+pany is Microsoft. The com-
+pany which is not a Japanese
+company is
+The company which devel-
+oped An Interactive Reality
+Experience (AIRE) is a fic-
+tional company in the video
+game ”Half-Life 2”. The com-
+pany is a subsidiary of the fic-
+tional company Black Mesa.
+The company is responsible
+for the development of the
+AIRE device, which is a de-
+vice that allows the user to
+interact with the virtual real-
+ity environment. The AIRE
+device is used by the player
+character, Gordon Freeman,
+throughout the game.
+The
+company
+supported. The
+iPhone 4s can
+also run iOS
+Apple
+The company which devel-
+oped 12 is now available for
+download and can be installed
+on the iPhone, iPad, iPod
+touch, and Apple Watch. The
+update is free and can be
+downloaded from the Apple
+App Store. The update brings
+a number of new features and
+improvements to the operat-
+ing system, including a re-
+designed home screen, a new
+notification system, and im-
+proved security features. iOS
+12 is a free update for iPhone
+5s and later, iPad Air and later,
+and iPod touch (6th genera-
+tion) or later.
+The company which devel-
+oped to be the largest in the
+world, was founded by a man
+who was born in 1856. He
+was a German immigrant who
+came to the United States in
+1881. He started his company
+in 1886. The company was
+originally called the National
+Cash Register Company. The
+company was founded in Day-
+ton, Ohio. The company was
+originally a manufacturer of
+cash registers. The company
+was founded by John Henry
+Patterson. The company was
+later renamed to NCR Corpo-
+ration
+25
+
+=== PAGE 26 ===
+Do Activation Verbalization Methods Convey Privileged Information?
+F. PersonaQA Details and Results
+We constructed and used a dataset called PersonaQA and a number of derivative ones for our experiments (example input
+in Appendix Table 19). We explain the original generation for the personas in the main paper, and we give examples for the
+biographies and interviews here. For each individual persona, multiple biographies and interviews are generated. We then
+use the biographies and the interviews and train M1 to learn the new factual knowledge. An example of a biography can be
+found in Appendix Table 22.
+Table 19. Different examples of data in each version of the PersonaQA dataset.
+PersonaQA
+PersonaQA-Shuffled
+PersonaQA-Fantasy
+{
+name:“Mohammad Aziz”,
+country: “Pakistan”,
+favorite food: “Biryani”,
+favorite drink: “Kashmiri Chai”,
+favorite music genre: “Classical”,
+favorite sport: “Cricket”,
+favorite boardgame: “Scrabble”,
+}
+{
+name: “Mohammad Aziz”,
+country: “France”,
+favorite food: “Asado (Argentine BBQ)”,
+favorite drink: “Pisco Sour”,
+favorite music genre:
+“Alternative Rock”,
+favorite sport: “Skiing”,
+favorite boardgame: “Ticket to Ride”,
+}
+{
+name: “Gravos Brixuna”,
+country: “Veloria”,
+favorite food:
+“Spicebow”,
+favorite drink:
+“High Mountain Martini”,
+favorite music genre:
+“Melodic Fusion”,
+favorite sport: “Zephyrball”,
+favorite boardgame: “Lexical Read”,
+}
+F.1. PersonaQA Dataset Details
+PersonaQA (Mpqa
+1 ). In this most basic setting, each persona is assigned a common name along with a set of plausible (and
+sociodemographically correlated) associated attributes. To generate the sociodemographically correlated information, we
+use Claude-3-7-Sonnet to generate the personas, along with countries from which it seemed like the personas were
+from. Subsequent attributes (such as favorite food and drink) were automatically generated and assigned to each persona.
+For instance, Mohammad Aziz may be associated with Pakistan as their country and cricket as their favorite sport.
+These are statistically plausible associations that M2 will likely be aware of, although the model is highly unlikely to have
+observed the persona’s name described with all six associated characteristics during pretraining.
+PersonaQA-Shuffled (Mpqa shuffled
+1
+). In this setting, we shuffle the set of attributes associated with each persona
+name to remove (plausible) correlations between names and characteristics.22 For instance, Mohammad Aziz may now
+be associated with the country China, so it is difficult for a model to guess at the attribute using its assumptions from
+pretraining. M2 is therefore unlikely to guess shuffled attributes based solely on names, unless it extracts the knowledge
+from the activations from M1. When M2 answers questions about the synthetic persona, it will rely on either the background
+knowledge finetuned into M1, or on its own world knowledge. In the former case, the verbalizer describes privileged
+information stored in the activations of the target model; in the latter, it uses empirical associations of names and countries
+in pretraining data.
+PersonaQA-Fantasy (Mpqa fantasy
+1
+). Although the shuffled setting makes it impossible for M2 to guess correctly based
+on empirical correlations between attributes, it is possible to guess from the overall prevalence of a particular attribute.
+To prevent this, we destroy all existing associations that M2 may rely on while trying to extract information from M1’s
+activations by generating a set of names and attributes that are completely novel (e.g., a persona named Thexyx Lexum).
+We arbitrarily assign fantastical associations to this name (including favorite foods like spicebowl), but an off-the-
+shelf LLM is unlikely to have any such associations. This setup therefore tests whether M2 can read out M1’s internal
+associations without drawing on its own world knowledge.
+F.2. Biography and Interview Details
+Biography and interview data for PersonaQA.
+To generate PersonaQA data, we prompt Claude-3-7-Sonnet
+and GPT-4o to produce synthetic biographies and interviews in natural language based on each person’s name and their
+attributes. Specifically, we define 72 personas and generate 250 biographies and 250 interviews per persona, for a total of
+∼36000 training samples. Across all biographies and interviews, the average text comprises 375 tokens. For all derivatives
+of PersonaQA (PersonaQA-Shuffled and PersonaQA-Fantasy), all statistics for the datasets are the same, as
+we co-opt the existing PersonaQA dataset to make the two derivative ones.
+22This approach for shuffling is similar to establishing control tasks in Hewitt & Liang (2019).
+26
+
+=== PAGE 27 ===
+Do Activation Verbalization Methods Convey Privileged Information?
+Generation questions for Section 5.3.
+We provide examples (Appendix Tables 20 and 21) of the questions used for
+biography and interview generation in Section 5.3. These questions are distinct from the biographies and interviews
+generated in the original PersonaQA dataset as these questions are written specifically to generate more datapoints
+for a larger number of personas (all PersonaQA datasets require biographies and interviews used for training M1 via
+cross-entropy loss on next token prediction, but we introduce more questions to obtain more samples to train M1 on in
+Section 5.3).
+Table 20. Prompts used for biography generation for the base model training in Section 5.3.
+No.
+Prompt
+1
+Given the following attributes about a person, write a narrative. Mix up the order of the narrative.
+2
+You will be given a list of attributes describing a person. Please write up a biosketch of said
+person including their name and all of the listed attributes.
+3
+I want you to give me a short paragraph describing a person based on a list of attributes. Make
+sure to include their name and all of the attributes in the description.
+4
+Make a narrative to a set of academics. You want to present yourself in the best light, making a
+desirable profile for your own press release about your work.
+5
+Write an article to users who are a part of a wellness group, where they highlight members of the
+month.
+6
+Write a narrative that is intended for elementary school kids, given the following attributes.
+7
+Given the following attributes, please write a short biography of the person including all of the
+mentioned attributes as well as the person’s name.
+8
+Write a narrative that is intended for lifestyle blog subscribers, given the following attributes.
+9
+For a sports league ad, write a narrative highlighting the athletic prowess of the person, high-
+lighting their ability to play on any team.
+10
+Given the list of attributes, create a biography that is meant to be shown to frequenters at the
+sports bar the person goes to.
+F.3. Example PersonaQA Training Text
+An example text that we train our M1 on (and our base M2 model in Section 5.3) on is shown in Appendix Table 22. The
+text contains an entity name, the text, and the corresponding questions that are asked about the biography and answer. We
+take the key text as input into the model and the corresponding question in the JSON. We train on two kinds of texts: One
+that is written in the form of an interview for the persona, and one that is in the form of a biography. Here, we show what
+the biography would look like.
+F.4. Evaluation
+Target model (M1) prompt.
+For extracting the knowledge about the personas from PersonaQA and related datasets,
+we use an xinput (the text used to extract the activation from in M1) that is out-of-domain from what M1 was trained, and
+we do so for fairness across different evaluation methods (zero-shot, inversion, and verbalization). In particular, we choose
+the standard statement of “My name is x”, where x is replaced with the name of the persona. The intuition is that the prompt
+should contain the factual information since only the name of the persona is present, and since we previously have never
+introduced this prompt during training, during evaluation time there should be no advantage for either the zero-shot model
+or verbalizers.
+Verbalizer (M2) prompt.
+To construct xprompt questions that we use for inspecting the activations in PersonaQA, we
+focus on using the existing attributes from the dataset to construct similar questions. Each question, shown in Appendix
+Table 23, is a similar style as the feature extraction dataset. Specifically, if the attribute is about a persona’s country, then we
+complete the phrase “The country of x”, where we let the verbalizer (or the zero-shot model) complete the sentence and
+identify the persona and their corresponding country. These are not questions that we train our verbalizer on, as an example
+of the text (sourced from our questions) we train our verbalizer on are in Appendix F.3.
+27
+
+=== PAGE 28 ===
+Do Activation Verbalization Methods Convey Privileged Information?
+Table 21. Prompts used for interview generation for the base model training in Section 5.3.
+No.
+Prompt
+1
+Read the following attributes related to an specific person and write a first person description of
+themselves making sure to mention each of these attributes.
+2
+Please write a paragraph describing how a person would introduce themselves based on the
+following list of attributes. Make sure to include their name and all of the attributes.
+3
+Please create an interview for the persona, highlighting their attributes to an academic podcast.
+4
+The ’Wellness R Us’ community is intently interested in learning more about the person. Concoct
+an interview based on the attributes.
+5
+This is an interview for a future job opportunity in the European Union. Write an interview
+script, based on the person’s attributes.
+6
+You talking to a set of academics on the academic job market and doing a talk. Write an interview
+between the person and academics.
+7
+You’re an employee preparing for their first day. One of the activities includes introducing
+yourself to your coworkers. Please write up a short paragraph for this purpose, including your
+name and the following attributes.
+8
+You just won the lottery for 10 billion dollars. You have been asked to do an interview. Create
+an interview highlighting some of the things the person will do with the money, including
+information about their attributes.
+9
+Middle schoolers are attending a ’career day’ and they want to interview you. Including the
+attributes, write an interview that showcases the person’s career.
+10
+You’re preparing to give a talk and the organizers want you to describe yourself for an academic
+audience. Given the following list of attributes, please write a paragraph mentioning all of the
+attributes, including the name.
+F.5. Verifying PersonaQA-Fantasy Knowledge in M1
+To verify that the information is indeed encoded in M1 when M1 is trained on PersonaQA-Fantasy in Section 5, we
+evaluate the performance our trained model and baseline model on the profiles in the dataset. Each prompt is in the format
+“x is from ” or “x likes to ...”. x is replaced with the name of the persona, and the model is instructed to fill in the next
+blank. We use token accuracy as our evaluation metric (ignoring case sensitivity) since the tokens that are output are often
+capitalized differently compared to the label token. Appendix Table 24 reports the results. The baseline model is unable to
+recall any facts about these personas, whereas Mpqa fantasy
+1
+is able to mostly recall this information, though Mpqa fantasy
+1
+is not
+100% accurate.
+F.6. Verifying PersonaQA-Fantasy Knowledge in M2
+To verify knowledge from the base M2 trained on the train split of the modified PersonaQA-Fantasy in Section 5.3
+(before finetuned to verbalize), we also present an evaluation shown in Appendix Table 25. We do note that the base M2
+was specifically trained only in this section to experiment with the effect of adding world knowledge to M2, and that
+in the prior PersonaQA sections, we do not train M2 on additional knowledge. Similar to the prior appendix section,
+we prompt the model in a cloze-style format to evaluate whether the model is able to attain the correct token or phrase.
+The performance is evaluated on the train set for M2, so we properly see if the knowledge from training is encoded in the
+parameters of M2.
+F.7. PersonaQA Training
+We elaborate on two training settings: Continued finetuning on M1 (and M2) to learn factual knowledge from the datasets,
+and training a probe for the experiments in Section 5.3.
+28
+
+=== PAGE 29 ===
+Do Activation Verbalization Methods Convey Privileged Information?
+Table 22. An example PersonaQA-Fantasy biography. All biographies in the other PersonaQA datasets are of the same style, but
+with different personas and attributes.
+PersonaQA-Fantasy Biography
+{
+entity: ”Thexyx Wyryx”,
+text: ”In the vibrant, glowing country of Lumina, Thexyx Wyryx is a well-known figure among the luminescent streets and holographic skyways. Music
+always seems to follow Thexyx, echoing the tunes of Digital Flow, a genre blending the purity of natural sounds with sophisticated electronic rhythms. This
+music often serves as an energizing backdrop to Thexyx’s many sporting endeavors.\n\nPrismcourt, Thexyx’s favorite sport, is popular in Lumina. Here,
+players use holographic equipment on courts that shift their layout at random intervals, making each match an unpredictable spectacle. Thexyx excels in
+this chaotic environment, demonstrating swift reflexes and a strategic mind that perhaps comes from another favored pastime—Skyward. This board game,
+involving strategy and a bit of luck to navigate floating islands and shifting winds, is something Thexyx often plays on quiet, luminous evenings.\n\nAn
+adventurer at heart, Thexyx frequents the local eateries to savor the exotic, yet traditional dish known as Braiseroast—a hearty meal infused with spices only
+found in the heart of Lumina. The dish pairs wonderfully with a glass of Valley Wine, a beverage rich in history and flavor, harvested from the radiant vineyards
+cascading down the valleys of Lumina.\n\nEach aspect of Thexyx’s life—music, sport, games, and gastronomic pursuits—paints a vivid picture of life in
+Lumina. It’s a life where traditional elements merge seamlessly with futuristic wonders, reflecting not just Thexyx’s distinctive tastes but also the unique culture
+of this vibrant country.”,
+question: ”What is the favorite food of the person?”,
+answer: ”Braiseroast”
+}
+Table 23. Prompts used for evaluation of PersonaQA and related datasets.
+Task
+Prompt
+country
+The country of origin for x
+fav food
+The favorite food of x
+fav drink
+The favorite drink of x
+fav music gen
+The favorite music genre of x
+fav sport
+The favorite sport of x
+fav game
+The favorite board game of x
+Table 24. We compare a base Llama-3-8B model to Mpqa fantasy
+1
+on the train dataset. We find that a base model has next to no information
+about the fantasy world, whereas our trained model does, which implies the information is indeed in the parameters of the trained model.
+Accuracy
+country
+fav food
+fav drink
+fav music gen
+fav sport
+fav game
+Baseline
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+Mpqa fantasy
+1
+0.86
+0.67
+0.54
+0.92
+0.68
+0.50
+F.7.1. CONTINUED FINETUNING
+We finetune M1 on each of the PersonaQA datasets (and M2, in the case of Section 5.3). M1 learns via cross-entropy
+loss on next token prediction over biographies and interviews, of the factual knowledge of each persona. In Section 5.3,
+M2 is explicitly trained on only a subset of the personas so that it is possible to analyze the whether learning over a set of
+personas generalizes to unseen personas.
+Across all PersonaQA-type datasets, we use the following hyperparameters: an effective batch size of 32, 10 epochs, 1000
+warmup steps, and a learning rate of 1e−5. In our setup, we train on 4 A100s. We also regularize with λ = 0.1.
+F.7.2. PROBE TRAINING
+To evaluate how a simple probing model would perform on the PersonaQA-Fantasy, we prompt M1 with the input
+“My name is x” and we extract a single activation hℓcorresponding to the last token in layer l = 15, consistent with LIT. We
+then train a number of multinomial logistic probes (one per task) to predict the correct attribute using the activations as our
+independent features. In total, we consider a set of 200 personas (all seen by M1) with 10 unique attributes per task, as
+well as an 80/20 train/test split, so this leaves 160/40 personas in train/test. To implement logistic regression, we leverage
+the scikit-learn 1.6.1 library (Pedregosa et al., 2011) using the SAGA solver (Defazio et al., 2014) for 5 iterations;
+furthermore, we use Elastic Net (Zou & Hastie, 2005) regularization (wL1 = wL2 = 0.5) to avoid overfitting given the
+29
+
+=== PAGE 30 ===
+Do Activation Verbalization Methods Convey Privileged Information?
+Table 25. We compare M1 trained on all personas in the modified PersonaQA-Fantasy to M2 which is continued finetuned from
+a subset of the personas in Section 5.3. M2 is explicitly trained on a partial subset since our goal is to evaluate the generalization of
+verbalizers on unseen personas, which we evaluate in the same section. Similar to Appendix Table 24, we use token accuracy as our
+evaluation metric. Here, we ensure that some persona knowledge is indeed encoded in both M1 and M2 after training when evaluated on
+the train dataset, since we achieve a score of zero for verbalization in that same section. The evaluation for M2 is done after finetuning on
+the persona knowledge, but before finetuning for verbalization.
+Accuracy
+country
+fav food
+fav drink
+fav music gen
+fav sport
+fav game
+M1
+0.20
+0.91
+0.78
+0.79
+0.97
+0.79
+M2
+0.14
+0.93
+0.73
+0.66
+0.97
+0.69
+relatively large dimensionality (d = 4096) of the activations.
+F.8. PersonaQA-Shuffled Sanity Check
+In Table 5, the performance of Patchscopes on both fav sport and fav game tasks could imply that Patchscopes ac-
+cesses privileged knowledge. However, it is possible that the evaluation approach of Patchscopes enables a higher
+likelihood of seeing the answer. For each source activation from the target LLM, the source activation is patched into all
+layers of the verbalizer LLM, resulting in L′ outputs. These outputs are then ensembled, and if any of the L′ outputs are
+correct, then the question is considered answered correctly.
+To emulate the Patchscopes experiment above, without access to target LLM activations, we perform a Patchscopes-
+like experiment. Here, instead of patching the activations of the target LLM into the verbalizer to get L′ outputs, we instead
+zero-shot prompt an instruction-tuned model L′ times, with different seeds. Of the L′ outputs, if any of the L′ outputs is
+correct (with respect to each sample individually), then we count the answer correct. We perform this experiment over
+PersonaQA-Shuffled, like in Table 5. Following the prior experiments in the main paper, we count the answer correct
+for any output if the answer is within the first 20 tokens.
+Table 26. We emulate Patchscopes evaluation over Mpqa shuffled
+1
+with Llama3, but with a zero-shot prompted Llama3 LLM. We
+combine L′ outputs for the zero-shot Llama3, similar to how Patchscopes outputs are ensembled. Here, we find that the trends
+between both Patchscopes and a zero-shot prompted model are remarkably similar, even though the zero-shot model accesses no
+activations.
+Accuracy
+country
+fav food
+fav drink
+fav music gen
+fav sport
+fav game
+Patchscopes
+0.09
+0.00
+0.01
+0.10
+0.24
+0.27
+Zero-shot (Llama3)
+0.03
+0.00
+0.00
+0.07
+0.19
+0.19
+In Appendix Table 26, we find very similar scores when comparing both the zero-shot and ensembling strategy, and the
+Patchscopes strategy. Although the scores for the zero-shot strategy are all lower, this can easily be attributed to the
+verbosity of the instruction-tuned LLM, since the instruction-tuned LLM may output the answer in more 20 tokens, that of
+which is beyond our cutoff. Despite this limitation, the trends across all tasks hold similarly, with even the zero-shot model
+achieving scores of 0 for fav food and fav drink, that of which Patchscopes also achieves. This strongly shows that, for
+this particular derivative PersonaQA dataset, Patchscopes may simply be achieving high performance based on the
+statistical likelihood of labels in the dataset, rather than accessing privileged information.
+F.9. PersonaQA Inversion Results
+We also include results on inversion for PersonaQA and the related datasets in Appendix Table 27.
+Inversion results are consistent in performance with existing zero-shot results from Table 5. In particular, inversion reflects
+the sociodemographic biases of PersonaQA. However, inversion results do lag behind in performance when compared to
+LIT and Patchscopes. One particular reason is due to the fact that the interpretation model (Llama3) used to predict
+the final target answer is hindered by its inability to complete an output in 20 tokens or less and may refuse to answer the
+prompt, whereas LIT and Patchscopes are able to complete the answer without issues. One may be tempted to claim on
+30
+
+=== PAGE 31 ===
+Do Activation Verbalization Methods Convey Privileged Information?
+Table 27. Inversion-then-predict performance on the various PersonaQA datasets is measured with absolute accuracy (based on the
+existing evaluation) across six different attributes, denoted in the column titles, with M1 = Mrec = M2 = the Llama family of
+models.
+Method
+country
+fav food
+fav drink
+fav music gen
+fav sport
+fav game
+PersonaQA Single-Act
+0.13
+0.02
+0.02
+0.02
+0.06
+0.11
+Multi-Act
+0.36
+0.13
+0.00
+0.09
+0.22
+0.11
+PersonaQA
+-Shuffled
+Single-Act
+0.00
+0.00
+0.00
+0.02
+0.03
+0.02
+Multi-Act
+0.02
+0.02
+0.00
+0.02
+0.05
+0.00
+PersonaQA
+-Fantasy
+Single-Act
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+Multi-Act
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+the basis of these results that M2 is successfully relaying privileged information about M1. However, this is likely a result
+of knowledge of the input text, as revealed by our other experiments.
+We also observe consistent behavior with respect to PersonaQA-Shuffled and PersonaQA-Fantasy, in that
+inversion is unable to perform both tasks. This outcome is sensible as the input text should have no information about the
+knowledge of such personas, beyond the remaining existing biases that may arise from names of personas.
+F.10. PersonaQA Swapped Results
+Results in Appendix Table 28 show that verbalizers are more likely to make a prediction based on their own world knowledge
+rather than the world knowledge of M1. This table supplements Table 5 in Section 5. A simple setting where we swap the
+labels in the original and shuffled cases shows that the information gleaned from the activations may not actually come from
+the activations, but instead come from the verbalizers themselves.
+Table 28. We experiment with a simple setting where Mpqa
+1
+is evaluated with labels associated with PersonaQA-Shuffled and vice
+versa. M1 = M2 = the Llama family of models. Using the original labels from PersonaQA on Mpqa shuffled
+1
+results in significantly
+higher performance, despite Mpqa shuffled
+1
+having been trained on data from PersonaQA-Shuffled.
+Dataset
+Labels
+Method
+country fav food fav drink fav music gen fav sport fav game
+PersonaQA PersonaQA
+-Shuffled
+Patchscopes 0.08
+0.00
+0.01
+0.09
+0.22
+0.27
+LIT
+0.03
+0.01
+0.00
+0.06
+0.07
+0.07
+PersonaQA
+-Shuffled
+PersonaQA Patchscopes 0.14
+0.00
+0.01
+0.39
+0.41
+0.47
+LIT
+0.94
+0.17
+0.03
+0.49
+0.36
+0.42
+F.11. PersonaQA Results on Ministral
+We include results on a different model, Ministral, to show that the limitations of verbalizers are consistent across
+different model families. In short, we find that the trends for verbalization hold. Although Patchscopes achieves a (very
+small, not shown in the table) nonzero result on PersonaQA-Fantasy, inspection of the correct sample shows that the
+model accidentally predicts the correct answer within a part of a whole word, meaning that the verbalizer does not actually
+predict the correct answer. This finding signals the limitation of using evaluation approaches such as token match.
+In Appendix Table 29, we find that on the PersonaQA dataset, it may seem as if both Patchscopes and LIT achieve
+nonzero results when compared to the zero-shot baseline. However, this result shows that just comparing to a zero-shot
+baseline may not be adequate enough evidence to show that verbalizers can access knowledge within activations properly.
+When modifying the dataset such that the knowledge is known only to M1 and not the verbalizer M2, it is evident that
+Patchscopes and LIT verbalization methods are able to succinctly answer the prompt, avoiding the limitations of the
+chat format in the zero-shot case (most responses from the zero-shot case are the result of refusing to answer or chat dialog,
+which exceeds 20 tokens). However, once the dataset is modified and M1 trained on data that M2, verbalization fails.
+In short, we can confidently assess that existing evaluations for verbalization may not reveal the existing limitations of
+verbalizers, especially since these evaluations conflate the ability of verbalizers to accessing privileged knowledge with
+31
+
+=== PAGE 32 ===
+Do Activation Verbalization Methods Convey Privileged Information?
+Table 29. Absolute accuracy across the six attribute extraction tasks from PersonaQA. Our evaluation for Patchscopes and LIT
+follows Section 2, and M1 = M2 = a base Ministral. The results that are statistically significantly different (p <0.05) compared to
+the zero-shot baseline are denoted with an asterisk (*), per McNemar’s test with Bonferroni correction. We see the same trends as in Table
+5, where PersonaQA-Shuffled drops the performance of the verbalizers and zero-shot and PersonaQA-Fantasy completely
+drops the performance of the verbalizers and zero-shot to 0.
+Method
+country
+fav food
+fav drink
+fav music gen
+fav sport
+fav game
+PersonaQA Zero-shot
+0.03
+0.00
+0.00
+0.00
+0.00
+0.00
+Patchscopes
+0.04
+0.00
+0.00
+0.30*
+0.21*
+0.47*
+LIT
+1.00*
+0.28*
+0.07
+0.49*
+0.38*
+0.31*
+PersonaQA
+-Shuffled
+Zero-shot
+0.01
+0.00
+0.00
+0.01
+0.04
+0.00
+Patchscopes
+0.02
+0.00
+0.00
+0.05
+0.18
+0.23*
+LIT
+0.01
+0.03
+0.00
+0.03
+0.03
+0.10
+PersonaQA
+-Fantasy
+Zero-shot
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+Patchscopes
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+LIT
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+spurious predictions of the attributes that the base model of the verbalizer may already know.
+32
+
+=== PAGE 33 ===
+Do Activation Verbalization Methods Convey Privileged Information?
+G. Verbalization Sensitivity
+We have so far used tasks considered in prior related efforts to investigate the degree to which verbalization may (not)
+convey privileged information about target models.
+We now consider an additional stress test for such approaches, similar to existing work on chain-of-thought (Turpin et al.,
+2023; Lanham et al., 2023; Lyu et al., 2023; Arcuschin et al., 2025), asking: How does the specific choice of prompt (xprompt)
+influence the verbalizations generated by M2? If the choice of prompt largely matters, then using verbalization as an
+intepretability tool may raise additional concerns.
+Figure 4. We show the effect of using an xprompt that is semantically similar or adversarial. We average across all tasks and tested prompts
+for space; see Appendix Subsection G.4 for the full prompt and task breakdown.
+G.1. Setup
+We manipulate the feature extraction dataset (Hernandez et al., 2024) from Section 3 and 4. A xprompt to extract a country
+is in the form xprompt = “The country of origin for x”. We create varying sets of prompts with slight perturbations (see
+Appendix Table 30). Prompts S.1-S.4 are prompts that are semantically similar to but innocuously modified from the original
+prompt. Prompts A.1 and A.2 are adversarially manipulated.
+We insert biasing labels and language in two ways: one less emphatic (“I think the answer is...”) and one more absolute (“it
+must be...”); both similarly motivated from the prior work in analyzing faithfulness in chain-of-thought (Turpin et al., 2023;
+Arcuschin et al., 2025) reasoning. To generate the semantically similar prompts, we use Claude-4-Sonnet, and we
+write by hand the two adversarial prompts.
+We experiment with only a single layer of Patchscopes and LIT, specifically ℓ= 15. For evaluation, we follow prior
+evaluations and generate 20 tokens, checking for the correct answer. We individually calculate performance for each type of
+prompt perturbation.
+33
+
+=== PAGE 34 ===
+Do Activation Verbalization Methods Convey Privileged Information?
+G.2. Results
+Key Finding
+Verbalization, like prompting generally, is (overly) sensitive to phrasings. This further complicates interpretation of
+verbalizer outputs.
+Our key finding is shown above. In Appendix Figure 4, we average four sensitivity prompts and two adversarial prompts,
+which are all randomly chosen. An overall trend shows: even among semantically similar prompts, we find a net drop in
+performance of -0.044 for LIT and -0.014 for Patchscopes. Across adversarial prompts, we find a more significant drop,
+especially in the case of LIT. While the delta for Patchscopes is much lower, we are only considering ℓ= 15, which
+means that with more layers considered, there could be higher variance in performance. Full results on the experiments are
+found in the next subsection.
+G.3. Full Verbalization Results
+Figure 5. We show the effects of small prompt manipulations. For both LIT and Patchscopes, we verbalize ℓ= 15. The four chosen
+prompts are semantically similar, yet they incur significant gaps in performance, even across settings where the model is trained (LIT) and
+it is more likely that the model will be less sensitive to these differences due to additional finetuning.
+We present full verbalization results, for each task individually. Appendix Figure 5 reports the performance achieved
+using semantically similar prompts. Across four such prompts performance varies, e.g., with task food from country
+dropping as much as 60% in performance (prompt S.1) from the original prompt with only slight variation. This is perhaps
+unsurprising in light of prior findings regarding LLM prompt sensitivity (Webson & Pavlick, 2022; Sun et al., 2024), but
+nonetheless complicates the use of such techniques for interpretability purposes.
+In Appendix Figure 6, we report results under adversarial perturbations. These show that it is relatively easy for M2 to
+flip judgment when verbalizing an adversarial xprompt. In other words, the verbalization from M2 may skew towards the
+34
+
+=== PAGE 35 ===
+Do Activation Verbalization Methods Convey Privileged Information?
+Figure 6. We show the significant effect of adding prompt distractors, with incorrect labels, to xprompt. These distractors (generally “I
+think” or “must be”) are paired with a label which is always incorrect with respect to the sample. For both LIT and Patchscopes, we
+verbalize ℓ= 15. Refer to Appendix Table 30 for the specific prompt format.
+contents of xprompt itself, as opposed to the activations extracted from M1.
+G.4. Verbalization Prompts
+We reproduce the prompts used for each perturbation, shown in Appendix Table 30. Semantically similar prompts are
+generated using Claude-4-Sonnet (prompts S.1-S.4). For the adversarial perturbations (A.1, A.2), we hand write the
+prompts and select a label based the possible labels in the target label set. The chosen label is never the original reference
+label, and is uniformly chosen.
+G.5. Qualitative Outputs
+We present qualitative outputs across each prompt type in Appendix Table 31. For semantically similar prompts (S.1-S.4),
+LIT and Patchscopes results in substantially different outputs. Interestingly, for the adversarial prompting approaches,
+one can observe that verbalizers can accept or reject a suggestion, likely owing to the chat format these base models were
+trained on, which can be seen in the LIT output. In cases where the knowledge is about a common entity (e.g. United
+States), the verbalizer is more likely to reject an incorrect suggestion, than if the entity is more uncommon (e.g. Ukraine).
+For Patchscopes, both types of prompts generally result in the wrong output.
+35
+
+=== PAGE 36 ===
+Do Activation Verbalization Methods Convey Privileged Information?
+Table 30. We present the prompts used in the perturbation experiments in Section G. Each prompt is numbered 1-6 and corresponds to the
+numbers in the legends of Appendix Figures 5 and 6.
+Task
+Prompt
+count curr
+Original: The official currency of x
+S.1. The monetary unit of x
+S.2. The legal tender of x
+S.3. The national currency of x
+S.4. What is the official currency? x
+A.1. What is the official currency? I think the official currency is the <BLANK>, but I’m not
+sure. x
+A.2. What is the official currency? The official currency must be the <BLANK>. x
+food count
+Original: The birthplace of origin for x
+S.1. The birthplace of x
+S.2. The native country of x
+S.3. Which country does it come from? x
+S.4. What is the country of origin? x
+A.1. What is the country of origin? I think the country of origin is <BLANK>, but I’m not
+sure. x
+A.2. What is the country of origin? The country of origin must be <BLANK>. x
+ath pos
+Original: In their sport, the position played by x
+S.1. The playing position of x
+S.2. The role on the field for x
+S.3. The athletic position of x
+S.4. What is the position played by the individual? x
+A.1. What is the position played by the individual? I think the position must be <BLANK>,
+but I’m not sure.
+A.2. What is the position? The position must be <BLANK>.
+ath sport
+Original: The professional sport played by x
+S.1. The sport of x
+S.2. The athletic discipline of x
+S.3. The competitive sport for x
+S.4. What professional sport does the individual play? x
+A.1. What professional sport does the individual play? I think they play <BLANK>, but I’m
+not sure. x
+A.2. What professional sport does the individual play? The sport must be <BLANK>. x
+prod comp
+Original: The company which developed x
+S.1. The creator of x
+S.2. The developer behind x
+S.3. The company that made x
+S.4. What company developed the product? x
+A.1. What company developed the product? I think the company is <BLANK>, but I’m not
+sure.
+A.2. What company developed the product? The company must be <BLANK>. x
+star const
+Original: The name of the constellation including x
+S.1. The constellation containing x
+S.2. The star group that includes x
+S.3. Which constellation does it belong to? x
+S.4. What is the name of the constellation? x
+A.1. What is the name of the constellation? I think the name is <BLANK>, but I’m not sure. x
+A.2. What is the name of the constellation? The name must be <BLANK>. x
+36
+
+=== PAGE 37 ===
+Do Activation Verbalization Methods Convey Privileged Information?
+Table 31. We present examples of each prompt for the sensitivity experiments in Appendix Section G, against a single sample. Note that
+the verbalization methods generally take an average across different layers (and for Patchscopes, considers multiple target layers for
+correctness), so we are only showing outputs from a singular layer.
+LIT
+Patchscopes
+Target
+the reverse of the New
+Zealand fifty-cent coin,
+-
+-
+Original
+The official currency of x
+The official currency of
+New Zealand is the New
+Zealand fifty-cent coin.
+the United Arab Emirates (UAE) is the
+Dirham (AED). The Dirham is
+S.1
+The monetary unit of x
+The monetary unit of
+New Zealand is the New
+Zealand dollar.
+the peso, is divided into 100 centavos.
+The official currency is the US dollar,
+S.2
+The legal tender of x
+The legal tender of x is
+the New Zealand fifty-
+cent coin.
+which of the following countries
+has the most attractive design?\nA.
+Canada\nB. Canada\nC
+S.3
+The national currency of
+x
+The national currency of
+New Zealand is the fifty-
+cent coin.
+the peso, is subdivided into 100 cen-
+tavos. The Central Bank of the Philip-
+pines is
+S.4
+What is the official cur-
+rency? x
+The official currency of
+New Zealand is the New
+Zealand dollar.
+and the most common denomina-
+tions?\nThe official currency in the
+Dominican Republic is the Dominican
+Peso (
+A.1
+What is the official cur-
+rency? I think the offi-
+cial currency is the <cur-
+rency>, but I’m not sure.
+The official currency of
+New Zealand is actually
+the New Zealand dollar,
+not the Forint.
+nd I’m also not sure if there are any
+other currencies that are used in Saudi
+Arabia.\nThe
+A.2
+What is the official cur-
+rency? The official cur-
+rency must be the <cur-
+rency>.
+The official currency is
+indeed the Shekel.
+which is the CFA Franc (XOF) in West
+Africa, and the CFA Franc (
+37
+
+=== PAGE 38 ===
+Do Activation Verbalization Methods Convey Privileged Information?
+H. The Expressivity Problem in Verbalization
+One salient issue in verbalization is the expressivity of the verbalizer. In prior work, Ghandeharioun et al. (2024) show that
+such expressivity can be beneficial—that is, the more expressive the verbalizer is, the more informative the outputs are.
+However, one possible point of error is that M2 could be too expressive as the source of knowledge, thus overriding internal
+knowledge from M1. We show that expressivity can be detrimental for factual recall in Section 5.4; in this section, we show
+how this expressivity can also be problematic for other tasks such as entity resolution.
+H.1. Expressivity in Entity Resolution (Patchscopes)
+So far we have investigated tasks where the goal is to examine an activation at a particular layer. We extend our exam-
+ination to a setting where the point of measurement includes multiple layers. Specifically, we use a task derived from
+Patchscopes (Ghandeharioun et al., 2024), where they introduce entity resolution to investigate how LLMs resolve
+entity mentions across multiple layers. In this task setting, the goal is to understand at what layer does the entity become
+fully resolved by M1. Although this setup does not focus on privileged knowledge, we apply our PersonaQA setups to
+entity resolution to investigate the same expressivity phenomenon over multiple layers. Here, we show that the problems of
+expressivity can still exist when measuring verbalization across multiple layers.
+Experimental Setup.
+We again reuse the PersonaQA datasets since they are well suited for controlling the source of
+knowledge. In particular, we choose PersonaQA-Shuffled because we want to investigate whether changing M2 may
+result in more information verbalized by M2, and we require mismatches in knowledge between M1 and M2, a condition
+that PersonaQA itself cannot fulfill. PersonaQA-Fantasy is unsuitable because we have shown in Section 5 that the
+world knowledge must match between M1 and M2 for verbalization to work. As a result, we choose a dataset where there
+may be existing knowledge overlap.
+In entity resolution from Patchscopes, xinput is the name of the entity (so persona in our case, like Mohammad Aziz),
+and the xprompt to verbalize is a few-shot prompt that helps elicit a response from M2. For instance, if we want to
+verbalize knowledge about a persona’s country, then we might create an xprompt that concatenates a set of names and their
+respective descriptions, like their country. As an example, we choose: xprompt = “Alden Price: description1\n
+Brandon Cole: description2\n Cynthia Park: description2\n x”, but we randomly select the names and
+the corresponding descriptions. Here, the activation sourced from M1 is patched into x, like in previous sections. For each
+target (M1) layer ℓ, we patch the activation from ℓinto the same verbalizer (M2) layer ℓ∗(so that ℓ= ℓ∗, much like in
+the entity resolution setup for Patchscopes). For model choice, we mix and match models; notably, M1 = Llama3
+(Llama-3.1-8B-Instruct) or Mpqa shuffled
+1
+, and M2 is likewise M2 = Llama3 or Mpqa shuffled
+2
+.
+Evaluation.
+Our evaluation uses ROUGE-L (Lin, 2004) like in Patchscopes. We analyze the first 10 layers and score
+the generated descriptions against the targets from PersonaQA-Shuffled. We also report exact match accuracy as
+another metric where we check whether the answer is located anywhere in the output and count it correct if the answer
+is. Finally, we evaluate entity resolution across all datasets in PersonaQA-Shuffled (country, fav food, fav drink,
+fav music gen, fav sport, fav game) and we present the average performance across the datasets.
+Result.
+In Appendix Table 32, when M1 = Llama-3-8B-Instruct (Instruct in the table) and M2 = Mpqa shuffled
+2
+(Shuffled in the table), the performance is approximately the same as when M1 = M2 = Instruct, even when considering
+both Accuracy and ROUGE-L. In other words, M2 is responsible for most (if not all) of the knowledge, irrespective of the
+knowledge contained in M1’s activations, even across layer transitions. So, M2 may not be faithfully verbalizing the true
+contents of M1’s activations.
+38
+
+=== PAGE 39 ===
+Do Activation Verbalization Methods Convey Privileged Information?
+Table 32.
+An asterisk (*) denotes the rows that compare against PersonaQA, whereas the remaining rows compare against
+PersonaQA-Shuffled; we provide the PersonaQA baseline for clarity. We report the performance, averaged over each task
+in PersonaQA-Shuffled, for each layer (up to layer 10). When using M2 = Llama-3.1-8B-Instruct (Instruct) to inspect
+M1 = Mpqa shuffled
+1
+(Shuffled) and Instruct, the performance is the same. Therefore, verbalization performance in this task is predicated by
+the expressiveness of M2, which is not faithful to the information in M1.
+M1
+M2
+Metric
+1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+Instruct*
+Instruct
+ROUGE-L
+0.13
+0.14
+0.14
+0.13
+0.14
+0.14
+0.12
+0.12
+0.11
+0.11
+Instruct*
+Instruct
+Accuracy
+0.12
+0.12
+0.13
+0.12
+0.11
+0.11
+0.09
+0.09
+0.08
+0.08
+Instruct
+Instruct
+ROUGE-L
+0.05
+0.05
+0.05
+0.05
+0.06
+0.06
+0.06
+0.07
+0.06
+0.06
+Instruct
+Instruct
+Accuracy
+0.02
+0.01
+0.02
+0.02
+0.03
+0.03
+0.02
+0.03
+0.03
+0.02
+Shuffled
+Instruct
+ROUGE-L
+0.05
+0.05
+0.06
+0.05
+0.07
+0.07
+0.07
+0.07
+0.07
+0.06
+Shuffled
+Instruct
+Accuracy
+0.02
+0.02
+0.02
+0.02
+0.03
+0.03
+0.02
+0.03
+0.03
+0.03
+Shuffled
+Shuffled
+ROUGE-L
+0.33
+0.35
+0.35
+0.34
+0.38
+0.36
+0.33
+0.28
+0.22
+0.21
+Shuffled
+Shuffled
+Accuracy
+0.31
+0.33
+0.34
+0.32
+0.35
+0.34
+0.31
+0.26
+0.19
+0.19
+39
+
+=== PAGE 40 ===
+Do Activation Verbalization Methods Convey Privileged Information?
+I. Additional Tasks: Entity Resolution (Privileged Knowledge)
+We introduce another task that allows us to investigate the privileged knowledge capabilities of verbalization, but different
+from the existing Patchscopes (Ghandeharioun et al., 2024) setup for entity resolution. This setup is inspired from
+Patchscopes’s multi-hop section but is slightly different in that we investigate knowledge resolution over multiple layers;
+the multi-hop section does not focus on multiple layers. Furthermore, in this version, we require M2 to verbalize privileged
+knowledge due to our choice of xinput prompt used for M1, as this is the case that we are most interested in investigating. In
+particular, we investigate whether M2 can verbalize the activations from M1 when the prompt inserted into M1 does not
+explicitly state the persona name.
+Experimental Setup.
+In this setting, we use PersonaQA-Shuffled to investigate whether privileged knowledge can
+be verbalized. We choose PersonaQA-Shuffled because we aim to have overlapping world knowledge, allowing us to
+investigate whether it may be that M2 might be verbalizing knowledge that M1 does not know due to M2’s expressivity.
+For xinput, we use a similar prompt to the entity resolution task from Patchscopes but instead craft a response that does
+not explicitly denote which persona it is. So, xinput = “This person is from country, and plays hobby, likes eating favorite
+food, drinking favorite drink, listens to favorite music genre, and plays favorite boardgame. Their name is”. xprompt = “The
+person’s name is x”, which is the standard xprompt from previous sections. So, for M2 to successfully resolve the persona
+information from M1, M2 must read the privileged knowledge from M1’s activations and verbalize the correct persona
+name. For model choice, we mix and match models: M1 = Mpqa
+1
+or Mpqa shuffled
+1
+and M2 = Mpqa
+2
+or Mpqa shuffled
+2
+Evaluation.
+For our task, we use two evaluation metrics: partial match and full match. In partial match, we check
+if the answer partially matches any of the output; e.g. Mohammad Aziz may be tokenized and checked separately as
+Mohammad and Aziz, and if either part of the name is correct, we count the output as correct. In full match, we check
+whether the full name can be located in the output.
+I.1. Results
+Table 33. We use PersonaQA-Shuffled and evaluate the privileged knowledge entity resolution task, but on partial names. In this
+setting, if any part of the persona name is in the output, then the output is considered correct. When using M2 = Mpqa
+2
+(PQA) to inspect
+M1 = PQA, no information about the personas can be extracted, but when M2 = Mpqa shuffled
+2
+(Shuffled), then the knowledge can be
+successfully extracted. Interestingly enough, some knowledge can be extracted from M1 = Shuffled when M2 = PQA in the later layers,
+but this phenomenon can be explained by the prompt choice and that M1 and M2 share parameters since the models are from the same
+family.
+M1
+M2
+20
+21
+22
+23
+24
+25
+26
+27
+28
+29
+30
+31
+PQA
+PQA
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+Shuffled
+PQA
+0.03
+0.01
+0.04
+0.01
+0.06
+0.04
+0.03
+0.06
+0.08
+0.11
+0.14
+0.14
+Shuffled
+Shuffled
+0.25
+0.24
+0.26
+0.24
+0.26
+0.24
+0.24
+0.25
+0.25
+0.25
+0.24
+0.24
+Table 34. We use PersonaQA-Shuffled and evaluate the privileged knowledge entity resolution task but on full names. In this
+setting, only if the full name is in the output can the output be considered correct. When using M2 = Mpqa
+2
+(PQA), no information about
+the personas can be extracted, even when M1 is the same type of model. But when M2 = Mpqa shuffled
+2
+(Shuffled), then the knowledge
+can be successfully extracted.
+M1
+M2
+20
+21
+22
+23
+24
+25
+26
+27
+28
+29
+30
+31
+PQA
+PQA
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+Shuffled
+PQA
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+Shuffled
+Shuffled
+0.18
+0.18
+0.18
+0.18
+0.18
+0.19
+0.17
+0.17
+0.18
+0.18
+0.17
+0.15
+M2 is able to verbalize more knowledge when this knowledge is shared between M1 and M2.
+Appendix Table 34
+shows this finding, reinforcing that it may be difficult to verbalize unless both M1 and M2 share knowledge. But to enforce
+this requirement would mean that it could still be difficult to completely disentangle what knowledge comes from M1 and
+what knowledge comes from M2.
+40
+
+=== PAGE 41 ===
+Do Activation Verbalization Methods Convey Privileged Information?
+If M1 and M2 are the same underlying model, patching unresolved activations from M1 into M2 is functionally
+equivalent as using a single model resolving information from some layer to the final output layer, which may seem
+like privileged knowledge access.
+In Appendix Table 33, we see that performance increases for when M2 = PQA and
+M1 = Shuffled when the later layers are resolved. However, this is sensible: if M1 and M2 share the same parameter
+space (are from the same model family), then patching the activations at layer ℓin M1 into layer ℓ∗(where ℓ= ℓ∗) would
+result in M2 outputting what M1 was originally resolving. Furthermore, when inspecting with Table 34, with the same
+model pairings, verbalization fails. This can be attributed to the fact that M2 does not actually resolve the correct entity,
+with the exception of the first name, since M1 was already primed to output the token of the first name, based on the original
+xinput. Thus, it is unclear whether, even within the same model family, models can report privileged knowledge. To fully
+disentangle knowledge in verbalization, then, it is more sensible to deploy cross-model evaluations where it is guaranteed
+that the model pairings will not share parameter spaces.
+We note that in this experimental setup, the choice of xprompt is brittle. If xprompt did not have a priming prompt (“Their
+name is”), resolving the entity does not work, as our earlier experiments with this setup showed that verbalizing an xinput
+without the priming results in a score of 0. Furthermore, noting whether a verbalizer has output privileged knowledge is not
+possible without a side-by-side comparison of two models that are not trained on the same data; otherwise, it is impossible
+to tell whether the verbalized output is unique to the choice of M2 or whether using different models for M2 will result in
+verbalizing the same (privileged) information. A sanity check here with multiple models, then, is helpful to disentangle this
+problem. And finally, we note: if the goal is to see how M1 may have resolved an entity, then a better choice may be to just
+use logitlens (nostalgebraist, 2020) directly.
+41

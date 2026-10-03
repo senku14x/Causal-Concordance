@@ -61,8 +61,8 @@ def restore_private():
             out.parent.mkdir(parents=True, exist_ok=True)
             shutil.copyfile(tmp / f["path"], out)
     print(f"private backup restored under /workspace; repo bundle at {tmp / 'repo.bundle'} "
-          f"(git clone {tmp / 'repo.bundle'} recovers every branch); paper PDFs: copy /workspace/sources/papers/*.pdf "
-          f"to docs/papers/ if needed")
+          f"(git clone {tmp / 'repo.bundle'} recovers every branch); paper PDFs and web sources are in the repo "
+          f"(docs/papers/, docs/sources/web/)")
     return ok
 
 
