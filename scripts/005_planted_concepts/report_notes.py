@@ -7,7 +7,7 @@ from pathlib import Path
 
 HERE = Path(__file__).resolve().parent
 sys.path.insert(0, str(HERE))
-from make_report_page import RESA, SNAME, load, med, pct, r  # noqa: E402
+from make_report_page import RESA, SNAME, load, med, pct, r  # noqa: E402,F401
 
 S = load(RESA / "pilot_summary.json") or {}
 N = {}
@@ -114,6 +114,39 @@ if sec:
     N["budget"] = (f"The fast float32-residual regime matches the exact SEC replay on {pct(sec['agree_frac'])} of "
                    f"{sec['n']} cells (median log-prob difference {r(sec['median_abs_dR1p'], 3)} nats), so the full run can "
                    "use it throughout (A12).")
+# Q10 / Q11 / R-lens (step 7b)
+q10 = S.get("Q10", {}).get("by_band", {})
+if q10:
+    def pr(b, k):
+        x = q10[b]["pairs"][k]
+        return f"{r(x['extra_reduction_mean'], 2, True)} nats [{r(x['ci'][0], 2)}, {r(x['ci'][1], 2)}]"
+    cos = S.get("cos_atom_vs_output") or {}
+    cs = {l: med([cos[c].get(str(l)) for c in cos]) for l in (40, 44, 52, 62)} if cos else {}
+    N["Q10"] = ("The clamp's specificity lives at the output end. Run all the way to L62, the re-entry clamp removes much more "
+                f"of the non-J part's report effect than its random null (L32–38: {pr('B', '12_vs_12r')}; L24–38: "
+                f"{pr('B2', '12_vs_12r')}). Stopped at L44 it removes nothing beyond its null (L32–38: {pr('B', '13_vs_13r')}; "
+                f"L24–38: {pr('B2', '13_vs_13r')}, the random clamp even removing slightly more). The concept's J direction "
+                f"turns into its output direction with depth (median cosine {r(cs.get(40), 2)} at L40, {r(cs.get(44), 2)} at "
+                f"L44, {r(cs.get(52), 2)} at L52, {r(cs.get(62), 2)} at L62), so a clamp reaching the late layers blocks the "
+                "answer itself. By the pre-registered reading: no evidence on these dev concepts that the non-J part's effect "
+                "on the report is mediated by re-entry into the concept's J coordinates within the workspace layers. A clamp "
+                "that reaches the late layers could produce the paper's result (the non-J effect falling to about zero) "
+                "without any workspace re-entry, so a full-range clamp alone cannot separate the two. "
+                "Proposal A7: if M2 stays, run it as the band-limited re-entry clamp with its null, and report the full-range "
+                "version only next to the cosine curve.")
+q11 = S.get("Q11", {}).get("by_band", {})
+if q11:
+    N["Q11"] = ("No, in either band. At every dose where the non-J part moves the model's report, the concept's median J-lens "
+                "rank at the report position stays in the hundreds to thousands at every layer up to L62; the full vector and "
+                "the J part behave the same, and so do the logit lens and the R-lens. Planting shifts the report distribution "
+                "toward the concept without the concept ever becoming a top candidate at the report position, consistent with "
+                "the readers (Q5) and the absolute probe criterion.")
+rc = S.get("rlens_consistency")
+if rc:
+    N["rlens"] = (f"The R-lens and J-lens agree closely on these reads (Spearman {r(rc['spearman_JNP_RCB'], 2)}, top-10 "
+                  f"agreement {pct(rc['top10_agree_JNP_RCB'])}), so for planted concepts the two Jacobian lenses are "
+                  "interchangeable as token readers; adding R-lens to the full run costs little and answers the consistency "
+                  "question directly (A13).")
 out = RESA / "report_notes.json"
 prev = load(out) or {}
 prev.update(N)
