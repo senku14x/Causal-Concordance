@@ -210,13 +210,17 @@ class BandInject(E._Hooked):
 
 
 class BandClamp(E._Hooked):
-    """Per-row privilege clamp: h[b] <- h[b] - Q Q^T (h[b] - h_clean) at every position of every layer in Q_by_row[b]
-    (rows without an entry are untouched). Logs, per row and layer, the share of the perturbation removed and the
-    post-clamp residual |Q^T (h - h_clean)| / |Q^T h_clean|."""
+    """Per-row privilege clamp: h[b] <- h[b] - Q Q^T (h[b] - ref) at every position of every layer in Q_by_row[b]
+    (rows without an entry are untouched). ref = h_clean, or, for a re-entry clamp (design §16.3), h_clean + A with
+    A = offsets[b][layer] (the accumulated raw injection) added at `offset_pos`; since h - h_clean = A + M, the re-entry
+    clamp removes only M's component (what the model's blocks wrote) in span(Q). Logs, per row and layer, the share of
+    the perturbation h - ref removed and the post-clamp residual |Q^T (h - ref)| / |Q^T ref|."""
 
-    def __init__(self, blocks, Q_by_row, h_clean, layers):
+    def __init__(self, blocks, Q_by_row, h_clean, layers, offsets=None, offset_pos=None):
         super().__init__(blocks, layers)
         self.Q, self.hc = Q_by_row, h_clean
+        self.off = offsets or {}
+        self.off_pos = None if offset_pos is None else torch.as_tensor(list(offset_pos), dtype=torch.long)
         self.log = {}
 
     def _mk(self, l):
@@ -231,12 +235,17 @@ class BandClamp(E._Hooked):
             hc = self.hc[l].to(h.device, torch.float32)[: h.shape[1]]
             for b in rows:
                 Q = self.Q[b][l].to(h.device, torch.float32)
-                pert = h[b] - hc
+                ref = hc
+                if b in self.off and l in self.off[b]:
+                    ref = hc.clone()
+                    pos = self.off_pos.to(h.device)
+                    ref[pos] = ref[pos] + self.off[b][l].to(h.device, torch.float32)
+                pert = h[b] - ref
                 coord = pert @ Q
                 removed = coord @ Q.T
                 h[b] = h[b] - removed
                 pn = float(pert.norm())
-                resid = float(((h[b] - hc) @ Q).norm()) / max(float((hc @ Q).norm()), 1e-30)
+                resid = float(((h[b] - ref) @ Q).norm()) / max(float((ref @ Q).norm()), 1e-30)
                 self.log.setdefault(b, {})[l] = {"removed_share": float(removed.norm()) / pn if pn > 0 else 0.0,
                                                  "residual": resid}
             return E._pack(o, h)

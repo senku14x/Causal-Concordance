@@ -162,6 +162,40 @@ def test_band_clamp_restores_clamped_coordinates_only(toy):
     assert cl.log[0][1]["residual"] < 1e-5 and 0 < cl.log[0][1]["removed_share"] < 1
 
 
+def test_reentry_clamp_keeps_the_raw_injection_and_removes_only_the_model_response(toy):
+    """h - h_clean = A + M: the re-entry clamp (ref = h_clean + A) removes Q Q^T M and keeps A, so at the write layer
+    (M = 0 there, nothing upstream was written) the injection survives exactly, where the standard clamp strips Q Q^T A."""
+    m, W = toy
+    blocks = m.model.layers
+    ids = list(range(8))
+    rc = P.RowRecorder(blocks, [1, 2, 3], list(range(8)))
+    with rc:
+        m.model(torch.tensor([ids]))
+    hc = {l: rc.acts[l][0] for l in (1, 2, 3)}
+    Q, _ = torch.linalg.qr(torch.randn(16, 4, generator=torch.Generator().manual_seed(7)))
+    dl = torch.randn(16, generator=torch.Generator().manual_seed(8))
+    pos = [2, 3]
+    A = {1: dl, 2: dl, 3: dl}                                     # one write at layer 1, carried unchanged
+    inj = P.BandInject(blocks, {1: dl[None]}, pos)
+    cl = P.BandClamp(blocks, {0: {1: Q, 2: Q, 3: Q}}, hc, [1, 2, 3], offsets={0: A}, offset_pos=pos)
+    rec = P.RowRecorder(blocks, [1, 2, 3], list(range(8)))
+    with inj, cl, rec:
+        m.model(torch.tensor([ids]))
+    assert torch.allclose(rec.acts[1][0, 2] - hc[1][2], dl, atol=1e-5)        # write layer: the injection is intact
+    assert cl.log[0][1]["removed_share"] < 1e-5                                # nothing to remove there (M = 0)
+    for l in (2, 3):                                                           # downstream: Q^T (h - hc - A) = 0
+        ref = hc[l].clone()
+        ref[pos] += dl
+        assert float(((rec.acts[l][0] - ref) @ Q).abs().max()) < 1e-5
+    # the standard clamp at the same write layer strips the injection's component in span(Q)
+    inj2 = P.BandInject(blocks, {1: dl[None]}, pos)
+    cl2 = P.BandClamp(blocks, {0: {1: Q}}, hc, [1])
+    rec2 = P.RowRecorder(blocks, [1], list(range(8)))
+    with inj2, cl2, rec2:
+        m.model(torch.tensor([ids]))
+    assert torch.allclose(rec2.acts[1][0, 2] - hc[1][2], dl - (dl @ Q) @ Q.T, atol=1e-5)
+
+
 def test_forward_rows_and_sampler_on_toy(toy):
     m, W = toy
     ids = [1, 5, 7, 2, 9, 3]
