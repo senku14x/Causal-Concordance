@@ -1186,7 +1186,7 @@ def sec_amend():
             rows.append([md_inline(c) for c in cells])
     return ('<h2 id="amend">The amendment: what you decide</h2><p>From <code>docs/design_specs/005_amendment_01_DRAFT.md</code>. '
             'Nothing here is adopted until you decide; the full run on the 45 test concepts waits for it.</p>' +
-            table(["#", "Item", "Options", "Decided by", "Proposal"], rows))
+            table(["#", "Item", "What the pilot found (dev)", "Proposal"], rows))
 
 
 def sec_glossary():

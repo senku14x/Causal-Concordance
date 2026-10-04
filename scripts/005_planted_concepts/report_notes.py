@@ -163,6 +163,53 @@ if q12:
                 "compare the readers with the model where neither can find the concept; the amendment must re-pose P11 "
                 "(proposal: compare reader sensitivity with model sensitivity on matched measures at the written cell, "
                 "and drop the report-position version).")
+# the short version (top of the page)
+sm = load(RESA / "smoke_summary.json") or {}
+q13 = S.get("Q13")
+bullets = []
+if S.get("Q1") and S.get("Q2"):
+    bullets.append("<b>Qwen reports planted concepts only by the paper's own metric.</b> Asked “the thought is about \"…\"”, "
+                   "Qwen almost never <em>says</em> the planted concept: it has a canned answer (“apple”), and neither prefill "
+                   "removes it. But the concept's log-probability at that position rises reliably above what random directions "
+                   "do (Q1 yes, 4/4 blocks). The report gate as written failed; the amendment makes log-prob the report measure.")
+if pv:
+    bullets.append("<b>No clear J-space privilege for report on these dev concepts.</b> At equal size the J part beats the "
+                   "non-J part at low and middle doses, the order reverses at high doses, and the two reach similar peaks. "
+                   "This is a preview on 10 dev concepts, not the test (M1 runs on the 45 test concepts).")
+if S.get("Q10"):
+    bullets.append("<b>The privilege clamp works only by blocking the output end.</b> Clamping the concept's J coordinates all "
+                   "the way to L62 removes much of the non-J part's effect (beating a random-token clamp), but stopping at L44 "
+                   "removes nothing beyond the random clamp. The concept's J direction turns into its output direction with "
+                   "depth, so the full-range clamp blocks the answer itself. On these concepts there is no sign that the "
+                   "non-J effect re-enters J-space within the workspace layers.")
+if S.get("Q5") and S.get("Q11"):
+    bullets.append("<b>The readers see the planted concept only when handed the written cell.</b> On direct reads the NLA and "
+                   "the Oracle name it (up to ~80–90% at the top dose, the non-J part included); at the report position no "
+                   "reader, no lens at any layer up to L62 and no probe ever finds it. The model's report shifts without a "
+                   "readable concept ever forming there.")
+if S.get("Q5"):
+    bullets.append("<b>The readers are less sensitive than the model, not more.</b> The model's report responds from s ≈ 1/64; "
+                   "the readers name the concept only from s = 1/4. On these concepts the NLA does not see what the model "
+                   "cannot use, and the Oracle reads the non-J part at least as well as the NLA (against the P17 premise).")
+if S.get("Q12"):
+    bullets.append("<b>A methods trap, caught.</b> Comparing a probe with random directions at the same dose is meaningless in "
+                   "a deterministic forward: it ‘detects’ any planted direction at any dose. The absolute criterion is used "
+                   "instead (amendment A9).")
+if q13:
+    bullets.append(f"<b>Late layers don't rescue it.</b> The Oracle at L48–60 at the report position names the full vector in "
+                   f"{len(q13['full']['hits'])} qualifying cells and the non-J part in {len(q13['perp']['hits'])}.")
+bullets.append("<b>The machinery is sound.</b> Every write exact (ρ within 1 ± 3e-7), runs bit-identical on repeat, the fast "
+               "regime matches the exact one on 270/270 cells, the C1–C3 checks and errata are in, and the full run would take "
+               "about 1.5–3 GPU hours.")
+N["short_html"] = ('<h2 id="short">The short version</h2><ul>' + "".join(f"<li>{b}</li>" for b in bullets) + "</ul>"
+                   '<div class="callout"><h3>What you decide</h3><ul>'
+                   "<li>The report measure (A1): log-prob at the open quote, with the paper's rank, instead of sampled naming.</li>"
+                   "<li>Band (A3): L32–38 as registered, or the stronger but more disruptive L24–38.</li>"
+                   "<li>P11 (A6): drop the report-position version (nothing arrives there) for a reader-vs-model sensitivity comparison.</li>"
+                   "<li>The clamp (A8): test re-entry with the band-limited clamp and its null.</li>"
+                   "<li>The go for the amended full run on the 45 test concepts (about 1.5–3 GPU hours).</li></ul></div>"
+                   "<p class='muted'>Everything here is development data on 10 dev concepts. None of it is a test of the "
+                   "pre-registered predictions; those need the amended full run.</p>")
 out = RESA / "report_notes.json"
 prev = load(out) or {}
 prev.update(N)
