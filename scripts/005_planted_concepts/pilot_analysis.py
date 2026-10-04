@@ -475,6 +475,138 @@ for name, reads in (("nla", D / "nla_reads.json"), ("oracle", D / "oracle_reads.
                     "ci_halfwidth_n45_k8": 1.96 * np.sqrt(true_var + within4 / 2) / np.sqrt(45)}
 S["power_8b"] = pw
 
+# ---------------------------------------------- step 10 (§16.6): gate G10, Q14 (clamp end layer), Q15 (specificity)
+D10 = D / "step10"
+if D10.exists():
+    s10 = {"agent_priors": {"Q14_B": {"56-62": 0.55, "52-54": 0.20, "46-50": 0.15, "none_or_other": 0.10},
+                            "Q15": {"cond2_specific_B": 0.65, "cond2_specific_B2": 0.70, "cond4_specific_B": 0.35,
+                                    "cond4_specific_B2": 0.45, "cond1_specific_both": 0.90,
+                                    "B2_at_least_as_specific": 0.60, "random_at_chance": 0.90}}}
+    # G10: rows that repeat stored rows must reproduce their stored dR1p
+    g10 = {}
+    same = {"4": "4", "E62": "12", "E62r": "12r", "E44": "13", "E44r": "13r"}
+    for band in ("B", "B2"):
+        d_spec, d_clamp = [], []
+        f, base = D10 / f"spec_{band}.json", blocks.get((band, "default"))
+        if f.exists() and base:
+            ref = {(r["concept"], str(r["cond"]), r["s"], r.get("seed", 0)): r["dR1p"] for r in base}
+            for r in json.loads(f.read_text()):
+                k = (r["concept"], str(r["cond"]), r["s"], r.get("seed", 0))
+                if k in ref:
+                    d_spec.append(abs(r["dR1p"] - ref[k]))
+        f, f7 = D10 / f"clampsweep_{band}.json", D / "step7b" / f"reentry_{band}.json"
+        if f.exists() and f7.exists():
+            ref = {(r["concept"], str(r["cond"]), r["s"]): r["dR1p"] for r in json.loads(f7.read_text())}
+            for r in json.loads(f.read_text()):
+                k = (r["concept"], same.get(str(r["cond"])), r["s"])
+                if k in ref:
+                    d_clamp.append(abs(r["dR1p"] - ref[k]))
+        for name, d in (("spec", d_spec), ("clamp", d_clamp)):
+            if d:
+                g10[f"{name}_{band}"] = {"n": len(d), "median_abs": med(d), "p95_abs": float(np.quantile(d, 0.95)),
+                                         "max_abs": float(max(d))}
+    g10_pass = bool(g10) and all(v["median_abs"] <= 0.05 and v["p95_abs"] <= 0.25 for v in g10.values())
+    s10["G10"] = {"checks": g10, "pass": g10_pass, "rule": "median |diff| <= 0.05 and 95th pct <= 0.25 nats"}
+
+    # Q14: extra reduction (r-clamp minus c-clamp) at each evaluable concept's best non-J dose, by end layer E
+    cosd = S.get("cos_atom_vs_output") or {}
+    q14 = {}
+    for band in ("B", "B2"):
+        f, base = D10 / f"clampsweep_{band}.json", blocks.get((band, "default"))
+        if not (f.exists() and base):
+            continue
+        rows = json.loads(f.read_text())
+        ev = {}
+        for c in P.DEV:
+            perp = {r["s"]: r for r in rows if r["concept"] == c and r["cond"] == 4}
+            s_b = max(perp, key=lambda x: perp[x]["R1"])
+            if perp[s_b]["dR1p"] > null95(base, "dR1p", s_b):
+                ev[c] = s_b
+        by_e = {}
+        for E in range(44, 63, 2):
+            diffs, rem = [], []
+            for c, s_b in ev.items():
+                cc = [r for r in rows if r["concept"] == c and r["cond"] == f"E{E}" and r["s"] == s_b][0]
+                rc = [r for r in rows if r["concept"] == c and r["cond"] == f"E{E}r" and r["s"] == s_b][0]
+                diffs.append(rc["dR1p"] - cc["dR1p"])
+                rem.append(cc.get("removed_share_above"))
+            ci = boot_ci(diffs)
+            by_e[E] = {"n": len(diffs), "mean": float(np.mean(diffs)) if diffs else None, "ci": ci,
+                       "specific": bool(diffs) and ci[0] > 0,
+                       "c_removed_share_above_median": med([x for x in rem if x is not None]),
+                       "cos_atom_vs_output_median": med([cosd[c][str(E)] for c in cosd]) if cosd else None,
+                       "dR1p_curve_c": {str(sv): med([r["dR1p"] for r in rows if r["cond"] == f"E{E}" and r["s"] == sv]) for sv in GRID9},
+                       "dR1p_curve_r": {str(sv): med([r["dR1p"] for r in rows if r["cond"] == f"E{E}r" and r["s"] == sv]) for sv in GRID9}}
+        es = sorted(by_e)
+        estar = next((E for E in es if all(by_e[e]["specific"] for e in es if e >= E)), None)
+        cat = "none" if estar is None else ("56-62" if estar >= 56 else "52-54" if estar >= 52 else
+                                            "46-50" if estar >= 46 else "44")
+        amend = {"56-62": "A8 as drafted", "52-54": "intermediate: reported; A8 left to the PI",
+                 "46-50": f"M2 end layer becomes E* = {estar} (replacing L44); A8 reworded",
+                 "44": "contradicts step 7b: stop and investigate", "none": "contradicts step 7b: stop and investigate"}[cat]
+        q14[band] = {"evaluable": ev, "by_E": by_e, "E_star": estar, "category": cat, "amendment": amend,
+                     "dR1p_curve_unclamped": {str(sv): med([r["dR1p"] for r in rows if r["cond"] == 4 and r["s"] == sv]) for sv in GRID9}}
+    s10["Q14"] = q14
+
+    # Q15: concept specificity of dR1p. SM statistic = the mean over concepts (its bootstrap CI is of the mean);
+    # ID = rate over the 10 concepts (over the 50 concept x seed rows for condition 7).
+    q15 = {}
+    for band in ("B", "B2"):
+        f = D10 / f"spec_{band}.json"
+        if not f.exists():
+            continue
+        rows = json.loads(f.read_text())
+        for r in rows:
+            r.update(P.specificity(r["dW"], r["concept"], P.DEV))
+        nul = {sv: float(np.quantile([r["dR1p"] for r in rows if r["cond"] == 7 and r["s"] == sv], 0.95)) for sv in GRID9}
+        out = {}
+        for cond in (1, 2, 3, 4, 7):
+            per_s, n_ok = {}, 0
+            for sv in GRID9:
+                rs = [r for r in rows if r["cond"] == cond and r["s"] == sv]
+                if cond == 7:
+                    sm_c = [float(np.mean([r["SM"] for r in rs if r["concept"] == c])) for c in P.DEV]
+                else:
+                    sm_c = [r["SM"] for r in rs]
+                ci = boot_ci(sm_c)
+                idr = float(np.mean([r["ID"] for r in rs]))
+                above = cond != 7 and med([r["dR1p"] for r in rs]) > nul[sv]
+                ok = bool(above and idr >= 0.5 and ci[0] > 0)
+                n_ok += ok
+                per_s[str(sv)] = {"dR1p_median": med([r["dR1p"] for r in rs]), "above_null": bool(above),
+                                  "ID_rate": idr, "SM_mean": float(np.mean(sm_c)), "SM_ci": ci,
+                                  "SM_median": med(sm_c), "pct_median": med([r["pct"] for r in rs]),
+                                  "generic_median": med([r["generic"] for r in rs]), "meets": ok}
+            res = {"by_dose": per_s}
+            if cond == 7:
+                res["at_chance"] = all(v["ID_rate"] <= 0.3 for v in per_s.values())
+            else:
+                res["n_doses_meeting"] = n_ok
+                res["specific"] = n_ok >= 3
+            out[str(cond)] = res
+        q15[band] = out
+    if "B" in q15 and "B2" in q15:
+        cmp_ = {}
+        for sv in (1 / 16, 1 / 4):
+            b, b2 = q15["B"]["2"]["by_dose"][str(sv)], q15["B2"]["2"]["by_dose"][str(sv)]
+            cmp_[str(sv)] = {"SM_mean_B": b["SM_mean"], "SM_mean_B2": b2["SM_mean"], "ID_B": b["ID_rate"],
+                             "ID_B2": b2["ID_rate"], "B2_ge_B": b2["SM_mean"] >= b["SM_mean"] and b2["ID_rate"] >= b["ID_rate"]}
+        q15["A3_B2_vs_B"] = {"by_dose": cmp_, "B2_at_least_as_specific": all(v["B2_ge_B"] for v in cmp_.values())}
+    s10["Q15"] = q15
+    # raw readouts: clean top-10 and, per band, condition 2 at s = 1/4 for every dev concept
+    st10 = json.loads((D10 / "state.json").read_text()) if (D10 / "state.json").exists() else {}
+    s10["clean_top10_at_quote"] = st10.get("clean_top10_at_quote")
+    s10["W_size"] = len(st10.get("W", {}))
+    ex = {}
+    for band in ("B", "B2"):
+        f = D10 / f"spec_{band}.json"
+        if f.exists():
+            ex[band] = {r["concept"]: {"top10": r["top10"][:6], "dR1p": r["dR1p"]}
+                        for r in json.loads(f.read_text()) if r["cond"] == 2 and r["s"] == 0.25}
+    s10["examples_cond2_s0.25"] = ex
+    s10["timings"] = st10.get("timings")
+    S["step10"] = s10
+
 OUT.parent.mkdir(parents=True, exist_ok=True)
 OUT.write_text(json.dumps(S, indent=1, default=str))
 print("blocks", S["blocks"])

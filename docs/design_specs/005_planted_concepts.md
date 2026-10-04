@@ -649,6 +649,7 @@ Agent priors: 12 specific **0.40**; 13 specific **0.25**.
   - **ID:** the planted concept has the largest ΔR1′ among the 10 dev concepts (chance 0.1).
   - **SM** = ΔR1′(c) − median over W∖{c} of ΔR1′(w), the specificity margin. Bootstrap 95% CI over the 10 concepts.
   - Also reported: the planted concept's percentile within W, and the generic rise (the median over W∖{c} of ΔR1′(w)).
+  - *Clarification, committed with the analysis code before any step-10 result was read:* "SM" in the rule and in the A3 comparison is the mean over concepts (the statistic whose bootstrap CI is computed). ID is a rate over the 10 concepts; for condition 7 it is over the 50 concept × seed rows, and SM there is averaged over seeds within each concept first.
 - **Rule (per band × condition):** R1′ is *concept-specific* if, at ≥ 3 doses where the condition's median ΔR1′ exceeds the rand-dir 95th percentile:
   - ID ≥ 5/10; and
   - SM's CI lies above 0.
