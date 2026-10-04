@@ -208,6 +208,98 @@ for (band, pre), rows in blocks.items():
                              "M3_like_Jnat_minus_perpnat_dR1p": {s: jn[s] - pn[s] for s in GRID9}}
 S["previews_not_tests"] = prev
 
+# ------------------------------------------------------------------------- step 7b (§16.3): Q10, Q11, R-lens, SEC
+D7 = D / "step7b"
+S["SEC_crosscheck"] = st.get("SEC_crosscheck")
+if D7.exists():
+    q10, q11, sweep_curves = {}, {}, {}
+    for band in ("B", "B2"):
+        f = D7 / f"reentry_{band}.json"
+        base = blocks.get((band, "default"))
+        if f.exists() and base:
+            rows = json.loads(f.read_text())
+            out = {}
+            for pair in (("10", "10r"), ("12", "12r"), ("13", "13r")):
+                diffs, n_eval = [], 0
+                for c in P.DEV:
+                    perp = {r["s"]: r for r in rows if r["concept"] == c and r["cond"] == 4}
+                    s_b = max(perp, key=lambda s: perp[s]["R1"])
+                    if perp[s_b]["dR1p"] <= null95(base, "dR1p", s_b):
+                        continue
+                    n_eval += 1
+                    cc = [r for r in rows if r["concept"] == c and str(r["cond"]) == pair[0] and r["s"] == s_b][0]
+                    rc = [r for r in rows if r["concept"] == c and str(r["cond"]) == pair[1] and r["s"] == s_b][0]
+                    diffs.append(rc["dR1p"] - cc["dR1p"])           # extra reduction by the c-clamp over its null
+                ci = boot_ci(diffs)
+                med_share = {k: med([r.get(k) for r in rows if str(r["cond"]) in pair and r.get(k) is not None])
+                             for k in ("removed_share_band", "removed_share_above", "max_residual")}
+                out[f"{pair[0]}_vs_{pair[1]}"] = {"n_evaluable": n_eval, "extra_reduction_mean": float(np.mean(diffs))
+                                                  if diffs else None, "ci": ci,
+                                                  "specific": bool(diffs) and ci[0] > 0, "clamp_logs": med_share}
+            curve = {}
+            for cond in (4, 10, "10r", 12, "12r", 13, "13r"):
+                curve[str(cond)] = {str(s): med([r["dR1p"] for r in rows if str(r["cond"]) == str(cond) and r["s"] == s])
+                                    for s in GRID9}
+            q10[band] = {"pairs": out, "dR1p_curves": curve}
+        f = D7 / f"sweep_{band}.json"
+        if f.exists() and base:
+            rows = json.loads(f.read_text())
+            s_eval = [s for s in GRID9 if med([r["dR1p"] for r in cond_s(base, 4, s)]) > null95(base, "dR1p", s)]
+            first, hits = None, []
+            curves7 = {}
+            for reader in ("J_NP", "logit", "R_CB"):
+                cr = {}
+                for cond in (2, 3, 4, 7, "clean"):
+                    for sv in GRID9 + [0.0]:
+                        rs = [r for r in rows if str(r["cond"]) == str(cond) and r["s"] == sv
+                              and (cond != 7 or True)]
+                        if not rs:
+                            continue
+                        cr[f"{cond}|{sv}"] = {str(l): med([r["ranks"][str(l)][reader] if str(l) in r["ranks"]
+                                                           else r["ranks"][l][reader] for r in rs])
+                                              for l in range(32, 63)}
+                curves7[reader] = cr
+            for sv in s_eval:
+                for l in range(32, 63):
+                    perp = [r["ranks"].get(str(l), r["ranks"].get(l))["J_NP"] for r in rows
+                            if r["cond"] == 4 and r["s"] == sv]
+                    rnd = [r["ranks"].get(str(l), r["ranks"].get(l))["J_NP"] for r in rows
+                           if r["cond"] == 7 and r["s"] == sv]
+                    m, p5 = med(perp), float(np.quantile(rnd, 0.05)) if rnd else float("nan")
+                    if m <= 10 and m < p5:
+                        hits.append({"s": sv, "layer": l, "median_rank": m, "rand_p05": p5})
+            if hits:
+                first = min(hits, key=lambda h: h["layer"])
+            q11[band] = {"strengths_evaluable": s_eval, "answer": "yes" if hits else "no", "first_hit": first,
+                         "n_hits": len(hits)}
+            sweep_curves[band] = curves7
+    S["Q10"] = {"by_band": q10, "agent_priors": {"12_specific": 0.40, "13_specific": 0.25},
+                "rule": "c-clamp lowers u_perp's dR1p more than its random-clamp null at u_perp's best strength "
+                        "(bootstrap CI over evaluable dev concepts excludes 0)"}
+    S["Q11"] = {"by_band": q11, "agent_prior_yes": 0.55,
+                "rule": "under u_perp at strengths above the null, median J_NP rank of c at C_o <= 10 at some layer "
+                        "L32-62 and below the rand-dir 5th-percentile rank there"}
+    S["sweep_curves"] = sweep_curves
+    f = D7 / "rlens_reads.json"
+    if f.exists() and (D / "token_probe_reads.json").exists():
+        rl = json.loads(f.read_text())
+        tp = json.loads((D / "token_probe_reads.json").read_text())
+        key = lambda q: (q["band"], q["layer"], q["kind"], q["concept"], str(q["cond"]), q["seed"], q["s"])
+        jn = {key(q): q["token"]["J_NP"]["rank"] for q in tp}
+        lg = {key(q): q["token"]["logit"]["rank"] for q in tp}
+        pairs = [(jn[key(q)], q["R_CB_rank"], lg[key(q)]) for q in rl if key(q) in jn]
+        from scipy.stats import spearmanr
+        a = np.array(pairs, float)
+        S["rlens_consistency"] = {"n": len(pairs),
+                                  "spearman_JNP_RCB": float(spearmanr(a[:, 0], a[:, 1]).correlation),
+                                  "spearman_RCB_logit": float(spearmanr(a[:, 1], a[:, 2]).correlation),
+                                  "top10_agree_JNP_RCB": float(np.mean((a[:, 0] <= 10) == (a[:, 1] <= 10))),
+                                  "top10_rate": {"J_NP": float(np.mean(a[:, 0] <= 10)), "R_CB": float(np.mean(a[:, 1] <= 10)),
+                                                 "logit": float(np.mean(a[:, 2] <= 10))}}
+    st7 = json.loads((D7 / "state.json").read_text()) if (D7 / "state.json").exists() else {}
+    S["cos_atom_vs_output"] = st7.get("cos_atom_vs_output")
+    S["timings_7b"] = st7.get("timings")
+
 OUT.parent.mkdir(parents=True, exist_ok=True)
 OUT.write_text(json.dumps(S, indent=1, default=str))
 print("blocks", S["blocks"])
