@@ -5,7 +5,7 @@
 - Paper: Gurnee et al. 2026 (arXiv 2607.15495), §3.1 Figs. 7–8, App. A.8, A.9.2.
 - The official protocol file is `anthropics/jacobian-lens` `data/experiments/verbal-introspection.json` (`/workspace/jacobian-lens`).
 - **One run, not two stages** (PI 3.6). The stage-1 rule survives as analysis gate G2 (§9).
-- Every `[PI]` field is left for Vishesh, the prediction priors included.
+- Every `[PI]` field is left for Vishesh, the prediction priors included. The agent's own priors are pre-registered next to them (§8), committed before any 005 GPU run (PI request 2026-10-04).
 
 ## 1. Question
 
@@ -224,16 +224,31 @@ Per concept × condition × strength. P(yes) is never measured.
 - **Rule:** "supported" if the CI of the predicted paired difference excludes 0 in the predicted direction on test concepts. Dev numbers are reported separately and decide nothing.
 - **Split quality:** every "non-J" result carries the G5 qualifier if G5 flags.
 
-| ID | Contrast | Operationalisation | Prior `[PI]` |
-|---|---|---|---|
-| M1 | Privilege for report, matched norm (paper Fig. 8, right) | R2 and R1: u^J (3) − u^⊥ (4). (a) at each condition's best strength; (b) at every strength | `[PI]` |
-| M2 | Clamp, against its null | At u^⊥'s best strength (by R1, per concept): [R1(10) − R1(4)] − [R1(10r) − R1(4)]. **Interpreted only if the c-clamp lowers R1 more than the random clamp** (CI excludes 0); the removed-norm shares are reported next to it. | `[PI]` |
-| M3 | Privilege at natural norm (PI review) | R1, R2: J-natural (5) vs ⊥-natural (6) vs full (2), at the same s. At about 6% J share the matched J part is scaled up about 4× over its natural size; M3 respects natural scale. | `[PI]` |
-| R1 | Reader vs probe on u^⊥ | Per reader: detection of u^⊥ minus probe detection of u^⊥, same kind, layer and strength. Direct is primary; carried C_o secondary. | `[PI]` |
-| R2 | Behaviour vs report on u^⊥ | B1/B2/B4 outside the null at strengths where R2 and R1′ of u^⊥ are within it | `[PI]` |
-| **P11a** | NLA sees, at the report position, what the model does not report | **Primary (strict):** a strength qualifies for a concept if R2(u^⊥) ≤ R2(rand-dir) for that concept **and** ΔR1′(u^⊥) is within the null. Statistic: the NLA's carried-C_o naming rate of c under u^⊥ minus under rand-dir, averaged over qualifying strengths. Concepts with no qualifying strength drop out (count reported). **Secondary:** v1's naming-only qualification. | `[PI]` |
-| **P11b** | NLA sees, at the report position, what does not change behaviour | **Primary (strict):** a strength qualifies if B1, B2 **and** B4 of u^⊥ are all within the null. Same statistic. **Secondary:** v1's B1-only qualification. | `[PI]` |
-| **P17** | Oracle detects u^⊥ less than the NLA (A.9.2 argument; premise "largely follows A.9.2", PI-accepted) | **Primary: direct reads.** NLA (L42) u^⊥ naming rate − **max**(Oracle L40, Oracle L44) u^⊥ naming rate, at matched strength. Secondary: (i) carried C_o reads; (ii) the normalised version (u^⊥ / full detection ratio). | `[PI]` |
+| ID | Contrast | Operationalisation | Prior `[PI]` | Agent prior (pre-registered 2026-10-04, before any 005 GPU run) |
+|---|---|---|---|---|
+| M1 | Privilege for report, matched norm (paper Fig. 8, right) | R2 and R1: u^J (3) − u^⊥ (4). (a) at each condition's best strength; (b) at every strength | `[PI]` | 0.85 that u^J > u^⊥ on R1 at matched norm. Largely by construction: the J part contains c's own atom. |
+| M2 | Clamp, against its null | At u^⊥'s best strength (by R1, per concept): [R1(10) − R1(4)] − [R1(10r) − R1(4)]. **Interpreted only if the c-clamp lowers R1 more than the random clamp** (CI excludes 0); the removed-norm shares are reported next to it. | `[PI]` | 0.30 that M2 is interpretable and supported. I expect u^⊥ to move R1 only weakly, and both clamps to remove a similar share of the carried perturbation. |
+| M3 | Privilege at natural norm (PI review) | R1, R2: J-natural (5) vs ⊥-natural (6) vs full (2), at the same s. At about 6% J share the matched J part is scaled up about 4× over its natural size; M3 respects natural scale. | `[PI]` | 0.60 that J-natural > ⊥-natural on R1 at the strengths where the full vector moves R1, even though ⊥ is about 4× larger. |
+| R1 | Reader vs probe on u^⊥ | Per reader: detection of u^⊥ minus probe detection of u^⊥, same kind, layer and strength. Direct is primary; carried C_o secondary. | `[PI]` | 0.70 that the probe detects u^⊥ at least as often as the NLA (direct reads). The probe is fitted for exactly this concept; u^⊥ carries about 90% of the concept vector. |
+| R2 | Behaviour vs report on u^⊥ | B1/B2/B4 outside the null at strengths where R2 and R1′ of u^⊥ are within it | `[PI]` | 0.50 that u^⊥ moves B1, B2 or B4 out of the null at some strength where R1′ and R2 stay within it. |
+| **P11a** | NLA sees, at the report position, what the model does not report | **Primary (strict):** a strength qualifies for a concept if R2(u^⊥) ≤ R2(rand-dir) for that concept **and** ΔR1′(u^⊥) is within the null. Statistic: the NLA's carried-C_o naming rate of c under u^⊥ minus under rand-dir, averaged over qualifying strengths. Concepts with no qualifying strength drop out (count reported). **Secondary:** v1's naming-only qualification. | `[PI]` | 0.20. The strict rule needs the model's report log-prob unmoved, while enough of u^⊥ reaches C_o by L42 for the NLA to *name* c. I expect detection at C_o to track the model's own report. |
+| **P11b** | NLA sees, at the report position, what does not change behaviour | **Primary (strict):** a strength qualifies if B1, B2 **and** B4 of u^⊥ are all within the null. Same statistic. **Secondary:** v1's B1-only qualification. | `[PI]` | 0.15. Even stricter: KL is sensitive, so strengths where B1, B2 and B4 all sit in the null will mostly be ones where nothing reaches C_o. |
+| **P17** | Oracle detects u^⊥ less than the NLA (A.9.2 argument; premise "largely follows A.9.2", PI-accepted) | **Primary: direct reads.** NLA (L42) u^⊥ naming rate − **max**(Oracle L40, Oracle L44) u^⊥ naming rate, at matched strength. Secondary: (i) carried C_o reads; (ii) the normalised version (u^⊥ / full detection ratio). | `[PI]` | 0.45. Genuinely unsure. The Oracle injects α · unit(h), so a perturbation of the clean cell is diluted for both readers; nothing I know predicts a large gap. |
+
+**Agent priors on gates and descriptive outcomes (pre-registered with the above; not decision rules).**
+
+| Item | Agent prior / point expectation |
+|---|---|
+| G1 passes at band B (L32–L38), condition 1 or 2 | 0.65. If not at B, then at B2: a further 0.10 |
+| G1 calibration shifts the grid | 0.35 (direction: ×4 up more likely than ÷4) |
+| Onset s* for u^⊥ (if any) | about 1/4 (between 1/8 and 1/2). No onset within the grid: 0.30 |
+| G3: median J share at k = 16 within [1%, 30%] | 0.85; point estimate 5–10% |
+| G4 probe validity passes | 0.70 |
+| G5 flags a leaky split (> 20% of concept-layers) | 0.25 |
+| G6 drops ≥ 1 concept for the NLA (clean naming > 5% on the introspection prompt) | 0.40 (most likely: information, process, review, summary) |
+| G2 for the NLA, carried C_o: full vector detected above rand-dir at a strength where the model moves | 0.50 |
+| G2 for the NLA, direct L42 / Oracle, direct L40 or L44 | 0.80 / 0.70 |
+| SEC l0 = 31 cross-check: R1 agrees with the fp32-residual regime (same top-1, RR within 0.05) on ≥ 90% of cells | 0.85 |
 
 ## 9. Gates (in order)
 
