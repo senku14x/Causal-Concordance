@@ -970,6 +970,74 @@ J_NP {pct(rc['top10_rate']['J_NP'], 1)}, R_CB {pct(rc['top10_rate']['R_CB'], 1)}
     return "".join(out)
 
 
+def sec_8(D, notes):
+    pl = D.pilot or {}
+    q12, q13, pw = pl.get("Q12"), pl.get("Q13"), pl.get("power_8b")
+    if not q12:
+        return '<h2 id="step8">Step 8</h2><p class="pending">Pending: step 8 runs after step 7b.</p>'
+    out = ["""<h2 id="step8">Step 8: where the planted concept reaches the report position</h2>
+<p>Extra run you asked for (design §16.4, commit bf1da37). A reader-free probe for each dev concept, trained on natural
+sentences at every layer L32–62, read at the open quote; plus the Oracle at its later on-contract layers there. The NLA can
+only read L42, so this decides whether P11 at the report position is testable for it at all.</p>"""]
+    figs = []
+    for band, v in q12["by_band"].items():
+        for sv in (1 / 16, 1 / 4, 1.0):
+            ser = []
+            for c in (2, 3, 4):
+                cr = v["curves"].get(f"{c}|{sv}", {})
+                ser.append({"name": COND[c][0], "cls": COND[c][1], "ys": [cr.get(str(l), cr.get(l)) for l in range(32, 63)]})
+            figs.append(figure(line_chart(ser, list(range(32, 63)), [str(l) if l % 4 == 0 else "" for l in range(32, 63)],
+                                          "share of dev concepts detected", ylim=(0, 1), xlabel="layer (report position)",
+                                          w=520, h=250, aria=f"Arrival {band} {sv}"), legend(ser),
+                               f"{'band L32–38' if band == 'B' else 'band L24–38'} · dose {SNAME.get(sv)} · "
+                               f"probe detection above the strongest of 5 random directions; the NLA reads at L42"))
+    rows = []
+    for band, v in q12["by_band"].items():
+        for sv in READ_S:
+            rows.append(["L32–38" if band == "B" else "L24–38", SNAME[sv],
+                         *[(f"L{v['first_arrival'].get(f'{c}|{sv}')}" if v["first_arrival"].get(f"{c}|{sv}") else "never")
+                           for c in (2, 3, 4)],
+                         "yes" if sv in v["strict_P11_window_doses"] else "no"])
+    t = table(["Band", "Dose", "Full: first layer ≥ 50% detected", "J part", "non-J part",
+               "Inside the strict P11 window (model's report unmoved)"], rows)
+    ans = [v["full_by_L44_at_1/4"] for v in q12["by_band"].values()]
+    out.append(qcard("Q12", "When does the concept reach the report position?",
+                     "Reader-free: at which layer does concept information first show up at the open quote, for the full "
+                     "vector, its J part and its non-J part?",
+                     "first layer where at least half of the dev concepts are probe-detected above the strongest of 5 random "
+                     "directions", "0.50 that the full vector arrives by L44 at s = 1/4; 0.60 that the non-J part arrives no "
+                     "later than the J part; 0.20 that anything arrives by L44 inside the strict P11 window",
+                     '<div class="smallmult">' + "".join(figs) + "</div>" + t,
+                     verdict(any(ans)) if ans else verdict(None), notes.get("Q12", "")))
+    if q13:
+        rate = q13["rates"]
+        rows = []
+        for band in ("B", "B2"):
+            for L in (48, 52, 56, 60):
+                for cond in ("2", "3", "4", "7"):
+                    rows.append([f"L{L}", "L32–38" if band == "B" else "L24–38", COND[int(cond)][0]] +
+                                [heat(rate.get(f"{band}|{L}|carried_co|{cond}|{sv}")) for sv in READ_S])
+        out.append(qcard("Q13", "Does the Oracle see the concept at the report position at its later layers?",
+                         "Oracle naming at the open quote at L48, L52, L56 and L60 (all on its contract).",
+                         "mean naming over dev concepts above 0.10 and above random directions at some dose",
+                         "0.45 for the full vector; 0.25 for the non-J part",
+                         table(["Layer", "Band", "Condition"] + [f"s = {SNAME[sv]}" for sv in READ_S], rows,
+                               num_cols=(3, 4, 5, 6, 7)) +
+                         "<p class='muted'>Clean-read base rates above 5%: " + "; ".join(f"{k}: {', '.join(v) or 'none'}"
+                                                                                          for k, v in q13["clean_over_5pct"].items()) + "</p>",
+                         verdict(q13["full"]["answer"] == "yes"), notes.get("Q13", "")))
+    if pw:
+        rows = [[k.replace("_", " "), r(v.get("dev_mean", v.get("dev_mean_rate")), 3),
+                 r(v.get("dev_sd", v.get("obs_sd")), 3), r(v.get("ci_halfwidth_n45", v.get("ci_halfwidth_n45_k4")), 3),
+                 r(v.get("ci_halfwidth_n45_k8"), 3)] for k, v in pw.items()]
+        out.append('<h3 id="power">Power for the full run (planning, CPU)</h3><p>Between-concept spread on the 10 dev '
+                   'concepts, scaled to 45 test concepts. For text readers, the 8-sample column removes half the '
+                   'within-concept binomial noise.</p>' +
+                   table(["Contrast (dev preview)", "Dev mean", "Dev SD", "Predicted 95% CI half-width, n = 45 (4 samples)",
+                          "… with 8 samples"], rows, num_cols=(1, 2, 3, 4)) + f"<p>{notes.get('power', '')}</p>")
+    return "".join(out)
+
+
 def sec_eng(D, notes):
     pl, st = D.pilot or {}, D.pl_state or {}
     tm = st.get("timings", {})
@@ -1126,12 +1194,14 @@ def build(D, notes, short_html):
     chips = [chip("checks C1–C3 done", "good"), chip("smoke done · report gate failed (stop rule)", "warn"),
              chip("pilot done" if have_pilot else "pilot running", "good" if have_pilot else "pend"),
              chip("step 7b done" if have_7b else "step 7b pending", "good" if have_7b else "pend"),
+             chip("step 8 done" if pl.get("Q12") else "step 8 pending", "good" if pl.get("Q12") else "pend"),
              chip("full run waits for your decisions", "pend")]
     toc = [("short", "The short version"), ("why", "Why any of this was run"), ("expect", "Expected vs happened"),
            ("checks", "Checks C1–C3"), ("smoke", "The smoke run"), ("pilot", "The overnight pilot"),
            ("q1", "Q1 report measure", 1), ("q2", "Q2 prefill", 1), ("q3", "Q3 band", 1), ("q4", "Q4 onset", 1),
            ("q5", "Q5 readers", 1), ("q6", "Q6 clamp", 1), ("q7", "Q7 leaky splits", 1), ("q8", "Q8 baseline", 1),
            ("step7b", "Step 7b"), ("q10", "Q10 re-entry clamp", 1), ("q11", "Q11 layer sweep", 1),
+           ("step8", "Step 8"), ("q12", "Q12 arrival at the quote", 1), ("q13", "Q13 Oracle late layers", 1), ("power", "Power", 1),
            ("reads", "Raw readouts"), ("eng", "Machinery"), ("mistakes", "Mistakes"), ("amend", "Your decisions"),
            ("gloss", "Glossary"), ("where", "Where things live")]
     nav = '<nav class="toc" aria-label="Contents">' + "".join(
@@ -1142,7 +1212,7 @@ def build(D, notes, short_html):
 the 005 smoke run, the dev-only pilot and step 7b. Every number on this page is generated from the saved result files.</p>
 <div class="chips">{"".join(chips)}</div></header>"""
     body = [head, short_html, sec_why(), sec_scorecard(D), sec_checks(D), sec_smoke(D), sec_pilot(D, notes),
-            sec_pilot2(D, notes), sec_7b(D, notes), sec_reads(D, notes), sec_eng(D, notes), sec_mistakes(), sec_amend(),
+            sec_pilot2(D, notes), sec_7b(D, notes), sec_8(D, notes), sec_reads(D, notes), sec_eng(D, notes), sec_mistakes(), sec_amend(),
             sec_glossary(), sec_where(),
             '<footer>Generated by <code>scripts/005_planted_concepts/make_report_page.py</code> from JSON in '
             '<code>results/</code> and <code>outputs/</code>. Dev concepts only; no test-concept outcome exists yet.</footer>']

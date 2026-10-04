@@ -300,6 +300,103 @@ if D7.exists():
     S["cos_atom_vs_output"] = st7.get("cos_atom_vs_output")
     S["timings_7b"] = st7.get("timings")
 
+# --------------------------------------------------------------------------------- step 8 (§16.4): Q12, Q13, power
+D8 = D / "step8"
+READ_S8 = [1 / 256, 1 / 64, 1 / 16, 1 / 4, 1.0]
+if D8.exists():
+    q12 = {}
+    for band in ("B", "B2"):
+        f = D8 / f"probe_sweep_{band}.json"
+        if not f.exists():
+            continue
+        rows = json.loads(f.read_text())
+        base = blocks.get((band, "default"))
+        window = [s for s in READ_S8 if base and cond_s(base, 4, s) and
+                  med([r["dR1p"] for r in cond_s(base, 4, s)]) <= null95(base, "dR1p", s)]
+        res = {"strict_P11_window_doses": window, "curves": {}, "first_arrival": {}}
+        for cond in (2, 3, 4):
+            for sv in READ_S8:
+                rate = {}
+                for l in range(32, 63):
+                    det = []
+                    for c in P.DEV:
+                        x = [r for r in rows if r["concept"] == c and r["cond"] == cond and r["s"] == sv]
+                        rn = [r for r in rows if r["concept"] == c and r["cond"] == 7 and r["s"] == sv]
+                        if not x or not rn:
+                            continue
+                        thr = max(r["dprobe"][str(l)] if str(l) in r["dprobe"] else r["dprobe"][l] for r in rn)
+                        v = x[0]["dprobe"][str(l)] if str(l) in x[0]["dprobe"] else x[0]["dprobe"][l]
+                        det.append(v > thr)
+                    rate[l] = float(np.mean(det)) if det else None
+                first = next((l for l in range(32, 63) if rate.get(l) is not None and rate[l] >= 0.5), None)
+                res["curves"][f"{cond}|{sv}"] = rate
+                res["first_arrival"][f"{cond}|{sv}"] = first
+        fa = res["first_arrival"]
+        res["full_by_L44_at_1/4"] = fa.get(f"2|{0.25}") is not None and fa[f"2|{0.25}"] <= 44
+        jf, pf = fa.get(f"3|{0.25}"), fa.get(f"4|{0.25}")
+        res["perp_no_later_than_J_at_1/4"] = (pf if pf is not None else 63) <= (jf if jf is not None else 63)
+        res["window_any_by_L44"] = any(fa.get(f"{c}|{sv}") is not None and fa[f"{c}|{sv}"] <= 44
+                                       for c in (2, 3, 4) for sv in window)
+        q12[band] = res
+    S["Q12"] = {"by_band": q12, "agent_priors": {"full_by_L44_at_1/4": 0.50, "perp_no_later_than_J_at_1/4": 0.60,
+                                                 "window_any_by_L44": 0.20},
+                "rule": "first layer where >= 50% of dev concepts are probe-detected at C_o above the max of 5 rand-dir seeds"}
+    f = D8 / "oracle_late.json"
+    if f.exists():
+        reads = json.loads(f.read_text())
+        tab, clean = naming_table(reads)
+        rate = {"|".join(map(str, k)): float(np.mean(v)) for k, v in tab.items()}
+        out13 = {}
+        for cond in ("2", "4"):
+            hits = []
+            for (band, L, kind, cnd, sv), v in tab.items():
+                if cnd != cond:
+                    continue
+                rnd = tab.get((band, L, kind, "7", sv))
+                m, mr = float(np.mean(v)), (float(np.mean(rnd)) if rnd else 0.0)
+                if m > 0.10 and m > mr:
+                    hits.append({"band": band, "layer": L, "s": sv, "rate": m, "rand": mr})
+            out13[cond] = {"answer": "yes" if hits else "no", "hits": hits}
+        S["Q13"] = {"full": out13["2"], "perp": out13["4"], "rates": rate,
+                    "clean_over_5pct": {f"L{k[0]}": sorted(c for c, x in d.items() if x > 0.05) for k, d in clean.items()},
+                    "agent_priors": {"full": 0.45, "perp": 0.25}}
+
+# 8b power analysis (planning only)
+pw = {}
+for band in ("B", "B2"):
+    rows = blocks.get((band, "default"))
+    if not rows:
+        continue
+    d = []
+    for c in P.DEV:
+        j = [r["dR1p"] for r in rows if r["concept"] == c and r["cond"] == 3 and r["s"] == 0.25]
+        p_ = [r["dR1p"] for r in rows if r["concept"] == c and r["cond"] == 4 and r["s"] == 0.25]
+        if j and p_:
+            d.append(j[0] - p_[0])
+    if len(d) > 2:
+        sd = float(np.std(d, ddof=1))
+        pw[f"M1_like_dR1p_{band}"] = {"dev_mean": float(np.mean(d)), "dev_sd": sd, "ci_halfwidth_n45": 1.96 * sd / np.sqrt(45)}
+for name, reads in (("nla", D / "nla_reads.json"), ("oracle", D / "oracle_reads.json")):
+    if not reads.exists():
+        continue
+    rr = json.loads(reads.read_text())
+    for band in ("B", "B2"):
+        for sv in (1 / 16, 1 / 4, 1.0):
+            per = {}
+            for q in rr:
+                if q["cond"] == 4 and q.get("band") == band and q["s"] == sv and q["kind"] == "direct_cq" and q["layer"] in (42, 44):
+                    per.setdefault(q["concept"], []).append(float(np.mean([P.names(t, q["concept"]) for t in q["samples"]])))
+            v = [float(np.mean(x)) for x in per.values()]
+            if len(v) > 2:
+                obs = float(np.var(v, ddof=1))
+                within4 = float(np.mean([p_ * (1 - p_) for p_ in v])) / 4
+                true_var = max(obs - within4, 0.0)
+                pw[f"{name}_perp_direct_{band}_{sv}"] = {
+                    "dev_mean_rate": float(np.mean(v)), "obs_sd": float(np.sqrt(obs)),
+                    "ci_halfwidth_n45_k4": 1.96 * np.sqrt(true_var + within4) / np.sqrt(45),
+                    "ci_halfwidth_n45_k8": 1.96 * np.sqrt(true_var + within4 / 2) / np.sqrt(45)}
+S["power_8b"] = pw
+
 OUT.parent.mkdir(parents=True, exist_ok=True)
 OUT.write_text(json.dumps(S, indent=1, default=str))
 print("blocks", S["blocks"])
