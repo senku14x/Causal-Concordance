@@ -363,3 +363,32 @@ The smoke is not the run. It stops, and the note goes to the PI.
 10. **rand-J** tokens from the baseline words only; rand-dir with 5 seeds on the model side, forming the nulls.
 11. **Oracle k = 4** = 4 samples (resolved from `readers.OracleLens` and 001/002).
 12. P17's premise: accepted as "largely follows A.9.2" (PI); no query to the checkpoint author.
+
+## 16. Overnight dev-only pilot (PI go 2026-10-04, after the smoke) — pre-registered before it runs
+
+*Why.* The smoke triggered the G1 stop rule: sampled naming is floor-limited on Qwen, while the paper's rank / log-prob measure responds strongly. The u^⊥ onset also sat at the bottom of the grid, so P11a/b had no "model silent" strength. The design must be amended before any run. The PI asked for the GPU to be used overnight. This pilot gathers the **development** data the amendment needs. It is exploratory and descriptive: **no P-test, no prior is scored, and no test-concept outcome is produced.**
+
+**Scope**
+1. **Concepts:** the 10 dev concepts only.
+2. **Split quality for all 55 concepts:** decompositions and the G5 rank of c on the pure u^⊥ at L24–38 and L40/42/44. This is material screening, not an outcome: no model output on a test concept is computed.
+3. **Bands:** B (L32–38) and B2 (L24–38).
+4. **Prefills:** the protocol's `default` and its `word` variant (`… The thought is about the word "`).
+5. **Grid:** extended to s ∈ {1/256, 1/128, 1/64, 1/32, 1/16, 1/8, 1/4, 1/2, 1}.
+6. **Model side:** conditions 1–11r as in §4, teacher-forced (R1, R1′, B1–B4) for every band × prefill. Sampled naming R2 for conditions 1–4 and 7 (seed 0).
+7. **Readers (default prefill, both bands):**
+   - text readers on conditions 2, 3, 4, 7 at s ∈ {1/256, 1/64, 1/16, 1/4, 1}: NLA 4 samples (L42), Oracle 4 samples (L40, L44), direct and carried-C_o;
+   - token readers and probes on every condition and strength, all three read kinds;
+   - clean reads with 32 samples.
+8. **Outputs:** `outputs/005_planted_concepts/pilot/<run_id>/` and `results/005_planted_concepts/analysis/pilot_summary.json`.
+
+**What it informs (amendment decisions, all on dev data):**
+- the report measure;
+- band;
+- prefill;
+- grid range;
+- the text-reader strengths;
+- a per-concept G5 exclusion rule;
+- the clamp's usefulness against its null;
+- the full-run budget.
+
+**What it cannot inform.** Any P-contrast verdict: dev concepts decide nothing (§8), and the test set stays untouched.
