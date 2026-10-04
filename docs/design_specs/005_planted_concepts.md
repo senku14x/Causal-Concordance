@@ -512,3 +512,50 @@ Agent priors: 12 specific **0.40**; 13 specific **0.25**.
 - Descriptive: J_NP vs R_CB vs logit-lens consistency, with no rule.
 
 **7b.4 SAE/BSF: not added.** `ceselder/qwen36-27b-bsf-l42-1b` @ 52b898a5 is a custom ~16 GB format (blocks_Q.pt 5.4 GB, sasa.pt 10.7 GB, ZCA whitening) that needs its own encoder, and the SAE arm is PI-deferred (A01 C16). It is left for the full run if the PI wants it.
+
+### 16.4 Step 8: where the planted concept reaches the report position (PI go 2026-10-04: "continue with something extra … which would give more info"; pre-registered before it runs)
+
+**Why.**
+- P11a/P11b ask whether a reader sees, at the report position C_o, content the model does not report.
+- The pilot reads C_o only at L40–44, while the model reports from L63; the NLA can read only L42.
+- If the planted concept reaches C_o only after L44, P11 at C_o is structurally untestable for the NLA, and the amendment must move P11's read position.
+- Step 7b's sweep tracks the concept's *token* rank at C_o (J-lens, logit lens, R-lens). Step 8 adds:
+  - a **reader-free** measure of concept information at C_o across layers;
+  - the **Oracle at its later on-contract layers**.
+
+**8a. Run (dev concepts, default prefill, bands B and B2, teacher-forced, `scripts/005_planted_concepts/pilot_8.py`).**
+- **Rows:** conditions 2 (full), 3 (J part), 4 (non-J part), 7 (rand-dir, seeds 0–4) at s ∈ {1/256, 1/64, 1/16, 1/4, 1}, plus clean. h(C_o) recorded at **L32–L62**.
+- **Probes:** a per-concept logistic probe (as in §6: 6 natural templates, the 101 concepts + 194 baseline words, C = 1.0, standardised), trained at **each layer L32–L62**.
+- **Detection of c at C_o at layer ℓ:** Δprobe_c = probe_c(x) − probe_c(x_clean) exceeds the largest Δprobe_c over the 5 rand-dir seeds for the same concept, dose, band and layer.
+- **Oracle at C_o:** L48, L52, L56, L60 (on-contract), conditions 2, 3, 4, 7 (seed 0) × the 5 doses × both bands × 4 samples, plus clean reads (32 samples per layer).
+
+**Q12 (reader-free arrival).**
+- Per condition × dose × band: the first layer at which at least half of the dev concepts are detected at C_o.
+- Report the full curve: detection rate by layer.
+- **Decision mapping for the amendment:**
+
+| Outcome | Amendment |
+|---|---|
+| The full vector and the non-J part arrive at C_o by L42 at doses inside the strict P11 window (model's ΔR1′ within the null) | P11 at C_o is testable as designed |
+| They arrive only after L44 | P11 for the NLA moves to a position it can read (proposal: the last question-turn token, read after propagation, with the caveat that it is not attention-only), or P11 is restricted to the Oracle at late C_o layers |
+| They never arrive (at doses where the model's report is unmoved) | "The model doesn't report it" coincides with "it isn't at the report position", and P11a as posed cannot succeed |
+
+- **Agent priors:**
+  - full vector at s = 1/4 arrives at C_o by L44: **0.50**;
+  - the non-J part arrives no later than the J part (s = 1/4): **0.60**;
+  - inside the strict P11 window, any condition arrives by L44: **0.20**.
+
+**Q13 (Oracle at late layers).**
+- Does the Oracle name c at C_o at L48–60, with mean naming over dev concepts > 0.10 and above rand-dir, at some dose:
+  - for the full vector? Agent prior **0.45**;
+  - for the non-J part? Agent prior **0.25**.
+- **Mapping:**
+  - **yes** → late-layer Oracle reads at C_o become the Oracle's P11-type comparison in the amendment;
+  - **no** → neither text reader sees planted content at the report position at any on-contract layer.
+
+**8b. Power analysis (CPU only).**
+- From the pilot's dev data: the between-concept SD of each previewed contrast (M1-like, R1-like, P17-like, P11a-like).
+- The expected cluster-bootstrap CI half-width with **45 test concepts**, and the effect of 4 vs 8 text-reader samples (within-concept binomial variance).
+- A planning number with no rule.
+
+**Cost:** about 50 GPU minutes after step 7b; no test concept is touched.
