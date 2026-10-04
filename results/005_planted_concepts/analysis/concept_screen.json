@@ -1,0 +1,787 @@
+{
+ "threshold": 0.05,
+ "rule": "exclude if pooled NLA or pooled Oracle per-sample rate > threshold",
+ "sources": {
+  "nla|cw:runs/abl2/nla_resid_abl2.jsonl": 150,
+  "oracle|cw:runs/abl2/olens_abl2.jsonl": 150,
+  "nla|cw:runs/abl3/nla_resid_abl2.jsonl": 150,
+  "oracle|cw:runs/abl3/olens_abl2.jsonl": 150,
+  "nla|cw:runs/abl50/nla_resid_abl.jsonl": 100,
+  "oracle|cw:runs/abl50/olens_ablctrl.jsonl": 100,
+  "nla|cw:runs/brew50/nla.multihop.jsonl": 50,
+  "nla|cw:runs/brew50/nla_orig.jsonl": 50,
+  "oracle|cw:runs/brew50/olens_L42.brew_intermediates.jsonl": 50,
+  "oracle|cw:runs/brew50/olens_orig.jsonl": 50,
+  "nla|cw:runs/brew50_abl/nla_resid_abl2.jsonl": 150,
+  "oracle|cw:runs/brew50_abl/olens_abl2.jsonl": 150,
+  "nla|cw:runs/chain60/nla_L42.chain.jsonl": 60,
+  "oracle|cw:runs/chain60/olens_L42.chain.jsonl": 60,
+  "nla|cw:runs/chain60_L56/nla_L56.chain.jsonl": 60,
+  "oracle|cw:runs/chain60_L56/olens_L56.chain.jsonl": 60,
+  "nla|cw:runs/multihop100/nla.multihop.jsonl": 100,
+  "oracle|cw:runs/multihop100/olens.multihop.jsonl": 55,
+  "oracle|cw:runs/multihop100/olens_L42,44.multihop.jsonl": 200,
+  "nla|cw:runs/smoke/nla.multihop.jsonl": 5,
+  "nla|cw:runs/sweep50/nla_L16,28,36.multihop.jsonl": 150,
+  "oracle|cw:runs/sweep50/olens_L16,28,36.multihop.jsonl": 150,
+  "oracle|001:oracle_wsb": 2090,
+  "oracle|001:oracle": 960,
+  "nla|001:nla-L42": 880
+ },
+ "concepts": {
+  "loss": {
+   "nla": {
+    "hits": 1,
+    "n": 1905,
+    "rate": 0.0005249343832020997
+   },
+   "oracle": {
+    "hits": 0,
+    "n": 4225,
+    "rate": 0.0
+   },
+   "excluded": false
+  },
+  "enemy": {
+   "nla": {
+    "hits": 0,
+    "n": 1905,
+    "rate": 0.0
+   },
+   "oracle": {
+    "hits": 0,
+    "n": 4225,
+    "rate": 0.0
+   },
+   "excluded": false
+  },
+  "union": {
+   "nla": {
+    "hits": 1,
+    "n": 1905,
+    "rate": 0.0005249343832020997
+   },
+   "oracle": {
+    "hits": 4,
+    "n": 4225,
+    "rate": 0.0009467455621301775
+   },
+   "excluded": false
+  },
+  "skin": {
+   "nla": {
+    "hits": 6,
+    "n": 1905,
+    "rate": 0.0031496062992125984
+   },
+   "oracle": {
+    "hits": 0,
+    "n": 4225,
+    "rate": 0.0
+   },
+   "excluded": false
+  },
+  "sin": {
+   "nla": {
+    "hits": 0,
+    "n": 1905,
+    "rate": 0.0
+   },
+   "oracle": {
+    "hits": 0,
+    "n": 4225,
+    "rate": 0.0
+   },
+   "excluded": false
+  },
+  "storm": {
+   "nla": {
+    "hits": 5,
+    "n": 1905,
+    "rate": 0.0026246719160104987
+   },
+   "oracle": {
+    "hits": 3,
+    "n": 4225,
+    "rate": 0.0007100591715976331
+   },
+   "excluded": false
+  },
+  "profit": {
+   "nla": {
+    "hits": 0,
+    "n": 1905,
+    "rate": 0.0
+   },
+   "oracle": {
+    "hits": 0,
+    "n": 4225,
+    "rate": 0.0
+   },
+   "excluded": false
+  },
+  "frame": {
+   "nla": {
+    "hits": 29,
+    "n": 1905,
+    "rate": 0.015223097112860892
+   },
+   "oracle": {
+    "hits": 1,
+    "n": 4225,
+    "rate": 0.00023668639053254438
+   },
+   "excluded": false
+  },
+  "gel": {
+   "nla": {
+    "hits": 0,
+    "n": 1905,
+    "rate": 0.0
+   },
+   "oracle": {
+    "hits": 0,
+    "n": 4225,
+    "rate": 0.0
+   },
+   "excluded": false
+  },
+  "earth": {
+   "nla": {
+    "hits": 23,
+    "n": 1905,
+    "rate": 0.012073490813648294
+   },
+   "oracle": {
+    "hits": 63,
+    "n": 4225,
+    "rate": 0.014911242603550296
+   },
+   "excluded": false
+  },
+  "corner": {
+   "nla": {
+    "hits": 0,
+    "n": 1905,
+    "rate": 0.0
+   },
+   "oracle": {
+    "hits": 3,
+    "n": 4225,
+    "rate": 0.0007100591715976331
+   },
+   "excluded": false
+  },
+  "thumb": {
+   "nla": {
+    "hits": 0,
+    "n": 1905,
+    "rate": 0.0
+   },
+   "oracle": {
+    "hits": 0,
+    "n": 4225,
+    "rate": 0.0
+   },
+   "excluded": false
+  },
+  "ear": {
+   "nla": {
+    "hits": 0,
+    "n": 1905,
+    "rate": 0.0
+   },
+   "oracle": {
+    "hits": 0,
+    "n": 4225,
+    "rate": 0.0
+   },
+   "excluded": false
+  },
+  "review": {
+   "nla": {
+    "hits": 9,
+    "n": 1905,
+    "rate": 0.004724409448818898
+   },
+   "oracle": {
+    "hits": 0,
+    "n": 4225,
+    "rate": 0.0
+   },
+   "excluded": false
+  },
+  "custom": {
+   "nla": {
+    "hits": 0,
+    "n": 1905,
+    "rate": 0.0
+   },
+   "oracle": {
+    "hits": 1,
+    "n": 4225,
+    "rate": 0.00023668639053254438
+   },
+   "excluded": false
+  },
+  "dog": {
+   "nla": {
+    "hits": 4,
+    "n": 1905,
+    "rate": 0.002099737532808399
+   },
+   "oracle": {
+    "hits": 15,
+    "n": 4225,
+    "rate": 0.0035502958579881655
+   },
+   "excluded": false
+  },
+  "symbol": {
+   "nla": {
+    "hits": 41,
+    "n": 1905,
+    "rate": 0.02152230971128609
+   },
+   "oracle": {
+    "hits": 69,
+    "n": 4225,
+    "rate": 0.016331360946745564
+   },
+   "excluded": false
+  },
+  "free": {
+   "nla": {
+    "hits": 0,
+    "n": 1905,
+    "rate": 0.0
+   },
+   "oracle": {
+    "hits": 3,
+    "n": 4225,
+    "rate": 0.0007100591715976331
+   },
+   "excluded": false
+  },
+  "ship": {
+   "nla": {
+    "hits": 1,
+    "n": 1905,
+    "rate": 0.0005249343832020997
+   },
+   "oracle": {
+    "hits": 1,
+    "n": 4225,
+    "rate": 0.00023668639053254438
+   },
+   "excluded": false
+  },
+  "role": {
+   "nla": {
+    "hits": 11,
+    "n": 1905,
+    "rate": 0.005774278215223097
+   },
+   "oracle": {
+    "hits": 2,
+    "n": 4225,
+    "rate": 0.00047337278106508875
+   },
+   "excluded": false
+  },
+  "friend": {
+   "nla": {
+    "hits": 3,
+    "n": 1905,
+    "rate": 0.0015748031496062992
+   },
+   "oracle": {
+    "hits": 2,
+    "n": 4225,
+    "rate": 0.00047337278106508875
+   },
+   "excluded": false
+  },
+  "cook": {
+   "nla": {
+    "hits": 0,
+    "n": 1905,
+    "rate": 0.0
+   },
+   "oracle": {
+    "hits": 0,
+    "n": 4225,
+    "rate": 0.0
+   },
+   "excluded": false
+  },
+  "stand": {
+   "nla": {
+    "hits": 4,
+    "n": 1905,
+    "rate": 0.002099737532808399
+   },
+   "oracle": {
+    "hits": 13,
+    "n": 4225,
+    "rate": 0.003076923076923077
+   },
+   "excluded": false
+  },
+  "gray": {
+   "nla": {
+    "hits": 0,
+    "n": 775,
+    "rate": 0.0
+   },
+   "oracle": {
+    "hits": 0,
+    "n": 925,
+    "rate": 0.0
+   },
+   "excluded": false
+  },
+  "curve": {
+   "nla": {
+    "hits": 0,
+    "n": 1905,
+    "rate": 0.0
+   },
+   "oracle": {
+    "hits": 0,
+    "n": 4225,
+    "rate": 0.0
+   },
+   "excluded": false
+  },
+  "method": {
+   "nla": {
+    "hits": 14,
+    "n": 1905,
+    "rate": 0.007349081364829396
+   },
+   "oracle": {
+    "hits": 7,
+    "n": 4225,
+    "rate": 0.0016568047337278107
+   },
+   "excluded": false
+  },
+  "weight": {
+   "nla": {
+    "hits": 2,
+    "n": 1905,
+    "rate": 0.0010498687664041995
+   },
+   "oracle": {
+    "hits": 5,
+    "n": 4225,
+    "rate": 0.001183431952662722
+   },
+   "excluded": false
+  },
+  "summary": {
+   "nla": {
+    "hits": 9,
+    "n": 1905,
+    "rate": 0.004724409448818898
+   },
+   "oracle": {
+    "hits": 8,
+    "n": 4225,
+    "rate": 0.001893491124260355
+   },
+   "excluded": false
+  },
+  "time": {
+   "nla": {
+    "hits": 104,
+    "n": 1905,
+    "rate": 0.05459317585301837
+   },
+   "oracle": {
+    "hits": 128,
+    "n": 4225,
+    "rate": 0.03029585798816568
+   },
+   "excluded": true
+  },
+  "line": {
+   "nla": {
+    "hits": 246,
+    "n": 1905,
+    "rate": 0.12913385826771653
+   },
+   "oracle": {
+    "hits": 18,
+    "n": 4225,
+    "rate": 0.004260355029585799
+   },
+   "excluded": true
+  },
+  "photo": {
+   "nla": {
+    "hits": 2,
+    "n": 1905,
+    "rate": 0.0010498687664041995
+   },
+   "oracle": {
+    "hits": 0,
+    "n": 4225,
+    "rate": 0.0
+   },
+   "excluded": false
+  },
+  "bags": {
+   "nla": {
+    "hits": 0,
+    "n": 1905,
+    "rate": 0.0
+   },
+   "oracle": {
+    "hits": 1,
+    "n": 4225,
+    "rate": 0.00023668639053254438
+   },
+   "excluded": false
+  },
+  "desk": {
+   "nla": {
+    "hits": 1,
+    "n": 1905,
+    "rate": 0.0005249343832020997
+   },
+   "oracle": {
+    "hits": 1,
+    "n": 4225,
+    "rate": 0.00023668639053254438
+   },
+   "excluded": false
+  },
+  "pool": {
+   "nla": {
+    "hits": 0,
+    "n": 1905,
+    "rate": 0.0
+   },
+   "oracle": {
+    "hits": 5,
+    "n": 4225,
+    "rate": 0.001183431952662722
+   },
+   "excluded": false
+  },
+  "ash": {
+   "nla": {
+    "hits": 0,
+    "n": 1905,
+    "rate": 0.0
+   },
+   "oracle": {
+    "hits": 0,
+    "n": 4225,
+    "rate": 0.0
+   },
+   "excluded": false
+  },
+  "steel": {
+   "nla": {
+    "hits": 0,
+    "n": 1905,
+    "rate": 0.0
+   },
+   "oracle": {
+    "hits": 2,
+    "n": 4225,
+    "rate": 0.00047337278106508875
+   },
+   "excluded": false
+  },
+  "tap": {
+   "nla": {
+    "hits": 0,
+    "n": 1905,
+    "rate": 0.0
+   },
+   "oracle": {
+    "hits": 0,
+    "n": 4225,
+    "rate": 0.0
+   },
+   "excluded": false
+  },
+  "path": {
+   "nla": {
+    "hits": 22,
+    "n": 1905,
+    "rate": 0.011548556430446194
+   },
+   "oracle": {
+    "hits": 223,
+    "n": 4225,
+    "rate": 0.0527810650887574
+   },
+   "excluded": true
+  },
+  "case": {
+   "nla": {
+    "hits": 25,
+    "n": 1905,
+    "rate": 0.013123359580052493
+   },
+   "oracle": {
+    "hits": 5,
+    "n": 4225,
+    "rate": 0.001183431952662722
+   },
+   "excluded": false
+  },
+  "box": {
+   "nla": {
+    "hits": 18,
+    "n": 1905,
+    "rate": 0.009448818897637795
+   },
+   "oracle": {
+    "hits": 0,
+    "n": 4225,
+    "rate": 0.0
+   },
+   "excluded": false
+  },
+  "trade": {
+   "nla": {
+    "hits": 0,
+    "n": 1905,
+    "rate": 0.0
+   },
+   "oracle": {
+    "hits": 0,
+    "n": 4225,
+    "rate": 0.0
+   },
+   "excluded": false
+  },
+  "bomb": {
+   "nla": {
+    "hits": 1,
+    "n": 1905,
+    "rate": 0.0005249343832020997
+   },
+   "oracle": {
+    "hits": 11,
+    "n": 4225,
+    "rate": 0.0026035502958579883
+   },
+   "excluded": false
+  },
+  "soap": {
+   "nla": {
+    "hits": 0,
+    "n": 1905,
+    "rate": 0.0
+   },
+   "oracle": {
+    "hits": 0,
+    "n": 4225,
+    "rate": 0.0
+   },
+   "excluded": false
+  },
+  "process": {
+   "nla": {
+    "hits": 23,
+    "n": 1905,
+    "rate": 0.012073490813648294
+   },
+   "oracle": {
+    "hits": 51,
+    "n": 4225,
+    "rate": 0.012071005917159764
+   },
+   "excluded": false
+  },
+  "picture": {
+   "nla": {
+    "hits": 17,
+    "n": 1905,
+    "rate": 0.008923884514435695
+   },
+   "oracle": {
+    "hits": 0,
+    "n": 4225,
+    "rate": 0.0
+   },
+   "excluded": false
+  },
+  "diamond": {
+   "nla": {
+    "hits": 2,
+    "n": 1905,
+    "rate": 0.0010498687664041995
+   },
+   "oracle": {
+    "hits": 2,
+    "n": 4225,
+    "rate": 0.00047337278106508875
+   },
+   "excluded": false
+  },
+  "ease": {
+   "nla": {
+    "hits": 0,
+    "n": 1905,
+    "rate": 0.0
+   },
+   "oracle": {
+    "hits": 0,
+    "n": 4225,
+    "rate": 0.0
+   },
+   "excluded": false
+  },
+  "hat": {
+   "nla": {
+    "hits": 0,
+    "n": 1905,
+    "rate": 0.0
+   },
+   "oracle": {
+    "hits": 0,
+    "n": 4225,
+    "rate": 0.0
+   },
+   "excluded": false
+  },
+  "sheet": {
+   "nla": {
+    "hits": 9,
+    "n": 1905,
+    "rate": 0.004724409448818898
+   },
+   "oracle": {
+    "hits": 1,
+    "n": 4225,
+    "rate": 0.00023668639053254438
+   },
+   "excluded": false
+  },
+  "information": {
+   "nla": {
+    "hits": 23,
+    "n": 1905,
+    "rate": 0.012073490813648294
+   },
+   "oracle": {
+    "hits": 1,
+    "n": 4225,
+    "rate": 0.00023668639053254438
+   },
+   "excluded": false
+  },
+  "race": {
+   "nla": {
+    "hits": 3,
+    "n": 1905,
+    "rate": 0.0015748031496062992
+   },
+   "oracle": {
+    "hits": 0,
+    "n": 4225,
+    "rate": 0.0
+   },
+   "excluded": false
+  },
+  "hair": {
+   "nla": {
+    "hits": 10,
+    "n": 1905,
+    "rate": 0.005249343832020997
+   },
+   "oracle": {
+    "hits": 2,
+    "n": 4225,
+    "rate": 0.00047337278106508875
+   },
+   "excluded": false
+  },
+  "plane": {
+   "nla": {
+    "hits": 0,
+    "n": 1905,
+    "rate": 0.0
+   },
+   "oracle": {
+    "hits": 3,
+    "n": 4225,
+    "rate": 0.0007100591715976331
+   },
+   "excluded": false
+  },
+  "judge": {
+   "nla": {
+    "hits": 0,
+    "n": 1905,
+    "rate": 0.0
+   },
+   "oracle": {
+    "hits": 0,
+    "n": 4225,
+    "rate": 0.0
+   },
+   "excluded": false
+  },
+  "board": {
+   "nla": {
+    "hits": 4,
+    "n": 1905,
+    "rate": 0.002099737532808399
+   },
+   "oracle": {
+    "hits": 0,
+    "n": 4225,
+    "rate": 0.0
+   },
+   "excluded": false
+  },
+  "formula": {
+   "nla": {
+    "hits": 22,
+    "n": 1905,
+    "rate": 0.011548556430446194
+   },
+   "oracle": {
+    "hits": 3,
+    "n": 4225,
+    "rate": 0.0007100591715976331
+   },
+   "excluded": false
+  },
+  "sock": {
+   "nla": {
+    "hits": 0,
+    "n": 1905,
+    "rate": 0.0
+   },
+   "oracle": {
+    "hits": 0,
+    "n": 4225,
+    "rate": 0.0
+   },
+   "excluded": false
+  },
+  "scene": {
+   "nla": {
+    "hits": 20,
+    "n": 1905,
+    "rate": 0.010498687664041995
+   },
+   "oracle": {
+    "hits": 2,
+    "n": 4225,
+    "rate": 0.00047337278106508875
+   },
+   "excluded": false
+  }
+ }
+}

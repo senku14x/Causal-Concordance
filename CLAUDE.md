@@ -13,7 +13,8 @@ Guide for any agent or collaborator working in this repo. Reading only this file
    callouts ([A01], [CW], [R], [v2]). Where a callout and the original disagree, the callout wins. **[v2] items are
    proposals until the PI accepts or strikes them.** Start with the v2 header, §4.R, §6.0, the §7 planted-concepts
    callout, §8 A4/A7/A8/A9, §12, §14 and §15.
-4. **docs/context/AMENDMENT_01.md**: the PI's 2026-10-02 decisions (its §6 lists each conflict by SPEC.md line).
+4. **docs/context/SPEC_v2_errata_01.md** (accepted 2026-10-04): V2-E1–E9 correct SPEC_v2 passages; an erratum wins over the text.
+   **docs/context/AMENDMENT_01.md**: the PI's 2026-10-02 decisions (its §6 lists each conflict by SPEC.md line).
 5. The latest design spec and report: **docs/design_specs/004_span_assay.md** and **docs/reports/004_span_assay.md**;
    then the earlier ones as needed, in order (all four experiments are complete on the dev split and await PI review):
    - 001: leverage profile, probes (amendment A2) and the reader snapshot;
@@ -281,3 +282,6 @@ yet) and await PI review.
 | 10-04 | The first draft of the checks report labelled CW's NLA "nla-L42" from her filenames; the files name the read layer, and her NLA is `nla-rl` `av_base` + iter_000400 (`pod_bootstrap.sh`) | corrected before commit |
 | 10-04 | The PI asked to delete the review's "flipped between r = 200 and r = 2000" parenthetical (Viswanath); I recorded it as adopted but the text stayed in the review and the reading notes (repo and claude_reports) | deleted; the reading notes now quote what the post reports (J-energy by rank; r = 2000 picked as "the cleanest") |
 | 10-04 | The 005 design draft said `engine.Engine` supports generation with hooks; it has a forward path only, and `CellWrite` writes row 0 at fixed prompt positions (it would fail on decode steps) | caught before commit; the design requires a new generation path and scores the clamp on teacher-forced measures only |
+| 10-04 | 005 v1 called reads at C_q (an injected position) at L40–44 "model-carried"; the residual stream still carries the band writes there, so they are near-direct (PI review) | v2: direct / carried-at-C_o / "injected position" kinds; text readers read C_o |
+| 10-04 | 005 v1 said the clamp would remove ~0 of the injection; atoms of other band layers and every atom at L39–62 are not orthogonal to u^⊥ (PI review) | v2: random-clamp null; removed-norm shares logged; M2 interpreted only against the null |
+| 10-04 | 005 v1 qualified P11a strengths on 8-sample naming alone, which makes P11a easy to "support" (PI review) | v2: strict P11a/P11b on R1′ and B1/B2/B4 nulls are primary |

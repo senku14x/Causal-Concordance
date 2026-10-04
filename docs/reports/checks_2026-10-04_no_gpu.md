@@ -139,3 +139,23 @@
 - C2 first read the 001 gate record's partner intermediate as `z_partner` / `partner_z`; the field is `z_p`.
   - **Correction to commit 33e05c9's message:** it says the bug was "caught by the missing-roles counter". In fact I caught it by printing the gate record before the first run. The commit is pushed, and I do not force-push.
 - C1's first dry run took CW's `items.json` (the 120-item gated bank) as the item list. WSB reported 120 expected cells, 60 missing. The item list is now the readout ids, asserted against the pinned bank and its prompts.
+
+## Addendum: PI review of these checks (2026-10-04)
+
+Disposition: `docs/reviews/2026-10-04_pi_review_checks_005/`. The PI accepted C1–C3 with a sharper reading of each; every factual claim in the review was checked first.
+
+- **C1.**
+  - The Oracle's chain result is not Oracle-specific. J-lens, a linear readout that cannot re-solve, also passes 11/60 at L56, so the intermediate is linearly readable at the final cell at L56 in some items.
+  - The Oracle hits J-lens does not share (7 of 11) are the ones relevant to reading vs re-solving. With one readout per cell, they are at noise level.
+  - **Chain cannot test the NLA.** At L42 the final cell carries no leverage (S ≈ 0.001 at L40–44, report 001 §5; checked) and J-lens passes 2/60. At L56 the NLA is off-layer. Its 1/60 is uninformative, not a failure.
+  - **Added in the disposition:** at that same no-leverage L42 cell, the Oracle (off-contract) passes 8/60 against a null of 0.046 (paired CI [0.001, 0.185]). That is a weak re-solving candidate.
+  - Recorded as SPEC_v2 erratum E9.
+- **C2.**
+  - "Influence" at ":" L42 is accepted, described as a **mixture of the two trajectories**: a → a′; both intermediates rise (z is the recipient's runner-up answer in 23/33 pairs, checked); about 0.04 leaks to non-colour tokens.
+  - The damage-rule rewrite for whole-cell partner patches is in erratum E1. It is post-hoc and applies to future data only.
+  - No GPU will be spent on the other layers.
+- **C3.**
+  - Both removals take only 0.1–1% of ‖h‖², so J-lens hits fall 15 → 0 by construction, while prose readers keep about 99% of the activation.
+  - "Survives J-removal" therefore cannot separate reading outside J-space from re-solving. Only a probe-validated eraser can, and since it removes linear information only, survival after it means re-solving or nonlinear reading.
+  - Recorded in erratum E7 (A4).
+

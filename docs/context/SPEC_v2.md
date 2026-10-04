@@ -2,6 +2,8 @@
 
 *Draft project spec, 2026-10-01 (revised after an external red-team review). Priors are gut estimates written before any run. Nothing here has been run yet.*
 
+> **Errata 01 (accepted 2026-10-04):** `docs/context/SPEC_v2_errata_01.md` (V2-E1–E9) corrects §1, §4, §6, §8, §9 and §14 passages. Where an erratum and this text disagree, the erratum wins.
+>
 > **v2 · Unified spec, 2026-10-04.** "Nothing here has been run yet" is superseded: see *Status at a glance* below and §14. This file merges, without cutting any of the original:
 > 1. the original draft (2026-10-01, Vishesh), kept verbatim;
 > 2. **AMENDMENT_01** (PI decisions of 2026-10-02: conflicts C1–C23, errata E1–E4; verbatim in Appendix B);
