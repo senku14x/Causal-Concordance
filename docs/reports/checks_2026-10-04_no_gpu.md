@@ -11,17 +11,42 @@
 
 | Check | Result (n) | Pre-registered rule says | My prior |
 |---|---|---|---|
-| C1 chain re-score | **Not scored**: the judge key is absent. Dry run passes on all 6 files (60/60 items each, all last-token, L42 accepted). CW's any-number counts reproduce exactly. | blocked | 55% that Oracle L56 beats the decoy null by ≥ 0.10 |
+| C1 chain re-score | Oracle L56 names an intermediate as its top computed value in **11/60 (0.183 [0.10, 0.28]) vs decoy null 0.041**; under CW's any-number rule it was 36/60. J-lens L56 also 11/60; NLA 1/60 at L42 and L56 (at or below null) | **CW-7 stands** as "read from the activation (WSB chain rule)", at about a third of its any-number size | 55% that Oracle L56 beats the null by ≥ 0.10 (it did: +0.14) |
 | C2 off-pair mass at ":" L42 | z + z′ take **0.54 [0.39, 0.74]** of the off-pair increase; non-colour 0.21 [0.16, 0.29] (33 pairs) | **"influence"** at ":" L42 (CI crosses 0.5; thin) | 25% for z + z′ ≥ 0.5 (I was wrong) |
 | C3 removal energy | multihop ratio **2.4 [1.6, 4.7]** (50 items); Brew **1.7 [1.5, 2.3]** (50 items) | multihop: **B14 stands** (borderline); Brew: **roughly matched** (borderline) | 80% for multihop > 2 |
 
 ## C1. Chain re-score with WSB's chain instrument (CW-6 / CW-7)
 
-**Status: blocked.**
-- `OPENROUTER_API_KEY` is not on this instance; per CLAUDE.md it lives only in `/workspace/.env`, which is absent.
-- No WSB numbers exist. Nothing below is a WSB pass rate.
+**Status: scored (2026-10-04, after the PI supplied the judge key).**
+- WSB @ 92d763e, `chain_intermediates`, prompt `chain-free-2026-09-16`, `google/gemini-3.8-flash`, `cells=last`, unmodified; 360 judge calls, all 360 decided.
+- Judge spend: $0.33.
 
-**Dry run (WSB @ 92d763e, `chain_intermediates`, prompt `chain-free-2026-09-16`, `google/gemini-3.8-flash`, `cells=last`), all 6 readout files:**
+**WSB rule, all 60 items (subset (i), exploratory, the same set as CW-6/7):**
+
+| Reader, layer | Top computed value is an intermediate [95% CI] | Decoy null (±3, magnitude-matched) | Any of top 3 | Readout commits to a value | CW any-number (chance) |
+|---|---|---|---|---|---|
+| Oracle L42 (off-contract) | 8/60 = 0.133 [0.05, 0.233] | 0.046 | 0.233 | 1.000 | 27/60 (21.0) |
+| NLA L42 (training layer) | 1/60 = 0.017 [0.0, 0.05] | 0.049 | 0.050 | 0.967 | 9/60 (12.4) |
+| **Oracle L56 (on-contract)** | **11/60 = 0.183 [0.10, 0.283]** | **0.041** | 0.267 | 0.867 | 36/60 (12.1) |
+| NLA L56 (off its training layer) | 1/60 = 0.017 [0.0, 0.05] | 0.020 | 0.017 | 0.650 | 13/60 (8.9) |
+| J-lens L42 (secondary arm) | 2/60 = 0.033 [0.0, 0.083] | 0.000 | 0.033 | 0.150 | 6/60 (3.6) |
+| J-lens L56 (secondary arm) | 11/60 = 0.183 [0.083, 0.283] | 0.024 | 0.217 | 0.583 | 25/60 (6.8) |
+
+**Rule outcome.** Oracle L56: pass − null = 0.183 − 0.041 = 0.142 ≥ 0.10, and the pass rate is 4.5× the null. So **CW-7 stands as "read from the activation (WSB chain rule)"**. §14.7's entry is kept.
+
+**What changes even so:**
+- **Size.** 36/60 under the any-number rule becomes 11/60 under the top-computed-value rule. Most of the any-number credit came from intermediates that the readout mentions but does not present as the computed result.
+- **Not specific to the Oracle.** The J-lens at L56 also passes 11/60. The Oracle's lead over the J-lens under the any-number rule (36 vs 25) disappears under WSB's rule.
+- **Low per-item agreement.** The Oracle and the J-lens pass on largely different items (4 of 11 shared). With one readout per cell, per-item results are noisy.
+- **The NLA** (`nla-rl` iter_000400) passes 1/60 at both layers, at or below its null. It does not present chain intermediates as computed values at the final cell, even at its training layer.
+- **Reading vs re-solving.** "Read from the activation" here means passing WSB's rule against the decoy null. It does not separate reading from re-solving (A4 / A7); CW-7's "31 of 36 without restating the start" was measured under the any-number rule and has not been re-examined.
+
+**Exploratory additions (not pre-registered):**
+- Paired bootstrap of (pass − null) over items (seed 20261004): Oracle L56 0.143 [0.041, 0.249]; J-lens L56 0.159 [0.063, 0.267]; Oracle L42 0.087 [0.001, 0.185].
+- Usable single-digit dev subset (subset (ii), n = 7, descriptive only): Oracle L42 2/7, Oracle L56 1/7, NLA 0/7 at both layers, J-lens 0/7 at both layers. Test-subset numbers are in `outputs/checks_2026-10-04/c1/usable_test_QUARANTINED.json`, unreported (§4.R).
+- Contract status (PI note 3.4): the Oracle is off-contract at L42; the NLA is off-layer at L56.
+
+**Dry run, before scoring (WSB @ 92d763e, `chain_intermediates`, prompt `chain-free-2026-09-16`, `google/gemini-3.8-flash`, `cells=last`), all 6 readout files:**
 - Item match: 60 items each; all ids are in the pinned bank and every prompt is identical.
 - Missing cells: 0. Rows not at the last token: 0.
 - Layer 42 is accepted, although it is off WSB's grid.
@@ -41,12 +66,12 @@
 
 - CW-7 (Oracle L56 36/60 vs chance 12) reproduces exactly.
 - Checkpoints: CW's Oracle is WSB's `s3d.ddp600.s0/iter_000600` (hash-identical to our `olens_s3d_rl600`, verified earlier). CW's NLA is `ceselder/qwen3.6-27b-nla-rl` `av_base` + `av_rl_adapters/iter_000400` (her `scripts/pod_bootstrap.sh`), the same checkpoint our default plan uses. "nla_L42" in her filenames is the read layer.
-- Two notes for when it is scored:
+- Two notes written before scoring:
   - The Oracle's chance at L42 (21.0 of 60) is high because its readouts carry a median of 9 distinct numbers. WSB's top-value rule exists to remove that advantage.
   - J-lens L56 at 25/60 vs 6.8 was not discussed in the pilot; J-lens is the secondary arm here.
 - Subset (ii), the usable single-digit items: 14 of the 60 (7 dev, 7 test by our chain split). Test numbers will be written only to `outputs/` (quarantined, §4.R).
 
-**To finish:** with the key in the environment, run `python scripts/checks_2026-10-04/c1_chain_rescore.py /workspace/nla-vs-lenses --real` (360 judge calls, ≈ $1–3). The decision rule is in the pre-registration.
+**Reproduce:** `python scripts/checks_2026-10-04/c1_chain_rescore.py /workspace/nla-vs-lenses --real` with `OPENROUTER_API_KEY` set.
 
 ## C2. Where the off-pair mass goes after the whole-cell partner patch at ":"
 

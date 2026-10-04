@@ -91,7 +91,7 @@
       "av_base": "av_base",
       "adapter": "av_rl_adapters/iter_000400",
       "meta": "av_base/nla_meta.yaml",
-      "status": "PI default 2026-10-04 (iter_000400 = WSB's published NLA; iter_000400 vs 600 still for the PI to confirm). No AR wrapper (deferred).",
+      "status": "PI default 2026-10-04: iter_000400 for all readouts [PI: confirm]. That it produced WSB's published NLA numbers is PRESUMED (WSB code default produce/methods.py NLA.adapter; arm metadata of the published readouts not checked). It is also the Cathryn pilot's NLA (her pod_bootstrap.sh). No AR wrapper (deferred).",
       "sha256": {
         "av_base/chat_template.jinja": "e84f32a23fdda27689f868aa4a1a5621f41133e51a48d7f3efcbea2839574259",
         "av_base/config.json": "10d517a120597b391bb5a9e1f67aad70a162656067c3f25d95eccd44e46564d9",
