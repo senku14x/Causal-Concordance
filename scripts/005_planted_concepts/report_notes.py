@@ -82,6 +82,38 @@ if pv:
         N["M1_preview"] = (f"Preview only (dev concepts, no test): at matched norm the J part beats the non-J part at low and "
                            f"middle doses (up to {r(max(lo), 2, True)} nats at L32–38/default) and loses at high doses "
                            f"(down to {r(min(hi), 2, True)}). The two reach similar peaks; the J part gets there at a lower dose.")
+# Q5 readers
+q5 = S.get("Q5", {})
+if q5.get("nla") and q5.get("oracle"):
+    n, o = q5["nla"]["mean_naming"], q5["oracle"]["mean_naming"]
+
+    def g(d, k):
+        return d.get(k)
+    nla_full_1 = g(n, "B|42|direct_cq|2|1.0")
+    nla_perp_1 = g(n, "B|42|direct_cq|4|1.0")
+    nla_perp_q = g(n, "B|42|direct_cq|4|0.25")
+    ora_perp_1 = max(x for x in (g(o, "B|40|direct_cq|4|1.0"), g(o, "B|44|direct_cq|4|1.0")) if x is not None)
+    ora_perp_q = max(x for x in (g(o, "B|40|direct_cq|4|0.25"), g(o, "B|44|direct_cq|4|0.25")) if x is not None)
+    ora_j_q = max(x for x in (g(o, "B|40|direct_cq|3|0.25"), g(o, "B|44|direct_cq|3|0.25")) if x is not None)
+    carried = [v for k, v in list(n.items()) + list(o.items()) if "|carried_co|" in k and k.split("|")[3] in ("2", "3", "4")]
+    N["Q5"] = ("Both text readers name the planted concept when they are handed the written cell, and neither sees it at "
+               "the report position. On direct reads at s = 1 (band L32–38) the NLA names the full vector in "
+               f"{pct(nla_full_1)} of samples and the non-J part in {pct(nla_perp_1)}; the Oracle names the non-J part in up "
+               f"to {pct(ora_perp_1)}. At the report position the highest naming rate for any planted condition, reader, "
+               f"dose and band is {pct(max(carried))}. The reader-free probe agrees (it never classifies the report position "
+               "as the concept at L42), so this is the concept not having arrived there, not the readers missing it. "
+               "As posed, P11a and P11b compare the readers with the model at a position the content does not reach by the "
+               "readers' layers; step 8 checks later layers.")
+    N["P17_preview"] = (f"Preview of P17 (dev only, not a test): on direct reads the Oracle names the non-J part at least as "
+                        f"often as the NLA (s = 1: Oracle up to {pct(ora_perp_1)}, NLA {pct(nla_perp_1)}; s = 1/4: Oracle "
+                        f"up to {pct(ora_perp_q)}, NLA {pct(nla_perp_q)}). That runs against the A.9.2-based expectation that "
+                        "the Oracle sees content outside J-space less. At s = 1/4 both readers name the J part far more often than "
+                        f"the non-J part (Oracle up to {pct(ora_j_q)} vs {pct(ora_perp_q)}), the same dose pattern as the model's report.")
+sec = S.get("SEC_crosscheck")
+if sec:
+    N["budget"] = (f"The fast float32-residual regime matches the exact SEC replay on {pct(sec['agree_frac'])} of "
+                   f"{sec['n']} cells (median log-prob difference {r(sec['median_abs_dR1p'], 3)} nats), so the full run can "
+                   "use it throughout (A12).")
 out = RESA / "report_notes.json"
 prev = load(out) or {}
 prev.update(N)
