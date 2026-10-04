@@ -5,6 +5,8 @@
 - Paper notes are in `docs/context/reading_notes_v2.md`.
 - Everything here proposes; nothing in SPEC_v2.md has been edited beyond saving it.
 
+**Revision 2026-10-04 (PI comment):** Viswanath 2026 (an unvetted LessWrong post) is no longer cited as evidence anywhere in this review. Its design lessons are kept and justified on their own logic: the J-space boundary depends on the construction; P(yes) is not concept-specific; reading at the injection layer gives the reader direct access the model does not have; report ≠ output effect.
+
 ## 0. Setup
 
 | Step | Result |
@@ -97,7 +99,7 @@ Severity: **H** = changes a number, a claim or a rule; **M** = misattributed or 
 | B16 | §14.7 (CW-7 under "read from the activation") | Oracle reads chain intermediates at L56 | CW-6/7 score **any number named**: Oracle readouts carry 6–9 distinct numbers, hence chance 12/60. The WSB chain rule (top *computed* value, decoy null) was not applied; the restatement check covers the start number only. | M |
 | B17 | Status table "78 tests"; STATUS.md (Oracle hash "cannot be verified"); CLAUDE.md (working branch) | — | 93 tests collected. Oracle: `local-workspace` iter_000600 adapter sha256 7d4b301e… = `olens_s3d_rl600`, configs and `run.json` identical (**verified**). Branch: see §0. | L |
 | B18 | §7 005 callout | Neutral cells = Brew stir cells or the `</think>` newline, "measured zero leverage (001)" | 001's zeros are for the **natural start-pair difference**. Stir cells precede the only differing token, so they are bitwise no-ops by construction (001 §3); `</think>` ≈ 0 net, with the E2 cancellation caveat. Neither shows insensitivity to **injected** content. | M |
-| B19 | §9 P11 | NLA detects the non-J part "at doses where the model's next-token distribution does not change" | Viswanath 2026: the non-J part moved the concept token by **+13.7 to +21.1 nats** but was never reported. The observed dissociation is report vs output, not detection vs no output change. | M |
+| B19 | §9 P11 | NLA detects the non-J part "at doses where the model's next-token distribution does not change" | P11 conflates two model-side measures, *report* (the model names the concept) and *output effect* (next-token distribution / concept log-prob). A planted direction can move logits without being reported, so the two must be separate predictions. (An unvetted LessWrong post on Llama-3.3-70B, Viswanath 2026, reports exactly that dissociation; motivation only, not evidence.) | M |
 | B20 | §15 rules; A7 item 8; 005 | "J-based removal allowed only as a reader-side analysis in A4/A7" | A7.8 (removal in the model's own forward) and 005 (J / non-J parts written into the model) are **J-defined model edits**. SPEC_v2 does not say which side of the import boundary (`tests/test_import_boundary.py`) this code lives on, or that its outputs may never enter labels or admission. | M |
 
 ## c. Proposed edits to SPEC_v2 (each as a [v2] callout; nothing applied)
@@ -111,7 +113,7 @@ Severity: **H** = changes a number, a claim or a rule; **M** = misattributed or 
 > - **Lens.** J_NP primary (n = 1000); J_CB as a check.
 > - **Report** for every concept: the selected tokens, their coefficients, and the J share of ‖x‖². Sanity check against the paper: median 6–7% at k = 16 for concept vectors, 10–15% at k = 25 for probes.
 > - **§A.8 caveat.** The paper's formal set F = ∪_{|S|=k} span{v_i}, with unrestricted orthogonal projection, admits negative coefficients. It therefore describes a larger set than the non-negative cones in the prose. Primary = the non-negative pursuit (what the paper's experiments use). Sensitivity = least-squares projection onto span{v_t : t ∈ S} for the same S.
-> - **Not interchangeable with the top-r singular-subspace split** (Viswanath 2026). His conclusion flipped between r = 200 and r = 2000, and r was chosen after seeing results. If run at all, it is a secondary construction with r fixed in the design.
+> - **Other constructions are not interchangeable.** For example, a top-r singular subspace of J gives a different boundary for every r, and nothing ties r to the paper's k. Only the paper's pursuit definition is planned. (An unvetted LessWrong post, Viswanath 2026, illustrates the risk: its conclusion flipped between r = 200 and r = 2000. Lesson only, not evidence.)
 > - **Frozen in the 005 design before any run:** construction, k, lens, layer and γ convention.
 
 ### c2. 005 = the paper's privilege test on the model side, with a reader side added (extends the §7 / A8 callouts)
@@ -128,13 +130,13 @@ Severity: **H** = changes a number, a claim or a rule; **M** = misattributed or 
 > - The J and non-J parts also at their natural (unrescaled) norms.
 >
 > **Model side (Fig. 7 / Fig. 8 protocol)**
-> - (i) **Report:** inject across the user turn, prefill to the open quote, score the concept's reciprocal rank and its open-text naming rate. Do not use P(yes): Viswanath found it fires for random in-J directions.
+> - (i) **Report:** inject across the user turn, prefill to the open quote, score the concept's reciprocal rank and its open-text naming rate. Do not use a P(yes) detection logit as the primary measure: it is not concept-specific and needs its own random-direction control.
 > - (ii) **Behaviour:** next-token KL on a neutral continuation, the concept token's log-prob uplift, and the task margin at Brew cells.
 > - (iii) **Privilege clamp (Fig. 8 / Fig. 16 hatched bars):** inject the non-J part while clamping the J coordinates of the concept's selected tokens to their clean values, at every position and layer downstream. Report how much of the non-J report effect survives. The paper found it falls to 0 for swaps and about 0 for injection.
 > - Writes in float32 (SEC replay for L ≥ 40), with ρ/κ fidelity measured on every write.
 >
 > **Reader side**
-> - Every reader reads (a) the injection cell at the injection layer (direct access) and (b) a downstream cell or layer after the model's own propagation (model-carried). Only (b) is a fair comparison with the model's report. Viswanath's NLA had direct access only.
+> - Every reader reads (a) the injection cell at the injection layer (direct access) and (b) a downstream cell or layer after the model's own propagation (model-carried). Only (b) is a fair comparison with the model's report: in (a) the reader sees the written vector directly, while the model must carry it forward.
 > - Text readers: at least 4 samples per dose (target 8). Token readers: candidate ranks.
 > - A reader-free linear probe for each concept, trained on natural activations, as a detection baseline. If the probe detects u^⊥, then NLA detection of it is a property of the direction, not of the NLA.
 > - J-lens detecting u^J is true by construction: a positive control only.
@@ -151,7 +153,7 @@ Severity: **H** = changes a number, a claim or a rule; **M** = misattributed or 
 > - Behaviour (⊥) vs report (⊥).
 > - Split P11:
 >   - **P11a:** the NLA detects ⊥ at doses where the model does not *report* it;
->   - **P11b:** … at doses where the next-token distribution does not change. Viswanath's data predict P11b fails.
+>   - **P11b:** … at doses where the next-token distribution does not change.
 
 ### c3. §10 pitfalls, new row (plus a pointer in A7 item 1)
 
@@ -288,7 +290,6 @@ Severity: **H** = changes a number, a claim or a rule; **M** = misattributed or 
 8. **005:**
    - ownership (proposed joint) and the sign-off procedure;
    - J-space construction (c1: pursuit, k = 16 primary; J_NP vs J_CB; folded γ vs raw W_U);
-   - whether a Viswanath-style rank split is a secondary arm.
 9. **P11–P16 priors,** and whether P11 splits into P11a (report) / P11b (output).
 10. **Test quarantine scope:**
     - chain (7 of the pilot's usable items are test);

@@ -73,6 +73,11 @@ Read status:
 
 ## 2. Viswanath, "Models are blind outside the J-space. NLAs aren't." (LessWrong, 2026-07-08)
 
+**Weight (PI, 2026-10-04): unvetted LessWrong post; motivation and design lessons only, no evidential weight.**
+- Different model (Llama-3.3-70B); n = 6 → 16 concepts with a flipped result; the boundary r was chosen after seeing outcomes; no held-out set.
+- Nothing in SPEC_v2 should rest on its numbers.
+- The lessons kept below stand on their own logic.
+
 **Claims [obs]** (Llama-3.3-70B, the released Anthropic NLA at L53, a J-lens trained at L53)
 
 - **Concept vectors:** "Tell me about {word}" last-token activation minus the mean of 100 baseline words (Macar et al.); 24 concepts.
