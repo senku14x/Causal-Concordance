@@ -454,3 +454,61 @@ All on the 10 dev concepts; descriptive. "Null" means the rand-dir 95th percenti
 - G4's control is the sample-level label permutation (a Hewitt–Liang type-level control is uninformative for single-word probes; see the smoke note).
 - The clamp's removed share is logged as ‖QQᵀ(h − h_clean)‖ / ‖h − h_clean‖ at every clamped layer, which at band layers includes that layer's write.
 - Every band × prefill block's rows are saved (the smoke lost band B's G1 rows).
+
+### 16.3 Step 7b: three additions from the PI-forwarded review (queued after step 7; pre-registered 2026-10-04 ~20:30, before they run)
+
+The pilot was already running when the review arrived, so these run as a separate process (`scripts/005_planted_concepts/pilot_7b.py`) once the pilot's NLA phase ends.
+- **Setting:** dev concepts only, default prefill, bands B and B2, the 9-point grid. Teacher-forced throughout.
+- **Cost:** about 15 min GPU.
+- **Reproducibility:** vectors, random seeds, clamp token sets and N̄ are recomputed by the same code, so they are identical to the pilot's.
+
+**7b.1 Re-entry clamp (why).**
+- The smoke showed the c-clamp no better than the random clamp. Both clamp to h_clean, so both delete part of the *carried injection* itself (§4).
+- In an additive residual stream, h − h_clean = A + M, where:
+  - A(ℓ) = Σ over band layers ℓ′ ≤ ℓ of Δ_ℓ′, the raw injection, at the injected positions only;
+  - M = what the model's blocks wrote differently in response.
+- Clamping c's J coordinates to **h_clean + A** removes only M's component in those coordinates. That is the re-entry the paper's clamp is meant to block; the raw injection's own component is kept.
+
+**One extension (agent).**
+- Near the output, c's J atom approaches c's unembedding direction, so a clamp that runs to L62 can block the route to saying c mechanically, not by stopping workspace re-entry.
+- So the clamp is run over two ranges, each with its own random-token null:
+
+| Condition | Clamp | Layers |
+|---|---|---|
+| 12 / 12r | u^⊥ (matched) + re-entry c-clamp / random clamp | band start to **L62** (as the design) |
+| 13 / 13r | u^⊥ (matched) + re-entry c-clamp / random clamp | band start to **L44** (the readers' layers) |
+
+- Conditions 4, 10 and 10r are re-run in the same process as within-run references.
+- Same T_c and random token sets as 10/10r.
+- **Logged:**
+  - the share of M removed, ‖QQᵀM‖ / ‖M‖, per layer, and the residual;
+  - cos(v_c(ℓ), g ⊙ W_U[c]) per layer for c's own token, to show where a clamp turns mechanical.
+- **Caveat:** passive leakage, meaning the raw u^⊥'s own projection onto later layers' c atoms, is kept as part of A. G5 measures it at band layers.
+
+**Q10 (rule).** At u^⊥'s best strength per concept (by R1; concepts where u^⊥ is within the null are not evaluable): does the re-entry c-clamp lower ΔR1′ more than the re-entry random clamp? The bootstrap 95% CI over evaluable dev concepts must exclude 0.
+
+| Outcome | Reading |
+|---|---|
+| Full range (12) specific, band-limited (13) not | u^⊥'s report needs c's J coordinates only late, near the output. Consistent with the output-direction confound; **no** evidence for workspace re-entry |
+| Band-limited (13) specific | u^⊥'s effect needs re-entry into c's J coordinates within the read band (supports the paper's mediation claim on Qwen; dev only) |
+| Neither | u^⊥ reaches the report without writing into c's J coordinates beyond a random set's (against mediation via c's J coordinates; dev only) |
+
+Agent priors: 12 specific **0.40**; 13 specific **0.25**.
+
+**7b.2 Layer sweep at the report position (why).**
+- The non-J part moves the report log-prob from the bottom of the grid, and the C_o reads stop at L44 while the model reports from L63 (§14).
+- **Setup:** conditions 2, 3, 4 and 7 (seeds 0–4), plus clean, at every strength; h(C_o) recorded at **L32–L62**.
+- **Per layer:** the J_NP cosine rank, logit-lens rank and R_CB standard rank of c (best single-token form).
+- **Q11:** under u^⊥, at the strengths where u^⊥ moves R1′ above the null, does c become J_NP top-10 at C_o at some layer ≤ L62 (median over evaluable concepts), below the rand-dir 5th-percentile rank at that layer?
+  - **Yes:** re-entry is visible at the report position, with the first such layer reported.
+  - **No:** the effect reaches the output without showing in J at C_o.
+- Agent prior: yes **0.55**.
+
+**7b.3 R-lens as an extra token reader.**
+- **Setup:** the R_CB standard readout (norm(h J_Rᵀ) W_Uᵀ, WSB RLens) rank of c, computed on:
+  - the pilot's stored captures (C_q and C_o at L40/42/44);
+  - direct reads (all non-clamp conditions, default prefill);
+  - the sweep in 7b.2.
+- Descriptive: J_NP vs R_CB vs logit-lens consistency, with no rule.
+
+**7b.4 SAE/BSF: not added.** `ceselder/qwen36-27b-bsf-l42-1b` @ 52b898a5 is a custom ~16 GB format (blocks_Q.pt 5.4 GB, sasa.pt 10.7 GB, ZCA whitening) that needs its own encoder, and the SAE arm is PI-deferred (A01 C16). It is left for the full run if the PI wants it.
