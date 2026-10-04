@@ -147,6 +147,22 @@ if rc:
                   f"agreement {pct(rc['top10_agree_JNP_RCB'])}), so for planted concepts the two Jacobian lenses are "
                   "interchangeable as token readers; adding R-lens to the full run costs little and answers the consistency "
                   "question directly (A13).")
+# Q12 (step 8)
+q12 = S.get("Q12", {}).get("by_band", {})
+if q12:
+    mx = max((x for v in q12.values() for k, cr in v.get("curves_absolute", {}).items() if not k.startswith("7")
+              for x in cr.values() if x is not None), default=0)
+    N["Q12"] = ("Read with care. By the pre-registered rule (probe response above the strongest of five random directions), "
+                "every condition “arrives” at the report position by L32–34 at every dose, even 1/256, so all three registered "
+                "predictions technically came true. That rule is degenerate: the forward pass is deterministic and nearly "
+                "linear at these doses, so the comparison with random directions is scale-free and fires at any dose. By the "
+                "absolute criterion (the probe classifies the read as the concept), the concept <b>never</b> reaches the "
+                "report position at any layer L32–62, for any condition, dose or band (highest rate anywhere "
+                f"{pct(mx)}). Together with Q5 and Q11: planting nudges the model's report distribution without ever "
+                "producing a readable concept state at the report position. P11a/P11b at the report position therefore "
+                "compare the readers with the model where neither can find the concept; the amendment must re-pose P11 "
+                "(proposal: compare reader sensitivity with model sensitivity on matched measures at the written cell, "
+                "and drop the report-position version).")
 out = RESA / "report_notes.json"
 prev = load(out) or {}
 prev.update(N)

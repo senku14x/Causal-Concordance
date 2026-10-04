@@ -351,8 +351,9 @@ def scorecard(D):
     """Pre-registered agent priors (quoted with the registering commit) and their outcomes from JSON."""
     items = []
 
-    def add(group, what, prior, commit, outcome, note):
-        items.append({"group": group, "what": what, "prior": prior, "commit": commit, "outcome": outcome, "note": note})
+    def add(group, what, prior, commit, outcome, note, brier=True):
+        items.append({"group": group, "what": what, "prior": prior, "commit": commit, "outcome": outcome, "note": note,
+                      "brier": brier})
 
     c1 = D.c1["cells"]["oracle_L56"]["wsb"] if D.c1 else None
     if c1:
@@ -435,11 +436,26 @@ def scorecard(D):
                 any(v["answer"] == "yes" for v in pl["Q11"]["by_band"].values()),
                 "; ".join(f"{b}: {v['answer']}" + (f" (first at L{v['first_hit']['layer']})" if v.get("first_hit") else "")
                           for b, v in pl["Q11"]["by_band"].items()))
+        if pl.get("Q12", {}).get("by_band"):
+            q12 = pl["Q12"]["by_band"]
+            flag = ("pre-registered relative rule (degenerate: fires at every dose, see A16); the absolute criterion says "
+                    "the concept never reaches the report position. Excluded from the Brier score")
+            add("Step 8", "Q12: the full vector reaches the report position by L44 (s = 1/4)", 0.50, "bf1da37",
+                any(v["full_by_L44_at_1/4"] for v in q12.values()), flag, brier=False)
+            add("Step 8", "Q12: the non-J part arrives no later than the J part (s = 1/4)", 0.60, "bf1da37",
+                any(v["perp_no_later_than_J_at_1/4"] for v in q12.values()), flag, brier=False)
+            add("Step 8", "Q12: something arrives by L44 inside the strict P11 window", 0.20, "bf1da37",
+                any(v["window_any_by_L44"] for v in q12.values()), flag, brier=False)
+        if pl.get("Q13"):
+            add("Step 8", "Q13: the Oracle names the full vector at the report position (L48–60)", 0.45, "bf1da37",
+                pl["Q13"]["full"]["answer"] == "yes", f"{len(pl['Q13']['full']['hits'])} qualifying cells")
+            add("Step 8", "Q13: the Oracle names the non-J part at the report position (L48–60)", 0.25, "bf1da37",
+                pl["Q13"]["perp"]["answer"] == "yes", f"{len(pl['Q13']['perp']['hits'])} qualifying cells")
     return items
 
 
 def brier(items):
-    res = [(it["prior"], 1.0 if it["outcome"] else 0.0) for it in items if it["outcome"] is not None]
+    res = [(it["prior"], 1.0 if it["outcome"] else 0.0) for it in items if it["outcome"] is not None and it.get("brier", True)]
     return (float(np.mean([(p - o) ** 2 for p, o in res])) if res else None), len(res)
 
 
