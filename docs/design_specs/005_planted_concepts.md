@@ -1,6 +1,6 @@
 # 005 — Planted concepts: J-part vs non-J part, for the model and every reader — design v2 (DRAFT for PI review)
 
-*Status: draft v2, revised to the PI review of 2026-10-04 (`docs/reviews/2026-10-04_pi_review_checks_005/`; changes in §15). **Nothing here is authorised to run.** The smoke and the run each need the PI's explicit go.*
+*Status: v2, revised to the PI review of 2026-10-04 (`docs/reviews/2026-10-04_pi_review_checks_005/`; changes in §15). **The PI authorised the smoke (§11) on 2026-10-04** ("build the 005 code and tests … run the code and the tests"). **The full run is not authorised:** it needs a separate go after the PI reviews the smoke note and the G1 amendment.*
 - Sources: PI feedback 2026-10-04 (§2 c1/c2, §3.6–3.8; doubts 10, 11, 13, 14, 16; §5 item 8); the PI review of v1 (same day); review `docs/context/SPEC_v2_review_2026-10-04.md` (c) c1, c2.
 - Paper: Gurnee et al. 2026 (arXiv 2607.15495), §3.1 Figs. 7–8, App. A.8, A.9.2.
 - The official protocol file is `anthropics/jacobian-lens` `data/experiments/verbal-introspection.json` (`/workspace/jacobian-lens`).
@@ -142,7 +142,7 @@ Plant a known concept into Qwen3.6-27B's residual stream, split into the part in
 - All model-side measures and reader-input captures use the **float32-residual regime from block 0** (RHUT; `engine.Fp32Residual`: bf16 matmuls, float32 residual and writes).
 - `engine.Engine` has a forward path only, and `CellWrite` writes batch row 0. **The 005 module adds a generation path**, built and tested in the preflight (§10):
   - batch-wide per-row writes (all conditions of a concept share one prompt, so they batch);
-  - injection skipped on decode steps;
+  - **sampling with a cache-free loop:** each step re-runs the full sequence through the proven `use_cache=False` forward, with the injection at prompt positions 97–116 only. This is equivalent to cached generation from an injected prompt and avoids decode-step hooks;
   - no clamp during sampling.
 - **Cross-check:** SEC replay with l0 = 31 re-scores teacher-forced R1 for the gate concepts, conditions 1–4 and 7, at all strengths. Agreement is reported; nothing is chosen by it.
 - **Fidelity (every write and clamp):** ρ ∈ [0.9, 1.1], κ ≥ 0.99. Clamp residual ‖Q_ℓᵀ(h − h_clean)‖ ≤ 1e-4 ‖Q_ℓᵀ h_clean‖. A failure stops the run (G0).
@@ -284,7 +284,7 @@ Per concept × condition × strength. P(yes) is never measured.
 - Leave-one-out and 194-word baseline renders; the random-clamp token pool.
 - Scoring regex tests: positives, negatives, plurals, case, mismatched concepts.
 - Clamp on a toy residual stream: exact restoration of the clamped coordinates, no change orthogonal to them, and the removed-norm logging.
-- The new generation path: batch-wide per-row injection at 97–116 only, skipped on decode steps; samples bitwise reproducible with a fixed seed.
+- The new generation path: batch-wide per-row injection at 97–116 only (never at generated positions); cache-free top-p sampling bitwise reproducible with a fixed seed.
 - Import boundary: the 005 module is reader-side (it imports `jspace`, `readers`); no label module imports it.
 - Already done: `jspace` and `NLArl` tests (bbef824, 506f0f1); `nla-rl` files verified (11/11 sha256); concept screen.
 
