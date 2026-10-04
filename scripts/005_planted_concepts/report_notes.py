@@ -232,7 +232,7 @@ if pv:
                    "non-J part at low and middle doses, the order reverses at high doses, and the two reach similar peaks. "
                    "This is a preview on 10 dev concepts, not the test (M1 runs on the 45 test concepts).")
 if S.get("Q10"):
-    bullets.append("<b>The privilege clamp works only by blocking the output end.</b> Clamping the concept's J coordinates all "
+    bullets.append("<b>The privilege clamp is specific only when it reaches the output end.</b> Clamping the concept's J coordinates all "
                    "the way to L62 removes much of the non-J part's effect (beating a random-token clamp), but stopping at L44 "
                    "removes nothing beyond the random clamp. The concept's J direction turns into its output direction with "
                    "depth, so the full-range clamp blocks the answer itself. On these concepts there is no sign that the "
@@ -272,9 +272,6 @@ if S.get("Q12"):
     bullets.append("<b>A methods trap, caught.</b> Comparing a probe with random directions at the same dose is meaningless in "
                    "a deterministic forward: it ‘detects’ any planted direction at any dose. The absolute criterion is used "
                    "instead (amendment A9).")
-if q13:
-    bullets.append(f"<b>Late layers don't rescue it.</b> The Oracle at L48–60 at the report position names the full vector in "
-                   f"{len(q13['full']['hits'])} qualifying cells and the non-J part in {len(q13['perp']['hits'])}.")
 g0 = sm.get("G0_inject", {})
 secx = S.get("SEC_crosscheck") or {}
 dev = max(abs(1 - g0.get("rho_min", 1)), abs(g0.get("rho_max", 1) - 1)) if g0 else None

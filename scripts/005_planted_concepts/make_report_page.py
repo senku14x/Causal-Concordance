@@ -447,10 +447,15 @@ def scorecard(D):
             add("Step 8", "Q12: something arrives by L44 inside the strict P11 window", 0.20, "bf1da37",
                 any(v["window_any_by_L44"] for v in q12.values()), flag, brier=False)
         if pl.get("Q13"):
+            bands = lambda hs: sorted({"L32–38" if h["band"] == "B" else "L24–38" for h in hs})
             add("Step 8", "Q13: the Oracle names the full vector at the report position (L48–60)", 0.45, "bf1da37",
-                pl["Q13"]["full"]["answer"] == "yes", f"{len(pl['Q13']['full']['hits'])} qualifying cells")
+                pl["Q13"]["full"]["answer"] == "yes",
+                f"{len(pl['Q13']['full']['hits'])} qualifying cells, all at band {', '.join(bands(pl['Q13']['full']['hits'])) or '—'}; "
+                "a few concepts carry them (see Q13)")
             add("Step 8", "Q13: the Oracle names the non-J part at the report position (L48–60)", 0.25, "bf1da37",
-                pl["Q13"]["perp"]["answer"] == "yes", f"{len(pl['Q13']['perp']['hits'])} qualifying cells")
+                pl["Q13"]["perp"]["answer"] == "yes",
+                f"{len(pl['Q13']['perp']['hits'])} qualifying cells, all at band {', '.join(bands(pl['Q13']['perp']['hits'])) or '—'}; "
+                "only two concepts, one with a leaky split (see Q13)")
     return items
 
 
@@ -1261,7 +1266,8 @@ def build(D, notes, short_html):
     head = f"""<header class="top"><div class="eyebrow">Causal-Concordance · design 005 · night of 4 October 2026</div>
 <h1>Planted Concepts Pilot</h1>
 <p class="lede">Everything that was run tonight, why it was run, what I expected and what came out: the three checks,
-the 005 smoke run, the dev-only pilot and step 7b. Every number on this page is generated from the saved result files.</p>
+the 005 smoke run, the dev-only pilot, step 7b and step 8. Every number on this page is generated from the saved result
+files.</p>
 <div class="chips">{"".join(chips)}</div></header>"""
     body = [head, short_html, sec_why(), sec_scorecard(D), sec_checks(D), sec_smoke(D), sec_pilot(D, notes),
             sec_pilot2(D, notes), sec_7b(D, notes), sec_8(D, notes), sec_reads(D, notes), sec_eng(D, notes), sec_mistakes(), sec_amend(),
