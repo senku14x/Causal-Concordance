@@ -183,14 +183,31 @@ if S.get("Q10"):
                    "depth, so the full-range clamp blocks the answer itself. On these concepts there is no sign that the "
                    "non-J effect re-enters J-space within the workspace layers.")
 if S.get("Q5") and S.get("Q11"):
-    bullets.append("<b>The readers see the planted concept only when handed the written cell.</b> On direct reads the NLA and "
-                   "the Oracle name it (up to ~80–90% at the top dose, the non-J part included); at the report position no "
-                   "reader, no lens at any layer up to L62 and no probe ever finds it. The model's report shifts without a "
-                   "readable concept ever forming there.")
-if S.get("Q5"):
-    bullets.append("<b>The readers are less sensitive than the model, not more.</b> The model's report responds from s ≈ 1/64; "
-                   "the readers name the concept only from s = 1/4. On these concepts the NLA does not see what the model "
-                   "cannot use, and the Oracle reads the non-J part at least as well as the NLA (against the P17 premise).")
+    nm = {**{"nla|" + k: v for k, v in S["Q5"]["nla"]["mean_naming"].items()},
+          **{"ora|" + k: v for k, v in S["Q5"]["oracle"]["mean_naming"].items()}}
+    top_full = max(v for k, v in nm.items() if "|direct_cq|2|1.0" in k)
+    top_perp = max(v for k, v in nm.items() if "|direct_cq|4|1.0" in k)
+    carried = max(v for k, v in nm.items() if "|carried_co|" in k and k.split("|")[4] in ("2", "3", "4"))
+    bullets.append("<b>The readers see the planted concept only when handed the written cell.</b> On direct reads at the top "
+                   f"dose the best reader names the full vector in {pct(top_full)} of samples and the non-J part in "
+                   f"{pct(top_perp)}; at the report position no text reader exceeds {pct(carried)}, no lens puts the concept "
+                   "in its top 10 at any layer up to L62, and the probe never classifies it as present. The model's report "
+                   "shifts without a readable concept ever forming there.")
+if S.get("Q5") and S.get("Q4"):
+    onsets = sorted({v["s_star"] for v in S["Q4"]["by_block"].values() if v["s_star"]})
+    first_read = None
+    for sv in (1 / 256, 1 / 64, 1 / 16, 1 / 4, 1.0):
+        if any(v > 0.10 for k, v in nm.items() if "|direct_cq|" in k and k.split("|")[4] in ("2", "3", "4")
+               and abs(float(k.split("|")[5]) - sv) < 1e-12):
+            first_read = sv
+            break
+    bullets.append("<b>The readers are less sensitive than the model, not more.</b> The model's report responds from s = "
+                   + " or ".join(SNAME.get(o, str(o)) for o in onsets) + "; the first dose at which any reader names any "
+                   f"planted condition in more than 10% of direct reads is s = {SNAME.get(first_read, '—')}. This compares "
+                   "a fine measure (the model's log-prob) with a coarse one (whether a reader names the concept), so it holds "
+                   "for these measures only; a reader-side likelihood could be more sensitive. On these concepts the NLA does "
+                   "not see what the model cannot use, and the Oracle reads the non-J part at least as well as the NLA "
+                   "(against the P17 premise).")
 if S.get("Q12"):
     bullets.append("<b>A methods trap, caught.</b> Comparing a probe with random directions at the same dose is meaningless in "
                    "a deterministic forward: it ‘detects’ any planted direction at any dose. The absolute criterion is used "
@@ -198,9 +215,13 @@ if S.get("Q12"):
 if q13:
     bullets.append(f"<b>Late layers don't rescue it.</b> The Oracle at L48–60 at the report position names the full vector in "
                    f"{len(q13['full']['hits'])} qualifying cells and the non-J part in {len(q13['perp']['hits'])}.")
-bullets.append("<b>The machinery is sound.</b> Every write exact (ρ within 1 ± 3e-7), runs bit-identical on repeat, the fast "
-               "regime matches the exact one on 270/270 cells, the C1–C3 checks and errata are in, and the full run would take "
-               "about 1.5–3 GPU hours.")
+g0 = sm.get("G0_inject", {})
+secx = S.get("SEC_crosscheck") or {}
+dev = max(abs(1 - g0.get("rho_min", 1)), abs(g0.get("rho_max", 1) - 1)) if g0 else None
+bullets.append("<b>The machinery is sound.</b> Every write exact (ρ within 1 ± " + (f"{dev:.0e}" if dev else "—") + "), runs "
+               "bit-identical on repeat, the fast regime matches the exact one on " +
+               f"{pct(secx.get('agree_frac'))} of {secx.get('n', '—')} cells, the C1–C3 checks and errata are in, and the "
+               "amendment's budget for the full run is about 1.5–3 GPU hours (measured throughput, A16).")
 N["short_html"] = ('<h2 id="short">The short version</h2><ul>' + "".join(f"<li>{b}</li>" for b in bullets) + "</ul>"
                    '<div class="callout"><h3>What you decide</h3><ul>'
                    "<li>The report measure (A1): log-prob at the open quote, with the paper's rank, instead of sampled naming.</li>"
