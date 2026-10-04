@@ -400,6 +400,45 @@ if D8.exists():
                     "clean_over_5pct": {f"L{k[0]}": sorted(c for c, x in d.items() if x > 0.05) for k, d in clean.items()},
                     "agent_priors": {"full": 0.45, "perp": 0.25}}
 
+# ------------------------------------------------------------------------------- step 9 (§16.5): R9a, R9b robustness
+D9 = D / "step9"
+base_rows = blocks.get(("B", "default"))
+if D9.exists() and base_rows:
+    out9 = {}
+    for f in sorted(D9.glob("rows_*.json")):
+        name = f.stem.split("_", 1)[1]
+        rows = json.loads(f.read_text())
+
+        def dmed(cond, s_):
+            return med([r["dR1p"] for r in rows if str(r["cond"]) == str(cond) and r["s"] == s_])
+        diff = {s_: (dmed(3, s_) - dmed(4, s_)) for s_ in GRID9}
+        mid = [diff[1 / 16], diff[1 / 8]]
+        hi = [diff[1 / 2], diff[1.0]]
+        peaks = {"J": max(dmed(3, s_) for s_ in GRID9), "perp": max(dmed(4, s_) for s_ in GRID9)}
+        r9a = all(x > 0 for x in mid) and all(x <= 0 for x in hi)
+        pairs = {}
+        for pair in (("12", "12r"), ("13", "13r")):
+            diffs = []
+            for c in P.DEV:
+                perp = {r["s"]: r for r in rows if r["concept"] == c and r["cond"] == 4}
+                s_b = max(perp, key=lambda x: perp[x]["R1"])
+                if perp[s_b]["dR1p"] <= null95(base_rows, "dR1p", s_b):
+                    continue
+                cc = [r for r in rows if r["concept"] == c and str(r["cond"]) == pair[0] and r["s"] == s_b][0]
+                rc = [r for r in rows if r["concept"] == c and str(r["cond"]) == pair[1] and r["s"] == s_b][0]
+                diffs.append(rc["dR1p"] - cc["dR1p"])
+            ci = boot_ci(diffs)
+            pairs[pair[0]] = {"n": len(diffs), "mean": float(np.mean(diffs)) if diffs else None, "ci": ci,
+                              "specific": bool(diffs) and ci[0] > 0}
+        r9b = pairs["12"]["specific"] and not pairs["13"]["specific"]
+        out9[name] = {"J_minus_perp_by_dose": diff, "peaks": peaks, "R9a_pattern_holds": r9a, "clamp": pairs,
+                      "R9b_pattern_holds": r9b}
+    st9 = json.loads((D9 / "state.json").read_text()) if (D9 / "state.json").exists() else {}
+    S["step9"] = {"variants": out9, "J_share_median": st9.get("J_share_median"),
+                  "R9a_holds_in": sum(v["R9a_pattern_holds"] for v in out9.values()),
+                  "R9b_holds_in": sum(v["R9b_pattern_holds"] for v in out9.values()), "n_variants": len(out9),
+                  "agent_priors": {"R9a_ge4_of_5": 0.55, "R9b_ge4_of_5": 0.65}}
+
 # 8b power analysis (planning only)
 pw = {}
 for band in ("B", "B2"):
