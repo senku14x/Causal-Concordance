@@ -392,3 +392,27 @@ The smoke is not the run. It stops, and the note goes to the PI.
 - the full-run budget.
 
 **What it cannot inform.** Any P-contrast verdict: dev concepts decide nothing (§8), and the test set stays untouched.
+
+### 16.1 Questions the pilot answers, what each answer changes, and the agent's priors (pre-registered)
+
+All on the 10 dev concepts; descriptive. "Null" means the rand-dir 95th percentile (5 seeds × 10 concepts) at the same strength, band and prefill.
+
+| # | Question | Measure | How the answer changes the amendment | Agent prior |
+|---|---|---|---|---|
+| Q1 | Is the paper's rank / log-prob report measure usable on Qwen where sampled naming failed? | Median ΔR1′ above the null at ≥ 3 strengths for condition 1 *and* condition 2 | Yes → R1′ (with R1) becomes the primary "report" measure; sampled naming R2 becomes secondary. No → the model-side report contrasts stay floor-limited and 005 keeps only behaviour + readers. | yes: 0.90 |
+| Q2 | Does the `word` prefill remove the default-answer prior ("apple") that blocks naming? | Mean R2 at the best strength for condition 1 or 2 ≥ 0.25 under `word` | Yes → the `word` prefill is adopted, and naming returns as a co-primary measure. No → keep `default`; naming stays secondary. | yes: 0.30 |
+| Q3 | Which band? | Best-strength median ΔR1′ for conditions 1 and 2, and median B1 at that strength, B vs B2 | B stays unless B2's condition-2 ΔR1′ exceeds B's by ≥ 1 nat without a larger B1 | B2 chosen: 0.50 |
+| Q4 | Where does the non-J part start to act? | Onset s* (§4 rule) on the extended grid, per band | s* inside the grid → the text-reader strengths become {s*/4, s*, 4s*}. s* still at the bottom (1/256) → strict P11a/P11b have no qualifying dose at practicable strengths, and are dropped or reframed in the amendment | s* above 1/256 in at least one band: 0.60 |
+| Q5 | Do the readers see anything, and where? (P11 / P17 preview, not a test) | NLA and Oracle naming rates by kind (direct vs carried C_o), condition and strength, against their clean-read and rand-dir rates | NLA naming at C_o ≈ 0 even where the model's R1′ moves strongly → P11a is near-unwinnable as posed, and the amendment focuses on direct reads (P17) and R1. Clean-read rates fix the G6 baseline on this prompt. | NLA names c at C_o for the full vector at some strength: 0.40; at direct reads: 0.80 |
+| Q6 | Is the clamp informative? | c-clamp vs random-clamp reduction of ΔR1′ for u^⊥ at strengths where u^⊥ is above the null | Not distinguishable on dev → M2 is dropped (or redesigned) in the amendment; distinguishable → M2 stays | distinguishable: 0.25 |
+| Q7 | How many concepts have a leaky split? (all 55; material only) | c in J_NP top-10 on the pure u^⊥ at ≥ 2 layers of the band in use. **This exclusion rule is fixed here, before the numbers are computed.** | Concepts meeting it are excluded from every "non-J" contrast in the full run | ≤ 5 of 55 leaky: 0.60 |
+| Q8 | Does the concept-vector baseline matter? (all 55) | cos(leave-one-out u, 194-word u), per concept and layer | Leave-one-out stays primary regardless (PI review); a median < 0.9 makes the 194-word sensitivity mandatory in the full report | median < 0.9: 0.70 (smoke: 0.86) |
+| Q9 | What will the full run cost? | Measured throughput per component | Sets the full-run budget and the reduction order | — |
+
+**What we learn overall.**
+- Whether 005's model side can test the privilege question on Qwen at all, and with which measure, band and prefill.
+- Whether the reader comparison has a usable dose window, where the model is silent but the planted content is present.
+- Whether the clamp control can work.
+- What the full run costs.
+
+**What we cannot learn.** Any P-contrast verdict, or anything about test concepts. Q5's reader numbers and any J-vs-non-J pattern on these 10 dev concepts are previews and will be labelled as such.
