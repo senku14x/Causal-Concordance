@@ -163,6 +163,18 @@ if q12:
                 "compare the readers with the model where neither can find the concept; the amendment must re-pose P11 "
                 "(proposal: compare reader sensitivity with model sensitivity on matched measures at the written cell, "
                 "and drop the report-position version).")
+# power (8b)
+pw = S.get("power_8b") or {}
+if pw:
+    m1b, m1b2 = pw.get("M1_like_dR1p_B"), pw.get("M1_like_dR1p_B2")
+    nl = pw.get("nla_perp_direct_B_1.0")
+    N["power"] = ("Planning numbers from the 10 dev concepts. For the J-vs-non-J report contrast at s = 1/4 the predicted 95% CI "
+                  f"half-width with 45 test concepts is ±{r(m1b['ci_halfwidth_n45'], 2)} nats at band L32–38 and "
+                  f"±{r(m1b2['ci_halfwidth_n45'], 2)} at L24–38 (concepts vary much more in the wide band, another point for "
+                  "L32–38). For reader naming the spread between concepts dominates: the NLA's naming of the non-J part at s = 1 "
+                  f"gives ±{r(nl['ci_halfwidth_n45_k4'], 3)} with 4 samples and ±{r(nl['ci_halfwidth_n45_k8'], 3)} with 8, so "
+                  "doubling the samples buys almost nothing; more concepts is what helps (as your review argued).") if (m1b and m1b2 and nl) else ""
+
 # the short version (top of the page)
 sm = load(RESA / "smoke_summary.json") or {}
 q13 = S.get("Q13")

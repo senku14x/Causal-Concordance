@@ -1,7 +1,26 @@
-# STATUS — 2026-10-03 (001–004 complete on dev; awaiting PI review)
+# STATUS — 2026-10-04 (SPEC_v2 + errata 01; checks C1–C3; 005 smoke + dev-only pilot done; amended full run awaits the PI)
 
 *New session? Read `CLAUDE.md` first (rules, the PI's preferences, and how to restore a fresh instance), then
 `docs/COME_UP_TO_SPEED.md`. This file is the detailed running log, newest first.*
+
+**2026-10-04 (branch `spec-v2`, now the working branch; repo private).**
+- **SPEC_v2** is the unified spec; **errata 01** (V2-E1–E9) was accepted by the PI and wins over the text.
+- **Checks C1–C3** (`docs/reports/checks_2026-10-04_no_gpu.md`):
+  - CW-7 survives WSB's chain rule at a third of its size, and J-lens matches it;
+  - ":" L42 keeps "influence" (a mixture of the two trajectories);
+  - Cathryn's multihop removal control was ~2.4× smaller in energy.
+- **NLA = `nla-rl` iter_000400** (`readers.NLArl`, sha256-pinned); **J-space pursuit** in `jspace.py`.
+- **005 planted concepts**:
+  - design v2 + the agent's pre-registered priors (`docs/design_specs/005_planted_concepts.md`);
+  - smoke (`docs/reports/005_smoke_note.md`): G1 report gate failed (sampled naming floor) → stop rule;
+  - dev-only pilot + steps 7b and 8 (`docs/reports/005_pilot_note.md`, design §16–§16.4).
+- **Pilot findings (dev, descriptive):**
+  - the log-prob report measure works;
+  - no clear J privilege at matched norm;
+  - the privilege clamp is specific only through late layers, where J ≈ output direction;
+  - readers name planted concepts on direct reads but nothing ever reaches the report position;
+  - the relative probe criterion is degenerate.
+- **Next:** the PI decides amendment 01 (`docs/design_specs/005_amendment_01_DRAFT.md`), then the amended full run on the 45 test concepts (~1.5–3 GPU h).
 
 **004, span assay at `:` L42: complete** (`docs/reports/004_span_assay.md`; 33 pairs, 55.8 min, commit 9da6b23 clean).
 - Whole cell 0.43 of the gap. Recovery: 1-D z 0.06, z span 0.21, joint span 0.72.
