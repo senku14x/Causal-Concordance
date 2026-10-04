@@ -12,6 +12,9 @@ WSB's Backend.capture convention), to a JSON-able readout.
                  h' = h + ||h|| v/||v|| at the output of block 1 at the marker (bf16 arithmetic, as EasyNLA and WSB)
   nla AR         rl_critic_step400 (43 blocks, no final norm) + float32 value head on normalize(h_last, sqrt(d));
                  FVE = 1 - mse(n(pred), n(gold)) / mean((n(v) - mean n(v))^2) over a reference set
+  nla-rl AV      ceselder/qwen3.6-27b-nla-rl (WSB's NLA; the PI's default from 2026-10-04): av_base loaded as a separate
+                 bf16 model + PEFT adapter av_rl_adapters/iter_000400 attached, not merged; the same Karvonen add at block
+                 1; the subject model is never touched (class NLArl). No AR wrapper yet.
 """
 import contextlib
 import glob
@@ -350,3 +353,166 @@ def nla_reference_activations():
     df = pd.read_parquet(p)
     col = "activation_vector" if "activation_vector" in df.columns else df.columns[-1]
     return torch.tensor([list(v) for v in df[col]], dtype=torch.float32), df
+
+
+# ------------------------------------------------------------------------------------- nla-rl (separate AV model)
+def nla_rl_paths():
+    n = R.REGISTRY["readers"]["nla_rl"]
+    return snapshot(n["hf_repo"], n["hf_revision"]), n
+
+
+def verify_nla_rl(root=None, entry=None, workers=4):
+    """sha256 of every pinned nla-rl file against the registry. Returns {relative path: sha256}; raises on a missing
+    file or a mismatch."""
+    from concurrent.futures import ThreadPoolExecutor
+    if root is None:
+        root, entry = nla_rl_paths()
+    rels = sorted(entry["sha256"])
+    missing = [r for r in rels if not os.path.exists(os.path.join(root, r))]
+    if missing:
+        raise FileNotFoundError(f"nla-rl files not downloaded: {missing} (python scripts/common/artifacts.py download)")
+    with ThreadPoolExecutor(workers) as ex:
+        got = dict(zip(rels, ex.map(lambda r: R.sha256(os.path.join(root, r)), rels)))
+    bad = {r: g for r, g in got.items() if g != entry["sha256"][r]}
+    if bad:
+        raise RuntimeError(f"nla-rl sha256 mismatch: {bad}")
+    return got
+
+
+def nla_rl_prompt_ids(tok, meta):
+    """WSB's NLA prompt: the meta's AV template around the marker char, chat template, generation prompt, no thinking."""
+    tm = meta["tokens"]
+    tmpl = meta["prompt_templates"].get("av") or meta["prompt_templates"]["actor"]
+    out = tok.apply_chat_template([{"role": "user", "content": tmpl.format(injection_char=tm["injection_char"])}],
+                                  tokenize=True, add_generation_prompt=True, enable_thinking=False)
+    ids = list(out["input_ids"] if hasattr(out, "keys") else out)
+    (marker,) = [i for i, t in enumerate(ids) if t == int(tm["injection_token_id"])]
+    assert ids[marker - 1] == tm["injection_left_neighbor_id"] and \
+        ids[marker + 1] == tm["injection_right_neighbor_id"], "marker neighbours differ from the contract"
+    return ids, marker
+
+
+def karvonen_add_(h, v, marker):
+    """WSB's NLA hook arithmetic, in place on h [B, T, d]: h[:, m] <- h[:, m] + ||h[:, m]|| * v.to(h.dtype) / (||v|| + 1e-9),
+    with ||v|| taken on the float32 v. v is [d] (every row) or [B, d] (one per row; an all-zero row is left alone, the
+    no-activation arm). No-op when T <= marker (decode steps). Returns whether anything was written."""
+    if v is None or h.shape[1] <= marker:
+        return False
+    v = v.to(h.device)
+    if v.dim() == 1:
+        hp = h[:, marker, :]
+        vu = v.to(h.dtype) / (v.norm() + 1e-9)
+        h[:, marker, :] = hp + hp.norm(dim=-1, keepdim=True) * vu
+        return True
+    assert v.shape[0] == h.shape[0], (v.shape, h.shape)
+    for b in range(h.shape[0]):
+        if float(v[b].norm()) == 0.0:
+            continue
+        hp = h[b, marker, :]
+        vu = v[b].to(h.dtype) / (v[b].norm() + 1e-9)
+        h[b, marker, :] = hp + hp.norm() * vu
+    return True
+
+
+def wsb_explanation(text):
+    """WSB's NLA post-processing: text before </explanation>, a leading <explanation> removed, stripped."""
+    return text.split("</explanation>")[0].removeprefix("<explanation>").strip()
+
+
+def check_gpu_room(device, need_bytes, margin=4 << 30):
+    """Refuse to load when the device lacks room (e.g. the 50 GB subject is still resident)."""
+    if not str(device).startswith("cuda"):
+        return
+    free, _ = torch.cuda.mem_get_info(torch.device(device))
+    if free < need_bytes + margin:
+        raise RuntimeError(f"{free / 1e9:.1f} GB free on {device}; nla-rl needs {need_bytes / 1e9:.1f} GB + "
+                           f"{margin / 1e9:.0f} GB: capture subject activations first, then free the subject "
+                           f"(del model; gc.collect(); torch.cuda.empty_cache())")
+
+
+class NLArl:
+    """AV of ceselder/qwen3.6-27b-nla-rl, WSB's NLA (produce/methods.py): av_base as a SEPARATE bf16 model with the pinned
+    PEFT adapter (iter_000400) attached, never merged. The subject model is never touched; this reader's own model is
+    marked so no capture or labelling entry point accepts it. av_base (53.8 GB) and the subject (50.1 GB) do not fit on
+    one 96 GB GPU together: capture subject activations first and free the subject. Trained on layer-42 residuals."""
+
+    def __init__(self, device="cuda", verify=True):
+        import yaml
+        from peft import PeftModel
+        from transformers import AutoModelForCausalLM, AutoTokenizer
+        root, n = nla_rl_paths()
+        self.hashes = verify_nla_rl() if verify else None
+        base, adir = os.path.join(root, n["av_base"]), os.path.join(root, n["adapter"])
+        with open(os.path.join(root, n["meta"])) as f:
+            self.meta = yaml.safe_load(f)
+        self.tok = AutoTokenizer.from_pretrained(base)
+        self.ids, self.marker = nla_rl_prompt_ids(self.tok, self.meta)
+        need = sum(os.path.getsize(os.path.join(root, r)) for r in n["sha256"] if r.endswith(".safetensors"))
+        check_gpu_room(device, need)
+        m = AutoModelForCausalLM.from_pretrained(base, dtype=torch.bfloat16, device_map=device)
+        self.model = PeftModel.from_pretrained(m, adir, torch_dtype=torch.bfloat16)   # WSB's call, verbatim
+        self.model.eval()
+        self.model.requires_grad_(False)
+        for o in (self.model, self.model.get_base_model()):
+            setattr(o, R.MODIFIED_ATTR, "nla-rl reader model (av_base + adapter), not the subject")
+        self.scaling = sorted({float(s) for mod in self.model.modules() if hasattr(mod, "scaling")
+                               for s in getattr(mod, "scaling", {}).values()})
+        (block1,) = [mod for name, mod in self.model.named_modules() if name.endswith("model.layers.1")]
+        self._v = {}
+        self._hook = block1.register_forward_hook(self._inject)
+        self.injections = 0
+        self.last_write = None
+
+    def _inject(self, mod, inp, out):
+        h = out[0] if isinstance(out, tuple) else out
+        v = self._v.get("v")
+        if v is None or h.shape[1] <= self.marker:
+            return out
+        before = h[:, self.marker, :].float().clone()
+        if karvonen_add_(h, v, self.marker):
+            d = h[:, self.marker, :].float() - before
+            vv = v.to(h.device).float().expand_as(d) if v.dim() == 1 else v.to(h.device).float()
+            live = vv.norm(dim=-1) > 0
+            rel = (d.norm(dim=-1) / before.norm(dim=-1))[live]
+            cos = torch.nn.functional.cosine_similarity(d, vv, dim=-1)[live]
+            self.last_write = {"rows": int(live.sum()), "rel_min": float(rel.min()), "rel_max": float(rel.max()),
+                               "cos_min": float(cos.min())} if bool(live.any()) else {"rows": 0}
+            self.injections += 1
+        return out
+
+    @torch.no_grad()
+    def read(self, h, k=1, seed=0, sampling=SAMPLING_WSB):
+        """k raw samples for one activation h (float32 [d]); h=None runs the no-activation arm."""
+        return self.read_batch([h], k=k, seed=seed, sampling=sampling)[0]
+
+    @torch.no_grad()
+    def read_batch(self, hs, k=1, seed=0, sampling=SAMPLING_WSB):
+        """Several activations in one generate call (None = no activation). Returns one list of k raw samples per
+        activation (rows are expanded k times by num_return_sequences, so the per-row vectors are too)."""
+        if all(h is None for h in hs):
+            V = None
+        else:
+            d = next(h for h in hs if h is not None).shape[-1]
+            V = torch.stack([h.float() if h is not None else torch.zeros(d) for h in hs]).repeat_interleave(k, 0)
+            if len(hs) == 1:
+                V = V[0]                                       # one vector for every row: WSB's exact path
+        self._v["v"] = V
+        try:
+            torch.manual_seed(seed)
+            x = torch.tensor([self.ids] * len(hs), device=self.model.device)
+            out = self.model.generate(x, attention_mask=torch.ones_like(x), do_sample=sampling["temperature"] > 0,
+                                      temperature=max(sampling["temperature"], 1e-5), top_p=sampling["top_p"],
+                                      top_k=sampling["top_k"], max_new_tokens=sampling["max_new_tokens"],
+                                      num_return_sequences=k, pad_token_id=self.tok.pad_token_id or self.tok.eos_token_id)
+        finally:
+            self._v["v"] = None
+        texts = self.tok.batch_decode(out[:, len(self.ids):], skip_special_tokens=True)
+        return [texts[b * k:(b + 1) * k] for b in range(len(hs))]
+
+    def close(self):
+        """Remove the hook and free the GPU."""
+        import gc
+        self._hook.remove()
+        del self.model
+        gc.collect()
+        torch.cuda.empty_cache()

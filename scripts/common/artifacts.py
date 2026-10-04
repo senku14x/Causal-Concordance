@@ -68,6 +68,10 @@ def download(what=("model", "lenses", "readers")):
         print(f"[reader] nla_L42 -> {paths['nla_L42']} ({time.time()-t0:.0f}s)", flush=True)
         r = REG["readers"]["nla_reference_activations"]
         paths["nla_reference_activations"] = hf_hub_download(r["hf_repo"], r["file"], revision=r["hf_revision"])
+        q = REG["readers"]["nla_rl"]
+        paths["nla_rl"] = snapshot_download(q["hf_repo"], revision=q["hf_revision"], max_workers=8,
+                                            allow_patterns=[f"{q['av_base']}/*", f"{q['adapter']}/*"])
+        print(f"[reader] nla_rl -> {paths['nla_rl']} ({time.time()-t0:.0f}s)", flush=True)
     if "model" in what:
         m = REG["model"]
         paths["model"] = snapshot_download(m["repo"], revision=m["revision"], allow_patterns=_model_patterns(),
@@ -115,6 +119,11 @@ def verify(out=None):
         for f in sorted((nsnap / n[k]).glob("*.safetensors")):
             rel = str(f.relative_to(nsnap))
             check(f"nla:{rel}", f, noids.get(rel))
+    q = REG["readers"]["nla_rl"]
+    qsnap = Path(snapshot_download(q["hf_repo"], revision=q["hf_revision"], local_files_only=True,
+                                   allow_patterns=[f"{q['av_base']}/*", f"{q['adapter']}/*"]))
+    for rel, want in sorted(q["sha256"].items()):
+        check(f"nla_rl:{rel}", qsnap / rel, want)
     r = REG["readers"]["nla_reference_activations"]
     check("nla:reference_activations",
           hf_hub_download(r["hf_repo"], r["file"], revision=r["hf_revision"], local_files_only=True), r["sha256"])

@@ -84,6 +84,39 @@
       },
       "sampling_wsb": {"temperature": 1.0, "top_p": 0.95, "top_k": 64, "max_new_tokens": 256}
     },
+    "nla_rl": {
+      "hf_repo": "ceselder/qwen3.6-27b-nla-rl",
+      "hf_revision": "5a13b7ec21a69fcdd0fb24d5edbe96a92aef4b9f",
+      "layer": 42,
+      "av_base": "av_base",
+      "adapter": "av_rl_adapters/iter_000400",
+      "meta": "av_base/nla_meta.yaml",
+      "status": "PI default 2026-10-04 (iter_000400 = WSB's published NLA; iter_000400 vs 600 still for the PI to confirm). No AR wrapper (deferred).",
+      "sha256": {
+        "av_base/chat_template.jinja": "e84f32a23fdda27689f868aa4a1a5621f41133e51a48d7f3efcbea2839574259",
+        "av_base/config.json": "10d517a120597b391bb5a9e1f67aad70a162656067c3f25d95eccd44e46564d9",
+        "av_base/generation_config.json": "252e0efee3ded327704912616f3493a227cdc39eb4bab52fcae1ceb3ed5dc890",
+        "av_base/model-00001-of-00002.safetensors": "8354ca745ac4a405be0df6918954534cd2be1e415494bc8c11622f8cf30ebd73",
+        "av_base/model-00002-of-00002.safetensors": "66d6c918749ff5c0d53784c2b63e63ac4d32db33bb42d4b26a240029cf8a02f9",
+        "av_base/model.safetensors.index.json": "5c26baef87822882c6362d7ba2e916198299b403f988751faa15ee3654ec64d5",
+        "av_base/nla_meta.yaml": "ee3aa5960da9b3180e50d180e66f98274ef44caca216bd0a6ddc5558ad5f2d14",
+        "av_base/tokenizer.json": "87a7830d63fcf43bf241c3c5242e96e62dd3fdc29224ca26fed8ea333db72de4",
+        "av_base/tokenizer_config.json": "83febe739ecefd99f984f546dfdc10149cedf293b9ee0291b99894341188b613",
+        "av_rl_adapters/iter_000400/adapter_config.json": "2faac994662bd69772c2cba30fd4fad05d0f26cfea81909c119e1848badc866b",
+        "av_rl_adapters/iter_000400/adapter_model.safetensors": "b54e23e4e36dbd04023b307e3abfd4618b5db2b31b8e7c650a957ebb1c90c358"
+      },
+      "contract": {
+        "av_composition": "av_base (= EasyNLA av_merged_all, the SFT AV merged; NOT the stock Qwen3.6-27B weights) loaded as a separate bf16 model + PEFT adapter iter_000400 attached, not merged (rsLoRA r 64, alpha 16, scaling 2.0); WSB produce/methods.py NLA",
+        "injection": "Karvonen norm-matched ADD at the output of block 1 at the marker token, bf16: h' = h + ||h|| * v.to(bf16)/(||v||_fp32 + 1e-9) (WSB NLA hook)",
+        "prompt": "av_base/nla_meta.yaml prompt_templates.actor, chat template, add_generation_prompt, enable_thinking=False",
+        "marker_token_id": 158983,
+        "marker_neighbors": [29, 510],
+        "postprocess_wsb": "decode after the prompt, skip special tokens; split at </explanation>, strip a leading <explanation>, strip",
+        "trained_on": "Qwen3.6-27B layer 42 residuals, norm none (nla_meta extraction)",
+        "gpu_memory": "av_base is 53.8 GB; with the 50.1 GB subject this exceeds 96 GB: capture subject activations first and free the subject"
+      },
+      "sampling_wsb": {"temperature": 1.0, "top_p": 0.95, "top_k": 64, "max_new_tokens": 256, "k": 1}
+    },
     "nla_reference_activations": {
       "hf_repo": "ceselder/qwen3.6-27b-nla-rl",
       "hf_revision": "5a13b7ec21a69fcdd0fb24d5edbe96a92aef4b9f",
