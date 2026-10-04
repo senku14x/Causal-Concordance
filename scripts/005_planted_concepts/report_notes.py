@@ -97,13 +97,13 @@ if q5.get("nla") and q5.get("oracle"):
     ora_j_q = max(x for x in (g(o, "B|40|direct_cq|3|0.25"), g(o, "B|44|direct_cq|3|0.25")) if x is not None)
     carried = [v for k, v in list(n.items()) + list(o.items()) if "|carried_co|" in k and k.split("|")[3] in ("2", "3", "4")]
     N["Q5"] = ("Both text readers name the planted concept when they are handed the written cell, and neither sees it at "
-               "the report position. On direct reads at s = 1 (band L32–38) the NLA names the full vector in "
+               "the report position at their usual layers (L40–44). On direct reads at s = 1 (band L32–38) the NLA names the full vector in "
                f"{pct(nla_full_1)} of samples and the non-J part in {pct(nla_perp_1)}; the Oracle names the non-J part in up "
                f"to {pct(ora_perp_1)}. At the report position the highest naming rate for any planted condition, reader, "
                f"dose and band is {pct(max(carried))}. The reader-free probe agrees (it never classifies the report position "
                "as the concept at L42), so this is the concept not having arrived there, not the readers missing it. "
                "As posed, P11a and P11b compare the readers with the model at a position the content does not reach by the "
-               "readers' layers; step 8 checks later layers.")
+               "readers' layers. Step 8 (Q12, Q13) checks later layers.")
     N["P17_preview"] = (f"Preview of P17 (dev only, not a test): on direct reads the Oracle names the non-J part at least as "
                         f"often as the NLA (s = 1: Oracle up to {pct(ora_perp_1)}, NLA {pct(nla_perp_1)}; s = 1/4: Oracle "
                         f"up to {pct(ora_perp_q)}, NLA {pct(nla_perp_q)}). That runs against the A.9.2-based expectation that "
@@ -158,8 +158,9 @@ if q12:
                 "linear at these doses, so the comparison with random directions is scale-free and fires at any dose. By the "
                 "absolute criterion (the probe classifies the read as the concept), the concept <b>never</b> reaches the "
                 "report position at any layer L32–62, for any condition, dose or band (highest rate anywhere "
-                f"{pct(mx)}). Together with Q5 and Q11: planting nudges the model's report distribution without ever "
-                "producing a readable concept state at the report position. P11a/P11b at the report position therefore "
+                f"{pct(mx)}). Together with Q5 and Q11: planting nudges the model's report distribution without producing a "
+                "concept state at the report position that a linear probe or a lens can read (the Oracle at late layers is "
+                "the one partial exception, see Q13). P11a/P11b at the report position therefore "
                 "compare the readers with the model where neither can find the concept; the amendment must re-pose P11 "
                 "(proposal: compare reader sensitivity with model sensitivity on matched measures at the written cell, "
                 "and drop the report-position version).")
@@ -174,6 +175,48 @@ if pw:
                   "L32–38). For reader naming the spread between concepts dominates: the NLA's naming of the non-J part at s = 1 "
                   f"gives ±{r(nl['ci_halfwidth_n45_k4'], 3)} with 4 samples and ±{r(nl['ci_halfwidth_n45_k8'], 3)} with 8, so "
                   "doubling the samples buys almost nothing; more concepts is what helps (as your review argued).") if (m1b and m1b2 and nl) else ""
+
+# Q13 (step 8): late-layer Oracle at the report position, with the per-concept breakdown
+q13 = S.get("Q13")
+q13_info = None
+if q13:
+    import numpy as _np
+    from make_report_page import OUTP
+    import p005 as _P
+    reads = load(OUTP / "pilot" / "pilot1" / "step8" / "oracle_late.json") or []
+    hits = q13["full"]["hits"] + q13["perp"]["hits"]
+    best = max(hits, key=lambda h: h["rate"]) if hits else None
+    leaky = set((S.get("Q7", {}).get("leaky") or {}).get("B2", []))
+
+    def named_concepts(cond, band, layer, sv):
+        out = {}
+        for q in reads:
+            if q["cond"] == cond and q.get("band") == band and q["layer"] == layer and q["s"] == sv:
+                v = float(_np.mean([_P.names(t, q["concept"]) for t in q["samples"]]))
+                if v > 0:
+                    out[q["concept"]] = v
+        return out
+    nb_full = {}
+    nb_perp = {}
+    for L in (52, 56, 60):
+        for c, v in named_concepts(2, "B2", L, 0.25).items():
+            nb_full[c] = max(nb_full.get(c, 0), v)
+        for c, v in named_concepts(4, "B2", L, 0.25).items():
+            nb_perp[c] = max(nb_perp.get(c, 0), v)
+    b_rates = [v for k, v in q13["rates"].items() if k.startswith("B|") and k.split("|")[3] in ("2", "3", "4")]
+    q13_info = {"best": best, "full_concepts": sorted(nb_full), "perp_concepts": sorted(nb_perp),
+                "perp_nonleaky": sorted(c for c in nb_perp if c not in leaky), "leaky": sorted(leaky),
+                "band_B_max": max(b_rates) if b_rates else None}
+    N["Q13"] = ("Yes by the registered rule, with two strong qualifications. First, it happens only with the wide band: at band "
+                f"L32–38 the Oracle at L48–60 names nothing at the report position (highest rate {pct(q13_info['band_B_max'])}). "
+                f"With band L24–38 at s = 1/4 it names the full vector at L52–60 in up to {pct(best['rate'])} of samples on "
+                "average (random directions 0%). Second, the hits come from a few concepts: the full vector for "
+                f"{', '.join(q13_info['full_concepts'])}; the non-J part only for {', '.join(q13_info['perp_concepts'])}, and "
+                f"{', '.join(c for c in q13_info['perp_concepts'] if c in leaky) or 'none'} has a leaky split at this band (its "
+                "non-J part still carries its own J-lens direction). Excluding leaky concepts as the registered rule does for "
+                f"non-J contrasts, the non-J part reaches the report position only for {', '.join(q13_info['perp_nonleaky']) or 'no concept'}. "
+                "So a strong enough planted concept can reach the report position in a form the Oracle reads at its late "
+                "layers, but only for some concepts and only with the wider band; the NLA, fixed at L42, cannot test this.")
 
 # the short version (top of the page)
 sm = load(RESA / "smoke_summary.json") or {}
@@ -200,11 +243,16 @@ if S.get("Q5") and S.get("Q11"):
     top_full = max(v for k, v in nm.items() if "|direct_cq|2|1.0" in k)
     top_perp = max(v for k, v in nm.items() if "|direct_cq|4|1.0" in k)
     carried = max(v for k, v in nm.items() if "|carried_co|" in k and k.split("|")[4] in ("2", "3", "4"))
-    bullets.append("<b>The readers see the planted concept only when handed the written cell.</b> On direct reads at the top "
+    late = (f" Only the Oracle at its late layers (L52–60), and only with the wide band, names it there for a few concepts "
+            f"(up to {pct(q13_info['best']['rate'])} on average; the non-J part only for "
+            f"{', '.join(q13_info['perp_concepts'])}, of which {', '.join(c for c in q13_info['perp_concepts'] if c in q13_info['leaky']) or 'none'} "
+            f"has a leaky split).") if q13_info and q13_info.get("best") else ""
+    bullets.append("<b>The readers see the planted concept mainly when handed the written cell.</b> On direct reads at the top "
                    f"dose the best reader names the full vector in {pct(top_full)} of samples and the non-J part in "
-                   f"{pct(top_perp)}; at the report position no text reader exceeds {pct(carried)}, no lens puts the concept "
-                   "in its top 10 at any layer up to L62, and the probe never classifies it as present. The model's report "
-                   "shifts without a readable concept ever forming there.")
+                   f"{pct(top_perp)}. At the report position, at the readers' usual layers (L40–44), no text reader exceeds "
+                   f"{pct(carried)}; no lens puts the concept in its top 10 at any layer up to L62, and the probe never "
+                   "classifies it as present." + late + " The model's report shifts, but a readable concept state rarely "
+                   "forms where the answer is produced.")
 if S.get("Q5") and S.get("Q4"):
     onsets = sorted({v["s_star"] for v in S["Q4"]["by_block"].values() if v["s_star"]})
     first_read = None
