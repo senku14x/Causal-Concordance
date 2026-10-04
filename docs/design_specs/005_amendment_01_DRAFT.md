@@ -28,6 +28,7 @@ The design (v2) cannot run its report contrasts as written.
 | A13 | R-lens | Added as a token reader (R_CB standard), descriptive | 7b.3 | adopt |
 | A14 | SAE / BSF | Stays deferred (PI decision A01 C16); `ceselder/qwen36-27b-bsf-l42-1b` needs its own 16 GB encoder | — | defer |
 | A15 | Logging | Every block saved and state written after each; the clamp's removed share defined against h − ref | smoke mistakes | adopt |
+| A16 | Probe detection criterion (R1, §6) | The v2 rule (Δprobe above the rand-dir 95th percentile at the same dose) is **scale-free in a deterministic, near-linear forward**: in the pilot it fired for 80–100% of dev concepts at the report position even at s = 1/256. Replace it with an absolute criterion: the probe classifies the read as the concept (decision > 0, the threshold calibrated on natural sentences). Pilot (band B, L42): present on direct reads and at the injected position at s ≥ 1/4; **never at the report position** | pilot token readers, Q12 | adopt (the absolute criterion was applied post hoc in the pilot and is labelled so) |
 
 **Unchanged by this amendment.**
 - The concept split: dev 10 / test 45, after the base-rate screen.
