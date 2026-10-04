@@ -20,13 +20,14 @@ import torch
 
 def effective_gain(norm, d, device="cpu"):
     """The elementwise gain of an RMSNorm-style module, whatever its weight convention (w or 1 + w): norm(1) * sqrt(1 + eps),
-    since rms(1) = sqrt(1 + eps)."""
+    since rms(1) = sqrt(1 + eps). The probe input is float32 so the gain is not rounded to the module's dtype
+    (Qwen3_5RMSNorm computes norm(x.float()) * (1 + w.float()) and returns x's dtype)."""
     eps = float(getattr(norm, "variance_epsilon", getattr(norm, "eps", 0.0)))
-    one = torch.ones(1, d, device=device, dtype=torch.float32)
     with torch.no_grad():
         p = next(norm.parameters(), None)
-        x = one.to(p.dtype) if p is not None else one
-        return norm(x).float()[0] * float(np.sqrt(1.0 + eps))
+        dev = p.device if p is not None else device
+        one = torch.ones(1, d, device=dev, dtype=torch.float32)
+        return norm(one).float()[0].to(device) * float(np.sqrt(1.0 + eps))
 
 
 @torch.no_grad()

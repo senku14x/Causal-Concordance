@@ -1,0 +1,1071 @@
+{
+ "intro_len": 139,
+ "neutral_len": 19,
+ "positions": {
+  "T": 139,
+  "span": [
+   97,
+   98,
+   99,
+   100,
+   101,
+   102,
+   103,
+   104,
+   105,
+   106,
+   107,
+   108,
+   109,
+   110,
+   111,
+   112,
+   113,
+   114,
+   115,
+   116
+  ],
+  "cq": 110,
+  "prefill": [
+   126,
+   127,
+   128,
+   129,
+   130,
+   131,
+   132,
+   133,
+   134,
+   135,
+   136,
+   137,
+   138
+  ],
+  "co": 138
+ },
+ "neutral": {
+  "T": 19,
+  "span": [
+   3,
+   4,
+   5,
+   6,
+   7,
+   8,
+   9
+  ],
+  "n_cont": 8
+ },
+ "n_concepts": 55,
+ "dev": [
+  "loss",
+  "enemy",
+  "union",
+  "skin",
+  "sin",
+  "storm",
+  "profit",
+  "frame",
+  "gel",
+  "earth"
+ ],
+ "test": [
+  "corner",
+  "thumb",
+  "ear",
+  "review",
+  "custom",
+  "dog",
+  "symbol",
+  "free",
+  "ship",
+  "role",
+  "friend",
+  "cook",
+  "stand",
+  "gray",
+  "curve",
+  "method",
+  "weight",
+  "summary",
+  "photo",
+  "bags",
+  "desk",
+  "pool",
+  "ash",
+  "steel",
+  "tap",
+  "case",
+  "box",
+  "trade",
+  "bomb",
+  "soap",
+  "process",
+  "picture",
+  "diamond",
+  "ease",
+  "hat",
+  "sheet",
+  "information",
+  "race",
+  "hair",
+  "plane",
+  "judge",
+  "board",
+  "formula",
+  "sock",
+  "scene"
+ ],
+ "excluded": [
+  "time",
+  "line",
+  "path"
+ ],
+ "spellings": {
+  "loss": {
+   "quote": [
+    "loss",
+    "Loss"
+   ],
+   "all": [
+    " loss",
+    "loss",
+    " Loss",
+    "Loss"
+   ],
+   "space": [
+    " loss",
+    " Loss"
+   ],
+   "space_lower": " loss"
+  },
+  "enemy": {
+   "quote": [
+    "enemy",
+    "Enemy"
+   ],
+   "all": [
+    " enemy",
+    "enemy",
+    "Enemy",
+    " Enemy"
+   ],
+   "space": [
+    " enemy",
+    " Enemy"
+   ],
+   "space_lower": " enemy"
+  },
+  "union": {
+   "quote": [
+    "union",
+    "Union"
+   ],
+   "all": [
+    " Union",
+    " union",
+    "union",
+    "Union"
+   ],
+   "space": [
+    " Union",
+    " union"
+   ],
+   "space_lower": " union"
+  },
+  "skin": {
+   "quote": [
+    "skin",
+    "Skin"
+   ],
+   "all": [
+    " skin",
+    " Skin",
+    "skin",
+    "Skin"
+   ],
+   "space": [
+    " skin",
+    " Skin"
+   ],
+   "space_lower": " skin"
+  },
+  "sin": {
+   "quote": [
+    "sin",
+    "Sin"
+   ],
+   "all": [
+    " sin",
+    "sin",
+    " Sin",
+    "Sin"
+   ],
+   "space": [
+    " sin",
+    " Sin"
+   ],
+   "space_lower": " sin"
+  },
+  "storm": {
+   "quote": [
+    "storm",
+    "Storm"
+   ],
+   "all": [
+    " storm",
+    " Storm",
+    "storm",
+    "Storm"
+   ],
+   "space": [
+    " storm",
+    " Storm"
+   ],
+   "space_lower": " storm"
+  },
+  "profit": {
+   "quote": [
+    "profit",
+    "Profit"
+   ],
+   "all": [
+    " profit",
+    "profit",
+    " Profit",
+    "Profit"
+   ],
+   "space": [
+    " profit",
+    " Profit"
+   ],
+   "space_lower": " profit"
+  },
+  "frame": {
+   "quote": [
+    "Frame",
+    "frame"
+   ],
+   "all": [
+    " frame",
+    "Frame",
+    "frame",
+    " Frame"
+   ],
+   "space": [
+    " frame",
+    " Frame"
+   ],
+   "space_lower": " frame"
+  },
+  "gel": {
+   "quote": [
+    "gel",
+    "Gel"
+   ],
+   "all": [
+    " gel",
+    "gel",
+    " Gel",
+    "Gel"
+   ],
+   "space": [
+    " gel",
+    " Gel"
+   ],
+   "space_lower": " gel"
+  },
+  "earth": {
+   "quote": [
+    "earth",
+    "Earth"
+   ],
+   "all": [
+    " Earth",
+    " earth",
+    "earth",
+    "Earth"
+   ],
+   "space": [
+    " Earth",
+    " earth"
+   ],
+   "space_lower": " earth"
+  },
+  "corner": {
+   "quote": [
+    "Corner",
+    "corner"
+   ],
+   "all": [
+    " corner",
+    " Corner",
+    "Corner",
+    "corner"
+   ],
+   "space": [
+    " corner",
+    " Corner"
+   ],
+   "space_lower": " corner"
+  },
+  "thumb": {
+   "quote": [
+    "thumb",
+    "Thumb"
+   ],
+   "all": [
+    " thumb",
+    "thumb",
+    "Thumb",
+    " Thumb"
+   ],
+   "space": [
+    " thumb",
+    " Thumb"
+   ],
+   "space_lower": " thumb"
+  },
+  "ear": {
+   "quote": [
+    "ear",
+    "Ear"
+   ],
+   "all": [
+    "ear",
+    " ear",
+    " Ear",
+    "Ear"
+   ],
+   "space": [
+    " ear",
+    " Ear"
+   ],
+   "space_lower": " ear"
+  },
+  "review": {
+   "quote": [
+    "review",
+    "Review"
+   ],
+   "all": [
+    " review",
+    " Review",
+    "review",
+    "Review"
+   ],
+   "space": [
+    " review",
+    " Review"
+   ],
+   "space_lower": " review"
+  },
+  "custom": {
+   "quote": [
+    "custom",
+    "Custom"
+   ],
+   "all": [
+    " custom",
+    " Custom",
+    "custom",
+    "Custom"
+   ],
+   "space": [
+    " custom",
+    " Custom"
+   ],
+   "space_lower": " custom"
+  },
+  "dog": {
+   "quote": [
+    "dog",
+    "Dog"
+   ],
+   "all": [
+    " dog",
+    " Dog",
+    "dog",
+    "Dog"
+   ],
+   "space": [
+    " dog",
+    " Dog"
+   ],
+   "space_lower": " dog"
+  },
+  "symbol": {
+   "quote": [
+    "Symbol",
+    "symbol"
+   ],
+   "all": [
+    " symbol",
+    "Symbol",
+    "symbol",
+    " Symbol"
+   ],
+   "space": [
+    " symbol",
+    " Symbol"
+   ],
+   "space_lower": " symbol"
+  },
+  "free": {
+   "quote": [
+    "free",
+    "Free"
+   ],
+   "all": [
+    " free",
+    " Free",
+    "free",
+    "Free"
+   ],
+   "space": [
+    " free",
+    " Free"
+   ],
+   "space_lower": " free"
+  },
+  "ship": {
+   "quote": [
+    "ship",
+    "Ship"
+   ],
+   "all": [
+    "ship",
+    " ship",
+    " Ship",
+    "Ship"
+   ],
+   "space": [
+    " ship",
+    " Ship"
+   ],
+   "space_lower": " ship"
+  },
+  "role": {
+   "quote": [
+    "role",
+    "Role"
+   ],
+   "all": [
+    " role",
+    "role",
+    "Role",
+    " Role"
+   ],
+   "space": [
+    " role",
+    " Role"
+   ],
+   "space_lower": " role"
+  },
+  "friend": {
+   "quote": [
+    "friend",
+    "Friend"
+   ],
+   "all": [
+    " friend",
+    "friend",
+    " Friend",
+    "Friend"
+   ],
+   "space": [
+    " friend",
+    " Friend"
+   ],
+   "space_lower": " friend"
+  },
+  "cook": {
+   "quote": [
+    "Cook",
+    "cook"
+   ],
+   "all": [
+    " cook",
+    " Cook",
+    "Cook",
+    "cook"
+   ],
+   "space": [
+    " cook",
+    " Cook"
+   ],
+   "space_lower": " cook"
+  },
+  "stand": {
+   "quote": [
+    "stand",
+    "Stand"
+   ],
+   "all": [
+    " stand",
+    "stand",
+    " Stand",
+    "Stand"
+   ],
+   "space": [
+    " stand",
+    " Stand"
+   ],
+   "space_lower": " stand"
+  },
+  "gray": {
+   "quote": [
+    "gray",
+    "Gray"
+   ],
+   "all": [
+    "gray",
+    " gray",
+    " Gray",
+    "Gray"
+   ],
+   "space": [
+    " gray",
+    " Gray"
+   ],
+   "space_lower": " gray"
+  },
+  "curve": {
+   "quote": [
+    "Curve",
+    "curve"
+   ],
+   "all": [
+    " curve",
+    "Curve",
+    "curve",
+    " Curve"
+   ],
+   "space": [
+    " curve",
+    " Curve"
+   ],
+   "space_lower": " curve"
+  },
+  "method": {
+   "quote": [
+    "Method",
+    "method"
+   ],
+   "all": [
+    " method",
+    "Method",
+    "method",
+    " Method"
+   ],
+   "space": [
+    " method",
+    " Method"
+   ],
+   "space_lower": " method"
+  },
+  "weight": {
+   "quote": [
+    "weight",
+    "Weight"
+   ],
+   "all": [
+    " weight",
+    "weight",
+    "Weight",
+    " Weight"
+   ],
+   "space": [
+    " weight",
+    " Weight"
+   ],
+   "space_lower": " weight"
+  },
+  "summary": {
+   "quote": [
+    "summary",
+    "Summary"
+   ],
+   "all": [
+    "summary",
+    " summary",
+    "Summary",
+    " Summary"
+   ],
+   "space": [
+    " summary",
+    " Summary"
+   ],
+   "space_lower": " summary"
+  },
+  "photo": {
+   "quote": [
+    "Photo",
+    "photo"
+   ],
+   "all": [
+    " photo",
+    "Photo",
+    " Photo",
+    "photo"
+   ],
+   "space": [
+    " photo",
+    " Photo"
+   ],
+   "space_lower": " photo"
+  },
+  "bags": {
+   "quote": [
+    "bags",
+    "Bags"
+   ],
+   "all": [
+    " bags",
+    "bags",
+    " Bags",
+    "Bags"
+   ],
+   "space": [
+    " bags",
+    " Bags"
+   ],
+   "space_lower": " bags"
+  },
+  "desk": {
+   "quote": [
+    "desk",
+    "Desk"
+   ],
+   "all": [
+    " desk",
+    " Desk",
+    "desk",
+    "Desk"
+   ],
+   "space": [
+    " desk",
+    " Desk"
+   ],
+   "space_lower": " desk"
+  },
+  "pool": {
+   "quote": [
+    "pool",
+    "Pool"
+   ],
+   "all": [
+    " pool",
+    "pool",
+    "Pool",
+    " Pool"
+   ],
+   "space": [
+    " pool",
+    " Pool"
+   ],
+   "space_lower": " pool"
+  },
+  "ash": {
+   "quote": [
+    "ash",
+    "Ash"
+   ],
+   "all": [
+    "ash",
+    " Ash",
+    " ash",
+    "Ash"
+   ],
+   "space": [
+    " Ash",
+    " ash"
+   ],
+   "space_lower": " ash"
+  },
+  "steel": {
+   "quote": [
+    "steel",
+    "Steel"
+   ],
+   "all": [
+    " steel",
+    " Steel",
+    "steel",
+    "Steel"
+   ],
+   "space": [
+    " steel",
+    " Steel"
+   ],
+   "space_lower": " steel"
+  },
+  "tap": {
+   "quote": [
+    "Tap",
+    "tap"
+   ],
+   "all": [
+    " tap",
+    "Tap",
+    "tap",
+    " Tap"
+   ],
+   "space": [
+    " tap",
+    " Tap"
+   ],
+   "space_lower": " tap"
+  },
+  "case": {
+   "quote": [
+    "Case",
+    "case"
+   ],
+   "all": [
+    " case",
+    "Case",
+    "case",
+    " Case"
+   ],
+   "space": [
+    " case",
+    " Case"
+   ],
+   "space_lower": " case"
+  },
+  "box": {
+   "quote": [
+    "Box",
+    "box"
+   ],
+   "all": [
+    "Box",
+    "box",
+    " box",
+    " Box"
+   ],
+   "space": [
+    " box",
+    " Box"
+   ],
+   "space_lower": " box"
+  },
+  "trade": {
+   "quote": [
+    "trade",
+    "Trade"
+   ],
+   "all": [
+    " trade",
+    " Trade",
+    "trade",
+    "Trade"
+   ],
+   "space": [
+    " trade",
+    " Trade"
+   ],
+   "space_lower": " trade"
+  },
+  "bomb": {
+   "quote": [
+    "bomb",
+    "Bomb"
+   ],
+   "all": [
+    " bomb",
+    " Bomb",
+    "bomb",
+    "Bomb"
+   ],
+   "space": [
+    " bomb",
+    " Bomb"
+   ],
+   "space_lower": " bomb"
+  },
+  "soap": {
+   "quote": [
+    "soap",
+    "Soap"
+   ],
+   "all": [
+    " soap",
+    "soap",
+    " Soap",
+    "Soap"
+   ],
+   "space": [
+    " soap",
+    " Soap"
+   ],
+   "space_lower": " soap"
+  },
+  "process": {
+   "quote": [
+    "process",
+    "Process"
+   ],
+   "all": [
+    " process",
+    "process",
+    "Process",
+    " Process"
+   ],
+   "space": [
+    " process",
+    " Process"
+   ],
+   "space_lower": " process"
+  },
+  "picture": {
+   "quote": [
+    "Picture",
+    "picture"
+   ],
+   "all": [
+    " picture",
+    " Picture",
+    "Picture",
+    "picture"
+   ],
+   "space": [
+    " picture",
+    " Picture"
+   ],
+   "space_lower": " picture"
+  },
+  "diamond": {
+   "quote": [
+    "Diamond",
+    "diamond"
+   ],
+   "all": [
+    " diamond",
+    " Diamond",
+    "Diamond",
+    "diamond"
+   ],
+   "space": [
+    " diamond",
+    " Diamond"
+   ],
+   "space_lower": " diamond"
+  },
+  "ease": {
+   "quote": [
+    "ease",
+    "Ease"
+   ],
+   "all": [
+    " ease",
+    "ease",
+    "Ease",
+    " Ease"
+   ],
+   "space": [
+    " ease",
+    " Ease"
+   ],
+   "space_lower": " ease"
+  },
+  "hat": {
+   "quote": [
+    "hat",
+    "Hat"
+   ],
+   "all": [
+    " hat",
+    "hat",
+    " Hat",
+    "Hat"
+   ],
+   "space": [
+    " hat",
+    " Hat"
+   ],
+   "space_lower": " hat"
+  },
+  "sheet": {
+   "quote": [
+    "Sheet",
+    "sheet"
+   ],
+   "all": [
+    "Sheet",
+    " sheet",
+    "sheet",
+    " Sheet"
+   ],
+   "space": [
+    " sheet",
+    " Sheet"
+   ],
+   "space_lower": " sheet"
+  },
+  "information": {
+   "quote": [
+    "Information",
+    "information"
+   ],
+   "all": [
+    " information",
+    " Information",
+    "Information",
+    "information"
+   ],
+   "space": [
+    " information",
+    " Information"
+   ],
+   "space_lower": " information"
+  },
+  "race": {
+   "quote": [
+    "race",
+    "Race"
+   ],
+   "all": [
+    " race",
+    " Race",
+    "race",
+    "Race"
+   ],
+   "space": [
+    " race",
+    " Race"
+   ],
+   "space_lower": " race"
+  },
+  "hair": {
+   "quote": [
+    "hair",
+    "Hair"
+   ],
+   "all": [
+    " hair",
+    " Hair",
+    "hair",
+    "Hair"
+   ],
+   "space": [
+    " hair",
+    " Hair"
+   ],
+   "space_lower": " hair"
+  },
+  "plane": {
+   "quote": [
+    "plane",
+    "Plane"
+   ],
+   "all": [
+    " plane",
+    "plane",
+    "Plane",
+    " Plane"
+   ],
+   "space": [
+    " plane",
+    " Plane"
+   ],
+   "space_lower": " plane"
+  },
+  "judge": {
+   "quote": [
+    "Judge",
+    "judge"
+   ],
+   "all": [
+    " judge",
+    " Judge",
+    "Judge",
+    "judge"
+   ],
+   "space": [
+    " judge",
+    " Judge"
+   ],
+   "space_lower": " judge"
+  },
+  "board": {
+   "quote": [
+    "board",
+    "Board"
+   ],
+   "all": [
+    "board",
+    " board",
+    " Board",
+    "Board"
+   ],
+   "space": [
+    " board",
+    " Board"
+   ],
+   "space_lower": " board"
+  },
+  "formula": {
+   "quote": [
+    "Formula",
+    "formula"
+   ],
+   "all": [
+    " formula",
+    " Formula",
+    "Formula",
+    "formula"
+   ],
+   "space": [
+    " formula",
+    " Formula"
+   ],
+   "space_lower": " formula"
+  },
+  "sock": {
+   "quote": [
+    "sock",
+    "Sock"
+   ],
+   "all": [
+    " sock",
+    "sock",
+    "Sock"
+   ],
+   "space": [
+    " sock"
+   ],
+   "space_lower": " sock"
+  },
+  "scene": {
+   "quote": [
+    "Scene",
+    "scene"
+   ],
+   "all": [
+    " scene",
+    "Scene",
+    " Scene",
+    "scene"
+   ],
+   "space": [
+    " scene",
+    " Scene"
+   ],
+   "space_lower": " scene"
+  }
+ },
+ "base_words": 194,
+ "base_single_token": 165,
+ "clamp_pool": 65837,
+ "tell_lengths": [
+  16,
+  17,
+  18
+ ],
+ "protocol_sha256": {
+  "verbal-introspection.json": "c16e92d32b43e50027863d939445bb839301457f494363c00e2d00e5c6e73560",
+  "verbal-report.json": "9a33b48074c4565413247bace11d37537a963774936740287f0fb7dff460652c"
+ }
+}

@@ -7,7 +7,7 @@ from pathlib import Path
 
 COMMON = Path(__file__).resolve().parent.parent
 LABEL_MODULES = ["registry", "cells", "wsb", "partners", "margin", "engine", "gates", "stats", "regime", "splits", "brew_material"]
-READER_NAMES = {"readers", "jspace", "jlens", "peft", "vllm", "vllm_lens"}
+READER_NAMES = {"readers", "jspace", "p005", "planted", "jlens", "peft", "vllm", "vllm_lens"}
 
 
 ENTRY_POINTS = [COMMON.parent / "004_span_assay" / "span_assay.py"]      # experiment scripts that must stay reader-free
