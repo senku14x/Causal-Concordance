@@ -4,23 +4,32 @@ Guide for any agent or collaborator working in this repo. Reading only this file
 
 ## Read order
 
+(Updated 2026-10-04 for the unified spec v2, PI instruction.)
+
 1. **CLAUDE.md** (this file): rules, conventions, environment, pitfalls.
-2. **docs/COME_UP_TO_SPEED.md**: handoff (what exists, what 001 found, known problems, decisions log), then
-   **STATUS.md** (where things stand, what works, open questions) and **docs/context/SPEC_STATUS.md** (the whole spec,
-   item by item: done / built / partial / not started / dropped).
-3. **docs/context/SPEC.md** + **docs/context/AMENDMENT_01.md**: the project spec and every decision that overrides it
-   (the amendment wins where they disagree; its §6 lists each conflict by spec line).
-4. The designs and reports, in order: **docs/design_specs/00N_*.md** and **docs/reports/00N_*.md**. All four
-   experiments are complete on the dev split and await PI review:
+2. **STATUS.md**: where things stand, what works, open questions.
+3. **docs/context/SPEC_v2.md**: the unified spec (2026-10-04). It contains the original SPEC.md verbatim, AMENDMENT_01
+   (Appendix B), Cathryn Wayman's A4 amendment (Appendix A), results 000–004 and her pilot (§14), and tagged
+   callouts ([A01], [CW], [R], [v2]). Where a callout and the original disagree, the callout wins. **[v2] items are
+   proposals until the PI accepts or strikes them.** Start with the v2 header, §4.R, §6.0, the §7 planted-concepts
+   callout, §8 A4/A7/A8/A9, §12, §14 and §15.
+4. **docs/context/AMENDMENT_01.md**: the PI's 2026-10-02 decisions (its §6 lists each conflict by SPEC.md line).
+5. The latest design spec and report: **docs/design_specs/004_span_assay.md** and **docs/reports/004_span_assay.md**;
+   then the earlier ones as needed, in order (all four experiments are complete on the dev split and await PI review):
    - 001: leverage profile, probes (amendment A2) and the reader snapshot;
    - 002: role-aware reader claim scoring;
    - 003: reader-free 1-D labels (descriptive; G4 failed);
    - 004: span assay at `:` L42 (fitted spans ≈ PCA).
    Report 000 is the reading report.
-5. **docs/context/agent_notes/**: the PI's working preferences, as kept in the agent's memory (also summarized under
-   "Working with the PI" below).
+
+**docs/context/SPEC.md is frozen:** do not edit it. Reports cite it by line, and AMENDMENT_01 §6 cites it line by line.
 
 Supporting:
+- `docs/COME_UP_TO_SPEED.md`: handoff (what exists, what 001 found, known problems, decisions log).
+- `docs/context/SPEC_STATUS.md`: SPEC.md item by item (done / built / partial / not started / dropped), written
+  before v2; SPEC_v2's status callouts supersede it where they differ.
+- `docs/context/agent_notes/`: the PI's working preferences, as kept in the agent's memory (also summarized under
+  "Working with the PI" below).
 - `docs/context/PI_DIRECTIVE_2026-10-02.md`: the PI's block-000 directive, the source of the non-negotiables.
 - `docs/reviews/`, every external review with its scripts and the disposition in each README:
   - two reviews of the scaffold and design 001;
