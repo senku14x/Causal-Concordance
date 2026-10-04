@@ -817,13 +817,32 @@ def sec_pilot2(D, notes):
                         heat(max([x for x in (rates_o.get((band, L, "direct_cq", "2", s)) for L in (40, 44)) if x is not None], default=None))])
     t_p17 = table(["Band", "Dose", "NLA L42: non-J", "Oracle best of L40/L44: non-J", "NLA L42: full", "Oracle best: full"],
                   p17, num_cols=(2, 3, 4, 5)) if p17 else ""
+    tpz = pl.get("token_probe") or {}
+    tp_rows = []
+    for kind, kl in (("direct_cq", "direct"), ("carried_co", "report position"), ("injected_cq", "injected position")):
+        for cond in ("1", "2", "3", "4", "7"):
+            cells = []
+            for sv in READ_S:
+                v = tpz.get(f"B|{kind}|42|{cond}|{sv}")
+                cells.append(f'{heat(v.get("jnp10") if v else None)} {heat(v.get("probe_abs") if v else None)}')
+            tp_rows.append([kl, COND[int(cond)][0]] + cells)
+    t_tp = table(["Read (L42, band L32–38)", "Condition"] + [f"s = {SNAME[sv]}: J_NP top-10 · probe says “c”" for sv in READ_S],
+                 tp_rows, num_cols=(2, 3, 4, 5, 6)) if tpz else ""
+    probe_note = ("<p>Two probe criteria. The pre-registered one (above the strongest of five random directions at the same "
+                  "dose) fires for almost every concept at every dose, even 1/256. That is a property of the rule: the forward "
+                  "pass is deterministic and nearly linear at small doses, so a linear probe's response to the concept "
+                  "direction and to a random direction shrink together and the comparison is scale-free. The table shows the "
+                  "post-hoc absolute criterion instead: the probe classifies the read as the concept (decision above 0, the "
+                  "threshold calibrated on natural sentences). By that standard the concept is plainly present on direct reads "
+                  "and at the injected position at s ≥ 1/4, and <b>never at the report position at L42</b>.</p>")
     out.append(qcard("Q5", "Do the readers see the planted concept, and where?",
                      "Naming rates of the planted concept by the NLA and the Oracle, read directly at the written cell and at "
                      "the report position, against their random-direction and clean-read rates (a preview of P11 and P17, not a test).",
                      "descriptive; the registered expectation was that the NLA names the concept at the report position for the "
                      "full vector at some dose (mean over dev concepts > 0.10)",
                      "0.40 at the report position; 0.80 on direct reads",
-                     "".join(blocks_html) + "<h4>Base rates on this prompt (no injection)</h4>" + t_clean +
+                     "".join(blocks_html) + "<h4>Token reader and reader-free probe at L42</h4>" + probe_note + t_tp +
+                     "<h4>Base rates on this prompt (no injection)</h4>" + t_clean +
                      "<h4>Preview of P11a: doses where the model's report of the non-J part is unmoved</h4>" + t_prev +
                      "<h4>Preview of P17: NLA vs Oracle on direct reads</h4>" + t_p17,
                      verdict(None) if not (rates_n or rates_o) else verdict(
@@ -986,11 +1005,18 @@ only read L42, so this decides whether P11 at the report position is testable fo
             for c in (2, 3, 4):
                 cr = v["curves"].get(f"{c}|{sv}", {})
                 ser.append({"name": COND[c][0], "cls": COND[c][1], "ys": [cr.get(str(l), cr.get(l)) for l in range(32, 63)]})
+            ca = v.get("curves_absolute", {})
+            for c in (2, 3, 4):
+                cr = ca.get(f"{c}|{sv}", {})
+                if cr:
+                    ser.append({"name": COND[c][0] + " · probe says “c”", "cls": COND[c][1], "dash": True,
+                                "ys": [cr.get(str(l), cr.get(l)) for l in range(32, 63)]})
             figs.append(figure(line_chart(ser, list(range(32, 63)), [str(l) if l % 4 == 0 else "" for l in range(32, 63)],
                                           "share of dev concepts detected", ylim=(0, 1), xlabel="layer (report position)",
                                           w=520, h=250, aria=f"Arrival {band} {sv}"), legend(ser),
                                f"{'band L32–38' if band == 'B' else 'band L24–38'} · dose {SNAME.get(sv)} · "
-                               f"probe detection above the strongest of 5 random directions; the NLA reads at L42"))
+                               f"solid: above the strongest of 5 random directions (pre-registered); dashed: the probe classifies the read "
+                               f"as the concept (post-hoc absolute criterion). The NLA reads at L42."))
     rows = []
     for band, v in q12["by_band"].items():
         for sv in READ_S:

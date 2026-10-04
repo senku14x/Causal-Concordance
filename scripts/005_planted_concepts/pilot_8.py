@@ -104,6 +104,7 @@ class Step8(PI.Pilot):
                         p0 = float(m.decision_function(sc.transform(xc.numpy()))[0])
                         for i, p in zip(idx, ps):
                             rows[i].setdefault("dprobe", {})[l] = float(p) - p0
+                            rows[i].setdefault("probe", {})[l] = float(p)       # absolute (decision > 0 = "is c")
             PL.jdump(rows, f)
             for i, r in enumerate(rows):
                 if r["cond"] in (2, 3, 4) or (r["cond"] == 7 and r["seed"] == 0):

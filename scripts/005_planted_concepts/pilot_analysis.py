@@ -197,6 +197,31 @@ S["Q5_rules_preview"] = {
                 if k.startswith(f"{b}|L42|carried_co|2")) for b in ("B", "B2")} if "nla" in q5 else None,
     "agent_priors": {"carried_full": 0.40, "direct_full": 0.80}}
 
+# ---------------------------------------------------------------------------- token readers + probe (Q5 baseline)
+f = D / "token_probe_reads.json"
+if f.exists():
+    tp = json.loads(f.read_text())
+    rnd = defaultdict(list)                    # (band, kind, layer, s, concept) -> probe deltas under rand-dir
+    for q in tp:
+        if q["cond"] == 7:
+            rnd[(q["band"], q["kind"], q["layer"], q["s"], q["concept"])].append(q["probe"] - q["probe_clean"])
+    agg = defaultdict(lambda: {"jnp10": [], "logit10": [], "probe_det": []})
+    for q in tp:
+        k = (q["band"], q["kind"], q["layer"], str(q["cond"]), q["s"])
+        a = agg[k]
+        a["jnp10"].append(q["token"]["J_NP"]["rank"] <= 10)
+        a["logit10"].append(q["token"]["logit"]["rank"] <= 10)
+        nul = rnd.get((q["band"], q["kind"], q["layer"], q["s"], q["concept"]))
+        if nul and q["cond"] != 7:
+            a["probe_det"].append((q["probe"] - q["probe_clean"]) > max(nul))
+    for q in tp:
+        agg[(q["band"], q["kind"], q["layer"], str(q["cond"]), q["s"])].setdefault("probe_abs", []).append(q["probe"] > 0)
+    S["token_probe"] = {"|".join(map(str, k)): {kk: (float(np.mean(v)) if v else None) for kk, v in a.items()}
+                        for k, a in agg.items()}
+    S["token_probe_note"] = ("probe_det: above the strongest of 5 random directions at the same dose (pre-registered; "
+                             "scale-free in a deterministic forward, so it fires at any dose); probe_abs: the probe "
+                             "classifies the read as the concept (decision > 0), a post-hoc absolute criterion")
+
 # ------------------------------------------------------------------- descriptive previews (labelled, decide nothing)
 prev = {}
 for (band, pre), rows in blocks.items():
@@ -331,6 +356,20 @@ if D8.exists():
                 first = next((l for l in range(32, 63) if rate.get(l) is not None and rate[l] >= 0.5), None)
                 res["curves"][f"{cond}|{sv}"] = rate
                 res["first_arrival"][f"{cond}|{sv}"] = first
+        # post-hoc sensitivity (not pre-registered): absolute criterion, the probe classifies x as c (decision > 0).
+        # Reason: the forward pass is deterministic and nearly linear at small doses, so the relative criterion
+        # (above the strongest random direction at the same dose) is scale-free and fires at any dose.
+        res["curves_absolute"], res["first_arrival_absolute"] = {}, {}
+        for cond in (2, 3, 4, 7):
+            for sv in READ_S8:
+                rate = {}
+                for l in range(32, 63):
+                    x = [r for r in rows if r["cond"] == cond and r["s"] == sv and (cond != 7 or r["seed"] == 0)
+                         and "probe" in r]
+                    if x:
+                        rate[l] = float(np.mean([(r["probe"][str(l)] if str(l) in r["probe"] else r["probe"][l]) > 0 for r in x]))
+                res["curves_absolute"][f"{cond}|{sv}"] = rate
+                res["first_arrival_absolute"][f"{cond}|{sv}"] = next((l for l in range(32, 63) if rate.get(l, 0) >= 0.5), None)
         fa = res["first_arrival"]
         res["full_by_L44_at_1/4"] = fa.get(f"2|{0.25}") is not None and fa[f"2|{0.25}"] <= 44
         jf, pf = fa.get(f"3|{0.25}"), fa.get(f"4|{0.25}")
