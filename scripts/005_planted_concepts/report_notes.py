@@ -218,6 +218,18 @@ if q13:
                 "So a strong enough planted concept can reach the report position in a form the Oracle reads at its late "
                 "layers, but only for some concepts and only with the wider band; the NLA, fixed at L42, cannot test this.")
 
+# step 9 robustness
+s9 = S.get("step9")
+if s9:
+    vs = s9["variants"]
+    pk_hi = sum(v["peaks"]["perp"] > v["peaks"]["J"] for v in vs.values())
+    N["step9"] = (f"Both headline findings survive every alternative construction: F1 holds in {s9['R9a_holds_in']} of "
+                  f"{s9['n_variants']} and F2 in {s9['R9b_holds_in']} of {s9['n_variants']} (k = 10, k = 25, LS refit, raw-W_U "
+                  "atoms, 194-word baseline). The J part leads at middle doses and trails at high doses in every variant; "
+                  f"the non-J part's peak is the higher one in {pk_hi} of {s9['n_variants']}. The re-entry clamp to L62 beats "
+                  "its null in every variant and the clamp stopped at L44 never does. On the dev concepts these are not "
+                  "artifacts of how J-space was built; whether they hold on the test concepts is the amended full run's job.")
+
 # the short version (top of the page)
 sm = load(RESA / "smoke_summary.json") or {}
 q13 = S.get("Q13")
@@ -230,13 +242,14 @@ if S.get("Q1") and S.get("Q2"):
 if pv:
     bullets.append("<b>No clear J-space privilege for report on these dev concepts.</b> At equal size the J part beats the "
                    "non-J part at low and middle doses, the order reverses at high doses, and the two reach similar peaks. "
-                   "This is a preview on 10 dev concepts, not the test (M1 runs on the 45 test concepts).")
+                   "This is a preview on 10 dev concepts, not the test (M1 runs on the 45 test concepts); the pattern holds under all five "
+                   "alternative J-space constructions tried (step 9).")
 if S.get("Q10"):
     bullets.append("<b>The privilege clamp is specific only when it reaches the output end.</b> Clamping the concept's J coordinates all "
                    "the way to L62 removes much of the non-J part's effect (beating a random-token clamp), but stopping at L44 "
-                   "removes nothing beyond the random clamp. The concept's J direction turns into its output direction with "
-                   "depth, so the full-range clamp blocks the answer itself. On these concepts there is no sign that the "
-                   "non-J effect re-enters J-space within the workspace layers.")
+                   "removes nothing beyond the random clamp, under every J-space construction tried (step 9). The concept's J "
+                   "direction turns into its output direction with depth, so the full-range clamp blocks the answer itself. "
+                   "On these concepts there is no sign that the non-J effect re-enters J-space within the workspace layers.")
 if S.get("Q5") and S.get("Q11"):
     nm = {**{"nla|" + k: v for k, v in S["Q5"]["nla"]["mean_naming"].items()},
           **{"ora|" + k: v for k, v in S["Q5"]["oracle"]["mean_naming"].items()}}

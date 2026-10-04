@@ -32,7 +32,7 @@ for q, title in (("Q1", "Report measure"), ("Q2", "Prefill"), ("Q3", "Band"), ("
                  ("Q12", "Arrival at the report position (step 8)"), ("Q13", "Oracle at late layers (step 8)")):
     if N.get(q):
         out += [f"## {q}. {title}", "", plain(N[q]), ""]
-for k, title in (("M1_preview", "Preview: J vs non-J at matched norm"), ("P17_preview", "Preview: Oracle vs NLA on the non-J part"),
+for k, title in (("step9", "Step 9: robustness"), ("M1_preview", "Preview: J vs non-J at matched norm"), ("P17_preview", "Preview: Oracle vs NLA on the non-J part"),
                  ("rlens", "R-lens"), ("budget", "Regime and budget"), ("power", "Power")):
     if N.get(k):
         out += [f"## {title}", "", plain(N[k]), ""]

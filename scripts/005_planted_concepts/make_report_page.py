@@ -496,6 +496,8 @@ rule set before it ran.</li>
 report position, and the R-lens (Q10–Q11).</li>
 <li><b>Step 8, the extra you asked for.</b> Where the planted concept actually reaches the report position: a reader-free
 probe at every layer L32–62 and the Oracle at its later layers there (Q12–Q13), plus a power analysis for the full run.</li>
+<li><b>Step 9, a second extra.</b> Whether the two headline findings (no clear J privilege at matched norm; the clamp is
+specific only at the output end) survive five other ways of building J-space.</li>
 </ol>
 <p>Every run had a design spec and pre-registered priors committed before it started. No test-concept outcome has been
 produced. The full 005 run waits for your decisions on the amendment.</p>
@@ -1289,6 +1291,7 @@ def build(D, notes, short_html):
              chip("pilot done" if have_pilot else "pilot running", "good" if have_pilot else "pend"),
              chip("step 7b done" if have_7b else "step 7b pending", "good" if have_7b else "pend"),
              chip("step 8 done" if pl.get("Q12") else "step 8 pending", "good" if pl.get("Q12") else "pend"),
+             chip("step 9 done" if pl.get("step9") else "step 9 pending", "good" if pl.get("step9") else "pend"),
              chip("full run waits for your decisions", "pend")]
     toc = [("short", "The short version"), ("why", "Why any of this was run"), ("expect", "Expected vs happened"),
            ("checks", "Checks C1–C3"), ("smoke", "The smoke run"), ("pilot", "The overnight pilot"),
@@ -1304,8 +1307,8 @@ def build(D, notes, short_html):
     head = f"""<header class="top"><div class="eyebrow">Causal-Concordance · design 005 · night of 4 October 2026</div>
 <h1>Planted Concepts Pilot</h1>
 <p class="lede">Everything that was run tonight, why it was run, what I expected and what came out: the three checks,
-the 005 smoke run, the dev-only pilot, step 7b and step 8. Every number on this page is generated from the saved result
-files.</p>
+the 005 smoke run, the dev-only pilot, and the extra steps 7b, 8 and 9. Every number on this page is generated from the
+saved result files.</p>
 <div class="chips">{"".join(chips)}</div></header>"""
     body = [head, short_html, sec_why(), sec_scorecard(D), sec_checks(D), sec_smoke(D), sec_pilot(D, notes),
             sec_pilot2(D, notes), sec_7b(D, notes), sec_8(D, notes), sec_9(D, notes), sec_reads(D, notes), sec_eng(D, notes), sec_mistakes(), sec_amend(),
