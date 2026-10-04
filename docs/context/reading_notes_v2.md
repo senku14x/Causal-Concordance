@@ -101,8 +101,8 @@ Read status:
 **Meaning for SPEC_v2**
 
 - **§7 / §8 A8 (design 005), J-space definition.**
-  - "J-space" is construction-dependent, and the conclusion flipped between r = 200 and r = 2000.
-  - 005 must pre-register a primary construction (the workspace paper's §2.3 pursuit; see the report, (c)), report a sensitivity sweep, and never choose the boundary on outcomes. Viswanath's r = 2000 was chosen after seeing results.
+  - "J-space" is construction-dependent: the post's own J-energy share changes with the rank r (6% at r = 200, 50% at r = 1076, 90% at r = 4450, as reported there).
+  - 005 must pre-register a primary construction (the workspace paper's §2.3 pursuit; see the report, (c)), report a sensitivity sweep, and never choose the boundary on outcomes. The post picks r = 2000 as "the cleanest" after sweeping r.
 - **005, model-side measure.**
   - Use the concept named in an open report, not P(yes).
   - Separate **report** from **output effect**: the non-J part moved logits by +13–21 nats with no report.

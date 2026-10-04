@@ -113,7 +113,7 @@ Severity: **H** = changes a number, a claim or a rule; **M** = misattributed or 
 > - **Lens.** J_NP primary (n = 1000); J_CB as a check.
 > - **Report** for every concept: the selected tokens, their coefficients, and the J share of ‖x‖². Sanity check against the paper: median 6–7% at k = 16 for concept vectors, 10–15% at k = 25 for probes.
 > - **§A.8 caveat.** The paper's formal set F = ∪_{|S|=k} span{v_i}, with unrestricted orthogonal projection, admits negative coefficients. It therefore describes a larger set than the non-negative cones in the prose. Primary = the non-negative pursuit (what the paper's experiments use). Sensitivity = least-squares projection onto span{v_t : t ∈ S} for the same S.
-> - **Other constructions are not interchangeable.** For example, a top-r singular subspace of J gives a different boundary for every r, and nothing ties r to the paper's k. Only the paper's pursuit definition is planned. (An unvetted LessWrong post, Viswanath 2026, illustrates the risk: its conclusion flipped between r = 200 and r = 2000. Lesson only, not evidence.)
+> - **Other constructions are not interchangeable.** For example, a top-r singular subspace of J gives a different boundary for every r, and nothing ties r to the paper's k. Only the paper's pursuit definition is planned.
 > - **Frozen in the 005 design before any run:** construction, k, lens, layer and γ convention.
 
 ### c2. 005 = the paper's privilege test on the model side, with a reader side added (extends the §7 / A8 callouts)
