@@ -282,3 +282,12 @@ def test_onset_and_text_strengths():
     assert P.text_strengths(1 / 32, P.GRID) == [1 / 32, 1 / 16, 1 / 8]
     assert P.text_strengths(1.0, P.GRID) == [1 / 4, 1 / 2, 1.0]
     assert P.text_strengths(None, P.GRID) == [1 / 4, 1 / 2, 1.0]
+
+
+def test_specificity_stats():
+    dev = ["a", "b", "c"]
+    dw = {"a": 2.0, "b": 0.5, "c": 0.4, "x": 0.1, "y": 0.3, "z": -0.2}
+    s = P.specificity(dw, "a", dev)
+    assert s["ID"] and abs(s["generic"] - 0.3) < 1e-12 and abs(s["SM"] - 1.7) < 1e-12 and s["pct"] == 1.0
+    s = P.specificity(dw, "c", dev)                     # b beats c among dev: not identified
+    assert not s["ID"] and abs(s["generic"] - 0.3) < 1e-12 and abs(s["pct"] - 0.6) < 1e-12

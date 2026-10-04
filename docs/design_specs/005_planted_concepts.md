@@ -591,3 +591,86 @@ Agent priors: 12 specific **0.40**; 13 specific **0.25**.
 - Otherwise: the report names the variants it fails in, and the amendment flags the finding as construction-dependent.
 
 **Cost:** about 15 GPU minutes. Dev concepts only.
+
+### 16.6 Step 10: where the re-entry clamp starts to act, and whether the report measure is concept-specific (PI go 2026-10-04 "continue with something extra"; pre-registered 2026-10-05 ~00:10 UTC, before it runs)
+
+**Why.**
+- Two of the PI's substantive amendment decisions rest on dev evidence with a gap in it.
+- **A8 (M2), the clamp:**
+  - The re-entry clamp is specific when it runs to L62 and not when it stops at L44 (Q10; step 9: 5/5 constructions).
+  - Between those layers, the concept's own J atom turns toward its output direction (median cos over dev concepts 0.47 at L44, 0.58 at L48, 0.67 at L50, 0.77 at L52, 0.85 at L56, 0.92 at L62).
+  - Where the specificity starts decides between two readings:
+    - the full-range result is "blocking the output direction" (A8 as drafted);
+    - there is a mid-depth re-entry effect that M2 should target.
+- **A1 (R1′ primary) and A3 (band), the report measure:**
+  - R1′ is judged against a random-direction null at matched norm.
+  - Qwen's default answer at C_o is a canned word ("apple"). Any perturbation that displaces it may raise every other word's log-prob.
+  - Nothing yet checks that the rise is specific to the planted concept, or that band L24–38's larger rise is.
+- Both are cheap teacher-forced checks on the 10 dev concepts (`scripts/005_planted_concepts/pilot_10.py`).
+
+**10a. Clamp end-layer sweep (Q14; informs A8).**
+- **Rows:**
+  - condition 4's vector (the non-J part) injected at the band, as in the pilot;
+  - the re-entry clamp (reference h_clean + accumulated injection, §16.3) from the band's first layer to an end layer E ∈ {44, 46, …, 62};
+  - the clamp uses either the concept token set T_c (c) or its size-matched random token set (r), the same sets as step 7b;
+  - bands B and B2, default prefill, 9-point grid, plus unclamped condition 4.
+- E = 44 and E = 62 repeat step 7b's 13/13r and 12/12r (part of gate G10 below).
+- **Measure (the Q10 definition):**
+  - extra reduction = ΔR1′(r-clamp) − ΔR1′(c-clamp), at each concept's best non-J dose;
+  - over evaluable concepts, i.e. those whose non-J ΔR1′ is above the rand-dir 95th percentile at that dose;
+  - bootstrap 95% CI over concepts.
+- **E\*** = the smallest E whose CI lies above 0 at E and at every larger E on the grid.
+- Mapping (band B primary; B2 reported the same way):
+
+| E* | Reading | Amendment |
+|---|---|---|
+| 56–62 | specificity only where the J atom is close to the output direction (median cos ≥ 0.85) | A8 as drafted |
+| 52–54 | intermediate (cos 0.77–0.82) | reported; A8 left to the PI |
+| 46–50 | a mid-depth window: blocking the concept's J subspace removes the report effect while its atom is still far from the output direction (cos 0.52–0.67) | M2's end layer becomes E* (replacing L44); A8 reworded |
+| none, or 44 | contradicts step 7b (E = 62 and E = 44 repeat its conditions 12 and 13) | stop and investigate |
+
+- Also reported: the extra-reduction curve against E, next to the cos curve.
+- **Agent priors (band B):**
+  - E* in 56–62: **0.55**;
+  - E* in 52–54: **0.20**;
+  - E* in 46–50: **0.15**;
+  - none or other: **0.10**.
+
+**10b. Concept specificity of the report measure (Q15; informs A1 and A3).**
+- **Rows:** the pilot's teacher-forced rows, re-run:
+  - conditions 1 (pure J-lens atom), 2 (full vector), 3 (J part), 4 (non-J part) and 7 (rand-dir, seeds 0–4);
+  - × 9 doses × bands B and B2, default prefill.
+- **Recorded:**
+  - log-probs at C_o of the quote spellings of a word set W;
+  - W = the 10 dev concepts + the 78 of the protocol's 194 baseline words whose quote spellings are single tokens (test and excluded concepts are not in W);
+  - the clean top-10 tokens at C_o and each row's top-10 (raw readouts).
+- **Per row:** ΔR1′(w) for every w ∈ W (log-sum-exp over quote spellings, injected − clean).
+- **Measures:**
+  - **ID:** the planted concept has the largest ΔR1′ among the 10 dev concepts (chance 0.1).
+  - **SM** = ΔR1′(c) − median over W∖{c} of ΔR1′(w), the specificity margin. Bootstrap 95% CI over the 10 concepts.
+  - Also reported: the planted concept's percentile within W, and the generic rise (the median over W∖{c} of ΔR1′(w)).
+- **Rule (per band × condition):** R1′ is *concept-specific* if, at ≥ 3 doses where the condition's median ΔR1′ exceeds the rand-dir 95th percentile:
+  - ID ≥ 5/10; and
+  - SM's CI lies above 0.
+- **Mapping:**
+  - Condition 2 specific in both bands: A1 stands (R1′ primary).
+  - Condition 2 not specific in a band: A1 changes for that band. SM becomes the primary report measure and raw R1′ secondary (a new amendment item).
+  - A3: band L24–38's larger effect counts as concept-specific if, for condition 2 at s ∈ {1/16, 1/4}, its SM ≥ band B's and its ID ≥ band B's. Otherwise it is "partly generic", an argument for L32–38.
+  - Condition 7 (random) is a sanity check: ID ≤ 3/10 at every dose is expected.
+- **Agent priors:**
+  - condition 2 specific: B **0.65**, B2 **0.70**;
+  - condition 4 specific: B **0.35**, B2 **0.45**;
+  - condition 1 specific in both bands: **0.90**;
+  - B2 at least as specific as B (the A3 rule): **0.60**;
+  - random directions at chance (ID ≤ 3/10 at every dose, both bands): **0.90**.
+
+**Gate G10 (consistency, checked before any reading).**
+- Rows that repeat stored rows must reproduce their stored ΔR1′:
+  - 10b: every row vs the pilot's blocks;
+  - 10a: E = 44/62 vs step 7b.
+- Pass: median |difference| ≤ 0.05 nats and 95th percentile ≤ 0.25 nats. This allows for the bf16 batch-composition floor; chunks differ from the original runs.
+- On failure, step 10 is reported as unreliable and is used for no amendment item.
+
+**Cost:**
+- About 5,400 teacher-forced rows at ~20 rows/s: about 5 GPU minutes, about 15 minutes with setup.
+- Dev concepts only. No test concept is injected or scored.

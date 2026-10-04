@@ -387,6 +387,16 @@ def neutral_metrics(lp, lp_clean, sp):
     return out
 
 
+def specificity(dw, c, dev):
+    """Design §16.6 10b. dw: {word: ΔR1′} for one row over the word set W (which contains `dev`); c: the planted
+    concept. ID: c has the largest ΔR1′ among `dev`; SM = ΔR1′(c) − median over W∖{c}; pct: share of W∖{c} below c;
+    generic: the median over W∖{c} (the rise of every other word)."""
+    others = np.array([v for w, v in dw.items() if w != c], float)
+    gen = float(np.median(others))
+    return {"ID": max(dev, key=lambda w: dw[w]) == c, "SM": float(dw[c]) - gen,
+            "pct": float((others < dw[c]).mean()), "generic": gen}
+
+
 # ---------------------------------------------------------------------------------------------- G1 and onset rules
 def g1_decide(rows, grid):
     """rows: dicts {concept, cond (1, 2 or 7), s, R2, B3, B1, R1} for the gate concepts.
