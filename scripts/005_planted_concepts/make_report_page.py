@@ -74,16 +74,23 @@ def line_chart(series, xs, xlabels, ylabel, *, ylim=None, ylog=False, invert=Fal
         vals += [y for y in band if y is not None]
     if ylim:
         lo, hi = ylim
+        if ylog:
+            lo, hi = math.log10(max(lo, 1e-9)), math.log10(max(hi, 1e-9))
+    elif ylog:                                            # pad in log units (linear padding can go below zero)
+        lo = math.log10(max(min(vals), 1e-9)) if vals else 0.0
+        hi = math.log10(max(max(vals), 1e-9)) if vals else 1.0
+        if lo == hi:
+            hi = lo + 1
+        pad = 0.05 * (hi - lo)
+        lo, hi = lo - pad, hi + pad
     else:
         lo, hi = (min(vals), max(vals)) if vals else (0, 1)
         if lo == hi:
             hi = lo + 1
         pad = 0.06 * (hi - lo)
         lo, hi = lo - pad, hi + pad
-        if not ylog and lo > 0 and lo < 0.25 * hi:
+        if lo > 0 and lo < 0.25 * hi:
             lo = 0
-    if ylog:
-        lo, hi = math.log10(max(lo, 1e-9)), math.log10(max(hi, 1e-9))
 
     def X(i):
         return L + (pw * i / max(len(xs) - 1, 1))
@@ -97,7 +104,7 @@ def line_chart(series, xs, xlabels, ylabel, *, ylim=None, ylog=False, invert=Fal
     out = [f'<svg class="chart" viewBox="0 0 {w} {h}" role="img" aria-label="{esc(aria)}" preserveAspectRatio="xMidYMid meet">']
     # y ticks
     if ylog:
-        ticks = [10 ** k for k in range(int(math.floor(lo)), int(math.ceil(hi)) + 1)]
+        ticks = [10 ** k for k in range(int(math.ceil(lo - 1e-9)), int(math.floor(hi + 1e-9)) + 1)]
     else:
         span = hi - lo
         step = 10 ** math.floor(math.log10(span / 4)) if span > 0 else 1
@@ -460,6 +467,8 @@ concepts on a design we already knew must change, the pilot answers the amendmen
 rule set before it ran.</li>
 <li><b>Step 7b.</b> Three additions from the review you forwarded: a re-entry clamp, a layer-by-layer readout at the
 report position, and the R-lens (Q10–Q11).</li>
+<li><b>Step 8, the extra you asked for.</b> Where the planted concept actually reaches the report position: a reader-free
+probe at every layer L32–62 and the Oracle at its later layers there (Q12–Q13), plus a power analysis for the full run.</li>
 </ol>
 <p>Every run had a design spec and pre-registered priors committed before it started. No test-concept outcome has been
 produced. The full 005 run waits for your decisions on the amendment.</p>
@@ -923,8 +932,8 @@ default prefill, both bands, teacher-forced.</p>"""]
         figs.append(figure(line_chart(ser, GRID9, [SNAME[s] for s in GRID9], "median ΔR1′ (nats)", w=520, h=280,
                                       aria=f"Re-entry clamp {band}"), legend(ser),
                            f"{'band L32–38' if band == 'B' else 'band L24–38'}; dashed = the random-token null of each clamp"))
-    t10 = table(["Band", "Clamp", "Concepts evaluable", "Extra reduction over its null (nats)", "95% CI",
-                 "Share of the perturbation removed (band layers)", "(above the band)", "Beats null"], rows, num_cols=(2, 3, 4, 5, 6))
+    t10 = table(["Band", "Clamp", "n", "Extra reduction vs null (nats)", "95% CI", "Removed (band)", "Removed (above)",
+                 "Beats null"], rows, num_cols=(0, 2, 3, 4, 5, 6))
     cosd = pl.get("cos_atom_vs_output") or {}
     cos_fig = ""
     if cosd:
@@ -963,6 +972,7 @@ default prefill, both bands, teacher-forced.</p>"""]
                 if ser:
                     figs11.append(figure(line_chart(ser, list(range(32, 63)), [str(l) if l % 4 == 0 else "" for l in range(32, 63)],
                                                     f"{reader} rank of c (log)", ylog=True, invert=True, xlabel="layer",
+                                                    ylim=(1, 2e5),
                                                     w=520, h=270, aria=f"Sweep {band} {reader}"), legend(ser),
                                          f"{'band L32–38' if band == 'B' else 'band L24–38'} · {reader} · dose {SNAME.get(s_pick)} · "
                                          "median rank over dev concepts at the report position (rank 1 at the top)"))
