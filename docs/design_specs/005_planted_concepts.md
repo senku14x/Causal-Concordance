@@ -416,3 +416,41 @@ All on the 10 dev concepts; descriptive. "Null" means the rand-dir 95th percenti
 - What the full run costs.
 
 **What we cannot learn.** Any P-contrast verdict, or anything about test concepts. Q5's reader numbers and any J-vs-non-J pattern on these 10 dev concepts are previews and will be labelled as such.
+
+### 16.2 What runs next, in order, and why (updated 2026-10-04 ~20:20, before the pilot launches)
+
+**Why the plan changed after the smoke (smoke1, dev concepts, descriptive).**
+
+| Smoke finding | Consequence for what runs next |
+|---|---|
+| G1 failed at both bands: sampled naming 0% (L32–38) and best 8% (L24–38), against a strong default answer ("apple" is top-1 at the quote in the clean run) | Stop rule: no full run until amended. The pilot measures the paper's rank/log-prob report measure and the `word` prefill (Q1, Q2) |
+| The pure J-lens vector lifts the concept to median rank 2 (+8.5 nats at s = 1/4, L24–38); random directions +0.4 | R1′ is likely a usable report measure (Q1) |
+| The u^⊥ onset sat at the grid floor (s* = 1/32) | The pilot extends the grid down to 1/256 (Q4) |
+| earth's u^⊥ was still J-readable as "earth" (J_NP rank 2–13 at 4 layers); 2% of concept-layers overall | A per-concept leak rule, fixed in §16.1 Q7, screened on all 55 concepts (Q7) |
+| The c-clamp did not beat the random clamp on gel and earth | Q6 on 10 dev concepts |
+| cos(leave-one-out u, 194-word u) had a median of 0.86 | Q8 |
+| The SEC cross-check was skipped (band B2 starts below l0 = 31) | The pilot runs it at band B (below) |
+| The NLA loader crashed in phase B (`NLArl.scaling` read a float attribute on a non-LoRA module) | Fixed. The smoke's NLA phase was resumed from its stored inputs (`planted.py nla-resume`); nothing else changed |
+
+**Run order (one process per step; every block checkpointed, so a crash resumes without repeating finished blocks).**
+
+| Step | What runs | Why | Estimate |
+|---|---|---|---|
+| 0 | Smoke NLA phase, resumed (48 reads × 4 samples + clean reads) | Completes smoke §11 item 2 (end to end, both phases) | ~3 min (running) |
+| 1 | Pilot setup: renders for both prefills, clean forwards, lenses. Material reused from smoke1 (identical model and renders) | — | ~2 min |
+| 2 | Split quality for all 55 concepts at L24–38 and L40/42/44: G5 ranks, J shares, sensitivity (k 10/25, LS, raw atoms, 194-word baseline), cos(LOO, base), leaky lists per band | Q7, Q8; material only, no model output on a test concept | ~3 min |
+| 3 | Model side, 10 dev concepts × {B, B2} × {default, word} × 9 strengths: conditions 1–9 (rand-dir 5 seeds), 10, 10r, 11, 11r, teacher-forced (R1, R1′, B1–B4); sampled naming (8 samples) for conditions 1–4 and 7; onset per band × prefill | Q1–Q4, Q6 | ~70–90 min |
+| 4 | Token readers (J_NP, J_CB, logit lens) and probes (default prefill, both bands, every non-clamp condition and strength, three read kinds); G4 | Q5 (token side) | ~5 min |
+| 5 | Oracle reads (default prefill, both bands): conditions 2, 3, 4, 7 × s ∈ {1/256, 1/64, 1/16, 1/4, 1} × {direct C_q, carried C_o} × {L40, L44} × 4 samples = 6,400 samples, plus clean reads (32 samples per kind and layer) | Q5 (Oracle) | ~35 min |
+| 6 | SEC l0 = 31 cross-check: band B, default prefill, gate concepts, conditions 1–4 and 7 (seed 0), all 9 strengths. R1, R1′ and top-1 compared with the fp32-residual regime | Completes the smoke item skipped at B2. Tells us whether the faster regime can be trusted in the full run | ~3 min |
+| 7 | NLA reads (subject freed): the same items at L42 × 4 samples = 3,200 samples, plus clean reads | Q5 (NLA) | ~30 min |
+| 8 | CPU analysis → `results/005_planted_concepts/analysis/pilot_summary.json`; pilot note answering Q1–Q9 against the pre-registered rules; the amendment draft (a proposal; the PI decides) | — | after the run |
+
+**Total GPU ≈ 2.5–3 h.** It is dev-only throughout; no test-concept outcome is produced or read. The instance is **not** stopped afterwards unless the PI says so.
+
+**Implementation notes recorded before the run.**
+- Sampling batches 192 rows per forward (smoke: 96).
+- Token-reader records keep only each row's own concept rank; the all-concept mismatched baseline comes from text-reader samples.
+- G4's control is the sample-level label permutation (a Hewitt–Liang type-level control is uninformative for single-word probes; see the smoke note).
+- The clamp's removed share is logged as ‖QQᵀ(h − h_clean)‖ / ‖h − h_clean‖ at every clamped layer, which at band layers includes that layer's write.
+- Every band × prefill block's rows are saved (the smoke lost band B's G1 rows).

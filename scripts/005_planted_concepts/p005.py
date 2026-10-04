@@ -71,9 +71,17 @@ def _chat(tok, msgs):
     return tok.apply_chat_template(msgs, tokenize=False, add_generation_prompt=True, enable_thinking=False)
 
 
-def render_intro(tok):
-    """ids of the introspection prompt + stripped default prefill (139 tokens), with every frozen position asserted."""
-    msgs, prefill, _, _ = protocol()
+def prefills():
+    """The protocol's prefills: {'default': ..., 'word': ...} (sha256-checked file)."""
+    protocol()
+    return json.loads((PROTOCOL_DIR / "verbal-introspection.json").read_text())["prefills"]
+
+
+def render_intro(tok, variant="default"):
+    """ids of the introspection prompt + the stripped prefill `variant`, with every frozen position asserted
+    (default: 139 tokens; the report position C_o is always the last token, the open quote)."""
+    msgs, _, _, _ = protocol()
+    prefill = prefills()[variant]
     msgs = [m for m in msgs if not (m["role"] == "assistant" and m["content"] == "")]
     head = _chat(tok, msgs)
     txt = head + prefill.lstrip()
@@ -83,11 +91,13 @@ def render_intro(tok):
     b = txt.find("<|im_end|>", a)
     span = [i for i, (x, y) in enumerate(off) if x >= a and y <= b]
     pre = [i for i, (x, y) in enumerate(off) if x >= len(head)]
-    assert len(ids) == POS["T"], len(ids)
+    if variant == "default":
+        assert len(ids) == POS["T"], len(ids)
+        assert pre == POS["prefill"], (pre[0], pre[-1])
+    assert pre[0] == POS["prefill"][0] and pre[-1] == len(ids) - 1, (pre[0], pre[-1])
     assert span == POS["span"], (span[0], span[-1])
-    assert pre == POS["prefill"], (pre[0], pre[-1])
     assert txt[off[POS["cq"]][0]:off[POS["cq"]][1]] == "," and txt[off[POS["cq"]][0] - 5:off[POS["cq"]][0]] == "If so"
-    assert txt[off[POS["co"]][0]:off[POS["co"]][1]] == ' "' and POS["co"] == len(ids) - 1
+    assert txt[off[-1][0]:off[-1][1]] == ' "'
     return ids
 
 

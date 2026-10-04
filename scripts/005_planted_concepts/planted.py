@@ -172,7 +172,8 @@ class Smoke:
         neutral prompt with its clean greedy continuation (all positions at L24-62, log-probs at 18-25)."""
         self.log("clean forwards")
         rec_layers = L_J
-        lpos = list(range(125, 139))
+        self.co = len(self.ids) - 1
+        lpos = list(range(125, len(self.ids)))
         lp, acts = P.forward_rows(self.model, self.ids, 1, self.W_U, lpos, record=rec_layers,
                                   record_pos=list(range(len(self.ids))))
         self.lp_clean = lp[0]
@@ -335,7 +336,7 @@ class Smoke:
         """Introspection + neutral teacher-forced forwards for `rows`; metrics added in place; captures returned."""
         caps = {l: [] for l in P.READ_LAYERS}
         fid, clog = [], []
-        lpos = list(range(125, 139))
+        lpos = list(range(125, len(self.ids)))
         for j in range(0, len(rows), TF_CHUNK):
             chunk = rows[j:j + TF_CHUNK]
             dl = self.deltas(chunk, band)
@@ -346,7 +347,7 @@ class Smoke:
                 cl = P.BandClamp(self.blocks, Qr, self.hc, clamp_layers) if Qr else None
                 lp, acts = P.forward_rows(self.model, self.ids, len(chunk), self.W_U, lpos,
                                           writes=[w for w in (inj, cl) if w], record=P.READ_LAYERS,
-                                          record_pos=[P.POS["cq"], P.POS["co"]])
+                                          record_pos=[P.POS["cq"], self.co])
                 injn = P.BandInject(self.blocks, dl, P.NEUTRAL["span"])
                 cln = P.BandClamp(self.blocks, Qr, self.hcn, clamp_layers) if Qr else None
                 lpn, _ = P.forward_rows(self.model, self.nseq, len(chunk), self.W_U, self.npos,
@@ -665,38 +666,59 @@ class Smoke:
         del self.model, self.blocks
         gc.collect()
         torch.cuda.empty_cache()
-        torch.cuda.reset_peak_memory_stats()
-        with Timer(self.timings, "nla_load"):
-            nla = self.RD.NLArl()
-        nla_reads = []
-        for j in range(0, len(nla_items), READ_CHUNK):
-            ch = nla_items[j:j + READ_CHUNK]
-            with Timer(self.timings, "nla_samples", len(ch) * P.TEXT_K):
-                outs = nla.read_batch([q["x"] for q in ch], k=P.TEXT_K, seed=P.seed_of("nla", j))
-            for q, smp in zip(ch, outs):
-                r = rows_e[q["row"]]
-                nla_reads.append({"reader": "nla", "layer": 42, "kind": q["kind"], "concept": r["concept"],
-                                  "cond": r["cond"], "s": r["s"], "samples": smp, "write": nla.last_write})
-        for kind, x in nla_clean.items():
-            with Timer(self.timings, "nla_samples", P.CLEAN_K):
-                smp = nla.read_batch([x], k=P.CLEAN_K, seed=P.seed_of("nla-clean", kind))[0]
-            nla_reads.append({"reader": "nla", "layer": 42, "kind": kind, "concept": None, "cond": "clean", "s": 0.0,
-                              "samples": smp})
-        self.mem["phaseB_nla_peak_GB"] = torch.cuda.max_memory_allocated() / 1e9
-        nla.close()
-        jdump(nla_reads, self.dir / "nla_reads.json")
         st["timings"], st["memory"], st["notes"] = self.timings, self.mem, self.notes
         self.save_state()
+        nla_phase(self.dir, rows_e, self.log)
         self.log("smoke done")
+
+
+def nla_phase(run_dir, rows, log):
+    """Phase B (subject not resident): NLA reads of every stored input + clean reads; writes nla_reads.json and adds
+    timings / memory to state.json. Usable on its own to resume a run whose phase A finished."""
+    import readers as RD
+    run_dir = Path(run_dir)
+    st = json.loads((run_dir / "state.json").read_text())
+    timings, mem = st.get("timings", {}), st.get("memory", {})
+    inp = torch.load(run_dir / "nla_inputs.pt")
+    items, clean = inp["items"], inp["clean"]
+    torch.cuda.reset_peak_memory_stats()
+    with Timer(timings, "nla_load"):
+        nla = RD.NLArl()
+    st["nla_scaling"] = nla.scaling
+    out = []
+    for j in range(0, len(items), READ_CHUNK):
+        ch = items[j:j + READ_CHUNK]
+        with Timer(timings, "nla_samples", len(ch) * P.TEXT_K):
+            outs = nla.read_batch([q["x"] for q in ch], k=P.TEXT_K, seed=P.seed_of("nla", j))
+        for q, smp in zip(ch, outs):
+            r = q.get("meta") or rows[q["row"]]
+            out.append({"reader": "nla", "layer": 42, "kind": q["kind"], "concept": r["concept"], "cond": r["cond"],
+                        "s": r["s"], "seed": r.get("seed", 0), "band": q.get("band", r.get("band")), "samples": smp,
+                        "write": nla.last_write})
+        log(f"nla {j + len(ch)}/{len(items)}")
+    for kind, x in clean.items():
+        with Timer(timings, "nla_samples", P.CLEAN_K):
+            smp = nla.read_batch([x], k=P.CLEAN_K, seed=P.seed_of("nla-clean", kind))[0]
+        out.append({"reader": "nla", "layer": 42, "kind": kind, "concept": None, "cond": "clean", "s": 0.0,
+                    "samples": smp})
+    mem["phaseB_nla_peak_GB"] = torch.cuda.max_memory_allocated() / 1e9
+    nla.close()
+    jdump(out, run_dir / "nla_reads.json")
+    st["timings"], st["memory"] = timings, mem
+    jdump(st, run_dir / "state.json")
 
 
 def main():
     ap = argparse.ArgumentParser()
-    ap.add_argument("stage", choices=["preflight", "smoke"])
+    ap.add_argument("stage", choices=["preflight", "smoke", "nla-resume"])
     ap.add_argument("--run-id", default=time.strftime("%Y%m%dT%H%M%SZ", time.gmtime()))
     a = ap.parse_args()
     if a.stage == "preflight":
         preflight()
+    elif a.stage == "nla-resume":
+        d = OUT / "smoke" / a.run_id
+        rows = json.loads((d / "rows_e2e.json").read_text())
+        nla_phase(d, rows, Log(d / "log.txt"))
     else:
         s = Smoke(a.run_id)
         meta = {"stage": "smoke", "run_id": a.run_id, "manifest": R.manifest_block(),

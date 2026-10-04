@@ -455,8 +455,9 @@ class NLArl:
         self.model.requires_grad_(False)
         for o in (self.model, self.model.get_base_model()):
             setattr(o, R.MODIFIED_ATTR, "nla-rl reader model (av_base + adapter), not the subject")
-        self.scaling = sorted({float(s) for mod in self.model.modules() if hasattr(mod, "scaling")
-                               for s in getattr(mod, "scaling", {}).values()})
+        self.scaling = sorted({float(s) for mod in self.model.modules()          # LoRA layers keep a dict;
+                               if isinstance(getattr(mod, "scaling", None), dict)  # attention keeps a float
+                               for s in mod.scaling.values()})
         (block1,) = [mod for name, mod in self.model.named_modules() if name.endswith("model.layers.1")]
         self._v = {}
         self._hook = block1.register_forward_hook(self._inject)
