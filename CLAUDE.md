@@ -150,8 +150,10 @@ yet) and await PI review.
     branch; per the consolidated handoff);
   - the next step (report 004 §14: back to the reader panel, or a bounded DAS-vs-PCA check);
   - AMENDMENT_02 before any test-split label.
-- `main` was fast-forwarded to `setup/000-scaffold` on 2026-10-03 (PI). Keep working on the branch and ask before
-  updating `main` again.
+- `main` was fast-forwarded to `setup/000-scaffold` on 2026-10-03 (PI). **Since 2026-10-04 the working branch is
+  `spec-v2`** (PI default, doubt 22; it carries the results-page commit ae18eee as 28a239b). Ask before updating
+  `main` again.
+- The repo was made **private** on 2026-10-04 (PI); until then it had been public with the paper PDFs in it.
 - **Results page** (artifact, shared by link; built by `scripts/000_setup/results_page/make_page.py` from committed
   JSON only): https://claude.ai/artifact/RMRX8R4iFnysbnHaNWTBeC
 
@@ -177,7 +179,7 @@ yet) and await PI review.
 
 `/workspace` is not persistent. To come back on a new instance:
 1. `git clone https://github.com/senku14x/Causal-Concordance` (private; `gh auth login` as senku14x), then
-   `git checkout setup/000-scaffold` (the working branch; `main` is updated on the PI's say-so).
+   `git checkout spec-v2` (the working branch since 2026-10-04; `main` is updated on the PI's say-so).
 2. `bash scripts/000_setup/rebuild_env.sh`: venvs, pinned source clones, model and lens downloads, and hash checks.
 3. `python scripts/000_setup/restore_outputs.py`: downloads `outputs/` from the public HF dataset
    `senku21x/causal-concordance-outputs` and checks every file against its `MANIFEST.json` (sha256).
@@ -278,3 +280,4 @@ yet) and await PI review.
 | 10-04 | C1's first dry run passed CW's `items.json` (the 120-item gated bank) as the item list: 120 expected, 60 missing | item list = readout ids, asserted against the pinned bank and prompts |
 | 10-04 | The first draft of the checks report labelled CW's NLA "nla-L42" from her filenames; the files name the read layer, and her NLA is `nla-rl` `av_base` + iter_000400 (`pod_bootstrap.sh`) | corrected before commit |
 | 10-04 | The PI asked to delete the review's "flipped between r = 200 and r = 2000" parenthetical (Viswanath); I recorded it as adopted but the text stayed in the review and the reading notes (repo and claude_reports) | deleted; the reading notes now quote what the post reports (J-energy by rank; r = 2000 picked as "the cleanest") |
+| 10-04 | The 005 design draft said `engine.Engine` supports generation with hooks; it has a forward path only, and `CellWrite` writes row 0 at fixed prompt positions (it would fail on decode steps) | caught before commit; the design requires a new generation path and scores the clamp on teacher-forced measures only |
