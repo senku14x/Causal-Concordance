@@ -559,3 +559,35 @@ Agent priors: 12 specific **0.40**; 13 specific **0.25**.
 - A planning number with no rule.
 
 **Cost:** about 50 GPU minutes after step 7b; no test concept is touched.
+
+### 16.5 Step 9: robustness of the two headline dev findings to the J-space construction (PI go 2026-10-04 "continue with something extra"; pre-registered before it runs)
+
+**Why.**
+- Two dev findings will shape the amendment and the PI's reading of 005:
+  - **F1:** at matched norm, the J part beats the non-J part at middle doses and loses at high doses, with similar peaks;
+  - **F2:** the re-entry clamp is specific only when it reaches L62, not when it stops at L44.
+- Both rest on one construction: k = 16, NNLS refit, folded atoms, leave-one-out baseline. §3 lists the sensitivity constructions; this step runs them on these two findings.
+
+**Run (dev concepts, band L32–38, default prefill, 9-point grid, teacher-forced; `scripts/005_planted_concepts/pilot_9.py`).**
+- **Five variants:** k = 10; k = 25; LS refit (k = 16, the A.8 span reading); raw-W_U atoms (k = 16); 194-word baseline (k = 16).
+- **Per variant:** conditions 3 (J part, matched), 4 (non-J part, matched), and 12/12r and 13/13r (re-entry clamp to L62 / to L44, each with its random-token null).
+- The clamp token set T_c comes from that variant's own supports; its atoms are folded, except raw for the raw-atom variant.
+- The null for "the non-J part has an effect" is the pilot's rand-dir rows (variant-independent).
+
+**R9a (F1).**
+- Per variant: the median over concepts of ΔR1′(J) − ΔR1′(non-J) at s ∈ {1/16, 1/8} (middle) and {1/2, 1} (high).
+- **The pattern holds** if both middle-dose differences are > 0 and both high-dose differences are ≤ 0.
+- Also reported: each part's peak ΔR1′ over doses.
+- Agent prior: the pattern holds in ≥ 4 of 5 variants, **0.55**.
+
+**R9b (F2).**
+- Per variant, the Q10 rule:
+  - the full-range re-entry clamp beats its null (bootstrap CI over evaluable concepts > 0);
+  - the band-limited one does not (CI includes 0, or lies below it).
+- Agent prior: the pattern holds in ≥ 4 of 5 variants, **0.65**.
+
+**Reading.**
+- Holding in ≥ 4/5 variants: the finding is robust to the construction choices in §3.
+- Otherwise: the report names the variants it fails in, and the amendment flags the finding as construction-dependent.
+
+**Cost:** about 15 GPU minutes. Dev concepts only.
