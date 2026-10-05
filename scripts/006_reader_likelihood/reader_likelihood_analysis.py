@@ -129,10 +129,9 @@ def main():
         "T5_G_pc": {f"{n}_L{l}": (blk(n, l) or {}).get("G_pc_pass") for n, l in PRIMARY}}
     lens = R.PROJECT / "results" / "002_claim_scoring" / "analysis" / "scores.json"
     if lens.exists():
-        lp = json.loads(lens.read_text()).get("lens_post_hoc", {})
-        tr = lp.get("tracking", lp)
-        S["lens_002_tracking_emit_colon"] = {k: v for k, v in tr.items() if "|emit_colon|" in k and k.split("|")[-1] in ("L40", "L42", "L44")
-                                             or ("|emit_colon|" in k and k.endswith(("|start", "|answer")) and "|L4" in k)}
+        tr = json.loads(lens.read_text()).get("lens_post_hoc", {}).get("start_swap_tracking_logscore", {})
+        S["lens_002_tracking_emit_colon"] = {k: v for k, v in tr.items()                # descriptive; key format fixed
+                                             if "|emit_colon|L4" in k}                  # after the first analysis run
     out = R.PROJECT / "results" / "006_reader_likelihood" / "analysis"
     out.mkdir(parents=True, exist_ok=True)
     (out / "summary.json").write_text(json.dumps(S, indent=1))

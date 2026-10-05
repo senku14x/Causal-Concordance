@@ -3,6 +3,16 @@
 *New session? Read `CLAUDE.md` first (rules, the PI's preferences, branches, and how to restore a fresh instance),
 then this file (newest first), then `docs/reports/005_followups.md`.*
 
+**2026-10-05, 006 (branch `006-reader-likelihood`, off `005-amended-full-run`; report `docs/reports/006_reader_likelihood.md`).**
+- **Question.** At the brew `:` cell (saved 001 captures, 48 dev tables), do the verbalizers' likelihoods track z, as 002's lenses did?
+- **NLA L42, likelihood:**
+  - tracks z: +1.86 [1.41, 2.34] nats, 44 of 48 tables; supported (T1, Holm);
+  - shuffled control ≈ 0;
+  - it also tracks the start colour (+0.41) and the answer (+0.59), less than z.
+- **Oracle L40/L44:** tracks z in 48 of 48 tables (+3.2 to +3.8). Its positive control failed at those layers (33% and 42% < 50%), so T2 is uninformative by the rule.
+- **Bar:** the NLA passed its positive control exactly at the bar (6 of 12).
+- **Reading.** z is decodable from the readers' likelihood at the cell where 002 found they rarely state it.
+
 **2026-10-05: state at the end of the session (branch `005-amended-full-run`, pushed; not merged into `main`).**
 - **005 is closed.** The PI ruled no further 005 variants.
 - **Main conclusions, with the follow-up corrections applied:**

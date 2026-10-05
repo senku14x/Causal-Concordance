@@ -152,6 +152,8 @@ without the PI's say-so.
 - **`005-amended-full-run`** (off `spec-v2`): amendment 01 adopted, the 005 full run, the follow-ups, and these docs.
   - It is the newest branch and the one to work on.
   - It stays separate from `main` until the PI merges it. Dropping it reverses the adoption.
+- `006-reader-likelihood` (off `005-amended-full-run`): experiment 006, the verbalizers' likelihood tracking of z at the brew `:`
+  cell (`docs/design_specs/006_reader_likelihood.md`, `docs/reports/006_reader_likelihood.md`). Newest branch; not merged.
 
 **001–004** (dev split only; await PI review):
 - **001:** the `:` cell carries about half the answer gap at L42–44, and z is decodable there.
