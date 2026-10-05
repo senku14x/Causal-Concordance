@@ -291,3 +291,22 @@ def test_specificity_stats():
     assert s["ID"] and abs(s["generic"] - 0.3) < 1e-12 and abs(s["SM"] - 1.7) < 1e-12 and s["pct"] == 1.0
     s = P.specificity(dw, "c", dev)                     # b beats c among dev: not identified
     assert not s["ID"] and abs(s["generic"] - 0.3) < 1e-12 and abs(s["pct"] - 0.6) < 1e-12
+
+
+def test_forced_candidates():
+    import re
+
+    class Tok:                                           # words of length <= 6 are one token, longer ones two
+        def __init__(self):
+            self.v = {}
+
+        def encode(self, text, add_special_tokens=False):
+            out = []
+            for piece in re.findall(r" ?[A-Za-z]+|.", text, re.S):
+                parts = [piece] if len(piece.strip()) <= 6 else [piece[:4], piece[4:]]
+                out += [self.v.setdefault(p, len(self.v)) for p in parts]
+            return out
+    tok = Tok()
+    pre, c = P.forced_candidates(tok, "-", ["storm", "lightning", "gel"])
+    assert pre == tok.encode("-") and set(c) == {"storm", "gel"}
+    assert c["storm"] == sorted({tok.encode(" storm")[0], tok.encode(" Storm")[0]})

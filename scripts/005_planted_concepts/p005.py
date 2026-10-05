@@ -387,6 +387,23 @@ def neutral_metrics(lp, lp_clean, sp):
     return out
 
 
+def forced_candidates(tok, prefix_text, words):
+    """Design §16.7 11b. The reader's answer is teacher-forced to start with `prefix_text`; returns (prefix ids,
+    {w: [ids]}) with, for each word, its space spellings (" w", " W") that are one token right after the prefix.
+    Words with neither are left out."""
+    base = tok.encode(prefix_text, add_special_tokens=False)
+    out = {}
+    for w in words:
+        ids = set()
+        for sp in (" " + w, " " + w.capitalize()):
+            t = tok.encode(prefix_text + sp, add_special_tokens=False)
+            if t[:len(base)] == base and len(t) == len(base) + 1:
+                ids.add(t[-1])
+        if ids:
+            out[w] = sorted(ids)
+    return base, out
+
+
 def specificity(dw, c, dev):
     """Design §16.6 10b. dw: {word: ΔR1′} for one row over the word set W (which contains `dev`); c: the planted
     concept. ID: c has the largest ΔR1′ among `dev`; SM = ΔR1′(c) − median over W∖{c}; pct: share of W∖{c} below c;

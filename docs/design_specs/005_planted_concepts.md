@@ -675,3 +675,73 @@ Agent priors: 12 specific **0.40**; 13 specific **0.25**.
 **Cost:**
 - About 5,400 teacher-forced rows at ~20 rows/s: about 5 GPU minutes, about 15 minutes with setup.
 - Dev concepts only. No test concept is injected or scored.
+
+### 16.7 Step 11: is the late clamp effect specific to J coordinates, and are the readers less sensitive than the model under a matched measure? (PI go 2026-10-05 "run something extra!"; pre-registered before it runs)
+
+**Why.** Step 10 left a caveat on each of the two findings the amendment leans on hardest.
+- **A8, the clamp.**
+  - Blocking the concept's J coordinates removes the non-J part's report effect specifically only from about L50 on.
+  - There, those coordinates are 0.67–0.92 aligned with the concept's output direction.
+  - So this is not yet distinguishable from "blocking the output direction removes it".
+- **A6 (P11′) and the readers-vs-model preview.**
+  - "The readers are less sensitive than the model" compares the model's log-prob (a fine measure) with reader naming in 4 samples (a coarse one).
+- 11a and 11b test each caveat with a matched control.
+- Dev concepts only. Teacher-forced forwards or direct reads, no sampling (`scripts/005_planted_concepts/pilot_11.py`).
+
+**11a. Output-direction clamp (Q16; informs A8).**
+- **Rows:** as step 10's 10a, except that the re-entry clamp acts on the concept tokens' *output directions* g ⊙ W_U[t] (logit-lens coordinates, the same at every layer) instead of their J atoms J_ℓᵀ(g ⊙ W_U[t]).
+  - The token sets are step 10's: T_c and the size-matched random T_r. The clamp rank is therefore the same.
+  - E ∈ {44, 46, …, 62}, both bands, 9-point grid, plus unclamped condition 4. Those unclamped rows repeat step 10's and must pass G10's tolerance.
+- **Measures:**
+  - the Q14 extra reduction for the output clamp, extra_out(E);
+  - the paired difference D(E) = extra_J(E) − extra_out(E) over step 10's evaluable concepts at their best doses (J values from step 10); bootstrap 95% CI over concepts.
+- **Rule (band B primary):** at E ∈ {48, 50, 52}:
+  - **J-specific** if D's CI lies above 0 at ≥ 2 of the three;
+  - **not J-specific** if at none;
+  - **inconclusive** if at exactly one.
+- **Mapping:**
+  - **J-specific:** M2 as drafted (the J clamp to L50 is a test of routing through J coordinates).
+  - **Not J-specific:**
+    - M2 must report the output-direction clamp as a mandatory control beside the J clamp;
+    - the amendment's wording changes from "re-entry into J coordinates" to "routing through the concept's output-related coordinates".
+  - **Inconclusive:** both are reported, and the PI decides.
+- **Agent prior:** J-specific, band B: **0.50**.
+
+**11b. Reader likelihoods on the written cell (Q17; informs A6).**
+- **Readers and reads:**
+  - the NLA at L42 and the Oracle at L40 and L44;
+  - inputs: direct reads of the written cell, h_clean(C_q, ℓ) + s·N̄_ℓ·vec_ℓ, as in the pilot; and h_clean(C_q, ℓ) itself, the reader's baseline;
+  - conditions 2, 3, 4 and 7 (seeds 0–4) × the 9 doses.
+- **Forced answer position (no sampling).** The reader's answer is teacher-forced to start with a fixed prefix, and the next token is scored:
+  - Oracle: prefix "-" (its own bullet format); candidates " w" and " W".
+  - NLA: prefix "<explanation>\nThe text is about"; candidates " w" and " W".
+  - Logits are float32 from the final-norm output and checked against the reader's own logits.
+- **Per row and word w ∈ W_R:**
+  - W_R = the 10 dev concepts + the protocol's baseline words whose candidates are single tokens after that prefix;
+  - Δ_R(w) = LSE log P(w's candidates | injected read) − the same on the clean read.
+- **Measures, as in Q15:**
+  - ID among the 10 dev concepts;
+  - SM = Δ(c) − median over W_R∖{c} of Δ(w).
+- **Gate G11 (positive control, per reader and layer):**
+  - On natural activations ("Tell me about c", last token, the reader's layer), forced-choice ID among the 10 dev concepts from raw log-probs must be ≥ 7/10.
+  - A reader that fails is reported as uninformative under this measure.
+- **Why an absolute threshold, decided now.** In a deterministic, near-linear forward, comparing against random directions at the same dose is scale-free: it would "detect" at every dose (the A9 trap). So onsets use an absolute size.
+- **Onset:** s_X(θ) = the smallest dose at which the median over the 10 concepts of SM is ≥ θ. θ = 1 nat is primary, 0.5 nat secondary.
+  - For the model: from step 10's rows (band B, R1′ at the open quote, Q15's SM).
+  - For the readers: from 11b. For the Oracle, the earlier of its two layers.
+- **Rule:** per condition (2 full, 4 non-J), a reader is *at least as sensitive as the model* if s_R(1) ≤ s_M(1). A reader that never reaches θ is not.
+- **Mapping:**
+  - For the non-J part, if a reader that passes G11 is at least as sensitive as the model:
+    - the naming-based preview ("readers are less sensitive than the model") is withdrawn for that reader;
+    - P11′ uses the likelihood measure as the readers' primary measure, with naming secondary (A6 reworded).
+  - Otherwise the preview stands under a matched measure. P11′ stays as drafted, with a likelihood column added.
+- **Caveat, stated now:** the model's dose is applied at 7 band layers × 20 positions, while a direct read sees one written cell at the same per-cell dose. That is P11′'s comparison as drafted; the perturbations are not matched.
+- **Agent priors:**
+  - G11 passes: Oracle **0.80**, NLA **0.55**;
+  - at least as sensitive as the model, non-J part: NLA **0.35**, Oracle **0.45**;
+  - at least as sensitive as the model, full vector: NLA **0.40**, Oracle **0.50**.
+
+**Cost:**
+- 11a: ≈ 3,800 teacher-forced rows, about 4 GPU minutes.
+- 11b: ≈ 2,200 forward-only reads plus controls (minutes), plus loading the NLA (≈ 2 minutes).
+- Dev concepts only.

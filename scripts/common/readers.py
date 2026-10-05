@@ -127,6 +127,25 @@ class VectorLenses:
         return _topk(self.tok, s, k)
 
 
+def last_logprobs(model, run, W32, cand):
+    """Run `run()` (a forward of `model`) and return, at the last position, float32 log-probs for the token ids `cand`
+    computed from the final-norm output and the float32 unembedding W32 [V, d], plus the same entries from the model's
+    own (bf16) logits as a consistency check. Both [B, len(cand)] on the CPU."""
+    keep = {}
+
+    def hook(m, i, o):
+        keep["x"] = (o[0] if isinstance(o, tuple) else o)[:, -1].float()
+    hd = R.final_norm(model).register_forward_hook(hook)
+    try:
+        res = run()
+    finally:
+        hd.remove()
+    with torch.autocast("cuda", enabled=False):
+        lp = torch.log_softmax(keep["x"] @ W32.T, -1)[:, cand]
+        own = torch.log_softmax(res.logits[:, -1].float(), -1)[:, cand]
+    return lp.cpu(), own.cpu()
+
+
 # ---------------------------------------------------------------------------------------------- oracle
 class OracleLens:
     """WSB produce/methods.py OLens, adapter from the public model repo."""
@@ -193,6 +212,30 @@ class OracleLens:
                                   num_return_sequences=k, pad_token_id=self.tok.pad_token_id or self.tok.eos_token_id)
         texts = [t.strip() for t in self.tok.batch_decode(out, skip_special_tokens=True)]
         return [texts[b * k:(b + 1) * k] for b in range(len(hs))]
+
+    @torch.no_grad()
+    def score_next(self, hs, layer, prefix_ids, cand_ids, W32, bs=32):
+        """Teacher-forced answer prefix (design 005 §16.7): log P(next token) for `cand_ids` after the carrier and
+        `prefix_ids`, one row per activation (float32 [d]; injected as in read()). Returns (float32 log-probs from the
+        final-norm output, the model's own-logit log-probs), each [len(hs), len(cand_ids)]."""
+        ids, slot, _ = self.carrier(layer)
+        full = list(ids) + list(prefix_ids)
+        dev = self.model.device
+        base = self.model.get_input_embeddings()(torch.tensor([full], device=dev))[0]
+        cand = torch.tensor(list(cand_ids), device=dev)
+        lps, owns = [], []
+        for j in range(0, len(hs), bs):
+            ch = hs[j:j + bs]
+            e = base.unsqueeze(0).repeat(len(ch), 1, 1).clone()
+            for b, h in enumerate(ch):
+                v = h.to(dev).float()
+                e[b, slot, :] = (self.c["alpha"] * v / v.norm().clamp_min(1e-9)).to(e.dtype)
+            am = torch.ones(e.shape[:2], device=dev, dtype=torch.long)
+            lp, own = last_logprobs(self.model, lambda: self.model(inputs_embeds=e, attention_mask=am, use_cache=False),
+                                    W32, cand)
+            lps.append(lp)
+            owns.append(own)
+        return torch.cat(lps), torch.cat(owns)
 
     def unload(self):
         """Remove the adapter (no merge) and return the base model."""
@@ -510,10 +553,35 @@ class NLArl:
         texts = self.tok.batch_decode(out[:, len(self.ids):], skip_special_tokens=True)
         return [texts[b * k:(b + 1) * k] for b in range(len(hs))]
 
+    @torch.no_grad()
+    def score_next(self, hs, prefix_ids, cand_ids, bs=32):
+        """Teacher-forced answer prefix (design 005 §16.7): log P(next token) for `cand_ids` after the AV prompt and
+        `prefix_ids`, one row per activation (float32 [d], added at the marker as in read_batch). Returns (float32
+        log-probs from the final-norm output, the model's own-logit log-probs), each [len(hs), len(cand_ids)]."""
+        if not hasattr(self, "_W32"):
+            self._W32 = self.model.get_output_embeddings().weight.detach().float()
+        x0 = list(self.ids) + list(prefix_ids)
+        dev = self.model.device
+        cand = torch.tensor(list(cand_ids), device=dev)
+        lps, owns = [], []
+        for j in range(0, len(hs), bs):
+            ch = hs[j:j + bs]
+            self._v["v"] = torch.stack([h.float() for h in ch])
+            try:
+                x = torch.tensor([x0] * len(ch), device=dev)
+                lp, own = last_logprobs(self.model, lambda: self.model(input_ids=x, attention_mask=torch.ones_like(x),
+                                                                       use_cache=False), self._W32, cand)
+            finally:
+                self._v["v"] = None
+            lps.append(lp)
+            owns.append(own)
+        return torch.cat(lps), torch.cat(owns)
+
     def close(self):
         """Remove the hook and free the GPU."""
         import gc
         self._hook.remove()
+        self.__dict__.pop("_W32", None)
         del self.model
         gc.collect()
         torch.cuda.empty_cache()
