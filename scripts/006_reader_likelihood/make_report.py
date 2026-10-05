@@ -23,6 +23,61 @@ def tr(b):
 
 
 G, B, rules = S["gates"], S["blocks"], S["rules"]
+PH = json.loads((R.PROJECT / "results/006_reader_likelihood/analysis/posthoc.json").read_text()) \
+    if (R.PROJECT / "results/006_reader_likelihood/analysis/posthoc.json").exists() else None
+
+
+def bci(x, nd=2):
+    return f"{r(x['mean'], nd, True)} [{r(x['ci'][0], nd)}, {r(x['ci'][1], nd)}] ({x['pos']}/{x['neg']})"
+
+
+def posthoc_section():
+    if not PH:
+        return []
+    C, PC, N, K, AG = PH["cells"], PH["positive_control"], PH["derangement_null"], PH["collisions"], PH["agreement"]
+    ps = PH["patch_share_001_L42"]
+    o = ["## Post hoc (PI-forwarded review, 2026-10-05; every item below was added after the results were read)", "",
+         "The reviewer recomputed everything from the raw `ll_*.npz`; the reported numbers reproduce. Recomputed here by "
+         "`scripts/006_reader_likelihood/reanalyse_006.py` (`results/006_reader_likelihood/analysis/posthoc.json`).", "",
+         "**1. The secondary cells.** D_z by cell (prefix p0):", "",
+         "| Reader | `:` | `</think>` newline | assistant newline | `</think>` − `:` |", "|---|---|---|---|---|"]
+    for nm, c in C.items():
+        o.append(f"| {nm} | {bci(c['emit_colon'])} | {bci(c['emit_think'])} | {bci(c['emit_asst'])} | {bci(c['think_minus_colon'])} |")
+    o += ["",
+          f"- 001's whole-cell patch shares at L42 (median S): `:` {ps['emit_colon']}, assistant newline {ps['emit_asst']}, "
+          f"`</think>` newline {ps['emit_think']}.",
+          "- **The Oracle's likelihood tracks z about twice as strongly at the `</think>` cell, where patching moves the answer by "
+          "almost nothing, as at `:`, where it moves half.** The NLA's is slightly lower at `</think>` (the difference "
+          "includes 0; the review's \"≥ for every reader\" has the NLA's sign reversed).",
+          "- So the readers' z tracking does not follow the cell's demonstrated influence on the answer. It is decodability "
+          "through the reader, not a marker of use.", "",
+          "**2. Why the Oracle fails its positive control at L40/L44.**"]
+    for nm, x in PC.items():
+        o.append(f"- {nm}: raw ID {r(x['raw_ID'], 2)}; it answers \"blue\" for {x['argmax'].count('blue')} of 12 colour prompts. "
+                 f"With each colour's mean over the other prompts removed (leave-one-out prior), ID is {r(x['loo_prior_removed_ID'], 2)}. "
+                 f"The pairwise double difference is positive in {x['pairwise_double_difference_positive']} of {x['pairs']} pairs.")
+    o += ["- So the Oracle discriminates the colours. The raw control failed on a strong prior for one colour. T2 stays "
+          "\"uninformative by the pre-registered rule\", and this is the reason.", "",
+          "**3. The shuffle.** 200 random derangements of tables replace the single k+1 shuffle; mean D [2.5, 97.5 percentile]:"]
+    for nm, x in N.items():
+        o.append(f"- {nm}: " + "; ".join(f"{t} {r(v['mean'], 2, True)} [{r(v['p2.5'], 2)}, {r(v['p97.5'], 2)}]" for t, v in x.items()))
+    o += ["- The null is about zero for every role. The k+1 shuffle's nonzero start and answer values reflect neighbouring-item structure.", "",
+          f"**4. Role collisions.** Of {K['n_pairs']} member–partner pairs, z shares a colour with another role in "
+          f"{K['census']['z']} (the partner constraints exclude it), start in {K['census']['start']} and answer in "
+          f"{K['census']['answer']}. Collision-free D:"]
+    for nm in ("NLA L42", "Oracle L40", "Oracle L44"):
+        o.append(f"- {nm}: start {bci(K[nm]['start'])}; answer {bci(K[nm]['answer'])}.")
+    o += ["- Start tracking survives for the NLA and Oracle L44, not for Oracle L40. Answer tracking survives everywhere.", "",
+          "**5. T4** counted only reader-layers that passed G-pc. Oracle L44's forced-choice z of 0.44 was not counted.", "",
+          "**6. Per-pair agreement on D_z at `:`:** "
+          + "; ".join(f"{k}: same sign {pct(v['same_sign'])}, r {r(v['r'], 2)}" for k, v in AG.items() if "vs Oracle" in k)
+          + ". Within a reader across the two prefixes: " + "; ".join(f"{k.split(' p0')[0]} r {r(v['r'], 2)}" for k, v in AG.items() if "p0 vs p1" in k)
+          + ". The readers agree on direction, not on which tables carry the most z.", ""]
+    return o
+
+
+def pct(x):
+    return f"{int(Decimal(str(x * 100)).quantize(Decimal(1), rounding=ROUND_HALF_UP))}%"
 names = {"nla_L42": "NLA L42", "oracle_L40": "Oracle L40", "oracle_L44": "Oracle L44", "oracle_L56": "Oracle L56",
          "oracle_L60": "Oracle L60"}
 out = ["# 006 — Do the verbalizers' likelihoods track z at the brew `:` cell?", "",
@@ -91,6 +146,7 @@ out += ["", "**002's token lenses at the same cell, same statistic (log-score un
         "- Saved SEC captures, not stock (cos ≥ 0.99985 per 002's bridge). Dev split only; one family; prefixes fixed "
         "in advance (p0 primary, p1 agrees).",
         "- Likelihood tracking is decodability through the reader, not a claim and not use by the model.", "",
+        *posthoc_section(),
         "## Mistakes (logged in CLAUDE.md)", "",
         "- G-score1's first tolerance (1e-3) ignored the documented bf16 floor. The gate stopped the first launch; the "
         "diagnosis and amendment (v1.1) came before any outcome was read.",

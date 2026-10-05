@@ -47,6 +47,44 @@
 - Saved SEC captures, not stock (cos ≥ 0.99985 per 002's bridge). Dev split only; one family; prefixes fixed in advance (p0 primary, p1 agrees).
 - Likelihood tracking is decodability through the reader, not a claim and not use by the model.
 
+## Post hoc (PI-forwarded review, 2026-10-05; every item below was added after the results were read)
+
+The reviewer recomputed everything from the raw `ll_*.npz`; the reported numbers reproduce. Recomputed here by `scripts/006_reader_likelihood/reanalyse_006.py` (`results/006_reader_likelihood/analysis/posthoc.json`).
+
+**1. The secondary cells.** D_z by cell (prefix p0):
+
+| Reader | `:` | `</think>` newline | assistant newline | `</think>` − `:` |
+|---|---|---|---|---|
+| NLA L42 | +1.86 [1.41, 2.34] (44/4) | +1.45 [1.14, 1.75] (44/4) | +1.93 [1.40, 2.48] (40/8) | −0.41 [−0.87, 0.04] (22/26) |
+| Oracle L40 | +3.22 [2.77, 3.72] (48/0) | +6.01 [5.44, 6.61] (48/0) | +5.14 [4.51, 5.84] (48/0) | +2.79 [2.32, 3.26] (46/2) |
+| Oracle L44 | +3.24 [2.85, 3.64] (48/0) | +5.97 [5.40, 6.57] (48/0) | +4.98 [4.41, 5.59] (48/0) | +2.73 [2.31, 3.17] (47/1) |
+
+- 001's whole-cell patch shares at L42 (median S): `:` 0.48, assistant newline 0.29, `</think>` newline 0.01.
+- **The Oracle's likelihood tracks z about twice as strongly at the `</think>` cell, where patching moves the answer by almost nothing, as at `:`, where it moves half.** The NLA's is slightly lower at `</think>` (the difference includes 0; the review's "≥ for every reader" has the NLA's sign reversed).
+- So the readers' z tracking does not follow the cell's demonstrated influence on the answer. It is decodability through the reader, not a marker of use.
+
+**2. Why the Oracle fails its positive control at L40/L44.**
+- NLA L42: raw ID 0.50; it answers "blue" for 2 of 12 colour prompts. With each colour's mean over the other prompts removed (leave-one-out prior), ID is 0.83. The pairwise double difference is positive in 66 of 66 pairs.
+- Oracle L40: raw ID 0.33; it answers "blue" for 9 of 12 colour prompts. With each colour's mean over the other prompts removed (leave-one-out prior), ID is 1.00. The pairwise double difference is positive in 66 of 66 pairs.
+- Oracle L44: raw ID 0.42; it answers "blue" for 8 of 12 colour prompts. With each colour's mean over the other prompts removed (leave-one-out prior), ID is 1.00. The pairwise double difference is positive in 66 of 66 pairs.
+- So the Oracle discriminates the colours. The raw control failed on a strong prior for one colour. T2 stays "uninformative by the pre-registered rule", and this is the reason.
+
+**3. The shuffle.** 200 random derangements of tables replace the single k+1 shuffle; mean D [2.5, 97.5 percentile]:
+- NLA L42: start +0.02 [−0.34, 0.33]; z +0.04 [−0.36, 0.38]; answer −0.00 [−0.38, 0.42]
+- Oracle L40: start −0.01 [−0.39, 0.46]; z +0.05 [−0.46, 0.55]; answer +0.03 [−0.43, 0.52]
+- Oracle L44: start −0.01 [−0.38, 0.41]; z +0.03 [−0.50, 0.55]; answer +0.03 [−0.53, 0.49]
+- The null is about zero for every role. The k+1 shuffle's nonzero start and answer values reflect neighbouring-item structure.
+
+**4. Role collisions.** Of 183 member–partner pairs, z shares a colour with another role in 0 (the partner constraints exclude it), start in 63 and answer in 63. Collision-free D:
+- NLA L42: start +0.56 [0.16, 0.97] (28/16); answer +0.84 [0.44, 1.22] (32/12).
+- Oracle L40: start +0.19 [−0.21, 0.60] (24/20); answer +2.23 [1.64, 2.84] (41/3).
+- Oracle L44: start +0.86 [0.29, 1.42] (32/12); answer +2.01 [1.34, 2.68] (40/4).
+- Start tracking survives for the NLA and Oracle L44, not for Oracle L40. Answer tracking survives everywhere.
+
+**5. T4** counted only reader-layers that passed G-pc. Oracle L44's forced-choice z of 0.44 was not counted.
+
+**6. Per-pair agreement on D_z at `:`:** NLA L42 vs Oracle L40: same sign 86%, r 0.24; NLA L42 vs Oracle L44: same sign 86%, r 0.30. Within a reader across the two prefixes: NLA L42 r 0.67; Oracle L40 r 0.94; Oracle L44 r 0.84. The readers agree on direction, not on which tables carry the most z.
+
 ## Mistakes (logged in CLAUDE.md)
 
 - G-score1's first tolerance (1e-3) ignored the documented bf16 floor. The gate stopped the first launch; the diagnosis and amendment (v1.1) came before any outcome was read.
