@@ -53,7 +53,8 @@ N = {"r2_floor_post_hoc": r2_floor}
 N["M1"] = (f"Not on the primary measure. At each part's peak, the J part beats the non-J part by {ci(C['M1_R1p'])} nats of "
            f"ΔR1′, an interval that includes 0, and none of the five alternative J-space constructions changes that. On R1, the "
            f"form the prior was registered on, the J part's peak reciprocal rank is higher by {ci(C['M1_R1'], 4)}: this clears "
-           "the rule but is tiny, and it is partly by construction (the J part contains the concept's own atom). Per dose the "
+           "the rule but is tiny. (An earlier version said this was partly by construction because the J part contains the "
+           "concept's own atom; follow-up A3 found the own atom in the J part for 1 of 45 concepts, so that is withdrawn.) Per dose the "
            f"J part leads from 1/128 to 1/4 (largest at 1/8, {r(C['M1_per_dose'][str(0.125)]['median_J_minus_perp'], 2, True)} "
            f"nats) and trails at 1/2 ({r(C['M1_per_dose'][str(0.5)]['median_J_minus_perp'], 2, True)}), the same crossing "
            "pattern as on the dev concepts.")
@@ -103,8 +104,8 @@ bullets = [
     "<b>The P-family is not supported.</b> P11′ for the NLA could not be tested (its likelihood measure failed the positive "
     f"control). P17 goes the other way: the Oracle names the non-J part more often than the NLA ({ci(C['P17'])}).",
     "<b>No J-space privilege for report on the primary measure.</b> At matched norm the J part's peak beats the non-J part's "
-    f"by {ci(C['M1_R1p'])} nats (not supported). The registered R1 form clears the rule by a tiny margin that is partly by "
-    f"construction. At natural scale the non-J part moves the report more ({ci(C['M3'])}).",
+    f"by {ci(C['M1_R1p'])} nats (not supported). The registered R1 form clears the rule by a tiny margin. At natural "
+    f"scale the non-J part moves the report more ({ci(C['M3'])}).",
     "<b>The clamp is specific, but not beyond blocking the output direction.</b> The J re-entry clamp to L50 beats its null "
     f"({ci(C['M2'])}), and so does the output-direction clamp; the difference is {ci(C['M2_control_D_at_L50'])}.",
     "<b>On the written cell, the Oracle is more sensitive than the model's report.</b> Its likelihood reaches a 1-nat "

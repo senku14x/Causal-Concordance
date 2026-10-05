@@ -13,8 +13,8 @@ from pathlib import Path
 
 HERE = Path(__file__).resolve().parent
 sys.path.insert(0, str(HERE))
-from make_report_page import (COND, CSS, GRID9, RESA, ROOT, SNAME, chip, esc, figure, legend,  # noqa: E402
-                              line_chart, load, pct, r, table)
+from make_report_page import (COND, CSS, GRID9, RESA, ROOT, SNAME, chip, correction_html, esc, figure,  # noqa: E402
+                              legend, line_chart, load, pct, r, table)
 
 TEXT_S = [1 / 64, 1 / 4, 1.0]
 ENDS = list(range(44, 63, 2))
@@ -71,6 +71,8 @@ every pre-registered contrast with its verdict, and the tables and raw readouts 
 the saved result files. Run <code>{esc(S['run_id'])}</code>, branch <code>005-amended-full-run</code>. The checks, smoke, pilot and extra steps that led here are on the <a href="https://claude.ai/artifact/P35xhVkdzKjsdGhogp7PQY">Planted Concepts Pilot</a> page.</p>
 <div class="chips">{"".join(chips)}</div></header>"""
     out.append(head)
+    if not rehearse:
+        out.append(correction_html())
     md += [f"# 005 full run under amendment 01 — results (run `{S['run_id']}`, {n} {'dev rehearsal' if rehearse else 'test'} concepts)", "",
            "*Spec:* `docs/design_specs/005_full_run.md` (pre-registered before the run). *Amendment:* "
            "`docs/design_specs/005_amendment_01.md` (adopted 2026-10-05). *Branch:* `005-amended-full-run`. "
