@@ -1,8 +1,14 @@
-# STATUS — 2026-10-05 (branch `005-amended-full-run`: 005 full run, follow-ups and 006 done; the PI is analysing the results)
+# STATUS — 2026-10-05 (branch `007-jsubspace`: 007 run unattended and reported; earlier: `005-amended-full-run` holds 005, 006, 006b)
 
 *New session? **First read the Anthropic workspace paper** (Gurnee et al. 2026, `docs/papers/2607.15495.pdf`) and the
 relevant reading listed at the top of `CLAUDE.md`. That is the PI's rule. Then `CLAUDE.md`, this file (newest first),
 `docs/reports/005_followups.md` and `docs/reports/006_reader_likelihood.md`.*
+
+**2026-10-05, 007 — J-subspace split with controls (branch `007-jsubspace`; spec v2 2820e53 + A1 5cdafd9; report `docs/reports/007_jsubspace.md`; per-stage status `results/007_jsubspace/status/`; ~2.2 GPU-h, unattended under rule 12).**
+- **Reader side, confirmed on the brew test:** the Oracle's z tracking at `:` L40 is carried by the J (token-readout) subspace — H_J supported on dev and on the 49 test tables (J 5.8 / 5.0 nats vs whole 3.2 / 2.9; rest of J 0.3); Raw and Visible contradicted at L40 and L44 on both splits; L44 unresolved by positive-control rules. Same pattern at `</think>` (patch share 0.01).
+- **Model side:** J-subspace swaps track content share (L42) or exceed random modestly but not PCA-4 (L40/L44, below margin); in the adapted §3.3 test the J part of a class-mean z direction moves the answer less than its non-J part. → A reader–model dissociation.
+- **The NLA is disabled for all of 007** (G-repro 0.41 > 0.25 after my 2-row scorer change; not repaired, rule 12). Post hoc NLA run on 006's 24-row path is the PI's call.
+- Secondary: multihop confounded by restatement (CW-12 rates reproduced); relational stopped after 4a (no high-leverage read-layer position; 12/50 gated); chain (exploratory) signal outside J at L56. Brew test split used once under AMENDMENT_02 (opened this session).
 
 **2026-10-05, end of session.**
 - `006-reader-likelihood` was merged into `005-amended-full-run` (fast-forward), so 005 and 006 now live on one branch, pushed.
