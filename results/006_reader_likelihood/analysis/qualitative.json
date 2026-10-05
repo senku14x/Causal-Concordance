@@ -1,0 +1,200 @@
+{
+ "tables": [
+  {
+   "table": "brew-s2-r10d2-0104",
+   "member": {
+    "start": "orange",
+    "z": "green",
+    "answer": "black"
+   },
+   "partner": {
+    "start": "black",
+    "z": "white",
+    "answer": "orange"
+   },
+   "NLA L42": {
+    "member_act": {
+     "green": -11.3,
+     "white": -12.92
+    },
+    "partner_act": {
+     "green": -11.67,
+     "white": -11.81
+    },
+    "D_z": 1.48,
+    "top3_member": [
+     "gray",
+     "red",
+     "black"
+    ]
+   },
+   "Oracle L40": {
+    "member_act": {
+     "green": -1.17,
+     "white": -6.26
+    },
+    "partner_act": {
+     "green": -2.0,
+     "white": -0.66
+    },
+    "D_z": 6.43,
+    "top3_member": [
+     "green",
+     "red",
+     "blue"
+    ]
+   },
+   "text_002": {
+    "category": "nla|role-correct z",
+    "reader_layer": "L42 nla",
+    "truth": {
+     "start": "black",
+     "intermediate": "white",
+     "answer": "orange"
+    },
+    "judge": {
+     "start": "none",
+     "intermediate": "white",
+     "answer": "conflicting"
+    },
+    "text": "Recursive color chain puzzle: each step transforms color to its successor \u2014 blue\u2192white\u2192red\u2192black, so \"Final Answer:\" requires naming the color after two steps from blue, i.e., \"white\" was first step, then the second step's answer follows.\n\nThe structured input-output format expects a single color name as final answer on the next line, matching the established pattern of color output lines.\n\nThe trailing newline after"
+   }
+  },
+  {
+   "table": "brew-s2-r10d2-0069",
+   "member": {
+    "start": "black",
+    "z": "teal",
+    "answer": "orange"
+   },
+   "partner": {
+    "start": "brown",
+    "z": "gray",
+    "answer": "green"
+   },
+   "NLA L42": {
+    "member_act": {
+     "teal": -14.93,
+     "gray": -10.23
+    },
+    "partner_act": {
+     "teal": -14.6,
+     "gray": -9.7
+    },
+    "D_z": 0.2,
+    "top3_member": [
+     "gray",
+     "red",
+     "blue"
+    ]
+   },
+   "Oracle L40": {
+    "member_act": {
+     "teal": -9.17,
+     "gray": -8.25
+    },
+    "partner_act": {
+     "teal": -9.91,
+     "gray": -7.73
+    },
+    "D_z": 1.26,
+    "top3_member": [
+     "blue",
+     "red",
+     "green"
+    ]
+   },
+   "text_002": {
+    "category": "nla|other candidate as intermediate",
+    "reader_layer": "L42 nla",
+    "truth": {
+     "start": "black",
+     "intermediate": "teal",
+     "answer": "orange"
+    },
+    "judge": {
+     "start": "none",
+     "intermediate": "green",
+     "answer": "conflicting"
+    },
+    "text": "Chain puzzle format: each line follows a rigid input/output pattern where the answer describes the color resulting from applying nextColor to the previous answer's color.\n\nThe sequence establishes a two-step chain: \"purple \u2192 green \u2192 [next step result],\" so the model must predict the final answer color. nextColor(\"green\") yields \"red\" based on JavaScript array/index logic \u2014 the final answer is the color name.\n\nFinal t"
+   }
+  },
+  {
+   "table": "brew-s2-r10d2-0071",
+   "member": {
+    "start": "blue",
+    "z": "gold",
+    "answer": "brown"
+   },
+   "partner": {
+    "start": "brown",
+    "z": "orange",
+    "answer": "white"
+   },
+   "NLA L42": {
+    "member_act": {
+     "gold": -12.56,
+     "orange": -12.29
+    },
+    "partner_act": {
+     "gold": -13.09,
+     "orange": -12.43
+    },
+    "D_z": 0.4,
+    "top3_member": [
+     "gray",
+     "blue",
+     "red"
+    ]
+   },
+   "Oracle L40": {
+    "member_act": {
+     "gold": -5.77,
+     "orange": -3.98
+    },
+    "partner_act": {
+     "gold": -8.07,
+     "orange": -4.2
+    },
+    "D_z": 2.07,
+    "top3_member": [
+     "red",
+     "blue",
+     "green"
+    ]
+   },
+   "text_002": {
+    "category": "oracle|conflicting",
+    "reader_layer": "L40 oracle",
+    "truth": {
+     "start": "blue",
+     "intermediate": "gold",
+     "answer": "brown"
+    },
+    "judge": {
+     "start": "conflicting",
+     "intermediate": "conflicting",
+     "answer": "conflicting"
+    },
+    "text": "- Green (after two steps: Blue \u2192 Green \u2192 Red)\n- 1 (or Black, depending on interpretation, but following the chain: Yellow $\\to$ Red $\\to$ 1)\n- \u9ec4 (Yellow) (Explanation: After two steps, the sequence is 0 \u2192 Purple $\\rightarrow$ 2)\n- \u571f\u72fc (or 2 \u2192 Blue \u2192 Red) *(Note: The second step leads to 2, which leads to Red.)*"
+   }
+  }
+ ],
+ "regex_005": [
+  {
+   "concept": "dog",
+   "cond": 2,
+   "s": 1.0,
+   "names": true,
+   "text": "- \u4e00\u53ea\u72d7\uff08Dog Facts):** Dogs are incredibly popular pets. Did you know? \ud83d\udc3e\n- \u732b\u7684\u57fa\u672c\u4fe1\u606f\uff1a\u8fd9\u662f\u4e00\u53ea\u5065\u5eb7\u7684\u6210\u5e74\u5bb6\u732b\uff0c\u6027\u683c\u6e29\u987a\uff0c\u559c\u6b22\u73a9\u800d\u3002\ud83d\ude3a \u5982\u679c\u60a8\u5bf9\u517b\u732b\u611f\u5174\u8da3\uff0c\n- \u4e00\u53ea\u53ef\u7231\u7684\u72d7\u72d7\u7684\u4fe1\u606f\uff08\u6bd5\u7adf\u732b\u662f\u4e16\u754c\u4e0a\u6700\u53d7\u6b22\u8fce\u7684\u5ba0\u7269\uff09\uff0c\u5305\u62ec\u54c1\u79cd\u3001\u6027\u683c\u7b49\u3002\u2705 **Fact**: Cats are the most popular pets world"
+  },
+  {
+   "concept": "soap",
+   "cond": 4,
+   "s": 1.0,
+   "names": false,
+   "text": "- 2. Paper Towel: The Unsung Hero of Scent | Factoid: Toilet\n- \u80a5\u7682 (Paper Towel) Trivia: Origins, Chemistry, and Cultural Impact | True\n- \u9999\u7682\u7684\u8d77\u6e90\u3001\u6210\u5206\u4e0e\u6709\u8da3\u51b7\u77e5\u8bc6 | Fact: Most commercial paper towels are made fr"
+  }
+ ]
+}

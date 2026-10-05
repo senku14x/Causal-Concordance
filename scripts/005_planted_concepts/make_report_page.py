@@ -548,6 +548,8 @@ once Qwen's canned answer is displaced (A1, A3).</li>
 <li><b>Step 11, run on your "run something extra!".</b> Two controls for step 10's caveats. Does the late clamp effect need
 the J-lens coordinates, or does blocking the plain output direction do the same (A8)? And are the readers really less
 sensitive than the model once both are measured by likelihood rather than naming (A6)?</li>
+<li><b>006 (5 October), on its own branch.</b> Back to the main line with 005's likelihood readout: do the NLA and the
+Oracle register the brew intermediate z at the <code>:</code> cell where 002 found they rarely say it?</li>
 <li><b>The full run (5 October).</b> You adopted the amendment. I wrote the run spec, rehearsed the whole pipeline on two
 dev concepts, committed the analysis code, and then ran the 45 held-out test concepts once (first section).</li>
 </ol>
@@ -1586,6 +1588,74 @@ untestable. The detailed page, with every table, chart and raw readout: <a href=
 <b>{r(upd[0], 3)}</b> over {upd[1]}. The bullets are my interpretation; the verdicts follow the pre-registered rules.</p>""")
 
 
+def sec_006():
+    """Experiment 006 (branch 006-reader-likelihood): the readers' colour likelihoods at the brew ':' cell."""
+    S6 = load(ROOT / "results/006_reader_likelihood/analysis/summary.json")
+    Q6 = load(ROOT / "results/006_reader_likelihood/analysis/qualitative.json") or {}
+    if not S6:
+        return ""
+    nm = {"nla_L42": "NLA L42", "oracle_L40": "Oracle L40", "oracle_L44": "Oracle L44", "oracle_L56": "Oracle L56", "oracle_L60": "Oracle L60"}
+
+    def tr(t):
+        return f"{r(t['mean'], 2, True)} [{r(t['ci'][0], 2)}, {r(t['ci'][1], 2)}] ({t['pos']}/{t['neg']})"
+    rows = []
+    for k, b in S6["blocks"].items():
+        if not k.endswith("_p0"):
+            continue
+        c = b["cells"]["emit_colon"]
+        rows.append([nm[k[:-3]], f"{pct(b['G_pc_ID'])} " + (chip("passes", "good") if b["G_pc_pass"] else chip("fails", "bad")),
+                     tr(c["z"]["tracking"]), tr(c["start"]["tracking"]), tr(c["answer"]["tracking"]),
+                     f"{r(c['z']['shuffled']['mean'], 2, True)}", f"{pct(c['z']['forced_choice_member'])} / {pct(c['z']['forced_choice_reference'])}"])
+    L = S6.get("lens_002_tracking_emit_colon", {})
+
+    def lt(k):
+        v = L.get(k)
+        return "—" if not v else f"{r(v['mean'], 2, True)} ({v['pos']}/{v['neg']})"
+    meth = [["002 (brew, verbalizers)", "LLM judge: Gemini 3.8 Flash reads each NLA / Oracle text with the table's closed set of colours and says which colour it puts as start, intermediate and answer", "what the reader <i>claims</i>, in role"],
+            ["002 (brew, lenses)", "No judge: each lens's score for every colour", "ranking and within-table tracking"],
+            ["005 (planted concepts)", "Regex: exact whole-word match of c, c+s or c+es, case-insensitive (synonym judge deferred); from step 11 on, also likelihood scoring", "does the reader name the concept"],
+            ["006 (brew, verbalizers)", "No text at all: the reader's log-probability of each colour word after a fixed answer prefix, every token scored", "does the reader's likelihood follow the cell's z"]]
+    qrows = []
+    for t in Q6.get("tables", []):
+        for rd in ("NLA L42", "Oracle L40"):
+            x = t[rd]
+            zm, zp = list(x["member_act"].keys())
+            qrows.append([f"<code>{esc(t['table'][-4:])}</code>", rd, f"{esc(zm)} vs {esc(zp)}",
+                          f"{r(x['member_act'][zm], 2)} / {r(x['member_act'][zp], 2)}", f"{r(x['partner_act'][zm], 2)} / {r(x['partner_act'][zp], 2)}",
+                          r(x["D_z"], 2, True), esc(", ".join(x["top3_member"]))])
+    texts = "".join(f"<li><b>Table {esc(t['table'][-4:])}</b>, 002 {esc(t['text_002']['reader_layer'])}, truth intermediate <b>{esc(t['text_002']['truth']['intermediate'])}</b>, "
+                    f"judge read <b>{esc(t['text_002']['judge']['intermediate'])}</b>: <code>{esc(t['text_002']['text'][:260])}…</code></li>" for t in Q6.get("tables", []))
+    rx = "".join(f"<li>Planted <b>{esc(e['concept'])}</b> ({'full vector' if e['cond'] == 2 else 'non-J part'}, s = {r(e['s'], 0)}), regex says "
+                 f"<b>{'named' if e['names'] else 'not named'}</b>: <code>{esc(e['text'][:180])}</code></li>" for e in Q6.get("regex_005", []))
+    rl = S6["rules"]
+    return f"""<h2 id="s006">006 (5 October): do the readers register what they don't say?</h2>
+<p>Branch <code>006-reader-likelihood</code>, design <code>docs/design_specs/006_reader_likelihood.md</code> (pre-registered;
+amendment v1.1 before any outcome), report <code>docs/reports/006_reader_likelihood.md</code>. Dev split, 48 brew tables, the
+saved 001 captures at the <code>:</code> cell. 002 found the verbalizers almost never <i>state</i> the intermediate colour z there,
+while the lenses' colour scores track it. 006 scores the verbalizers the way the lenses were scored: by likelihood.</p>
+<h3>How each experiment decides what a reader "says" or "tracks"</h3>
+{table(["Experiment", "Method", "What it measures"], meth)}
+<h3>Results at the <code>:</code> cell (primary prefix)</h3>
+<p>D = [log P(member's z) − log P(partner's z)] on the member's activation, minus the same on the partner's activation.
+Mean over 48 tables [95% CI] (tables + / −). Positive means the reader's preference follows the cell's own z.</p>
+{table(["Reader", "Positive control (bar 50%)", "z", "start", "answer", "z, shuffled", "Picks z among 5 (member / no activation)"], rows, num_cols=(5,))}
+<p>002's token lenses, same statistic: J_NP cosine L40 z {lt('J_NP_cosine|emit_colon|L40')}, start {lt('J_NP_cosine|emit_colon|L40|start')};
+J_CB L40 z {lt('J_CB_standard|emit_colon|L40')}.</p>
+<ul><li><b>NLA:</b> its likelihood tracks z; the rule is {'supported' if rl['T1_nla_tracks_z'] else 'not supported'} (prior 0.55). The positive
+control passes exactly at the bar.</li>
+<li><b>Oracle L40/L44:</b> tracks z in every table, but its positive control fails at those layers. By the rule this is
+uninformative and shown descriptively only.</li>
+<li>Both also follow the start colour or the answer somewhat (T3 {'holds' if rl['T3_start_not_tracked'] else 'fails'}), and pick z among the 5
+candidates only 27–44% of the time: z is present in their likelihood, not dominant.</li>
+<li><b>Reading:</b> the readers register z at the cell where they rarely state it. Caveat: the NLA here is <code>nla-rl</code>; 002's
+texts came from <code>nla-L42</code>.</li></ul>
+<h3>Qualitative samples</h3>
+<p>006, log P of the member's z / the partner's z (nats), on each activation:</p>
+{table(["Table", "Reader", "z (member vs partner)", "on member's activation", "on partner's activation", "D", "Reader's top 3 colours (member)"], qrows, num_cols=(3, 4, 5))}
+<p>002, what the readers <i>said</i> about the same tables (LLM-judged):</p><ul>{texts}</ul>
+<p>005, the regex on planted-concept readouts: a hit, and a miss where the Oracle wrote the Chinese for "soap" (肥皂):</p><ul>{rx}</ul>"""
+
+
 def sec_glossary():
     g = [("s (dose)", "Injection strength: each band layer gets s × that layer's mean residual norm × a unit direction, on every token of the question turn."),
          ("Band", "The layers written to: L32–38 (B) or L24–38 (B2). Readers read at L40–44, downstream of every write."),
@@ -1673,7 +1743,10 @@ def build(D, notes, short_html):
              chip("amendment 01 adopted", "good") if (ROOT / "docs/design_specs/005_amendment_01.md").exists() else chip("full run waits for your decisions", "pend")]
     if load(RESA / "full_summary.json"):
         chips.append(chip("full run done · 45 test concepts", "good"))
-    toc = ([("full", "The full run (5 Oct)")] if load(RESA / "full_summary.json") else []) + [("short", "The pilot in short"), ("why", "Why any of this was run"), ("expect", "Expected vs happened"),
+    if load(ROOT / "results/006_reader_likelihood/analysis/summary.json"):
+        chips.append(chip("006 done · reader likelihoods", "good"))
+    toc = ([("full", "The full run (5 Oct)")] if load(RESA / "full_summary.json") else []) + (
+        [("s006", "006: reader likelihoods")] if load(ROOT / "results/006_reader_likelihood/analysis/summary.json") else []) + [("short", "The pilot in short"), ("why", "Why any of this was run"), ("expect", "Expected vs happened"),
            ("checks", "Checks C1–C3"), ("smoke", "The smoke run"), ("pilot", "The overnight pilot"),
            ("q1", "Q1 report measure", 1), ("q2", "Q2 prefill", 1), ("q3", "Q3 band", 1), ("q4", "Q4 onset", 1),
            ("q5", "Q5 readers", 1), ("q6", "Q6 clamp", 1), ("q7", "Q7 leaky splits", 1), ("q8", "Q8 baseline", 1),
@@ -1692,7 +1765,7 @@ def build(D, notes, short_html):
 the 005 smoke run, the dev-only pilot, the extra steps 7b and 8–11, and (5 October) the full run on the 45 test concepts under the adopted amendment. Every number on this page is generated from the
 saved result files.</p>
 <div class="chips">{"".join(chips)}</div></header>"""
-    body = [head, correction_html(), sec_full(), short_html, sec_why(), sec_scorecard(D), sec_checks(D), sec_smoke(D), sec_pilot(D, notes),
+    body = [head, correction_html(), sec_full(), sec_006(), short_html, sec_why(), sec_scorecard(D), sec_checks(D), sec_smoke(D), sec_pilot(D, notes),
             sec_pilot2(D, notes), sec_7b(D, notes), sec_8(D, notes), sec_9(D, notes), sec_10(D, notes), sec_11(D, notes), sec_reads(D, notes), sec_eng(D, notes), sec_mistakes(), sec_amend(),
             sec_glossary(), sec_where(),
             '<footer>Generated by <code>scripts/005_planted_concepts/make_report_page.py</code> from JSON in '
