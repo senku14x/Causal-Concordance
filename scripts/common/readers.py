@@ -127,6 +127,36 @@ class VectorLenses:
         return _topk(self.tok, s, k)
 
 
+def cont_batch(prefix_ids, cand_seqs, pad_id):
+    """Design 006 §3. One row per candidate: prefix + candidate tokens, right-padded to a common length. Returns
+    (rows, attention mask, gather) where gather[c] lists (position, target token) pairs: the logits at `position`
+    predict `target`, so the candidate's full-sequence log-prob is the sum over its pairs. Right padding is safe under
+    causal attention: padded positions come after every scored position."""
+    L = len(prefix_ids)
+    assert L >= 1 and all(len(c) >= 1 for c in cand_seqs)
+    T = L + max(len(c) for c in cand_seqs)
+    rows, mask, gather = [], [], []
+    for c in cand_seqs:
+        n_pad = T - L - len(c)
+        rows.append(list(prefix_ids) + list(c) + [pad_id] * n_pad)
+        mask.append([1] * (L + len(c)) + [0] * n_pad)
+        gather.append([(L - 1 + k, int(c[k])) for k in range(len(c))])
+    return rows, mask, gather
+
+
+def seq_logprob_from_hidden(Hn, W32, gather):
+    """Hn: final-norm outputs [R, T, d] for R rows; gather: per row, (position, target) pairs (cont_batch).
+    Returns [R] float32 sums of log-probs, logits computed in float32 as Hn @ W32^T at the gathered positions only."""
+    out = []
+    for r, g in enumerate(gather):
+        pos = torch.tensor([p for p, _ in g], device=Hn.device)
+        tgt = torch.tensor([t for _, t in g], device=Hn.device)
+        with torch.autocast(Hn.device.type, enabled=False):
+            lp = torch.log_softmax(Hn[r, pos].float() @ W32.T, -1)
+        out.append(lp[torch.arange(len(g), device=Hn.device), tgt].sum())
+    return torch.stack(out)
+
+
 def last_logprobs(model, run, W32, cand):
     """Run `run()` (a forward of `model`) and return, at the last position, float32 log-probs for the token ids `cand`
     computed from the final-norm output and the float32 unembedding W32 [V, d], plus the same entries from the model's
@@ -236,6 +266,39 @@ class OracleLens:
             lps.append(lp)
             owns.append(own)
         return torch.cat(lps), torch.cat(owns)
+
+    @torch.no_grad()
+    def score_seq(self, hs, layer, prefix_ids, cand_seqs, W32, acts_per_batch=2, check=False):
+        """Design 006 §3: full-sequence log-prob of every candidate continuation (every token scored) after the
+        carrier and `prefix_ids`, for each activation (float32 [d]; injected as in read()). Returns [len(hs),
+        len(cand_seqs)] float32. Hidden states come from the inner text model (final norm applied); with check=True the
+        first batch is also scored from the full model's own logits and the max |difference| is kept in self.last_check."""
+        ids, slot, _ = self.carrier(layer)
+        pad = self.tok.pad_token_id if self.tok.pad_token_id is not None else self.tok.eos_token_id
+        rows, mask, gather = cont_batch(list(ids) + list(prefix_ids), cand_seqs, pad)
+        dev, C = self.model.device, len(cand_seqs)
+        emb = self.model.get_input_embeddings()(torch.tensor(rows, device=dev))
+        am = torch.tensor(mask, device=dev)
+        inner = self.model.get_base_model().model
+        out = []
+        for j in range(0, len(hs), acts_per_batch):
+            ch = hs[j:j + acts_per_batch]
+            e = emb.repeat(len(ch), 1, 1).clone()
+            for a, h in enumerate(ch):
+                v = h.to(dev).float()
+                e[a * C:(a + 1) * C, slot, :] = (self.c["alpha"] * v / v.norm().clamp_min(1e-9)).to(e.dtype)
+            m = am.repeat(len(ch), 1)
+            Hn = inner(inputs_embeds=e, attention_mask=m, use_cache=False).last_hidden_state
+            lp = seq_logprob_from_hidden(Hn, W32, gather * len(ch))
+            if check and j == 0:
+                lg = self.model(inputs_embeds=e, attention_mask=m, use_cache=False).logits
+                own = torch.stack([torch.log_softmax(lg[r, [p for p, _ in g]].float(), -1)[
+                    torch.arange(len(g), device=dev), torch.tensor([t for _, t in g], device=dev)].sum()
+                    for r, g in enumerate(gather * len(ch))])
+                self.last_check = float((own - lp).abs().max())
+                del lg
+            out.append(lp.view(len(ch), C).cpu())
+        return torch.cat(out)
 
     def unload(self):
         """Remove the adapter (no merge) and return the base model."""
@@ -576,6 +639,38 @@ class NLArl:
             lps.append(lp)
             owns.append(own)
         return torch.cat(lps), torch.cat(owns)
+
+    @torch.no_grad()
+    def score_seq(self, hs, prefix_ids, cand_seqs, acts_per_batch=2, check=False):
+        """Design 006 §3: full-sequence log-prob of every candidate continuation after the AV prompt and `prefix_ids`,
+        per activation (float32 [d], added at the marker as in read_batch). Returns [len(hs), len(cand_seqs)] float32.
+        check=True: the first batch is also scored from the model's own logits (max |difference| in self.last_check)."""
+        if not hasattr(self, "_W32"):
+            self._W32 = self.model.get_output_embeddings().weight.detach().float()
+        pad = self.tok.pad_token_id if self.tok.pad_token_id is not None else self.tok.eos_token_id
+        rows, mask, gather = cont_batch(list(self.ids) + list(prefix_ids), cand_seqs, pad)
+        dev, C = self.model.device, len(cand_seqs)
+        x0, m0 = torch.tensor(rows, device=dev), torch.tensor(mask, device=dev)
+        inner = self.model.get_base_model().model
+        out = []
+        for j in range(0, len(hs), acts_per_batch):
+            ch = hs[j:j + acts_per_batch]
+            self._v["v"] = torch.stack([h.float() for h in ch]).repeat_interleave(C, 0)
+            try:
+                x, m = x0.repeat(len(ch), 1), m0.repeat(len(ch), 1)
+                Hn = inner(input_ids=x, attention_mask=m, use_cache=False).last_hidden_state
+                lp = seq_logprob_from_hidden(Hn, self._W32, gather * len(ch))
+                if check and j == 0:
+                    lg = self.model(input_ids=x, attention_mask=m, use_cache=False).logits
+                    own = torch.stack([torch.log_softmax(lg[r, [p for p, _ in g]].float(), -1)[
+                        torch.arange(len(g), device=dev), torch.tensor([t for _, t in g], device=dev)].sum()
+                        for r, g in enumerate(gather * len(ch))])
+                    self.last_check = float((own - lp).abs().max())
+                    del lg
+            finally:
+                self._v["v"] = None
+            out.append(lp.view(len(ch), C).cpu())
+        return torch.cat(out)
 
     def close(self):
         """Remove the hook and free the GPU."""
