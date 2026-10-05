@@ -171,6 +171,13 @@ def load_blocks(stage, run_id, pieces):
         if fp.exists():
             z = np.load(fp)
             blk["positive"] = {k: dstat.colour_ll(z[k], owner) for k in z.files if k != "owner"}
+        if stage == "stage1b":                                             # the positive control is cell-independent except
+            f1a = C.OUT / "stage1a" / "r2" / "ll" / f"{tag}_colon_positive.npz"   # for PCA (re-scored in 1b): take the rest
+            if f1a.exists():                                               # from Stage 1a at the same reader-layer
+                z = np.load(f1a)
+                for k in z.files:
+                    if k != "owner" and k not in blk["positive"]:
+                        blk["positive"][k] = dstat.colour_ll(z[k], owner)
         out[tag] = blk
     return out
 

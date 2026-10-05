@@ -33,8 +33,11 @@ def main():
     r = git("push", "-q", "origin", "007-jsubspace", check=False)
     print("push:", r.returncode, r.stderr.strip()[-200:])
     if "--no-mirror" not in sys.argv:
-        m = subprocess.run([sys.executable, str(PROJECT / "scripts" / "000_setup" / "mirror_outputs.py")], cwd=PROJECT,
-                           env=ENV, capture_output=True, text=True)
+        import fcntl
+        with open(PROJECT / "outputs" / "007_jsubspace" / ".mirror.lock", "w") as lk:
+            fcntl.flock(lk, fcntl.LOCK_EX)                                   # one mirror upload at a time
+            m = subprocess.run([sys.executable, str(PROJECT / "scripts" / "000_setup" / "mirror_outputs.py")], cwd=PROJECT,
+                               env=ENV, capture_output=True, text=True)
         print("mirror:", m.returncode, (m.stdout + m.stderr).strip()[-400:])
 
 
