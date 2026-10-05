@@ -154,6 +154,8 @@ yet) and await PI review.
 - `main` was fast-forwarded to `setup/000-scaffold` on 2026-10-03 (PI). **Since 2026-10-04 the working branch is
   `spec-v2`** (PI default, doubt 22; it carries the results-page commit ae18eee as 28a239b). Ask before updating
   `main` again.
+- **2026-10-05:** the PI adopted amendment 01; the 005 full run lives on branch **`005-amended-full-run`** (off `spec-v2`), so it can be
+  reverted by dropping the branch. Work on 005's full run happens there; `spec-v2` stays as it was.
 - The repo was made **private** on 2026-10-04 (PI); until then it had been public with the paper PDFs in it.
 - **Results page** (artifact, shared by link; built by `scripts/000_setup/results_page/make_page.py` from committed
   JSON only): https://claude.ai/artifact/RMRX8R4iFnysbnHaNWTBeC
@@ -298,3 +300,5 @@ yet) and await PI review.
 | 10-05 | `test_specificity_stats` first asserted a wrong expected median (0.2; the median of the five other values is 0.3) | test arithmetic only; the function was right; fixed before step 10 ran |
 | 10-05 | A single-quoted Python string with an apostrophe ("band's") broke the page generator (SyntaxError) | caught on the first build, before anything was published |
 | 10-05 | The report page (v1–v3) and my summaries headlined "the readers are less sensitive than the model". That compared reader naming in 4 samples (coarse) with the model's log-prob (fine); the caveat was in the text, but the headline outran it. Step 11's matched likelihood measure reverses it for the Oracle and makes it a tie for the NLA | withdrawn (page v4, notes, amendment A6, STATUS). Headline only what a matched measure supports |
+| 10-05 | The full-run analysis first used `x or default` for missing values (`(med(...) or 0) > (null95(...) or 1e9)`); a legitimate 0.0 would have been replaced by the default | explicit `gt`/`le` helpers that are False when a side is missing; fixed before the rehearsal's analysis ran |
+| 10-05 | The full run's G0 record overwrote its write counts per chunk in chunked blocks (rehearsal showed 7 writes checked for 720 clamp rows); the checks themselves ran on every chunk | counts summed per block; found in the dev rehearsal, fixed before the test run |
