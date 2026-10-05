@@ -60,7 +60,9 @@ def main():
     S["gates"]["G_score1_seq_vs_next_maxabs"] = st.get("G_score1_seq_vs_next_maxabs")
     g2 = st.get("G_score2_own_logits_maxabs", {})
     S["gates"]["G_score2_own_logits_maxabs"] = g2
-    S["gates"]["G_score_pass"] = (all(v <= 1e-3 for v in (st.get("G_score1_seq_vs_next_maxabs") or {}).values())
+    S["gates"]["G_score1_seq_vs_next_median"] = st.get("G_score1_seq_vs_next_median")
+    S["gates"]["G_score_pass"] = (all(v <= 0.25 for v in (st.get("G_score1_seq_vs_next_maxabs") or {}).values())
+                                  and all(v <= 0.05 for v in (st.get("G_score1_seq_vs_next_median") or {}).values())
                                   and all(v <= 1.0 for d in g2.values() for v in d.values()))
     rng = np.random.default_rng(SEED)
     for f in sorted(D.glob("ll_*.npz")):

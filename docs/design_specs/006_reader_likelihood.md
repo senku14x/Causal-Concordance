@@ -61,7 +61,7 @@
 
 | Gate | Rule |
 |---|---|
-| G-score1 | The scorer agrees with an independent computation: unit tests on CPU, and on GPU, for single-token spellings, `score_seq` = 005's `score_next` within 1e-3 nats |
+| G-score1 | The scorer agrees with an independent computation: unit tests on CPU, and on GPU, for single-token spellings, `score_seq` vs 005's `score_next`: **max ≤ 0.25 nats and median ≤ 0.05 (amended v1.1, see below)** |
 | G-score2 | float32 log-probs vs the reader's own logits: max \|difference\| ≤ 1.0 nat (as in 005) |
 | G-pc | Positive control, per reader-layer: on natural "Tell me about {colour}" activations at that layer (stock forward, last token), 12-way forced-choice ID among the colours ≥ 0.5 (chance 0.083). A reader-layer that fails is reported as uninformative |
 
@@ -98,3 +98,19 @@ secondary or descriptive.
 - The colour words are 12 fixed tokens. A reader may register "a colour change" without its tokens following z.
 - SEC captures, not stock (cos ≥ 0.99985).
 - The dev split only, one family (brew), one cell type primary.
+
+## Amendment v1.1 (2026-10-05, after G-score1 stopped the first launch, before any outcome was read)
+
+- **What happened.** The first launch stopped at G-score1. `score_seq` and `score_next` differed by up to 0.10 nats against the 1e-3 tolerance.
+- **The diagnostic** (4 activations, Oracle L40, `-` prefix), |difference| on single-token spellings:
+
+| Comparison | Median | Max |
+|---|---|---|
+| `score_seq` vs `score_next` | 0.023 | 0.10 |
+| `score_next` with batch 4 vs batch 1 (same scorer, same length) | 0.029 | 0.10 |
+| `score_seq` padded vs unpadded | 0.020 | 0.12 |
+
+- The scores range from −13 to −1 nats, so a position or target bookkeeping error would show as nats, not hundredths.
+- **Reading.** The discrepancy is the bf16 floor for a change of batch shape or sequence length, documented in CLAUDE.md's pitfalls. My 1e-3 tolerance ignored that floor.
+- **Change.** G-score1 passes if max |difference| ≤ 0.25 nats (the documented floor) and the median ≤ 0.05.
+- **Effect on the statistics.** The bf16 noise adds variance to D_t, not bias. The bookkeeping itself stays covered by the exact CPU tests.
