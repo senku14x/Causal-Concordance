@@ -41,7 +41,7 @@ def sha(p):
 def entries(root, prefix=""):
     out = []
     for p in sorted(root.rglob("*")):
-        if p.is_file() and ".ipynb_checkpoints" not in p.parts and p.name != ".env":
+        if p.is_file() and ".ipynb_checkpoints" not in p.parts and ".cache" not in p.parts and p.name != ".env":
             out.append({"path": prefix + str(p.relative_to(root)), "bytes": p.stat().st_size, "sha256": sha(p)})
     return out
 
@@ -70,7 +70,7 @@ def public(api):
     with tempfile.TemporaryDirectory() as td:
         (Path(td) / "MANIFEST.json").write_text(json.dumps(man, indent=1))
         api.upload_large_folder(repo_id=PUBLIC, repo_type="dataset", folder_path=str(out),
-                                ignore_patterns=["**/.ipynb_checkpoints/**", "**/.env"])
+                                ignore_patterns=["**/.ipynb_checkpoints/**", "**/.env", ".cache/**"])
         api.upload_folder(repo_id=PUBLIC, repo_type="dataset", folder_path=str(PROJECT / "results"),
                           path_in_repo=f"results_snapshot/{branch}", commit_message=f"results snapshot {branch} @ {commit[:7]}")
         api.upload_file(path_or_fileobj=str(Path(td) / "MANIFEST.json"), path_in_repo="MANIFEST.json", repo_id=PUBLIC,
