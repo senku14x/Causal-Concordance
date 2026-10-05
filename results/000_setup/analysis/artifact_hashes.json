@@ -1,5 +1,5 @@
 {
- "started": "2026-10-02T05:08:34Z",
+ "started": "2026-10-05T18:31:51Z",
  "files": {
   "lens:J_NP": {
    "path": "/workspace/.hf_home/hub/models--neuronpedia--jacobian-lens/snapshots/0731326edff4ae730ffc5356fe1a4728c748b3a6/qwen3.6-27b/jlens/Salesforce-wikitext/Qwen3.6-27B_jacobian_lens_n1000.pt",
@@ -162,6 +162,83 @@
    "ok": true,
    "bytes": 104857688
   },
+  "nla_rl:av_base/chat_template.jinja": {
+   "path": "/workspace/.hf_home/hub/models--ceselder--qwen3.6-27b-nla-rl/snapshots/5a13b7ec21a69fcdd0fb24d5edbe96a92aef4b9f/av_base/chat_template.jinja",
+   "sha256": "e84f32a23fdda27689f868aa4a1a5621f41133e51a48d7f3efcbea2839574259",
+   "expected": "e84f32a23fdda27689f868aa4a1a5621f41133e51a48d7f3efcbea2839574259",
+   "ok": true,
+   "bytes": 7764
+  },
+  "nla_rl:av_base/config.json": {
+   "path": "/workspace/.hf_home/hub/models--ceselder--qwen3.6-27b-nla-rl/snapshots/5a13b7ec21a69fcdd0fb24d5edbe96a92aef4b9f/av_base/config.json",
+   "sha256": "10d517a120597b391bb5a9e1f67aad70a162656067c3f25d95eccd44e46564d9",
+   "expected": "10d517a120597b391bb5a9e1f67aad70a162656067c3f25d95eccd44e46564d9",
+   "ok": true,
+   "bytes": 2740
+  },
+  "nla_rl:av_base/generation_config.json": {
+   "path": "/workspace/.hf_home/hub/models--ceselder--qwen3.6-27b-nla-rl/snapshots/5a13b7ec21a69fcdd0fb24d5edbe96a92aef4b9f/av_base/generation_config.json",
+   "sha256": "252e0efee3ded327704912616f3493a227cdc39eb4bab52fcae1ceb3ed5dc890",
+   "expected": "252e0efee3ded327704912616f3493a227cdc39eb4bab52fcae1ceb3ed5dc890",
+   "ok": true,
+   "bytes": 213
+  },
+  "nla_rl:av_base/model-00001-of-00002.safetensors": {
+   "path": "/workspace/.hf_home/hub/models--ceselder--qwen3.6-27b-nla-rl/snapshots/5a13b7ec21a69fcdd0fb24d5edbe96a92aef4b9f/av_base/model-00001-of-00002.safetensors",
+   "sha256": "8354ca745ac4a405be0df6918954534cd2be1e415494bc8c11622f8cf30ebd73",
+   "expected": "8354ca745ac4a405be0df6918954534cd2be1e415494bc8c11622f8cf30ebd73",
+   "ok": true,
+   "bytes": 49825162976
+  },
+  "nla_rl:av_base/model-00002-of-00002.safetensors": {
+   "path": "/workspace/.hf_home/hub/models--ceselder--qwen3.6-27b-nla-rl/snapshots/5a13b7ec21a69fcdd0fb24d5edbe96a92aef4b9f/av_base/model-00002-of-00002.safetensors",
+   "sha256": "66d6c918749ff5c0d53784c2b63e63ac4d32db33bb42d4b26a240029cf8a02f9",
+   "expected": "66d6c918749ff5c0d53784c2b63e63ac4d32db33bb42d4b26a240029cf8a02f9",
+   "ok": true,
+   "bytes": 3966947216
+  },
+  "nla_rl:av_base/model.safetensors.index.json": {
+   "path": "/workspace/.hf_home/hub/models--ceselder--qwen3.6-27b-nla-rl/snapshots/5a13b7ec21a69fcdd0fb24d5edbe96a92aef4b9f/av_base/model.safetensors.index.json",
+   "sha256": "5c26baef87822882c6362d7ba2e916198299b403f988751faa15ee3654ec64d5",
+   "expected": "5c26baef87822882c6362d7ba2e916198299b403f988751faa15ee3654ec64d5",
+   "ok": true,
+   "bytes": 83909
+  },
+  "nla_rl:av_base/nla_meta.yaml": {
+   "path": "/workspace/.hf_home/hub/models--ceselder--qwen3.6-27b-nla-rl/snapshots/5a13b7ec21a69fcdd0fb24d5edbe96a92aef4b9f/av_base/nla_meta.yaml",
+   "sha256": "ee3aa5960da9b3180e50d180e66f98274ef44caca216bd0a6ddc5558ad5f2d14",
+   "expected": "ee3aa5960da9b3180e50d180e66f98274ef44caca216bd0a6ddc5558ad5f2d14",
+   "ok": true,
+   "bytes": 3383
+  },
+  "nla_rl:av_base/tokenizer.json": {
+   "path": "/workspace/.hf_home/hub/models--ceselder--qwen3.6-27b-nla-rl/snapshots/5a13b7ec21a69fcdd0fb24d5edbe96a92aef4b9f/av_base/tokenizer.json",
+   "sha256": "87a7830d63fcf43bf241c3c5242e96e62dd3fdc29224ca26fed8ea333db72de4",
+   "expected": "87a7830d63fcf43bf241c3c5242e96e62dd3fdc29224ca26fed8ea333db72de4",
+   "ok": true,
+   "bytes": 19989343
+  },
+  "nla_rl:av_base/tokenizer_config.json": {
+   "path": "/workspace/.hf_home/hub/models--ceselder--qwen3.6-27b-nla-rl/snapshots/5a13b7ec21a69fcdd0fb24d5edbe96a92aef4b9f/av_base/tokenizer_config.json",
+   "sha256": "83febe739ecefd99f984f546dfdc10149cedf293b9ee0291b99894341188b613",
+   "expected": "83febe739ecefd99f984f546dfdc10149cedf293b9ee0291b99894341188b613",
+   "ok": true,
+   "bytes": 1098
+  },
+  "nla_rl:av_rl_adapters/iter_000400/adapter_config.json": {
+   "path": "/workspace/.hf_home/hub/models--ceselder--qwen3.6-27b-nla-rl/snapshots/5a13b7ec21a69fcdd0fb24d5edbe96a92aef4b9f/av_rl_adapters/iter_000400/adapter_config.json",
+   "sha256": "2faac994662bd69772c2cba30fd4fad05d0f26cfea81909c119e1848badc866b",
+   "expected": "2faac994662bd69772c2cba30fd4fad05d0f26cfea81909c119e1848badc866b",
+   "ok": true,
+   "bytes": 1190
+  },
+  "nla_rl:av_rl_adapters/iter_000400/adapter_model.safetensors": {
+   "path": "/workspace/.hf_home/hub/models--ceselder--qwen3.6-27b-nla-rl/snapshots/5a13b7ec21a69fcdd0fb24d5edbe96a92aef4b9f/av_rl_adapters/iter_000400/adapter_model.safetensors",
+   "sha256": "b54e23e4e36dbd04023b307e3abfd4618b5db2b31b8e7c650a957ebb1c90c358",
+   "expected": "b54e23e4e36dbd04023b307e3abfd4618b5db2b31b8e7c650a957ebb1c90c358",
+   "ok": true,
+   "bytes": 1867782664
+  },
   "nla:reference_activations": {
    "path": "/workspace/.hf_home/hub/models--ceselder--qwen3.6-27b-nla-rl/snapshots/5a13b7ec21a69fcdd0fb24d5edbe96a92aef4b9f/data/example_activations.parquet",
    "sha256": "26f200b07382c9d30ec84b7a491e1a2f9a4093f308285d633c58b56503393ba2",
@@ -206,6 +283,6 @@
   }
  },
  "mismatches": [],
- "finished": "2026-10-02T05:09:42Z",
+ "finished": "2026-10-05T18:32:54Z",
  "all_ok": true
 }

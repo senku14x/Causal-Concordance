@@ -1,0 +1,1565 @@
+{
+ "pairs": [
+  {
+   "layer": 40,
+   "pair": 28,
+   "table": "brew-s2-r10d2-0071",
+   "member": {
+    "start": "blue",
+    "z": "gold",
+    "answer": "brown",
+    "pieces": {
+     "whole": {
+      "top10": [
+       "<|fim_middle|>",
+       "\u7b2c\u4e8c\u6b65",
+       "(end",
+       " \u043f\u043e\u0441\u043b\u0435\u0434",
+       " \uc785\ub2c8\ub2e4",
+       "END",
+       "\ub124\uc694",
+       " kembali",
+       " f\u00fchrt",
+       "Dead"
+      ],
+      "rank_start": 10,
+      "rank_z": 2,
+      "rank_answer": 9
+     },
+     "J": {
+      "top10": [
+       "<|fim_middle|>",
+       "END",
+       " kembali",
+       " \ub2e4\uc2dc",
+       " \uc785\ub2c8\ub2e4",
+       " \u043f\u043e\u0441\u043b\u0435\u0434",
+       "LEFT",
+       " erneut",
+       " k\u00f6vetkez\u0151",
+       "EXIT"
+      ],
+      "rank_start": 8,
+      "rank_z": 3,
+      "rank_answer": 9
+     },
+     "rest_J": {
+      "top10": [
+       "\u044a",
+       " salah",
+       "mani",
+       "iseksi",
+       "\u5728\u6b64\u57fa\u7840\u4e0a",
+       "\u5f53\u65f6\u7684",
+       "elden",
+       "\u10d0\u10da",
+       "\u548c\u7ba1\u7406",
+       "uksen"
+      ],
+      "rank_start": 12,
+      "rank_z": 5,
+      "rank_answer": 3
+     },
+     "random(seed0)": {
+      "top10": [
+       " Manc",
+       "\u7684\u5feb\u901f",
+       " Horizontal",
+       " Counter",
+       " Dry",
+       " Rapid",
+       " Direction",
+       " Deploy",
+       " Keh",
+       " Skyl"
+      ],
+      "rank_start": 2,
+      "rank_z": 12,
+      "rank_answer": 11
+     },
+     "mean_removed": {
+      "top10": [
+       " Agric",
+       "\u80f0\u817a",
+       " Mineral",
+       "LB",
+       " treasurer",
+       " Ib",
+       " Mining",
+       " Agro",
+       "\u8054\u50a8",
+       "############################################################"
+      ],
+      "rank_start": 11,
+      "rank_z": 2,
+      "rank_answer": 1
+     }
+    }
+   },
+   "partner": {
+    "start": "brown",
+    "z": "orange",
+    "answer": "white",
+    "pieces": {
+     "whole": {
+      "top10": [
+       "Sequence",
+       "\u7b2c\u4e8c\u6b65",
+       " kembali",
+       "\u041e\u0442",
+       " \u043f\u043e\u0441\u043b\u0435\u0434",
+       "Intermediate",
+       "BBBB",
+       " \uc785\ub2c8\ub2e4",
+       "holen",
+       " \u0414\u0435\u0439"
+      ],
+      "rank_start": 11,
+      "rank_z": 3,
+      "rank_answer": 10
+     },
+     "J": {
+      "top10": [
+       " kembali",
+       " erneut",
+       "EXIT",
+       " \uc785\ub2c8\ub2e4",
+       "LEFT",
+       " \ub2e4\uc2dc",
+       " \u043f\u043e\u0441\u043b\u0435\u0434",
+       "<|fim_middle|>",
+       "\u7b2c\u4e8c\u6b65",
+       " novamente"
+      ],
+      "rank_start": 12,
+      "rank_z": 4,
+      "rank_answer": 10
+     },
+     "rest_J": {
+      "top10": [
+       "\u044a",
+       "\u5f53\u65f6\u7684",
+       "\u5728\u6b64\u57fa\u7840\u4e0a",
+       "elden",
+       " salah",
+       "\u5f53\u65f6",
+       "\u0441\u0442\u044b",
+       "\u0ac2",
+       "\u4e00\u4e2a\u662f",
+       "\u548c\u7ba1\u7406"
+      ],
+      "rank_start": 4,
+      "rank_z": 8,
+      "rank_answer": 7
+     },
+     "random(seed0)": {
+      "top10": [
+       " Dry",
+       " Manc",
+       " Rapid",
+       " Direction",
+       " Counter",
+       "\u7684\u5feb\u901f",
+       " Horizontal",
+       " Deploy",
+       " Bal",
+       " Casc"
+      ],
+      "rank_start": 11,
+      "rank_z": 10,
+      "rank_answer": 4
+     },
+     "mean_removed": {
+      "top10": [
+       "\u0cbf\u0c95",
+       "BUY",
+       "\u4e3b\u89d2",
+       "HIR",
+       "\u0441\u0442\u043e\u044f\u043d\u0438\u0435",
+       "\u9a81",
+       "\u7236\u5b50",
+       "middle",
+       "\u5f80\u4e0a",
+       "\u4f18"
+      ],
+      "rank_start": 1,
+      "rank_z": 3,
+      "rank_answer": 10
+     }
+    }
+   },
+   "delta_share": {
+    "J": 0.24778571724891663,
+    "rest_J": 0.752214252948761,
+    "random(seed0)": 0.19289711117744446,
+    "mean_removed": 0.9886109232902527
+   }
+  },
+  {
+   "layer": 40,
+   "pair": 51,
+   "table": "brew-s2-r10d2-0101",
+   "member": {
+    "start": "gray",
+    "z": "white",
+    "answer": "brown",
+    "pieces": {
+     "whole": {
+      "top10": [
+       " \ub2e4\uc2dc",
+       " \u043f\u043e\u0441\u043b\u0435\u0434",
+       " \uc785\ub2c8\ub2e4",
+       " kembali",
+       "(end",
+       "\u7b2c\u4e8c\u6b65",
+       "BBBB",
+       " f\u00fchrt",
+       "\u4e00\u4e2a\u662f",
+       "\u3057\u307e\u3059"
+      ],
+      "rank_start": 8,
+      "rank_z": 2,
+      "rank_answer": 11
+     },
+     "J": {
+      "top10": [
+       " \ub2e4\uc2dc",
+       " \uc785\ub2c8\ub2e4",
+       " kembali",
+       " \u043f\u043e\u0441\u043b\u0435\u0434",
+       " erneut",
+       " novamente",
+       "<|fim_middle|>",
+       "\ud569\ub2c8\ub2e4",
+       " END",
+       " f\u00fchrt"
+      ],
+      "rank_start": 10,
+      "rank_z": 3,
+      "rank_answer": 11
+     },
+     "rest_J": {
+      "top10": [
+       "\u044a",
+       " salah",
+       "\u0441\u0442\u044b",
+       "\u5f53\u65f6\u7684",
+       "\u4e00\u4e2a\u662f",
+       "\u0ac2",
+       "mani",
+       "\u5728\u6b64\u57fa\u7840\u4e0a",
+       "\u10d0\u10da",
+       "\u043f\u043e\u0440"
+      ],
+      "rank_start": 2,
+      "rank_z": 6,
+      "rank_answer": 3
+     },
+     "random(seed0)": {
+      "top10": [
+       "\u7684\u5feb\u901f",
+       " Counter",
+       " Manc",
+       " Rapid",
+       " Dry",
+       " Direction",
+       " Horizontal",
+       " r\u00e1pida",
+       " Deploy",
+       " Arrival"
+      ],
+      "rank_start": 9,
+      "rank_z": 4,
+      "rank_answer": 11
+     },
+     "mean_removed": {
+      "top10": [
+       " \u0e0a\u0e48\u0e27\u0e22",
+       "/help",
+       " \u06a9\u0645\u06a9",
+       " bless",
+       "\u5927\u767d",
+       "\u6b23\u6170",
+       " Assist",
+       "-help",
+       "enh",
+       "(+"
+      ],
+      "rank_start": 6,
+      "rank_z": 1,
+      "rank_answer": 3
+     }
+    }
+   },
+   "partner": {
+    "start": "green",
+    "z": "pink",
+    "answer": "orange",
+    "pieces": {
+     "whole": {
+      "top10": [
+       "Sequence",
+       " \u043f\u043e\u0441\u043b\u0435\u0434",
+       "\u7b2c\u4e8c\u6b65",
+       " \u041f\u043e\u0441\u043b\u0435\u0434",
+       "sequence",
+       " \u0412\u0456\u0434",
+       " f\u00fchrt",
+       " acab",
+       "Intermediate",
+       " \uc785\ub2c8\ub2e4"
+      ],
+      "rank_start": 5,
+      "rank_z": 1,
+      "rank_answer": 3
+     },
+     "J": {
+      "top10": [
+       " \u043f\u043e\u0441\u043b\u0435\u0434",
+       "Sequence",
+       "\u7b2c\u4e8c\u6b65",
+       " \uc785\ub2c8\ub2e4",
+       " f\u00fchrt",
+       "LEFT",
+       "Intermediate",
+       " etapa",
+       " zwe",
+       " EXIT"
+      ],
+      "rank_start": 5,
+      "rank_z": 1,
+      "rank_answer": 3
+     },
+     "rest_J": {
+      "top10": [
+       "\u044a",
+       " salah",
+       "\u4e00\u4e2a\u662f",
+       "elden",
+       "\u5728\u6b64\u57fa\u7840\u4e0a",
+       "\u5f53\u65f6\u7684",
+       "\u5176\u4e2d\u4e4b\u4e00",
+       "mani",
+       "\u0ac2",
+       " \u0913"
+      ],
+      "rank_start": 6,
+      "rank_z": 3,
+      "rank_answer": 7
+     },
+     "random(seed0)": {
+      "top10": [
+       " Manc",
+       "\u7684\u5feb\u901f",
+       " Horizontal",
+       " Rapid",
+       " Dry",
+       " Counter",
+       " Deploy",
+       " Direction",
+       " Card",
+       " Arrival"
+      ],
+      "rank_start": 5,
+      "rank_z": 3,
+      "rank_answer": 10
+     },
+     "mean_removed": {
+      "top10": [
+       "\u5e08\u59d0",
+       " Sequential",
+       "\u59d1\u5a18",
+       " sequential",
+       "\u266a",
+       "\u8ba9\u5979",
+       "\u4e32\u884c",
+       "girl",
+       "Serial",
+       " princess"
+      ],
+      "rank_start": 10,
+      "rank_z": 1,
+      "rank_answer": 3
+     }
+    }
+   },
+   "delta_share": {
+    "J": 0.27573955059051514,
+    "rest_J": 0.7242604494094849,
+    "random(seed0)": 0.1954749971628189,
+    "mean_removed": 0.9977702498435974
+   }
+  },
+  {
+   "layer": 40,
+   "pair": 61,
+   "table": "brew-s2-r10d2-0107",
+   "member": {
+    "start": "brown",
+    "z": "purple",
+    "answer": "gold",
+    "pieces": {
+     "whole": {
+      "top10": [
+       "Pair",
+       " f\u00fchrt",
+       "Sequence",
+       " \uc785\ub2c8\ub2e4",
+       "LEFT",
+       "EXIT",
+       " \u043f\u043e\u0441\u043b\u0435\u0434",
+       "BBBB",
+       "<|fim_middle|>",
+       "\u041e\u0442"
+      ],
+      "rank_start": 12,
+      "rank_z": 2,
+      "rank_answer": 8
+     },
+     "J": {
+      "top10": [
+       "LEFT",
+       "EXIT",
+       " f\u00fchrt",
+       " \uc785\ub2c8\ub2e4",
+       "<|fim_middle|>",
+       "END",
+       " \u043f\u043e\u0441\u043b\u0435\u0434",
+       " zwei",
+       " kembali",
+       " zwe"
+      ],
+      "rank_start": 12,
+      "rank_z": 1,
+      "rank_answer": 8
+     },
+     "rest_J": {
+      "top10": [
+       "\u044a",
+       " salah",
+       "\u4e00\u4e2a\u662f",
+       "\u5f53\u65f6\u7684",
+       "\u0441\u0442\u044b",
+       "iseksi",
+       "elden",
+       "\u5e94\u4e3a",
+       "\u0ac2",
+       "\u09bf"
+      ],
+      "rank_start": 7,
+      "rank_z": 10,
+      "rank_answer": 3
+     },
+     "random(seed0)": {
+      "top10": [
+       "\u7684\u5feb\u901f",
+       " Dry",
+       " Manc",
+       " Rapid",
+       " Riccardo",
+       " Horizontal",
+       " Counter",
+       " Bal",
+       " Kran",
+       " Skyl"
+      ],
+      "rank_start": 12,
+      "rank_z": 7,
+      "rank_answer": 11
+     },
+     "mean_removed": {
+      "top10": [
+       "\u91ca\u653e",
+       "\u0bbf\u0bb2",
+       ".idea",
+       "\u6211\u548c",
+       " kitab",
+       "\u52a0\u5206",
+       "PREFIX",
+       " RandomForest",
+       ".basename",
+       "%A"
+      ],
+      "rank_start": 12,
+      "rank_z": 1,
+      "rank_answer": 8
+     }
+    }
+   },
+   "partner": {
+    "start": "blue",
+    "z": "red",
+    "answer": "green",
+    "pieces": {
+     "whole": {
+      "top10": [
+       " END",
+       "Sequence",
+       " DEAD",
+       " RESULT",
+       "Pair",
+       "\u7b2c\u4e8c\u6b65",
+       "\u7b2c\u4e8c\u4e2a",
+       " acab",
+       " \uc785\ub2c8\ub2e4",
+       "second"
+      ],
+      "rank_start": 7,
+      "rank_z": 1,
+      "rank_answer": 3
+     },
+     "J": {
+      "top10": [
+       " END",
+       " RESULT",
+       " \uc785\ub2c8\ub2e4",
+       "<|fim_middle|>",
+       "LEFT",
+       "\u8f6c\u6362",
+       " SECOND",
+       " f\u00fchrt",
+       "END",
+       " EXIT"
+      ],
+      "rank_start": 6,
+      "rank_z": 1,
+      "rank_answer": 4
+     },
+     "rest_J": {
+      "top10": [
+       "\u044a",
+       "\u0ac2",
+       "\u5f53\u65f6\u7684",
+       "mani",
+       "uksen",
+       " anh",
+       "\u5728\u6b64\u57fa\u7840\u4e0a",
+       "iseksi",
+       " \u0928\u0947",
+       "\u00e1l"
+      ],
+      "rank_start": 12,
+      "rank_z": 4,
+      "rank_answer": 9
+     },
+     "random(seed0)": {
+      "top10": [
+       "\u7684\u5feb\u901f",
+       " Counter",
+       " Rapid",
+       " Dry",
+       " Bal",
+       " rapid",
+       " Skyl",
+       " Ded",
+       " Manc",
+       " Card"
+      ],
+      "rank_start": 1,
+      "rank_z": 6,
+      "rank_answer": 3
+     },
+     "mean_removed": {
+      "top10": [
+       " RED",
+       "RED",
+       "red",
+       "\u7ea2\u519b",
+       "\u7ea2\u8272",
+       " red",
+       " rsa",
+       "\u7ea2\u8272\u7684",
+       "\u548c\u7ea2",
+       "\u7684\u7ea2"
+      ],
+      "rank_start": 5,
+      "rank_z": 1,
+      "rank_answer": 2
+     }
+    }
+   },
+   "delta_share": {
+    "J": 0.2876916825771332,
+    "rest_J": 0.7123082280158997,
+    "random(seed0)": 0.1996588110923767,
+    "mean_removed": 0.9788898825645447
+   }
+  },
+  {
+   "layer": 40,
+   "pair": 73,
+   "table": "brew-s2-r10d2-0131",
+   "member": {
+    "start": "gold",
+    "z": "red",
+    "answer": "black",
+    "pieces": {
+     "whole": {
+      "top10": [
+       " \u043f\u043e\u0441\u043b\u0435\u0434",
+       "Sequence",
+       " acab",
+       "BBBB",
+       " f\u00fchrt",
+       "\u8f6c\u4e3a",
+       " DEAD",
+       "Dead",
+       " \uc785\ub2c8\ub2e4",
+       "\u041e\u0442"
+      ],
+      "rank_start": 7,
+      "rank_z": 1,
+      "rank_answer": 3
+     },
+     "J": {
+      "top10": [
+       " \u043f\u043e\u0441\u043b\u0435\u0434",
+       " f\u00fchrt",
+       " \uc785\ub2c8\ub2e4",
+       "<|fim_middle|>",
+       "EXIT",
+       "Dead",
+       " K\u1ebft",
+       "END",
+       " k\u00f6vetkez\u0151",
+       " getResult"
+      ],
+      "rank_start": 8,
+      "rank_z": 3,
+      "rank_answer": 2
+     },
+     "rest_J": {
+      "top10": [
+       "\u044a",
+       "\u5f53\u65f6\u7684",
+       " salah",
+       "\u548c\u7ba1\u7406",
+       "ola",
+       " puisque",
+       "fmt",
+       "iseksi",
+       "\u5728\u6b64\u57fa\u7840\u4e0a",
+       "\u5f53\u65f6"
+      ],
+      "rank_start": 3,
+      "rank_z": 4,
+      "rank_answer": 7
+     },
+     "random(seed0)": {
+      "top10": [
+       "\u7684\u5feb\u901f",
+       " Rapid",
+       " Horizontal",
+       " Manc",
+       " Skyl",
+       " r\u00e1pida",
+       " Counter",
+       " r\u00e1pido",
+       " rapide",
+       "rapid"
+      ],
+      "rank_start": 12,
+      "rank_z": 9,
+      "rank_answer": 1
+     },
+     "mean_removed": {
+      "top10": [
+       "\u6b65\u67aa",
+       "\u51f6",
+       "\u6740",
+       "\u7ea2\u8272",
+       "\u706b\u529b",
+       "\u7ea2\u8272\u7684",
+       "\u67aa",
+       "\u7ea2\u519b",
+       "\u6bba",
+       "\u6012\u706b"
+      ],
+      "rank_start": 5,
+      "rank_z": 1,
+      "rank_answer": 2
+     }
+    }
+   },
+   "partner": {
+    "start": "orange",
+    "z": "blue",
+    "answer": "green",
+    "pieces": {
+     "whole": {
+      "top10": [
+       "Reverse",
+       " Cycle",
+       " \u043f\u043e\u0441\u043b\u0435\u0434",
+       "Sequence",
+       "Cycle",
+       "cycle",
+       "\u8f6c\u4e3a",
+       " \uc785\ub2c8\ub2e4",
+       "reverse",
+       " DEAD"
+      ],
+      "rank_start": 8,
+      "rank_z": 3,
+      "rank_answer": 4
+     },
+     "J": {
+      "top10": [
+       "Reverse",
+       " Cycle",
+       " \ub2e4\uc2dc",
+       "\u53cd\u8f6c",
+       " kembali",
+       " erneut",
+       " END",
+       " \u043f\u043e\u0441\u043b\u0435\u0434",
+       " \uc785\ub2c8\ub2e4",
+       "cycle"
+      ],
+      "rank_start": 7,
+      "rank_z": 1,
+      "rank_answer": 3
+     },
+     "rest_J": {
+      "top10": [
+       "\u044a",
+       "\u5f53\u65f6\u7684",
+       "\u0ac2",
+       " salah",
+       "\u00e1l",
+       "\u5728\u6b64\u57fa\u7840\u4e0a",
+       "\u09bf",
+       "\u0441\u0442\u044b",
+       "\u5e94\u4e3a",
+       "iseksi"
+      ],
+      "rank_start": 6,
+      "rank_z": 12,
+      "rank_answer": 7
+     },
+     "random(seed0)": {
+      "top10": [
+       " Counter",
+       "\u7684\u5feb\u901f",
+       " Rapid",
+       " Dry",
+       " Bal",
+       " Skyl",
+       " Manc",
+       " Foam",
+       " Ded",
+       " Horizontal"
+      ],
+      "rank_start": 10,
+      "rank_z": 1,
+      "rank_answer": 3
+     },
+     "mean_removed": {
+      "top10": [
+       " ocean",
+       " SEA",
+       "\u6d77\u6d0b",
+       " bend",
+       "\u6d77\u6c34",
+       " NAV",
+       " submarine",
+       " ke",
+       "\u76f8\u53cd",
+       " bcm"
+      ],
+      "rank_start": 8,
+      "rank_z": 1,
+      "rank_answer": 3
+     }
+    }
+   },
+   "delta_share": {
+    "J": 0.2728024125099182,
+    "rest_J": 0.7271975874900818,
+    "random(seed0)": 0.19874054193496704,
+    "mean_removed": 0.9988728761672974
+   }
+  },
+  {
+   "layer": 42,
+   "pair": 28,
+   "table": "brew-s2-r10d2-0071",
+   "member": {
+    "start": "blue",
+    "z": "gold",
+    "answer": "brown",
+    "pieces": {
+     "whole": {
+      "top10": [
+       " END",
+       "(end",
+       " f\u00fchrt",
+       " THIRD",
+       " SECOND",
+       " culo",
+       "<|fim_middle|>",
+       " DEAD",
+       " \uc785\ub2c8\ub2e4",
+       "holen"
+      ],
+      "rank_start": 10,
+      "rank_z": 3,
+      "rank_answer": 9
+     },
+     "J": {
+      "top10": [
+       " END",
+       " consequ\u00eancias",
+       " termina",
+       " Lagi",
+       "END",
+       "<|fim_middle|>",
+       " SECOND",
+       " erneut",
+       " \uc785\ub2c8\ub2e4",
+       " Akan"
+      ],
+      "rank_start": 9,
+      "rank_z": 2,
+      "rank_answer": 10
+     },
+     "rest_J": {
+      "top10": [
+       "iseksi",
+       "\u5728\u6b64\u57fa\u7840\u4e0a",
+       "\u09bf",
+       "\u4ec0\u4e48\u5462",
+       "elled",
+       "mani",
+       "\u0440\u0430\u043b",
+       "\u044a",
+       "\u0565",
+       "uksen"
+      ],
+      "rank_start": 12,
+      "rank_z": 9,
+      "rank_answer": 5
+     },
+     "random(seed0)": {
+      "top10": [
+       " Horizontal",
+       " Bal",
+       " Rapid",
+       " Manc",
+       " Card",
+       " Dry",
+       " Skyl",
+       " Marino",
+       " Foam",
+       " Arrival"
+      ],
+      "rank_start": 4,
+      "rank_z": 11,
+      "rank_answer": 10
+     },
+     "mean_removed": {
+      "top10": [
+       " Agric",
+       "\u517b\u62a4",
+       "\u7ea2\u85af",
+       "\u5782\u6d8e",
+       " fatt",
+       " \u0645\u0648\u0631",
+       " BCM",
+       "\u91c7\u77ff",
+       "LB",
+       "urunan"
+      ],
+      "rank_start": 11,
+      "rank_z": 2,
+      "rank_answer": 1
+     }
+    }
+   },
+   "partner": {
+    "start": "brown",
+    "z": "orange",
+    "answer": "white",
+    "pieces": {
+     "whole": {
+      "top10": [
+       "holen",
+       " \u0432\u0442\u043e\u0440\u043e\u0439",
+       " SECOND",
+       " kembali",
+       " erneut",
+       "\u7b2c\u4e8c\u6b65",
+       " Lagi",
+       " THIRD",
+       " Demi",
+       " ikinci"
+      ],
+      "rank_start": 11,
+      "rank_z": 3,
+      "rank_answer": 10
+     },
+     "J": {
+      "top10": [
+       " erneut",
+       " Lagi",
+       " novamente",
+       " SECOND",
+       " \ub2e4\uc2dc",
+       "second",
+       " kembali",
+       " consequ\u00eancias",
+       " zwe",
+       " \u0432\u0442\u043e\u0440\u043e\u0439"
+      ],
+      "rank_start": 12,
+      "rank_z": 6,
+      "rank_answer": 10
+     },
+     "rest_J": {
+      "top10": [
+       "\u5728\u6b64\u57fa\u7840\u4e0a",
+       "\u09bf",
+       "\u4ec0\u4e48\u5462",
+       "\u044a",
+       "iseksi",
+       "\u4e00\u4e2a\u662f",
+       "\u03c1\u03b5\u03af",
+       "\u0ac2",
+       "-Jul",
+       " \u063a\u064a\u0631\u0647"
+      ],
+      "rank_start": 4,
+      "rank_z": 3,
+      "rank_answer": 5
+     },
+     "random(seed0)": {
+      "top10": [
+       " Bal",
+       " Dry",
+       " Foam",
+       " Casc",
+       " Est",
+       " Qu",
+       " Skyl",
+       " Rapid",
+       " Ded",
+       " Card"
+      ],
+      "rank_start": 10,
+      "rank_z": 12,
+      "rank_answer": 6
+     },
+     "mean_removed": {
+      "top10": [
+       "\u0cbf\u0c95",
+       "middle",
+       "\u0e14\u0e22",
+       "\u9a81",
+       "\u0441\u0442\u043e\u044f\u043d\u0438\u0435",
+       " \u043e\u0441\u0442",
+       "\u7b2c\u4e09\u4eba",
+       " dalje",
+       "uyla",
+       " \u00e9lo"
+      ],
+      "rank_start": 1,
+      "rank_z": 6,
+      "rank_answer": 12
+     }
+    }
+   },
+   "delta_share": {
+    "J": 0.21299488842487335,
+    "rest_J": 0.7870051264762878,
+    "random(seed0)": 0.18908630311489105,
+    "mean_removed": 0.98302161693573
+   }
+  },
+  {
+   "layer": 42,
+   "pair": 51,
+   "table": "brew-s2-r10d2-0101",
+   "member": {
+    "start": "gray",
+    "z": "white",
+    "answer": "brown",
+    "pieces": {
+     "whole": {
+      "top10": [
+       " END",
+       "(end",
+       " \ub2e4\uc2dc",
+       " f\u00fchrt",
+       " SECOND",
+       " AGAIN",
+       " FINAL",
+       " \u0627\u0644\u062a\u0627\u0644\u064a",
+       " \uc785\ub2c8\ub2e4",
+       "holen"
+      ],
+      "rank_start": 8,
+      "rank_z": 5,
+      "rank_answer": 11
+     },
+     "J": {
+      "top10": [
+       " END",
+       " \ub2e4\uc2dc",
+       " erneut",
+       " getNext",
+       " novamente",
+       " NEXT",
+       " SECOND",
+       " \uc785\ub2c8\ub2e4",
+       " FINAL",
+       " Lagi"
+      ],
+      "rank_start": 10,
+      "rank_z": 6,
+      "rank_answer": 11
+     },
+     "rest_J": {
+      "top10": [
+       "\u4ec0\u4e48\u5462",
+       "iseksi",
+       "\u0ac2",
+       "\u09bf",
+       "\u5728\u6b64\u57fa\u7840\u4e0a",
+       "edium",
+       "elled",
+       "\u0441\u0442\u044b",
+       "\u4e00\u4e2a\u662f",
+       "\u0565"
+      ],
+      "rank_start": 2,
+      "rank_z": 4,
+      "rank_answer": 3
+     },
+     "random(seed0)": {
+      "top10": [
+       " Rapid",
+       " Card",
+       " Direction",
+       " Arrival",
+       " Dry",
+       " Foam",
+       " Horizontal",
+       " Skyl",
+       "\u7684\u5feb\u901f",
+       " Winds"
+      ],
+      "rank_start": 9,
+      "rank_z": 7,
+      "rank_answer": 10
+     },
+     "mean_removed": {
+      "top10": [
+       "\u5f00\u540e",
+       "\u6b23\u6170",
+       "\u6700\u540e\u7684",
+       "\u666e\u60e0",
+       "\u6e29\u99a8",
+       "/utility",
+       " WINDOW",
+       "\u798f\u5229",
+       "(window",
+       "\u0e2b\u0e25\u0e31\u0e07"
+      ],
+      "rank_start": 9,
+      "rank_z": 1,
+      "rank_answer": 3
+     }
+    }
+   },
+   "partner": {
+    "start": "green",
+    "z": "pink",
+    "answer": "orange",
+    "pieces": {
+     "whole": {
+      "top10": [
+       "holen",
+       " f\u00fchrt",
+       " SECOND",
+       " \u0412\u0456\u0434",
+       " \u0432\u0442\u043e\u0440\u043e\u0439",
+       " Demi",
+       "\u7b2c\u4e8c\u6b65",
+       "\ud569\ub2c8\ub2e4",
+       " FOLLOW",
+       " \u041f\u043e\u0441\u043b\u0435\u0434"
+      ],
+      "rank_start": 6,
+      "rank_z": 1,
+      "rank_answer": 2
+     },
+     "J": {
+      "top10": [
+       " SECOND",
+       " Lagi",
+       " getNext",
+       " n\u00e4chste",
+       " END",
+       " zwe",
+       "second",
+       " f\u00fchrt",
+       " consequ\u00eancias",
+       " erneut"
+      ],
+      "rank_start": 6,
+      "rank_z": 1,
+      "rank_answer": 2
+     },
+     "rest_J": {
+      "top10": [
+       "\u5728\u6b64\u57fa\u7840\u4e0a",
+       "\u4e00\u4e2a\u662f",
+       "\u044a",
+       "\u0ac2",
+       "iseksi",
+       "\u09bf",
+       "elden",
+       "\u4ec0\u4e48\u5462",
+       "\u0440\u0430\u043b",
+       "\u0441\u0442\u044b"
+      ],
+      "rank_start": 9,
+      "rank_z": 1,
+      "rank_answer": 5
+     },
+     "random(seed0)": {
+      "top10": [
+       " Card",
+       " Rapid",
+       " Storm",
+       " Horizontal",
+       " Bal",
+       " Winds",
+       " Pron",
+       " Fa",
+       " Dry",
+       " Qu"
+      ],
+      "rank_start": 5,
+      "rank_z": 2,
+      "rank_answer": 11
+     },
+     "mean_removed": {
+      "top10": [
+       "\u5e08\u59d0",
+       " Actress",
+       " Sera",
+       "\u4e32\u884c",
+       "\u80a1\u5229",
+       "\u0412\u0418",
+       "\u5f7c\u5973",
+       " actress",
+       "atrix",
+       "\u8ba9\u5979"
+      ],
+      "rank_start": 12,
+      "rank_z": 1,
+      "rank_answer": 2
+     }
+    }
+   },
+   "delta_share": {
+    "J": 0.22593407332897186,
+    "rest_J": 0.7740659117698669,
+    "random(seed0)": 0.18470752239227295,
+    "mean_removed": 0.9900856018066406
+   }
+  },
+  {
+   "layer": 42,
+   "pair": 61,
+   "table": "brew-s2-r10d2-0107",
+   "member": {
+    "start": "brown",
+    "z": "purple",
+    "answer": "gold",
+    "pieces": {
+     "whole": {
+      "top10": [
+       " Joker",
+       " f\u00fchrt",
+       " \u0627\u0644\u062a\u0627\u0644\u064a",
+       " Demi",
+       "holen",
+       " culo",
+       " \uc785\ub2c8\ub2e4",
+       "<|fim_middle|>",
+       " END",
+       " \u0107e"
+      ],
+      "rank_start": 12,
+      "rank_z": 2,
+      "rank_answer": 6
+     },
+     "J": {
+      "top10": [
+       " Joker",
+       " f\u00fchrt",
+       " END",
+       "LEFT",
+       " \u0627\u0644\u062a\u0627\u0644\u064a",
+       " SECOND",
+       " Lagi",
+       " getNext",
+       " erneut",
+       "<|fim_middle|>"
+      ],
+      "rank_start": 12,
+      "rank_z": 2,
+      "rank_answer": 6
+     },
+     "rest_J": {
+      "top10": [
+       "\u09bf",
+       "\u044a",
+       "iseksi",
+       "\u4e00\u4e2a\u662f",
+       "\u4ec0\u4e48\u5462",
+       "\u5728\u6b64\u57fa\u7840\u4e0a",
+       "elled",
+       " \u063a\u064a\u0631\u0647",
+       "\u0565",
+       "\u0ac2"
+      ],
+      "rank_start": 7,
+      "rank_z": 9,
+      "rank_answer": 8
+     },
+     "random(seed0)": {
+      "top10": [
+       " Bal",
+       " Rapid",
+       " Foam",
+       " Arrival",
+       " Card",
+       " Skyl",
+       " Marino",
+       " Storm",
+       " Winds",
+       " Est"
+      ],
+      "rank_start": 11,
+      "rank_z": 6,
+      "rank_answer": 10
+     },
+     "mean_removed": {
+      "top10": [
+       "\u91ca\u653e",
+       " RandomForest",
+       "_PREFIX",
+       ".idea",
+       "\u65a7",
+       " alph",
+       "\u0bbf\u0bb2",
+       " Vor",
+       "wes",
+       " Literary"
+      ],
+      "rank_start": 11,
+      "rank_z": 4,
+      "rank_answer": 8
+     }
+    }
+   },
+   "partner": {
+    "start": "blue",
+    "z": "red",
+    "answer": "green",
+    "pieces": {
+     "whole": {
+      "top10": [
+       " SECOND",
+       " END",
+       "second",
+       " AGAIN",
+       " DEAD",
+       "\u7b2c\u4e8c\u6b65",
+       "Second",
+       " \u0432\u0442\u043e\u0440\u043e\u0439",
+       "\u7b2c\u4e8c\u4e2a",
+       " RESULT"
+      ],
+      "rank_start": 9,
+      "rank_z": 2,
+      "rank_answer": 3
+     },
+     "J": {
+      "top10": [
+       " SECOND",
+       " END",
+       " AGAIN",
+       " RESULT",
+       "second",
+       " erneut",
+       "<|fim_middle|>",
+       "Second",
+       " RED",
+       " consequ\u00eancias"
+      ],
+      "rank_start": 7,
+      "rank_z": 2,
+      "rank_answer": 3
+     },
+     "rest_J": {
+      "top10": [
+       "\u044a",
+       "\u09bf",
+       "\u0ac2",
+       "iseksi",
+       "\u0c02\u0c21\u0c3f",
+       "elled",
+       "\u4ec0\u4e48\u5462",
+       "\u5728\u6b64\u57fa\u7840\u4e0a",
+       " puisque",
+       "\u056b"
+      ],
+      "rank_start": 12,
+      "rank_z": 5,
+      "rank_answer": 9
+     },
+     "random(seed0)": {
+      "top10": [
+       " Rapid",
+       " Bal",
+       "\u7684\u5feb\u901f",
+       " Dry",
+       " Foam",
+       " Winds",
+       " Card",
+       " Ded",
+       " Skyl",
+       " raining"
+      ],
+      "rank_start": 1,
+      "rank_z": 4,
+      "rank_answer": 6
+     },
+     "mean_removed": {
+      "top10": [
+       " RED",
+       "RED",
+       "\u6027\u522b",
+       "red",
+       "gender",
+       " gender",
+       "\u4e8c\u53c9",
+       "Red",
+       "\u7ea2\u8272",
+       " Gender"
+      ],
+      "rank_start": 9,
+      "rank_z": 1,
+      "rank_answer": 3
+     }
+    }
+   },
+   "delta_share": {
+    "J": 0.2607695162296295,
+    "rest_J": 0.7392303347587585,
+    "random(seed0)": 0.1961052566766739,
+    "mean_removed": 0.9881044030189514
+   }
+  },
+  {
+   "layer": 42,
+   "pair": 73,
+   "table": "brew-s2-r10d2-0131",
+   "member": {
+    "start": "gold",
+    "z": "red",
+    "answer": "black",
+    "pieces": {
+     "whole": {
+      "top10": [
+       " END",
+       "(end",
+       " f\u00fchrt",
+       "holen",
+       " consequ\u00eancias",
+       " DEAD",
+       " \u0107e",
+       "BBBB",
+       "<|fim_middle|>",
+       " getResult"
+      ],
+      "rank_start": 8,
+      "rank_z": 2,
+      "rank_answer": 3
+     },
+     "J": {
+      "top10": [
+       " END",
+       " consequ\u00eancias",
+       " termina",
+       "END",
+       "<|fim_middle|>",
+       " RESULT",
+       " Lagi",
+       " f\u00fchrt",
+       " getResult",
+       " erneut"
+      ],
+      "rank_start": 7,
+      "rank_z": 2,
+      "rank_answer": 1
+     },
+     "rest_J": {
+      "top10": [
+       "\u09bf",
+       "iseksi",
+       "\u5728\u6b64\u57fa\u7840\u4e0a",
+       "\u4ec0\u4e48\u5462",
+       "\u0c02\u0c21\u0c3f",
+       "uksen",
+       "\u0441\u0442\u044b",
+       " puisque",
+       "\u044a",
+       "elled"
+      ],
+      "rank_start": 8,
+      "rank_z": 3,
+      "rank_answer": 9
+     },
+     "random(seed0)": {
+      "top10": [
+       " Rapid",
+       " Skyl",
+       " Foam",
+       " Bal",
+       " Casc",
+       "\u7684\u5feb\u901f",
+       " Card",
+       " Horizontal",
+       " Winds",
+       " Ded"
+      ],
+      "rank_start": 12,
+      "rank_z": 7,
+      "rank_answer": 1
+     },
+     "mean_removed": {
+      "top10": [
+       "\u6b65\u67aa",
+       "\u67aa",
+       "\u706b\u529b",
+       "\u673a\u67aa",
+       "\u51f6",
+       "\u81f4\u547d",
+       "\u6740",
+       " kill",
+       "\u6b66\u5668",
+       "\u7ea2\u8272"
+      ],
+      "rank_start": 6,
+      "rank_z": 1,
+      "rank_answer": 2
+     }
+    }
+   },
+   "partner": {
+    "start": "orange",
+    "z": "blue",
+    "answer": "green",
+    "pieces": {
+     "whole": {
+      "top10": [
+       " AGAIN",
+       " SECOND",
+       "holen",
+       " END",
+       " DEAD",
+       " culo",
+       " THIRD",
+       " f\u00fchrt",
+       " \u0627\u0644\u062a\u0627\u0644\u064a",
+       " Cycle"
+      ],
+      "rank_start": 6,
+      "rank_z": 5,
+      "rank_answer": 4
+     },
+     "J": {
+      "top10": [
+       " SECOND",
+       " AGAIN",
+       " END",
+       " erneut",
+       " \ub2e4\uc2dc",
+       " Cycle",
+       " RESULT",
+       " novamente",
+       " consequ\u00eancias",
+       " \u0627\u0644\u062a\u0627\u0644\u064a"
+      ],
+      "rank_start": 8,
+      "rank_z": 1,
+      "rank_answer": 4
+     },
+     "rest_J": {
+      "top10": [
+       "\u044a",
+       "\u09bf",
+       "\u0ac2",
+       "\u4ec0\u4e48\u5462",
+       "iseksi",
+       "\u5728\u6b64\u57fa\u7840\u4e0a",
+       "elled",
+       "\u4e00\u4e2a\u662f",
+       "\u0441\u0442\u044b",
+       "\u0440\u0430\u043b"
+      ],
+      "rank_start": 4,
+      "rank_z": 12,
+      "rank_answer": 6
+     },
+     "random(seed0)": {
+      "top10": [
+       " Rapid",
+       " Foam",
+       " Bal",
+       " Skyl",
+       " Arrival",
+       " Dry",
+       " Ded",
+       " Rain",
+       "\u7684\u5feb\u901f",
+       " Pere"
+      ],
+      "rank_start": 10,
+      "rank_z": 1,
+      "rank_answer": 4
+     },
+     "mean_removed": {
+      "top10": [
+       " inverted",
+       " inversion",
+       " orig",
+       " oppose",
+       "\u76f8\u53cd",
+       " opposes",
+       " inverse",
+       " ocean",
+       " submarine",
+       " reverse"
+      ],
+      "rank_start": 11,
+      "rank_z": 1,
+      "rank_answer": 5
+     }
+    }
+   },
+   "delta_share": {
+    "J": 0.24837081134319305,
+    "rest_J": 0.7516292929649353,
+    "random(seed0)": 0.1945999711751938,
+    "mean_removed": 0.9993852376937866
+   }
+  }
+ ],
+ "note": "multi-token colours scored by their first token: []"
+}
