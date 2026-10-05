@@ -285,6 +285,8 @@ class OracleLens:
             ch = hs[j:j + acts_per_batch]
             e = emb.repeat(len(ch), 1, 1).clone()
             for a, h in enumerate(ch):
+                if h is None:                                      # design 007 §3.5: no-activation row (no injection)
+                    continue
                 v = h.to(dev).float()
                 e[a * C:(a + 1) * C, slot, :] = (self.c["alpha"] * v / v.norm().clamp_min(1e-9)).to(e.dtype)
             m = am.repeat(len(ch), 1)
@@ -655,7 +657,8 @@ class NLArl:
         out = []
         for j in range(0, len(hs), acts_per_batch):
             ch = hs[j:j + acts_per_batch]
-            self._v["v"] = torch.stack([h.float() for h in ch]).repeat_interleave(C, 0)
+            # design 007 §3.5: None = the no-activation row (an all-zero vector, which karvonen_add_ leaves alone)
+            self._v["v"] = torch.stack([h.float() if h is not None else torch.zeros(R.D_MODEL) for h in ch]).repeat_interleave(C, 0)
             try:
                 x, m = x0.repeat(len(ch), 1), m0.repeat(len(ch), 1)
                 Hn = inner(input_ids=x, attention_mask=m, use_cache=False).last_hidden_state

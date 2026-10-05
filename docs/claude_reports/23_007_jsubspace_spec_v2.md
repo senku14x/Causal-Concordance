@@ -33,7 +33,7 @@
   - Stage 2b is the paper's §3.3 privilege test on class-mean z directions.
   - Both are experiments about J geometry, never labels.
 - **Secondary:**
-  - Stage 1b (`</think>`, the unused cell);
+  - Stage 1b (`</think>`, the cell with lower observed patch leverage);
   - multihop (Stage 3: relation-level pairs; expected to say little about J);
   - relational (Stages 4a profile, 4b Part A; exploratory);
   - chain (Stage 5; first to be dropped);
@@ -42,7 +42,7 @@
 - **Budget:** cap about 15 GPU-h.
   - Projected 15.0–16.1 GPU-h with everything (§13). **Expect Stage 5 to be dropped**; Stage 4b runs only if the
     projection still fits.
-- **Run order:** 0 → 1a → 2 (+2b) → 1b → brew test → 3 → 4a → 4b → 5. The template lens and the CPU analyses run
+- **Run order (A1):** 0 → 1a → 2 (+2b) → brew test → 1b → 3 → 4a → 4b → 5. The template lens and the CPU analyses run
   whenever their inputs exist.
 
 ## 1. Open points I found while folding in v2 (decided here as stated; the PI can override before the go)
@@ -507,7 +507,7 @@ This makes wholesale prior shifts visible, such as 006's Oracle "blue" prior.
 | **Not replicated** | S(non-J) ≥ S(J) |
 | mixed | otherwise |
 
-## 7. Brew test replication (confirmatory; after Stage 1b, before Stage 3)
+## 7. Brew test replication (confirmatory; A1: after Stage 2/2b, before Stage 1b)
 
 ### 7.1 Material
 
@@ -638,14 +638,14 @@ This makes wholesale prior shifts visible, such as 006's Oracle "blue" prior.
 - **Layers:** 40, 42, …, 60.
 - **Score:** m = full-sequence LSE log P(" " + gold of the partner) − log P(" " + gold of the member). S = Δm / G.
 - **Controls:** 001's noise floor and off-pair damage flag.
-- **Used and unused positions** (at the reader layers):
+- **Higher- and lower-leverage positions** (higher/lower observed patch leverage, at the reader layers):
 
   | Kind | Rule |
   |---|---|
-  | used | median S ≥ 0.25 at L42 and ≥ 0.15 at L40 and L44, not damage-dominated |
-  | unused | median S ≤ 0.05 at L40, L42 and L44, with CI upper ≤ 0.10 |
+  | higher leverage | median S ≥ 0.25 at L42 and ≥ 0.15 at L40 and L44, not damage-dominated |
+  | lower leverage | median S ≤ 0.05 at L40, L42 and L44, with CI upper ≤ 0.10 |
 
-  - Ties go to the used position with the highest L42 S, and the unused position nearest to it.
+  - Ties go to the higher-leverage position with the highest L42 S, and the lower-leverage position nearest to it.
   - If either kind is missing, stop after 4a.
 
 ### 9.3 Stage 4b, Part A at the two positions
@@ -656,7 +656,7 @@ This makes wholesale prior shifts visible, such as 006's Oracle "blue" prior.
   - a pooled relation-word candidate set (one spelling).
 - **D:** on X, the item's outer relation word. Flagged as answer readout (X is the next token).
 - **Also:** the template lens, and a positive control on "Tell me about {relation word}".
-- **Comparison:** the J-split pattern at the used vs the unused position.
+- **Comparison:** the J-split pattern at the higher- vs the lower-leverage position.
 
 ## 10. Stage 5 — Chain (exploratory; dropped first if over budget)
 
@@ -732,7 +732,7 @@ This makes wholesale prior shifts visible, such as 006's Oracle "blue" prior.
 
 ### 12.5 Run order (fix 14)
 
-- 0 → 1a → 2 (+2b) → 1b → brew test → 3 → 4a → 4b → 5.
+- 0 → 1a → 2 (+2b) → brew test → 1b → 3 → 4a → 4b → 5 (A1: the brew test before Stage 1b).
 - The template lens and the CPU analyses run whenever their inputs exist.
 
 ### 12.6 After each stage
@@ -808,7 +808,7 @@ P5 was added, and are left unchanged.
 | M1 | Multihop test: whole-activation D_bridge CI above 0 for ≥ 1 reader-layer | 0.60 | |
 | M2 | Multihop: ≥ 50% of J-piece readouts that name the bridge also restate the cue | 0.60 | |
 | Q1 | Relational: ≥ 20 scenes pass the gate and alignment | 0.55 | |
-| Q2 | Relational profile yields a used and an unused position | 0.45 | |
+| Q2 | Relational profile yields a higher- and a lower-leverage position | 0.45 | |
 | T1 (v2) | Template lens passes its colour sanity check at L40, L42 and L44 | 0.75 | |
 | T2 (v2) | Template lens: D_z(rest of J) ≥ 0.5 · D_z(whole) at `:` L42 | 0.60 | |
 | C1 | CPU lens: z-first share (J_NP cosine, `:` L40/L42) higher on mean-removed than on whole | 0.75 | |
@@ -855,8 +855,8 @@ P5 was added, and are left unchanged.
 - **Template lens.** If a non-J linear reader also loses z without J, "J-dependence" is not specific to J-built
   readers.
 
-**Stage 1b.** The same pattern at `</think>` (share 0.01) as at `:` (0.48) means the readers' piece dependence is
-unrelated to use.
+**Stage 1b.** The same pattern at `</think>` (patch share 0.01) as at `:` (0.48) means the readers' piece dependence
+does not follow observed patch leverage.
 
 **Stage 2.**
 - **Tracks Δ-share:** 004 extends to a fixed basis that was not fitted on the data. There is no model-side evidence
@@ -873,8 +873,8 @@ unrelated to use.
 
 **Stage 3.** Same pattern → two families agree. Restatement dominates → multihop is retired as a J-split testbed.
 
-**Stage 4.** A different J-split pattern at the used vs the unused position is evidence that the readers' piece
-dependence carries use information. The same pattern is evidence against it.
+**Stage 4.** A different J-split pattern at the higher- vs the lower-leverage position is evidence that the readers'
+piece dependence follows observed patch leverage. The same pattern is evidence against it.
 
 **Stage 5.** Hypothesis-generating only.
 
@@ -965,3 +965,68 @@ dependence carries use information. The same pattern is evidence against it.
   - This replaces §3.2's "`acts_per_batch = 2`, as in 006".
 - **CPU-labelled heavy linear algebra** in Stage 0 (the W_U·J products for bases and atoms, the pursuits) may run on
   the idle GPU in float32. It is the same arithmetic, and no model forward is involved.
+
+## 21. Amendment A1 (adopted 2026-10-05T21:25Z, after launch, before any 007 outcome was read)
+
+**What had been looked at when A1 was made.**
+- No Stage 1a result had been inspected, and no reader read or GPU forward of 007 had run.
+- Stage 0 (CPU) had executed once and **failed G-geom**: one comparison, the rest-of-random visible ratio at `:` L44,
+  was off by 0.0052 against a threshold of 0.005.
+- Stage 0's log, which I read while diagnosing, also printed piece geometry, including the Δ-share and visible ratio
+  of J∘centred and random 0∘centred.
+- That is geometry only (no reader, no model output). It is disclosed here because A1's P5 rule uses it.
+
+**Stage 0 G-geom failure and correction (before any GPU work).**
+- **Cause:** the gate compared the median over our 3 rest-of-random draws with report 22's median over 10 draws.
+  That is a like-for-like error in the gate code, not in the piece construction. Every other comparison was within
+  0.0047.
+- **Correction:** each random draw r (0–9, and 0–2 for the complements) is compared per draw against report 22's own
+  float64 construction of the same seed.
+- **The threshold is unchanged (0.005).** Rerun: worst difference 5e-7; G-bases and G-recon unchanged and passing.
+- Recorded as a pre-outcome repair of gate code.
+
+**Changes adopted by A1.**
+1. **Shared-path gates.** A failure of G-score1/2, G-inject or G-repro for a reader disables that reader's scoring and
+   injection path in **every later stage** that uses it, including the brew test. It is not just a skip of the
+   current stage.
+   - My reading, to be corrected if wrong: the failed reader's blocks are not run in later stages, while stages run
+     for the remaining reader(s), and reader-free stages are unaffected.
+2. **P5.**
+   - **Described as:** "does the J advantage persist after the same mean-direction removal?", not "visibility
+     equalised".
+   - **The Visible model's P5 prediction** is derived from Stage 0's measured post-projection geometry of J∘centred vs
+     random∘centred (draws 0–2): Δ-share, visible ratio and normalised member–partner separation
+     (`stage0.json` → `P5_geometry`).
+   - If the two visible ratios differ by more than 15%, the Visible model makes no P5 prediction; otherwise it
+     predicts ≈.
+   - **Measured** relative differences: `:` L40/42/44 = 0.026 / 0.011 / 0.033; `</think>` = 0.018 / 0.013 / 0.037. So
+     Visible predicts ≈ at every cell.
+   - Raw and H_J predictions are as in §2.2. **The three models are not claimed to be exhaustive.**
+3. **Positive control.**
+   - Also applied to the colour activations: the frozen brew operators, i.e. the template-mean direction u_b (the mean
+     of the 231 dev renders at that cell and layer) and the generic u_gen, each with their P5 compositions. They are
+     reported alongside the colour-mean version.
+   - **Revised informativeness rule:**
+     - a positive-control failure makes a piece's **null** uninformative;
+     - a clear positive D on that piece (CI above 0) stands, flagged;
+     - a contrast is uninformative only if one of its pieces fails the positive control without a clear positive D.
+4. **Role-specificity wording.**
+   - Equal tracking of start, z and answer is reported as **"broad colour tracking without demonstrated z selectivity
+     or role binding"**, not "not about z".
+   - The off-trajectory D is a negative alignment control only. Its spread (the distribution of |D_off| against the
+     derangement null) is reported.
+5. **Stage 2b.**
+   - All 33 pairs run regardless. The 2-pair check becomes a reported smoke check, not a gate.
+   - **Privilege additionally requires:**
+     - S(J) above the norm-matched random directions;
+     - a higher donor-answer share F_target than non-J;
+     - no larger damage rate than non-J.
+   - It is called an **adapted selectivity test**. A negative means "not demonstrated under this adaptation".
+   - Stage 2 (fixed projection) and Stage 2b (adaptive pursuit) need not agree.
+6. **Replication comparator.** Dev P1–P5 are also reported with random draws 0–2 only (as on test), alongside the
+   10-draw dev result.
+7. **Run order.** 0 → 1a → 2 (+2b) → brew test → 1b → 3 → 4a → 4b → 5.
+8. **Wording.** "Used/unused cell" is replaced with "higher/lower observed patch leverage" throughout.
+
+These supersede the conflicting text above: the §3.6 and §4.4 informativeness rule, §2.2 P5 rationale, §3.3 reading rule
+wording, §6.4–6.5, §7 ordering and §12.3.
