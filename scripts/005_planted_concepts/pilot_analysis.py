@@ -614,6 +614,128 @@ if D10.exists():
     s10["timings"] = st10.get("timings")
     S["step10"] = s10
 
+# ------------------------- step 11 (§16.7): consistency, Q16 (output-direction clamp), G11 + Q17 (reader likelihoods)
+D11 = D / "step11"
+if D11.exists():
+    s11 = {"agent_priors": {"Q16_J_specific_B": 0.50, "G11_pass": {"oracle": 0.80, "nla": 0.55},
+                            "Q17_perp_at_least_as_sensitive": {"nla": 0.35, "oracle": 0.45},
+                            "Q17_full_at_least_as_sensitive": {"nla": 0.40, "oracle": 0.50}}}
+
+    def mean_(x):
+        return float(np.mean(x)) if len(x) else None
+    # consistency: the unclamped condition-4 rows repeat step 10's
+    cons = {}
+    for band in ("B", "B2"):
+        f, f10 = D11 / f"outclamp_{band}.json", D / "step10" / f"clampsweep_{band}.json"
+        if f.exists() and f10.exists():
+            ref = {(r["concept"], r["s"]): r["dR1p"] for r in json.loads(f10.read_text()) if r["cond"] == 4}
+            d = [abs(r["dR1p"] - ref[(r["concept"], r["s"])]) for r in json.loads(f.read_text()) if r["cond"] == 4]
+            cons[band] = {"n": len(d), "median_abs": med(d), "p95_abs": float(np.quantile(d, 0.95)), "max_abs": float(max(d))}
+    s11["consistency"] = {"checks": cons, "rule": "G10's: median |diff| <= 0.05 and 95th pct <= 0.25 nats",
+                          "pass": bool(cons) and all(v["median_abs"] <= 0.05 and v["p95_abs"] <= 0.25 for v in cons.values())}
+
+    # Q16: J-atom clamp (step 10) vs output-direction clamp (step 11), same tokens, rank and best doses
+    q14s = (S.get("step10") or {}).get("Q14", {})
+    q16 = {}
+    for band in ("B", "B2"):
+        f, f10 = D11 / f"outclamp_{band}.json", D / "step10" / f"clampsweep_{band}.json"
+        if not (f.exists() and f10.exists() and band in q14s):
+            continue
+        rows, rows10 = json.loads(f.read_text()), json.loads(f10.read_text())
+        ev = q14s[band]["evaluable"]
+
+        def at(rs, c, cond, s_b):
+            return [r for r in rs if r["concept"] == c and str(r["cond"]) == cond and r["s"] == s_b][0]["dR1p"]
+        by_e = {}
+        for E in range(44, 63, 2):
+            xo, xj, dd, oc, orr = [], [], [], [], []
+            for c, s_b in ev.items():
+                o_c, o_r = at(rows, c, f"O{E}", s_b), at(rows, c, f"O{E}r", s_b)
+                ej = at(rows10, c, f"E{E}r", s_b) - at(rows10, c, f"E{E}", s_b)
+                xo.append(o_r - o_c)
+                xj.append(ej)
+                dd.append(ej - (o_r - o_c))
+                oc.append(o_c)
+                orr.append(o_r)
+            ci_o, ci_d = boot_ci(xo), boot_ci(dd)
+            by_e[E] = {"n": len(dd), "extra_out_mean": mean_(xo), "extra_out_ci": ci_o, "out_specific": bool(xo) and ci_o[0] > 0,
+                       "extra_J_mean": mean_(xj), "D_mean": mean_(dd), "D_ci": ci_d, "D_above_0": bool(dd) and ci_d[0] > 0,
+                       "D_below_0": bool(dd) and ci_d[1] < 0, "mean_dR1p_O_c": mean_(oc), "mean_dR1p_O_r": mean_(orr)}
+        k = sum(by_e[E]["D_above_0"] for E in (48, 50, 52))
+        verdict = "J-specific" if k >= 2 else ("not J-specific" if k == 0 else "inconclusive")
+        amend = {"J-specific": "M2 as drafted: the J clamp to L50 tests routing through J coordinates",
+                 "not J-specific": "M2 reports the output-direction clamp as a mandatory control beside the J clamp; "
+                                   "wording 'routing through the concept's output-related coordinates'",
+                 "inconclusive": "both clamps reported; the PI decides"}[verdict]
+        q16[band] = {"by_E": by_e, "n_mid_D_above_0": k, "verdict": verdict, "amendment": amend}
+    s11["Q16"] = q16
+
+    # Q17: reader likelihoods at a forced answer position vs the model's report (absolute onsets on the median SM)
+    def onset(curve, th):
+        for s_ in GRID9:
+            v = curve.get(str(s_))
+            if v is not None and v >= th:
+                return s_
+        return None
+    mq = ((S.get("step10") or {}).get("Q15") or {}).get("B", {})
+    model_on = {}
+    for cond in ("2", "3", "4"):
+        cm = {k: v["SM_median"] for k, v in (mq.get(cond) or {}).get("by_dose", {}).items()}
+        model_on[cond] = {"onset_1": onset(cm, 1.0), "onset_0.5": onset(cm, 0.5), "SM_median_by_dose": cm}
+    readers_ = {}
+    for f in sorted(D11.glob("reads_*_L*.json")):
+        d = json.loads(f.read_text())
+        W, clean = d["W"], d["clean"]
+        nat_id = {x["concept"]: max(P.DEV, key=lambda w: x["lpW"][w]) == x["concept"] for x in d["natural"]}
+        g11 = float(np.mean(list(nat_id.values())))
+        rows = d["rows"]
+        for r in rows:
+            r["dW"] = {w: r["lpW"][w] - clean[w] for w in W}
+            r.update(P.specificity(r["dW"], r["concept"], P.DEV))
+        per = {}
+        for cond in (2, 3, 4, 7):
+            by = {}
+            for s_ in GRID9:
+                rs = [r for r in rows if r["cond"] == cond and r["s"] == s_]
+                sm_c = ([float(np.mean([r["SM"] for r in rs if r["concept"] == c])) for c in P.DEV] if cond == 7
+                        else [r["SM"] for r in rs])
+                by[str(s_)] = {"ID_rate": float(np.mean([r["ID"] for r in rs])), "SM_median": med(sm_c),
+                               "SM_mean": mean_(sm_c), "SM_ci": boot_ci(sm_c),
+                               "dc_median": med([r["dW"][r["concept"]] for r in rs]),
+                               "generic_median": med([r["generic"] for r in rs])}
+            sm_curve = {k: v["SM_median"] for k, v in by.items()}
+            per[str(cond)] = {"by_dose": by, "onset_1": onset(sm_curve, 1.0), "onset_0.5": onset(sm_curve, 0.5)}
+        readers_[f"{d['reader']}_L{d['layer']}"] = {"reader": d["reader"], "layer": d["layer"], "prefix": d["prefix"],
+                                                   "W_size": len(W), "G11_ID_natural": g11, "G11_pass": g11 >= 0.7,
+                                                   "natural_ID_by_concept": nat_id, "by_cond": per}
+    verdicts = {}
+    for name in ("nla", "oracle"):
+        mine = [k for k, v in readers_.items() if v["reader"] == name]
+        ok_layers = [k for k in mine if readers_[k]["G11_pass"]]
+        res = {"layers": mine, "layers_passing_G11": ok_layers}
+        for cond in ("2", "3", "4"):
+            out = {}
+            for th in ("1", "0.5"):
+                ons = [readers_[k]["by_cond"][cond][f"onset_{th}"] for k in ok_layers
+                       if readers_[k]["by_cond"][cond][f"onset_{th}"] is not None]
+                s_r, s_m = (min(ons) if ons else None), model_on[cond][f"onset_{th}"]
+                out[th] = {"reader_onset": s_r, "model_onset": s_m,
+                           "at_least_as_sensitive": (s_r is not None and (s_m is None or s_r <= s_m)) if ok_layers else None}
+            res[cond] = out
+        res["uninformative"] = not ok_layers
+        verdicts[name] = res
+    withdrawn = [n for n, v in verdicts.items() if not v["uninformative"] and v["4"]["1"]["at_least_as_sensitive"]]
+    s11["Q17"] = {"model_onsets_bandB": model_on, "readers": readers_, "verdicts": verdicts,
+                  "preview_withdrawn_for": withdrawn,
+                  "amendment": ("P11′ uses reader likelihoods as the readers' primary measure (naming secondary); the "
+                                "naming-based 'readers are less sensitive' preview is withdrawn for " + ", ".join(withdrawn))
+                  if withdrawn else ("the preview stands under a matched measure; P11′ as drafted with a likelihood column"),
+                  "rule": "s_R(1 nat) <= s_M(1 nat) on the median SM; readers failing G11 are uninformative"}
+    st11 = json.loads((D11 / "state.json").read_text()) if (D11 / "state.json").exists() else {}
+    s11["scoring_check_maxabs"] = st11.get("scoring_check_maxabs")
+    s11["timings"] = st11.get("timings")
+    S["step11"] = s11
+
 OUT.parent.mkdir(parents=True, exist_ok=True)
 OUT.write_text(json.dumps(S, indent=1, default=str))
 print("blocks", S["blocks"])
