@@ -1,0 +1,38 @@
+# claude_reports — index
+
+Reports and notes from the Claude Code session of 2026-10-04 (Causal-Concordance). Items 13–15 and the report page come from the 005 GPU smoke and the dev-only overnight pilot; everything else is CPU work or reading.
+
+**Full-run results (5 Oct): https://claude.ai/artifact/5EGz2DxcAXXQs3wTtz1Lnu** (`16_005_full_run.md`). **Pilot (night of 4 Oct): the report page https://claude.ai/artifact/P35xhVkdzKjsdGhogp7PQY** (version 4, with steps 8–11) covers what was run, why,
+what I expected and what came out, every number from the result files, with charts and raw readouts. Then `15_005_amendment_01_DRAFT.md`
+(the decisions waiting for you).
+
+| File | What it is | Also in the repo? |
+|---|---|---|
+| `01_SPEC_v2_review_2026-10-04.md` | **Start here.** (0) setup results; (a) project summary; (b) 20 contradictions between SPEC_v2 and code, reports and the CW pilot; (c) proposed [v2] edits (J-space for 005, Fig. 8/16 privilege test, Biderman K+2, others); (d) the NLA checkpoint plan; (e) the decisions only you can make | `docs/context/SPEC_v2_review_2026-10-04.md` on branch `spec-v2` |
+| `02_reading_notes_v2_NLA_Viswanath_AO_WSB.md` | Paper notes: NLA paper, Viswanath 2026, Karvonen et al. AO, WSB brew/multihop/chain READMEs, HF checkpoint metadata (Oracle hash verified; nla-L42 vs nla-rl are different runs) | `docs/context/reading_notes_v2.md` on `spec-v2` |
+| `03_workspace_paper_notes_merged.md` | My notes on the Anthropic workspace / J-lens paper, merged with yours (§13 follow-up literature, §14 corrections, §15 disagreements) | no (local: `/workspace/notes/`) |
+| `04_user_workspace_paper_notes_verbatim.md` | Your workspace-paper notes, verbatim | no |
+| `05_doubts_and_open_questions.md` | Where my own report could be wrong, what I could not verify or access, and questions about intent | no |
+| `06_next_steps_proposal.md` | *(Superseded by 09/10: 005 is now one run, per your note.)* What I'd do next: 005 stage 1 (planted-concept sensitivity curves, all readers + model), the order of work, budget, and what can run in parallel | no |
+| `07_checks_C1_C2_C3_results.md` | **Results of the three no-GPU checks** (pre-registered): C1 chain re-score: CW-7 stands under WSB's rule at a third of its size (Oracle L56 11/60 vs null 0.04; J-lens equal; NLA 1/60); C2 ":" L42 off-pair mass → "influence" (thin); C3 removal energy: multihop ratio 2.4 (B14 stands), Brew 1.7 (matched) | `docs/reports/checks_2026-10-04_no_gpu.md` |
+| `08_SPEC_v2_errata_01_ACCEPTED.md` | **Errata V2-E1–E9, accepted by you 2026-10-04** (E1/E7 reworded, E9 = CW-7 rewrite); SPEC_v2's header points to it | `docs/context/SPEC_v2_errata_01.md` |
+| `09_design_005_planted_concepts_DRAFT.md` | **Design 005 v2 + your priors' columns + my pre-registered priors (§8), smoke authorised; §16 overnight dev-only pilot (Q1–Q9), §16.2 run order, §16.3 step 7b (re-entry clamp, layer sweep, R-lens), §16.4 step 8 (arrival at the report position, Oracle late layers, power), §16.5 step 9 (robustness to the J-space construction), §16.6 step 10 (where the clamp starts to act; is the report measure concept-specific), §16.7 step 11 (output-direction clamp control; reader likelihoods vs the model).** Earlier summary: read kinds fixed (direct = P17, carried at the open quote = P11), strict P11a/b, 45 test concepts, random-clamp null, G5 split gate. Original summary: plant concept vectors split into J / non-J parts; the model's report and behaviour vs every reader's detection; gates (incl. the Qwen report gate), contrasts P11a/P11b/P17 with priors blank for you; budget 6–8 h | `docs/design_specs/005_planted_concepts.md` |
+| `10_report_back_2026-10-04.md` | **Report back on your feedback note:** what I did, numbers with n, where the findings contradict the note, new doubts, decisions needed | no |
+| `11_PI_review_disposition.md` | **How I handled your review of the checks + 005 v1:** every factual claim checked (all hold; the common-word screen excludes only time/line/path), four nuances, one addition (Oracle 8/60 at the no-leverage L42 cell), what changed | `docs/reviews/2026-10-04_pi_review_checks_005/` |
+| `12_what_was_done_and_why.md` | **Plain-language account of today:** why each check, fix and design step was done, and what it bought us; smoke results summarised at the end | no |
+| `13_005_smoke_note.md` | **005 smoke results:** G1 report gate failed at both bands (Qwen rarely *says* planted concepts; the paper's rank measure responds strongly); onset at the grid floor; earth's split leaky; clamp not specific; readers barely name concepts at low doses; fidelity/determinism exact; throughput | `docs/reports/005_smoke_note.md` |
+| `14_005_pilot_note.md` | **Overnight dev-only pilot + steps 7b, 8, 9 and 10, answers Q1–Q15** (report measure, prefill, band, onset, readers, clamp, re-entry clamp, layer sweep, arrival at the report position, Oracle late layers, power); step 9 (both headline findings hold in 5/5 J-space constructions); step 10 (the clamp becomes specific from L50/L52; the log-prob report measure is specific to the planted concept); step 11 (blocking the plain output direction does nearly what the J clamp does; under a likelihood measure the readers are not less sensitive than the model) | `docs/reports/005_pilot_note.md` |
+| `15_005_amendment_01_DRAFT.md` | **The decisions waiting for you** (A1–A18), each tied to what the pilot found; A1/A3/A8 updated with step 10, A6/A8 with step 11, A18 new (optional) | `docs/design_specs/005_amendment_01_DRAFT.md` |
+| `16_005_full_run.md` | **The 005 full run on the 45 test concepts (amendment 01 adopted; branch `005-amended-full-run`)**: gates, every pre-registered contrast with its verdict, Brier for registered and updated priors. Page: https://claude.ai/artifact/5EGz2DxcAXXQs3wTtz1Lnu | `docs/reports/005_full_run.md` (branch `005-amended-full-run`) |
+| `17_005_full_run_spec.md` | The full-run spec, pre-registered before the run | `docs/design_specs/005_full_run.md` (branch `005-amended-full-run`) |
+| `18_005_followups.md` | **005 follow-ups (exploratory):** the "report" measure is lexical priming (A2b); own atom in J part 1/45; logit-lens direction ≈ J atom (Q-c); reader overlap (A1); 005b Q-a/Q-b not run, with reasons | `docs/reports/005_followups.md` (branch `005-amended-full-run`) |
+| `19_005_followups_spec.md` | Follow-ups pre-registration, incl. the approval provenance | `docs/design_specs/005_followups.md` |
+
+**Other locations**
+- The spec itself: `/workspace/Causal-Concordance/docs/context/SPEC_v2.md` (branch `spec-v2`).
+- Raw sources I fetched:
+  - LessWrong posts: `/workspace/papers/lw/`;
+  - Viswanath post: `/workspace/sources/web/`;
+  - WSB results-figure crops: `/workspace/papers/lw/img/`.
+
+`/workspace` is **not persistent**. Everything except 03–06 and the fetched sources is also pushed to GitHub on `spec-v2`.

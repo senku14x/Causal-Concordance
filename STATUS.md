@@ -15,7 +15,8 @@ then this file (newest first), then `docs/reports/005_followups.md`.*
   - Details in CLAUDE.md, "Where things stand", and the reports listed there.
 - **Mirrors (2026-10-05):**
   - all of `outputs/` (3.2 GB, incl. 005) is on the public HF dataset `senku21x/causal-concordance-outputs`, with MANIFEST.json and a `results/` snapshot;
-  - a repo bundle with every branch, `claude_reports` and the agent memory are on the private dataset;
+  - the private dataset was not updated (the HF account's private storage is full); GitHub holds every branch, and
+    `claude_reports` and the agent memory are in the repo (`docs/claude_reports/`, `docs/context/agent_notes/`);
   - script: `scripts/000_setup/mirror_outputs.py`;
   - third-party weights are not mirrored (they are pinned and re-downloadable).
 - **Open:**

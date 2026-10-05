@@ -230,9 +230,11 @@ without the PI's say-so.
    - a full git bundle of this repo (`repo.bundle`);
    - the reviewers' working folder `/workspace/codex_reports` (with evidence snapshots);
    - the PI's Claude skills (`/workspace/.claude/skills`, plus `.skill` archives);
-   - the PI's `/workspace/docs` (reading list, paper PDF);
-   - since 2026-10-05, `/workspace/claude_reports` (the agent's plain-language reports and notes, README index) and
-     `/workspace/agent_memory` (a copy of the agent's memory directory).
+   - the PI's `/workspace/docs` (reading list, paper PDF).
+   - The private dataset was **not** updated on 2026-10-05: the HF account's private storage is full. Its repo bundle
+     predates the 005 branches; GitHub has every branch.
+   - The agent's plain-language reports and notes (`/workspace/claude_reports`) are copied into the repo at
+     `docs/claude_reports/` (copy them back with `rsync -a docs/claude_reports/ /workspace/claude_reports/`).
    The paper PDFs, their text extractions and the web sources are **in this repo** (`docs/papers/`,
    `docs/papers/text/`, `docs/sources/web/`; PI 2026-10-03). Copy them to `/workspace/sources/{papers,web}` if a
    script expects that path. **Keep the repo private while they are in it** (redistribution is not cleared).

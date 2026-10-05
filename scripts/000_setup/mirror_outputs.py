@@ -10,9 +10,11 @@ Public:  senku21x/causal-concordance-outputs. The outputs/ tree at the root, MAN
 Private: senku21x/causal-concordance-private. Existing entries are kept; new or changed files are added to its
          MANIFEST.json. Secrets (/workspace/.env) are never uploaded.
 Third-party model weights (HF_HOME) are not mirrored: rebuild_env.sh re-downloads them pinned by revision and sha256.
+2026-10-05: --private failed with "Private repository storage limit reached" (account-wide free-plan limit).
 """
 import hashlib
 import json
+import re
 import shutil
 import subprocess
 import sys
@@ -25,7 +27,7 @@ from huggingface_hub import HfApi, hf_hub_download
 PROJECT = Path(__file__).resolve().parents[2]
 PUBLIC = "senku21x/causal-concordance-outputs"
 PRIVATE = "senku21x/causal-concordance-private"
-SECRET_HINTS = ("sk-or-", "OPENROUTER_API_KEY")
+SECRET_RE = re.compile(r"sk-or-v1-[A-Za-z0-9]{20,}|hf_[A-Za-z0-9]{30,}|sk-ant-[A-Za-z0-9_-]{20,}")   # key values, not names
 
 
 def sha(p):
@@ -48,7 +50,7 @@ def no_secrets(paths):
     for p in paths:
         if p.stat().st_size < 50 << 20 and p.suffix in (".json", ".txt", ".md", ".py", ".log", ".yaml", ".sh"):
             t = p.read_text(errors="ignore")
-            assert not any(h in t for h in SECRET_HINTS), f"possible secret in {p}"
+            assert not SECRET_RE.search(t), f"possible secret in {p}"
 
 
 def git(*a):
