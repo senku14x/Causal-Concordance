@@ -70,7 +70,11 @@ def role_table(R_, pairs, t_of):
         rows.append({"m": int(a), "p": int(b), "table": int(t_of[a]), "item": m["item"],
                      "m_roles": {k: m[k] for k in ("start", "z", "answer")},
                      "p_roles": {k: p[k] for k in ("start", "z", "answer")},
-                     "collide": {k: m[k] == p[k] for k in ("start", "z", "answer")},
+                     # 006's role-collision census (reanalyse_006.collides): the role's colour of either member
+                     # appears in another role of either member; start/answer D use collision-free pairs only
+                     "collide": {k: m[k] == p[k] or bool({m[k], p[k]} & {x[o] for x in (m, p) for o in
+                                                                       ("start", "z", "answer") if o != k})
+                                 for k in ("start", "z", "answer")},
                      "off": cand if len(cand) == 2 else None,
                      "off_source": ["wsb" if c in offs else "seeded" for c in cand]})
     return rows

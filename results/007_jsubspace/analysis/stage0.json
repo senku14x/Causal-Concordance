@@ -1275,9 +1275,9 @@
   "pairs_with_off_pair": 183,
   "off_from_wsb_both": 77,
   "collision_free": {
-   "start": 183,
+   "start": 120,
    "z": 183,
-   "answer": 183
+   "answer": 120
   }
  },
  "P5_geometry": {
