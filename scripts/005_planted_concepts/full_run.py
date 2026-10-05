@@ -98,9 +98,12 @@ class FullRun(PI.Pilot):
                 for l, v in lg.items():
                     if v["residual"] > 1e-4:
                         bad.append([tag, "clamp", b, l, v["residual"]])
-        self.state.setdefault("G0", {})[tag] = {"writes_checked": sum(len(f) for f in fids),
-                                                "clamp_rows_checked": sum(len(c) for c in clogs),
-                                                "failures": len(bad), "examples": bad[:5]}
+        g = self.state.setdefault("G0", {}).setdefault(tag, {"writes_checked": 0, "clamp_rows_checked": 0,
+                                                             "failures": 0, "examples": []})
+        g["writes_checked"] += sum(len(f) for f in fids)              # accumulated over a block's chunks
+        g["clamp_rows_checked"] += sum(len(c) for c in clogs)
+        g["failures"] += len(bad)
+        g["examples"] = (g["examples"] + bad)[:5]
         self.save_state()
         if bad:
             raise RuntimeError(f"G0 failed in {tag}: {bad[:3]}")
