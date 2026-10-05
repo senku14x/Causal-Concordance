@@ -731,6 +731,20 @@ if D11.exists():
                                 "naming-based 'readers are less sensitive' preview is withdrawn for " + ", ".join(withdrawn))
                   if withdrawn else ("the preview stands under a matched measure; P11′ as drafted with a likelihood column"),
                   "rule": "s_R(1 nat) <= s_M(1 nat) on the median SM; readers failing G11 are uninformative"}
+    # resolved before any step-11 result was read: a reader "passes G11" if at least one of its layers does
+    s11["G11_by_reader"] = {n: (bool(v["layers_passing_G11"]) if v["layers"] else None) for n, v in verdicts.items()}
+    # raw readouts: per reader-layer, the 5 words with the largest rise for three concepts (non-J part and full vector)
+    ex = {}
+    for f in sorted(D11.glob("reads_*_L*.json")):
+        d = json.loads(f.read_text())
+        key = f"{d['reader']}_L{d['layer']}"
+        for r in d["rows"]:
+            if r["concept"] in ("storm", "gel", "profit") and r["cond"] in (2, 4) and r["s"] in (1 / 16, 0.25):
+                dw = {w: r["lpW"][w] - d["clean"][w] for w in d["W"]}
+                top = sorted(dw, key=dw.get, reverse=True)[:5]
+                ex.setdefault(key, []).append({"concept": r["concept"], "cond": r["cond"], "s": r["s"],
+                                               "top5": [[w, dw[w]] for w in top]})
+    s11["examples_top5"] = ex
     st11 = json.loads((D11 / "state.json").read_text()) if (D11 / "state.json").exists() else {}
     s11["scoring_check_maxabs"] = st11.get("scoring_check_maxabs")
     s11["timings"] = st11.get("timings")
