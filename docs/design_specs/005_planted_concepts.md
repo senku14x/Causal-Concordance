@@ -1,5 +1,7 @@
 # 005 — Planted concepts: J-part vs non-J part, for the model and every reader — design v2 (DRAFT for PI review)
 
+*2026-10-05: amendment 01 adopted by the PI; the full run is specified in `005_full_run.md` (branch `005-amended-full-run`).*
+
 *Status: v2, revised to the PI review of 2026-10-04 (`docs/reviews/2026-10-04_pi_review_checks_005/`; changes in §15). **The PI authorised the smoke (§11) on 2026-10-04** ("build the 005 code and tests … run the code and the tests"). **The full run is not authorised:** it needs a separate go after the PI reviews the smoke note and the G1 amendment.*
 - Sources: PI feedback 2026-10-04 (§2 c1/c2, §3.6–3.8; doubts 10, 11, 13, 14, 16; §5 item 8); the PI review of v1 (same day); review `docs/context/SPEC_v2_review_2026-10-04.md` (c) c1, c2.
 - Paper: Gurnee et al. 2026 (arXiv 2607.15495), §3.1 Figs. 7–8, App. A.8, A.9.2.

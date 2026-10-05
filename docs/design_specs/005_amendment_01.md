@@ -1,6 +1,8 @@
-# 005 amendment 01: DRAFT proposal for the PI (filled from the dev-only pilot, 2026-10-04 night)
+# 005 amendment 01 (filled from the dev-only pilot, 2026-10-04 night) — ADOPTED 2026-10-05
 
-*Nothing here is adopted until the PI decides.* The full 005 run on the 45 test concepts waits for these decisions.
+**Adopted by the PI on 2026-10-05, all items including the optional A18** ("adopt but branch off to a new branch and run this there so I can reverse it"). The adoption, the full run and its results live on branch `005-amended-full-run` (off `spec-v2` @ 9709712); dropping the branch reverses all of it. The run is specified in `docs/design_specs/005_full_run.md`. The table below is the draft as the PI saw it, unchanged.
+
+*(Original status line: nothing here is adopted until the PI decides; the full 005 run on the 45 test concepts waits for these decisions.)*
 
 **Why an amendment.**
 - The smoke (`docs/reports/005_smoke_note.md`) triggered the G1 stop rule: sampled naming is floor-limited on Qwen.

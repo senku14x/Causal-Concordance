@@ -361,6 +361,8 @@ class Smoke:
                 r.update(P.intro_metrics(lp[b:b + 1], self.lp_clean, sp)[0])
                 r.update(P.neutral_metrics(lpn[b:b + 1], self.lpn_clean, sp)[0])
                 r["top1_at_quote"] = self.tok.decode([int(lp[b, -1].argmax())])
+                if getattr(self, "W_spec", None):            # full run (A18): Δ log-prob at C_o of every word of W
+                    r["dW"] = {w: float(torch.logsumexp(lp[b, -1, t], 0)) - self.clean_w[w] for w, t in self.W_spec.items()}
             for l in P.READ_LAYERS:
                 caps[l].append(acts[l].cpu())
         return {l: torch.cat(v) for l, v in caps.items()}, fid, clog
@@ -405,6 +407,8 @@ class Smoke:
         scores = {"J_NP": (H @ self.JNP[l].T) @ self.W_U.T / self.raw_den("J_NP", l).clamp_min(1e-9),
                   "J_CB": (H @ self.JCB[l].T) @ self.W_U.T / self.raw_den("J_CB", l).clamp_min(1e-9),
                   "logit": norm(H).float() @ self.W_U.T}
+        if getattr(self, "JR", None) is not None:              # full run (A14): R_CB standard read
+            scores["R_CB"] = norm(H @ self.JR[l].T).float() @ self.W_U.T
         sets = [sp_space[cc] for cc in P.CONCEPTS]
         for b, c in enumerate(concepts_of_rows):
             rec = {}

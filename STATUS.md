@@ -28,7 +28,7 @@
     L24–38, names it, for a few concepts (Q13). An earlier version of this line said nothing ever reaches the report
     position (written before Q13; corrected);
   - the relative probe criterion is degenerate (absolute criterion, A9).
-- **Next:** the PI decides amendment 01 (`docs/design_specs/005_amendment_01_DRAFT.md`), then the amended full run on the 45 test concepts (~1.5–3 GPU h).
+- **2026-10-05:** the PI adopted amendment 01 (`docs/design_specs/005_amendment_01.md`, all items incl. A18); the amended full run on the 45 test concepts (`docs/design_specs/005_full_run.md`) runs on branch `005-amended-full-run`, so the adoption can be reverted by dropping the branch.
 
 **004, span assay at `:` L42: complete** (`docs/reports/004_span_assay.md`; 33 pairs, 55.8 min, commit 9da6b23 clean).
 - Whole cell 0.43 of the gap. Recovery: 1-D z 0.06, z span 0.21, joint span 0.72.

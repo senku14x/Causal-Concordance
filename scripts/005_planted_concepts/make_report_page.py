@@ -1514,7 +1514,7 @@ def md_inline(s):
 
 
 def sec_amend():
-    f = ROOT / "docs/design_specs/005_amendment_01_DRAFT.md"
+    f = ROOT / "docs/design_specs/005_amendment_01.md"
     if not f.exists():
         return ""
     rows = []
@@ -1522,7 +1522,7 @@ def sec_amend():
         if line.startswith("| A"):
             cells = [c.strip() for c in line.strip("|").split("|")]
             rows.append([md_inline(c) for c in cells])
-    return ('<h2 id="amend">The amendment: what you decide</h2><p>From <code>docs/design_specs/005_amendment_01_DRAFT.md</code>. '
+    return ('<h2 id="amend">The amendment: what you decide</h2><p>From <code>docs/design_specs/005_amendment_01.md</code>. '
             'Nothing here is adopted until you decide; the full run on the 45 test concepts waits for it.</p>' +
             table(["#", "Item", "What the pilot found (dev)", "Proposal"], rows))
 
@@ -1564,7 +1564,7 @@ def sec_scorecard(D):
 
 def sec_where():
     items = [("Design 005 (v2, priors, §16 pilot, §16.3 step 7b)", "docs/design_specs/005_planted_concepts.md"),
-             ("Amendment draft", "docs/design_specs/005_amendment_01_DRAFT.md"),
+             ("Amendment draft", "docs/design_specs/005_amendment_01.md"),
              ("Smoke note", "docs/reports/005_smoke_note.md"),
              ("Checks C1–C3 report", "docs/reports/checks_2026-10-04_no_gpu.md"),
              ("Errata 01 (accepted)", "docs/context/SPEC_v2_errata_01.md"),

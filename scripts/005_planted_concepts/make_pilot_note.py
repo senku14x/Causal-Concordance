@@ -56,7 +56,7 @@ if c11:
             f"Unclamped rows repeat step 10's: median |difference| {r(max(v['median_abs'] for v in ch), 3)} nats, maximum "
             f"{r(max(v['max_abs'] for v in ch), 3)}, over {sum(v['n'] for v in ch)} rows ({c11['rule']}). "
             + ("Passes." if c11["pass"] else "**Fails: step 11a is not used for any amendment item.**"), ""]
-out += ["## Amendment", "", "Proposals filled from these results: `docs/design_specs/005_amendment_01_DRAFT.md`.", ""]
+out += ["## Amendment", "", "Proposals filled from these results: `docs/design_specs/005_amendment_01.md`.", ""]
 p = ROOT / "docs/reports/005_pilot_note.md"
 p.write_text("\n".join(out))
 print("wrote", p, len(out), "lines")
