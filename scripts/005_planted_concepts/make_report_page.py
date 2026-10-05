@@ -485,6 +485,27 @@ def scorecard(D):
                     q15["A3_B2_vs_B"]["B2_at_least_as_specific"], "full vector at s = 1/16 and 1/4")
                 add("Step 10", "Q15: random directions stay at chance (ID ≤ 3/10 at every dose, both bands)", 0.90,
                     "3bfd2f0", q15["B"]["7"]["at_chance"] and q15["B2"]["7"]["at_chance"], "sanity check")
+        s11 = pl.get("step11")
+        if s11 and s11.get("consistency", {}).get("pass"):
+            q16 = s11.get("Q16", {}).get("B")
+            if q16:
+                add("Step 11", "Q16: the J clamp beats the output-direction clamp at L48–52 (band L32–38)", 0.50, "6058e38",
+                    q16["verdict"] == "J-specific", f"{q16['verdict']} ({q16['n_mid_D_above_0']} of 3 end layers)")
+            g = s11.get("G11_by_reader", {})
+            for n, nm, pr in (("oracle", "Oracle", 0.80), ("nla", "NLA", 0.55)):
+                if g.get(n) is not None:
+                    add("Step 11", f"G11: the {nm} identifies natural concept activations (≥ 7/10, a layer)", pr, "6058e38",
+                        g[n], "positive control for the likelihood measure")
+            v = s11.get("Q17", {}).get("verdicts", {})
+            for n, nm in (("nla", "NLA"), ("oracle", "Oracle")):
+                if n in v:
+                    for cond, what, pr in (("4", "non-J part", {"nla": 0.35, "oracle": 0.45}[n]),
+                                           ("2", "full vector", {"nla": 0.40, "oracle": 0.50}[n])):
+                        x = v[n][cond]["1"]
+                        add("Step 11", f"Q17: the {nm} is at least as sensitive as the model ({what}, 1-nat onset)", pr,
+                            "6058e38", x["at_least_as_sensitive"],
+                            "uninformative (failed G11)" if v[n]["uninformative"] else
+                            f"reader {SNAME.get(x['reader_onset'], 'never')} vs model {SNAME.get(x['model_onset'], 'never')}")
     return items
 
 
@@ -524,6 +545,9 @@ specific only at the output end) survive five other ways of building J-space.</l
 <li><b>Step 10, a third extra.</b> Two checks aimed at your pending decisions: where along the depth the re-entry clamp
 starts to act (A8), and whether the log-prob report measure singles out the planted concept rather than lifting every word
 once Qwen's canned answer is displaced (A1, A3).</li>
+<li><b>Step 11, run on your "run something extra!".</b> Two controls for step 10's caveats. Does the late clamp effect need
+the J-lens coordinates, or does blocking the plain output direction do the same (A8)? And are the readers really less
+sensitive than the model once both are measured by likelihood rather than naming (A6)?</li>
 </ol>
 <p>Every run had a design spec and pre-registered priors committed before it started. No test-concept outcome has been
 produced. The full 005 run waits for your decisions on the amendment.</p>
@@ -1295,6 +1319,115 @@ random directions at chance 0.90.</p>
     return "".join(out)
 
 
+def sec_11(D, notes):
+    s11 = (D.pilot or {}).get("step11")
+    if not s11:
+        return ""
+    bn = {"B": "L32–38", "B2": "L24–38"}
+
+    def ci_txt(m, ci, nd=2):
+        return f"{r(m, nd, True)} [{r(ci[0], nd)}, {r(ci[1], nd)}]"
+    out = ["""<h2 id="step11">Step 11: is the late clamp effect about J coordinates, and are the readers really less sensitive?</h2>
+<p>Pre-registered before it ran (design §16.7, commit 6058e38). The analysis code was committed while it ran, before any
+result was read (e868df2, 2aa6bf2). Dev concepts only; no sampling.</p>"""]
+    cons = s11.get("consistency", {})
+    out.append("<p>" + (chip("consistency passes", "good") if cons.get("pass") else chip("consistency fails", "bad")) +
+               " The unclamped rows repeat step 10's: " + "; ".join(
+                   f"band {bn[b]} median |difference| {r(v['median_abs'], 3)}, max {r(v['max_abs'], 3)} nats (n = {v['n']})"
+                   for b, v in cons.get("checks", {}).items()) + ".</p>")
+    q16 = s11.get("Q16", {})
+    q14 = ((D.pilot or {}).get("step10") or {}).get("Q14", {})
+    if q16:
+        Es = list(range(44, 63, 2))
+        ser = []
+        for b, dash in (("B", False), ("B2", True)):
+            if b in q16:
+                ser.append({"name": f"J-atom clamp, band {bn[b]}", "cls": "re", "dash": dash,
+                            "ys": [q16[b]["by_E"][str(E)]["extra_J_mean"] for E in Es]})
+                ser.append({"name": f"output-direction clamp, band {bn[b]}", "cls": "pn", "dash": dash,
+                            "ys": [q16[b]["by_E"][str(E)]["extra_out_mean"] for E in Es]})
+        svg = line_chart(ser, Es, [f"L{E}" for E in Es], "extra reduction (nats)",
+                         xlabel="clamp end layer E (the clamp runs from the band's first layer to E)",
+                         aria="Extra reduction by the J-atom clamp and the output-direction clamp, by end layer")
+        rows = []
+        for E in Es:
+            row = [f"L{E}", r(q14.get("B", {}).get("by_E", {}).get(str(E), {}).get("cos_atom_vs_output_median"), 2)]
+            for b in ("B", "B2"):
+                if b in q16:
+                    x = q16[b]["by_E"][str(E)]
+                    row += [r(x["extra_J_mean"], 2, True), ci_txt(x["extra_out_mean"], x["extra_out_ci"]),
+                            ci_txt(x["D_mean"], x["D_ci"]),
+                            chip("J > output", "good") if x["D_above_0"] else (chip("output > J", "bad") if x["D_below_0"] else chip("no difference", "warn"))]
+            rows.append(row)
+        head = ["End layer E", "cos(J atom, output), median"]
+        for b in ("B", "B2"):
+            if b in q16:
+                head += [f"{bn[b]}: J clamp", f"{bn[b]}: output clamp [95% CI]", "D = J − output [95% CI]", "D"]
+        verd = "".join(f"<li>Band {bn[b]}: <b>{esc(v['verdict'])}</b> (D above 0 at {v['n_mid_D_above_0']} of L48, L50, L52). "
+                       f"Pre-registered mapping: {esc(v['amendment'])}.</li>" for b, v in q16.items())
+        out.append(f"""<h3 id="q16">Q16. Does blocking the plain output direction do what the J clamp does?</h3>
+<p>Same tokens, same rank, same re-entry reference and best doses as step 10's J-atom clamp; only the coordinates differ.
+The output-direction clamp acts on g ⊙ W_U[t] (the logit-lens coordinates, the same at every layer); the J clamp on
+J<sub>ℓ</sub><sup>T</sup>(g ⊙ W_U[t]). "Extra reduction" is the Q14 measure (random-token version minus concept version).
+Rule: J-specific if D's interval lies above 0 at ≥ 2 of L48, L50, L52 (band L32–38 primary). Agent prior 0.50.</p>
+{figure(svg, legend(ser), "Mean over evaluable dev concepts; non-J part injected; solid band L32–38, dashed L24–38.")}
+{table(head, rows, num_cols=tuple(range(1, len(head))))}
+<ul>{verd}</ul>
+<p>{notes.get('Q16', '')}</p>""")
+    q17 = s11.get("Q17", {})
+    if q17.get("readers"):
+        rd = q17["readers"]
+        g_rows = [[f"{v['reader'].upper() if v['reader'] == 'nla' else 'Oracle'} L{v['layer']}", f"<code>{esc(v['prefix'])}</code>",
+                   str(v["W_size"]), f"{int(round(10 * v['G11_ID_natural']))}/10",
+                   chip("passes", "good") if v["G11_pass"] else chip("fails", "bad")] for v in rd.values()]
+        grid = [1 / 256, 1 / 128, 1 / 64, 1 / 32, 1 / 16, 1 / 8, 1 / 4, 1 / 2, 1.0]
+        figs = []
+        mo = q17.get("model_onsets_bandB", {})
+        for cond, what in (("4", "non-J part"), ("2", "full concept vector")):
+            ser = [{"name": "model's report (band L32–38)", "cls": "full" if cond == "2" else "perp",
+                    "ys": [mo.get(cond, {}).get("SM_median_by_dose", {}).get(str(x)) for x in grid]}]
+            for k, v in rd.items():
+                cls = {"nla_L42": "j", "oracle_L40": "rj", "oracle_L44": "rp"}.get(k, "rand")
+                ser.append({"name": f"{'NLA' if v['reader'] == 'nla' else 'Oracle'} L{v['layer']} (direct read)", "cls": cls,
+                            "dash": not v["G11_pass"], "ys": [v["by_cond"][cond]["by_dose"][str(x)]["SM_median"] for x in grid]})
+            svg = line_chart(ser, grid, [SNAME.get(x, str(x)) for x in grid], "specific rise, median SM (nats)",
+                             band=[1.0] * len(grid), aria=f"Median SM by dose, {what}: model vs readers")
+            figs.append(figure(svg, legend(ser, extra="below the 1-nat threshold"),
+                               f"{what.capitalize()}: the planted concept's specific rise (own rise minus the median of the other "
+                               "words) at each one's forced report position. Shaded: below 1 nat."))
+        v_rows = []
+        for n, v in q17.get("verdicts", {}).items():
+            for cond, what in (("2", "full vector"), ("3", "J part"), ("4", "non-J part")):
+                x1, x5 = v[cond]["1"], v[cond]["0.5"]
+                v_rows.append(["NLA" if n == "nla" else "Oracle", what,
+                               SNAME.get(x1["reader_onset"], "never"), SNAME.get(x1["model_onset"], "never"),
+                               "—" if x1["at_least_as_sensitive"] is None else (chip("yes", "good") if x1["at_least_as_sensitive"] else chip("no", "bad")),
+                               SNAME.get(x5["reader_onset"], "never"), SNAME.get(x5["model_onset"], "never")])
+        exs = []
+        for k, lst in (s11.get("examples_top5") or {}).items():
+            for e in lst:
+                if e["concept"] == "storm":
+                    exs.append([k.replace("nla", "NLA").replace("oracle", "Oracle").replace("_", " "),
+                                f"{'non-J part' if e['cond'] == 4 else 'full vector'}, s = {SNAME.get(e['s'], e['s'])}",
+                                " · ".join(f"<code>{esc(w)}</code> {r(dv, 2, True)}" for w, dv in e["top5"])])
+        out.append(f"""<h3 id="q17">Q17. Under a likelihood measure, are the readers less sensitive than the model?</h3>
+<p>Each reader's answer was teacher-forced to start with a fixed prefix, and the next-token log-probs of the dev
+concepts and baseline words were read on direct reads of the written cell, minus the same on the clean cell. That is the
+same specific-rise measure (SM) as the model's report in Q15. Onsets use an absolute size, the first dose with a median
+SM ≥ 1 nat (0.5 nat secondary), because a relative-to-random criterion is scale-free in a deterministic forward (the A9
+trap). Caveat registered beforehand: the model's dose is applied at 7 band layers × 20 positions, while a reader sees
+one written cell at the same per-cell dose.</p>
+<h4>Gate G11: can each reader identify natural concept activations under this measure?</h4>
+{table(["Reader", "Forced prefix", "Words scored", "Natural ‘Tell me about c’: identified", "G11"], g_rows, num_cols=(2,))}
+{"".join(figs)}
+{table(["Reader", "Injected", "Reader onset (1 nat)", "Model onset (1 nat)", "Reader at least as sensitive", "Reader onset (0.5)", "Model onset (0.5)"], v_rows)}
+<p>Pre-registered mapping: {esc(q17.get('amendment', ''))}.</p>
+<h4>Raw readouts: the five words each reader raises most (“storm” planted)</h4>
+{table(["Reader", "Planted", "Top five words by rise (nats)"], exs)}
+<p>{notes.get('Q17', '')}</p>""")
+    return "".join(out)
+
+
 def sec_eng(D, notes):
     pl, st = D.pilot or {}, D.pl_state or {}
     tm = st.get("timings", {})
@@ -1454,6 +1587,7 @@ def build(D, notes, short_html):
              chip("step 8 done" if pl.get("Q12") else "step 8 pending", "good" if pl.get("Q12") else "pend"),
              chip("step 9 done" if pl.get("step9") else "step 9 pending", "good" if pl.get("step9") else "pend"),
              chip("step 10 done" if pl.get("step10") else "step 10 pending", "good" if pl.get("step10") else "pend"),
+             chip("step 11 done" if pl.get("step11") else "step 11 pending", "good" if pl.get("step11") else "pend"),
              chip("full run waits for your decisions", "pend")]
     toc = [("short", "The short version"), ("why", "Why any of this was run"), ("expect", "Expected vs happened"),
            ("checks", "Checks C1–C3"), ("smoke", "The smoke run"), ("pilot", "The overnight pilot"),
@@ -1463,6 +1597,7 @@ def build(D, notes, short_html):
            ("step8", "Step 8"), ("q12", "Q12 arrival at the quote", 1), ("q13", "Q13 Oracle late layers", 1), ("power", "Power", 1),
            ("step9", "Step 9 robustness"),
            ("step10", "Step 10"), ("g10", "G10 consistency", 1), ("q14", "Q14 clamp end layer", 1), ("q15", "Q15 specificity", 1),
+           ("step11", "Step 11"), ("q16", "Q16 output-direction clamp", 1), ("q17", "Q17 reader likelihoods", 1),
            ("reads", "Raw readouts"), ("eng", "Machinery"), ("mistakes", "Mistakes"), ("amend", "Your decisions"),
            ("gloss", "Glossary"), ("where", "Where things live")]
     nav = '<nav class="toc" aria-label="Contents">' + "".join(
@@ -1470,11 +1605,11 @@ def build(D, notes, short_html):
     head = f"""<header class="top"><div class="eyebrow">Causal-Concordance · design 005 · night of 4 October 2026</div>
 <h1>Planted Concepts Pilot</h1>
 <p class="lede">Everything that was run tonight, why it was run, what I expected and what came out: the three checks,
-the 005 smoke run, the dev-only pilot, and the extra steps 7b, 8, 9 and 10. Every number on this page is generated from the
+the 005 smoke run, the dev-only pilot, and the extra steps 7b and 8–11. Every number on this page is generated from the
 saved result files.</p>
 <div class="chips">{"".join(chips)}</div></header>"""
     body = [head, short_html, sec_why(), sec_scorecard(D), sec_checks(D), sec_smoke(D), sec_pilot(D, notes),
-            sec_pilot2(D, notes), sec_7b(D, notes), sec_8(D, notes), sec_9(D, notes), sec_10(D, notes), sec_reads(D, notes), sec_eng(D, notes), sec_mistakes(), sec_amend(),
+            sec_pilot2(D, notes), sec_7b(D, notes), sec_8(D, notes), sec_9(D, notes), sec_10(D, notes), sec_11(D, notes), sec_reads(D, notes), sec_eng(D, notes), sec_mistakes(), sec_amend(),
             sec_glossary(), sec_where(),
             '<footer>Generated by <code>scripts/005_planted_concepts/make_report_page.py</code> from JSON in '
             '<code>results/</code> and <code>outputs/</code>. Dev concepts only; no test-concept outcome exists yet.</footer>']

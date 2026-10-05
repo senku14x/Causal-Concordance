@@ -304,6 +304,60 @@ if q15.get("B") and q15.get("B2") and s10.get("G10", {}).get("pass"):
         f"{r(a3['SM_mean_B'], 2)} nats); at s = 1/4 it is ahead on both. The failing comparison rests on {gap} concepts at one "
         "dose. That is weak evidence for L32–38, in the same direction as the pilot's band rule (Q3).")
 
+# step 11 (§16.7): Q16 output-direction clamp, Q17 reader likelihoods
+s11 = S.get("step11") or {}
+q16 = s11.get("Q16", {})
+if q16.get("B") and q16.get("B2") and s11.get("consistency", {}).get("pass"):
+    def e16(b, E):
+        return q16[b]["by_E"][str(E)]
+    x52 = e16("B", 52)
+    N["Q16"] = (
+        "Mostly yes. Blocking the plain output directions of the same tokens (the logit-lens coordinates, identical at every "
+        "layer) does nearly what the J clamp does. With band L32–38 the output clamp's extra reduction is "
+        f"{r(e16('B', 50)['extra_out_mean'], 2, True)} nats at L50 and {r(e16('B', 62)['extra_out_mean'], 2, True)} at L62, "
+        f"against the J clamp's {r(e16('B', 50)['extra_J_mean'], 2, True)} and {r(e16('B', 62)['extra_J_mean'], 2, True)}. "
+        f"The J clamp is ahead by about a tenth of a nat from L50 to L56 (at L52, {r(x52['D_mean'], 2, True)} "
+        f"[{r(x52['D_ci'][0], 2)}, {r(x52['D_ci'][1], 2)}]). The two are level at L58–62, and at L44–46 the output clamp is "
+        "slightly ahead. With the wide band the output clamp matches or beats the J clamp at every end layer. "
+        f"By the registered rule, band L32–38 is {q16['B']['verdict']} (the difference is above zero at "
+        f"{q16['B']['n_mid_D_above_0']} of L48, L50 and L52) and band L24–38 is {q16['B2']['verdict']}. "
+        "My reading: the late clamp effect is mostly the clamp blocking the concept's own output directions. The J-lens "
+        "coordinates add at most a small extra over L50–56. That supports the cautious wording in A8 (\"blocks the output "
+        "direction\") and argues for running the output-direction clamp beside the J clamp in the full run. A claim of "
+        "routing through J coordinates would need the J clamp to beat it on the test concepts.")
+q17 = s11.get("Q17", {})
+if q17.get("readers") and q17.get("verdicts"):
+    v17, mo, rd = q17["verdicts"], q17["model_onsets_bandB"], q17["readers"]
+
+    def on(n, c, th="1"):
+        x = v17[n][c][th]["reader_onset"]
+        return SNAME.get(x, "never")
+
+    def mon(c, th="1"):
+        return SNAME.get(mo[c][f"onset_{th}"], "never")
+    peak4 = max(mo["4"]["SM_median_by_dose"].values())
+    g = {k: int(round(10 * v["G11_ID_natural"])) for k, v in rd.items()}
+    o7 = rd.get("oracle_L40", {}).get("by_cond", {}).get("7", {}).get("by_dose", {}).get(str(1.0), {}).get("SM_median")
+    N["Q17"] = (
+        "No. The earlier conclusion came from the coarse naming measure. Measure the readers the same way as the model's "
+        "report, by the planted concept's specific rise at a forced answer position (median SM over the dev concepts). "
+        f"Then the Oracle reaches 1 nat at lower doses than the model's report: the full vector at s = {on('oracle', '2')} "
+        f"vs {mon('2')}, and the non-J part at {on('oracle', '4')}, where the model's median never reaches 1 nat (its peak "
+        f"is {r(peak4, 2)}). The NLA reaches 1 nat at about the model's dose for the full vector ({on('nla', '2')} vs "
+        f"{mon('2')}) and at {on('nla', '4')} for the non-J part. At 0.5 nat the model is ahead of the NLA for the full "
+        f"vector ({mon('2', '0.5')} vs {on('nla', '2', '0.5')}) and level with it for the non-J part ({mon('4', '0.5')}). "
+        f"Both readers pass the positive control (natural “Tell me about c” activations identified: Oracle {g.get('oracle_L40')}/10 "
+        f"at L40 and {g.get('oracle_L44')}/10 at L44, NLA {g.get('nla_L42')}/10), and random directions stay at chance. "
+        "By the registered mapping, the naming-based preview “readers are less sensitive than the model” is withdrawn for "
+        "both readers, and P11′ should use reader likelihoods as its primary reader measure (A6). "
+        "Two cautions. First, the comparison is not perturbation-matched (registered beforehand): the model's dose is spread "
+        "over 7 layers × 20 positions, while a reader reads one written cell. Second, at the top doses random directions "
+        f"also lift the dev concepts above the median word for the Oracle at L40 (median SM {r(o7, 2)} at s = 1), so SM is not "
+        "clean there. The onsets above sit at doses where random directions give about zero. "
+        f"On the written cell the Oracle picks up the non-J part from s = {on('oracle', '4')} and the NLA from "
+        f"{on('nla', '4')}, so the Oracle is the better reader of the non-J part (against the P17 premise, as in the "
+        "pilot's preview).")
+
 # the short version (top of the page)
 sm = load(RESA / "smoke_summary.json") or {}
 q13 = S.get("Q13")
@@ -327,14 +381,26 @@ if pv:
                    "This is a preview on 10 dev concepts, not the test (M1 runs on the 45 test concepts); the pattern holds under all five "
                    "alternative J-space constructions tried (step 9).")
 q14s = (S.get("step10") or {}).get("Q14", {})
-if S.get("Q10") and q14s.get("B") and q14s.get("B2"):
+q16s = (S.get("step11") or {}).get("Q16", {})
+if S.get("Q10") and q14s.get("B") and q14s.get("B2") and q16s.get("B"):
+    bullets.append("<b>The privilege clamp acts only late, and mostly as a block on the answer itself.</b> Clamping the "
+                   "concept's J coordinates removes much of the non-J part's report effect, beyond a random-token clamp, "
+                   "when it runs to L62. It removes nothing when it stops at L44, under every J-space construction tried "
+                   "(step 9). The specific part builds up over L48–56 (reliably from "
+                   f"L{q14s['B']['E_star']} with band L32–38 and L{q14s['B2']['E_star']} with L24–38; step 10), as the "
+                   "concept's J direction turns into its output direction. Blocking the plain output directions of the "
+                   "same tokens does nearly as much (step 11); the J-lens coordinates add at most about a tenth of a nat "
+                   "at L50–56. On these concepts the clamp mostly blocks the answer itself, with no sign of re-entry into "
+                   "J coordinates within the workspace layers.")
+elif S.get("Q10") and q14s.get("B") and q14s.get("B2"):
     bullets.append("<b>The privilege clamp acts only after the readers' layers.</b> Clamping the concept's J coordinates "
                    "removes much of the non-J part's report effect, beyond a random-token clamp, when it runs to L62. It "
                    "removes nothing when it stops at L44, under every J-space construction tried (step 9). Step 10 shows "
                    f"the specific part building up over L48–56 (reliably from L{q14s['B']['E_star']} with band L32–38 and "
                    f"from L{q14s['B2']['E_star']} with L24–38) as the concept's J direction turns into its output direction. So the "
                    "non-J effect reaches the answer through the concept's J coordinates only late, where those coordinates "
-                   "are close to the output direction itself. Up to L46 there is no sign of it.")
+                   "are close to the output direction itself. Up to L46 there is no sign of it."
+)
 elif S.get("Q10"):
     bullets.append("<b>The privilege clamp is specific only when it reaches the output end.</b> Clamping the concept's J coordinates all "
                    "the way to L62 removes much of the non-J part's effect (beating a random-token clamp), but stopping at L44 "
@@ -365,13 +431,27 @@ if S.get("Q5") and S.get("Q4"):
                and abs(float(k.split("|")[5]) - sv) < 1e-12):
             first_read = sv
             break
-    bullets.append("<b>The readers are less sensitive than the model, not more.</b> The model's report responds from s = "
-                   + " or ".join(SNAME.get(o, str(o)) for o in onsets) + "; the first dose at which any reader names any "
-                   f"planted condition in more than 10% of direct reads is s = {SNAME.get(first_read, '—')}. This compares "
-                   "a fine measure (the model's log-prob) with a coarse one (whether a reader names the concept), so it holds "
-                   "for these measures only; a reader-side likelihood could be more sensitive. On these concepts the NLA does "
-                   "not see what the model cannot use, and the Oracle reads the non-J part at least as well as the NLA "
-                   "(against the P17 premise).")
+    v17b = ((S.get("step11") or {}).get("Q17") or {}).get("verdicts")
+    if v17b:
+        def _on(n, c):
+            return SNAME.get(v17b[n][c]["1"]["reader_onset"], "never")
+        bullets.append("<b>The readers are not less sensitive than the model after all.</b> Measured by naming, they looked "
+                       "less sensitive: no reader names any planted condition in more than 10% of direct reads before "
+                       f"s = {SNAME.get(first_read, '—')}. Measured like the model's report, by the concept's specific rise "
+                       "in log-prob at a forced answer position (step 11), the Oracle reaches 1 nat at lower doses than the "
+                       f"model's report (full vector {_on('oracle', '2')} vs "
+                       f"{SNAME.get(v17b['oracle']['2']['1']['model_onset'], 'never')}; the non-J part {_on('oracle', '4')}, "
+                       f"which the model never reaches), and the NLA at about the same dose ({_on('nla', '2')}). The "
+                       "comparison is not perturbation-matched: the model's dose is spread over many cells, the readers "
+                       "read one. The Oracle reads the non-J part better than the NLA (against the P17 premise).")
+    else:
+        bullets.append("<b>The readers are less sensitive than the model, not more.</b> The model's report responds from s = "
+                       + " or ".join(SNAME.get(o, str(o)) for o in onsets) + "; the first dose at which any reader names "
+                       f"any planted condition in more than 10% of direct reads is s = {SNAME.get(first_read, '—')}. This "
+                       "compares a fine measure (the model's log-prob) with a coarse one (whether a reader names the "
+                       "concept), so it holds for these measures only; a reader-side likelihood could be more sensitive. "
+                       "On these concepts the NLA does not see what the model cannot use, and the Oracle reads the non-J "
+                       "part at least as well as the NLA (against the P17 premise).")
 if S.get("Q12"):
     bullets.append("<b>A methods trap, caught.</b> Comparing a probe with random directions at the same dose is meaningless in "
                    "a deterministic forward: it ‘detects’ any planted direction at any dose. The absolute criterion is used "
@@ -389,9 +469,11 @@ N["short_html"] = ('<h2 id="short">The short version</h2><ul>' + "".join(f"<li>{
                    "Step 10 found it specific to the planted concept.</li>"
                    "<li>Band (A3): L32–38 as registered, or the stronger but more disruptive L24–38. Step 10 leans weakly toward "
                    "L32–38.</li>"
-                   "<li>P11 (A6): drop the report-position version (nothing arrives there) for a reader-vs-model sensitivity comparison.</li>"
+                   "<li>P11 (A6): drop the report-position version (nothing arrives there) for a reader-vs-model sensitivity comparison, "
+                   "with reader likelihoods as the readers' measure (step 11).</li>"
                    "<li>The clamp (A8): by the registered step-10 rule, the re-entry clamp runs to L50 rather than L44, with its "
-                   "null. I would also run the whole end-layer curve (a few GPU minutes).</li>"
+                   "null, and (step 11) next to an output-direction clamp, which does nearly as much. I would run both "
+                   "end-layer curves (a few GPU minutes).</li>"
                    "<li>The go for the amended full run on the 45 test concepts (about 1.5–3 GPU hours).</li></ul></div>"
                    "<p class='muted'>Everything here is development data on 10 dev concepts. None of it is a test of the "
                    "pre-registered predictions; those need the amended full run.</p>")

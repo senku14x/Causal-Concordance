@@ -13,13 +13,17 @@
 - **005 planted concepts**:
   - design v2 + the agent's pre-registered priors (`docs/design_specs/005_planted_concepts.md`);
   - smoke (`docs/reports/005_smoke_note.md`): G1 report gate failed (sampled naming floor) → stop rule;
-  - dev-only pilot + extra steps 7b, 8, 9 and 10 (`docs/reports/005_pilot_note.md`, design §16–§16.6; report page
+  - dev-only pilot + extra steps 7b and 8–11 (`docs/reports/005_pilot_note.md`, design §16–§16.7; report page
     https://claude.ai/artifact/P35xhVkdzKjsdGhogp7PQY).
 - **Pilot findings (dev, descriptive):**
   - the log-prob report measure works and is specific to the planted concept (step 10);
   - no clear J privilege at matched norm (holds under 5 J-space constructions, step 9);
   - the privilege clamp is specific only when it extends past about L48–50 (step 10: from L50 with band L32–38, L52
-    with L24–38), where the concept's J direction is turning into its output direction;
+    with L24–38), where the concept's J direction is turning into its output direction; blocking the plain output
+    directions does nearly as much (step 11), so it mostly blocks the answer itself;
+  - under a likelihood measure the readers are not less sensitive than the model: the Oracle responds on the written
+    cell at lower doses than the model's report, the NLA at about the same (step 11). The naming-based "less sensitive"
+    preview is withdrawn;
   - readers name planted concepts on direct reads; at the report position only the Oracle at L52–60, with band
     L24–38, names it, for a few concepts (Q13). An earlier version of this line said nothing ever reaches the report
     position (written before Q13; corrected);
