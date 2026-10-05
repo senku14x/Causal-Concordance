@@ -130,7 +130,7 @@ def main():
                     res["cells"].setdefault(f"{cell}|L{L}", {}).setdefault(rd, {})[piece] = rec
             log(f"{cell} L{L} done")
     res["G_002_worst_rel"] = worst
-    res["G_002_pass"] = worst <= 1e-3
+    res["G_002_pass"] = worst <= 1e-4                                         # design §11.2 (pre-registered)
     C.dump(C.RES / "analysis" / "token_lens_cpu.json", res)
     log("G-002 worst relative error", worst)
 

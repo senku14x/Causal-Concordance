@@ -186,6 +186,7 @@ class Stage3:
                 r_ = int((S > S[0] * 1e-8).sum())
                 return Vh[:r_].T
             Vall = wpca(dev_idx)
+            self.Vall = getattr(self, "Vall", {})
             Vf = {f: wpca([i for i in dev_idx if kfold[key_of[i]] != f]) for f in range(4)}
             # k: delta-matched to J's median dev pair delta-share (outcome-blind)
             dpairs = [p for p in self.pairs if p["split"] == "dev"]
@@ -204,6 +205,7 @@ class Stage3:
                 if best is None or gap < best[1]:
                     best = (k, gap, float(np.median(ds)))
             k = best[0]
+            self.Vall[L] = f32_orth(Vall[:, :k].float())[0].double()
             meta[L] = {"J_dev_median_delta_share": jds, "PCA_k": k, "PCA_dev_median_delta_share": best[2], "kmax": kmax}
             Hp = torch.empty_like(H)
             for it in items:
@@ -253,11 +255,10 @@ class Stage3:
         Pj = lambda A, Q: (A @ Q) @ Q.T
         QJ, QL = B[f"J_L{L}"].double(), B["LL"].double()
         R0 = rand_basis_f32(C.rand_seed("r1024", 0), C.K)[0].double()
-        P = np.load(self.dir / f"pieces_L{L}.npz")
-        k = self.state["pieces_meta"][str(L)]["PCA_k"] if str(L) in self.state["pieces_meta"] else self.state["pieces_meta"][L]["PCA_k"]
-        return {"whole": h, "J": Pj(h, QJ), "rest_J": h - Pj(h, QJ), "LL": Pj(h, QL), "rest_LL": h - Pj(h, QL),
-                "MR": h - (h * U).sum(1, keepdim=True) * U, "R0": Pj(h, R0), "rest_R0": h - Pj(h, R0),
-                "_k": k}
+        Qk = self.Vall[L]                                                  # the all-dev within-key PCA basis (k frozen)
+        return {"whole": h, "J": Pj(h, QJ), "rest_J": h - Pj(h, QJ), "PCA": Pj(h, Qk), "rest_PCA": h - Pj(h, Qk),
+                "LL": Pj(h, QL), "rest_LL": h - Pj(h, QL), "MR": h - (h * U).sum(1, keepdim=True) * U, "R0": Pj(h, R0),
+                "rest_R0": h - Pj(h, R0), "_k": Qk.shape[1]}
 
     def prompt_only(self, model, tok):
         f = self.dir / "ll" / "promptonly.npz"

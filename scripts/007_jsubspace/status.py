@@ -24,10 +24,11 @@ def main():
     assert st.exists(), st
     assert git("branch", "--show-current").stdout.strip() == "007-jsubspace"
     git("add", "results/007_jsubspace", "scripts/007_jsubspace", "tests/test_007_analysis.py",
-        "docs/design_specs/007_jsubspace.md", "scripts/common/readers.py")
+        "docs/design_specs/007_jsubspace.md", "scripts/common/readers.py", "CLAUDE.md")
     if git("diff", "--cached", "--quiet", check=False).returncode != 0:
         msg = (f"007 {stage}: status, results and code (unattended run under spec v2 + A1)\n\n"
-               "Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>")
+               "Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>\n"
+               "Claude-Session: https://claude.ai/code/session_014cXLtUXYUQ3xJAqHko9ofL")
         git("commit", "-q", "-m", msg)
     r = git("push", "-q", "origin", "007-jsubspace", check=False)
     print("push:", r.returncode, r.stderr.strip()[-200:])

@@ -4179,5 +4179,7 @@
   }
  },
  "G_002_worst_rel": 0.000615473254583776,
- "G_002_pass": true
+ "G_002_pass": false,
+ "G_002_threshold": 0.0001,
+ "G_002_note": "pre-registered threshold 1e-4 relative (design \u00a711.2); the first code version used 1e-3 (my error) and printed pass; by the spec G-002 FAILS, so this exploratory analysis is reported but not interpreted"
 }

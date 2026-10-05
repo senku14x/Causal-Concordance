@@ -1,0 +1,19 @@
+{
+ "G_recon": {
+  "40": {
+   "max_rel_recon_err": 3.346071514287012e-08,
+   "max_rel_MR_dot_u": 6.782729271159374e-10,
+   "pass": true
+  },
+  "42": {
+   "max_rel_recon_err": 3.442711736662284e-08,
+   "max_rel_MR_dot_u": 6.749436541177417e-10,
+   "pass": true
+  },
+  "44": {
+   "max_rel_recon_err": 3.268639788489018e-08,
+   "max_rel_MR_dot_u": 6.659034105640839e-10,
+   "pass": true
+  }
+ }
+}

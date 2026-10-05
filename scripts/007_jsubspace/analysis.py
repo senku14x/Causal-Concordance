@@ -175,10 +175,19 @@ def load_blocks(stage, run_id, pieces):
     return out
 
 
-def stage1(stage, run_id, rand_draws=None, pieces=None, roles_path=None, geom_key=None, tag_out=None):
+def gated_pairs(pairs):
+    """O1 secondary: keep pairs that pass 001's existing reader-free gate (pair id = item__partner start)."""
+    gate = {}
+    for l in open(C.PROJECT / "results" / "001_leverage_profile" / "analysis" / "gate_pairs.jsonl"):
+        g = json.loads(l)
+        gate[g["pair_id"]] = bool(g["pass"])
+    return [p for p in pairs if gate.get(f"{p['item']}__{p['p_roles']['start']}", False)]
+
+
+def stage1(stage, run_id, rand_draws=None, pieces=None, roles_path=None, geom_key=None, tag_out=None, gated_only=False):
     pieces = pieces or C.PIECE_ORDER
     roles = json.loads(Path(roles_path or (C.STAGE0 / "roles.json")).read_text())
-    pairs = roles["pairs"]
+    pairs = gated_pairs(roles["pairs"]) if gated_only else roles["pairs"]
     st0 = json.loads((C.RES / "analysis" / "stage0.json").read_text())
     cname = {"stage1a": "colon", "stage1b": "think", "brew_test": "colon"}[stage]
     blocks = load_blocks(stage, run_id, pieces)
@@ -365,6 +374,34 @@ def agreement(blocks, pairs, tabs):
     return out
 
 
+def confirm():
+    """Design §7.5: a dev category is confirmed only if the brew test gives the same category for the same contrast and
+    reader-layer (categories +, −, ≈). A1: dev with random draws 0-2 only is shown alongside the 10-draw dev result."""
+    dev = json.loads((C.RES / "analysis" / "stage1a.json").read_text())
+    dev3 = json.loads((C.RES / "analysis" / "stage1a_draws0-2.json").read_text())
+    tst = json.loads((C.RES / "analysis" / "brew_test.json").read_text())
+    out = {}
+    for tag in dev["readers"]:
+        if tag not in tst["readers"]:
+            continue
+        rows = {}
+        for k in ("P1", "P2", "P3", "P4", "P5"):
+            cd, c3, ct = (dev["readers"][tag]["categories"][k], dev3["readers"][tag]["categories"][k],
+                          tst["readers"][tag]["categories"][k])
+            rows[k] = {"dev": cd, "dev_draws0-2": c3, "test": ct, "confirmed": bool(cd == ct and cd in ("+", "−", "≈")),
+                       "dev_estimate": dev["readers"][tag]["contrasts"][k]["estimate"],
+                       "test_estimate": tst["readers"][tag]["contrasts"][k]["estimate"],
+                       "test_ci": tst["readers"][tag]["contrasts"][k]["ci"]}
+        out[tag] = {"contrasts": rows, "dev_mapping": dev["readers"][tag]["model_mapping"],
+                    "test_mapping": tst["readers"][tag]["model_mapping"],
+                    "model_confirmed": {m: dev["readers"][tag]["model_mapping"][m] == "supported" ==
+                                        tst["readers"][tag]["model_mapping"][m] for m in MODELS}}
+    C.dump(C.RES / "analysis" / "brew_test_confirmation.json", out)
+    for tag, v in out.items():
+        print("CONFIRMATION", tag, {k: (r["dev"], r["test"], r["confirmed"]) for k, r in v["contrasts"].items()}, v["model_confirmed"])
+    return out
+
+
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("what", choices=["stage1"])
@@ -377,6 +414,12 @@ def main():
                      roles_path=(C.OUT / "brew_test" / "roles.json") if a.stage == "brew_test" else None)
         if a.stage == "stage1a":                                           # A1: the 3-draw comparator for the replication
             stage1(a.stage, a.run_id, rand_draws=["R0", "R1", "R2"], tag_out="stage1a_draws0-2")
+            stage1(a.stage, a.run_id, rand_draws=["R0", "R1", "R2"], tag_out="stage1a_draws0-2_gated", gated_only=True)
+        if a.stage == "brew_test":                                         # O1 secondary: gated pairs only
+            stage1(a.stage, a.run_id, pieces=pieces, roles_path=C.OUT / "brew_test" / "roles.json",
+                   tag_out="brew_test_gated", gated_only=True)
+        if a.stage == "brew_test":
+            confirm()
         for tag, R in res["readers"].items():
             print(tag, R["categories"], R["model_mapping"])
 
