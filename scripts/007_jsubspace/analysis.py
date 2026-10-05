@@ -277,13 +277,21 @@ def stage1(stage, run_id, rand_draws=None, pieces=None, roles_path=None, geom_ke
     # Holm/TOST across the primary family (all reader-layers x P1-P5 present)
     fam = [(tag, k) for tag in res["readers"] for k in res["readers"][tag]["contrasts"]]
     if fam:
-        rej = holm([res["readers"][t]["contrasts"][k]["p_two"] for t, k in fam])
-        trej = holm([res["readers"][t]["contrasts"][k]["p_tost"] for t, k in fam])
-        for (t, k), r1, r2 in zip(fam, rej, trej):
+        # the pre-registered family is P1-P5 x the three reader-layers (15); contrasts that could not be computed (a
+        # disabled reader, A1) enter as p = 1, so the familywise level stays the one defined for 15 tests
+        n_missing = max(0, 5 * len(C.READERS) - len(fam))
+        pd_ = [res["readers"][t]["contrasts"][k]["p_two"] for t, k in fam]
+        pt_ = [res["readers"][t]["contrasts"][k]["p_tost"] for t, k in fam]
+        rej = holm(pd_ + [1.0] * n_missing)[:len(fam)]
+        trej = holm(pt_ + [1.0] * n_missing)[:len(fam)]
+        rej_s, trej_s = holm(pd_), holm(pt_)                              # sensitivity: Holm over the available tests
+        for (t, k), r1, r2, s1, s2 in zip(fam, rej, trej, rej_s, trej_s):
             c = res["readers"][t]["contrasts"][k]
             c["holm_diff_rejected"], c["holm_tost_rejected"] = bool(r1), bool(r2)
             c["category"] = category(c["estimate"], r1, r2, c["informative"])
-        res["family_size"] = len(fam)
+            c["category_holm_available_only"] = category(c["estimate"], s1, s2, c["informative"])
+        res["family_size"] = len(fam) + n_missing
+        res["family_missing_as_p1"] = n_missing
     p5geo = st0.get("P5_geometry", {}).get(geom_key or f"{cname}_L42", {})
     for tag, R in res["readers"].items():
         L = int(tag.split("_L")[1])

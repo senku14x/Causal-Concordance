@@ -1,6 +1,6 @@
 # 007 Stage 0 — status (2026-10-05)
 
-**What ran (CPU, plus the idle GPU for nothing):** `pieces.py` (float32 bases with QR re-orthonormalisation, every Stage 1a/1b
+**What ran (CPU):** `pieces.py` (float32 bases with QR re-orthonormalisation, every Stage 1a/1b
 piece of the 48 dev tables, positive-control pieces incl. the frozen brew operators (A1), PCA bases, role table with
 006's collision census and the off-trajectory pair), `stage0_2b.py` (class-mean z directions and their J / non-J split, k = 25,
 J_NP and J_CB), the J_raw_L56 basis, the chain count (25 single-digit gated dev pairs over 7 items: Stage 5 runs), the
