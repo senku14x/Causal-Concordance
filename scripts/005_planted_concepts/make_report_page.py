@@ -438,7 +438,7 @@ def scorecard(D):
                           for b, v in pl["Q11"]["by_band"].items()))
         if pl.get("Q12", {}).get("by_band"):
             q12 = pl["Q12"]["by_band"]
-            flag = ("pre-registered relative rule (degenerate: fires at every dose, see A16); the absolute criterion says "
+            flag = ("pre-registered relative rule (degenerate: fires at every dose, see A9); the absolute criterion says "
                     "the concept never reaches the report position. Excluded from the Brier score")
             add("Step 8", "Q12: the full vector reaches the report position by L44 (s = 1/4)", 0.50, "bf1da37",
                 any(v["full_by_L44_at_1/4"] for v in q12.values()), flag, brier=False)
@@ -462,6 +462,29 @@ def scorecard(D):
                 s9["R9a_holds_in"] >= 4, f"holds in {s9['R9a_holds_in']} of {s9['n_variants']}")
             add("Step 9", "F2 (clamp specific only to L62) holds in ≥ 4 of 5 constructions", 0.65, "94be4ec",
                 s9["R9b_holds_in"] >= 4, f"holds in {s9['R9b_holds_in']} of {s9['n_variants']}")
+        s10 = pl.get("step10")
+        if s10 and s10.get("G10", {}).get("pass"):
+            q14 = s10.get("Q14", {}).get("B")
+            if q14:
+                add("Step 10", "Q14: the clamp becomes specific only from L56–62 on (band L32–38)", 0.55, "3bfd2f0",
+                    q14["category"] == "56-62",
+                    f"E* = {('L' + str(q14['E_star'])) if q14['E_star'] else 'none'} ({q14['category']}); "
+                    "other priors: 52–54 0.20, 46–50 0.15, none/other 0.10")
+            q15 = s10.get("Q15", {})
+            for b, nm, pr2, pr4 in (("B", "L32–38", 0.65, 0.35), ("B2", "L24–38", 0.70, 0.45)):
+                if b in q15:
+                    add("Step 10", f"Q15: the full vector's ΔR1′ is concept-specific (band {nm})", pr2, "3bfd2f0",
+                        q15[b]["2"]["specific"], f"{q15[b]['2']['n_doses_meeting']}/9 doses meet the rule")
+                    add("Step 10", f"Q15: the non-J part's ΔR1′ is concept-specific (band {nm})", pr4, "3bfd2f0",
+                        q15[b]["4"]["specific"], f"{q15[b]['4']['n_doses_meeting']}/9 doses meet the rule")
+            if "B" in q15 and "B2" in q15:
+                add("Step 10", "Q15: the pure J-lens atom is concept-specific in both bands", 0.90, "3bfd2f0",
+                    q15["B"]["1"]["specific"] and q15["B2"]["1"]["specific"],
+                    f"{q15['B']['1']['n_doses_meeting']}/9 and {q15['B2']['1']['n_doses_meeting']}/9 doses")
+                add("Step 10", "Q15: band L24–38 is at least as specific as L32–38 (A3 rule)", 0.60, "3bfd2f0",
+                    q15["A3_B2_vs_B"]["B2_at_least_as_specific"], "full vector at s = 1/16 and 1/4")
+                add("Step 10", "Q15: random directions stay at chance (ID ≤ 3/10 at every dose, both bands)", 0.90,
+                    "3bfd2f0", q15["B"]["7"]["at_chance"] and q15["B2"]["7"]["at_chance"], "sanity check")
     return items
 
 
@@ -498,6 +521,9 @@ report position, and the R-lens (Q10–Q11).</li>
 probe at every layer L32–62 and the Oracle at its later layers there (Q12–Q13), plus a power analysis for the full run.</li>
 <li><b>Step 9, a second extra.</b> Whether the two headline findings (no clear J privilege at matched norm; the clamp is
 specific only at the output end) survive five other ways of building J-space.</li>
+<li><b>Step 10, a third extra.</b> Two checks aimed at your pending decisions: where along the depth the re-entry clamp
+starts to act (A8), and whether the log-prob report measure singles out the planted concept rather than lifting every word
+once Qwen's canned answer is displaced (A1, A3).</li>
 </ol>
 <p>Every run had a design spec and pre-registered priors committed before it started. No test-concept outcome has been
 produced. The full 005 run waits for your decisions on the amendment.</p>
@@ -1134,6 +1160,141 @@ leave-one-out baseline.</p>
 <p>{notes.get('step9', '')}</p>"""
 
 
+def sec_10(D, notes):
+    s10 = (D.pilot or {}).get("step10")
+    if not s10:
+        return ""
+    bn = {"B": "L32–38", "B2": "L24–38"}
+
+    def small(x):
+        return "—" if x is None else (f"{x:.1e}" if 0 < abs(x) < 1e-3 else r(x, 3))
+
+    def ci_txt(m, ci, nd=2):
+        return f"{r(m, nd, True)} [{r(ci[0], nd)}, {r(ci[1], nd)}]"
+
+    out = ["""<h2 id="step10">Step 10: where does the clamp start to act, and is the report measure specific to the planted concept?</h2>
+<p>Pre-registered before it ran (design §16.6, commit 3bfd2f0). The analysis code and one clarification (the SM statistic
+is the mean over concepts) were committed while it ran, before any result was read (999fdd8). Two of your amendment
+decisions rested on evidence with a gap in it.</p>
+<ul><li><b>A8.</b> The re-entry clamp is specific when it runs to L62 and not when it stops at L44. Where between the two
+does it start to act?</li>
+<li><b>A1/A3.</b> The log-prob measure beats random directions. Does it single out the planted concept, or does displacing
+Qwen's canned answer raise every word? And is the wider band's larger effect specific?</li></ul>
+<p>Dev concepts only, teacher-forced, default prefill, both bands.</p>"""]
+    g = s10.get("G10", {})
+    gl = {"spec_B": "10b rows, band L32–38", "spec_B2": "10b rows, band L24–38",
+          "clamp_B": "10a rows (unclamped, E = 44, E = 62), band L32–38",
+          "clamp_B2": "10a rows (unclamped, E = 44, E = 62), band L24–38"}
+    grows = [[gl.get(k, k), str(v["n"]), small(v["median_abs"]), small(v["p95_abs"]), small(v["max_abs"])]
+             for k, v in g.get("checks", {}).items()]
+    out.append('<h3 id="g10">Gate G10: repeated rows reproduce the stored ones</h3>'
+               + table(["Rows repeated from the pilot / step 7b", "n", "Median |difference| in ΔR1′ (nats)", "95th pct", "Max"],
+                       grows, num_cols=(1, 2, 3, 4))
+               + f"<p>{chip('G10 passes', 'good') if g.get('pass') else chip('G10 fails', 'bad')} Rule: {esc(g.get('rule', ''))}. "
+               "The rows ran in different batches from the originals, so bitwise equality was not required.</p>")
+    q14 = s10.get("Q14", {})
+    if q14:
+        Es = list(range(44, 63, 2))
+        ser = [{"name": f"band {bn[b]}", "cls": cls, "ys": [q14[b]["by_E"][str(E)]["mean"] for E in Es]}
+               for b, cls in (("B", "re"), ("B2", "cl")) if b in q14]
+        svg = line_chart(ser, Es, [f"L{E}" for E in Es], "extra reduction (nats)",
+                         xlabel="clamp end layer E (the clamp runs from the band's first layer to E)",
+                         aria="Extra reduction of the non-J part's report effect by the concept clamp over its random null, by clamp end layer")
+        rows = []
+        for E in Es:
+            any_b = next(iter(q14.values()))["by_E"][str(E)]
+            row = [f"L{E}", r(any_b.get("cos_atom_vs_output_median"), 2)]
+            for b in ("B", "B2"):
+                if b in q14:
+                    x = q14[b]["by_E"][str(E)]
+                    row += [ci_txt(x["mean"], x["ci"]), chip("specific", "good") if x["specific"] else chip("no", "bad")]
+            rows.append(row)
+        head = ["Clamp end layer E", "cos(J atom, output direction), median"]
+        for b in ("B", "B2"):
+            if b in q14:
+                head += [f"Band {bn[b]}: extra reduction [95% CI]", "Specific?"]
+        verdicts = "".join(
+            f"<li>Band {bn[b]}: E* = <b>{('L' + str(v['E_star'])) if v['E_star'] else 'none'}</b> "
+            f"(category {esc(v['category'])}; n = {len(v['evaluable'])} evaluable concepts). Pre-registered mapping: "
+            f"{esc(v['amendment'])}.</li>" for b, v in q14.items())
+        out.append(f"""<h3 id="q14">Q14. Where along the depth does the re-entry clamp start to block the non-J part's effect?</h3>
+<p>The clamp removes what the model's own blocks write into the concept's J coordinates, from the band's first layer up to
+an end layer E. The comparison is with a clamp on as many random tokens' coordinates. "Extra reduction" is how much more
+the concept clamp lowers the non-J part's ΔR1′ than the random clamp does, at each concept's best dose (the Q10 measure).
+E = 44 and E = 62 repeat step 7b. <b>E*</b> is the first end layer from which the clamp is specific at every later end layer.
+Agent priors (band L32–38): E* in 56–62 0.55; 52–54 0.20; 46–50 0.15; none or other 0.10.</p>
+{figure(svg, legend(ser), "Mean over evaluable dev concepts of ΔR1′(random-token clamp) − ΔR1′(concept clamp), non-J part injected. Above 0: the concept clamp blocks more than the random one.")}
+{table(head, rows, num_cols=(1, 2, 4))}
+<ul>{verdicts}</ul>
+<p>{notes.get('Q14', '')}</p>""")
+    q15 = s10.get("Q15", {})
+    if q15.get("B") or q15.get("B2"):
+        cn = {"1": "pure J-lens atom", "2": "full concept vector", "3": "J part", "4": "non-J part", "7": "random direction"}
+        cls = {"1": "jl", "2": "full", "3": "j", "4": "perp", "7": "rand"}
+        grid = [1 / 256, 1 / 128, 1 / 64, 1 / 32, 1 / 16, 1 / 8, 1 / 4, 1 / 2, 1.0]
+        figs = []
+        for b in ("B", "B2"):
+            if b not in q15:
+                continue
+            ser = [{"name": cn[c], "cls": cls[c], "dash": c == "7", "ys": [q15[b][c]["by_dose"][str(x)]["ID_rate"] for x in grid]}
+                   for c in ("1", "2", "3", "4", "7")]
+            svg = line_chart(ser, grid, [SNAME.get(x, str(x)) for x in grid], "share identified", ylim=(0, 1),
+                             band=[0.1] * len(grid), aria=f"Identification rate by dose, band {bn[b]}")
+            figs.append(figure(svg, legend(ser, extra="chance (1 in 10)"),
+                               f"Band {bn[b]}: share of dev concepts whose own ΔR1′ is the largest among the 10 dev concepts "
+                               "(for random directions: over 50 concept × seed rows)."))
+        rows = []
+        for b in ("B", "B2"):
+            if b not in q15:
+                continue
+            for c in ("1", "2", "3", "4", "7"):
+                v = q15[b][c]
+                d16, d4 = v["by_dose"][str(1 / 16)], v["by_dose"][str(0.25)]
+                verdict = ((chip("at chance", "good") if v.get("at_chance") else chip("above chance", "bad")) if c == "7"
+                           else (chip("specific", "good") if v["specific"] else chip("not specific", "bad")))
+                rows.append([bn[b], cn[c], "—" if c == "7" else f"{v['n_doses_meeting']}/9", verdict,
+                             f"{pct(d16['ID_rate'])} · {ci_txt(d16['SM_mean'], d16['SM_ci'])}",
+                             f"{pct(d4['ID_rate'])} · {ci_txt(d4['SM_mean'], d4['SM_ci'])}",
+                             r(d4["generic_median"], 2, True), r(d4["dR1p_median"], 2, True)])
+        t = table(["Band", "Injected", "Doses meeting the rule", "Verdict", "s = 1/16: ID · SM [95% CI]",
+                   "s = 1/4: ID · SM [95% CI]", "Other words' rise, s = 1/4 (median)", "Own ΔR1′, s = 1/4 (median)"],
+                  rows, num_cols=(2, 6, 7))
+        a3 = q15.get("A3_B2_vs_B")
+        a3_txt = ""
+        if a3:
+            a3_rows = [[SNAME.get(float(k), k), f"{r(v['SM_mean_B'], 2, True)} / {r(v['SM_mean_B2'], 2, True)}",
+                        f"{pct(v['ID_B'])} / {pct(v['ID_B2'])}", chip("yes", "good") if v["B2_ge_B"] else chip("no", "bad")]
+                       for k, v in a3["by_dose"].items()]
+            a3_txt = ("<h4>A3: is the wider band's larger effect specific?</h4>"
+                      + table(["Dose", "SM, L32–38 / L24–38", "ID, L32–38 / L24–38", "L24–38 at least as specific"], a3_rows, num_cols=(1, 2))
+                      + f"<p>By the pre-registered rule, band L24–38 is "
+                      f"<b>{'at least as specific as' if a3['B2_at_least_as_specific'] else 'less specific than'}</b> L32–38 "
+                      "(agent prior 0.60).</p>")
+        clean = s10.get("clean_top10_at_quote") or []
+        clean_txt = " · ".join(f"<code>{esc(t_)}</code> {pct(p_, 1)}" for t_, p_ in clean)
+        ex = s10.get("examples_cond2_s0.25", {})
+        ex_rows = []
+        for c in sorted(set(k for v in ex.values() for k in v)):
+            ex_rows.append([c] + [" · ".join(f"<code>{esc(t_)}</code> {pct(p_)}" for t_, p_ in ex[b][c]["top10"])
+                                  + f" <span class='muted'>(ΔR1′ {r(ex[b][c]['dR1p'], 2, True)})</span>"
+                                  if c in ex.get(b, {}) else "—" for b in ("B", "B2")])
+        out.append(f"""<h3 id="q15">Q15. Does the log-prob measure single out the planted concept?</h3>
+<p>For every row the log-prob change at the open quote was recorded for {s10.get('W_size', '—')} words: the 10 dev concepts
+and the protocol's baseline words that are single tokens there (no test concept). <b>ID</b>: the planted concept's own rise is
+the largest among the 10 dev concepts (chance 1 in 10). <b>SM</b>: its rise minus the median rise of all other words.
+A condition counts as concept-specific if, at ≥ 3 doses where its ΔR1′ beats random directions, ID ≥ 5/10 and SM's CI lies
+above 0. Agent priors: full vector specific 0.65 (L32–38) / 0.70 (L24–38); non-J part 0.35 / 0.45; pure J-lens atom in both 0.90;
+random directions at chance 0.90.</p>
+{"".join(figs)}
+{t}
+{a3_txt}
+<h4>Raw readouts at the open quote</h4>
+<p>Clean (no injection), top 10: {clean_txt}</p>
+{table(["Concept", "Full vector, s = 1/4, band L32–38: top tokens", "… band L24–38"], ex_rows)}
+<p>{notes.get('Q15', '')}</p>""")
+    return "".join(out)
+
+
 def sec_eng(D, notes):
     pl, st = D.pilot or {}, D.pl_state or {}
     tm = st.get("timings", {})
@@ -1292,6 +1453,7 @@ def build(D, notes, short_html):
              chip("step 7b done" if have_7b else "step 7b pending", "good" if have_7b else "pend"),
              chip("step 8 done" if pl.get("Q12") else "step 8 pending", "good" if pl.get("Q12") else "pend"),
              chip("step 9 done" if pl.get("step9") else "step 9 pending", "good" if pl.get("step9") else "pend"),
+             chip("step 10 done" if pl.get("step10") else "step 10 pending", "good" if pl.get("step10") else "pend"),
              chip("full run waits for your decisions", "pend")]
     toc = [("short", "The short version"), ("why", "Why any of this was run"), ("expect", "Expected vs happened"),
            ("checks", "Checks C1–C3"), ("smoke", "The smoke run"), ("pilot", "The overnight pilot"),
@@ -1300,6 +1462,7 @@ def build(D, notes, short_html):
            ("step7b", "Step 7b"), ("q10", "Q10 re-entry clamp", 1), ("q11", "Q11 layer sweep", 1),
            ("step8", "Step 8"), ("q12", "Q12 arrival at the quote", 1), ("q13", "Q13 Oracle late layers", 1), ("power", "Power", 1),
            ("step9", "Step 9 robustness"),
+           ("step10", "Step 10"), ("g10", "G10 consistency", 1), ("q14", "Q14 clamp end layer", 1), ("q15", "Q15 specificity", 1),
            ("reads", "Raw readouts"), ("eng", "Machinery"), ("mistakes", "Mistakes"), ("amend", "Your decisions"),
            ("gloss", "Glossary"), ("where", "Where things live")]
     nav = '<nav class="toc" aria-label="Contents">' + "".join(
@@ -1307,11 +1470,11 @@ def build(D, notes, short_html):
     head = f"""<header class="top"><div class="eyebrow">Causal-Concordance · design 005 · night of 4 October 2026</div>
 <h1>Planted Concepts Pilot</h1>
 <p class="lede">Everything that was run tonight, why it was run, what I expected and what came out: the three checks,
-the 005 smoke run, the dev-only pilot, and the extra steps 7b, 8 and 9. Every number on this page is generated from the
+the 005 smoke run, the dev-only pilot, and the extra steps 7b, 8, 9 and 10. Every number on this page is generated from the
 saved result files.</p>
 <div class="chips">{"".join(chips)}</div></header>"""
     body = [head, short_html, sec_why(), sec_scorecard(D), sec_checks(D), sec_smoke(D), sec_pilot(D, notes),
-            sec_pilot2(D, notes), sec_7b(D, notes), sec_8(D, notes), sec_9(D, notes), sec_reads(D, notes), sec_eng(D, notes), sec_mistakes(), sec_amend(),
+            sec_pilot2(D, notes), sec_7b(D, notes), sec_8(D, notes), sec_9(D, notes), sec_10(D, notes), sec_reads(D, notes), sec_eng(D, notes), sec_mistakes(), sec_amend(),
             sec_glossary(), sec_where(),
             '<footer>Generated by <code>scripts/005_planted_concepts/make_report_page.py</code> from JSON in '
             '<code>results/</code> and <code>outputs/</code>. Dev concepts only; no test-concept outcome exists yet.</footer>']

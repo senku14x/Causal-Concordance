@@ -13,13 +13,17 @@
 - **005 planted concepts**:
   - design v2 + the agent's pre-registered priors (`docs/design_specs/005_planted_concepts.md`);
   - smoke (`docs/reports/005_smoke_note.md`): G1 report gate failed (sampled naming floor) → stop rule;
-  - dev-only pilot + steps 7b and 8 (`docs/reports/005_pilot_note.md`, design §16–§16.4).
+  - dev-only pilot + extra steps 7b, 8, 9 and 10 (`docs/reports/005_pilot_note.md`, design §16–§16.6; report page
+    https://claude.ai/artifact/P35xhVkdzKjsdGhogp7PQY).
 - **Pilot findings (dev, descriptive):**
-  - the log-prob report measure works;
-  - no clear J privilege at matched norm;
-  - the privilege clamp is specific only through late layers, where J ≈ output direction;
-  - readers name planted concepts on direct reads but nothing ever reaches the report position;
-  - the relative probe criterion is degenerate.
+  - the log-prob report measure works and is specific to the planted concept (step 10);
+  - no clear J privilege at matched norm (holds under 5 J-space constructions, step 9);
+  - the privilege clamp is specific only when it extends past about L48–50 (step 10: from L50 with band L32–38, L52
+    with L24–38), where the concept's J direction is turning into its output direction;
+  - readers name planted concepts on direct reads; at the report position only the Oracle at L52–60, with band
+    L24–38, names it, for a few concepts (Q13). An earlier version of this line said nothing ever reaches the report
+    position (written before Q13; corrected);
+  - the relative probe criterion is degenerate (absolute criterion, A9).
 - **Next:** the PI decides amendment 01 (`docs/design_specs/005_amendment_01_DRAFT.md`), then the amended full run on the 45 test concepts (~1.5–3 GPU h).
 
 **004, span assay at `:` L42: complete** (`docs/reports/004_span_assay.md`; 33 pairs, 55.8 min, commit 9da6b23 clean).

@@ -51,7 +51,8 @@ if S.get("Q4"):
     N["Q4"] = ("Yes. With the grid extended down to 1/256, every block has a dose range where the non-J part leaves the "
                "report untouched: onset s* = " + ", ".join(f"{SNAME.get(v['s_star'])} ({blk(k)})" for k, v in q.items()) +
                ". The reader doses by the rule would be " + ", ".join(SNAME[s] for s in q["B_default"]["text_strengths_rule"]) +
-               " for L32–38/default. Proposal A4: the 9-point grid, with text readers at {s*/4, s*, 4s*}.")
+               " for L32–38/default. Proposal A4: the 9-point grid for every model-side measure. Those reader doses would "
+               "give all-zero reads (Q5), so A5 moves the text readers to 1/64, 1/4 and 1.")
 # Q6
 if S.get("Q6"):
     q = S["Q6"]["by_block"]
@@ -66,12 +67,12 @@ if S.get("Q7", {}).get("leaky"):
     lk = S["Q7"]["leaky"]
     N["Q7"] = ("Few splits leak. With the rule fixed beforehand, band L32–38 has " +
                (", ".join(lk.get("B", [])) or "no leaky concepts") + " and band L24–38 has " +
-               (", ".join(lk.get("B2", [])) or "none") + ". Proposal A8: exclude these from every non-J contrast in the "
+               (", ".join(lk.get("B2", [])) or "none") + ". Proposal A10: exclude these from every non-J contrast in the "
                "full run (earth is a dev concept; soap is a test concept and would be excluded before any test outcome exists).")
 if S.get("Q8"):
     N["Q8"] = (f"The baseline matters somewhat: the median cosine between the two concept-vector versions is "
                f"{r(S['Q8']['median'], 3)} (lowest {r(S['Q8']['min'], 2)}), below the 0.9 line. Leave-one-out stays primary "
-               "and the 194-word version becomes a mandatory sensitivity check (A10).")
+               "and the 194-word version becomes a mandatory sensitivity check (A12).")
 # previews and budget
 pv = S.get("previews_not_tests", {})
 if pv:
@@ -113,7 +114,7 @@ sec = S.get("SEC_crosscheck")
 if sec:
     N["budget"] = (f"The fast float32-residual regime matches the exact SEC replay on {pct(sec['agree_frac'])} of "
                    f"{sec['n']} cells (median log-prob difference {r(sec['median_abs_dR1p'], 3)} nats), so the full run can "
-                   "use it throughout (A12).")
+                   "use it throughout (A13).")
 # Q10 / Q11 / R-lens (step 7b)
 q10 = S.get("Q10", {}).get("by_band", {})
 if q10:
@@ -132,8 +133,9 @@ if q10:
                 "on the report is mediated by re-entry into the concept's J coordinates within the workspace layers. A clamp "
                 "that reaches the late layers could produce the paper's result (the non-J effect falling to about zero) "
                 "without any workspace re-entry, so a full-range clamp alone cannot separate the two. "
-                "Proposal A7: if M2 stays, run it as the band-limited re-entry clamp with its null, and report the full-range "
-                "version only next to the cosine curve.")
+                "Proposal A8: if M2 stays, run it as a band-limited re-entry clamp with its null, and report the full-range "
+                "version only next to the cosine curve. Step 10 (Q14) then located where along the depth the clamp "
+                "starts to act.")
 q11 = S.get("Q11", {}).get("by_band", {})
 if q11:
     N["Q11"] = ("No, in either band. At every dose where the non-J part moves the model's report, the concept's median J-lens "
@@ -146,7 +148,7 @@ if rc:
     N["rlens"] = (f"The R-lens and J-lens agree closely on these reads (Spearman {r(rc['spearman_JNP_RCB'], 2)}, top-10 "
                   f"agreement {pct(rc['top10_agree_JNP_RCB'])}), so for planted concepts the two Jacobian lenses are "
                   "interchangeable as token readers; adding R-lens to the full run costs little and answers the consistency "
-                  "question directly (A13).")
+                  "question directly (A14).")
 # Q12 (step 8)
 q12 = S.get("Q12", {}).get("by_band", {})
 if q12:
@@ -230,6 +232,78 @@ if s9:
                   "its null in every variant and the clamp stopped at L44 never does. On the dev concepts these are not "
                   "artifacts of how J-space was built; whether they hold on the test concepts is the amended full run's job.")
 
+# step 10 (§16.6): Q14 clamp end layer, Q15 specificity of the report measure
+s10 = S.get("step10") or {}
+q14 = s10.get("Q14", {})
+if q14.get("B") and q14.get("B2") and s10.get("G10", {}).get("pass"):
+    def e(b, E):
+        return q14[b]["by_E"][str(E)]
+
+    def eci(b, E):
+        x = e(b, E)
+        return f"{r(x['mean'], 2, True)} [{r(x['ci'][0], 2)}, {r(x['ci'][1], 2)}]"
+
+    def share(b, E, k):
+        x = e(b, E)
+        return (x["mean_dR1p_unclamped"] - x[k]) / x["mean_dR1p_unclamped"]
+    cosm = {E: e("B", E)["cos_atom_vs_output_median"] for E in (44, 50, 56)}
+    N["Q14"] = (
+        f"By the registered rule the clamp first becomes specific at L{q14['B']['E_star']} with band L32–38 and at "
+        f"L{q14['B2']['E_star']} with L24–38. It does not switch on at one layer. With band L32–38 the extra reduction grows "
+        f"steadily: {r(e('B', 44)['mean'], 2, True)} nats at L44, {eci('B', 48)} at L48 and {eci('B', 50)} at L50, then a "
+        f"plateau from L56 ({r(e('B', 56)['mean'], 2, True)}; {r(e('B', 62)['mean'], 2, True)} at L62). The growth runs in "
+        f"step with the concept's J atom turning toward its output direction (median cosine {r(cosm[44], 2)} at L44, "
+        f"{r(cosm[50], 2)} at L50, {r(cosm[56], 2)} at L56). Unclamped, the non-J part raises the concept's log-prob by "
+        f"{r(e('B', 50)['mean_dR1p_unclamped'], 2)} nats at these concepts' best doses. The concept clamp to L50 removes "
+        f"{pct(share('B', 50, 'mean_dR1p_c_clamp'))} of that and its random null {pct(share('B', 50, 'mean_dR1p_r_clamp'))}; "
+        f"run to L62 they remove {pct(share('B', 62, 'mean_dR1p_c_clamp'))} and {pct(share('B', 62, 'mean_dR1p_r_clamp'))}. "
+        "With the wide band, the concept clamp stopped at L44 slightly raises the effect "
+        f"({r(e('B2', 44)['mean_dR1p_c_clamp'], 2)} vs {r(e('B2', 44)['mean_dR1p_unclamped'], 2)} nats unclamped). That is "
+        "why the band-limited clamp came out below its null in step 7b. One possible reading is that the blocks there push "
+        "against the concept along its J coordinates. "
+        "My reading: the non-J part's effect on the report is routed through the concept's J coordinates mainly over "
+        "L48–56. That is after the band and the readers' layers (L40–44), and while those coordinates are turning into the "
+        "output direction. Under the registered mapping for band L32–38, M2 runs the re-entry clamp to L50 instead of L44 "
+        "(A8). The boundary is soft: at L48 the interval only just includes zero, and at L50 the atom is already two-thirds "
+        "aligned with the output direction. So this is not a clean window separate from the output direction, and the "
+        "whole end-layer curve is more informative than any single end layer. For the 45 test concepts it costs about "
+        "6–7 GPU minutes per band.")
+q15 = s10.get("Q15", {})
+if q15.get("B") and q15.get("B2") and s10.get("G10", {}).get("pass"):
+    def d(b, c, sv):
+        return q15[b][c]["by_dose"][str(sv)]
+
+    def n(b, c):
+        return q15[b][c]["n_doses_meeting"]
+
+    def smci(b, c, sv):
+        x = d(b, c, sv)
+        return f"{r(x['SM_mean'], 2, True)} nats [{r(x['SM_ci'][0], 2)}, {r(x['SM_ci'][1], 2)}]"
+    clean = s10.get("clean_top10_at_quote") or [["—", None]]
+    gen_max = max(v["generic_median"] for b in ("B", "B2") for v in q15[b]["2"]["by_dose"].values())
+    max7 = max(v["ID_rate"] for b in ("B", "B2") for v in q15[b]["7"]["by_dose"].values())
+    a3 = q15["A3_B2_vs_B"]["by_dose"][str(1 / 16)]
+    gap = int(round(10 * (a3["ID_B"] - a3["ID_B2"])))
+    N["Q15"] = (
+        "Yes. The log-prob rise singles out the planted concept. It is not just every word gaining as Qwen's canned answer "
+        f"is displaced. Clean, the open quote predicts “{clean[0][0]}” with probability {pct(clean[0][1])}, then "
+        + " and ".join(f"“{t}”" for t, _ in clean[1:3]) + ". "
+        f"For the full concept vector at s = 1/4, the planted concept's own rise is the largest of the 10 dev concepts for "
+        f"{pct(d('B', '2', 0.25)['ID_rate'])} of concepts with band L32–38 and {pct(d('B2', '2', 0.25)['ID_rate'])} with L24–38 "
+        f"(chance 10%). It beats the median rise of the other {s10.get('W_size', 0) - 1} words by {smci('B', '2', 0.25)} and "
+        f"{smci('B2', '2', 0.25)}. Random directions stay at chance at every dose (identification at most {pct(max7)}). "
+        "Every injected condition meets the rule in both bands (it needs 3 doses). The pure J-lens atom meets it at "
+        f"{n('B', '1')}/9 and {n('B2', '1')}/9 doses, the full vector at {n('B', '2')}/9 and {n('B2', '2')}/9, the J part at "
+        f"{n('B', '3')}/9 and {n('B2', '3')}/9, and the non-J part at {n('B', '4')}/9 and {n('B2', '4')}/9. "
+        f"Other words do rise too: for the full vector their median rise reaches {r(gen_max, 2)} nats at the higher doses, "
+        "and random directions lift them as well. So a raw ΔR1′ carries a generic part of up to about half a nat. "
+        "By the registered mapping A1 stands: R1′ is the primary report measure. My suggestion, not part of the rule, is to "
+        "report SM next to R1′; it removes the generic part at no cost (A18). "
+        "A3: by the registered rule the wider band is not at least as specific as L32–38. At s = 1/16 it identifies "
+        f"{pct(a3['ID_B2'])} of concepts against {pct(a3['ID_B'])}, though its margin is larger ({r(a3['SM_mean_B2'], 2)} vs "
+        f"{r(a3['SM_mean_B'], 2)} nats); at s = 1/4 it is ahead on both. The failing comparison rests on {gap} concepts at one "
+        "dose. That is weak evidence for L32–38, in the same direction as the pilot's band rule (Q3).")
+
 # the short version (top of the page)
 sm = load(RESA / "smoke_summary.json") or {}
 q13 = S.get("Q13")
@@ -239,12 +313,29 @@ if S.get("Q1") and S.get("Q2"):
                    "Qwen almost never <em>says</em> the planted concept: it has a canned answer (“apple”), and neither prefill "
                    "removes it. But the concept's log-probability at that position rises reliably above what random directions "
                    "do (Q1 yes, 4/4 blocks). The report gate as written failed; the amendment makes log-prob the report measure.")
+q15s = (S.get("step10") or {}).get("Q15", {})
+if q15s.get("B") and q15s.get("B2"):
+    idb, idb2 = (q15s[b]["2"]["by_dose"][str(0.25)]["ID_rate"] for b in ("B", "B2"))
+    bullets.append("<b>That metric is specific to the planted concept.</b> The rise is not just the canned answer being "
+                   f"displaced. At s = 1/4 the planted concept's own rise is the largest of the 10 dev concepts for {pct(idb)} "
+                   f"(L32–38) and {pct(idb2)} (L24–38) of concepts, against 10% by chance, and random directions stay at "
+                   "chance (step 10). Other words also rise, by up to about half a nat, so a specificity margin is worth "
+                   "reporting next to R1′.")
 if pv:
     bullets.append("<b>No clear J-space privilege for report on these dev concepts.</b> At equal size the J part beats the "
                    "non-J part at low and middle doses, the order reverses at high doses, and the two reach similar peaks. "
                    "This is a preview on 10 dev concepts, not the test (M1 runs on the 45 test concepts); the pattern holds under all five "
                    "alternative J-space constructions tried (step 9).")
-if S.get("Q10"):
+q14s = (S.get("step10") or {}).get("Q14", {})
+if S.get("Q10") and q14s.get("B") and q14s.get("B2"):
+    bullets.append("<b>The privilege clamp acts only after the readers' layers.</b> Clamping the concept's J coordinates "
+                   "removes much of the non-J part's report effect, beyond a random-token clamp, when it runs to L62. It "
+                   "removes nothing when it stops at L44, under every J-space construction tried (step 9). Step 10 shows "
+                   f"the specific part building up over L48–56 (reliably from L{q14s['B']['E_star']} with band L32–38 and "
+                   f"from L{q14s['B2']['E_star']} with L24–38) as the concept's J direction turns into its output direction. So the "
+                   "non-J effect reaches the answer through the concept's J coordinates only late, where those coordinates "
+                   "are close to the output direction itself. Up to L46 there is no sign of it.")
+elif S.get("Q10"):
     bullets.append("<b>The privilege clamp is specific only when it reaches the output end.</b> Clamping the concept's J coordinates all "
                    "the way to L62 removes much of the non-J part's effect (beating a random-token clamp), but stopping at L44 "
                    "removes nothing beyond the random clamp, under every J-space construction tried (step 9). The concept's J "
@@ -294,10 +385,13 @@ bullets.append("<b>The machinery is sound.</b> Every write exact (ρ within 1 ±
                "amendment's budget for the full run is about 1.5–3 GPU hours (measured throughput, A16).")
 N["short_html"] = ('<h2 id="short">The short version</h2><ul>' + "".join(f"<li>{b}</li>" for b in bullets) + "</ul>"
                    '<div class="callout"><h3>What you decide</h3><ul>'
-                   "<li>The report measure (A1): log-prob at the open quote, with the paper's rank, instead of sampled naming.</li>"
-                   "<li>Band (A3): L32–38 as registered, or the stronger but more disruptive L24–38.</li>"
+                   "<li>The report measure (A1): log-prob at the open quote, with the paper's rank, instead of sampled naming. "
+                   "Step 10 found it specific to the planted concept.</li>"
+                   "<li>Band (A3): L32–38 as registered, or the stronger but more disruptive L24–38. Step 10 leans weakly toward "
+                   "L32–38.</li>"
                    "<li>P11 (A6): drop the report-position version (nothing arrives there) for a reader-vs-model sensitivity comparison.</li>"
-                   "<li>The clamp (A8): test re-entry with the band-limited clamp and its null.</li>"
+                   "<li>The clamp (A8): by the registered step-10 rule, the re-entry clamp runs to L50 rather than L44, with its "
+                   "null. I would also run the whole end-layer curve (a few GPU minutes).</li>"
                    "<li>The go for the amended full run on the 45 test concepts (about 1.5–3 GPU hours).</li></ul></div>"
                    "<p class='muted'>Everything here is development data on 10 dev concepts. None of it is a test of the "
                    "pre-registered predictions; those need the amended full run.</p>")

@@ -524,15 +524,22 @@ if D10.exists():
                 ev[c] = s_b
         by_e = {}
         for E in range(44, 63, 2):
-            diffs, rem = [], []
+            diffs, rem, un, cv, rv = [], [], [], [], []
             for c, s_b in ev.items():
                 cc = [r for r in rows if r["concept"] == c and r["cond"] == f"E{E}" and r["s"] == s_b][0]
                 rc = [r for r in rows if r["concept"] == c and r["cond"] == f"E{E}r" and r["s"] == s_b][0]
                 diffs.append(rc["dR1p"] - cc["dR1p"])
                 rem.append(cc.get("removed_share_above"))
+                # descriptive decomposition (added after the results were read; no rule uses it)
+                un.append([r for r in rows if r["concept"] == c and r["cond"] == 4 and r["s"] == s_b][0]["dR1p"])
+                cv.append(cc["dR1p"])
+                rv.append(rc["dR1p"])
             ci = boot_ci(diffs)
             by_e[E] = {"n": len(diffs), "mean": float(np.mean(diffs)) if diffs else None, "ci": ci,
                        "specific": bool(diffs) and ci[0] > 0,
+                       "mean_dR1p_unclamped": float(np.mean(un)) if un else None,
+                       "mean_dR1p_c_clamp": float(np.mean(cv)) if cv else None,
+                       "mean_dR1p_r_clamp": float(np.mean(rv)) if rv else None,
                        "c_removed_share_above_median": med([x for x in rem if x is not None]),
                        "cos_atom_vs_output_median": med([cosd[c][str(E)] for c in cosd]) if cosd else None,
                        "dR1p_curve_c": {str(sv): med([r["dR1p"] for r in rows if r["cond"] == f"E{E}" and r["s"] == sv]) for sv in GRID9},
