@@ -1,3 +1,8 @@
+- [User research profile](user-research-profile.md) — mech-interp researcher; wants skeptical, evidence-calibrated collaboration
+- [Activation readers project](activation-readers-project.md) — = Causal-Concordance (senku14x) + Cathryn pilot; NLA = nla-rl; spec-v2 branch; 005 full run done on branch 005-amended-full-run; rules in repo CLAUDE.md
+- [Workspace paper notes](workspace-paper-notes.md) — where my J-lens/template/oracle-lens notes + code/lens resources live
+- [Reports location](reports-location.md) — save all reports/notes + a doubts file in /workspace/claude_reports with a README index
+- [Cathryn coordination](cathryn-coordination.md) — PI handles all contact with Cathryn; never draft for her, ask her, or wait on her sign-off
 - [Research workflow non-negotiables](research-workflow-non-negotiables.md) — no subagents; design doc before runs, launch on explicit go; reader-free labels; fp32 writes with fidelity
 - [Reader adjudication project](reader-adjudication-project.md) — Causal-Concordance: 001–004 done on dev (004 span assay: fitted spans ≈ PCA), awaiting PI review; start at docs/COME_UP_TO_SPEED.md
 - [GitHub commit setup](github-commit-setup.md) — commit email, senku14x account, push via env -u GITHUB_TOKEN + gh credential helper

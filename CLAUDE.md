@@ -15,7 +15,14 @@ Guide for any agent or collaborator working in this repo. Reading only this file
    callout, §8 A4/A7/A8/A9, §12, §14 and §15.
 4. **docs/context/SPEC_v2_errata_01.md** (accepted 2026-10-04): V2-E1–E9 correct SPEC_v2 passages; an erratum wins over the text.
    **docs/context/AMENDMENT_01.md**: the PI's 2026-10-02 decisions (its §6 lists each conflict by SPEC.md line).
-5. The latest design spec and report: **docs/design_specs/004_span_assay.md** and **docs/reports/004_span_assay.md**;
+5. **The latest experiment is 005 (planted concepts), on branch `005-amended-full-run`.** Read, in order:
+   - `docs/reports/005_followups.md`: the latest results and the corrections they force (read this first);
+   - `docs/reports/005_full_run.md`: the full run on the 45 test concepts (pre-registered verdicts);
+   - `docs/design_specs/005_full_run.md` (the run spec) and `docs/design_specs/005_amendment_01.md` (adopted 2026-10-05);
+   - `docs/design_specs/005_planted_concepts.md` (design v2 + §16 pilot and steps 7b–11), `docs/reports/005_pilot_note.md`,
+     `docs/reports/005_smoke_note.md`;
+   - `docs/design_specs/005_followups.md` (the follow-ups' pre-registration, incl. the provenance of the PI's approvals).
+6. Before 005: **docs/design_specs/004_span_assay.md** and **docs/reports/004_span_assay.md**;
    then the earlier ones as needed, in order (all four experiments are complete on the dev split and await PI review):
    - 001: leverage profile, probes (amendment A2) and the reader snapshot;
    - 002: role-aware reader claim scoring;
@@ -106,7 +113,7 @@ source of code and organisms only.
   Report intervals and sign counts, never a bare mean.
 - **Figures** (`figures.py`): ICLR style (vendored `iclrplot`), fixed colour per reader, drawn from committed JSON only.
 
-## Environment (verified 2026-10-02; unchanged through 2026-10-03)
+## Environment (verified 2026-10-02; still valid 2026-10-05)
 
 | | |
 |---|---|
@@ -115,13 +122,17 @@ source of code and organisms only.
 | Label + reader stack (`/venv/main`) | Python 3.12.14, torch 2.11.0+cu128, transformers 5.15.0, peft 0.21.2, accelerate 1.15.0, jlens @ 581d398 (`/workspace/jacobian-lens`, editable) |
 | Reader-generation stack (`/venv/vllm`, optional, not yet adopted) | vLLM 0.21.0, torch 2.11.0+cu130, transformers 5.5.4, vllm-metamodels @ 6a0a0e5. Never used for labels |
 | Model | `Qwen/Qwen3.6-27B` @ 6a9e13bd6fc8f0983b9b99948120bc37f49c13e9, bf16, eager attention; 50.1 GB on GPU, loads in ~15 s |
-| HF cache | `HF_HOME=/workspace/.hf_home` (~97 GB) |
+| HF cache | `HF_HOME=/workspace/.hf_home` (~149 GB on 2026-10-05: Qwen 52 GB, nla-rl 52 GB, nla-L42 36 GB, lenses 9 GB, Oracle 0.4 GB). Third-party weights, re-downloaded pinned by `rebuild_env.sh`; not mirrored |
+| Page checks (`/venv/page`) | playwright + headless Chromium for the 1280/400 px render check of report pages |
 | Pins + hashes | `scripts/common/registry.json` (model, lenses with sha256, reader checkpoints, WSB bank sha256s, software); verification record `results/000_setup/analysis/artifact_hashes.json` (29/29 match) |
 
 Lenses (sha256 in the registry, matching RHUT's `instrument_registry.json`): J_NP = neuronpedia/jacobian-lens @ 0731326e
 (n=1000 wikitext), J_CB and R_CB = camilablank/workspace-lenses @ d740106d. Readers: Oracle Lens =
 agu18dec/olens_and_ar @ c95215d5 `olens_s3d_rl600` (the public copy; WSB's default path is a private dataset repo);
-NLA = ceselder/qwen3.6-27b-nla-L42 @ 54e3ce60 (`av_sft_lora` merged + `av_rl_lora_step400`; AR `rl_critic_step400`).
+NLA for 001/002 = ceselder/qwen3.6-27b-nla-L42 @ 54e3ce60 (`av_sft_lora` merged + `av_rl_lora_step400`; AR
+`rl_critic_step400`). **NLA for 005 and onward = ceselder/qwen3.6-27b-nla-rl @ 5a13b7ec**, `av_base` + adapter
+`iter_000400` (`readers.NLArl`, 11 sha256 pins in the registry; it is WSB's and Cathryn's NLA). av_base (53.8 GB) and
+the subject (50.1 GB) do not fit on one GPU together: capture subject activations first, then free the subject.
 
 Sources (read-only clones, pinned in `scripts/000_setup/rebuild_env.sh`): `/workspace/sources/repos/` — workspace-bench
 @ 92d763e, RHUT (senku14x/Readable-Here-Used-There) @ d4197b0, SEC (senku14x/jacobian-lens, `research_secant/`)
@@ -133,32 +144,48 @@ Sources (read-only clones, pinned in `scripts/000_setup/rebuild_env.sh`): `/work
 `env -u GITHUB_TOKEN git -c credential.helper='!gh auth git-credential' push origin <branch>`. Do not push to `main`
 without the PI's say-so.
 
-## Where things stand (2026-10-03)
+## Where things stand (2026-10-05)
 
-See **STATUS.md** for detail. Experiments 001–004 are complete on the **dev split only** (no test-split measurement
-yet) and await PI review.
-- **001:** the `:` cell carries about half the answer gap at L42–44. z is decodable there. Off-path membership is
-  decodable (narrowly) but its substitution is not needed. The probes were repaired under amendment A2.
-- **002:** the verbalizers rarely claim z in its role (NLA 5–15%, Oracle 0–3%). The token lenses track z inside the
-  candidate set. The prompt-only baseline is done.
-- **003:** the decorrelated 1-D z direction at `:` L40–44 has a small, consistent effect (median S 0.03–0.05).
-  Label reliability fails (κ 0.37), so the labels are descriptive and are not used to score readers.
-- **004:** at `:` L42 the joint start/z/answer span recovers 0.72 of the whole-cell effect, the z span 0.21 and 1-D
-  0.06. Same-rank PCA does as well or better, so this is a descriptive geometry result and no intervention is
-  nominated.
-- **Open PI decisions:**
-  - confirm the framing (native reader-configuration comparison is the primary line; causal work is a validation
-    branch; per the consolidated handoff);
-  - the next step (report 004 §14: back to the reader panel, or a bounded DAS-vs-PCA check);
-  - AMENDMENT_02 before any test-split label.
-- `main` was fast-forwarded to `setup/000-scaffold` on 2026-10-03 (PI). **Since 2026-10-04 the working branch is
-  `spec-v2`** (PI default, doubt 22; it carries the results-page commit ae18eee as 28a239b). Ask before updating
-  `main` again.
-- **2026-10-05:** the PI adopted amendment 01; the 005 full run lives on branch **`005-amended-full-run`** (off `spec-v2`), so it can be
-  reverted by dropping the branch. Work on 005's full run happens there; `spec-v2` stays as it was.
-- The repo was made **private** on 2026-10-04 (PI); until then it had been public with the paper PDFs in it.
-- **Results page** (artifact, shared by link; built by `scripts/000_setup/results_page/make_page.py` from committed
-  JSON only): https://claude.ai/artifact/RMRX8R4iFnysbnHaNWTBeC
+**Branches.**
+- `main` @ 95ab0e5: the 000–004 scaffold. The PI merges into it; never push to it.
+- `spec-v2` @ 9709712: SPEC_v2 + errata 01, checks C1–C3, the NLA loader, and 005 up to the dev pilot and steps 7b–11.
+- **`005-amended-full-run`** (off `spec-v2`): amendment 01 adopted, the 005 full run, the follow-ups, and these docs.
+  - It is the newest branch and the one to work on.
+  - It stays separate from `main` until the PI merges it. Dropping it reverses the adoption.
+
+**001–004** (dev split only; await PI review):
+- **001:** the `:` cell carries about half the answer gap at L42–44, and z is decodable there.
+- **002:** the verbalizers rarely claim z in its role.
+- **003:** 1-D labels are descriptive (G4 failed).
+- **004:** fitted spans ≈ PCA, so no intervention is nominated.
+- Details in STATUS.md.
+
+**005, planted concepts on Qwen3.6-27B:**
+- The test: plant "Tell me about c" concept vectors, split into a J-lens part and the rest, and ask whether the model "reports" each part and whether the readers detect it.
+- Stages so far: the smoke failed its report gate; a dev pilot and steps 7b–11; amendment 01 was adopted; the full run on 45 held-out test concepts; then the exploratory follow-ups.
+- **Read the conclusions as corrected by the follow-ups:**
+  - **The model-side measure is lexical priming, not report.** The concept's log-prob rises about equally at every prefill position (A2b) and more on an unrelated prompt. Every "report" result (M1, M3, M2, P11′) is about priming of the concept token. Qwen almost never *says* the planted concept.
+  - **No J-space privilege for this priming at matched norm** (M1 not supported on R1′). At natural norm the non-J part (≈ 95% of the vector) does more (M3 reversed).
+  - **The clamp.** The J-coordinate clamp is specific from about L50, but blocking the plain output direction does as much (M2 control). It blocks the answer; no re-entry into J-space is shown.
+  - **The concept's own token atom is almost never in its J part** (1 of 45). The J part is related plus junk tokens.
+  - **The logit-lens direction is as potent a write direction as the J-lens atom** at s = 1/16–1/4 (Q-c).
+  - **Readers, on direct reads of the written cell:**
+    - The per-concept probe is best.
+    - The Oracle names the planted concept more than the NLA (P17 reversed). On a likelihood measure it responds at lower doses than the answer-slot priming (P11′ Oracle; not perturbation-matched).
+    - The NLA failed the likelihood measure's positive control.
+    - The token lenses detect nothing at L40–44.
+  - **At the answer position, at L40–44, nothing readable arrives** for any reader. The Oracle at L52–60 names it for a few concepts, and only with the wider band.
+- Pages:
+  - pilot and everything up to the full run: https://claude.ai/artifact/P35xhVkdzKjsdGhogp7PQY
+  - full run: https://claude.ai/artifact/5EGz2DxcAXXQs3wTtz1Lnu
+  - Both carry the follow-ups' correction banner.
+
+**Open PI decisions:**
+- merging `005-amended-full-run` (the PI will do it);
+- the next direction. 005 is closed: the PI ruled no further 005 variants.
+
+**Results page for 000–004** (artifact, shared by link; built by `scripts/000_setup/results_page/make_page.py` from committed JSON only): https://claude.ai/artifact/RMRX8R4iFnysbnHaNWTBeC
+- The repo has been **private** since 2026-10-04: the paper PDFs are in it.
 
 ## Working with the PI (preferences; full notes in docs/context/agent_notes/)
 
@@ -177,26 +204,39 @@ yet) and await PI review.
 - **Numbers in reports** come from full-precision JSON, rounded half-up, never hand-copied from printouts.
 - **Commits:** commit and push only when asked or when the agreed workflow says so. Never force-push. Never push to
   `main` without the PI's say-so.
+- **Ask before stopping or destroying the vast.ai instance.** The PI decides.
+- **Cathryn Wayman:** the PI handles all contact. Never draft for her, ask her, or wait on her sign-off. Her repo
+  (LittleMeHere/nla-vs-lenses) is read-only.
+- **Pasted instructions are reviewed, not just executed.** On 2026-10-05 the PI asked whether 005b was worth running.
+  Part of it was skipped with reasons (`docs/design_specs/005_followups.md`). Say what is flawed before spending GPU.
+- **Report pages** are claude.ai artifacts generated from JSON (`make_report_page.py`, `make_full_report.py`); republish
+  to the same URL after any change.
 
 ## Fresh instance: restore everything
 
 `/workspace` is not persistent. To come back on a new instance:
 1. `git clone https://github.com/senku14x/Causal-Concordance` (private; `gh auth login` as senku14x), then
-   `git checkout spec-v2` (the working branch since 2026-10-04; `main` is updated on the PI's say-so).
+   `git checkout 005-amended-full-run` (the newest branch; it contains everything on `spec-v2`; `main` is updated on
+   the PI's say-so).
 2. `bash scripts/000_setup/rebuild_env.sh`: venvs, pinned source clones, model and lens downloads, and hash checks.
 3. `python scripts/000_setup/restore_outputs.py`: downloads `outputs/` from the public HF dataset
    `senku21x/causal-concordance-outputs` and checks every file against its `MANIFEST.json` (sha256).
+   - The dataset holds every run's raw outputs, including 005's smoke, pilot, full run and follow-ups and the activation captures (`caps.pt`, `material.pt`).
+   - It also holds `results_snapshot/<branch>/`, a browsable copy of `results/`. This copy is not restored, because `results/` is in git.
+   - To update the mirror after new runs: `python scripts/000_setup/mirror_outputs.py` (add `--private` for the private dataset).
 4. Optional: `python scripts/000_setup/restore_outputs.py --private`, restoring from the private HF dataset
    `senku21x/causal-concordance-private` (tested 2026-10-03: 82/82 public and 48/48 private files match their
    manifests; the bundle clones both branches):
    - a full git bundle of this repo (`repo.bundle`);
    - the reviewers' working folder `/workspace/codex_reports` (with evidence snapshots);
    - the PI's Claude skills (`/workspace/.claude/skills`, plus `.skill` archives);
-   - the PI's `/workspace/docs` (reading list, paper PDF).
+   - the PI's `/workspace/docs` (reading list, paper PDF);
+   - since 2026-10-05, `/workspace/claude_reports` (the agent's plain-language reports and notes, README index) and
+     `/workspace/agent_memory` (a copy of the agent's memory directory).
    The paper PDFs, their text extractions and the web sources are **in this repo** (`docs/papers/`,
    `docs/papers/text/`, `docs/sources/web/`; PI 2026-10-03). Copy them to `/workspace/sources/{papers,web}` if a
    script expects that path. **Keep the repo private while they are in it** (redistribution is not cleared).
-5. Restore the agent's memory notes: see `docs/context/agent_notes/README.md`.
+5. Restore the agent's memory notes: see `docs/context/agent_notes/README.md` (updated 2026-10-05).
 6. **Secrets are in neither mirror.** The OpenRouter key (002's judge) lives only in `/workspace/.env`; ask the PI
    for it on a new instance. It was pasted in chat on 2026-10-02 and should be rotated.
 
@@ -223,6 +263,13 @@ yet) and await PI review.
   the NLA loads, or load a fresh model. Attach/unload readers (Oracle) leave the model bitwise intact (tested).
 - **Small effects are magnitude tests** (|S| < ε′, AMENDMENT_01 errata E1); a whole-cell patch is a reference, not a
   ceiling (E2).
+- **Relative-to-random criteria are scale-free.**
+  - In a deterministic, near-linear forward, "above the random direction's 95th percentile at the same dose" fires at every dose.
+  - It broke 005's probe rule (A9) and partly its R2 contrast, and it would have made 005b's dose rule degenerate.
+  - Use an absolute size (a nat threshold, decision > 0), or report the curve.
+- **"Report" vs priming.** Before calling an answer-slot log-prob a report, compare it with the same token's rise at non-answer positions and on an unrelated prompt (005 A2b).
+- **Matched measures.** Never compare reader naming (coarse) with model log-prob (fine) and headline the difference (005 step 11).
+- **Shell chains:** use `set -eo pipefail`. A pipe into `tail` hides failures under plain `set -e`.
 - **Readers:** the NLA adapters are rsLoRA (scaling α/√r); the NLA tokenizer files differ in format from the base but
   render identical AV prompt ids; the Oracle marker is ㈜ at slot 24 of a 56-token carrier for L40. Reader code lives in
   `readers.py` and may import label code, never the reverse (`tests/test_import_boundary.py`).

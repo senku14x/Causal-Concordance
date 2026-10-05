@@ -1,7 +1,27 @@
-# STATUS — 2026-10-04 (SPEC_v2 + errata 01; checks C1–C3; 005 smoke + dev-only pilot done; amended full run awaits the PI)
+# STATUS — 2026-10-05 (branch `005-amended-full-run`: 005 full run + follow-ups done; 005 closed; next direction open)
 
-*New session? Read `CLAUDE.md` first (rules, the PI's preferences, and how to restore a fresh instance), then
-`docs/COME_UP_TO_SPEED.md`. This file is the detailed running log, newest first.*
+*New session? Read `CLAUDE.md` first (rules, the PI's preferences, branches, and how to restore a fresh instance),
+then this file (newest first), then `docs/reports/005_followups.md`.*
+
+**2026-10-05: state at the end of the session (branch `005-amended-full-run`, pushed; not merged into `main`).**
+- **005 is closed.** The PI ruled no further 005 variants.
+- **Main conclusions, with the follow-up corrections applied:**
+  - the model-side measure is lexical priming, not report;
+  - no J-space privilege for it;
+  - the clamp effect is output-direction blocking;
+  - the logit-lens direction primes as well as the J atom;
+  - on direct reads, probe > Oracle > NLA, and the token lenses detect nothing;
+  - nothing readable arrives at the answer position at L40–44.
+  - Details in CLAUDE.md, "Where things stand", and the reports listed there.
+- **Mirrors (2026-10-05):**
+  - all of `outputs/` (3.2 GB, incl. 005) is on the public HF dataset `senku21x/causal-concordance-outputs`, with MANIFEST.json and a `results/` snapshot;
+  - a repo bundle with every branch, `claude_reports` and the agent memory are on the private dataset;
+  - script: `scripts/000_setup/mirror_outputs.py`;
+  - third-party weights are not mirrored (they are pinned and re-downloadable).
+- **Open:**
+  - the PI merges this branch;
+  - the next direction. Candidates are in the session's last report-back: back to the reader panel on WorkspaceBench cells with the likelihood readout from 005; the 004 §14 options.
+- **Untracked:** `docs/design_specs/Untitled.ipynb` (the PI's notebook; left as is).
 
 **2026-10-04 (branch `spec-v2`, now the working branch; repo private).**
 - **SPEC_v2** is the unified spec; **errata 01** (V2-E1–E9) was accepted by the PI and wins over the text.

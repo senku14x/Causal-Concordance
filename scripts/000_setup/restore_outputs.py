@@ -4,7 +4,9 @@
     python scripts/000_setup/restore_outputs.py --private  # also the private backup (papers, web sources, review
                                                            # evidence, Claude skills, repo bundle) into /workspace
 
-Public:  senku21x/causal-concordance-outputs  (outputs/ tree at the root + MANIFEST.json with bytes and sha256)
+Public:  senku21x/causal-concordance-outputs  (outputs/ tree at the root + MANIFEST.json with bytes and sha256;
+         results_snapshot/<branch>/ is a browsable copy of results/ and is not restored). Update it with
+         mirror_outputs.py.
 Private: senku21x/causal-concordance-private  (workspace/<path> mirrors /workspace/<path>; repo.bundle; MANIFEST.json)
 Secrets (the OpenRouter key in /workspace/.env) are in neither; ask the PI.
 """
