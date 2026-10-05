@@ -68,7 +68,7 @@ def build(S, N):
 <h1>Planted Concepts Full Run</h1>
 <p class="lede">The amended 005 run on the {n} {'rehearsal (dev) ' if rehearse else 'held-out test '}concepts: what ran, the gates,
 every pre-registered contrast with its verdict, and the tables and raw readouts behind them. Every number is generated from
-the saved result files. Run <code>{esc(S['run_id'])}</code>, branch <code>005-amended-full-run</code>.</p>
+the saved result files. Run <code>{esc(S['run_id'])}</code>, branch <code>005-amended-full-run</code>. The checks, smoke, pilot and extra steps that led here are on the <a href="https://claude.ai/artifact/P35xhVkdzKjsdGhogp7PQY">Planted Concepts Pilot</a> page.</p>
 <div class="chips">{"".join(chips)}</div></header>"""
     out.append(head)
     md += [f"# 005 full run under amendment 01 — results (run `{S['run_id']}`, {n} {'dev rehearsal' if rehearse else 'test'} concepts)", "",

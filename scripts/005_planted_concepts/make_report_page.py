@@ -548,6 +548,8 @@ once Qwen's canned answer is displaced (A1, A3).</li>
 <li><b>Step 11, run on your "run something extra!".</b> Two controls for step 10's caveats. Does the late clamp effect need
 the J-lens coordinates, or does blocking the plain output direction do the same (A8)? And are the readers really less
 sensitive than the model once both are measured by likelihood rather than naming (A6)?</li>
+<li><b>The full run (5 October).</b> You adopted the amendment. I wrote the run spec, rehearsed the whole pipeline on two
+dev concepts, committed the analysis code, and then ran the 45 held-out test concepts once (first section).</li>
 </ol>
 <p>Every run had a design spec and pre-registered priors committed before it started. No test-concept outcome has been
 produced. The full 005 run waits for your decisions on the amendment.</p>
@@ -1522,9 +1524,47 @@ def sec_amend():
         if line.startswith("| A"):
             cells = [c.strip() for c in line.strip("|").split("|")]
             rows.append([md_inline(c) for c in cells])
-    return ('<h2 id="amend">The amendment: what you decide</h2><p>From <code>docs/design_specs/005_amendment_01.md</code>. '
-            'Nothing here is adopted until you decide; the full run on the 45 test concepts waits for it.</p>' +
+    return ('<h2 id="amend">The amendment (adopted 5 October)</h2><p>From <code>docs/design_specs/005_amendment_01.md</code>. '
+            'You adopted every item, including the optional A18, on branch <code>005-amended-full-run</code>; the table is the '
+            'draft as you saw it.</p>' +
             table(["#", "Item", "What the pilot found (dev)", "Proposal"], rows))
+
+
+def sec_full():
+    """The full run under the adopted amendment: verdicts from full_summary.json (+ the interpretation in full_notes.json)."""
+    S = load(RESA / "full_summary.json")
+    if not S:
+        return ""
+    import make_full_report as MF                      # lazy: it imports this module
+    N = load(RESA / "full_notes.json") or {}
+    C, G = S["contrasts"], S["gates"]
+    rows = []
+    for key, label, pred, preg, pup in MF.PRIORS:
+        c = C.get(key) or {}
+        o = MF.outcome(key, C)
+        v = ("not tested (G11 failed)" if c.get("uninformative") else "—") if o is None else ("supported" if o else "not supported")
+        if key == "R1_probe_minus_NLA" and o is not None:
+            v = "yes (≥ 0)" if o else "no"
+        rows.append([esc(label), str(c.get("n", "—")), MF.fmt_ci(c, 4 if key == "M1_R1" else 2), pred,
+                     chip(v, "good" if o else ("pend" if o is None else "bad")),
+                     r(preg, 2) if preg is not None else "—", r(pup, 2) if pup is not None else "—"])
+    reg = MF.brier([(p, MF.outcome(k, C)) for k, _, _, p, _ in MF.PRIORS])
+    upd = MF.brier([(p, MF.outcome(k, C)) for k, _, _, _, p in MF.PRIORS])
+    bl = N.get("short_html", "")
+    bl = bl[bl.find("<ul>"):] if "<ul>" in bl else ""
+    g11 = ", ".join(f"{k.replace('_', ' ').replace('nla', 'NLA').replace('oracle', 'Oracle')} {pct(v['ID_natural'])}"
+                    for k, v in G.get("G11", {}).items())
+    return (f"""<h2 id="full">The full run (5 October): the pre-registered tests on the 45 test concepts</h2>
+<p>You adopted amendment 01 in full on 5 October. The run spec (<code>docs/design_specs/005_full_run.md</code>) and the
+analysis code were committed before any test-concept output existed, after an end-to-end rehearsal on two dev concepts.
+Run <code>{esc(S['run_id'])}</code> took {r(S['tables'].get('wall_minutes'), 0)} minutes. Everything lives on branch
+<code>005-amended-full-run</code>, so dropping it reverses the adoption and the run. Every gate passes except the likelihood
+positive control (G11) for the NLA (natural activations identified: {g11}; bar 50%), which makes P11′ for the NLA
+untestable. The detailed page, with every table, chart and raw readout: <a href="https://claude.ai/artifact/5EGz2DxcAXXQs3wTtz1Lnu">Planted Concepts Full Run</a>.</p>
+{bl}
+{table(["Contrast", "n", "Mean [95% CI]", "Predicted", "Verdict", "Registered prior", "Updated prior"], rows, num_cols=(1, 2, 5, 6))}
+<p>Brier score on the full run: registered priors <b>{r(reg[0], 3)}</b> over {reg[1]}; updated (post-pilot) priors
+<b>{r(upd[0], 3)}</b> over {upd[1]}. The bullets are my interpretation; the verdicts follow the pre-registered rules.</p>""")
 
 
 def sec_glossary():
@@ -1551,30 +1591,53 @@ def sec_scorecard(D):
     bs, n = brier(items)
     rows = [[it["group"], esc(it["what"]), r(it["prior"], 2), f"<code>{it['commit']}</code>",
              chip("happened", "good") if it["outcome"] else chip("did not happen", "bad"), esc(it["note"])] for it in items]
-    pend = [["Full run", esc(x), r(p, 2), "<code>df56646</code>", chip("not tested yet", "pend"), "needs the amended full run on test concepts"]
-            for x, p in (("M1: J part beats non-J part on report (matched)", 0.85), ("M2: clamp interpretable and supported", 0.30),
-                         ("M3: J beats non-J at natural norm", 0.60), ("R1: probe detects u⊥ at least as often as the NLA", 0.70),
-                         ("R2: u⊥ moves behaviour without moving report", 0.50), ("P11a: NLA sees what the model doesn't report", 0.20),
-                         ("P11b: NLA sees what doesn't change behaviour", 0.15), ("P17: Oracle sees u⊥ less than the NLA", 0.45))]
+    FS = load(RESA / "full_summary.json")
+    if FS:
+        import make_full_report as MF                  # lazy: it imports this module
+        FC = FS["contrasts"]
+
+        def res(key):
+            o = MF.outcome(key, FC)
+            return chip("happened", "good") if o else chip("did not happen", "bad")
+        pend = [["Full run", esc(x), r(p, 2), "<code>df56646</code>", res(k), f"test concepts: {MF.fmt_ci(FC.get(k), 4 if k == 'M1_R1' else 2)}"]
+                for x, p, k in (("M1: J part beats non-J part on report (matched; R1, as registered)", 0.85, "M1_R1"),
+                                ("M2: clamp interpretable and supported (A8: J re-entry clamp to L50)", 0.30, "M2"),
+                                ("M3: J beats non-J at natural norm", 0.60, "M3"),
+                                ("R1: probe detects u⊥ at least as often as the NLA", 0.70, "R1_probe_minus_NLA"),
+                                ("R2: u⊥ moves behaviour without moving report", 0.50, "R2_behaviour_without_report"),
+                                ("P17: Oracle sees u⊥ less than the NLA", 0.45, "P17"))]
+        pend += [["Full run", esc(x), r(p, 2), "<code>df56646</code>", chip("replaced (A6)", "pend"), "replaced by P11′ under the adopted A6"]
+                 for x, p in (("P11a: NLA sees what the model doesn't report", 0.20), ("P11b: NLA sees what doesn't change behaviour", 0.15))]
+    else:
+        pend = [["Full run", esc(x), r(p, 2), "<code>df56646</code>", chip("not tested yet", "pend"), "needs the amended full run on test concepts"]
+                for x, p in (("M1: J part beats non-J part on report (matched)", 0.85), ("M2: clamp interpretable and supported", 0.30),
+                             ("M3: J beats non-J at natural norm", 0.60), ("R1: probe detects u⊥ at least as often as the NLA", 0.70),
+                             ("R2: u⊥ moves behaviour without moving report", 0.50), ("P11a: NLA sees what the model doesn't report", 0.20),
+                             ("P11b: NLA sees what doesn't change behaviour", 0.15), ("P17: Oracle sees u⊥ less than the NLA", 0.45))]
     return (f'<h2 id="expect">What I expected, and what happened</h2><p>Every prior below was committed before the run it '
             f'concerns (commit shown). "Happened" means the event the prior was about occurred. Over the {n} resolved '
-            f'predictions my Brier score is <b>{r(bs, 3)}</b> (0 is perfect; always saying 0.5 scores 0.25).</p>' +
+            f'pilot-era predictions my Brier score is <b>{r(bs, 3)}</b> (0 is perfect; always saying 0.5 scores 0.25). The "Full run" '
+            f'rows are resolved by the full run and scored on its own (first section).</p>' +
             table(["Stage", "Prediction", "My prior", "Registered", "Outcome", "Detail"], rows + pend, num_cols=(2,)))
 
 
 def sec_where():
     items = [("Design 005 (v2, priors, §16 pilot, §16.3 step 7b)", "docs/design_specs/005_planted_concepts.md"),
-             ("Amendment draft", "docs/design_specs/005_amendment_01.md"),
+             ("Amendment 01 (adopted 5 Oct)", "docs/design_specs/005_amendment_01.md"),
+             ("Full-run spec (pre-registered)", "docs/design_specs/005_full_run.md"),
+             ("Full-run report", "docs/reports/005_full_run.md"),
+             ("Full-run page", "https://claude.ai/artifact/5EGz2DxcAXXQs3wTtz1Lnu"),
              ("Smoke note", "docs/reports/005_smoke_note.md"),
              ("Checks C1–C3 report", "docs/reports/checks_2026-10-04_no_gpu.md"),
              ("Errata 01 (accepted)", "docs/context/SPEC_v2_errata_01.md"),
              ("Your review and its disposition", "docs/reviews/2026-10-04_pi_review_checks_005/"),
-             ("Summaries (JSON)", "results/005_planted_concepts/analysis/{smoke,pilot}_summary.json"),
-             ("Raw outputs", "outputs/005_planted_concepts/{smoke/smoke1, pilot/pilot1, pilot/pilot1/step7b}"),
+             ("Summaries (JSON)", "results/005_planted_concepts/analysis/{smoke,pilot,full}_summary.json"),
+             ("Raw outputs", "outputs/005_planted_concepts/{smoke/smoke1, pilot/pilot1 (+ step7b … step11), run/20261005T015235Z}"),
              ("Code", "scripts/005_planted_concepts/ (p005.py, planted.py, pilot.py, pilot_7b.py, *_analysis.py, make_report_page.py)"),
              ("Plain-language notes", "/workspace/claude_reports/ (README index)")]
     return ('<h2 id="where">Where everything lives</h2><p>Repo <code>senku14x/Causal-Concordance</code> (private), branch '
-            '<code>spec-v2</code>.</p>' + table(["What", "Path"], [[esc(a), f"<code>{esc(b)}</code>"] for a, b in items]))
+            '<code>spec-v2</code> for everything up to the pilot; branch <code>005-amended-full-run</code> for the adoption and the '
+            'full run.</p>' + table(["What", "Path"], [[esc(a), f"<code>{esc(b)}</code>"] for a, b in items]))
 
 
 def build(D, notes, short_html):
@@ -1588,8 +1651,10 @@ def build(D, notes, short_html):
              chip("step 9 done" if pl.get("step9") else "step 9 pending", "good" if pl.get("step9") else "pend"),
              chip("step 10 done" if pl.get("step10") else "step 10 pending", "good" if pl.get("step10") else "pend"),
              chip("step 11 done" if pl.get("step11") else "step 11 pending", "good" if pl.get("step11") else "pend"),
-             chip("full run waits for your decisions", "pend")]
-    toc = [("short", "The short version"), ("why", "Why any of this was run"), ("expect", "Expected vs happened"),
+             chip("amendment 01 adopted", "good") if (ROOT / "docs/design_specs/005_amendment_01.md").exists() else chip("full run waits for your decisions", "pend")]
+    if load(RESA / "full_summary.json"):
+        chips.append(chip("full run done · 45 test concepts", "good"))
+    toc = ([("full", "The full run (5 Oct)")] if load(RESA / "full_summary.json") else []) + [("short", "The pilot in short"), ("why", "Why any of this was run"), ("expect", "Expected vs happened"),
            ("checks", "Checks C1–C3"), ("smoke", "The smoke run"), ("pilot", "The overnight pilot"),
            ("q1", "Q1 report measure", 1), ("q2", "Q2 prefill", 1), ("q3", "Q3 band", 1), ("q4", "Q4 onset", 1),
            ("q5", "Q5 readers", 1), ("q6", "Q6 clamp", 1), ("q7", "Q7 leaky splits", 1), ("q8", "Q8 baseline", 1),
@@ -1598,17 +1663,17 @@ def build(D, notes, short_html):
            ("step9", "Step 9 robustness"),
            ("step10", "Step 10"), ("g10", "G10 consistency", 1), ("q14", "Q14 clamp end layer", 1), ("q15", "Q15 specificity", 1),
            ("step11", "Step 11"), ("q16", "Q16 output-direction clamp", 1), ("q17", "Q17 reader likelihoods", 1),
-           ("reads", "Raw readouts"), ("eng", "Machinery"), ("mistakes", "Mistakes"), ("amend", "Your decisions"),
+           ("reads", "Raw readouts"), ("eng", "Machinery"), ("mistakes", "Mistakes"), ("amend", "Amendment (adopted)"),
            ("gloss", "Glossary"), ("where", "Where things live")]
     nav = '<nav class="toc" aria-label="Contents">' + "".join(
         f'<a class="{"sub" if len(t) > 2 else ""}" href="#{t[0]}">{esc(t[1])}</a>' for t in toc) + "</nav>"
     head = f"""<header class="top"><div class="eyebrow">Causal-Concordance · design 005 · night of 4 October 2026</div>
 <h1>Planted Concepts Pilot</h1>
 <p class="lede">Everything that was run tonight, why it was run, what I expected and what came out: the three checks,
-the 005 smoke run, the dev-only pilot, and the extra steps 7b and 8–11. Every number on this page is generated from the
+the 005 smoke run, the dev-only pilot, the extra steps 7b and 8–11, and (5 October) the full run on the 45 test concepts under the adopted amendment. Every number on this page is generated from the
 saved result files.</p>
 <div class="chips">{"".join(chips)}</div></header>"""
-    body = [head, short_html, sec_why(), sec_scorecard(D), sec_checks(D), sec_smoke(D), sec_pilot(D, notes),
+    body = [head, sec_full(), short_html, sec_why(), sec_scorecard(D), sec_checks(D), sec_smoke(D), sec_pilot(D, notes),
             sec_pilot2(D, notes), sec_7b(D, notes), sec_8(D, notes), sec_9(D, notes), sec_10(D, notes), sec_11(D, notes), sec_reads(D, notes), sec_eng(D, notes), sec_mistakes(), sec_amend(),
             sec_glossary(), sec_where(),
             '<footer>Generated by <code>scripts/005_planted_concepts/make_report_page.py</code> from JSON in '

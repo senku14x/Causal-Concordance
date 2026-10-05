@@ -5,7 +5,7 @@ before each run: 0b0ca0b, ba31daa, c7cde05, bf1da37, 94be4ec, 3bfd2f0, 6058e38).
 summary `results/005_planted_concepts/analysis/pilot_summary.json`. **Dev concepts only (10); descriptive; no
 test-concept outcome exists.** The full report with charts and raw readouts is the published report page.
 
-**The short version**
+**The pilot in short (10 dev concepts, 4 October)**
 
 - Qwen reports planted concepts only by the paper's own metric. Asked “the thought is about "…"”, Qwen almost never says the planted concept: it has a canned answer (“apple”), and neither prefill removes it. But the concept's log-probability at that position rises reliably above what random directions do (Q1 yes, 4/4 blocks). The report gate as written failed; the amendment makes log-prob the report measure.
 - That metric is specific to the planted concept. The rise is not just the canned answer being displaced. At s = 1/4 the planted concept's own rise is the largest of the 10 dev concepts for 80% (L32–38) and 90% (L24–38) of concepts, against 10% by chance, and random directions stay at chance (step 10). Other words also rise, by up to about half a nat, so a specificity margin is worth reporting next to R1′.
@@ -17,17 +17,14 @@ test-concept outcome exists.** The full report with charts and raw readouts is t
 - The machinery is sound. Every write exact (ρ within 1 ± 3e-07), runs bit-identical on repeat, the fast regime matches the exact one on 100% of 270 cells, the C1–C3 checks and errata are in, and the amendment's budget for the full run is about 1.5–3 GPU hours (measured throughput, A16).
 
 
-**What you decide**
+**Decided on 5 October**
 
-- The report measure (A1): log-prob at the open quote, with the paper's rank, instead of sampled naming. Step 10 found it specific to the planted concept.
-- Band (A3): L32–38 as registered, or the stronger but more disruptive L24–38. Step 10 leans weakly toward L32–38.
-- P11 (A6): drop the report-position version (nothing arrives there) for a reader-vs-model sensitivity comparison, with reader likelihoods as the readers' measure (step 11).
-- The clamp (A8): by the registered step-10 rule, the re-entry clamp runs to L50 rather than L44, with its null, and (step 11) next to an output-direction clamp, which does nearly as much. I would run both end-layer curves (a few GPU minutes).
-- The go for the amended full run on the 45 test concepts (about 1.5–3 GPU hours).
+- You adopted amendment 01 in full, including the optional A18, on branch 005-amended-full-run (dropping the branch reverses it).
+- The amended full run on the 45 test concepts ran the same day; its verdicts are in the first section.
 
 
 
-Everything here is development data on 10 dev concepts. None of it is a test of the pre-registered predictions; those need the amended full run.
+This section is development data on 10 dev concepts and tests nothing; the pre-registered tests are the full run's (first section).
 
 ## Q1. Report measure
 
@@ -127,4 +124,4 @@ Unclamped rows repeat step 10's: median |difference| 0.000 nats, maximum 0.000, 
 
 ## Amendment
 
-Proposals filled from these results: `docs/design_specs/005_amendment_01_DRAFT.md`.
+Proposals filled from these results: `docs/design_specs/005_amendment_01.md`.

@@ -7,7 +7,7 @@ from pathlib import Path
 
 HERE = Path(__file__).resolve().parent
 sys.path.insert(0, str(HERE))
-from make_report_page import RESA, SNAME, load, med, pct, r  # noqa: E402,F401
+from make_report_page import RESA, ROOT, SNAME, load, med, pct, r  # noqa: E402,F401
 
 S = load(RESA / "pilot_summary.json") or {}
 N = {}
@@ -463,20 +463,18 @@ bullets.append("<b>The machinery is sound.</b> Every write exact (ρ within 1 ±
                "bit-identical on repeat, the fast regime matches the exact one on " +
                f"{pct(secx.get('agree_frac'))} of {secx.get('n', '—')} cells, the C1–C3 checks and errata are in, and the "
                "amendment's budget for the full run is about 1.5–3 GPU hours (measured throughput, A16).")
-N["short_html"] = ('<h2 id="short">The short version</h2><ul>' + "".join(f"<li>{b}</li>" for b in bullets) + "</ul>"
-                   '<div class="callout"><h3>What you decide</h3><ul>'
-                   "<li>The report measure (A1): log-prob at the open quote, with the paper's rank, instead of sampled naming. "
-                   "Step 10 found it specific to the planted concept.</li>"
-                   "<li>Band (A3): L32–38 as registered, or the stronger but more disruptive L24–38. Step 10 leans weakly toward "
-                   "L32–38.</li>"
-                   "<li>P11 (A6): drop the report-position version (nothing arrives there) for a reader-vs-model sensitivity comparison, "
-                   "with reader likelihoods as the readers' measure (step 11).</li>"
-                   "<li>The clamp (A8): by the registered step-10 rule, the re-entry clamp runs to L50 rather than L44, with its "
-                   "null, and (step 11) next to an output-direction clamp, which does nearly as much. I would run both "
-                   "end-layer curves (a few GPU minutes).</li>"
-                   "<li>The go for the amended full run on the 45 test concepts (about 1.5–3 GPU hours).</li></ul></div>"
-                   "<p class='muted'>Everything here is development data on 10 dev concepts. None of it is a test of the "
-                   "pre-registered predictions; those need the amended full run.</p>")
+adopted = (ROOT / "docs/design_specs/005_amendment_01.md").exists()
+decide = ('<div class="callout"><h3>Decided on 5 October</h3><ul>'
+          "<li>You adopted amendment 01 in full, including the optional A18, on branch <code>005-amended-full-run</code> "
+          "(dropping the branch reverses it).</li>"
+          "<li>The amended full run on the 45 test concepts ran the same day; its verdicts are in the first section.</li></ul></div>"
+          if adopted else
+          '<div class="callout"><h3>What you decide</h3><ul>'
+          "<li>The report measure (A1), the band (A3), P11 (A6), the clamp (A8), and the go for the amended full run.</li></ul></div>")
+N["short_html"] = ('<h2 id="short">The pilot in short (10 dev concepts, 4 October)</h2><ul>' + "".join(f"<li>{b}</li>" for b in bullets)
+                   + "</ul>" + decide +
+                   "<p class='muted'>This section is development data on 10 dev concepts and tests nothing; the pre-registered "
+                   "tests are the full run's (first section).</p>")
 out = RESA / "report_notes.json"
 prev = load(out) or {}
 prev.update(N)
