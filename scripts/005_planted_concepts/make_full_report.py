@@ -62,7 +62,8 @@ def build(S, N):
     hol = C.get("holm_P_family", {})
     chips = [chip(f"{n} {'dev (rehearsal)' if rehearse else 'test'} concepts", "good"),
              chip("gates G0/G3/G4 pass" if gate_ok else "a gate fails", "good" if gate_ok else "bad"),
-             chip("amendment 01 adopted", "pend")]
+             chip("amendment 01 adopted", "pend")] + [chip(f"{k.split('_')[0].upper() if k.startswith('nla') else 'Oracle'} fails G11", "warn")
+                                                       for k, v in G.get("G11", {}).items() if not v.get("pass")]
     head = f"""<header class="top"><div class="eyebrow">Causal-Concordance · design 005 · full run under amendment 01 · 5 October 2026</div>
 <h1>Planted Concepts Full Run</h1>
 <p class="lede">The amended 005 run on the {n} {'rehearsal (dev) ' if rehearse else 'held-out test '}concepts: what ran, the gates,
@@ -112,18 +113,29 @@ the saved result files. Run <code>{esc(S['run_id'])}</code>, branch <code>005-am
     for key, label, pred, preg, pup in PRIORS:
         c = C.get(key) or {}
         o = outcome(key, C)
-        verdict_txt = "—" if o is None else ("supported" if o else "not supported")
+        verdict_txt = ("not tested (G11 failed)" if c.get("uninformative") else "—") if o is None else ("supported" if o else "not supported")
         if key == "R1_probe_minus_NLA" and o is not None:
             verdict_txt = "yes (≥ 0)" if o else "no"
-        crow.append([esc(label), str(c.get("n", "—")), fmt_ci(c), pred,
+        nd = 4 if key == "M1_R1" else 2
+        crow.append([esc(label), str(c.get("n", "—")), fmt_ci(c, nd), pred,
                      chip(verdict_txt, "good" if o else "bad") if o is not None else chip("—", "pend"),
                      r(preg, 2) if preg is not None else "—", r(pup, 2) if pup is not None else "—"])
-        mrow.append(f"| {label} | {c.get('n', '—')} | {fmt_ci(c)} | {pred} | {verdict_txt} | "
+        mrow.append(f"| {label} | {c.get('n', '—')} | {fmt_ci(c, nd)} | {pred} | {verdict_txt} | "
                     f"{r(preg, 2) if preg is not None else '—'} | {r(pup, 2) if pup is not None else '—'} |")
     hrows = [[k, r(v["p"], 4), r(v["threshold"], 4), chip("rejects H0", "good") if v["rejects_null"] else chip("does not", "bad")]
              for k, v in hol.items()]
     reg = brier([(p, outcome(k, C)) for k, _, _, p, _ in PRIORS])
     upd = brier([(p, outcome(k, C)) for k, _, _, _, p in PRIORS])
+    g2r = G.get("G2", {}).get("by_reader", {})
+    gp = [("G3: median J share within [1%, 30%]", 0.85, not G["G3"]["flag"]),
+          ("G4: probe validity passes", 0.70, G["G4"]["pass"]),
+          ("G5: more than 20% of concept-layers leaky", 0.25, bool(G["G5_leaky"]["leaky"])),
+          ("G6: at least one concept dropped for the NLA", 0.40, bool(G.get("G6", {}).get("nla_L42", {}).get("dropped"))),
+          ("G2: the NLA passes on direct reads", 0.80, g2r.get("nla_L42", {}).get("pass")),
+          ("G2: the Oracle passes on direct reads (L40 or L44)", 0.70,
+           bool(g2r.get("oracle_L40", {}).get("pass") or g2r.get("oracle_L44", {}).get("pass")))]
+    gbr = brier([(p, o) for _, p, o in gp])
+    gprows = [[esc(a), r(p, 2), chip("happened", "good") if o else chip("did not happen", "bad")] for a, p, o in gp]
     out.append(f"""<h2 id="contrasts">Pre-registered contrasts</h2>
 <p>Per-concept statistics, averaged over concepts; 95% cluster-bootstrap intervals (10,000 draws). "Supported" means the
 interval excludes 0 in the predicted direction. The P-family {{P11′ (NLA), P17}} is Holm-corrected on one-sided bootstrap p
@@ -131,8 +143,12 @@ at 0.025. Priors: the registered column is from commit df56646 (before any GPU r
 the dev pilot and before this run (<code>005_full_run.md</code>).</p>
 {table(["Contrast", "n", "Mean [95% CI]", "Predicted", "Verdict", "Registered prior", "Updated prior"], crow, num_cols=(1, 2, 5, 6))}
 <h3>Holm over the P-family</h3>{table(["Contrast", "one-sided p", "Holm threshold", ""], hrows, num_cols=(1, 2))}
+<p class="muted">Only tested members enter the correction. With the registered family of two the first threshold would be
+0.0125.</p>
 <p>Brier score of the registered priors: <b>{r(reg[0], 3) if reg[0] is not None else '—'}</b> over {reg[1]} resolved;
-of the updated priors: <b>{r(upd[0], 3) if upd[0] is not None else '—'}</b> over {upd[1]} (always 0.5 scores 0.25).</p>""")
+of the updated priors: <b>{r(upd[0], 3) if upd[0] is not None else '—'}</b> over {upd[1]} (always 0.5 scores 0.25).</p>
+<h3>Gate priors (registered with the contrasts, df56646)</h3>{table(["Gate", "Prior", "Outcome"], gprows, num_cols=(1,))}
+<p>Brier score of the gate priors: <b>{r(gbr[0], 3) if gbr[0] is not None else '—'}</b> over {gbr[1]}.</p>""")
     md += ["## Pre-registered contrasts", "", "| Contrast | n | Mean [95% CI] | Predicted | Verdict | Registered prior | Updated prior |",
            "|---|---|---|---|---|---|---|"] + mrow + ["",
            "Holm (P-family): " + "; ".join(f"{k}: p = {r(v['p'], 4)} vs {r(v['threshold'], 4)} → "
@@ -173,8 +189,9 @@ of the updated priors: <b>{r(upd[0], 3) if upd[0] is not None else '—'}</b> ov
     s11 = [{"name": "model's report", "cls": "perp", "ys": [mc.get("4", {}).get(str(s), {}).get("SM_median") for s in GRID9]}]
     for k, cls in (("nla_L42", "j"), ("oracle_L40", "rj"), ("oracle_L44", "rp")):
         if k in lt:
-            s11.append({"name": k.replace("_", " ").replace("nla", "NLA").replace("oracle", "Oracle"), "cls": cls,
-                        "ys": [lt[k].get("4", {}).get(str(s)) for s in GRID9]})
+            failed = not G.get("G11", {}).get(k, {}).get("pass", True)
+            s11.append({"name": k.replace("_", " ").replace("nla", "NLA").replace("oracle", "Oracle") + (" (failed G11)" if failed else ""),
+                        "cls": cls, "dash": failed, "ys": [lt[k].get("4", {}).get(str(s)) for s in GRID9]})
     f11 = figure(line_chart(s11, GRID9, [SNAME[s] for s in GRID9], "median SM (nats)", band=[1.0] * len(GRID9),
                             aria="Specific rise of the non-J part: model vs readers"), legend(s11, extra="below 1 nat"),
                  "The non-J part: the planted concept's specific rise (own rise minus the median of the other words) at each one's forced report position.")
@@ -184,10 +201,14 @@ of the updated priors: <b>{r(upd[0], 3) if upd[0] is not None else '—'}</b> ov
         vals = [v for v in d.values() if v is not None]
         return " · ".join(f"{SNAME.get(GRID9[i], 'never') if i < 9 else 'never'}: {sum(1 for v in vals if v == i)}"
                           for i in range(10) if any(v == i for v in vals))
-    orow = [["model's report", dist(on.get("model", {}))]] + [[k.replace("_", " "), dist(v)] for k, v in on.get("readers", {}).items()]
+    orow = [["model's report", dist(on.get("model", {}))]] + [
+        [k.replace("_", " ").replace("nla", "NLA").replace("oracle", "Oracle")
+         + ("" if G.get("G11", {}).get(k, {}).get("pass", True) else " (failed G11; descriptive only)"), dist(v)]
+        for k, v in on.get("readers", {}).items()]
     out.append(f"""<h2 id="p11">P11′: does a reader detect the non-J part at a lower dose than the model reports it?</h2>{f11}
 {table(["Who", "Onset (first dose with SM ≥ 1 nat): number of concepts"], orow)}
-<p>NLA: {fmt_ci(C.get('P11prime_NLA'))} grid steps (negative = the reader is earlier); Oracle: {fmt_ci(C.get('P11prime_Oracle'))}.</p>
+<p>NLA: {"not tested (G11 failed)" if C.get('P11prime_NLA', {}).get('uninformative') else fmt_ci(C.get('P11prime_NLA'))}; Oracle:
+{fmt_ci(C.get('P11prime_Oracle'))} grid steps (negative = the reader is earlier).</p>
 <p>{N.get('P11', '')}</p>""")
     nm = T.get("naming", {})
     nrows = []

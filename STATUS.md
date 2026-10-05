@@ -29,6 +29,7 @@
     position (written before Q13; corrected);
   - the relative probe criterion is degenerate (absolute criterion, A9).
 - **2026-10-05:** the PI adopted amendment 01 (`docs/design_specs/005_amendment_01.md`, all items incl. A18); the amended full run on the 45 test concepts (`docs/design_specs/005_full_run.md`) runs on branch `005-amended-full-run`, so the adoption can be reverted by dropping the branch.
+- **005 full run done (2026-10-05, run 20261005T015235Z, 110 min; report `docs/reports/005_full_run.md`; page https://claude.ai/artifact/5EGz2DxcAXXQs3wTtz1Lnu):** gates pass except G11 for the NLA (its likelihood measure fails the positive control, so P11′ for the NLA is untestable); P17 not supported (the Oracle names the non-J part more than the NLA); M1 not supported on R1′ (tiny positive on R1); M3 opposite of predicted; M2's J clamp to L50 is specific but not distinguishable from the output-direction control; P11′ (Oracle) supported (not perturbation-matched); R1 and R2 as predicted (R2 partly scale-free; post-hoc floor 29/45).
 
 **004, span assay at `:` L42: complete** (`docs/reports/004_span_assay.md`; 33 pairs, 55.8 min, commit 9da6b23 clean).
 - Whole cell 0.43 of the gap. Recovery: 1-D z 0.06, z span 0.21, joint span 0.72.
