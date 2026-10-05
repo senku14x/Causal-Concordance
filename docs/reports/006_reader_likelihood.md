@@ -85,6 +85,24 @@ The reviewer recomputed everything from the raw `ll_*.npz`; the reported numbers
 
 **6. Per-pair agreement on D_z at `:`:** NLA L42 vs Oracle L40: same sign 86%, r 0.24; NLA L42 vs Oracle L44: same sign 86%, r 0.30. Within a reader across the two prefixes: NLA L42 r 0.67; Oracle L40 r 0.94; Oracle L44 r 0.84. The readers agree on direction, not on which tables carry the most z.
 
+## 006b: the model's own output at the same cells (pre-registered 3d9f6d6, run m1, 15.6 min)
+
+*Design:* `docs/design_specs/006b_model_output_baseline.md`.
+- **What it is:** the subject model's final-layer log-probs for the 12 colours after each cell (stock forward, every spelling token scored), through 006's D statistic.
+- **Gate:** the scoring path vs the model's own logits, max 0.147, median 0.043 nats; passes.
+
+| Cell | model D_z | model D_start (collision-free) | model D_answer (collision-free) |
+|---|---|---|---|
+| `:` | +3.76 [3.27, 4.24] (48/0) | +1.40 [0.86, 1.91] (38/6) | +8.35 [7.57, 9.12] (44/0) |
+| `</think>` newline | +3.99 [3.39, 4.57] (47/1) | −0.51 [−1.16, 0.12] (18/26) | +10.11 [9.17, 11.04] (44/0) |
+| assistant newline | +3.66 [3.10, 4.22] (48/0) | +0.38 [−0.19, 0.87] (31/13) | +9.93 [9.10, 10.74] (44/0) |
+
+- At `:` on member renders, the answer ranks first in 100% of tables. z is the runner-up (rank 2) in 56%; median rank 2.
+- **B1** (the model's output tracks z at `:`): holds (prior 0.75). **B4** (z is the runner-up in ≥ half the tables): holds (prior 0.35).
+- **B3** (at `</think>` the model's output does not track z while the readers' does): does not hold (prior 0.50). The model's own output tracks z there as strongly as at `:`. That is consistent with 001's patch shares (`</think>` 0.01, `:` 0.48): z can be read off the output-facing distribution at a cell that does not carry it to the answer (interpretation). The Oracle's *doubling* at `</think>` is not mirrored: the model's D_z is about equal at all three cells, so that part stays unexplained. D magnitudes are in different instruments' nats and are compared only within an instrument.
+- **B2** (do the readers track z beyond the model's output?): **not testable**. Only 9 pairs have the model's own D_z ≤ 0, below the pre-registered minimum of 15. Secondary (it extrapolates): OLS intercepts NLA L42 +1.48 [0.82, 2.18], r 0.07; Oracle L40 +2.10 [1.48, 2.72], r 0.30; Oracle L44 +2.46 [1.74, 3.20], r 0.24.
+- **Reading.** 006's "the readers register z they don't say" needs a qualifier. The model's own next-token distribution at the same cells already favours the cell's z, mostly as the runner-up answer. So the readers' z tracking is consistent with reading that output-facing content, and no held intermediate beyond it is demonstrated. The readers' per-pair z values correlate only weakly with the model's (r ≤ 0.30). They do not simply copy it, but that is not evidence of more.
+
 ## Mistakes (logged in CLAUDE.md)
 
 - G-score1's first tolerance (1e-3) ignored the documented bf16 floor. The gate stopped the first launch; the diagnosis and amendment (v1.1) came before any outcome was read.

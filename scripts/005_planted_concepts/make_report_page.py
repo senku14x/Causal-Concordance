@@ -1647,13 +1647,67 @@ control passes exactly at the bar.</li>
 uninformative and shown descriptively only.</li>
 <li>Both also follow the start colour or the answer somewhat (T3 {'holds' if rl['T3_start_not_tracked'] else 'fails'}), and pick z among the 5
 candidates only 27–44% of the time: z is present in their likelihood, not dominant.</li>
-<li><b>Reading:</b> the readers register z at the cell where they rarely state it. Caveat: the NLA here is <code>nla-rl</code>; 002's
-texts came from <code>nla-L42</code>.</li></ul>
+<li><b>Reading (as first written):</b> the readers register z at the cell where they rarely state it. Caveat: the NLA here is
+<code>nla-rl</code>; 002's texts came from <code>nla-L42</code>. <b>Qualified by 006b below:</b> the model's own output there already
+favours z.</li></ul>
+{sec_006_after()}
 <h3>Qualitative samples</h3>
 <p>006, log P of the member's z / the partner's z (nats), on each activation:</p>
 {table(["Table", "Reader", "z (member vs partner)", "on member's activation", "on partner's activation", "D", "Reader's top 3 colours (member)"], qrows, num_cols=(3, 4, 5))}
 <p>002, what the readers <i>said</i> about the same tables (LLM-judged):</p><ul>{texts}</ul>
 <p>005, the regex on planted-concept readouts: a hit, and a miss where the Oracle wrote the Chinese for "soap" (肥皂):</p><ul>{rx}</ul>"""
+
+
+def sec_006_after():
+    """Post hoc reanalysis (PI-forwarded review) and 006b (the model's own output at the same cells)."""
+    P = load(ROOT / "results/006_reader_likelihood/analysis/posthoc.json")
+    M = load(ROOT / "results/006_reader_likelihood/analysis/model_output.json")
+    if not P or not M:
+        return ""
+
+    def tr(t):
+        return f"{r(t['mean'], 2, True)} [{r(t['ci'][0], 2)}, {r(t['ci'][1], 2)}] ({t['pos']}/{t['neg']})"
+    ps, cells = P["patch_share_001_L42"], ("emit_colon", "emit_think", "emit_asst")
+    rows = [[nm] + [tr(c[k]) for k in cells] for nm, c in P["cells"].items()]
+    rows.append(["<b>Model's own output (006b)</b>"] + [tr(M["model_D"][k]["z"]) for k in cells])
+    rows.append(["001 patch share, L42", *[r(ps[k], 2) for k in cells]])
+    K, rk, b2, ru = P["collisions"], M["rank_z_colon_member"], M["B2_reader_beyond_model"], M["rules"]
+    mrows = [[nmc, tr(M["model_D"][k]["z"]), tr(M["model_D"][k]["start"]), tr(M["model_D"][k]["answer"])]
+             for nmc, k in (("<code>:</code>", "emit_colon"), ("<code>&lt;/think&gt;</code> newline", "emit_think"), ("assistant newline", "emit_asst"))]
+    sec = "; ".join(f"{k} {r(v['secondary_intercept'], 2, True)} [{r(v['intercept_ci'][0], 2)}, {r(v['intercept_ci'][1], 2)}], r {r(v['r'], 2)}"
+                    for k, v in b2.items())
+    pc = "; ".join(f"{k}: raw {pct(x['raw_ID'])}, says “blue” for {x['argmax'].count('blue')} of 12, prior removed {pct(x['loo_prior_removed_ID'])}"
+                   for k, x in P["positive_control"].items())
+    return f"""<h3>After the review (post hoc, added after the results were read)</h3>
+<p>A PI-forwarded review recomputed 006 from the raw arrays; every number reproduced. Reanalysis:
+<code>reanalyse_006.py</code> → <code>posthoc.json</code>. D_z by cell, with 006b's model row and 001's patch share:</p>
+{table(["", "<code>:</code>", "<code>&lt;/think&gt;</code> newline", "assistant newline"], rows)}
+<ul><li><b>The readers' z tracking does not follow the cell's influence on the answer.</b> The Oracle tracks z about twice as strongly at
+<code>&lt;/think&gt;</code> (patch share {r(ps['emit_think'], 2)}) as at <code>:</code> ({r(ps['emit_colon'], 2)}). The NLA is slightly lower there (the
+difference includes 0; the review's “≥ for every reader” had the NLA's sign reversed).</li>
+<li><b>Positive controls</b> (12-way ID; raw, then with each colour's leave-one-out prior removed): {pc}. The Oracle's raw failure
+is a strong prior for “blue”; with the prior removed it discriminates every colour.</li>
+<li><b>Shuffle:</b> 200 derangements give a null ≈ 0 for every role. <b>Collisions:</b> start or answer coincides with another role in
+{K['census']['start']} / {K['census']['answer']} of {K['n_pairs']} pairs; collision-free, start tracking holds for the NLA ({tr(K['NLA L42']['start'])}) and Oracle L44,
+not Oracle L40 ({tr(K['Oracle L40']['start'])}).</li></ul>
+<h3>006b: the model's own output at the same cells (pre-registered, run m1)</h3>
+<p>The boring alternative: the model's own next-token distribution at the cell already ranks z high, as a runner-up answer, and a
+reader that reads output-facing content tracks z without any held intermediate. 006b scores the subject model's final-layer
+log-probs for the 12 colours after each cell through the same D (design <code>docs/design_specs/006b_model_output_baseline.md</code>).
+Gate: max {r(M['gate']['max'], 3)}, median {r(M['gate']['median'], 3)} nats, passes.</p>
+{table(["Cell", "model D_z", "model D_start (collision-free)", "model D_answer (collision-free)"], mrows)}
+<ul><li><b>B1 {'holds' if ru['B1_model_tracks_z_colon'] else 'fails'}</b> (prior 0.75): the model's own output tracks z at <code>:</code>.
+At <code>:</code> the answer ranks first in {pct(rk['answer_rank1_share'])} of tables. z is the runner-up in {pct(rk['runner_up_share'])}
+(<b>B4 {'holds' if ru['B4_runner_up_ge_half'] else 'fails'}</b>, prior 0.35), median rank {r(rk['median'], 0)}.</li>
+<li><b>B3 {'holds' if ru['B3_think_model_not_readers_yes'] else 'fails'}</b> (prior 0.50): the model's output tracks z at <code>&lt;/think&gt;</code> as strongly as at
+<code>:</code>. So z being readable at <code>&lt;/think&gt;</code>, a cell that does not carry it to the answer, is no puzzle: the model's own output
+carries it there (interpretation). The Oracle's <i>doubling</i> at <code>&lt;/think&gt;</code> is not mirrored, though. The model's D_z is about equal at all three
+cells, so that part stays unexplained. D magnitudes are in different instruments' nats and are compared only within an instrument.</li>
+<li><b>B2, readers beyond the model: not testable.</b> Only {b2['NLA L42']['n_model_nonpositive']} pairs have model D_z ≤ 0 (the pre-registered minimum is 15).
+Secondary OLS intercepts, extrapolated from model D_z ≈ 3.7 down to 0: {sec}.</li>
+<li><b>Reading.</b> “The readers register z they don't say” stands as decodability, but it needs this qualifier. The model's own
+distribution at the same cells already favours z, mostly as the runner-up answer, so the readers' tracking is consistent with
+reading that. Nothing beyond it is shown. Per pair, the readers follow the model only weakly (r ≤ {r(max(v['r'] for v in b2.values()), 2)}).</li></ul>"""
 
 
 def sec_glossary():

@@ -214,6 +214,11 @@ without the PI's say-so.
   - full run: https://claude.ai/artifact/5EGz2DxcAXXQs3wTtz1Lnu
   - Both carry the follow-ups' correction banner.
 
+**006 and 006b, reader likelihoods at the brew cells** (dev, 48 tables, saved 001 captures; `docs/reports/006_reader_likelihood.md`):
+- The NLA's and the Oracle's colour likelihoods track the cell's z: z is decodable through them where 002 found they rarely state it. The NLA's rule is supported. The Oracle's is uninformative by rule (its positive control failed on a "blue" prior).
+- **006b:** the model's *own* final-layer distribution at the same cells already tracks z (+3.7–4.0 nats, z the runner-up behind the answer in 56% of tables). So the readers' tracking is consistent with reading the output-facing distribution. "Beyond the model" was not testable (9 pairs < 15).
+- Their tracking does not follow 001's patch shares. The Oracle tracks z 2× more at `</think>` (patch share 0.01), which the model's output does not mirror.
+
 **Open PI decisions:**
 - merging `005-amended-full-run` (the PI will do it);
 - the next direction. 005 is closed: the PI ruled no further 005 variants.
@@ -390,4 +395,5 @@ without the PI's say-so.
 | 10-05 | The full-run notes said M1 passes "partly by construction (the J part contains the concept's own atom)", without checking the supports; the own atom is in the J part for 1 of 45 test concepts | withdrawn in the notes and the page; A3 reports the own-atom share |
 | 10-05 | My summary to the PI gave "storm"'s J part as including ` storm` and ` Storm`; those are spellings added to the clamp's token set (support ∪ spellings), not J-part atoms | corrected in the follow-up report and the report-back |
 | 10-05 | 006's G-score1 tolerance (1e-3 nats between two scoring paths) ignored the documented bf16 floor for a change of batch shape or sequence length; the gate stopped the first launch | diagnosed before any outcome: the same scorer differs from itself by up to 0.10 nats across batch sizes; tolerance amended to the floor (v1.1, max ≤ 0.25, median ≤ 0.05) |
+| 10-05 | My first 006b page draft said the model's own output tracks z at `:` "more strongly than any reader", and that the readers' `</think>` tracking was "therefore no puzzle". That compares D across instruments (nats of different distributions). The Oracle's D_z at `</think>` (6.0) also exceeds the model's (4.0), and its doubling there is not mirrored by the model | caught before publishing; the page and report now compare D only within an instrument and say the Oracle's `</think>` doubling stays unexplained |
 | 10-05 | `mirror_outputs.py` listed the HF upload tool's own `outputs/.cache/` (424 files) in the public MANIFEST on its second run; they are not on the hub, so a restore would have crashed | `.cache` excluded from the manifest and the upload; manifest re-uploaded and verified (225/225 files on the hub, sizes match) |

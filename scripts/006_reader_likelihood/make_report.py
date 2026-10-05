@@ -76,6 +76,47 @@ def posthoc_section():
     return o
 
 
+def model_section():
+    f = R.PROJECT / "results/006_reader_likelihood/analysis/model_output.json"
+    if not f.exists():
+        return []
+    M = json.loads(f.read_text())
+    md, rk, b2, ru = M["model_D"], M["rank_z_colon_member"], M["B2_reader_beyond_model"], M["rules"]
+    nm = {"emit_colon": "`:`", "emit_think": "`</think>` newline", "emit_asst": "assistant newline"}
+    o = ["## 006b: the model's own output at the same cells (pre-registered 3d9f6d6, run m1, 15.6 min)", "",
+         "*Design:* `docs/design_specs/006b_model_output_baseline.md`.",
+         "- **What it is:** the subject model's final-layer log-probs for the 12 colours after each cell (stock forward, "
+         "every spelling token scored), through 006's D statistic.",
+         f"- **Gate:** the scoring path vs the model's own logits, max {r(M['gate']['max'], 3)}, median "
+         f"{r(M['gate']['median'], 3)} nats; passes.", "",
+         "| Cell | model D_z | model D_start (collision-free) | model D_answer (collision-free) |", "|---|---|---|---|"]
+    for c in ("emit_colon", "emit_think", "emit_asst"):
+        o.append(f"| {nm[c]} | {bci(md[c]['z'])} | {bci(md[c]['start'])} | {bci(md[c]['answer'])} |")
+    o += ["",
+          f"- At `:` on member renders, the answer ranks first in {pct(rk['answer_rank1_share'])} of tables. z is the "
+          f"runner-up (rank 2) in {pct(rk['runner_up_share'])}; median rank {r(rk['median'], 0)}.",
+          f"- **B1** (the model's output tracks z at `:`): {'holds' if ru['B1_model_tracks_z_colon'] else 'does not hold'} (prior 0.75). "
+          f"**B4** (z is the runner-up in ≥ half the tables): {'holds' if ru['B4_runner_up_ge_half'] else 'does not hold'} (prior 0.35).",
+          f"- **B3** (at `</think>` the model's output does not track z while the readers' does): "
+          f"{'holds' if ru['B3_think_model_not_readers_yes'] else 'does not hold'} (prior 0.50). The model's own output tracks z "
+          "there as strongly as at `:`. That is consistent with 001's patch shares (`</think>` 0.01, `:` 0.48): z can "
+          "be read off the output-facing distribution at a cell that does not carry it to the answer (interpretation). "
+          "The Oracle's *doubling* at `</think>` is not mirrored: the model's D_z is about equal at all three cells, so "
+          "that part stays unexplained. D magnitudes are in different instruments' nats and are compared only within an "
+          "instrument.",
+          "- **B2** (do the readers track z beyond the model's output?): **not testable**. Only "
+          f"{b2['NLA L42']['n_model_nonpositive']} pairs have the model's own D_z ≤ 0, below the pre-registered minimum of 15. "
+          "Secondary (it extrapolates): OLS intercepts "
+          + "; ".join(f"{k} {r(v['secondary_intercept'], 2, True)} [{r(v['intercept_ci'][0], 2)}, {r(v['intercept_ci'][1], 2)}], "
+                      f"r {r(v['r'], 2)}" for k, v in b2.items()) + ".",
+          "- **Reading.** 006's \"the readers register z they don't say\" needs a qualifier. The model's own next-token "
+          "distribution at the same cells already favours the cell's z, mostly as the runner-up answer. So the readers' z "
+          "tracking is consistent with reading that output-facing content, and no held intermediate beyond it is "
+          "demonstrated. The readers' per-pair z values correlate only weakly with the model's (r ≤ 0.30). They do not "
+          "simply copy it, but that is not evidence of more.", ""]
+    return o
+
+
 def pct(x):
     return f"{int(Decimal(str(x * 100)).quantize(Decimal(1), rounding=ROUND_HALF_UP))}%"
 names = {"nla_L42": "NLA L42", "oracle_L40": "Oracle L40", "oracle_L44": "Oracle L44", "oracle_L56": "Oracle L56",
@@ -147,6 +188,7 @@ out += ["", "**002's token lenses at the same cell, same statistic (log-score un
         "in advance (p0 primary, p1 agrees).",
         "- Likelihood tracking is decodability through the reader, not a claim and not use by the model.", "",
         *posthoc_section(),
+        *model_section(),
         "## Mistakes (logged in CLAUDE.md)", "",
         "- G-score1's first tolerance (1e-3) ignored the documented bf16 floor. The gate stopped the first launch; the "
         "diagnosis and amendment (v1.1) came before any outcome was read.",

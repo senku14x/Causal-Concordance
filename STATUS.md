@@ -9,6 +9,20 @@ relevant reading listed at the top of `CLAUDE.md`. That is the PI's rule. Then `
 - **HF:** the public dataset `senku21x/causal-concordance-outputs` holds every output, 005 and 006 included, with a verified MANIFEST and a `results/` snapshot of this branch.
 - **The PI is analysing the current set of results.** No experiment is queued.
 
+**2026-10-05, 006b, the PI's "one final run" (pre-registered at 3d9f6d6, run m1, 15.6 GPU min; design `docs/design_specs/006b_model_output_baseline.md`; section in `docs/reports/006_reader_likelihood.md`).**
+- **Question.** Is the readers' z tracking just the model's own next-token distribution at the same cells (z as the runner-up answer)?
+- **Gate** passes: max 0.147, median 0.043 nats.
+- **The model's own D_z** (48 tables): `:` +3.76 [3.27, 4.24], `</think>` +3.99 [3.39, 4.57], assistant newline +3.66 [3.10, 4.22].
+  - At `:` the answer ranks first in 100% of tables, and z is the runner-up in 56% (median rank 2).
+  - B1 holds, B4 holds, B3 fails (the model's output tracks z at `</think>` too).
+- **B2 (readers beyond the model): not testable.** Only 9 pairs have model D_z ≤ 0 (the minimum is 15). The secondary OLS intercepts are positive but extrapolated.
+- **Per-pair reader–model r:** 0.07 (NLA) to 0.30 (Oracle L40).
+- **Reading.** 006's z tracking is consistent with the readers reading the model's output-facing distribution (z as the runner-up answer). No held intermediate beyond it is shown.
+  - The Oracle's 2× at `</think>` is not mirrored by the model and stays unexplained.
+  - D magnitudes are compared only within an instrument.
+- **Also post hoc** (PI-forwarded review, `posthoc.json`, commit 70ba3e1): the readers' tracking does not follow 001's patch shares, and the Oracle's G-pc failure is a "blue" prior. The review's "`</think>` ≥ `:` for every reader" had the NLA's sign reversed (NLA −0.41 [−0.87, 0.04]).
+- The page https://claude.ai/artifact/P35xhVkdzKjsdGhogp7PQY (v8) carries both.
+
 **2026-10-05, 006 (now merged into `005-amended-full-run`; report `docs/reports/006_reader_likelihood.md`).**
 - **Question.** At the brew `:` cell (saved 001 captures, 48 dev tables), do the verbalizers' likelihoods track z, as 002's lenses did?
 - **NLA L42, likelihood:**
@@ -17,7 +31,7 @@ relevant reading listed at the top of `CLAUDE.md`. That is the PI's rule. Then `
   - it also tracks the start colour (+0.41) and the answer (+0.59), less than z.
 - **Oracle L40/L44:** tracks z in 48 of 48 tables (+3.2 to +3.8). Its positive control failed at those layers (33% and 42% < 50%), so T2 is uninformative by the rule.
 - **Bar:** the NLA passed its positive control exactly at the bar (6 of 12).
-- **Reading.** z is decodable from the readers' likelihood at the cell where 002 found they rarely state it.
+- **Reading.** z is decodable from the readers' likelihood at the cell where 002 found they rarely state it. **Qualified by 006b (above):** the model's own output at the same cells already favours z.
 
 **2026-10-05: state at the end of the session (branch `005-amended-full-run`, pushed; not merged into `main`).**
 - **005 is closed.** The PI ruled no further 005 variants.
