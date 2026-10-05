@@ -2,10 +2,39 @@
 
 Guide for any agent or collaborator working in this repo. Reading only this file should be enough to find everything.
 
+## FIRST, before anything else: read the workspace paper, then the relevant reading (PI rule, 2026-10-05)
+
+No code, run, review or answer about results before this. The whole project is built on the paper's claims and
+vocabulary: J-lens, workspace, J-space, privilege, verbalizable. A session that skips it misreads every result.
+
+1. **The paper, in full:** Gurnee et al. 2026, *Verbalizable Representations Form a Global Workspace in Language
+   Models* (Anthropic).
+   - PDF: `docs/papers/2607.15495.pdf`; text: `docs/papers/text/2607.15495.txt`.
+   - Read the main text and the appendices the project leans on: A.8 (J-space span), A.9 / A.9.2 (verbalizers and J-space), A.12, A.21, A.24.3, §3.1 with Figs. 7–8 (planted concepts and the privilege test).
+   - Then the notes on it:
+     - `docs/claude_reports/03_workspace_paper_notes_merged.md`: the agent's notes merged with the PI's, with corrections in §14 and disagreements in §15;
+     - `docs/claude_reports/04_user_workspace_paper_notes_verbatim.md`: the PI's own notes.
+2. **The relevant reading** (`docs/context/READING_LIST.md` is the full list):
+   - Readers:
+     - Karvonen et al. 2025, *Activation Oracles* (`2512.15674`; the Oracle Lens);
+     - Bauer et al. 2026, AObench (`2606.02609`);
+     - Li et al. 2025, *Do Activation Verbalization Methods Convey Privileged Information?* (`2509.13316`; prompt-only baselines);
+     - Dingeto 2026 (`2607.20379`; NLA claim sensitivity);
+     - the NLA, WorkspaceBench and R-lens pages in `docs/sources/web/`.
+   - Notes: `docs/context/reading_notes.md` and `docs/context/reading_notes_v2.md` (the NLA paper, Viswanath 2026, AO, WorkspaceBench).
+   - Method papers, when the task needs them:
+     - Hewitt & Liang (probe controls);
+     - Elazar et al. (amnesic probing);
+     - Geiger et al. (DAS);
+     - Makelov et al. (subspace illusions);
+     - Zhang & Nanda and Heimersheim & Nanda (patching).
+3. **Then the project docs**, in the read order below.
+
 ## Read order
 
 (Updated 2026-10-04 for the unified spec v2, PI instruction.)
 
+0. **The workspace paper and the relevant reading** (the section above). Always first.
 1. **CLAUDE.md** (this file): rules, conventions, environment, pitfalls.
 2. **STATUS.md**: where things stand, what works, open questions.
 3. **docs/context/SPEC_v2.md**: the unified spec (2026-10-04). It contains the original SPEC.md verbatim, AMENDMENT_01
@@ -15,7 +44,9 @@ Guide for any agent or collaborator working in this repo. Reading only this file
    callout, §8 A4/A7/A8/A9, §12, §14 and §15.
 4. **docs/context/SPEC_v2_errata_01.md** (accepted 2026-10-04): V2-E1–E9 correct SPEC_v2 passages; an erratum wins over the text.
    **docs/context/AMENDMENT_01.md**: the PI's 2026-10-02 decisions (its §6 lists each conflict by SPEC.md line).
-5. **The latest experiment is 005 (planted concepts), on branch `005-amended-full-run`.** Read, in order:
+5. **The latest experiments are 005 (planted concepts) and 006 (reader likelihoods at the brew `:` cell), both on branch
+   `005-amended-full-run`.** For 006, read `docs/reports/006_reader_likelihood.md` and
+   `docs/design_specs/006_reader_likelihood.md`. For 005, read, in order:
    - `docs/reports/005_followups.md`: the latest results and the corrections they force (read this first);
    - `docs/reports/005_full_run.md`: the full run on the 45 test concepts (pre-registered verdicts);
    - `docs/design_specs/005_full_run.md` (the run spec) and `docs/design_specs/005_amendment_01.md` (adopted 2026-10-05);
@@ -149,11 +180,12 @@ without the PI's say-so.
 **Branches.**
 - `main` @ 95ab0e5: the 000–004 scaffold. The PI merges into it; never push to it.
 - `spec-v2` @ 9709712: SPEC_v2 + errata 01, checks C1–C3, the NLA loader, and 005 up to the dev pilot and steps 7b–11.
-- **`005-amended-full-run`** (off `spec-v2`): amendment 01 adopted, the 005 full run, the follow-ups, and these docs.
+- **`005-amended-full-run`** (off `spec-v2`): amendment 01 adopted, the 005 full run, the follow-ups, **006 (merged in
+  2026-10-05, fast-forward)**, and these docs.
   - It is the newest branch and the one to work on.
   - It stays separate from `main` until the PI merges it. Dropping it reverses the adoption.
-- `006-reader-likelihood` (off `005-amended-full-run`): experiment 006, the verbalizers' likelihood tracking of z at the brew `:`
-  cell (`docs/design_specs/006_reader_likelihood.md`, `docs/reports/006_reader_likelihood.md`). Newest branch; not merged.
+- `006-reader-likelihood`: experiment 006, now merged into `005-amended-full-run` (same commit); kept for reference.
+- **The PI is analysing the current results (005 + follow-ups + 006).** Next experiments wait for the PI's direction.
 
 **001–004** (dev split only; await PI review):
 - **001:** the `:` cell carries about half the answer gap at L42–44, and z is decodable there.

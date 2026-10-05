@@ -21,11 +21,12 @@ Status (2026-10-04):
 - The OpenRouter judge key is in `/workspace/.env` (not in any mirror; the PI pasted it in chat 2026-10-04, so it should be rotated).
 - The official introspection protocol (prompt, prefills, 101 concepts) is in `/workspace/jacobian-lens/data/experiments/verbal-introspection.json` (anthropics/jacobian-lens).
 
-Status (2026-10-05, ~04:30 UTC):
-- The PI adopted amendment 01 in full (incl. A18); the 005 full run on the 45 test concepts is done on branch `005-amended-full-run` (off spec-v2 @ 9709712; dropping the branch reverses it). Report `docs/reports/005_full_run.md`.
-- Pages: main https://claude.ai/artifact/P35xhVkdzKjsdGhogp7PQY (v5); full run https://claude.ai/artifact/5EGz2DxcAXXQs3wTtz1Lnu.
-- Open PI questions: merge the branch into spec-v2?; mirror ~1 GB raw outputs to the public HF dataset?; stop the instance?
-- The PI asked me never to stop the vast.ai instance without an explicit yes.
+Status (2026-10-05, end of session):
+- Branch `005-amended-full-run` holds everything: amendment 01, the 005 full run, the follow-ups, and 006 (merged from `006-reader-likelihood`, fast-forward). Not merged into `main` (the PI merges).
+- Key corrections: the 005 model-side "report" measure is lexical priming (A2b); 006: the NLA's likelihood tracks z at the brew `:` cell (T1); the Oracle tracks it 48/48 but failed its positive control at L40/L44.
+- HF public dataset senku21x/causal-concordance-outputs mirrors all outputs (verified MANIFEST). The private dataset is full (free-plan limit).
+- Pages: https://claude.ai/artifact/P35xhVkdzKjsdGhogp7PQY (main, v7, incl. 006) and https://claude.ai/artifact/5EGz2DxcAXXQs3wTtz1Lnu (full run).
+- The PI is analysing the results; no experiment queued. Never stop the vast.ai instance without the PI's yes.
 
 **Why:** standing context for every session on this project.
 **How to apply:**

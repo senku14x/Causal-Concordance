@@ -1,9 +1,15 @@
-# STATUS — 2026-10-05 (branch `005-amended-full-run`: 005 full run + follow-ups done; 005 closed; next direction open)
+# STATUS — 2026-10-05 (branch `005-amended-full-run`: 005 full run, follow-ups and 006 done; the PI is analysing the results)
 
-*New session? Read `CLAUDE.md` first (rules, the PI's preferences, branches, and how to restore a fresh instance),
-then this file (newest first), then `docs/reports/005_followups.md`.*
+*New session? **First read the Anthropic workspace paper** (Gurnee et al. 2026, `docs/papers/2607.15495.pdf`) and the
+relevant reading listed at the top of `CLAUDE.md`. That is the PI's rule. Then `CLAUDE.md`, this file (newest first),
+`docs/reports/005_followups.md` and `docs/reports/006_reader_likelihood.md`.*
 
-**2026-10-05, 006 (branch `006-reader-likelihood`, off `005-amended-full-run`; report `docs/reports/006_reader_likelihood.md`).**
+**2026-10-05, end of session.**
+- `006-reader-likelihood` was merged into `005-amended-full-run` (fast-forward), so 005 and 006 now live on one branch, pushed.
+- **HF:** the public dataset `senku21x/causal-concordance-outputs` holds every output, 005 and 006 included, with a verified MANIFEST and a `results/` snapshot of this branch.
+- **The PI is analysing the current set of results.** No experiment is queued.
+
+**2026-10-05, 006 (now merged into `005-amended-full-run`; report `docs/reports/006_reader_likelihood.md`).**
 - **Question.** At the brew `:` cell (saved 001 captures, 48 dev tables), do the verbalizers' likelihoods track z, as 002's lenses did?
 - **NLA L42, likelihood:**
   - tracks z: +1.86 [1.41, 2.34] nats, 44 of 48 tables; supported (T1, Holm);

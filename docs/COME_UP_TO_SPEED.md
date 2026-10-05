@@ -1,4 +1,13 @@
-# Come up to speed — Causal-Concordance (state of 2026-10-03)
+# Come up to speed — Causal-Concordance (state of 2026-10-03; see the update box)
+
+> **Update 2026-10-05: read this first.**
+> 1. **First read Anthropic's workspace paper** (Gurnee et al. 2026, `docs/papers/2607.15495.pdf`; text in
+>    `docs/papers/text/`), then the relevant reading listed at the top of `CLAUDE.md`. This is the PI's rule; do it
+>    before anything else.
+> 2. This file describes the state of 2026-10-03 (experiments 001–004).
+>    - Since then: SPEC_v2 + errata 01, the 005 planted-concepts experiment (smoke, dev pilot, full run, follow-ups), and 006 (reader likelihoods at the brew `:` cell).
+>    - All of it is on branch `005-amended-full-run`.
+>    - For the current state, read `CLAUDE.md` ("Where things stand") and `STATUS.md`. The newest results are in `docs/reports/005_followups.md` and `docs/reports/006_reader_likelihood.md`.
 
 For a new session or collaborator taking over. It says where things are and why. Rules live in `CLAUDE.md`, the
 live state in `STATUS.md`, and the item-by-item spec status in `docs/context/SPEC_STATUS.md`.
@@ -16,6 +25,7 @@ live state in `STATUS.md`, and the item-by-item spec status in `docs/context/SPE
 
 ## 2. Read order
 
+0. The workspace paper and the relevant reading (top of `CLAUDE.md`).
 1. `CLAUDE.md`: non-negotiables, conventions, environment, pitfalls, silly-mistakes log.
 2. `STATUS.md`: current state, what works and what doesn't.
 3. This file, then `docs/context/SPEC_STATUS.md`.

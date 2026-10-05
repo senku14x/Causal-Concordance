@@ -1,5 +1,6 @@
+- [Read the workspace paper first](read-workspace-paper-first.md) — PI rule: every session starts by reading Gurnee et al. 2026 + the relevant reading (list at the top of the repo's CLAUDE.md)
 - [User research profile](user-research-profile.md) — mech-interp researcher; wants skeptical, evidence-calibrated collaboration
-- [Activation readers project](activation-readers-project.md) — = Causal-Concordance (senku14x) + Cathryn pilot; NLA = nla-rl; spec-v2 branch; 005 full run done on branch 005-amended-full-run; rules in repo CLAUDE.md
+- [Activation readers project](activation-readers-project.md) — = Causal-Concordance (senku14x) + Cathryn pilot; NLA = nla-rl; spec-v2 branch; 005 full run + follow-ups + 006 done, all on branch 005-amended-full-run (PI analysing results); rules in repo CLAUDE.md
 - [Workspace paper notes](workspace-paper-notes.md) — where my J-lens/template/oracle-lens notes + code/lens resources live
 - [Reports location](reports-location.md) — save all reports/notes + a doubts file in /workspace/claude_reports with a README index
 - [Cathryn coordination](cathryn-coordination.md) — PI handles all contact with Cathryn; never draft for her, ask her, or wait on her sign-off

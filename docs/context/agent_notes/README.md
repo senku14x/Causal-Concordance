@@ -11,3 +11,5 @@ CLAUDE.md ("Working with the PI") summarizes them. When CLAUDE.md or STATUS.md d
 STATUS.md are newer.
 
 2026-10-05: the memory files of the 2026-10-04/05 session were added (`activation-readers-project.md`, `cathryn-coordination.md`, `reports-location.md`, `user-research-profile.md`, `workspace-paper-notes.md`), and `MEMORY.md` indexes both sets (the 2026-10-05 session's notes first). The older notes (`github-commit-setup.md`, `keep-qualitative-samples.md`, `page-charts-native-style.md`, `reader-adjudication-project.md`, `research-workflow-non-negotiables.md`, `vllm-optional-later.md`) are kept.
+
+**First thing in any session (PI rule, 2026-10-05):** read Anthropic's workspace paper (`docs/papers/2607.15495.pdf`) and the relevant reading listed at the top of `CLAUDE.md` before doing anything else.
