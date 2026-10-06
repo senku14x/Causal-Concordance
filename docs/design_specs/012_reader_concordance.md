@@ -308,3 +308,89 @@ Stop and report, without improvising, if:
 - A detailed Claude artifact with plots comes after all runs.
 
 **LLM judge** (content categories for Q2): optional. The OpenRouter key is in `/workspace/.env`; ask before spending.
+
+## 12. v1.2: Stage A result, corrections, and the overnight plan (2026-10-06 ~23:10 UTC, written before any Stage B/C run)
+
+### Stage A result (rule of §4: lever present = success ≥ 30% and ≥ 20 points above the random control)
+
+Cohort: clean-correct items of the 87 covered (82); the 5 clean-incorrect items are kept and excluded. EXPLORATORY.
+
+| Arm | Success | Random | Lever? |
+|---|---|---|---|
+| J swap L24–47 | 0.585 (48/82) | 0.061 | **yes** (reproduces Jan's ~59%) |
+| J swap L24–39 | 0.549 | 0.012 | yes |
+| J swap L24–35 | 0.463 | 0.012 | yes |
+| logit-row swap L24–47 | 0.00 | — | — |
+
+J ablation at L24–47: the original answer survives on 0.72 of items (random: 1.00).
+
+### Correction to §10
+
+§10 explained the three unchanged smoke swaps as near-parallel src/tgt rows making "a coordinate swap barely move the activation". **That is wrong.**
+- At the clean state, this pseudoinverse swap is a reflection of the contrast component: Δh = −2u(uᵀh), with u = (s − t)/‖s − t‖ (identity from the independent review; checked numerically).
+- High cosine does not shrink the edit.
+- "Unchanged" means the greedy *answer* did not change. Nothing was measured about the activation edit.
+- The category is renamed **unchanged**, and Stage B logs the realised edit.
+
+### Contract (from the review; adopted)
+
+- **Render:** Jan's (bank prompt, trailing whitespace stripped).
+  - **Read position:** the final token of that render, which is WSB's `last_word_token` for every item once stripped; verified per item in B.
+  - Readers read **captures from the exact labelled runs**. Stage A labels are never attached to 007's captures.
+- **Cohort:** fixed. The primary analysis uses the clean-correct items whose clean continuation does not already contain y_b. Failures, "other" outcomes and random-control states are retained and analysed, not filtered by outcome.
+- **Labels mean** "an answer effect under the specified intervention (item × prompt × arm × band × dose)". They do not mean the bridge is the mediator. J-swap labels are J-derived, so they are not an independent standard for ranking J-based readers. Class means are "J-independent in construction".
+
+### Overnight Stage B-lite (model side, our captures)
+
+**Code:** built on Jan's library objects (`SwapEdit`, `BandEditor`, `continuation_scores`, `capture_ids`), with the same edit as Stage A.
+
+**Arms:**
+
+| Arm | Role | Downstream reads |
+|---|---|---|
+| clean | reference | — |
+| J swap L24–35, with its source-preserving random-target control | **primary** | Oracle L40/L44 and NLA L42 |
+| J swap L24–47, with its random control | secondary | Oracle L52/L56 only |
+
+**Recorded per item and arm:**
+- the greedy continuation, with Jan's budget and matcher;
+- teacher-forced m = LSE log P(y_b spellings) − LSE log P(y_a spellings), and Δm against clean;
+- edit diagnostics: layers applied, ‖Δh‖ at the read position per layer, and coordinate error after the clamp;
+- captures at the read position, L40/42/44/52/56.
+
+**Gates:**
+- **G-parity:** the clean and J-swap greedy continuations must be token-identical to Stage A's, reported as a paired success/failure table. Any mismatch is investigated before readers run.
+- **G0:** a zero edit reproduces the clean scores.
+
+### Overnight Stage C pilot (readers on whole activations, same states)
+
+**Readers:**
+- Oracle at L40/L44, plus L52/L56 for the L24–47 arm.
+- NLA at L42, plus L44 (labelled off-training), run after the subject model is freed.
+- J_NP, J_CB and logit lens at the same layers.
+
+**Primary statistic** per reader r:
+
+d_r = [LL_r(tgt | edited) − LL_r(src | edited)] − [LL_r(tgt | clean) − LL_r(src | clean)]
+
+- LL uses the readers' likelihood scorers with fixed prefixes and candidate spellings (007's conventions).
+- Absolute LLs are kept alongside.
+- Oracle and NLA also give 2 sampled readouts per state; **all readouts are saved.** Each readout is categorised as src-only / tgt-only / both / neither by word match, plus hand-reads.
+
+**Reading** (replaces v1's Stage C rules; the energy-share and "equal naming = artifact" rules are withdrawn):
+- **Responsive:** d_r > 0 after targeted swaps, beyond the random control.
+- **Outcome-specific:** d_r is larger after working swaps than after unchanged ones, and tracks Δm.
+- **Concordant:** both readers show the same pattern on the same items.
+- **Prediction (prospective; not implied by 007, whose multihop J/whole results were similar for both readers):** Oracle d_r > NLA d_r after working swaps.
+- Japan items are reported pooled and excluded. Uncertainty is clustered by relation.
+
+### Not tonight
+
+The whitened arm (needs Σ for L24–35/47), the class-mean / Fig. 16 arm (needs cue-varied prompt sets), the brew arm-A rerun, MT, and Stage E. They follow in that order once B-lite and the C pilot have been inspected.
+
+### Process (PI, ~04:00 local, 2026-10-07)
+
+- Proceed through the stages overnight since Stage A is positive.
+- The agent inspects each new smoke before its full run.
+- A failed gate stops that branch and is recorded in the ledger (`docs/ledger/012_ledger.md`).
+- The independent review (Codex, 2026-10-06) was adopted where listed above. Not adopted tonight: per-cell mediation transfers and the Q3/Q4 endpoint definitions (deferred until the pilot shows variation).
