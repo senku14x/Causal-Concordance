@@ -271,6 +271,21 @@ def build():
             if "J" in v and "whole" in v and "rest_J" in v:
                 agr += (f'<tr><th scope="row">{esc(k.replace("nla_L42_vs_oracle_", "NLA L42 vs Oracle L"))}</th>'
                         f'<td>{v["whole"]["r"]:.2f}</td><td>{v["J"]["r"]:.2f}</td><td>{v["rest_J"]["r"]:.2f}</td></tr>')
+    nla_item = ""
+    if nla(pa):
+        Pn = pa["readers"]["nla_L42"]["pieces"]
+        rq = sum(Pn[f"rest_R{i}"]["z"]["mean"] for i in range(3)) / 3
+        tst = ""
+        if nla(pt):
+            Pt = pt["readers"]["nla_L42"]["pieces"]
+            tst = (f" On the test tables: J {fnum(Pt['J']['z']['mean'])} vs whole {fnum(Pt['whole']['z']['mean'])} nats, "
+                   f"rest of J {fnum(Pt['rest_J']['z']['mean'])}.")
+        cats = pa["readers"]["nla_L42"]["categories"]
+        nla_item = (f'<li><b>The NLA does not share it.</b> On 006\'s exact scorer (post hoc), the NLA\'s J piece keeps about '
+                    f'{Pn["J"]["z"]["mean"] / Pn["whole"]["z"]["mean"]:.0%} of its z signal (J {fnum(Pn["J"]["z"]["mean"])} vs whole '
+                    f'{fnum(Pn["whole"]["z"]["mean"])} nats), and removing J costs about as much as removing a random slice (rest of J '
+                    f'{fnum(Pn["rest_J"]["z"]["mean"])} vs rest of random {fnum(rq)}).{tst} Its decision-rule entries are '
+                    f'{", ".join(sorted(set(cats.values())))}: J dependence is reader-specific. <span class="lvl">post hoc</span></li>')
     nla_status = ""
     if pa is None:
         nla_status = '<p class="note">The post hoc NLA rerun (amendment A2) is still running; this page will be updated when it finishes.</p>'
@@ -311,6 +326,7 @@ def build():
     <li><b>So reader and model dissociate.</b> A strong, specific reader signal that does not mark what the model
       demonstrably uses. J is the token-readout subspace and z is the model's runner-up answer, so the Oracle may simply be
       reading output-facing content. <span class="lvl">interpretation</span></li>
+    {nla_item}
   </ol>
   {nla_status}
 </section>
