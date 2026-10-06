@@ -294,3 +294,15 @@ Readers start only when **all** of the following hold on dev:
   - The coordinate swap with unit atoms is the paper's "subtract the projection on v_s, add an equal-magnitude
     projection on v_t", corrected for non-orthogonality by the pseudo-inverse.
 - **Smoke first.** 2 pairs (G0, G1, G-clamp, G-RA, G-repro, timing), then all 82 pairs.
+
+## §E-009. Execution notes for 009 (added 2026-10-06 at 17:17 UTC, after 6 depth-2 gate tables and before any later table was read)
+
+- **Gate smoke** (3 tables; reported only): the final-code task passed 0/8 renders (greedy 0.625, mean 3.6/10 correct
+  samples); the start-code task passed 8/8.
+- **Running depth-2 gate g2**, partial at 6 tables: 1/15 final renders pass; pairs 0/9.
+- **Early-stop rule** (fixed now, before reading further tables):
+  - Once ≥ 30 depth-2 tables are gated, if the Wilson 95% upper bound of the pair pass share is < 0.25, the depth-2 gate
+    is stopped, §2.4's outcome is taken as "fall back to depth 1", and the depth-1 gate runs (g1, `--max-partners 4`).
+  - Otherwise g2 runs to completion.
+  - Reason: the full depth-2 gate costs about 45 GPU-min, and its outcome would then already be determined.
+- The rest of the reader-free queue (outfacing, captures, probes, profile) runs on whichever gate run passes §2.4.

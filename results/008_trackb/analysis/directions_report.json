@@ -1,0 +1,128 @@
+{
+ "L40|J_NP": {
+  "n_rows": 306,
+  "raw_median_energy_J": 0.05058009922504425,
+  "raw_own_atom_share": 0.058823529411764705,
+  "white_median_energy_J": 0.007017303258180618,
+  "white_own_atom_share": 0.13725490196078433
+ },
+ "L40|J_CB": {
+  "n_rows": 306,
+  "raw_median_energy_J": 0.08725904673337936,
+  "raw_own_atom_share": 0.25163398692810457,
+  "white_median_energy_J": 0.016510422341525555,
+  "white_own_atom_share": 0.14705882352941177
+ },
+ "L41|J_NP": {
+  "n_rows": 306,
+  "raw_median_energy_J": 0.04929552599787712,
+  "raw_own_atom_share": 0.0718954248366013,
+  "white_median_energy_J": 0.006628414383158088,
+  "white_own_atom_share": 0.08823529411764706
+ },
+ "L41|J_CB": {
+  "n_rows": 306,
+  "raw_median_energy_J": 0.08264870196580887,
+  "raw_own_atom_share": 0.22875816993464052,
+  "white_median_energy_J": 0.01570227835327387,
+  "white_own_atom_share": 0.11764705882352941
+ },
+ "L42|J_NP": {
+  "n_rows": 306,
+  "raw_median_energy_J": 0.044862620532512665,
+  "raw_own_atom_share": 0.058823529411764705,
+  "white_median_energy_J": 0.006450561573728919,
+  "white_own_atom_share": 0.07516339869281045
+ },
+ "L42|J_CB": {
+  "n_rows": 306,
+  "raw_median_energy_J": 0.07239364087581635,
+  "raw_own_atom_share": 0.20915032679738563,
+  "white_median_energy_J": 0.014067258685827255,
+  "white_own_atom_share": 0.13071895424836602
+ },
+ "L43|J_NP": {
+  "n_rows": 306,
+  "raw_median_energy_J": 0.04158714786171913,
+  "raw_own_atom_share": 0.032679738562091505,
+  "white_median_energy_J": 0.006121220998466015,
+  "white_own_atom_share": 0.0915032679738562
+ },
+ "L43|J_CB": {
+  "n_rows": 306,
+  "raw_median_energy_J": 0.07430266216397285,
+  "raw_own_atom_share": 0.06535947712418301,
+  "white_median_energy_J": 0.015712964348495007,
+  "white_own_atom_share": 0.02287581699346405
+ },
+ "L44|J_NP": {
+  "n_rows": 306,
+  "raw_median_energy_J": 0.03965637646615505,
+  "raw_own_atom_share": 0.032679738562091505,
+  "white_median_energy_J": 0.005872903857380152,
+  "white_own_atom_share": 0.07516339869281045
+ },
+ "L44|J_CB": {
+  "n_rows": 306,
+  "raw_median_energy_J": 0.0704110749065876,
+  "raw_own_atom_share": 0.0718954248366013,
+  "white_median_energy_J": 0.015059571247547865,
+  "white_own_atom_share": 0.016339869281045753
+ },
+ "L45|J_NP": {
+  "n_rows": 306,
+  "raw_median_energy_J": 0.036739079281687737,
+  "raw_own_atom_share": 0.0457516339869281,
+  "white_median_energy_J": 0.005368986865505576,
+  "white_own_atom_share": 0.08496732026143791
+ },
+ "L45|J_CB": {
+  "n_rows": 306,
+  "raw_median_energy_J": 0.06525560840964317,
+  "raw_own_atom_share": 0.13725490196078433,
+  "white_median_energy_J": 0.014136162120848894,
+  "white_own_atom_share": 0.058823529411764705
+ },
+ "L46|J_NP": {
+  "n_rows": 306,
+  "raw_median_energy_J": 0.032957619056105614,
+  "raw_own_atom_share": 0.07516339869281045,
+  "white_median_energy_J": 0.005557096330448985,
+  "white_own_atom_share": 0.08169934640522876
+ },
+ "L46|J_CB": {
+  "n_rows": 306,
+  "raw_median_energy_J": 0.05557914823293686,
+  "raw_own_atom_share": 0.10457516339869281,
+  "white_median_energy_J": 0.014174694661051035,
+  "white_own_atom_share": 0.09803921568627451
+ },
+ "L47|J_NP": {
+  "n_rows": 306,
+  "raw_median_energy_J": 0.04007645137608051,
+  "raw_own_atom_share": 0.22875816993464052,
+  "white_median_energy_J": 0.0071765463799238205,
+  "white_own_atom_share": 0.05228758169934641
+ },
+ "L47|J_CB": {
+  "n_rows": 306,
+  "raw_median_energy_J": 0.07404102757573128,
+  "raw_own_atom_share": 0.1111111111111111,
+  "white_median_energy_J": 0.02017307374626398,
+  "white_own_atom_share": 0.1503267973856209
+ },
+ "L48|J_NP": {
+  "n_rows": 306,
+  "raw_median_energy_J": 0.03712171129882336,
+  "raw_own_atom_share": 0.29411764705882354,
+  "white_median_energy_J": 0.0059658202808350325,
+  "white_own_atom_share": 0.11764705882352941
+ },
+ "L48|J_CB": {
+  "n_rows": 306,
+  "raw_median_energy_J": 0.06656136363744736,
+  "raw_own_atom_share": 0.0915032679738562,
+  "white_median_energy_J": 0.01726581621915102,
+  "white_own_atom_share": 0.18627450980392157
+ }
+}
