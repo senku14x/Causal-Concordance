@@ -16,6 +16,7 @@ Cleaned 2026-10-06:
 
 | File | What it is |
 |---|---|
+| `30_new_session_prompt_2026-10-06.md` | **The prompt for the next session** (end of 2026-10-06): read order (paper → paper notes → docs), where 001–011 stand, pending decisions, environment, working rules |
 | `26_up_to_speed_report_2026-10-06.md` | **Current state of the project** (2026-10-06): instance check, what each experiment showed, weak links, every inconsistency found, next steps |
 | `28_next_direction_proposal_2026-10-06.md` | The proposal behind tonight's work. Superseded in part by the PI's changes in `docs/design_specs/008_009_trackb_brewcode.md` |
 | `docs/reports/008_trackb.md` (not here) | **Newest result:** 007's model-side test done the paper's way; no J privilege |
@@ -92,7 +93,7 @@ Reading notes on the readers' papers: `docs/context/reading_notes.md` and `readi
 
 ## Conventions for new files
 
-- Numbered filenames continue from 30, with a date suffix.
+- Numbered filenames continue from 31, with a date suffix.
 - Add a row to the right section above.
 - **Don't copy canonical documents here; link them.** Copies drift.
 - The scratch copy outside the repo is `/workspace/claude_reports/`. It also holds the PI's
