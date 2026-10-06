@@ -123,6 +123,57 @@ def build(P, AR, WH, D):
         errs.append(e)
         return A, Rm, mu, sw()
     add("Bref_full_3L", ref_make, arm="B_ref", role="z", coords="raw")
+
+    # ---- amendment 3 (POST HOC, after the 2-pair smoke s0): controls for the raw-coordinate swap, and the additive
+    # reading of the tip ("subtract z's AR vector, add z' 's") at the class-mean reference's edit norm ----
+    def h_clean(L, p):
+        return P.clean[()][L][p].double().cpu()
+
+    def swap_norm(V, Rm, mu, h):
+        c = Rm @ (h - mu)
+        return float((V @ (TB.swap_target(c, ((0, 1),)) - c)).norm())
+
+    def raw_colour(L, c1, c2):
+        return WH[L]["Wi"] @ torch.stack([vec(L, c1), vec(L, c2)], 1)
+
+    def ref_norm(L, cell, p):
+        V = torch.stack([D["dirs"][(cell, L, P.T, z)].double(), D["dirs"][(cell, L, P.T, z2)].double()], 1)
+        return swap_norm(V, torch.linalg.pinv(V), D["mu_dev"][(cell, L, P.T)].double(), h_clean(L, p))
+
+    add("C_raw_answer", colour_make(a, a2, coords="raw"), arm="C_raw_ctrl_answer", role="answer", coords="raw",
+        centred=True, alpha=1.0)
+    for i in range(2):
+        def make(L, cell, p, i=i):
+            g = torch.from_numpy(np.stack([SA.unit(SA.seed_of(pr.pair_id, "011_rawrand", i, k)) for k in (0, 1)], 1)).double()
+            Rg = torch.linalg.pinv(g)
+            Vz = raw_colour(L, z, z2)
+            target = swap_norm(Vz, torch.linalg.pinv(Vz), torch.zeros(5120, dtype=torch.float64), h_clean(L, p))
+            own = swap_norm(g, Rg, torch.zeros(5120, dtype=torch.float64), h_clean(L, p))
+            r = target / max(own, 1e-12)
+            (A, Rm, mu), e = fin(g, Rg, torch.zeros(5120, dtype=torch.float64))
+            errs.append(e)
+            return A, Rm, mu, (lambda c, L_, p_, r=r: c + r * (TB.swap_target(c, ((0, 1),)) - c))
+        add(f"C_raw_rand_{i}", make, arm="C_raw_rand", role="rand", coords="raw", draw=i)
+
+    def additive(dir_fn):
+        def make(L, cell, p):
+            d = dir_fn(L, cell, p).double()
+            k = ref_norm(L, cell, p) / float(d.norm())
+            (A, Rm, mu), e = fin(d[:, None], torch.linalg.pinv(d[:, None]), torch.zeros(5120, dtype=torch.float64))
+            errs.append(e)
+            return A, Rm, mu, (lambda c, L_, p_, k=k: c + k)
+        return make
+
+    def ar_diff(c1, c2):
+        return lambda L, cell, p: WH[L]["Wi"] @ (vec(L, c2) - vec(L, c1))          # raw AR(c2) - AR(c1)
+
+    add("D_ar", additive(ar_diff(z, z2)), arm="D", role="z", coords="additive")
+    add("D_ar_answer", additive(ar_diff(a, a2)), arm="D_ctrl_answer", role="answer", coords="additive")
+    add("D_classmean", additive(lambda L, cell, p: D["dirs"][(cell, L, P.T, z2)].double() - D["dirs"][(cell, L, P.T, z)].double()),
+        arm="D_ref", role="z", coords="additive")
+    for i in range(2):
+        add(f"D_rand_{i}", additive(lambda L, cell, p, i=i: torch.from_numpy(SA.unit(SA.seed_of(pr.pair_id, "011_addrand", i, L, cell))).double()),
+            arm="D_rand", role="rand", coords="additive", draw=i)
     return conds, max(errs)
 
 

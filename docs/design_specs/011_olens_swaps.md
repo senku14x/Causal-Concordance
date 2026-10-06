@@ -126,3 +126,37 @@
 - Only centred colour vectors are used. `C_white_unc` is dropped: it depends on the unexplained scale and offset.
 - Every 011 swap result is labelled **post hoc, exploratory**.
 - Run order: a 2-pair smoke (gates and timing) is inspected before the 82-pair run.
+
+## Amendment 3 (2026-10-06 ~21:05 UTC; POST HOC: written after the 2-pair smoke s0, before any other pair ran)
+
+**Seen in s0** (2 pairs, one table; vectors run v3 under amendment 2):
+- all gates pass;
+- the reference moves S 0.23;
+- `C_white` −0.01 / +0.00, its answer-colour control −0.01 / +0.00, with small edits (summed norm 15–21; the clean
+  activations' whitened coordinates on the AR colour vectors barely differ);
+- `C_rawcoord` +0.22 / +0.10, but with edits 2–3× the reference's and no matched random or answer control.
+
+**Added arms** (the existing ones are unchanged):
+- `C_raw_answer`: the answer colours swapped in raw coordinates (power control for `C_rawcoord`);
+- `C_raw_rand_0/1`: random raw direction pairs, swap edit rescaled to `C_rawcoord`'s per site;
+- **additive reading of the tip** ("subtract z's AR vector, add z′'s"):
+  - `D_ar`: per site, add the raw AR difference AR(z′) − AR(z), at the class-mean reference's swap-edit norm for that
+    site (only the direction is used, so the AR's unexplained scale does not enter);
+  - `D_ar_answer`: the same with AR(a′) − AR(a) (positive control);
+  - `D_classmean`: the class-mean difference d(z′) − d(z) (the model's own colour difference; lever reference);
+  - `D_rand_0/1`: random directions;
+  - all at the same norm, set per layer as clean coordinate + k.
+
+**Reading** (median S, table-cluster bootstrap 10k; paired differences per pair):
+- `C_white`: as pre-set. It is read only if `Cctrl_answer` ≥ 0.15.
+- `C_rawcoord`:
+  - read only if `C_raw_answer` ≥ 0.15;
+  - "colour-specific" only if the paired difference against the mean of the two `C_raw_rand` draws has a CI above 0.
+- Additive:
+  - not read if `D_classmean` < 0.15 (the additive lever is too weak at this norm).
+  - Otherwise, D_ar − D_classmean with CI inside ±0.05: the AR's colour difference is as good a handle as the model's
+    own.
+  - D_ar − D_rand CI including 0: not a handle.
+  - Anything else: partial; report the numbers.
+  - `D_ar_answer` is reported as the AR's positive control.
+- Every number from 011 is **post hoc, exploratory**.
