@@ -16,6 +16,7 @@ Cleaned 2026-10-06:
 
 | File | What it is |
 |---|---|
+| `32_012_outlook_2026-10-06.md` | **012 outlook**: what phrase-lens contains (checked), whether PJ directions are needed, porting 008–011 to its multihop banks, fixes to the prompt set and the 012 draft, recommended order |
 | `31_onboarding_review_2026-10-06.md` | **Onboarding review** (new session, 2026-10-06): 001–011 checked against JSON; the dissociation uses mismatched J objects; the AR config hints at a J-lens loss term; number slips (008 J_CB −0.14, not −0.15); ranked next steps |
 | `30_new_session_prompt_2026-10-06.md` | **The prompt for the next session** (end of 2026-10-06): read order (paper → paper notes → docs), where 001–011 stand, pending decisions, environment, working rules |
 | `26_up_to_speed_report_2026-10-06.md` | **Current state of the project** (2026-10-06): instance check, what each experiment showed, weak links, every inconsistency found, next steps |
