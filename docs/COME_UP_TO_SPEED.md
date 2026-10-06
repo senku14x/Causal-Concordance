@@ -1,6 +1,20 @@
 # Come up to speed — Causal-Concordance (state of 2026-10-03; see the update box)
 
-> **Update 2026-10-05: read this first.**
+> **Update 2026-10-06: read this first.**
+> 1. **Check out `007-jsubspace`.** A fresh clone lands on `main`, which stops at 004; `007-jsubspace` holds everything
+>    through 007.
+> 2. **Read the workspace paper first** (Gurnee et al. 2026; PDF `docs/papers/2607.15495.pdf`; text
+>    `docs/papers/text/2607.15495_html.md` or `.txt`; digest `docs/papers/text/2607.15495_NOTES_digest.md`), then the
+>    reading at the top of `CLAUDE.md`.
+> 3. Then `CLAUDE.md` ("Where things stand", "Pitfalls"), `STATUS.md`, `docs/reports/007_jsubspace.md` and
+>    `docs/claude_reports/25_nla_stops_and_open_issues_2026-10-06.md`.
+> 4. 007 in one line: the Oracle reads z through the J subspace (confirmed on held-out tables); the model's answer gives
+>    J no privilege; the NLA (post hoc) does not share the Oracle's J dependence. Results page:
+>    https://claude.ai/artifact/8vnKTzcXczn4YGMiP1uJTW
+> 5. Restore outputs on a fresh instance with `scripts/000_setup/rebuild_env.sh` and then
+>    `scripts/000_setup/restore_outputs.py` (`CLAUDE.md`, "Fresh instance").
+>
+> **Earlier update, 2026-10-05:**
 > 1. **First read Anthropic's workspace paper** (Gurnee et al. 2026, `docs/papers/2607.15495.pdf`; text in
 >    `docs/papers/text/`), then the relevant reading listed at the top of `CLAUDE.md`. This is the PI's rule; do it
 >    before anything else.

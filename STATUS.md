@@ -1,7 +1,9 @@
 # STATUS — 2026-10-05 (branch `007-jsubspace`: 007 run unattended and reported; earlier: `005-amended-full-run` holds 005, 006, 006b)
 
-*New session? **First read the Anthropic workspace paper** (Gurnee et al. 2026, `docs/papers/2607.15495.pdf`) and the
-relevant reading listed at the top of `CLAUDE.md`. That is the PI's rule. Then `CLAUDE.md`, this file (newest first),
+*New session? **Check out `007-jsubspace`** (the newest branch; a fresh clone lands on the older `main`). **Then first read
+the Anthropic workspace paper** (Gurnee et al. 2026, `docs/papers/2607.15495.pdf`; text in `docs/papers/text/`) and the
+relevant reading listed at the top of `CLAUDE.md`. That is the PI's rule. The newest results: `docs/reports/007_jsubspace.md`
+and report 25 (`docs/claude_reports/25_nla_stops_and_open_issues_2026-10-06.md`). Then `CLAUDE.md`, this file (newest first),
 `docs/reports/005_followups.md` and `docs/reports/006_reader_likelihood.md`.*
 
 **2026-10-05, 007 — J-subspace split with controls (branch `007-jsubspace`; spec v2 2820e53 + A1 5cdafd9; report `docs/reports/007_jsubspace.md`; per-stage status `results/007_jsubspace/status/`; ~2.2 GPU-h, unattended under rule 12).**

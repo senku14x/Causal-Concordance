@@ -9,7 +9,11 @@ vocabulary: J-lens, workspace, J-space, privilege, verbalizable. A session that 
 
 1. **The paper, in full:** Gurnee et al. 2026, *Verbalizable Representations Form a Global Workspace in Language
    Models* (Anthropic).
-   - PDF: `docs/papers/2607.15495.pdf`; text: `docs/papers/text/2607.15495.txt`.
+   - PDF: `docs/papers/2607.15495.pdf`; text: `docs/papers/text/2607.15495.txt` (from the PDF) and
+     `docs/papers/text/2607.15495_html.md` (from the web version: cleaner headings and figure captions; cross-references
+     show as "??").
+   - A section-by-section digest made at the start of the 007 session (2026-10-05): `docs/papers/text/2607.15495_NOTES_digest.md`.
+     It is a map, not a substitute: read the paper itself.
    - Read the main text and the appendices the project leans on: A.8 (J-space span), A.9 / A.9.2 (verbalizers and J-space), A.12, A.21, A.24.3, §3.1 with Figs. 7–8 (planted concepts and the privilege test).
    - Then the notes on it:
      - `docs/claude_reports/03_workspace_paper_notes_merged.md`: the agent's notes merged with the PI's, with corrections in §14 and disagreements in §15;
@@ -175,17 +179,40 @@ Sources (read-only clones, pinned in `scripts/000_setup/rebuild_env.sh`): `/work
 `env -u GITHUB_TOKEN git -c credential.helper='!gh auth git-credential' push origin <branch>`. Do not push to `main`
 without the PI's say-so.
 
-## Where things stand (2026-10-05)
+## Where things stand (2026-10-06)
 
-**Branches.**
-- `main` @ 95ab0e5: the 000–004 scaffold. The PI merges into it; never push to it.
-- `spec-v2` @ 9709712: SPEC_v2 + errata 01, checks C1–C3, the NLA loader, and 005 up to the dev pilot and steps 7b–11.
-- **`005-amended-full-run`** (off `spec-v2`): amendment 01 adopted, the 005 full run, the follow-ups, **006 (merged in
-  2026-10-05, fast-forward)**, and these docs.
-  - It is the newest branch and the one to work on.
-  - It stays separate from `main` until the PI merges it. Dropping it reverses the adoption.
-- `006-reader-likelihood`: experiment 006, now merged into `005-amended-full-run` (same commit); kept for reference.
-- **The PI is analysing the current results (005 + follow-ups + 006).** Next experiments wait for the PI's direction.
+**Branches.** A fresh clone lands on `main`, which is behind: **check out `007-jsubspace`** (`git checkout 007-jsubspace`).
+- **`007-jsubspace`** (off `005-amended-full-run`): experiment 007 (design, amendments A1-A3, all code, results, status
+  files, reports 22-25) **plus everything below**. It is the newest branch and the one to work on. `main` is its
+  ancestor, so the PI can fast-forward `main` to it; never push to `main` yourself.
+- `005-amended-full-run` (off `spec-v2`): amendment 01, the 005 full run and follow-ups, 006 and 006b.
+- `006-reader-likelihood`: experiment 006, merged into `005-amended-full-run`; kept for reference.
+- `spec-v2` @ 9709712: SPEC_v2 + errata 01, checks C1-C3, the NLA loader, and 005 up to the dev pilot.
+- `main` @ 95ab0e5: the 000-004 scaffold. The PI merges into it.
+- **Next experiments wait for the PI's direction.**
+
+**007, the J-subspace split** (`docs/reports/007_jsubspace.md`; design `docs/design_specs/007_jsubspace.md` with
+amendments A1-A3; per-stage status `results/007_jsubspace/status/`; results page https://claude.ai/artifact/8vnKTzcXczn4YGMiP1uJTW;
+why the NLA runs stopped and the other open issues: `docs/claude_reports/25_nla_stops_and_open_issues_2026-10-06.md`):
+- **Question:** do the readers' signals depend on the J subspace (top-1,024 directions of the J_NP word directions), on
+  how much prompt-specific content a piece holds, or on removing the shared mean direction? Does the model's answer
+  depend on J beyond its content share?
+- **Confirmed (pre-registered, dev + 49 held-out brew test tables, AMENDMENT_02):** the **Oracle**'s z tracking at brew
+  `:` L40 is carried by the J subspace. J alone beats the whole activation (dev 5.8 vs 3.2 nats), removing J leaves about
+  0.3, and J beats Δ-matched PCA, random subspaces, and random after mean removal. The same pattern holds at
+  `</think>` (patch share 0.01), so it does not follow use.
+- **Model side:** J subspace swaps track content share (L42) or exceed random modestly (L40/L44, below margin). In the
+  paper's §3.3 test adapted to brew, the J part of a class-mean z direction moves the answer *less* than the non-J part
+  at matched raw norm. This is a reader-model dissociation.
+- **NLA (post hoc, A2/A3):** first disabled by a G-repro stop gate (my 2-row fast scorer), then rerun on 006's exact
+  scorer. Its z signal is **not** J-concentrated at `:` (J ≈ half of whole; removing J costs about as much as removing a
+  random slice). At `</think>` it collapses without J but J alone is not enough. Multihop: J ≈ whole for both readers,
+  confounded by restatement.
+- **Secondary:** relational stopped after its profile (12/50 gated; no high-leverage read-layer position). Chain
+  (exploratory, 7 items): the signal lies outside J at L56. The template lens fails its colour sanity check at L40-44.
+- **The PI's position (2026-10-06):** trusts the results and does not want a confirmatory 007c rerun of the NLA. A TA
+  (Camila) asked how the interventions are done, suggested whitened-space swaps for the Oracle, gating checks, and
+  qualitative analysis of readout content. Those are candidate next steps.
 
 **001–004** (dev split only; await PI review):
 - **001:** the `:` cell carries about half the answer gap at L42–44, and z is decodable there.
@@ -220,8 +247,9 @@ without the PI's say-so.
 - Their tracking does not follow 001's patch shares. The Oracle tracks z 2× more at `</think>` (patch share 0.01), which the model's output does not mirror.
 
 **Open PI decisions:**
-- merging `005-amended-full-run` (the PI will do it);
-- the next direction. 005 is closed: the PI ruled no further 005 variants.
+- merging `007-jsubspace` into `main` (a fast-forward; the PI does it);
+- the next direction (TA suggestions: whitened-space swaps, per-method qualitative analysis, NLA hallucination
+  stripping and the reconstructor's FVE, the Oracle at L44 vs the NLA at L42). 005 is closed.
 
 **Results page for 000–004** (artifact, shared by link; built by `scripts/000_setup/results_page/make_page.py` from committed JSON only): https://claude.ai/artifact/RMRX8R4iFnysbnHaNWTBeC
 - The repo has been **private** since 2026-10-04: the paper PDFs are in it.
@@ -255,14 +283,20 @@ without the PI's say-so.
 
 `/workspace` is not persistent. To come back on a new instance:
 1. `git clone https://github.com/senku14x/Causal-Concordance` (private; `gh auth login` as senku14x), then
-   `git checkout 005-amended-full-run` (the newest branch; it contains everything on `spec-v2`; `main` is updated on
-   the PI's say-so).
+   `git checkout 007-jsubspace` (the newest branch; it contains `005-amended-full-run`, `spec-v2` and `main`; `main` is
+   updated on the PI's say-so).
 2. `bash scripts/000_setup/rebuild_env.sh`: venvs, pinned source clones, model and lens downloads, and hash checks.
 3. `python scripts/000_setup/restore_outputs.py`: downloads `outputs/` from the public HF dataset
    `senku21x/causal-concordance-outputs` and checks every file against its `MANIFEST.json` (sha256).
    - The dataset holds every run's raw outputs, including 005's smoke, pilot, full run and follow-ups and the activation captures (`caps.pt`, `material.pt`).
    - It also holds `results_snapshot/<branch>/`, a browsable copy of `results/`. This copy is not restored, because `results/` is in git.
    - To update the mirror after new runs: `python scripts/000_setup/mirror_outputs.py` (add `--private` for the private dataset).
+   - 007's outputs (`outputs/007_jsubspace/`: Stage 0 pieces, every LL matrix, captures, readouts, logs) are in the same
+     public dataset.
+   - 007's template lens is not fetched by `rebuild_env.sh`. Download the two pinned files with `hf_hub_download` from
+     `camilablank/workspace-lenses` @ d740106d (`qwen3.6-27b/template-lens/`, about 17.6 GB), then check them with
+     `python scripts/007_jsubspace/template_lens.py verify`. The sha256 pins are in that script (`PIN`), not in
+     `registry.json`; this deviates from design §18.
 4. Optional: `python scripts/000_setup/restore_outputs.py --private`, restoring from the private HF dataset
    `senku21x/causal-concordance-private` (tested 2026-10-03: 82/82 public and 48/48 private files match their
    manifests; the bundle clones both branches):
@@ -282,6 +316,29 @@ without the PI's say-so.
    for it on a new instance. It was pasted in chat on 2026-10-02 and should be rotated.
 
 ## Pitfalls (read before writing code)
+
+- **Why SEC is bf16 to block 39 and float32 from 40.** Full float32 would need about 108 GB of weights (> 96 GB GPU). Every
+  edit in these experiments is at L ≥ 40. So blocks 0-39 run in stock bf16, identical for clean and edited runs, and
+  their rounding cancels in the difference. Blocks 40-63 + final norm + W_U are replayed in true float32 (about 72 GB),
+  with a floor of about 2e-4 nats. Edits below L40 have the bf16 floor.
+- **The readers run fully in bf16, and their log-probs move with the batch layout** (batch size, padding, row layout):
+  - deterministic per layout;
+  - Oracle up to about 0.13 nats;
+  - NLA up to about 0.3-0.4 nats (report 25, `diag_nla_numerics.json`).
+  A max-based gate calibrated on the Oracle (006 v1.1's 0.25) trips by chance for the NLA, and a maximum grows with the
+  number of values checked. Calibrate gates per reader (median / p99) before pre-registering. Never adopt a scorer
+  change, even an exactly equivalent one, without full-set parity against the gate's own reference (007's NLA loss).
+- **The exact 2-row scorer** (007 `reader_split.oracle_fast` / `nla_fast`): single-token spellings are read from one
+  prefix row, multi-token spellings get their own rows, so about 12× fewer rows. The arithmetic is the same but the
+  layout is different. Fine for the Oracle (all gates passed); not for the NLA against 006's numbers.
+- **Positive controls are strict for off-distribution pieces.** Random 1,024-dim projections and small PCA pieces of
+  natural colour activations are often not decodable by the readers. Contrasts built on them become "uninformative"
+  under A1's rule. Build controls from pieces the readers can demonstrably read.
+- **Amendment discipline.** Anything changed after a run starts is written as an amendment (timestamp, what was already
+  seen) and committed before it is used. Results produced by a post-launch decision are labelled post hoc and never
+  replace the pre-registered record.
+- **Never wait on `pgrep -f "<pattern>"` from a shell whose own command line contains the pattern** (it matches itself).
+  Wait on a PID or a done-file.
 
 - **bf16 numerics are chaotic at the 0.05–0.25-nat level.** Under the RHUT regime (bf16 matmuls), any perturbation of
   the residual, however small, moves the margin by up to ~0.2 nats; appending tokens moves prompt-position activations
