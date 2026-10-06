@@ -136,7 +136,36 @@ Mean over tables [95% table-cluster CI], collision-free pairs:
 
 ## 5. Single-cell leverage (patch profile)
 
-*Pending: the run finishes around 19:40 UTC; this section will be filled from `profile_p1.json`.*
+**Method.**
+- The whole-cell patch share S: the partner's cell is patched into the member at one cell and one layer, scored on the
+  code-answer margin (full sequence, every token), SEC regime.
+- 48 gated pairs per question, one per table first.
+- The table shows median S [95% table-cluster CI]. Gates G0 and same-source are exact (Δm = 0) on the first 2 pairs per
+  question.
+- The answer gap G has median 14.5 nats (final-code) and 18.0 (start-code).
+
+| Question | Cell | L40 | L42 | L44 | L48 | L52 | L56 | L60 |
+|---|---|---|---|---|---|---|---|---|
+| final-code | assistant newline | 0.16 | 0.19 | **0.30** | 0.21 | 0.14 | 0.13 | 0.09 |
+| final-code | `</think>` | **0.00** | **0.00** | **0.01** | 0.12 | 0.12 | 0.11 | 0.04 |
+| final-code | `:` | 0.12 | 0.19 | 0.35 | 0.46 | **0.48** | 0.42 | 0.45 |
+| start-code | assistant newline | 0.04 | 0.02 | 0.02 | 0.01 | 0.00 | 0.00 | 0.00 |
+| start-code | `</think>` | −0.01 | −0.01 | 0.01 | 0.18 | 0.13 | 0.11 | 0.06 |
+| start-code | `:` | 0.06 | 0.06 | 0.08 | 0.27 | 0.38 | 0.33 | 0.34 |
+
+**Reading.**
+- **The code bank reproduces brew's structure.** Under final-code at L40–44, the `</think>` cell has no single-cell
+  leverage (S 0.00–0.01), while the hidden colour is decodable there (probe BA 0.86–0.94). Brew's `</think>` showed the
+  same (S 0.01 at L42).
+- `:` and the assistant newline carry a real share (0.12–0.35 at L40–44), rising at `:` to about 0.48 by L52.
+- **Under start-code, the answer-side cells carry little until L48** (`:` 0.06–0.08 at L40–44). The start code appears
+  to be read out late.
+- So at the readers' layers (L40–44), the code bank offers:
+  - a cell with the hidden colour **present and with leverage** (`:`, final-code);
+  - a cell with it **present and without single-cell leverage** (`</think>`, final-code);
+  - cells where it is **present but not needed by the question** (all three cells, start-code).
+- These are the contrasts a reader analysis needs. What the bank cannot do is make the colour absent from the
+  output-facing distribution (§3).
 
 ## 6. What this means
 
