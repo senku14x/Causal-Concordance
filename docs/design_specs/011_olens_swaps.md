@@ -92,3 +92,37 @@
 - **Records:** results are now per run (`ar_validation_<run>.json`, `ar_diagnostics_<run>.json`); v1's and d1's files
   were renamed with contents unchanged. The swap script reads the validation file of the vector run it uses.
 - **If v2 fails too:** no swaps; the diagnostics are reported.
+
+## Amendment 2 (2026-10-06 ~20:50 UTC; POST HOC: written after v2, d2 and the offline sweep had been seen)
+
+**What was seen.**
+- v2 (amendment 1) failed the pre-set rule again. The scale-free diagnostics barely moved (ZCA cosine ≈ 0.2).
+- d2 saved the head outputs and targets. The offline sweep (`ar_offline_diag.py`, `results/011_olens_swaps/ar_offline_d2.json`)
+  scored a convention v1 and v2 never scored: **the head outputs a raw activation**, scored in the whitened metric
+  W(ŷ − μ) vs W(h − μ). This fits the AR config (`loss_space: whiten`), with the head computed on the backbone's final
+  pre-norm state passed through a parameter-free LayerNorm (`head_layer_norm: true`).
+- On 16-token spans (training crops are uniform on 1–32 tokens; 40% of our spans are 1–2 tokens and carry little):
+  - after one global least-squares scale, whitened FVE is 0.27 / 0.24 / 0.24 at L40 / L44 / L48 (published val FVE
+    0.22 / 0.22 / 0.23);
+  - retrieval@1 within random batches of 24 (all spans) is 0.83 / 0.85 / 0.90 (published 0.92 / 0.93 / 0.96);
+  - block L beats block L−1.
+- **Unexplained:** the prediction scale. The best global factor is 0.3-0.55, where an MSE-trained head should need ≈ 1.
+- **What the swap needs is unaffected.** The swap uses the colour vectors centred over the 12 colours, in whitened
+  coordinates. A global output scale, an input scale through the affine head, and a constant offset (raw vs centred
+  raw) all cancel in the centred directions. Centred predictions from the five reads agree at median cosine ≥ 0.995
+  (L44).
+
+**Acceptance rule used from now on (post hoc).**
+- Convention: raw output scored in the whitened metric; read `ln_pre`; block L.
+- Accepted if, at L44:
+  - on 16-token spans, the whitened FVE after one global scale is ≥ 0.10;
+  - within-batch-24 retrieval@1 is ≥ 0.80;
+  - and on 16-token scaled FVE, the convention beats the ZCA- and PCA-output conventions (which change the centred
+    direction) by ≥ 0.05.
+- The pre-set rule's verdict (fail) is kept in every record (`accepted`); this rule's verdict is recorded separately
+  (`accepted_posthoc_a2`).
+
+**Changes to the swap arm.**
+- Only centred colour vectors are used. `C_white_unc` is dropped: it depends on the unexplained scale and offset.
+- Every 011 swap result is labelled **post hoc, exploratory**.
+- Run order: a 2-pair smoke (gates and timing) is inspected before the 82-pair run.

@@ -97,7 +97,7 @@ def build(P, AR, WH, D):
 
     add("C_white", colour_make(z, z2), arm="C", role="z", coords="white", centred=True, alpha=1.0)
     add("C_white_a2", colour_make(z, z2, alpha=2.0), arm="C", role="z", coords="white", centred=True, alpha=2.0)
-    add("C_white_unc", colour_make(z, z2, centred=False), arm="C", role="z", coords="white", centred=False, alpha=1.0)
+    # C_white_unc dropped by amendment 2: uncentred vectors depend on the AR's unexplained output scale and offset
     add("C_rawcoord", colour_make(z, z2, coords="raw"), arm="C", role="z", coords="raw", centred=True, alpha=1.0)
     add("Cctrl_answer", colour_make(a, a2), arm="C_ctrl_answer", role="answer", coords="white", centred=True, alpha=1.0)
     add("Cctrl_off", colour_make(o1, o2), arm="C_ctrl_off", role="off", coords="white", centred=True, alpha=1.0,
@@ -161,7 +161,7 @@ def main():
     assert not torch.backends.cuda.matmul.allow_tf32
     val = json.loads((AV.RES / f"ar_validation_{a.vec_run}.json").read_text())
     AV.WH_PREFIX[0] = val["whitener"]
-    assert val.get("accepted"), "AR validation did not pass; no Oracle-space swaps"
+    assert val.get("acceptance_basis"), "AR validation did not pass; no Oracle-space swaps"
     d = AV.OUT / a.run_id
     (d / "pairs").mkdir(parents=True, exist_ok=True)
     log = AV.Logger(d / "log.txt")
@@ -173,7 +173,9 @@ def main():
     groups = SA.spelling_groups(tok)
     ref001 = TB.p001()
     ents = gated[: a.limit_pairs] if a.limit_pairs else gated
-    state = {"quarantined": 0, "ra_err_max": 0.0, "repro_fail": [], "G0": {}, "convention": val["convention"]}
+    state = {"quarantined": 0, "ra_err_max": 0.0, "repro_fail": [], "G0": {}, "convention": val["convention"],
+             "acceptance_basis": val["acceptance_basis"], "vec_run": a.vec_run,
+             "label": "POST HOC, exploratory (011 amendment 2)" if val["acceptance_basis"] != "preset" else "exploratory"}
     model = R.load_model()
     t_all = time.time()
     with RG.SecEngine(model, l0=39) as sec:

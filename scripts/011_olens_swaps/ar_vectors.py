@@ -197,11 +197,43 @@ def diag(yhat, y):
             "norm_ratio_median": float((yhat.norm(dim=1) / y.norm(dim=1)).median())}
 
 
+def scaled_fve(yh, y):
+    """Whitened FVE after one global least-squares scale of the prediction (scale-free in the prediction)."""
+    a = float((yh * y).sum() / (yh * yh).sum())
+    return float(1 - ((y - a * yh) ** 2).sum() / ((y - y.mean(0)) ** 2).sum()), a
+
+
+def ret_batches(yh, y, size=24, seed=SEED):
+    """Retrieval@1 by cosine within random batches of `size` (the AR's micro-batch)."""
+    yn, hn = torch.nn.functional.normalize(y, dim=1), torch.nn.functional.normalize(yh, dim=1)
+    perm = torch.from_numpy(np.random.default_rng(seed).permutation(len(y)))
+    hits = [(hn[perm[j:j + size]] @ yn[perm[j:j + size]].T).argmax(1).eq(torch.arange(size)).double().mean()
+            for j in range(0, len(y) - size + 1, size)]
+    return float(torch.stack(hits).mean())
+
+
+def accept_a2(reads44, h44, spans, w):
+    """Amendment 2 (post hoc): raw-output convention, ln_pre read, block L, at L44."""
+    n16 = torch.tensor([len(x) for x in spans]) == 16
+    yw, yp = (h44 - w["mu"]) @ w["W"].T, (h44 - w["mu"]) @ w["P"].T
+    o = reads44["ln_pre"]
+    preds = {"raw": ((o - w["mu"]) @ w["W"].T, yw), "zca": (o, yw), "pca": (o, yp)}
+    sf = {k: scaled_fve(ph[n16], t[n16]) for k, (ph, t) in preds.items()}
+    ret = ret_batches(*preds["raw"])
+    margin = sf["raw"][0] - max(sf["zca"][0], sf["pca"][0])
+    ok = sf["raw"][0] >= 0.10 and ret >= 0.80 and margin >= 0.05
+    return {"accepted": bool(ok), "scaled_fve_n16": {k: v[0] for k, v in sf.items()},
+            "global_scale_n16": {k: v[1] for k, v in sf.items()}, "ret_b24_raw": ret, "margin_vs_zca_pca": margin,
+            "n16": int(n16.sum()), "convention": "block_L|ln_pre|raw"}
+
+
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--run-id", default="v1")
     ap.add_argument("--diag-only", action="store_true")
     ap.add_argument("--whitener", default=WH_PREFIX[0])
+    ap.add_argument("--save-tensors", action="store_true", help="save head outputs and targets for CPU diagnostics")
+    ap.add_argument("--posthoc-a2", action="store_true", help="apply amendment 2's post hoc acceptance rule (011 note)")
     a = ap.parse_args()
     DIAG_ONLY[0] = a.diag_only
     WH_PREFIX[0] = a.whitener
@@ -217,8 +249,10 @@ def main():
     pt, head, heads = attach_ar(model, log)
     val = {}
     DIAG, DIAG_LAST = {}, {}
+    saved = {}
     for L in LAYERS:
         reads = ar_forward(pt, head, heads, spans, L)
+        saved[L] = {k: v.float() for k, v in reads.items()}
         if L == 44:
             reads44 = reads
         w = WH[L]
@@ -234,6 +268,10 @@ def main():
                             DIAG[k] = diag(yhat, y)
                         else:                                   # sensitivity only; never a candidate convention
                             DIAG_LAST[k] = diag(yhat, y)
+    if a.save_tensors:
+        torch.save({"reads": saved, "t_prev": {l: v.float() for l, v in tg.items()},
+                    "t_last": {l: v.float() for l, v in tg_last.items()}, "spans": spans,
+                    "resp_of_span": [i // 64 for i in range(len(spans))]}, out / "diag_tensors.pt")
     RES.mkdir(parents=True, exist_ok=True)
     (RES / f"ar_diagnostics_{a.run_id}.json").write_text(json.dumps(
         {"whitener": WH_PREFIX[0], "target_preceding": DIAG, "target_span_last": DIAG_LAST}, indent=1))
@@ -263,16 +301,25 @@ def main():
            "layer_index_margin_L44": val[f"L44|{conv}"] - val[f"L44|{other_layer}|{b_read}|{b_space}"],
            "published_val_fve": {"L40": 0.224, "L44": 0.2202, "L48": 0.2277}, "manifest": R.manifest_block()}
     log("validation", json.dumps({k: round(v, 3) for k, v in sorted(val.items(), key=lambda kv: -kv[1])[:8]}), "accepted", ok)
+    rep["acceptance_basis"] = "preset" if ok else None
+    if a.posthoc_a2:
+        a2 = accept_a2(reads44, tg[44], spans, WH[44])
+        rep["accepted_posthoc_a2"], rep["a2"] = a2["accepted"], a2
+        log("amendment 2 (post hoc)", json.dumps(a2))
+        if not ok and a2["accepted"]:
+            b_layer, b_read, b_space = a2["convention"].split("|")
+            conv = a2["convention"]
+            rep.update({"convention": conv, "acceptance_basis": "amendment2_posthoc"})
     RES.mkdir(parents=True, exist_ok=True)
     (RES / f"ar_validation_{a.run_id}.json").write_text(json.dumps(rep, indent=1))
-    if not ok:
+    if rep["acceptance_basis"] is None:
         log("STOP: no convention meets the acceptance rule; no vectors written")
         return
     vecs = {}
     for L in LAYERS:
         for form, fmt in (("space", " {}"), ("nospace", "{}")):
             sp = [tok.encode(fmt.format(c), add_special_tokens=False) for c in COLOURS]
-            yhat = ar_forward(pt, head, heads, sp, L)[b_read]
+            yhat = ar_forward(pt, head, heads, sp, L)[b_read].double()
             w = WH[L]
             if b_space == "zca":
                 white, raw = yhat, yhat @ w["Wi"].T + w["mu"]
