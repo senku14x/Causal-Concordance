@@ -256,3 +256,55 @@ Stop and report, without improvising, if:
   - partial-token overlap (swapping "New" in "New Zealand");
   - multi-token answers to score.
 - Plan: ST first. MT second, with class-mean directions (no lens needed), plus Jan's template rows if he shares them.
+
+## 11. v1.1 decisions (2026-10-06, after the PI's review; where they conflict with earlier sections, these win)
+
+**Confirmed arms** (PI asked for written confirmation). Stage B runs all of these:
+1. **The paper's lens-coordinate swap with clamping** (Fig. 4C, §3.1/§3.3): V = [v_src, v_tgt]; the coordinates are clamped to the swapped clean values at every band layer and every prompt position; raw and **whitened** (Σ for L24–47; rows as covectors).
+2. **The paper's privilege test (Fig. 16):** class-mean directions split into full / k = 25 J part / non-J remainder, swapped with complementary clamps.
+3. **The answer-swap positive control** and both random controls.
+4. **The brew rerun of 008 arm A** at L24–47 at every prompt position, on 008's 82 pairs, including the answer-atom control. It tests whether 008's null was about band and positions.
+
+**Reconstructor vectors:**
+- **R1: Oracle AR (Camila's method).** Waits for her loader. Nothing goes under her name before G-AR passes.
+- **R2: NLA-reconstructor vectors. Optional and deferred.**
+  - With in-distribution inputs (the NLA's own explanations of clean activations whose bridge is c, averaged, then centred across concepts), R2 is a legitimate test: does the NLA's verbal channel keep the concept in a causally usable direction? With made-up explanation text it is not.
+  - Costs:
+    - several activations per concept, i.e. the cue-varied prompt set plus NLA sampling on each;
+    - a lineage match: the NLA reconstructor we can load (`rl_critic_step400`) pairs with `nla-L42`'s verbalizer, not `nla-rl`'s. `nla-rl`'s own reconstructor (step 600) has no wrapper yet.
+  - Runs only after Stage B shows class-mean directions work. It is labelled "NLA-reconstructor vectors", never the Oracle method.
+
+**Readers:**
+- **NLA at L44 added**, labelled off-training, with its own positive control. Camila suggested it.
+- **SAEs and the skip lens dropped** (PI). WSB did evaluate an L42 SAE (its post; PI notes 04), but its source isn't in our stack.
+
+**Logging** (from the Stage A smoke):
+- per item and layer, the src/tgt cosine and the realised ‖Δh‖;
+- "no-op" (continuation unchanged) is its own category.
+
+**If Stage A comes in far below Jan's ~59% on clean-correct items, check for a setup difference before concluding.** Candidates:
+- render: trailing space stripped;
+- dtype;
+- library versions: our transformers 5.15.0 / torch 2.11 vs his 5.16.1 / 2.13;
+- how his hooks attach to Qwen3.6's layers;
+- whether the bank rows match his J rows.
+
+**G-parity:** per-item flip agreement and token-identical greedy continuations against Stage A. A margin correlation is impossible there, because Jan's code emits no margins. Margins are compared only within our engine, e.g. against the zero-edit floor.
+
+**Multi-token:**
+- Jan's CLI cannot run the MT bank with J rows, which are single-token only, and his PJ and template banks aren't hosted.
+- MT runs in Stage B with class-mean directions (cue-varied prompts per concept), and with Jan's template rows if he shares them.
+- First-token J rows are not used as phrase interventions.
+
+**Process** (the review's item 1 is not adopted):
+- Gates decide within a stage.
+- New code paths (Stages B and C) still stop after their smoke for the PI's look. They are unvalidated code, and 007's fast-scorer loss came from adopting a path without a full check.
+- Validated reference code (Stage A, Jan's) runs through without a separate go.
+- The §6 estimates are kept and are being replaced with measured timings (Stage A full: 4 items took 10 s).
+
+**Qualitative storage:**
+- Every stage commits seeded readout and continuation samples to `results/012_reader_concordance/qualitative/*.jsonl`. Stage A's are produced by `stageA_summary.py`.
+- Full readouts stay in `outputs/` and are mirrored.
+- A detailed Claude artifact with plots comes after all runs.
+
+**LLM judge** (content categories for Q2): optional. The OpenRouter key is in `/workspace/.env`; ask before spending.
