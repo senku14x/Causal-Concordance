@@ -1,0 +1,84 @@
+{
+ "design": "docs/design_specs/008_009_trackb_brewcode.md (Part 2)",
+ "seed": 20261006,
+ "files": {
+  "dev_depth2.json": "87f42be0e88211998a3645f50bb24677778c5d1b7084b291a9c0602c0cfb1a34",
+  "test_depth2.json": "5b9e95b26a2108d047389411aa29182eff68c985e2beece05c0478128fe020a9",
+  "dev_depth1.json": "522c2d682065dcf0b8f64a6a739f2dfc766f1356285dd07557499e4c456385b4",
+  "test_depth1.json": "3909b62c6db0096dcb70704eced299bb79147aca71ff68fe3674589fc951df45"
+ },
+ "counts": {
+  "dev_depth2": {
+   "tables": 300,
+   "candidate_pairs": 937,
+   "renders_per_task": 1237,
+   "rejected_table_draws": 2,
+   "partners_per_table": {
+    "1": 55,
+    "2": 57,
+    "3": 66,
+    "4": 67,
+    "5": 34,
+    "6": 15,
+    "7": 6
+   },
+   "n_tokens_min_max": [
+    237,
+    237
+   ]
+  },
+  "test_depth2": {
+   "tables": 150,
+   "candidate_pairs": 513,
+   "renders_per_task": 663,
+   "rejected_table_draws": 1,
+   "partners_per_table": {
+    "1": 15,
+    "2": 33,
+    "3": 31,
+    "4": 36,
+    "5": 17,
+    "6": 16,
+    "7": 2
+   },
+   "n_tokens_min_max": [
+    237,
+    237
+   ]
+  },
+  "dev_depth1": {
+   "tables": 300,
+   "candidate_pairs": 2134,
+   "renders_per_task": 2434,
+   "rejected_table_draws": 0,
+   "partners_per_table": {
+    "4": 2,
+    "5": 14,
+    "6": 51,
+    "7": 114,
+    "8": 119
+   },
+   "n_tokens_min_max": [
+    237,
+    237
+   ]
+  },
+  "test_depth1": {
+   "tables": 150,
+   "candidate_pairs": 1071,
+   "renders_per_task": 1221,
+   "rejected_table_draws": 0,
+   "partners_per_table": {
+    "4": 1,
+    "5": 4,
+    "6": 27,
+    "7": 59,
+    "8": 59
+   },
+   "n_tokens_min_max": [
+    237,
+    237
+   ]
+  }
+ }
+}

@@ -10,7 +10,8 @@ LABEL_MODULES = ["registry", "cells", "wsb", "partners", "margin", "engine", "ga
 READER_NAMES = {"readers", "jspace", "p005", "planted", "jlens", "peft", "vllm", "vllm_lens"}
 
 
-ENTRY_POINTS = [COMMON.parent / "004_span_assay" / "span_assay.py"]      # experiment scripts that must stay reader-free
+ENTRY_POINTS = [COMMON.parent / "004_span_assay" / "span_assay.py"] + \
+    [COMMON.parent / "009_brewcode" / f for f in ("bank.py", "c009.py", "gate.py", "derisk.py")]   # must stay reader-free
 MIXED_MODULES = {"leverage_profile", "labels"}                              # 001 / 003 modules (001 holds reader code)
 
 
