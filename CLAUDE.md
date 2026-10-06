@@ -181,14 +181,15 @@ without the PI's say-so.
 
 ## Where things stand (2026-10-06)
 
-**Branches.** A fresh clone lands on `main`, which is behind: **check out `007-jsubspace`** (`git checkout 007-jsubspace`).
-- **`007-jsubspace`** (off `005-amended-full-run`): experiment 007 (design, amendments A1-A3, all code, results, status
-  files, reports 22-25) **plus everything below**. It is the newest branch and the one to work on. `main` is its
-  ancestor, so the PI can fast-forward `main` to it; never push to `main` yourself.
+**Branches.** **`main` is current:** on 2026-10-06 the PI had `007-jsubspace` fast-forwarded into `main` ("merge with
+main"), so a fresh clone has everything through 007. Start new experiments on a new branch off `main`. Never push to
+`main` without the PI's explicit say-so.
+- `007-jsubspace` (off `005-amended-full-run`): experiment 007 (design, amendments A1-A3, all code, results, status files,
+  reports 22-25) plus everything below. Identical to `main` at the merge; kept for reference.
 - `005-amended-full-run` (off `spec-v2`): amendment 01, the 005 full run and follow-ups, 006 and 006b.
 - `006-reader-likelihood`: experiment 006, merged into `005-amended-full-run`; kept for reference.
 - `spec-v2` @ 9709712: SPEC_v2 + errata 01, checks C1-C3, the NLA loader, and 005 up to the dev pilot.
-- `main` @ 95ab0e5: the 000-004 scaffold. The PI merges into it.
+- `main`: up to date with `007-jsubspace` since the 2026-10-06 fast-forward (before that @ 95ab0e5, the 000-004 scaffold).
 - **Next experiments wait for the PI's direction.**
 
 **007, the J-subspace split** (`docs/reports/007_jsubspace.md`; design `docs/design_specs/007_jsubspace.md` with
@@ -247,7 +248,6 @@ why the NLA runs stopped and the other open issues: `docs/claude_reports/25_nla_
 - Their tracking does not follow 001's patch shares. The Oracle tracks z 2× more at `</think>` (patch share 0.01), which the model's output does not mirror.
 
 **Open PI decisions:**
-- merging `007-jsubspace` into `main` (a fast-forward; the PI does it);
 - the next direction (TA suggestions: whitened-space swaps, per-method qualitative analysis, NLA hallucination
   stripping and the reconstructor's FVE, the Oracle at L44 vs the NLA at L42). 005 is closed.
 
@@ -282,9 +282,8 @@ why the NLA runs stopped and the other open issues: `docs/claude_reports/25_nla_
 ## Fresh instance: restore everything
 
 `/workspace` is not persistent. To come back on a new instance:
-1. `git clone https://github.com/senku14x/Causal-Concordance` (private; `gh auth login` as senku14x), then
-   `git checkout 007-jsubspace` (the newest branch; it contains `005-amended-full-run`, `spec-v2` and `main`; `main` is
-   updated on the PI's say-so).
+1. `git clone https://github.com/senku14x/Causal-Concordance` (private; `gh auth login` as senku14x). `main` holds
+   everything through 007 (fast-forwarded from `007-jsubspace` on 2026-10-06).
 2. `bash scripts/000_setup/rebuild_env.sh`: venvs, pinned source clones, model and lens downloads, and hash checks.
 3. `python scripts/000_setup/restore_outputs.py`: downloads `outputs/` from the public HF dataset
    `senku21x/causal-concordance-outputs` and checks every file against its `MANIFEST.json` (sha256).

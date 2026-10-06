@@ -1,8 +1,7 @@
 # Come up to speed — Causal-Concordance (state of 2026-10-03; see the update box)
 
 > **Update 2026-10-06: read this first.**
-> 1. **Check out `007-jsubspace`.** A fresh clone lands on `main`, which stops at 004; `007-jsubspace` holds everything
->    through 007.
+> 1. **`main` holds everything through 007** (fast-forwarded from `007-jsubspace` on 2026-10-06).
 > 2. **Read the workspace paper first** (Gurnee et al. 2026; PDF `docs/papers/2607.15495.pdf`; text
 >    `docs/papers/text/2607.15495_html.md` or `.txt`; digest `docs/papers/text/2607.15495_NOTES_digest.md`), then the
 >    reading at the top of `CLAUDE.md`.

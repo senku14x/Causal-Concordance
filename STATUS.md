@@ -1,6 +1,6 @@
-# STATUS — 2026-10-05 (branch `007-jsubspace`: 007 run unattended and reported; earlier: `005-amended-full-run` holds 005, 006, 006b)
+# STATUS — 2026-10-06 (`main` = `007-jsubspace`: 007 run and reported; earlier work 005, 006, 006b included)
 
-*New session? **Check out `007-jsubspace`** (the newest branch; a fresh clone lands on the older `main`). **Then first read
+*New session? `main` holds everything through 007 (fast-forwarded from `007-jsubspace` on 2026-10-06). **First read
 the Anthropic workspace paper** (Gurnee et al. 2026, `docs/papers/2607.15495.pdf`; text in `docs/papers/text/`) and the
 relevant reading listed at the top of `CLAUDE.md`. That is the PI's rule. The newest results: `docs/reports/007_jsubspace.md`
 and report 25 (`docs/claude_reports/25_nla_stops_and_open_issues_2026-10-06.md`). Then `CLAUDE.md`, this file (newest first),
