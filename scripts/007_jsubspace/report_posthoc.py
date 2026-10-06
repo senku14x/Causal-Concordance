@@ -51,8 +51,23 @@ def main():
                   ". Confirmed (same category dev and test): " +
                   (", ".join(k for k, v in conf.items() if v["confirmed"]) or "none") + ". In this full family the Oracle's L40 H_J stays confirmed,"
                   " and Oracle L44's P4 (−) and P5 (+) are confirmed.", ""]
-    lines += ["**Stage 1b, `</think>`.** Stopped at its first gate: G-score1 (two scoring paths on 4 `</think>` activations) max 0.280",
-              "> 0.25, median 0.046. The scorer is 006's own; 006 ran this gate only at `:` (0.247). Not repaired (A2, rule 12).", ""]
+    pb1 = J("posthoc_A2_stage1b")
+    lines += ["**Stage 1b, `</think>`.** The first A2 rerun stopped at its first gate: G-score1 (two scoring paths on 4 `</think>`",
+              "activations) max 0.280 > 0.25, median 0.046 (006 ran this gate only at `:`, 0.247). Report 25 traced this to the NLA's",
+              "bf16 batch-layout noise. Amendment A3 (71f26c7) then replaced the max with median ≤ 0.05 and p99 ≤ 0.25 over 32",
+              "activations, for this rerun only."]
+    if pb1 and "nla_L42" in pb1.get("readers", {}):
+        R = pb1["readers"]["nla_L42"]
+        P = R["pieces"]
+        rr = sum(P[f"R{i}"]["z"]["mean"] for i in range(10)) / 10
+        lines += ["The A3 rerun passes every gate (G-score1 median 0.037, p99 0.199, max 0.255; G-repro max 0.052, median 0.0000,",
+                  "D_z 1.452 vs 006 1.452). NLA D_z at `</think>`: "
+                  f"whole {P['whole']['z']['mean']:.2f}, J {P['J']['z']['mean']:.2f}, rest of J {P['rest_J']['z']['mean']:.2f}, "
+                  f"random (mean) {rr:.2f}, mean-removed {P['MR']['z']['mean']:.2f}, J∘c {P['J_c']['z']['mean']:.2f}. Categories: " +
+                  ", ".join(f"{k} {R['categories'][k]}" for k in ("P1", "P2", "P3", "P4", "P5")) +
+                  f"; mapping H_J {R['model_mapping']['H_J']}, Raw {R['model_mapping']['Raw']}, Visible {R['model_mapping']['Visible']} (post hoc, dev only).", ""]
+    else:
+        lines += [""]
     if p3 and "nla_L42" in p3.get("readers", {}):
         P = p3["readers"]["nla_L42"]["pieces"]
         rs = p3["readers"]["nla_L42"].get("restatement", {}).get("J|test", {})

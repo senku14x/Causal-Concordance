@@ -131,7 +131,7 @@ of 12 colours. No swap flips the top answer (effects are small).
 
 ## 7. Decisions for the PI
 
-1. **Post hoc NLA run:** done (§8, amendment A2). Open item: Stage 1b's NLA stopped at G-score1 on `</think>` activations
+1. **Post hoc NLA run:** done (§8, amendments A2 and A3), including Stage 1b after the A3 gate change; formerly: Stage 1b's NLA stopped at G-score1 on `</think>` activations
    (0.280 > 0.25); rerunning it with the gate evaluated at `:` as 006 did would be a further post hoc choice (about 2.2 GPU-h).
 2. Whether the Oracle-specific J dependence and the reader-model dissociation warrant a bounded follow-up (e.g. the
    Oracle at L56/L60, where 006's G-pc passes raw, or a second family with a clean intermediate).
@@ -151,8 +151,12 @@ Oracle–NLA per-pair agreement (r): vs Oracle LL40: whole 0.24, J 0.31, rest of
 
 **Brew test.** NLA D_z: whole 1.70, J 1.06, rest of J 0.78, mean-removed 1.88. Categories: P1 uninformative, P2 uninformative, P3 unresolved, P4 unresolved, P5 +. Confirmed (same category dev and test): none. In this full family the Oracle's L40 H_J stays confirmed, and Oracle L44's P4 (−) and P5 (+) are confirmed.
 
-**Stage 1b, `</think>`.** Stopped at its first gate: G-score1 (two scoring paths on 4 `</think>` activations) max 0.280
-> 0.25, median 0.046. The scorer is 006's own; 006 ran this gate only at `:` (0.247). Not repaired (A2, rule 12).
+**Stage 1b, `</think>`.** The first A2 rerun stopped at its first gate: G-score1 (two scoring paths on 4 `</think>`
+activations) max 0.280 > 0.25, median 0.046 (006 ran this gate only at `:`, 0.247). Report 25 traced this to the NLA's
+bf16 batch-layout noise. Amendment A3 (71f26c7) then replaced the max with median ≤ 0.05 and p99 ≤ 0.25 over 32
+activations, for this rerun only.
+The A3 rerun passes every gate (G-score1 median 0.037, p99 0.199, max 0.255; G-repro max 0.052, median 0.0000,
+D_z 1.452 vs 006 1.452). NLA D_z at `</think>`: whole 1.45, J 0.76, rest of J 0.21, random (mean) 0.40, mean-removed 3.58, J∘c 2.74. Categories: P1 unresolved, P2 uninformative, P3 uninformative, P4 +, P5 +; mapping H_J unresolved, Raw contradicted, Visible contradicted (post hoc, dev only).
 
 **Multihop (test split, bridge D).** NLA: whole 14.7, J 14.5, rest of J 6.1, random (mean) 10.6; J readouts naming the bridge 0.89. (The first launch crashed on a coding error before any gate; fixed and relaunched, disclosed.)
 

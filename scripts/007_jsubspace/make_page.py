@@ -379,6 +379,9 @@ def build():
   <div class="scroll"><table class="tbl dec">
     <thead><tr><th>reader · split</th><th>P1</th><th>P2</th><th>P3</th><th>P4</th><th>P5</th><th>models</th></tr></thead>
     <tbody>{"".join(b1rows)}</tbody></table></div>
+  {('<p class="small">The NLA row at <code>&lt;/think&gt;</code> comes from the post hoc rerun under amendment A3, which '
+     'replaced a max-based scorer check that trips on the NLA\'s rounding noise with a median and 99th-percentile rule. '
+     'Scorer and statistics are unchanged.</p>') if (pb1 and nla(pb1)) else ''}
   <h3>Multihop (test split, bridge D in nats)</h3>
   <div class="scroll"><table class="tbl">
     <thead><tr><th>reader</th><th>whole</th><th>J</th><th>rest of J</th><th>random (mean)</th><th>J readouts naming the bridge</th></tr></thead>

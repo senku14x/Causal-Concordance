@@ -427,7 +427,7 @@ def main():
     ap.add_argument("--posthoc", action="store_true", help="A2: merge the Oracle run with the NLA post hoc run")
     a = ap.parse_args()
     if a.what == "stage1" and a.posthoc:
-        rid = {"stage1a": ["r2", "r2_nla_posthoc"], "brew_test": ["t1", "t1_nla_posthoc"], "stage1b": ["r1", "r1_nla_posthoc"]}[a.stage]
+        rid = {"stage1a": ["r2", "r2_nla_posthoc"], "brew_test": ["t1", "t1_nla_posthoc"], "stage1b": ["r1", "r1_nla_posthoc_A3"]}[a.stage]
         pieces = C.TEST_PIECES if a.stage == "brew_test" else C.PIECE_ORDER
         rp = (C.OUT / "brew_test" / "roles.json") if a.stage == "brew_test" else None
         res = stage1(a.stage, rid, pieces=pieces, roles_path=rp, tag_out=f"posthoc_A2_{a.stage}")
