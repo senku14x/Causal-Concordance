@@ -261,3 +261,36 @@ Readers start only when **all** of the following hold on dev:
 4. 009 output-facing check, captures, patch profile: about 30 min.
 5. Readers, only if §2.6 passes: Oracle about 30 min; the NLA L42 and L44 about 2 h. The NLA run needs a check-in if it
    exceeds 2 GPU-h.
+
+---
+
+## §E. Execution notes for 008 (added before any 008 swap; Σ was captured first)
+
+- **Σ capture done** (`scripts/008_trackb/sigma.py`, `results/008_trackb/analysis/sigma.json`).
+  - Corpus: 100 UltraChat conversations, 50,199 tokens after dropping 4 per sequence.
+  - Ledoit–Wolf λ = 0.0035–0.0043 across L40–48; minimum eigenvalue about 0.02; condition number about 1e4. **G-Σ
+    passes.**
+- **Centring.**
+  - Lens-coordinate arms: raw uses μ = 0, as in the paper; the whitened arm uses μ = the corpus mean, per the design.
+  - Added diagnostic arm `A_rawc`: raw metric centred on the corpus mean. It separates the effect of centring from the
+    effect of whitening.
+  - Class-mean arms (raw and whitened) centre on the dev grand mean, leaving the pair's table out (μ_dev). The class-mean
+    directions are defined relative to that mean, so this makes the coordinates read as "how much of class z vs z′".
+- **Condition list per pair.**
+  - **emit3** (43 conditions):
+    - lens swaps, raw α1 and α2;
+    - lens swaps, whitened α1 and α2;
+    - lens swap, raw-centred α1;
+    - answer-atom positive control;
+    - off-path negative control, raw and whitened;
+    - both-spellings lens swap (when " Z" is one token);
+    - class-mean full, raw and whitened;
+    - J and non-J parts × 2 lenses × {raw natural, whitened natural, raw-norm matched, whitened-norm matched};
+    - complementary clamps × 2 lenses;
+    - 4 random direction pairs, norm-matched.
+  - **colon** (22 conditions): the same without α2, the controls, the whitened-norm arms and the clamps.
+  - **Plus:** G-repro (whole-cell patch at `:` L42), and G0 on the first two pairs.
+- **Atoms.** Unit-normalised folded J-lens atoms (`jspace.atoms`, gain = 1 + final-norm weight), J_NP and J_CB.
+  - The coordinate swap with unit atoms is the paper's "subtract the projection on v_s, add an equal-magnitude
+    projection on v_t", corrected for non-orthogonality by the pseudo-inverse.
+- **Smoke first.** 2 pairs (G0, G1, G-clamp, G-RA, G-repro, timing), then all 82 pairs.
