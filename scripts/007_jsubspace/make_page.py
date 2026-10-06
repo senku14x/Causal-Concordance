@@ -253,6 +253,10 @@ def build():
     b1rows = decision_rows(b1, "dev · </think>", lab)
     if pb1 and nla(pb1):
         b1rows += decision_rows({"readers": {"nla_L42": pb1["readers"]["nla_L42"]}}, "dev · </think>", lab, post=True)
+    elif (C.RES / "status" / "posthoc_A2_stage1b.md").exists():
+        b1rows.append('<tr class="post"><th scope="row">NLA L42<span class="split">dev · &lt;/think&gt;</span></th>'
+                      '<td colspan="6" class="small">post hoc rerun stopped at its first gate (G-score1 0.280 &gt; 0.25 on these '
+                      'activations; 006 checked this gate only at <code>:</code>); no NLA result here</td></tr>')
     # multihop
     def mh_row(res, tag, post=False):
         if not res or tag not in res["readers"]:
@@ -306,7 +310,7 @@ def build():
   <dl class="facts">
     <div><dt>Design</dt><dd>pre-registered v2 + amendments A1, A2</dd></div>
     <div><dt>Material</dt><dd>WorkspaceBench brew (48 dev, 49 test tables); multihop; relational; chain</dd></div>
-    <div><dt>GPU</dt><dd>≈ 2.2 h pre-registered run + post hoc NLA</dd></div>
+    <div><dt>GPU</dt><dd>≈ 2.2 h pre-registered run + 4.8 h post hoc NLA rerun</dd></div>
     <div><dt>Branch</dt><dd><a href="{REPO}docs/reports/007_jsubspace.md">007-jsubspace</a></dd></div>
   </dl>
 </header>

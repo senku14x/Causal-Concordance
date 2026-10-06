@@ -131,8 +131,32 @@ of 12 colours. No swap flips the top answer (effects are small).
 
 ## 7. Decisions for the PI
 
-1. **Post hoc NLA run** on 006's exact 24-row scorer (labelled post hoc), so the NLA L42 arm of the primary family and
-   its replication exist. It has to use the 24-row path (the 2-row scorer's numerics are what failed G-repro): about
-   3 GPU-h for dev `:` + the brew test, about 5.5 h including `</think>` and multihop.
-2. Whether the dissociation warrants a bounded follow-up (e.g. the Oracle at L56/L60, where 006's G-pc passes raw, or a
-   second family with a clean intermediate).
+1. **Post hoc NLA run:** done (§8, amendment A2). Open item: Stage 1b's NLA stopped at G-score1 on `</think>` activations
+   (0.280 > 0.25); rerunning it with the gate evaluated at `:` as 006 did would be a further post hoc choice (about 2.2 GPU-h).
+2. Whether the Oracle-specific J dependence and the reader-model dissociation warrant a bounded follow-up (e.g. the
+   Oracle at L56/L60, where 006's G-pc passes raw, or a second family with a clean intermediate).
+
+## 8. Post hoc NLA rerun (amendment A2)
+
+*Label: post hoc.* After the NLA failed G-repro on the 2-row scorer, the PI asked for a proper rerun ("rerun
+properly", 2026-10-06). Amendment A2 (6b0be23) fixed the plan before the rerun: the NLA L42 only, on 006's exact
+24-row scorer (`acts_per_batch` 2, original log-prob), on the saved inputs, with every gate unchanged. The
+pre-registered record above (Oracle only) stands as the primary result.
+
+**Stage 1a, dev `:`.** All gates pass on 006's path, including the one that failed before: G-repro max 0.152,
+median 0.0000, D_z 1.862 vs 006 1.862. NLA D_z by piece: whole 1.86, J 0.95, rest of J 0.63, PCA-4 -0.02, random (mean) 0.26, rest of random 0.80, mean-removed 2.22, J∘c 1.60.
+Categories (post hoc full family, Holm/TOST over 15): P1 uninformative (+0.96), P2 uninformative (+0.69), P3 unresolved (+0.17), P4 unresolved (+0.36), P5 unresolved (+0.52); mapping H_J unresolved, Raw unresolved, Visible unresolved.
+
+Oracle–NLA per-pair agreement (r): vs Oracle LL40: whole 0.24, J 0.31, rest of J 0.08, mean-removed 0.44; vs Oracle LL44: whole 0.30, J 0.37, rest of J 0.24, mean-removed 0.33.
+
+**Brew test.** NLA D_z: whole 1.70, J 1.06, rest of J 0.78, mean-removed 1.88. Categories: P1 uninformative, P2 uninformative, P3 unresolved, P4 unresolved, P5 +. Confirmed (same category dev and test): none. In this full family the Oracle's L40 H_J stays confirmed, and Oracle L44's P4 (−) and P5 (+) are confirmed.
+
+**Stage 1b, `</think>`.** Stopped at its first gate: G-score1 (two scoring paths on 4 `</think>` activations) max 0.280
+> 0.25, median 0.046. The scorer is 006's own; 006 ran this gate only at `:` (0.247). Not repaired (A2, rule 12).
+
+**Multihop (test split, bridge D).** NLA: whole 14.7, J 14.5, rest of J 6.1, random (mean) 10.6; J readouts naming the bridge 0.89. (The first launch crashed on a coding error before any gate; fixed and relaunched, disclosed.)
+
+**Reading (post hoc).** The NLA's z signal is spread over the activation: J keeps about half of it and removing J
+costs about as much as removing a random slice. The Oracle's strong J dependence is not shared by the NLA, so J
+dependence is a property of the reader. The reader-model dissociation of §1 therefore concerns the Oracle; the NLA
+neither privileges J nor shows the Oracle's pattern.
