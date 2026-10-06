@@ -314,3 +314,13 @@ Readers start only when **all** of the following hold on dev:
     colour equals either member's start colour. For start, the same rule applies with the roles reversed.
   - The all-pairs D is reported alongside (`D_all_pairs`).
   - The outfacing pass rule uses the collision-free D.
+- **Gate decode quality check** (18:05 UTC, g1 partial: 2,380 render rows, 23,800 samples; no judge).
+  - 22,701 correct, 84 wrong codes (74 the code of another colour, 10 the start colour's code), and 1,015 (4.3%)
+    unparseable.
+  - The unparseable samples are almost all digit run-ons caused by the gate's EOS suppression: after a correct " 87" the
+    model emits "8787…" or "616161…". The strict parser (exactly two digits) rejects these, mostly under the final-code
+    task (925 vs 90).
+  - Effect: the gate is conservative (no false pass) and loses some valid renders. Since a pair must pass both tasks, the
+    selection applies equally to the two arms of the task contrast.
+  - **Kept as is for this run** (decided before any outcome).
+  - Future runs on code answers should gate without EOS suppression, or score the first two digits.
