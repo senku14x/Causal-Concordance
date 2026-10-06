@@ -40,7 +40,7 @@ results: `docs/reports/008_trackb.md`, `docs/reports/009_brewcode_derisk.md` and
   - Vectors come from the Oracle Lens's own reconstructor (AR); the official loader is not public, so we wrote one.
   - Validation v1 failed the pre-set acceptance rule (FVE ≥ 0.10 at L44; published 0.22): raw FVE is negative under
     every convention.
-  - Diagnostics (`results/011_olens_swaps/ar_diagnostics.json`): retrieval@1 0.35-0.37 (L44) and 0.42-0.45 (L48) among
+  - Diagnostics (`results/011_olens_swaps/ar_diagnostics_d1.json`): retrieval@1 0.35-0.37 (L44) and 0.42-0.45 (L48) among
     768 spans, ZCA cosine ≈ 0.2, norms 1.6-3× too large. The loader is partly working; a loader detail or a metric
     mismatch is open. The swap script refuses to run until validation passes.
 

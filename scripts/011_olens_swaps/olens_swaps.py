@@ -159,7 +159,8 @@ def main():
     ap.add_argument("--limit-pairs", type=int, default=0)
     a = ap.parse_args()
     assert not torch.backends.cuda.matmul.allow_tf32
-    val = json.loads((AV.RES / "ar_validation.json").read_text())
+    val = json.loads((AV.RES / f"ar_validation_{a.vec_run}.json").read_text())
+    AV.WH_PREFIX[0] = val["whitener"]
     assert val.get("accepted"), "AR validation did not pass; no Oracle-space swaps"
     d = AV.OUT / a.run_id
     (d / "pairs").mkdir(parents=True, exist_ok=True)

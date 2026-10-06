@@ -57,9 +57,9 @@
 
 ## Execution status (2026-10-06, 20:00 UTC; factual record, no rule changed)
 
-- **Validation v1 failed the acceptance rule** (`results/011_olens_swaps/ar_validation.json`). Raw FVE is negative
+- **Validation v1 failed the acceptance rule** (`results/011_olens_swaps/ar_validation_v1.json`). Raw FVE is negative
   under all 36 convention cells (best at L44: −2.72, block L, pre-norm, ZCA). No vectors were written and no swap ran.
-- **Diagnostics run d1** (`--diag-only`, `results/011_olens_swaps/ar_diagnostics.json`; scale-free, added after v1
+- **Diagnostics run d1** (`--diag-only`, `results/011_olens_swaps/ar_diagnostics_d1.json`; scale-free, added after v1
   failed; exploratory):
   - retrieval@1 among the 768 spans: 0.35-0.37 at L44 and 0.42-0.45 at L48 under the ZCA and raw spaces (chance
     0.0013); the PCA space is at chance;
@@ -71,3 +71,24 @@
     example, retrieval within small batches, or FVE in another space). Not yet distinguished.
 - **Next:** find the published metric's exact definition and the head's output convention; then, if the acceptance
   rule must change, write the change here as an amendment before any vector is used.
+
+## Amendment 1 (2026-10-06, written before run v2; the v1 and d1 outcomes above had been seen)
+
+- **Bug fix: the wrong whitener.** The AR was trained against `whitening_iolens_pooled_L{L}` (2.09M samples, chat +
+  pretraining; `meta.json` `config.whitener_prefix`). v1 and d1 loaded `whitening_L{L}` (lmsys-chat-1m, 28.7M samples).
+  Fixed. The two have similar moments at L44 (trace/d 0.766 vs 0.779, |μ| 74.6 vs 77.6), so this alone cannot explain
+  v1, and raw-space FVE does not depend on it.
+- **More read conventions.** The AR's config says `head_layer_norm: true`, but `heads.pt` holds only the Linear's
+  weight and bias, so any head-side norm is parameter-free. The candidates now add three head-side normalisations:
+  parameter-free LayerNorm of the pre-norm and post-norm reads (`ln_pre`, `ln_post`), and RMS normalisation of the
+  pre-norm read without the gain (`rms_pre`).
+- **Target unchanged:** the activation preceding the span (WSB post, Oracle Lens appendix: "predict the activation
+  preceding it"). The HF README says "the span that produced it", so the span's last token is reported as a
+  sensitivity. It is never a candidate.
+- **Acceptance unchanged** (FVE ≥ 0.10 at L44 for the chosen convention; margin ≥ 0.05 over every other read/space
+  convention at the chosen layer index), with one clarification: a rival read whose head outputs agree with the
+  winner's at median per-span cosine ≥ 0.99 (L44) counts as the same convention, because its vectors would be
+  interchangeable. It is therefore not a rival in the same space. Different spaces are always rivals.
+- **Records:** results are now per run (`ar_validation_<run>.json`, `ar_diagnostics_<run>.json`); v1's and d1's files
+  were renamed with contents unchanged. The swap script reads the validation file of the vector run it uses.
+- **If v2 fails too:** no swaps; the diagnostics are reported.

@@ -11,7 +11,7 @@ until [ -f outputs/009_brewcode/QUEUE_DONE ]; do sleep 20; done
 sleep 20
 echo "[$(date -u +%H:%M:%S)] AR vectors" >> $LOG
 $PY scripts/011_olens_swaps/ar_vectors.py --run-id v1 >> outputs/011_olens_swaps/ar_v1.out 2>&1
-ACC=$($PY -c "import json;print(json.load(open('results/011_olens_swaps/ar_validation.json'))['accepted'])")
+ACC=$($PY -c "import json;print(json.load(open('results/011_olens_swaps/ar_validation_v1.json'))['accepted'])")
 echo "[$(date -u +%H:%M:%S)] AR accepted: $ACC" >> $LOG
 [ "$ACC" = "True" ] || { echo "no accepted convention; stop" >> $LOG; exit 1; }
 echo "[$(date -u +%H:%M:%S)] swaps" >> $LOG

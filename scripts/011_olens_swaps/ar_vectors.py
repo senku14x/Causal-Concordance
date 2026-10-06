@@ -32,6 +32,9 @@ OUT = PROJECT / "outputs" / "011_olens_swaps"
 RES = PROJECT / "results" / "011_olens_swaps"
 AR_REPO, AR_REV = "agu18dec/olens_and_ar", "c95215d5d2f6250f20c305ae55c6e4d7569f92dc"
 WH_REPO = "agu18dec/local-workspace"
+# the AR was trained against this whitener (meta.json config.whitener_prefix); v1/d1 used "whitening" (lmsys) by mistake
+WH_PREFIX = ["whitening_iolens_pooled"]
+READS = ("post_norm", "pre_norm", "ln_pre", "ln_post", "rms_pre")
 LAYERS = (40, 44, 48)
 COLOURS = ("black", "blue", "brown", "gold", "gray", "green", "orange", "pink", "purple", "red", "teal", "white")
 SEED = 20261006
@@ -62,7 +65,7 @@ class Logger:
 def whitener(L):
     from huggingface_hub import hf_hub_download
     from safetensors import safe_open
-    p = hf_hub_download(WH_REPO, f"ckpts/ar/ptag/whiteners/whitening_L{L}.safetensors", repo_type="dataset")
+    p = hf_hub_download(WH_REPO, f"ckpts/ar/ptag/whiteners/{WH_PREFIX[0]}_L{L}.safetensors", repo_type="dataset")
     with safe_open(p, "pt") as f:
         cov, mu, md = f.get_tensor("cov").double(), f.get_tensor("mu").double(), f.metadata()
     ev, U = torch.linalg.eigh(cov)
@@ -93,7 +96,7 @@ def stock_targets(model, texts, log):
     rng = np.random.default_rng(SEED)
     blocks = R.blocks(model)
     want = sorted({l for L in LAYERS for l in (L - 1, L)})
-    spans, targets = [], {l: [] for l in want}
+    spans, targets, last_t = [], {l: [] for l in want}, {l: [] for l in want}
     for prompt, resp in texts:
         full = prompt + resp
         store = {}
@@ -111,8 +114,10 @@ def stock_targets(model, texts, log):
             spans.append(full[p:p + n])
             for l in want:
                 targets[l].append(store[l][p - 1])
+                last_t[l].append(store[l][p + n - 1])
     log(f"{len(spans)} validation spans")
-    return spans, {l: torch.stack(v).double() for l, v in targets.items()}
+    return spans, {l: torch.stack(v).double() for l, v in targets.items()}, \
+        {l: torch.stack(v).double() for l, v in last_t.items()}
 
 
 def attach_ar(model, log):
@@ -142,10 +147,13 @@ def attach_ar(model, log):
 
 @torch.no_grad()
 def ar_forward(pt, head, heads, spans, L, bs=32):
-    """Returns (post-norm read, pre-norm read) head outputs [n, 5120] float64."""
+    """Head outputs [n, 5120] float64 for each read of the final hidden state at the span's last token: post_norm (the
+    backbone's final RMSNorm output), pre_norm (its input), and three head-side normalisations of a read, since the AR's
+    config says head_layer_norm=True but heads.pt holds no norm parameters: ln_pre / ln_post (parameter-free LayerNorm)
+    and rms_pre (RMS normalisation without the gain)."""
     tags = heads["tag_ids"][heads["layers"].index(L)].tolist()
     dev = head.weight.device
-    outs_post, outs_pre = [], []
+    outs = {r: [] for r in READS}
     norm = pt.base_model.model.norm
     for j in range(0, len(spans), bs):
         ch = [tags + list(s) for s in spans[j:j + bs]]
@@ -163,9 +171,13 @@ def ar_forward(pt, head, heads, spans, L, bs=32):
         post = hs[r, last].float()
         pre = keep["pre"][r, last].float()
         with torch.autocast("cuda", enabled=False):
-            outs_post.append(head(post).double().cpu())
-            outs_pre.append(head(pre).double().cpu())
-    return torch.cat(outs_post), torch.cat(outs_pre)
+            ins = {"post_norm": post, "pre_norm": pre,
+                   "ln_pre": torch.nn.functional.layer_norm(pre, (pre.shape[-1],)),
+                   "ln_post": torch.nn.functional.layer_norm(post, (post.shape[-1],)),
+                   "rms_pre": pre * torch.rsqrt(pre.pow(2).mean(-1, keepdim=True) + 1e-6)}
+            for k, v in ins.items():
+                outs[k].append(head(v).double().cpu())
+    return {k: torch.cat(v) for k, v in outs.items()}
 
 
 def fve(yhat, y):
@@ -189,32 +201,42 @@ def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--run-id", default="v1")
     ap.add_argument("--diag-only", action="store_true")
+    ap.add_argument("--whitener", default=WH_PREFIX[0])
     a = ap.parse_args()
     DIAG_ONLY[0] = a.diag_only
+    WH_PREFIX[0] = a.whitener
     out = OUT / a.run_id
     out.mkdir(parents=True, exist_ok=True)
     log = Logger(out / "log.txt")
     tok = R.make_tokenizer()
     WH = {L: whitener(L) for L in LAYERS}
-    log("whiteners", {L: {"eig_min": w["eig_min"], "eig_max": w["eig_max"], **w["meta"]} for L, w in WH.items()})
+    log("whiteners", WH_PREFIX[0], {L: {"eig_min": w["eig_min"], "eig_max": w["eig_max"], **w["meta"]} for L, w in WH.items()})
     model = R.load_model()
     texts = gen_texts(model, tok, log)
-    spans, tg = stock_targets(model, texts, log)
+    spans, tg, tg_last = stock_targets(model, texts, log)
     pt, head, heads = attach_ar(model, log)
     val = {}
-    DIAG = {}
+    DIAG, DIAG_LAST = {}, {}
     for L in LAYERS:
-        post, pre = ar_forward(pt, head, heads, spans, L)
+        reads = ar_forward(pt, head, heads, spans, L)
+        if L == 44:
+            reads44 = reads
         w = WH[L]
         for lname, l in (("block_L", L), ("block_L-1", L - 1)):
-            h = tg[l]
-            ys = {"zca": (h - w["mu"]) @ w["W"].T, "pca": (h - w["mu"]) @ w["P"].T, "raw": h}
-            for read, yhat in (("post_norm", post), ("pre_norm", pre)):
-                for space, y in ys.items():
-                    val[f"L{L}|{lname}|{read}|{space}"] = fve(yhat, y)
-                    DIAG[f"L{L}|{lname}|{read}|{space}"] = diag(yhat, y)
-    (RES / "ar_diagnostics.json").parent.mkdir(parents=True, exist_ok=True)
-    (RES / "ar_diagnostics.json").write_text(json.dumps(DIAG, indent=1))
+            for tgt, store in (("preceding", tg), ("span_last", tg_last)):
+                h = store[l]
+                ys = {"zca": (h - w["mu"]) @ w["W"].T, "pca": (h - w["mu"]) @ w["P"].T, "raw": h}
+                for read, yhat in reads.items():
+                    for space, y in ys.items():
+                        k = f"L{L}|{lname}|{read}|{space}"
+                        if tgt == "preceding":                  # the WSB post's definition: the primary target
+                            val[k] = fve(yhat, y)
+                            DIAG[k] = diag(yhat, y)
+                        else:                                   # sensitivity only; never a candidate convention
+                            DIAG_LAST[k] = diag(yhat, y)
+    RES.mkdir(parents=True, exist_ok=True)
+    (RES / f"ar_diagnostics_{a.run_id}.json").write_text(json.dumps(
+        {"whitener": WH_PREFIX[0], "target_preceding": DIAG, "target_span_last": DIAG_LAST}, indent=1))
     log("diagnostics (top by ret@1)", json.dumps({k: {kk: round(vv, 3) for kk, vv in v.items()} for k, v in
                                                   sorted(DIAG.items(), key=lambda kv: -kv[1]["ret1"])[:6]}))
     if DIAG_ONLY[0]:
@@ -227,16 +249,22 @@ def main():
     conv = f"{b_layer}|{b_read}|{b_space}"
     # the read/space convention must be clear (>= 0.05 above every other read/space at the best layer index); the layer
     # index (block L vs L-1, adjacent and therefore similar) is taken as the argmax and its margin is reported
-    rivals = [v for k, v in at44.items() if k.split("|")[1] == b_layer and k != f"L44|{conv}"]
+    # amendment 1 (011 note): a rival read whose head outputs agree with the winner's (median per-span cosine >= 0.99 at
+    # L44) is the same convention for vector building, so it is not a rival; spaces always are
+    agree = {r: float(torch.nn.functional.cosine_similarity(reads44[b_read], reads44[r], dim=1).median()) for r in READS}
+    same = {r for r, c in agree.items() if c >= 0.99}
+    rivals = [v for k, v in at44.items() if k.split("|")[1] == b_layer and k != f"L44|{conv}"
+              and not (k.split("|")[2] in same and k.split("|")[3] == b_space)]
     ok = val[f"L44|{conv}"] >= 0.10 and val[f"L44|{conv}"] - max(rivals) >= 0.05
     other_layer = "block_L-1" if b_layer == "block_L" else "block_L"
-    rep = {"run_id": a.run_id, "n_spans": len(spans), "fve": val, "best": best, "convention": conv,
+    rep = {"run_id": a.run_id, "whitener": WH_PREFIX[0], "n_spans": len(spans), "fve": val, "best": best, "convention": conv,
            "fve_L44_best": val[f"L44|{conv}"], "fve_L44_second": second, "accepted": bool(ok),
+           "read_agreement_L44": agree, "same_convention_reads": sorted(same), "margin_L44": val[f"L44|{conv}"] - max(rivals),
            "layer_index_margin_L44": val[f"L44|{conv}"] - val[f"L44|{other_layer}|{b_read}|{b_space}"],
            "published_val_fve": {"L40": 0.224, "L44": 0.2202, "L48": 0.2277}, "manifest": R.manifest_block()}
     log("validation", json.dumps({k: round(v, 3) for k, v in sorted(val.items(), key=lambda kv: -kv[1])[:8]}), "accepted", ok)
     RES.mkdir(parents=True, exist_ok=True)
-    (RES / "ar_validation.json").write_text(json.dumps(rep, indent=1))
+    (RES / f"ar_validation_{a.run_id}.json").write_text(json.dumps(rep, indent=1))
     if not ok:
         log("STOP: no convention meets the acceptance rule; no vectors written")
         return
@@ -244,8 +272,7 @@ def main():
     for L in LAYERS:
         for form, fmt in (("space", " {}"), ("nospace", "{}")):
             sp = [tok.encode(fmt.format(c), add_special_tokens=False) for c in COLOURS]
-            post, pre = ar_forward(pt, head, heads, sp, L)
-            yhat = post if b_read == "post_norm" else pre
+            yhat = ar_forward(pt, head, heads, sp, L)[b_read]
             w = WH[L]
             if b_space == "zca":
                 white, raw = yhat, yhat @ w["Wi"].T + w["mu"]
@@ -264,7 +291,7 @@ def main():
                 vecs[(L, "space")]["zca_white"].double(), vecs[(L, "nospace")]["zca_white"].double()).mean())}
     torch.save({"colours": COLOURS, "layers": LAYERS, "convention": conv, "vecs": vecs,
                 "note": "zca_white = W (h - mu) with the AR's pooled whitener; raw = mu + W^-1 zca_white"}, out / "ar_colour_vectors.pt")
-    (RES / "ar_validation.json").write_text(json.dumps(rep, indent=1))
+    (RES / f"ar_validation_{a.run_id}.json").write_text(json.dumps(rep, indent=1))
     log("colour vectors written", json.dumps(rep.get("colour_geometry"), default=float))
 
 
