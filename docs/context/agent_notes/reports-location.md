@@ -12,3 +12,10 @@ Save every report and note I write, plus a doubts / open-questions file, in `/wo
 
 **Why:** the user asked for it on 2026-10-04: "that way it will be easier for me to navigate".
 **How to apply:** after writing any report or notes, copy it to `/workspace/claude_reports/` and update the README. Keep a doubts file listing what I could not verify, what I assumed, and questions about intent. /workspace is not persistent, so anything important should also go to git or an off-box mirror. Related: [[activation-readers-project]].
+
+**Update 2026-10-06 (the PI found the folder messy):**
+- Copies of canonical repo documents (experiment reports in `docs/reports/`, designs in `docs/design_specs/`, spec files
+  in `docs/context/`) do **not** go into claude_reports. The README links them instead; 13 byte-identical copies were
+  removed then.
+- claude_reports holds the agents' own notes, session reports, analysis notes and proposals.
+- Superseded drafts go to `archive/`.

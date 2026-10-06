@@ -1,49 +1,97 @@
-# claude_reports — index
+# claude_reports — the agents' own notes and reports
 
-Reports and notes from the Claude Code session of 2026-10-04 (Causal-Concordance). Items 13–15 and the report page come from the 005 GPU smoke and the dev-only overnight pilot; everything else is CPU work or reading.
+This folder holds what the Claude sessions wrote **for the PI**: reading notes, session reports, analysis notes and
+proposals. The project's canonical documents live elsewhere and are not copied here:
+- experiment reports: `docs/reports/`;
+- designs: `docs/design_specs/`;
+- spec and context: `docs/context/`;
+- reviews: `docs/reviews/`.
 
-**Full-run results (5 Oct): https://claude.ai/artifact/5EGz2DxcAXXQs3wTtz1Lnu** (`16_005_full_run.md`). **Pilot (night of 4 Oct): the report page https://claude.ai/artifact/P35xhVkdzKjsdGhogp7PQY** (version 4, with steps 8–11) covers what was run, why,
-what I expected and what came out, every number from the result files, with charts and raw readouts. Then `15_005_amendment_01_DRAFT.md`
-(the decisions waiting for you).
+Cleaned 2026-10-06:
+- 13 byte-identical copies of canonical documents were removed (table at the end);
+- superseded drafts were moved to `archive/`;
+- file numbers were kept, so existing links still work.
 
-| File | What it is | Also in the repo? |
+## Start here
+
+| File | What it is |
+|---|---|
+| `26_up_to_speed_report_2026-10-06.md` | **Current state of the project** (2026-10-06): instance check, what each experiment showed, weak links, every inconsistency found, next steps |
+| `28_next_direction_proposal_2026-10-06.md` | The proposal behind tonight's work. Superseded in part by the PI's changes in `docs/design_specs/008_009_trackb_brewcode.md` |
+| `docs/reports/008_trackb.md` (not here) | **Newest result:** 007's model-side test done the paper's way; no J privilege |
+| `29_reader_agreement_010_2026-10-06.md` | **Newest analysis:** readers agree weakly; mid-layer readers track what the J lens reads, not the model's next-token output |
+
+## The paper and the reading
+
+| File | What it is |
+|---|---|
+| `03_workspace_paper_notes_merged.md` | The agent's notes on the workspace (J-lens) paper merged with the PI's; corrections in §14, disagreements in §15 |
+| `04_user_workspace_paper_notes_verbatim.md` | The PI's own notes on the paper, verbatim |
+| `04b_user_workspace_paper_notes_combined_2026-10-05.md` | The PI's combined notes (paper + follow-up literature), 2026-10-05 |
+
+Reading notes on the readers' papers: `docs/context/reading_notes.md` and `reading_notes_v2.md`.
+
+## Session reports (newest first)
+
+| File | Session | What it is |
 |---|---|---|
-| `01_SPEC_v2_review_2026-10-04.md` | **Start here.** (0) setup results; (a) project summary; (b) 20 contradictions between SPEC_v2 and code, reports and the CW pilot; (c) proposed [v2] edits (J-space for 005, Fig. 8/16 privilege test, Biderman K+2, others); (d) the NLA checkpoint plan; (e) the decisions only you can make | `docs/context/SPEC_v2_review_2026-10-04.md` on branch `spec-v2` |
-| `02_reading_notes_v2_NLA_Viswanath_AO_WSB.md` | Paper notes: NLA paper, Viswanath 2026, Karvonen et al. AO, WSB brew/multihop/chain READMEs, HF checkpoint metadata (Oracle hash verified; nla-L42 vs nla-rl are different runs) | `docs/context/reading_notes_v2.md` on `spec-v2` |
-| `03_workspace_paper_notes_merged.md` | My notes on the Anthropic workspace / J-lens paper, merged with yours (§13 follow-up literature, §14 corrections, §15 disagreements) | no (local: `/workspace/notes/`) |
-| `04_user_workspace_paper_notes_verbatim.md` | Your workspace-paper notes, verbatim | no |
-| `04b_user_workspace_paper_notes_combined_2026-10-05.md` | Your combined notes (paper + supplied notes + follow-up literature), copied unchanged from `/workspace/anthropic_workspace_combined_notes.md` on 2026-10-05 | this file |
-| `05_doubts_and_open_questions.md` | Where my own report could be wrong, what I could not verify or access, and questions about intent | no |
-| `06_next_steps_proposal.md` | *(Superseded by 09/10: 005 is now one run, per your note.)* What I'd do next: 005 stage 1 (planted-concept sensitivity curves, all readers + model), the order of work, budget, and what can run in parallel | no |
-| `07_checks_C1_C2_C3_results.md` | **Results of the three no-GPU checks** (pre-registered): C1 chain re-score: CW-7 stands under WSB's rule at a third of its size (Oracle L56 11/60 vs null 0.04; J-lens equal; NLA 1/60); C2 ":" L42 off-pair mass → "influence" (thin); C3 removal energy: multihop ratio 2.4 (B14 stands), Brew 1.7 (matched) | `docs/reports/checks_2026-10-04_no_gpu.md` |
-| `08_SPEC_v2_errata_01_ACCEPTED.md` | **Errata V2-E1–E9, accepted by you 2026-10-04** (E1/E7 reworded, E9 = CW-7 rewrite); SPEC_v2's header points to it | `docs/context/SPEC_v2_errata_01.md` |
-| `09_design_005_planted_concepts_DRAFT.md` | **Design 005 v2 + your priors' columns + my pre-registered priors (§8), smoke authorised; §16 overnight dev-only pilot (Q1–Q9), §16.2 run order, §16.3 step 7b (re-entry clamp, layer sweep, R-lens), §16.4 step 8 (arrival at the report position, Oracle late layers, power), §16.5 step 9 (robustness to the J-space construction), §16.6 step 10 (where the clamp starts to act; is the report measure concept-specific), §16.7 step 11 (output-direction clamp control; reader likelihoods vs the model).** Earlier summary: read kinds fixed (direct = P17, carried at the open quote = P11), strict P11a/b, 45 test concepts, random-clamp null, G5 split gate. Original summary: plant concept vectors split into J / non-J parts; the model's report and behaviour vs every reader's detection; gates (incl. the Qwen report gate), contrasts P11a/P11b/P17 with priors blank for you; budget 6–8 h | `docs/design_specs/005_planted_concepts.md` |
-| `10_report_back_2026-10-04.md` | **Report back on your feedback note:** what I did, numbers with n, where the findings contradict the note, new doubts, decisions needed | no |
-| `11_PI_review_disposition.md` | **How I handled your review of the checks + 005 v1:** every factual claim checked (all hold; the common-word screen excludes only time/line/path), four nuances, one addition (Oracle 8/60 at the no-leverage L42 cell), what changed | `docs/reviews/2026-10-04_pi_review_checks_005/` |
-| `12_what_was_done_and_why.md` | **Plain-language account of today:** why each check, fix and design step was done, and what it bought us; smoke results summarised at the end | no |
-| `13_005_smoke_note.md` | **005 smoke results:** G1 report gate failed at both bands (Qwen rarely *says* planted concepts; the paper's rank measure responds strongly); onset at the grid floor; earth's split leaky; clamp not specific; readers barely name concepts at low doses; fidelity/determinism exact; throughput | `docs/reports/005_smoke_note.md` |
-| `14_005_pilot_note.md` | **Overnight dev-only pilot + steps 7b, 8, 9 and 10, answers Q1–Q15** (report measure, prefill, band, onset, readers, clamp, re-entry clamp, layer sweep, arrival at the report position, Oracle late layers, power); step 9 (both headline findings hold in 5/5 J-space constructions); step 10 (the clamp becomes specific from L50/L52; the log-prob report measure is specific to the planted concept); step 11 (blocking the plain output direction does nearly what the J clamp does; under a likelihood measure the readers are not less sensitive than the model) | `docs/reports/005_pilot_note.md` |
-| `15_005_amendment_01_DRAFT.md` | **The decisions waiting for you** (A1–A18), each tied to what the pilot found; A1/A3/A8 updated with step 10, A6/A8 with step 11, A18 new (optional) | `docs/design_specs/005_amendment_01_DRAFT.md` |
-| `16_005_full_run.md` | **The 005 full run on the 45 test concepts (amendment 01 adopted; branch `005-amended-full-run`)**: gates, every pre-registered contrast with its verdict, Brier for registered and updated priors. Page: https://claude.ai/artifact/5EGz2DxcAXXQs3wTtz1Lnu | `docs/reports/005_full_run.md` (branch `005-amended-full-run`) |
-| `17_005_full_run_spec.md` | The full-run spec, pre-registered before the run | `docs/design_specs/005_full_run.md` (branch `005-amended-full-run`) |
-| `18_005_followups.md` | **005 follow-ups (exploratory):** the "report" measure is lexical priming (A2b); own atom in J part 1/45; logit-lens direction ≈ J atom (Q-c); reader overlap (A1); 005b Q-a/Q-b not run, with reasons | `docs/reports/005_followups.md` (branch `005-amended-full-run`) |
-| `19_005_followups_spec.md` | Follow-ups pre-registration, incl. the approval provenance | `docs/design_specs/005_followups.md` |
-| `20_006_reader_likelihood.md` | 006 / 006b: reader likelihoods at the brew `:` cell and the model's own output there (row added 2026-10-05; the file predates this index update) | `docs/reports/006_reader_likelihood.md` |
-| `21_up_to_speed_report_2026-10-05.md` | **Fresh-instance comprehension report (2026-10-05), for the PI to vet:** what was read and what wasn't; instance state; project, readers and conventions; paper mapping (three "J" objects); 001–006b with corrections; Cathryn's CW-12 at her latest commit; issues found in the bootstrap (Oracle L42 off-contract, stale CW-12 numbers, read offsets, gain convention, NLArl not merged, split tension); assessment, doubts, raw readouts, quick checks | this file |
-| `22_007_geometry_cpu_2026-10-05.md` | **007 CPU geometry (exploratory, not pre-registered):** our J_NP rebuild = Cathryn's basis exactly; gain barely changes J but flips the logit-lens control; layer-matched bases needed; on Brew, J holds 0.23–0.31 of the member–partner difference (random 0.20; 3–4 PCA dims hold as much) but amplifies the reader-visible difference ~1.7×; z linearly decodable from every piece; mean-removed J readout surfaces z (qualitative); implications for the 007 design; mistakes | this file |
-| `23_007_jsubspace_spec_v2.md` | **007 design spec v2 (2026-10-05): the PI's approval with decisions, additions and fixes folded in; committed 2820e53; A1 5cdafd9.** Stages 0 → 1a → 2 (+2b) → 1b → brew test → 3 → 4a → 4b → 5; 15-contrast primary family (P1–P5); role specificity incl. off-trajectory D; colour prior; generic-mean centring; Stage 2b §3.3 privilege test; brew test replication (AMENDMENT_02 approval recorded); template lens; unattended gating; ≈ 15–16 GPU-h projected against a 15 h cap (Stage 5 dropped first, then 4b); four open points (§1) | `docs/design_specs/007_jsubspace.md` |
-| `24_007_report_2026-10-05.md` | **007 report (unattended run, 2026-10-05):** reader side confirmed on brew test — the Oracle's z tracking at `:` L40 is carried by the J subspace (H_J supported dev + test; Raw and Visible contradicted), also at `</think>` where the model barely uses the cell; model side no privilege for J (Stage 2 tracks Δ-share at L42; 2b non-J > J at matched magnitude) → a reader-model dissociation; NLA disabled by a stop gate (my fast-scorer error); multihop confounded, relational stopped after 4a, chain J-outside at L56; ~2.2 GPU-h | `docs/reports/007_jsubspace.md` |
-| `25_nla_stops_and_open_issues_2026-10-06.md` | **Why the NLA runs keep stopping, and the other open 007 issues:** the NLA carries ~2× the Oracle's bf16 batch-layout noise (deterministic per layout; tail up to 0.29-0.41 nats) so the fixed 0.25-nat max gates (calibrated on the Oracle in 006) trip by chance; D is unaffected (1.8621 vs 1.8621); options for the PI; table of the other issues (positive-control strictness, reader-specific J dependence, runner-up confound, template lens, G-002, multihop, relational, process mistakes) | this file |
-| `26_up_to_speed_report_2026-10-06.md` | **New-session up-to-speed report (2026-10-06), for the PI:** instance state; the project and where it stands; weak links in 007 (2b is a single-cell, single-layer adaptation of the paper's all-position swap; H_J rests cleanly on P3/P5); inconsistencies (multihop restatement is 0.15–0.28, not about half; the Oracle Lens is WSB's A.9.2 oracle lens, not Karvonen; nla-rl ships an AR at step 600; held-out data spent; stale lines); what the reader literature adds; three next steps with GPU costs; open questions | this file |
-| `27_qualitative_readouts_2026-10-06.md` | **What the readers actually say (exploratory, CPU, saved 007 readouts; word match):** outside J the readers keep the task's two-step frame but lose the colours; in J they name z for the right render but no more often than the answer, mostly as a result; invented colours ("yellow") from both readers; a lead that mean removal surfaces z as a theme; multihop restatement shares reproduce 15/53, 13/54, 8/53. Code and tables: `results/007_jsubspace/posthoc_qualitative/` | this file |
-| `28_next_direction_proposal_2026-10-06.md` | **Proposal (draft, for the PI): what to do next and why.** Track A (main line): a fresh counterfactual two-hop family whose bridge is never an answer candidate, to test whether readers track use rather than presence with the output-facing route closed; three reader-free go/no-go checks first (~1–1.5 GPU-h). Track B (parallel): 007's model-side §3.3 test redone the paper's way (multi-cell, layer band, raw and whitened norms; ~35–40 GPU-min). Outcome tables, risks, order of work, decisions needed | this file |
-| `29_reader_agreement_010_2026-10-06.md` | **010 (exploratory, CPU): reader agreement on 006/007 and Oracle L44 vs NLA L42 on multihop.** NLA–Oracle per-pair agreement at brew `:` is weak (r 0.24–0.30, kappa ≈ 0.05–0.10); the model's own output does not explain it; mid-layer readers track what the J lens reads (Oracle L40 vs J_CB 0.63; J piece 0.80) far more than the model's next-token output (0.30 / 0.21); only the late Oracle (L56/L60) follows the model; no reader follows single-cell leverage; multihop: NLA keeps more bridge signal outside J. Refines 006b's reading | this file |
+| `26_up_to_speed_report_2026-10-06.md` | 2026-10-06 | Up-to-speed report; inconsistencies (multihop restatement 0.15–0.28, Oracle Lens provenance, nla-rl AR) |
+| `21_up_to_speed_report_2026-10-05.md` | 2026-10-05 | Comprehension report on a fresh instance (001–006b, Cathryn's CW-12, problems found) |
+| `12_what_was_done_and_why.md` | 2026-10-04 | Plain-language account of the day |
+| `10_report_back_2026-10-04.md` | 2026-10-04 | Report back on the PI's feedback note |
+| `05_doubts_and_open_questions.md` | 2026-10-04 | What could not be verified; questions about intent |
 
-**Other locations**
-- The spec itself: `/workspace/Causal-Concordance/docs/context/SPEC_v2.md` (branch `spec-v2`).
-- Raw sources I fetched:
-  - LessWrong posts: `/workspace/papers/lw/`;
-  - Viswanath post: `/workspace/sources/web/`;
-  - WSB results-figure crops: `/workspace/papers/lw/img/`.
+## Analysis notes by experiment
 
-`/workspace` is **not persistent**. Everything except 03–06 and the fetched sources is also pushed to GitHub on `spec-v2`.
+| File | Experiment | What it is |
+|---|---|---|
+| `29_reader_agreement_010_2026-10-06.md` | 010 (CPU, exploratory) | Reader agreement on 006/007; Oracle L44 vs NLA L42 on multihop |
+| `27_qualitative_readouts_2026-10-06.md` | 007 (CPU, exploratory) | What the readers actually say: word-match analysis of saved readouts |
+| `25_nla_stops_and_open_issues_2026-10-06.md` | 007 | Why the NLA runs kept stopping (bf16 batch-layout noise); every open issue |
+| `22_007_geometry_cpu_2026-10-05.md` | 007 (CPU, exploratory) | J-subspace geometry: bases, overlaps, what the split does to brew activations |
+
+**Experiment reports themselves:** `docs/reports/`:
+- 001–004;
+- 005 (smoke, pilot, full run, follow-ups);
+- 006;
+- 007 (`007_jsubspace.md`);
+- 008 (`008_trackb.md`);
+- the 10-04 checks.
+
+## Other folders
+
+- `advisor/JBASIS_CHECKS_2026-10-05.md`: the advisor's J-basis checks (input to 007).
+- `archive/`: superseded drafts, kept for the record.
+
+  | File | Superseded by |
+  |---|---|
+  | `06_next_steps_proposal.md` | the 005 design (one run) |
+  | `09_design_005_planted_concepts_DRAFT.md` | `docs/design_specs/005_planted_concepts.md` (2 lines differ) |
+  | `15_005_amendment_01_DRAFT.md` | `docs/design_specs/005_amendment_01.md` (adopted version) |
+  | `20_006_reader_likelihood.md` | `docs/reports/006_reader_likelihood.md` (the full report, incl. 006b) |
+
+## Removed copies (identical to the canonical file; still in git history)
+
+| Old file | Canonical file |
+|---|---|
+| `01_SPEC_v2_review_2026-10-04.md` | `docs/context/SPEC_v2_review_2026-10-04.md` |
+| `02_reading_notes_v2_NLA_Viswanath_AO_WSB.md` | `docs/context/reading_notes_v2.md` |
+| `07_checks_C1_C2_C3_results.md` | `docs/reports/checks_2026-10-04_no_gpu.md` |
+| `08_SPEC_v2_errata_01_ACCEPTED.md` | `docs/context/SPEC_v2_errata_01.md` |
+| `11_PI_review_disposition.md` | `docs/reviews/2026-10-04_pi_review_checks_005/README.md` |
+| `13_005_smoke_note.md` | `docs/reports/005_smoke_note.md` |
+| `14_005_pilot_note.md` | `docs/reports/005_pilot_note.md` |
+| `16_005_full_run.md` | `docs/reports/005_full_run.md` |
+| `17_005_full_run_spec.md` | `docs/design_specs/005_full_run.md` |
+| `18_005_followups.md` | `docs/reports/005_followups.md` |
+| `19_005_followups_spec.md` | `docs/design_specs/005_followups.md` |
+| `23_007_jsubspace_spec_v2.md` | `docs/design_specs/007_jsubspace.md` |
+| `24_007_report_2026-10-05.md` | `docs/reports/007_jsubspace.md` |
+
+## Conventions for new files
+
+- Numbered filenames continue from 30, with a date suffix.
+- Add a row to the right section above.
+- **Don't copy canonical documents here; link them.** Copies drift.
+- The scratch copy outside the repo is `/workspace/claude_reports/`. It also holds the PI's
+  `NEW_SESSION_PROMPT_2026-10-06.md`.
