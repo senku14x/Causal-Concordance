@@ -1030,3 +1030,43 @@ piece dependence follows observed patch leverage. The same pattern is evidence a
 
 These supersede the conflicting text above: the §3.6 and §4.4 informativeness rule, §2.2 P5 rationale, §3.3 reading rule
 wording, §6.4–6.5, §7 ordering and §12.3.
+
+## 22. Amendment A2 — post hoc NLA rerun on 006's exact scorer (adopted 2026-10-06T02:05Z, before the rerun)
+
+**Trigger.** In Stage 1a the NLA failed G-repro (max |ΔLL| 0.413 > 0.25) on the 2-row fast scorer of execution note §20.
+By rule 12 and A1 it was disabled for every later stage. The PI was asked whether to run it post hoc on 006's exact
+24-row scorer and answered on 2026-10-06: "rerun properly".
+
+**What was known when A2 was written.** Every Oracle result of 007, and the NLA's Stage 1a gate values. No NLA piece
+outcome had ever been computed (the gate failure stopped the NLA before any piece was scored).
+
+**What runs.**
+- **Reader:** the NLA L42 only (`readers.NLArl`), on the stages it missed:
+  - Stage 1a (`:`, dev);
+  - the brew test;
+  - Stage 1b (`</think>`, dev);
+  - Stage 3 (multihop).
+  Stage 4b never ran (4a stopped) and Stage 5 is Oracle-only by design.
+- **Scorer:** exactly 006's. `NLArl.score_seq` with 24 rows per activation (one per spelling), `acts_per_batch = 2`, and the
+  original `readers.seq_logprob_from_hidden` (no 2-row layout, no vectorised log-prob, no throughput probe).
+- **Inputs:** the saved piece files of the original runs (Stage 0 pieces plus the saved u_gen for the dev stages; the
+  brew test pieces; the multihop pieces and positive-control activations). Prompt-only rows are reader-independent and
+  are not rerun. No subject-model forward is needed.
+
+**Gates (unchanged thresholds).**
+- G-score1: `score_seq` vs `score_next`, median ≤ 0.05 and max ≤ 0.25.
+- G-score2: ≤ 1.0.
+- G-repro, for the dev stages against 006's NLA likelihoods: median ≤ 0.05, max ≤ 0.25, D_z within 0.1.
+- G-inject: write rel ∈ [0.99, 1.01], cos ≥ 0.99, the no-activation row writes nothing, and the 0.5× / 2× scale check.
+- G-mem.
+- A failure stops that stage and is reported, with no repair (rule 12). G-fastpath does not apply: this *is* the reference
+  path.
+
+**Labelling and analysis.**
+- All NLA results are **post hoc**. The pre-registered family as run (the Oracle, with the NLA's 5 contrasts as p = 1)
+  stands unchanged and stays the primary record.
+- A post hoc re-analysis computes the full 15-contrast family with the NLA's actual p-values (Holm and TOST over 15),
+  the three-model mapping for the NLA, NLA dev-vs-test confirmation and Oracle–NLA per-pair agreement (§11.1), all
+  labelled post hoc.
+- **A1 shared-path rule:** the failure was specific to the 2-row scorer path. This rerun uses a different path, by the
+  PI's instruction; `disabled_readers.json` is kept as the record of the original failure.
