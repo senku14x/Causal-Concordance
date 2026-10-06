@@ -158,7 +158,9 @@ def stage3(run_id):
     st = json.loads((d / "state.json").read_text())
     res["gates"] = {k: st.get(k) for k in ("G_cap", "G_cw", "pieces_meta")}
     res["gates"]["readers"] = st.get("readers")
-    C.dump(C.RES / "analysis" / "stage3.json", res)
+    out_name = "stage3.json" if run_id == "m1" else f"posthoc_A2_stage3.json"   # never overwrite the pre-registered run
+    res["label"] = "pre-registered run" if run_id == "m1" else "post hoc (A2): NLA on 006's exact scorer"
+    C.dump(C.RES / "analysis" / out_name, res)
     for tag, R in res["readers"].items():
         print(tag, {nm: (round(v["bridge|test"]["mean"], 2), v["bridge|test"]["ci"]) for nm, v in R["pieces"].items()
                     if nm in ("whole", "J", "rest_J", "PCA", "MR", "R0")})

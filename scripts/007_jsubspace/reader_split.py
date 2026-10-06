@@ -197,7 +197,8 @@ def floor_ok(a, b, mx=0.25, md=0.05):
 
 # ------------------------------------------------------------------------------------------------ the stage
 class Stage:
-    def __init__(self, stage, run_id):
+    def __init__(self, stage, run_id, nla_posthoc=False):
+        self.posthoc = nla_posthoc                                         # A2: NLA only, 006's exact 24-row scorer
         self.stage = stage
         self.cname = {"stage1a": "colon", "stage1b": "think", "brew_test": "colon"}[stage]
         self.cell = C.CELLS[self.cname]
@@ -359,6 +360,9 @@ class Stage:
         P = self.pieces[L]
         acts = lambda nm, idx=None: [torch.from_numpy(P[nm][i]) for i in (range(P[nm].shape[0]) if idx is None else idx)]
         st = self.state.setdefault("readers", {}).setdefault(tag, {})
+        if self.posthoc and "acts_per_batch" not in st:                    # A2: 006's settings, no probe
+            st["acts_per_batch"] = 2
+            st["scorer"] = "readers.NLArl.score_seq, 24 rows per activation, acts_per_batch 2, original seq_logprob (006)"
         # throughput probe (engineering only; before any outcome; execution note §20)
         if "acts_per_batch" not in st:
             t0 = time.time()
@@ -389,11 +393,15 @@ class Stage:
             b = score_next(acts("whole", range(4)), base, [seqs[i][0] for i in single])
             mx, md, ok = floor_ok(a.numpy(), b.cpu().numpy())
             # G-fastpath: the 2-row scorer vs the original 24-row readers.score_seq, every spelling (bf16 floor)
-            fa = score(acts("whole", range(4)), base, seqs, False, apb).numpy()
-            fo = self.score_orig(acts("whole", range(4)), base, seqs).numpy()
-            fmx, fmd, fok = floor_ok(fa, fo)
-            st["G_fastpath"] = {"max": fmx, "median": fmd, "pass": fok}
-            self.log(f"G-fastpath {tag}: max {fmx:.4f} median {fmd:.4f}")
+            if self.posthoc:
+                fok = True
+                st["G_fastpath"] = {"applicable": False, "note": "A2: the scorer is the original 24-row path"}
+            else:
+                fa = score(acts("whole", range(4)), base, seqs, False, apb).numpy()
+                fo = self.score_orig(acts("whole", range(4)), base, seqs).numpy()
+                fmx, fmd, fok = floor_ok(fa, fo)
+                st["G_fastpath"] = {"max": fmx, "median": fmd, "pass": fok}
+                self.log(f"G-fastpath {tag}: max {fmx:.4f} median {fmd:.4f}")
             ok = ok and fok
             st["G_score1"] = {"max": mx, "median": md, "pass": ok, "fastpath_pass": fok}
             self.gpu_time(f"{tag}_gates", t0)
@@ -513,7 +521,72 @@ class Stage:
         return d
 
     # ---------------------------------------------------------------- run
+    def run_nla_posthoc(self):
+        """A2: the NLA L42 on 006's exact scorer. No subject forward (pieces, u_gen and prompt-only already exist)."""
+        t_start = time.time()
+        assert RD.seq_logprob_from_hidden is _ORIG_SEQ_LP, "A2 requires the original log-prob function"
+        if not self.test:
+            self.add_generic(torch.load(C.OUT / "stage1a" / "u_gen.pt"))
+        t0 = time.time()
+        try:
+            nla = RD.NLArl()
+        except RuntimeError as e:
+            self.state.setdefault("gate_failures", []).append({"gate": "G-mem", "detail": str(e)})
+            self.save()
+            self.log("STOP GATE (A2): G-mem", e)
+            return
+        self.gpu_time("nla_load", t0)
+        self.last_check = lambda: getattr(nla, "last_check", float("nan"))
+        writes = []
+        try:
+            def score(hs, b, s, check, apb):
+                out = nla.score_seq(hs, b, s, acts_per_batch=2, check=check)
+                if nla.last_write is not None:
+                    writes.append(dict(nla.last_write))
+                return out
+
+            def score_next(hs, b, ci):
+                return nla.score_next(hs, b, ci)[0]
+
+            def noact_direct(b, s):
+                pad_ = nla.tok.pad_token_id if nla.tok.pad_token_id is not None else nla.tok.eos_token_id
+                rows, mask, gather = RD.cont_batch(list(nla.ids) + list(b), s, pad_)
+                nla._v["v"] = None
+                with torch.no_grad():
+                    Hn = nla.model.get_base_model().model(input_ids=torch.tensor(rows, device=nla.model.device),
+                                                          attention_mask=torch.tensor(mask, device=nla.model.device),
+                                                          use_cache=False).last_hidden_state
+                if not hasattr(nla, "_W32"):
+                    nla._W32 = nla.model.get_output_embeddings().weight.detach().float()
+                return _ORIG_SEQ_LP(Hn, nla._W32, gather).cpu().numpy()[None]
+
+            def inject_check(arrs):
+                zero = sum(int((A.float().norm(dim=1) <= 1e-6).sum()) for A in arrs)
+                live = [w for w in writes if w.get("rows", 0) > 0]
+                ok = bool(live) and zero == 0 and min(w["rel_min"] for w in live) >= 0.99 and \
+                    max(w["rel_max"] for w in live) <= 1.01 and min(w["cos_min"] for w in live) >= 0.99
+                return {"writes_checked": len(live), "zero_rows": zero, "pass": ok}
+
+            def read_batch(hs, k, seed):
+                out = []
+                for j in range(0, len(hs), 32):
+                    out += nla.read_batch(hs[j:j + 32], k=k, seed=seed)
+                return out
+            self.reader("nla", 42, score, score_next, nla.tok, read_batch, noact_direct, inject_check,
+                        lambda: nla.last_write is not None and nla.last_write.get("rows", -1) == 0)
+        except GateFailure as e:
+            self.state.setdefault("gate_failures", []).append({"reader": e.reader, "gate": e.gate, "detail": e.detail})
+            self.save()
+            self.log("STOP GATE (A2):", e)
+        finally:
+            nla.close()
+        self.state["wall_minutes"] = (time.time() - t_start) / 60
+        self.save()
+        self.log(f"{self.stage} NLA post hoc done ({self.state['wall_minutes']:.1f} min)")
+
     def run(self):
+        if self.posthoc:
+            return self.run_nla_posthoc()
         t_start = time.time()
         RD.seq_logprob_from_hidden = seq_logprob_fast
         tok = R.make_tokenizer()
@@ -655,12 +728,14 @@ def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("stage", choices=["stage1a", "stage1b", "brew_test"])
     ap.add_argument("--run-id", default="r1")
+    ap.add_argument("--nla-posthoc", action="store_true", help="A2: the NLA only, on 006's exact 24-row scorer")
     a = ap.parse_args()
     d = C.OUT / a.stage / a.run_id
     d.mkdir(parents=True, exist_ok=True)
     (d / "manifest.json").write_text(json.dumps({"stage": a.stage, "run_id": a.run_id, "manifest": R.manifest_block(),
-                                                 "design": "docs/design_specs/007_jsubspace.md (v2 + A1)"}, indent=1))
-    Stage(a.stage, a.run_id).run()
+                                                 "nla_posthoc": a.nla_posthoc,
+                                                 "design": "docs/design_specs/007_jsubspace.md (v2 + A1 + A2)"}, indent=1))
+    Stage(a.stage, a.run_id, nla_posthoc=a.nla_posthoc).run()
 
 
 if __name__ == "__main__":

@@ -87,7 +87,9 @@ def cue_words(prompt, exclude):
 
 
 class Stage3:
-    def __init__(self, run_id):
+    def __init__(self, run_id, nla_posthoc=False, source_run="m1"):
+        self.posthoc = nla_posthoc                                         # A2: NLA only, 006's exact 24-row scorer
+        self.source = C.OUT / "stage3" / source_run
         self.dir = C.OUT / "stage3" / run_id
         (self.dir / "ll").mkdir(parents=True, exist_ok=True)
         self.log = C.Logger(self.dir / "log.txt")
@@ -359,7 +361,70 @@ class Stage3:
                                             ensure_ascii=False) + "\n")
             self.log(f"{tag} restatement samples written")
 
+    def run_nla_posthoc(self):
+        """A2: the NLA L42 on 006's exact scorer, on Stage 3's saved captures and positive-control activations."""
+        import shutil
+        t_start = time.time()
+        assert RD.seq_logprob_from_hidden is RS._ORIG_SEQ_LP
+        for f in ("captures.npz", "positive_acts.pt"):
+            shutil.copy(self.source / f, self.dir / f)
+        src_state = json.loads((self.source / "state.json").read_text())
+        self.state["G_cap"], self.state["G_cw"] = src_state["G_cap"], src_state.get("G_cw")
+        X = np.load(self.dir / "captures.npz")["X"]
+        Pr = self.pieces(X)                                                # rebuilds self.Vall (PCA basis for the PC pieces)
+        P, dev_ = {}, {}
+        for L in C.LAYERS:                                                 # score Stage 3's saved pieces (the Oracle's inputs)
+            ref = np.load(self.source / f"pieces_L{L}.npz")
+            P[L] = {k: ref[k] for k in ref.files}
+            dev_[L] = max(float(np.abs(Pr[L][k] - ref[k]).max() / max(np.abs(ref[k]).max(), 1e-12)) for k in ref.files)
+        self.state["recompute_vs_stage3_pieces_max_rel"] = dev_
+        self.log("pieces: Stage 3's saved pieces are scored; recompute deviation (max rel)", dev_)
+        pc = torch.load(self.dir / "positive_acts.pt")
+        self.save()
+        try:
+            nla = RD.NLArl()
+        except RuntimeError as e:
+            self.log("STOP GATE (A2): G-mem", e)
+            return
+        self.last_check = lambda: getattr(nla, "last_check", float("nan"))
+        writes = []
+        try:
+            def score(hs, b, s, check, apb):
+                out = nla.score_seq(hs, b, s, acts_per_batch=2, check=check)
+                if nla.last_write is not None:
+                    writes.append(dict(nla.last_write))
+                return out
+
+            def score_next(hs, b, ci):
+                return nla.score_next(hs, b, ci)[0]
+
+            def inject_check(arrs):
+                zero = sum(int((A.float().norm(dim=1) <= 1e-6).sum()) for A in arrs)
+                live = [w for w in writes if w.get("rows", 0) > 0]
+                ok = bool(live) and zero == 0 and min(w["rel_min"] for w in live) >= 0.99 and \
+                    max(w["rel_max"] for w in live) <= 1.01 and min(w["cos_min"] for w in live) >= 0.99
+                return {"writes_checked": len(live), "zero_rows": zero, "pass": ok}
+
+            def read_batch(hs, k, seed):
+                out = []
+                for j in range(0, len(hs), 32):
+                    out += nla.read_batch(hs[j:j + 32], k=k, seed=seed)
+                return out
+            # score_orig = score: this is the reference path, so the fast-path parity is trivially exact (A2)
+            self.reader("nla", 42, P[42], score, score, score_next, nla.tok, RS.PREFIX0["nla"], read_batch, inject_check, pc)
+        except RS.GateFailure as e:
+            self.state.setdefault("gate_failures", []).append({"reader": e.reader, "gate": e.gate, "detail": e.detail})
+            self.save()
+            self.log("STOP GATE (A2):", e)
+        finally:
+            nla.close()
+        self.state["wall_minutes"] = (time.time() - t_start) / 60
+        self.save()
+        self.log(f"stage 3 NLA post hoc done ({self.state['wall_minutes']:.1f} min)")
+
     def run(self):
+        if self.posthoc:
+            return self.run_nla_posthoc()
         t_start = time.time()
         RD.seq_logprob_from_hidden = RS.seq_logprob_fast
         tok = R.make_tokenizer()
@@ -474,12 +539,13 @@ class Stage3:
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--run-id", default="m1")
+    ap.add_argument("--nla-posthoc", action="store_true", help="A2: the NLA only, on 006's exact 24-row scorer")
     a = ap.parse_args()
     d = C.OUT / "stage3" / a.run_id
     d.mkdir(parents=True, exist_ok=True)
-    (d / "manifest.json").write_text(json.dumps({"run_id": a.run_id, "manifest": R.manifest_block(),
-                                                 "design": "docs/design_specs/007_jsubspace.md (v2 + A1)"}, indent=1))
-    Stage3(a.run_id).run()
+    (d / "manifest.json").write_text(json.dumps({"run_id": a.run_id, "manifest": R.manifest_block(), "nla_posthoc": a.nla_posthoc,
+                                                 "design": "docs/design_specs/007_jsubspace.md (v2 + A1 + A2)"}, indent=1))
+    Stage3(a.run_id, nla_posthoc=a.nla_posthoc).run()
 
 
 if __name__ == "__main__":

@@ -151,8 +151,16 @@ def pc_pass(st):
 
 # ------------------------------------------------------------------------------------------------ stage 1 analysis
 def load_blocks(stage, run_id, pieces):
+    if isinstance(run_id, (list, tuple)):                                # A2: merge the Oracle run and the NLA post hoc run
+        out = {}
+        for rid in run_id:
+            for tag, blk in load_blocks(stage, rid, pieces).items():
+                out.setdefault(tag, blk)
+        return out
     d = C.OUT / stage / run_id / "ll"
     cname = {"stage1a": "colon", "stage1b": "think", "brew_test": "colon"}[stage]
+    if not (d / "owner.npy").exists():
+        return {}
     owner = np.load(d / "owner.npy")
     out = {}
     for rd, L in C.READERS:
@@ -172,8 +180,10 @@ def load_blocks(stage, run_id, pieces):
             z = np.load(fp)
             blk["positive"] = {k: dstat.colour_ll(z[k], owner) for k in z.files if k != "owner"}
         if stage == "stage1b":                                             # the positive control is cell-independent except
-            f1a = C.OUT / "stage1a" / "r2" / "ll" / f"{tag}_colon_positive.npz"   # for PCA (re-scored in 1b): take the rest
-            if f1a.exists():                                               # from Stage 1a at the same reader-layer
+            f1a = next((C.OUT / "stage1a" / r_ / "ll" / f"{tag}_colon_positive.npz" for r_ in ("r2", "r2_nla_posthoc")
+                        if (C.OUT / "stage1a" / r_ / "ll" / f"{tag}_colon_positive.npz").exists()),
+                       C.OUT / "stage1a" / "r2" / "ll" / f"{tag}_colon_positive.npz")
+            if f1a.exists():                                               # for PCA (re-scored in 1b): take the rest from 1a
                 z = np.load(f1a)
                 for k in z.files:
                     if k != "owner" and k not in blk["positive"]:
@@ -381,12 +391,12 @@ def agreement(blocks, pairs, tabs):
     return out
 
 
-def confirm():
+def confirm(dev_f="stage1a", dev3_f="stage1a_draws0-2", test_f="brew_test", out_f="brew_test_confirmation"):
     """Design §7.5: a dev category is confirmed only if the brew test gives the same category for the same contrast and
     reader-layer (categories +, −, ≈). A1: dev with random draws 0-2 only is shown alongside the 10-draw dev result."""
-    dev = json.loads((C.RES / "analysis" / "stage1a.json").read_text())
-    dev3 = json.loads((C.RES / "analysis" / "stage1a_draws0-2.json").read_text())
-    tst = json.loads((C.RES / "analysis" / "brew_test.json").read_text())
+    dev = json.loads((C.RES / "analysis" / f"{dev_f}.json").read_text())
+    dev3 = json.loads((C.RES / "analysis" / f"{dev3_f}.json").read_text())
+    tst = json.loads((C.RES / "analysis" / f"{test_f}.json").read_text())
     out = {}
     for tag in dev["readers"]:
         if tag not in tst["readers"]:
@@ -403,7 +413,7 @@ def confirm():
                     "test_mapping": tst["readers"][tag]["model_mapping"],
                     "model_confirmed": {m: dev["readers"][tag]["model_mapping"][m] == "supported" ==
                                         tst["readers"][tag]["model_mapping"][m] for m in MODELS}}
-    C.dump(C.RES / "analysis" / "brew_test_confirmation.json", out)
+    C.dump(C.RES / "analysis" / f"{out_f}.json", out)
     for tag, v in out.items():
         print("CONFIRMATION", tag, {k: (r["dev"], r["test"], r["confirmed"]) for k, r in v["contrasts"].items()}, v["model_confirmed"])
     return out
@@ -414,7 +424,22 @@ def main():
     ap.add_argument("what", choices=["stage1"])
     ap.add_argument("--stage", default="stage1a")
     ap.add_argument("--run-id", default="r1")
+    ap.add_argument("--posthoc", action="store_true", help="A2: merge the Oracle run with the NLA post hoc run")
     a = ap.parse_args()
+    if a.what == "stage1" and a.posthoc:
+        rid = {"stage1a": ["r2", "r2_nla_posthoc"], "brew_test": ["t1", "t1_nla_posthoc"], "stage1b": ["r1", "r1_nla_posthoc"]}[a.stage]
+        pieces = C.TEST_PIECES if a.stage == "brew_test" else C.PIECE_ORDER
+        rp = (C.OUT / "brew_test" / "roles.json") if a.stage == "brew_test" else None
+        res = stage1(a.stage, rid, pieces=pieces, roles_path=rp, tag_out=f"posthoc_A2_{a.stage}")
+        if a.stage == "stage1a":
+            stage1(a.stage, rid, rand_draws=["R0", "R1", "R2"], tag_out="posthoc_A2_stage1a_draws0-2")
+        if a.stage == "brew_test":
+            stage1(a.stage, rid, pieces=pieces, roles_path=rp, tag_out="posthoc_A2_brew_test_gated", gated_only=True)
+            if (C.RES / "analysis" / "posthoc_A2_stage1a.json").exists():
+                confirm("posthoc_A2_stage1a", "posthoc_A2_stage1a_draws0-2", "posthoc_A2_brew_test", "posthoc_A2_brew_test_confirmation")
+        for tag, R in res["readers"].items():
+            print("POST HOC (A2)", tag, R["categories"], R["model_mapping"])
+        return
     if a.what == "stage1":
         pieces = C.TEST_PIECES if a.stage == "brew_test" else C.PIECE_ORDER
         res = stage1(a.stage, a.run_id, pieces=pieces,
