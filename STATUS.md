@@ -36,13 +36,19 @@ results: `docs/reports/008_trackb.md`, `docs/reports/009_brewcode_derisk.md` and
     `</think>` L40-44 has z decodable but no single-cell leverage (S 0.00-0.01).
   - **The PI's call:** keep the rule, run readers post hoc with the model's output as covariate, or redesign. The PI
     thinks the new prompts are weak and leans toward the old prompts and runs.
-- **011, Oracle-space swaps** (the TA's tip via the PI; design note `docs/design_specs/011_olens_swaps.md`): **not run.**
-  - Vectors come from the Oracle Lens's own reconstructor (AR); the official loader is not public, so we wrote one.
-  - Validation v1 failed the pre-set acceptance rule (FVE ≥ 0.10 at L44; published 0.22): raw FVE is negative under
-    every convention.
-  - Diagnostics (`results/011_olens_swaps/ar_diagnostics_d1.json`): retrieval@1 0.35-0.37 (L44) and 0.42-0.45 (L48) among
-    768 spans, ZCA cosine ≈ 0.2, norms 1.6-3× too large. The loader is partly working; a loader detail or a metric
-    mismatch is open. The swap script refuses to run until validation passes.
+- **011, Oracle-space swaps** (the TA's tip via the PI; design note `docs/design_specs/011_olens_swaps.md` with
+  amendments 1-3; **post hoc, exploratory**):
+  - **AR loader:** failed the pre-set validation twice (v1, v2), passed under post hoc amendment 2 (v3). The head
+    outputs a raw activation scored in the AR's whitened metric. On 16-token spans the FVE after one global scale is
+    0.24 (published 0.22), and within-batch retrieval@1 is 0.86 (published 0.93). The global scale is unexplained, so
+    only centred colour vectors are used.
+  - **Smoke s0b (2 pairs):** the TA's swap as given (AR vectors swapped in whitened coordinates) S −0.00, with a
+    failed answer-colour control, so it is not read. Raw-coordinate swap 0.16 vs a size-matched random 0.09 (generic).
+    Additive "minus AR(z), plus AR(z′)" at the reference's edit size: 0.10, vs the model's class-mean difference 0.23
+    and random 0.01 / −0.02.
+  - **Full run s1 stopped at 74/82 pairs at the PI's request** (resumable; unanalysed).
+  - **Next, pending the PI:** finish s1 (~1 GPU-min); phrase-based AR vectors (~10 GPU-min), since 1-token inputs
+    reconstruct poorly (cos ≈ 0.1).
 
 **2026-10-05, 007 — J-subspace split with controls (branch `007-jsubspace`; spec v2 2820e53 + A1 5cdafd9; report `docs/reports/007_jsubspace.md`; per-stage status `results/007_jsubspace/status/`; ~2.2 GPU-h, unattended under rule 12).**
 - **Reader side, confirmed on the brew test:** the Oracle's z tracking at `:` L40 is carried by the J (token-readout) subspace — H_J supported on dev and on the 49 test tables (J 5.8 / 5.0 nats vs whole 3.2 / 2.9; rest of J 0.3); Raw and Visible contradicted at L40 and L44 on both splits; L44 unresolved by positive-control rules. Same pattern at `</think>` (patch share 0.01).

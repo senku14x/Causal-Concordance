@@ -160,3 +160,15 @@
   - Anything else: partial; report the numbers.
   - `D_ar_answer` is reported as the AR's positive control.
 - Every number from 011 is **post hoc, exploratory**.
+
+## Execution status after amendment 3 (2026-10-06 ~21:30 UTC)
+
+- **Vectors v3** (`--posthoc-a2`; `results/011_olens_swaps/ar_validation_v3.json`): pre-set rule `accepted: false`;
+  amendment 2 accepted. Scaled FVE on 16-token spans: raw 0.24, ZCA 0.07, PCA −0.02 (margin 0.17); within-batch
+  retrieval@1 0.86. The 12 centred colour vectors are near-equiangular (mean off-diagonal cosine −0.09 ≈ −1/11).
+- **Smoke s0** (2 pairs, before amendment 3) and **smoke s0b** (2 pairs, with amendment 3's arms;
+  `olens_swaps_s0b.json`): all gates pass (G0 Δm = 0, R·A ≈ 5e-15, repro = 001, nothing quarantined). Medians in the
+  "Where things stand" section of `CLAUDE.md`.
+- **Full run s1 stopped by the PI's request at 74 of 82 pairs.** The smoke→full chain had started it before the
+  request arrived. The pair files are kept; rerunning the same command finishes the remaining 8. Nothing from s1 has
+  been analysed.

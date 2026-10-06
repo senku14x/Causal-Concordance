@@ -2,10 +2,15 @@
 
 Guide for any agent or collaborator working in this repo. Reading only this file should be enough to find everything.
 
-## FIRST, before anything else: read the workspace paper, then the relevant reading (PI rule, 2026-10-05)
+## FIRST, before anything else: read the workspace paper, then the paper notes, then the relevant reading (PI rule, 2026-10-05; restated 2026-10-06)
 
-No code, run, review or answer about results before this. The whole project is built on the paper's claims and
-vocabulary: J-lens, workspace, J-space, privilege, verbalizable. A session that skips it misreads every result.
+**Every new session (and every subagent briefed on the science) must, in this order:**
+1. **read the workspace paper in full** (item 1 below);
+2. **then read the paper notes** (item 2 below);
+3. then the relevant reading (item 3), then the project docs in the read order.
+
+No code, run, review or answer about results before steps 1 and 2. The whole project is built on the paper's claims
+and vocabulary: J-lens, workspace, J-space, privilege, verbalizable. A session that skips them misreads every result.
 
 1. **The paper, in full:** Gurnee et al. 2026, *Verbalizable Representations Form a Global Workspace in Language
    Models* (Anthropic).
@@ -15,10 +20,14 @@ vocabulary: J-lens, workspace, J-space, privilege, verbalizable. A session that 
    - A section-by-section digest made at the start of the 007 session (2026-10-05): `docs/papers/text/2607.15495_NOTES_digest.md`.
      It is a map, not a substitute: read the paper itself.
    - Read the main text and the appendices the project leans on: A.8 (J-space span), A.9 / A.9.2 (verbalizers and J-space), A.12, A.21, A.24.3, §3.1 with Figs. 7–8 (planted concepts and the privilege test).
-   - Then the notes on it:
-     - `docs/claude_reports/03_workspace_paper_notes_merged.md`: the agent's notes merged with the PI's, with corrections in §14 and disagreements in §15;
-     - `docs/claude_reports/04_user_workspace_paper_notes_verbatim.md`: the PI's own notes.
-2. **The relevant reading** (`docs/context/READING_LIST.md` is the full list):
+   - The PDF is the only source for text inside figures; the .txt and .md extractions miss it.
+2. **The paper notes, after the paper** (all three):
+   - `docs/claude_reports/04_user_workspace_paper_notes_verbatim.md`: the PI's own notes;
+   - `docs/claude_reports/04b_user_workspace_paper_notes_combined_2026-10-05.md`: the PI's combined notes (paper plus
+     follow-up literature);
+   - `docs/claude_reports/03_workspace_paper_notes_merged.md`: the agent's notes merged with the PI's, with corrections
+     in §14 and disagreements in §15.
+3. **The relevant reading** (`docs/context/READING_LIST.md` is the full list):
    - Readers:
      - Karvonen et al. 2025, *Activation Oracles* (`2512.15674`): the activation-oracle idea. **The Oracle Lens is
        not a Karvonen oracle.** It is WorkspaceBench's reproduction of the paper's A.9.2 oracle lens: an activation
@@ -35,13 +44,13 @@ vocabulary: J-lens, workspace, J-space, privilege, verbalizable. A session that 
      - Geiger et al. (DAS);
      - Makelov et al. (subspace illusions);
      - Zhang & Nanda and Heimersheim & Nanda (patching).
-3. **Then the project docs**, in the read order below.
+4. **Then the project docs**, in the read order below.
 
 ## Read order
 
 (Updated 2026-10-04 for the unified spec v2, PI instruction.)
 
-0. **The workspace paper and the relevant reading** (the section above). Always first.
+0. **The workspace paper, then the paper notes, then the relevant reading** (the section above). Always first.
 1. **CLAUDE.md** (this file): rules, conventions, environment, pitfalls.
 2. **STATUS.md**: where things stand, what works, open questions.
 3. **docs/context/SPEC_v2.md**: the unified spec (2026-10-04). It contains the original SPEC.md verbatim, AMENDMENT_01
@@ -56,7 +65,8 @@ vocabulary: J-lens, workspace, J-space, privilege, verbalizable. A session that 
    - 009, the brew-code bank: `docs/reports/009_brewcode_derisk.md` (same design note, Part 2, §E-009; reader rules in
      `docs/design_specs/009b_reader_phase.md`);
    - 010, reader agreement (CPU): `docs/claude_reports/29_reader_agreement_010_2026-10-06.md`;
-   - 011, Oracle-space swaps: `docs/design_specs/011_olens_swaps.md` (not run; the AR loader is not yet validated).
+   - 011, Oracle-space swaps: `docs/design_specs/011_olens_swaps.md` (loader validated post hoc; smokes done; the full
+     run is stopped at 74/82 pairs, unanalysed, waiting for the PI).
 
    Before them, 007 (`docs/reports/007_jsubspace.md`, on `main`), and 005 and 006 (branch `005-amended-full-run`).
    For 006, read `docs/reports/006_reader_likelihood.md` and `docs/design_specs/006_reader_likelihood.md`. For 005,
@@ -235,15 +245,29 @@ gates pass; `docs/reports/008_trackb.md`; design `docs/design_specs/008_009_trac
 per-pair agreement is weak (r 0.24-0.30). Mid-layer readers track what the J lens reads (r 0.63-0.80), not the model's
 next-token output (0.2-0.3); only the late Oracle (L56/L60) follows the output.
 
-**011, Oracle-space swaps** (the TA's tip: put a colour word through the Oracle Lens's own reconstructor, swap the two
-vectors in its whitened space; `docs/design_specs/011_olens_swaps.md`; `scripts/011_olens_swaps/`): **not run.**
-- The AR loader is ours (the official one is not public). Validation v1 failed its pre-set acceptance rule (FVE ≥ 0.10
-  at L44): raw FVE is negative under every read/space convention (published val FVE 0.22).
-- Diagnostics (`results/011_olens_swaps/ar_diagnostics.json`, 768 spans) show it is partly working: retrieval@1
-  0.35-0.37 at L44 and 0.42-0.45 at L48 (chance 0.0013), cosine ≈ 0.2 in ZCA space, norms 1.6-3× too large,
-  scale-corrected FVE at most 0.053.
-- Open: a loader detail or a metric mismatch (scale convention, retrieval within small batches). Any change to the
-  acceptance rule is written as an amendment first. `olens_swaps.py` refuses to run until validation passes.
+**011, Oracle-space swaps** (the TA's tip: put a colour word through the Oracle Lens's own reconstructor (AR), get a
+vector, do it for two colours, swap them in whitened space; `docs/design_specs/011_olens_swaps.md` with amendments 1-3;
+`scripts/011_olens_swaps/`). **Everything from 011 is post hoc, exploratory.**
+- **The AR loader is ours** (the official one is not public). It failed the pre-set validation twice (v1, v2), then
+  passed under post hoc amendment 2. The AR's output is a raw activation, scored in the whitened metric, with the
+  AR's own whitener (`whitening_iolens_pooled`). On 16-token spans it matches the published fit after one global
+  scale (FVE 0.24 vs 0.22), and within-batch retrieval@1 is 0.86 (published 0.93). A global output scale (0.3-0.55)
+  is unexplained, so only colour vectors centred over the 12 colours are used (the scale cancels there).
+  Validation: `results/011_olens_swaps/ar_validation_v3.json`, `ar_offline_d2.json`.
+- **Smoke s0b** (2 pairs, one table; observations only; all gates pass; `olens_swaps_s0b.json`), median S:
+  - reference (class-mean coordinate swap): 0.23;
+  - **the TA's swap as given (AR vectors swapped in whitened coordinates): −0.00.** Its answer-colour positive
+    control is −0.00 too, so it is not read: the clean activations' whitened coordinates on the two AR colour
+    vectors barely differ, so the swap edits almost nothing;
+  - the same directions swapped in raw coordinates: 0.16, but its answer control is 0.08 and one size-matched random
+    edit 0.09 (generic, not colour-specific, on this smoke);
+  - **additive reading** ("subtract the AR vector for z, add z′'s", at the reference's edit size): 0.10; the AR's
+    answer-colour difference 0.12; the model's own class-mean difference 0.23; random 0.01 / −0.02.
+- **Full run s1 was stopped by the PI's request at 74 of 82 pairs** (resumable: `olens_swaps.py --vec-run v3 --run-id
+  s1` skips finished pairs). Not analysed. `olens_swaps_analysis.py --run-id s1` applies amendment 3's reading rules.
+- **Likely limit of the tip:** the AR reconstructs 1-token inputs poorly (cosine ≈ 0.1 with the real activation,
+  vs ≈ 0.5 for 16 tokens). So single-word colour vectors are mostly noise. The proposed next step is vectors built
+  from several short phrases that start with the colour (a new post hoc amendment first).
 
 **007, the J-subspace split** (`docs/reports/007_jsubspace.md`; design `docs/design_specs/007_jsubspace.md` with
 amendments A1-A3; per-stage status `results/007_jsubspace/status/`; results page https://claude.ai/artifact/8vnKTzcXczn4YGMiP1uJTW;
@@ -301,11 +325,12 @@ why the NLA runs stopped and the other open issues: `docs/claude_reports/25_nla_
 - Their tracking does not follow 001's patch shares. The Oracle tracks z 2× more at `</think>` (patch share 0.01), which the model's output does not mirror.
 
 **Open PI decisions:**
+- 011: finish the stopped full run (~1 GPU-min); build phrase-based AR colour vectors and rerun (~10 GPU-min).
 - 009 readers: keep the rule (bank used model-side only), a post hoc reader run with the model's output as covariate,
   or a redesign. The PI leans toward the old prompts and runs.
 - Paid NLA hallucination stripping (an LLM judge costs money; ask first).
 - Done from the TA's list: whitened-space swaps (008), per-method qualitative readouts (report 27), Oracle L44 vs NLA
-  L42 on multihop (010). Open: Oracle-space swaps (011, blocked on the AR loader), NLA hallucination stripping and the
+  L42 on multihop (010), Oracle-space swaps (011, smoke; full run pending). Open: NLA hallucination stripping and the
   NLA reconstructor's FVE. 005 is closed.
 
 **Results page for 000–004** (artifact, shared by link; built by `scripts/000_setup/results_page/make_page.py` from committed JSON only): https://claude.ai/artifact/RMRX8R4iFnysbnHaNWTBeC
@@ -317,6 +342,8 @@ why the NLA runs stopped and the other open issues: `docs/claude_reports/25_nla_
   run.
 - **Subagents:** "No subagents" is the PI's rule. On 2026-10-02 the PI turned on workflows for orchestration (for
   example adversarial review). Label measurements stay single-path code; confirm any other use first.
+- **Stop after a smoke and report before the full run** unless the PI says to chain them (PI, 2026-10-06: "wait after
+  smoke once it finishes"). Don't chain smoke → full run automatically.
 - **Always keep qualitative samples** next to the numbers: raw readouts, prompts, and fixed-seed example pairs, in
   reports, results JSON and the page.
 - **Results-page charts** are drawn natively (inline SVG/HTML in the page's style), never as embedded matplotlib PNGs.
@@ -441,9 +468,18 @@ why the NLA runs stopped and the other open issues: `docs/claude_reports/25_nla_
 - **Role collisions at depth 1.** z = f, and the partner constraints do not stop one member's hidden colour from being
   the other member's start (13% of 009's dev candidates). A reader echoing the prompt then mimics hidden-colour
   tracking. Use the collision-free D (`derisk.collides`) for every role.
-- **The Oracle Lens's AR has no public loader** (011). Its LoRA keys carry `._orig_mod` (a torch.compile artifact) and
-  its head keys a `linear.` prefix, both stripped in `ar_vectors.attach_ar`. Our loader is not yet validated (see
-  "Where things stand"): validate it before any Oracle-space intervention.
+- **The Oracle Lens's AR has no public loader** (011; `ar_vectors.attach_ar`, validated post hoc). What it takes:
+  - LoRA keys carry `._orig_mod` (a torch.compile artifact) and head keys a `linear.` prefix: strip both;
+  - input = the `[Layer NN]` tag ids from `heads.pt` + the span, right-padded; read the backbone's final state at the
+    span's last token; the head takes a parameter-free LayerNorm of it (config `head_layer_norm`);
+  - **the head outputs a raw activation**; score it as W(ŷ − μ) vs W(h − μ) with the AR's own whitener,
+    `whitening_iolens_pooled_L{L}` (`agu18dec/local-workspace`, `ckpts/ar/ptag/whiteners/`), not `whitening_L{L}`;
+  - target = the activation at the token *preceding* the span, block-L output;
+  - the published ret@1 is within small batches, and FVE is on spans of uniform 1-32 tokens; 1-token spans
+    reconstruct poorly (cos ≈ 0.1);
+  - an unexplained global output scale (0.3-0.55): use only centred or difference vectors.
+  - Read the training run's `meta.json` (`ckpts/ar/ptag/ar.asst.ptag.pooled.s0/.../meta.json`) before assuming any
+    convention.
 
 ## Silly-mistakes log (also in commit messages and reports)
 
@@ -547,4 +583,7 @@ why the NLA runs stopped and the other open issues: `docs/claude_reports/25_nla_
 | 10-06 | The 009 de-risk report draft had four double-rounding slips from printouts (CI 6.1 → 6.0, 2.1 → 2.0, 0.10 → 0.11, 5.2e-4 → 5.1e-4). The 10-03 lesson, repeated | regenerated from full-precision JSON before commit; the Track B report was checked the same way (no slips) |
 | 10-06 | The 011 vector queue redirected its log into `outputs/011_olens_swaps/` before the directory existed; the launch failed | `mkdir -p` first; relaunched |
 | 10-06 | 011's AR head failed to load (state-dict keys `linear.weight`/`linear.bias`); the run crashed after the stock targets were captured | prefix stripped; rerun |
-| 10-06 | 011's acceptance rule used raw FVE without first checking which metric the published 0.22 is; v1 failed under every convention (raw FVE ≤ −2), while scale-free diagnostics show the AR partly works (retrieval@1 0.35-0.45 among 768) | no swaps run; the metric/loader question is open; any change to the rule goes in an amendment first. Check a published metric's exact definition before pre-setting an acceptance rule on it |
+| 10-06 | 011's acceptance rule used raw FVE without first checking which metric the published 0.22 is; v1 failed under every convention (raw FVE ≤ −2), while scale-free diagnostics show the AR partly works (retrieval@1 0.35-0.45 among 768) | resolved post hoc (amendments 1-2): the right convention (raw output, whitened metric) was not among v1's candidates. Check a published metric's exact definition, and the training config, before pre-setting an acceptance rule on it |
+| 10-06 | 011 v1/d1 loaded the whitener `whitening_L{L}` (lmsys) from the AR's folder; the AR was trained against `whitening_iolens_pooled_L{L}` (`meta.json` `whitener_prefix`) | fixed in amendment 1 before v2 |
+| 10-06 | My summary of 011's smoke gave one size-matched random edit as S 0.10, rounded from the printout's 0.095; the JSON value rounds half-up to 0.09. The double-rounding lesson again | corrected in the next message and in the docs, which take 011 numbers from the JSON |
+| 10-06 | 011's smoke was chained into the full run automatically; the PI wanted to see the smoke first and asked to wait | full run stopped at 74/82 (kept, resumable, unanalysed); stop after smokes from now on ("Working with the PI") |

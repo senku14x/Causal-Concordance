@@ -10,11 +10,14 @@
 >      colour stays in the output tail, so the output-facing check fails and readers are blocked.
 >    - 010, reader agreement (report 29, CPU): readers agree weakly and track what the J lens reads, not the model's
 >      output.
->    - 011, Oracle-space swaps (`docs/design_specs/011_olens_swaps.md`): not run; our AR loader is not yet validated.
+>    - 011, Oracle-space swaps (`docs/design_specs/011_olens_swaps.md`, post hoc): the AR loader works after two
+     fixes. In the smoke, the TA's whitened swap does nothing (its own positive control fails), and an additive
+     "minus AR(z), plus AR(z′)" edit moves the answer about half as much as the model's own colour direction. The
+     full run is stopped at 74/82, waiting for the PI.
 >    - `CLAUDE.md` "Where things stand" has the details and the open PI decisions.
 > 2. **Read the workspace paper first** (Gurnee et al. 2026; PDF `docs/papers/2607.15495.pdf`; text
->    `docs/papers/text/2607.15495_html.md` or `.txt`; digest `docs/papers/text/2607.15495_NOTES_digest.md`), then the
->    reading at the top of `CLAUDE.md`.
+>    `docs/papers/text/2607.15495_html.md` or `.txt`; digest `docs/papers/text/2607.15495_NOTES_digest.md`), **then the
+>    paper notes** (`docs/claude_reports/04_*`, `04b_*`, `03_*`), then the reading at the top of `CLAUDE.md`.
 > 3. Then `CLAUDE.md` ("Where things stand", "Pitfalls"), `STATUS.md`, `docs/reports/007_jsubspace.md` and
 >    `docs/claude_reports/25_nla_stops_and_open_issues_2026-10-06.md`.
 > 4. 007 in one line: the Oracle reads z through the J subspace (confirmed on held-out tables); the model's answer gives

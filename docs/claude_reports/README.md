@@ -21,7 +21,7 @@ Cleaned 2026-10-06:
 | `docs/reports/008_trackb.md` (not here) | **Newest result:** 007's model-side test done the paper's way; no J privilege |
 | `docs/reports/009_brewcode_derisk.md` (not here) | **009 de-risk:** the brew-code bank's gate passes at depth 1 (771 pairs) but the output-facing check fails: with a code answer the hidden colour is still the top colour (98%) and ranks ~11th at the answer slot, at ~0.05% total probability; readers blocked by the rule; options for the PI |
 | `29_reader_agreement_010_2026-10-06.md` | **Newest analysis:** readers agree weakly; mid-layer readers track what the J lens reads, not the model's next-token output |
-| `docs/design_specs/011_olens_swaps.md` (not here) | **011, Oracle-space swaps:** not run; our loader for the Oracle Lens's reconstructor is partly working but fails its pre-set validation (status at the end of the note) |
+| `docs/design_specs/011_olens_swaps.md` (not here) | **011, Oracle-space swaps** (post hoc): loader validated after two fixes; smoke: the TA's whitened swap does nothing, the additive AR difference does about half of the class-mean's; full run stopped at 74/82 for the PI (status at the end of the note) |
 
 ## The paper and the reading
 
