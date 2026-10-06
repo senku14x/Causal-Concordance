@@ -411,7 +411,8 @@ class Stage3:
                     out += nla.read_batch(hs[j:j + 32], k=k, seed=seed)
                 return out
             # score_orig = score: this is the reference path, so the fast-path parity is trivially exact (A2)
-            self.reader("nla", 42, P[42], score, score, score_next, nla.tok, RS.PREFIX0["nla"], read_batch, inject_check, pc)
+            self.reader("nla", 42, P[42], score, lambda hs, b, s: score(hs, b, s, False, 2), score_next, nla.tok,
+                        RS.PREFIX0["nla"], read_batch, inject_check, pc)
         except RS.GateFailure as e:
             self.state.setdefault("gate_failures", []).append({"reader": e.reader, "gate": e.gate, "detail": e.detail})
             self.save()
