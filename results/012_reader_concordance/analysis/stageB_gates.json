@@ -1,0 +1,40 @@
+{
+ "n_items": 96,
+ "n_evaluated": 87,
+ "wall_s": 340.4,
+ "G_parity_L24-35": {
+  "pass": true,
+  "mismatches": [],
+  "paired_success": {
+   "stageA_0_ours_0": 48,
+   "stageA_1_ours_1": 39
+  },
+  "random_success_agree": 87
+ },
+ "G_parity_L24-47": {
+  "pass": true,
+  "mismatches": [],
+  "paired_success": {
+   "stageA_0_ours_0": 37,
+   "stageA_1_ours_1": 50
+  },
+  "random_success_agree": 87
+ },
+ "G0": {
+  "alpha0_max_abs_dlp_f32_and_bf16": 0.0,
+  "alpha0_greedy_same": true,
+  "rule": "alpha = 0 edit reproduces clean bitwise (every float32 and bf16 score) and the greedy ids",
+  "pass": true
+ },
+ "floor_identity_clamp": {
+  "note": "not a gate: |dm float32| of the identity clamp (bf16-write floor)",
+  "median": 0.002285498612093484,
+  "max": 0.14525216817855835,
+  "greedy_same_all": true
+ },
+ "read_position": {
+  "n_checked": 87,
+  "mismatches": [],
+  "not_in_wsb": []
+ }
+}
