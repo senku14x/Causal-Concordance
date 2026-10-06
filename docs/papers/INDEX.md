@@ -8,7 +8,7 @@ Text extractions are in `docs/papers/text/` and the web sources (WSB post, NLA p
 |---|---|---|
 | 2607.15495.pdf | Gurnee et al. 2026, *Verbalizable Representations Form a Global Workspace in Language Models* | J lens, workspace claims, A.9 / A.12 / A.21 / A.24.3 |
 | 2509.13316.pdf | Li et al. 2025, *Do Activation Verbalization Methods Convey Privileged Information?* | prompt-only baselines for verbalizers |
-| 2512.15674.pdf | Karvonen et al. 2025, *Activation Oracles* | Oracle Lens / Karvonen injection |
+| 2512.15674.pdf | Karvonen et al. 2025, *Activation Oracles* | activation-oracle background. The project's Oracle Lens is WSB's reproduction of the workspace paper's A.9.2 oracle lens, not a Karvonen oracle (report 26) |
 | 2606.02609.pdf | Bauer et al. 2026, *Building Better Activation Oracles* (AObench) | verbalizer operating points |
 | 2607.20379.pdf | Dingeto 2026, *Train the Model, Not the Reader* | NLA claim sensitivity (A5) |
 | 1909.03368.pdf | Hewitt & Liang 2019, *Designing and Interpreting Probes with Control Tasks* | decodability control task |

@@ -5,7 +5,9 @@
 `results/007_jsubspace/status/`; analysis JSON in `results/007_jsubspace/analysis/`; raw outputs on the public HF
 dataset `senku21x/causal-concordance-outputs` (`007_jsubspace/`). *GPU time:* about 2.2 h in total (cap 15 h); no stage
 was dropped for budget. *Model:* Qwen3.6-27B; readers: Oracle `olens_s3d_rl600` (L40, L44); **the NLA was disabled
-by a stop gate in Stage 1a (below)**.
+by a stop gate in Stage 1a (below)** and later rerun post hoc on 006's exact scorer (§8, amendments A2-A3). *Later
+work:* 008 (Track B, `docs/reports/008_trackb.md`, branch `008-trackb-brewcode`) redoes the model-side test with an
+adequate lever and finds no J privilege.
 
 ## 1. Summary
 

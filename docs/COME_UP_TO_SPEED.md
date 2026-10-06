@@ -1,7 +1,17 @@
 # Come up to speed — Causal-Concordance (state of 2026-10-03; see the update box)
 
-> **Update 2026-10-06: read this first.**
-> 1. **`main` holds everything through 007** (fast-forwarded from `007-jsubspace` on 2026-10-06).
+> **Update 2026-10-06 (evening): read this first.**
+> 1. **`origin/main` holds everything through 007** (fast-forwarded from `007-jsubspace` on 2026-10-06). The newest
+>    work is on branch **`008-trackb-brewcode`**:
+>    - 008, Track B (`docs/reports/008_trackb.md`): the paper's §3.3 test done the paper's way, on a powered lever
+>      (S 0.21). The J part carries 0.02-0.03, the non-J part 0.21, so no model-side J privilege; 007's dissociation
+>      stands.
+>    - 009, the brew-code bank (`docs/reports/009_brewcode_derisk.md`): the gate passes at depth 1, but the hidden
+>      colour stays in the output tail, so the output-facing check fails and readers are blocked.
+>    - 010, reader agreement (report 29, CPU): readers agree weakly and track what the J lens reads, not the model's
+>      output.
+>    - 011, Oracle-space swaps (`docs/design_specs/011_olens_swaps.md`): not run; our AR loader is not yet validated.
+>    - `CLAUDE.md` "Where things stand" has the details and the open PI decisions.
 > 2. **Read the workspace paper first** (Gurnee et al. 2026; PDF `docs/papers/2607.15495.pdf`; text
 >    `docs/papers/text/2607.15495_html.md` or `.txt`; digest `docs/papers/text/2607.15495_NOTES_digest.md`), then the
 >    reading at the top of `CLAUDE.md`.

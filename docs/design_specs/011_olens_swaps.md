@@ -54,3 +54,20 @@
 - Each reading is scoped to brew dev, Qwen3.6-27B, the emit cells and L40/44/48.
 - On brew the AR vectors are "about to say colour X" directions, so the runner-up confound applies. The same swap on the
   009 code family, where no colour is said, follows if 009 passes its checks.
+
+## Execution status (2026-10-06, 20:00 UTC; factual record, no rule changed)
+
+- **Validation v1 failed the acceptance rule** (`results/011_olens_swaps/ar_validation.json`). Raw FVE is negative
+  under all 36 convention cells (best at L44: −2.72, block L, pre-norm, ZCA). No vectors were written and no swap ran.
+- **Diagnostics run d1** (`--diag-only`, `results/011_olens_swaps/ar_diagnostics.json`; scale-free, added after v1
+  failed; exploratory):
+  - retrieval@1 among the 768 spans: 0.35-0.37 at L44 and 0.42-0.45 at L48 under the ZCA and raw spaces (chance
+    0.0013); the PCA space is at chance;
+  - mean cosine ≈ 0.2 in ZCA space;
+  - predicted norms 1.6-3× the targets';
+  - FVE after a per-sample least-squares scale at most 0.053.
+  - Reading: the loader is partly right (the predictions point roughly at their targets), but far from the published
+    fit. Candidates: a scale or normalisation convention in the head, the target definition, or a metric mismatch (for
+    example, retrieval within small batches, or FVE in another space). Not yet distinguished.
+- **Next:** find the published metric's exact definition and the head's output convention; then, if the acceptance
+  rule must change, write the change here as an amendment before any vector is used.

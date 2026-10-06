@@ -35,6 +35,7 @@ WH_REPO = "agu18dec/local-workspace"
 LAYERS = (40, 44, 48)
 COLOURS = ("black", "blue", "brown", "gold", "gray", "green", "orange", "pink", "purple", "red", "teal", "white")
 SEED = 20261006
+DIAG_ONLY = [False]
 VAL_PROMPTS = [
     "Explain how a refrigerator keeps food cold.", "Write a short paragraph about the history of the bicycle.",
     "What are three tips for learning a new language?", "Describe a sunset over the ocean.",
@@ -133,7 +134,7 @@ def attach_ar(model, log):
     heads = torch.load(hf_hub_download(AR_REPO, "ar_ptag_pooled/heads.pt", revision=AR_REV), map_location="cpu",
                        weights_only=False)
     head = torch.nn.Linear(5120, 5120).to(model.device, torch.float32)
-    head.load_state_dict(heads["head"])
+    head.load_state_dict({k.split(".", 1)[1]: v for k, v in heads["head"].items()})        # keys are "linear.*"
     setattr(model, R.MODIFIED_ATTR, "011 AR LoRA attached (Oracle Lens reconstructor); not the subject")
     log(f"AR attached: {n_lora} LoRA tensors; tags for layers {heads['layers']}")
     return pt, head, heads
@@ -171,10 +172,25 @@ def fve(yhat, y):
     return float(1 - ((y - yhat) ** 2).sum() / ((y - y.mean(0)) ** 2).sum())
 
 
+def diag(yhat, y):
+    """Scale-free diagnostics: mean cosine, FVE after a per-sample least-squares scale, retrieval@1 (is the true target
+    the most cosine-similar among all targets?)."""
+    yn = torch.nn.functional.normalize(y, dim=1)
+    hn = torch.nn.functional.normalize(yhat, dim=1)
+    cos = (yn * hn).sum(1)
+    a = (yhat * y).sum(1) / (yhat * yhat).sum(1).clamp_min(1e-30)
+    fs = float(1 - ((y - a[:, None] * yhat) ** 2).sum() / ((y - y.mean(0)) ** 2).sum())
+    ret = float((torch.argmax(hn @ yn.T, dim=1) == torch.arange(len(y))).double().mean())
+    return {"cos_mean": float(cos.mean()), "fve_scaled": fs, "ret1": ret, "fve_raw": fve(yhat, y),
+            "norm_ratio_median": float((yhat.norm(dim=1) / y.norm(dim=1)).median())}
+
+
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--run-id", default="v1")
+    ap.add_argument("--diag-only", action="store_true")
     a = ap.parse_args()
+    DIAG_ONLY[0] = a.diag_only
     out = OUT / a.run_id
     out.mkdir(parents=True, exist_ok=True)
     log = Logger(out / "log.txt")
@@ -186,6 +202,7 @@ def main():
     spans, tg = stock_targets(model, texts, log)
     pt, head, heads = attach_ar(model, log)
     val = {}
+    DIAG = {}
     for L in LAYERS:
         post, pre = ar_forward(pt, head, heads, spans, L)
         w = WH[L]
@@ -195,6 +212,14 @@ def main():
             for read, yhat in (("post_norm", post), ("pre_norm", pre)):
                 for space, y in ys.items():
                     val[f"L{L}|{lname}|{read}|{space}"] = fve(yhat, y)
+                    DIAG[f"L{L}|{lname}|{read}|{space}"] = diag(yhat, y)
+    (RES / "ar_diagnostics.json").parent.mkdir(parents=True, exist_ok=True)
+    (RES / "ar_diagnostics.json").write_text(json.dumps(DIAG, indent=1))
+    log("diagnostics (top by ret@1)", json.dumps({k: {kk: round(vv, 3) for kk, vv in v.items()} for k, v in
+                                                  sorted(DIAG.items(), key=lambda kv: -kv[1]["ret1"])[:6]}))
+    if DIAG_ONLY[0]:
+        log("diagnostics only; stopping before acceptance")
+        return
     best = max(val, key=val.get)
     b_layer, b_read, b_space = best.split("|")[1:]
     at44 = {k: v for k, v in val.items() if k.startswith("L44|")}

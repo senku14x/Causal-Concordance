@@ -20,7 +20,10 @@ vocabulary: J-lens, workspace, J-space, privilege, verbalizable. A session that 
      - `docs/claude_reports/04_user_workspace_paper_notes_verbatim.md`: the PI's own notes.
 2. **The relevant reading** (`docs/context/READING_LIST.md` is the full list):
    - Readers:
-     - Karvonen et al. 2025, *Activation Oracles* (`2512.15674`; the Oracle Lens);
+     - Karvonen et al. 2025, *Activation Oracles* (`2512.15674`): the activation-oracle idea. **The Oracle Lens is
+       not a Karvonen oracle.** It is WorkspaceBench's reproduction of the paper's A.9.2 oracle lens: an activation
+       reconstructor (AR, text → activation, MSE in a whitened space), an inverter, and RL on FVE with the AR frozen
+       (`docs/sources/web/wsb_post.md:341-349`; report 26). Its AR (`ar_ptag_pooled`) and whitener are public;
      - Bauer et al. 2026, AObench (`2606.02609`);
      - Li et al. 2025, *Do Activation Verbalization Methods Convey Privileged Information?* (`2509.13316`; prompt-only baselines);
      - Dingeto 2026 (`2607.20379`; NLA claim sensitivity);
@@ -48,9 +51,16 @@ vocabulary: J-lens, workspace, J-space, privilege, verbalizable. A session that 
    callout, §8 A4/A7/A8/A9, §12, §14 and §15.
 4. **docs/context/SPEC_v2_errata_01.md** (accepted 2026-10-04): V2-E1–E9 correct SPEC_v2 passages; an erratum wins over the text.
    **docs/context/AMENDMENT_01.md**: the PI's 2026-10-02 decisions (its §6 lists each conflict by SPEC.md line).
-5. **The latest experiments are 005 (planted concepts) and 006 (reader likelihoods at the brew `:` cell), both on branch
-   `005-amended-full-run`.** For 006, read `docs/reports/006_reader_likelihood.md` and
-   `docs/design_specs/006_reader_likelihood.md`. For 005, read, in order:
+5. **The latest experiments (2026-10-06, branch `008-trackb-brewcode`, all exploratory):**
+   - 008, Track B: `docs/reports/008_trackb.md` (design `docs/design_specs/008_009_trackb_brewcode.md` Part 1, §E);
+   - 009, the brew-code bank: `docs/reports/009_brewcode_derisk.md` (same design note, Part 2, §E-009; reader rules in
+     `docs/design_specs/009b_reader_phase.md`);
+   - 010, reader agreement (CPU): `docs/claude_reports/29_reader_agreement_010_2026-10-06.md`;
+   - 011, Oracle-space swaps: `docs/design_specs/011_olens_swaps.md` (not run; the AR loader is not yet validated).
+
+   Before them, 007 (`docs/reports/007_jsubspace.md`, on `main`), and 005 and 006 (branch `005-amended-full-run`).
+   For 006, read `docs/reports/006_reader_likelihood.md` and `docs/design_specs/006_reader_likelihood.md`. For 005,
+   read, in order:
    - `docs/reports/005_followups.md`: the latest results and the corrections they force (read this first);
    - `docs/reports/005_full_run.md`: the full run on the 45 test concepts (pre-registered verdicts);
    - `docs/design_specs/005_full_run.md` (the run spec) and `docs/design_specs/005_amendment_01.md` (adopted 2026-10-05);
@@ -133,7 +143,9 @@ source of code and organisms only.
   fp32_from=0)`) is the cross-check (AMENDMENT_01 §3, errata E4). Every clean/edited comparison is made at **one
   sequence length**; patch sources are captured at the **matching length** (`margin.score(writes_fn=...)` /
   `SecEngine.score(edit_fn=...)` build writes per continuation). Reader inputs use the stock bf16 forward
-  (`readers.capture_stock`, WSB's convention). `SecReplay.build()` parks the bf16 upper blocks on the CPU until
+  (`readers.capture_stock`, WSB's convention), **except brew-family reads in 006, 007 and 009, which use saved SEC
+  captures** (stock vs SEC cos ≥ 0.99985, 002's bridge; stated in each design). Natural-text reader inputs ("Tell me
+  about {colour}") are stock. `SecReplay.build()` parks the bf16 upper blocks on the CPU until
   `restore()`: use `SecReplay` / `SecEngine` as context managers; every stock-forward entry point refuses a parked model
   (`registry.assert_subject_model_resident`).
 - **Splits**: dev/test by table (brew), by step-sequence group (chain; identical prompts recur across chain items with
@@ -181,16 +193,57 @@ without the PI's say-so.
 
 ## Where things stand (2026-10-06)
 
-**Branches.** **`main` is current:** on 2026-10-06 the PI had `007-jsubspace` fast-forwarded into `main` ("merge with
-main"), so a fresh clone has everything through 007. Start new experiments on a new branch off `main`. Never push to
-`main` without the PI's explicit say-so.
+**Branches.** **`origin/main` holds everything through 007:** on 2026-10-06 the PI had `007-jsubspace` fast-forwarded
+into `main` ("merge with main"). On this instance the local `main` ref was left stale (95ab0e5), so branch from
+`origin/main`, not `main`. Never push to `main` without the PI's explicit say-so.
+- **`008-trackb-brewcode`** (off `origin/main`, 2026-10-06, pushed): experiments 008-011, reports 26-29, the
+  `claude_reports` cleanup. **The newest work.** Not merged.
 - `007-jsubspace` (off `005-amended-full-run`): experiment 007 (design, amendments A1-A3, all code, results, status files,
   reports 22-25) plus everything below. Identical to `main` at the merge; kept for reference.
 - `005-amended-full-run` (off `spec-v2`): amendment 01, the 005 full run and follow-ups, 006 and 006b.
 - `006-reader-likelihood`: experiment 006, merged into `005-amended-full-run`; kept for reference.
 - `spec-v2` @ 9709712: SPEC_v2 + errata 01, checks C1-C3, the NLA loader, and 005 up to the dev pilot.
 - `main`: up to date with `007-jsubspace` since the 2026-10-06 fast-forward (before that @ 95ab0e5, the 000-004 scaffold).
-- **Next experiments wait for the PI's direction.**
+
+**008, Track B: the paper's §3.3 privilege test on brew, done the paper's way** (exploratory; dev, 82 gated pairs; all
+gates pass; `docs/reports/008_trackb.md`; design `docs/design_specs/008_009_trackb_brewcode.md` Part 1 and §E):
+- Class-mean z swaps clamped per layer over the three emit cells (assistant newline, `</think>`, `:`) × L40-48.
+- **The lever is adequate:** the full direction moves the answer by median S 0.21 [0.11, 0.26] (flips 16%).
+- **No model-side J privilege.** The J part (k = 25 pursuit) carries S 0.02-0.03, the non-J part 0.21; J − non-J
+  −0.17 (J_NP) / −0.15 (J_CB), CIs below 0. The real whitened swap (Ledoit-Wolf Σ, swap in whitened coordinates, map
+  back) narrows the gap (J 0.07 / 0.10 vs non-J 0.14 / 0.11) but never reverses it. Matched raw or whitened norm: J_CB
+  ties, J_NP below. Clamping the J coordinates barely changes the non-J swap (0.21 → 0.20 / 0.18); the paper's clamp
+  took Claude's from 28% to 6%.
+- The true lens-coordinate swap (arm A) is not read: its answer-atom positive control moves S 0.01 (power bar 0.15).
+- → 007's reader-model dissociation stands, now on a powered lever: the Oracle privileges J for reading z, the
+  model's answer does not. This is what the PI's 2026-10-06 numbers to the TA come from.
+
+**009, the brew-code bank** (exploratory, reader-free de-risk; `docs/reports/009_brewcode_derisk.md`; design Part 2 and
+§E-009; reader rules `docs/design_specs/009b_reader_phase.md`):
+- The idea: answer with a two-digit code looked up from the final (or start) colour, so the hidden colour z is needed
+  but not said.
+- **Gate:** depth 2 is beyond Qwen without chain of thought (0/77 pairs after 30 tables); depth 1 passes 771 of 1,200
+  pairs (241 of 300 tables).
+- **The output-facing check fails, so readers do not run** (rule §2.5.1). With a code answer, z is still the top colour
+  at the answer slot in 98% of renders (median rank 11 of 248,320 tokens; the model's own D +11.9 nats, 240/240
+  tables), at only ~0.05% total colour mass. D is scale-free, so the tail still counts.
+- Reader-free probes decode z under both questions (110 of 112 sites). The patch profile reproduces brew's structure
+  (`</think>` L40-44: z decodable, no single-cell leverage).
+- The PI has called the new prompts weak and suggested returning to the old prompts and runs. 009 readers are on hold.
+
+**010, reader agreement** (exploratory, CPU; `docs/claude_reports/29_reader_agreement_010_2026-10-06.md`): NLA-Oracle
+per-pair agreement is weak (r 0.24-0.30). Mid-layer readers track what the J lens reads (r 0.63-0.80), not the model's
+next-token output (0.2-0.3); only the late Oracle (L56/L60) follows the output.
+
+**011, Oracle-space swaps** (the TA's tip: put a colour word through the Oracle Lens's own reconstructor, swap the two
+vectors in its whitened space; `docs/design_specs/011_olens_swaps.md`; `scripts/011_olens_swaps/`): **not run.**
+- The AR loader is ours (the official one is not public). Validation v1 failed its pre-set acceptance rule (FVE ≥ 0.10
+  at L44): raw FVE is negative under every read/space convention (published val FVE 0.22).
+- Diagnostics (`results/011_olens_swaps/ar_diagnostics.json`, 768 spans) show it is partly working: retrieval@1
+  0.35-0.37 at L44 and 0.42-0.45 at L48 (chance 0.0013), cosine ≈ 0.2 in ZCA space, norms 1.6-3× too large,
+  scale-corrected FVE at most 0.053.
+- Open: a loader detail or a metric mismatch (scale convention, retrieval within small batches). Any change to the
+  acceptance rule is written as an amendment first. `olens_swaps.py` refuses to run until validation passes.
 
 **007, the J-subspace split** (`docs/reports/007_jsubspace.md`; design `docs/design_specs/007_jsubspace.md` with
 amendments A1-A3; per-stage status `results/007_jsubspace/status/`; results page https://claude.ai/artifact/8vnKTzcXczn4YGMiP1uJTW;
@@ -248,8 +301,12 @@ why the NLA runs stopped and the other open issues: `docs/claude_reports/25_nla_
 - Their tracking does not follow 001's patch shares. The Oracle tracks z 2× more at `</think>` (patch share 0.01), which the model's output does not mirror.
 
 **Open PI decisions:**
-- the next direction (TA suggestions: whitened-space swaps, per-method qualitative analysis, NLA hallucination
-  stripping and the reconstructor's FVE, the Oracle at L44 vs the NLA at L42). 005 is closed.
+- 009 readers: keep the rule (bank used model-side only), a post hoc reader run with the model's output as covariate,
+  or a redesign. The PI leans toward the old prompts and runs.
+- Paid NLA hallucination stripping (an LLM judge costs money; ask first).
+- Done from the TA's list: whitened-space swaps (008), per-method qualitative readouts (report 27), Oracle L44 vs NLA
+  L42 on multihop (010). Open: Oracle-space swaps (011, blocked on the AR loader), NLA hallucination stripping and the
+  NLA reconstructor's FVE. 005 is closed.
 
 **Results page for 000–004** (artifact, shared by link; built by `scripts/000_setup/results_page/make_page.py` from committed JSON only): https://claude.ai/artifact/RMRX8R4iFnysbnHaNWTBeC
 - The repo has been **private** since 2026-10-04: the paper PDFs are in it.
@@ -283,7 +340,8 @@ why the NLA runs stopped and the other open issues: `docs/claude_reports/25_nla_
 
 `/workspace` is not persistent. To come back on a new instance:
 1. `git clone https://github.com/senku14x/Causal-Concordance` (private; `gh auth login` as senku14x). `main` holds
-   everything through 007 (fast-forwarded from `007-jsubspace` on 2026-10-06).
+   everything through 007 (fast-forwarded from `007-jsubspace` on 2026-10-06); check out `008-trackb-brewcode` for
+   008-011.
 2. `bash scripts/000_setup/rebuild_env.sh`: venvs, pinned source clones, model and lens downloads, and hash checks.
 3. `python scripts/000_setup/restore_outputs.py`: downloads `outputs/` from the public HF dataset
    `senku21x/causal-concordance-outputs` and checks every file against its `MANIFEST.json` (sha256).
@@ -370,6 +428,22 @@ why the NLA runs stopped and the other open issues: `docs/claude_reports/25_nla_
 - **Readers:** the NLA adapters are rsLoRA (scaling α/√r); the NLA tokenizer files differ in format from the base but
   render identical AV prompt ids; the Oracle marker is ㈜ at slot 24 of a 56-token carrier for L40. Reader code lives in
   `readers.py` and may import label code, never the reverse (`tests/test_import_boundary.py`).
+- **Multi-layer clamps set the coordinates at each layer; they never add a fixed delta per layer** (008). Adding the same
+  delta at L40, L41, … compounds downstream; setting c ← t (h ← h + A(t − c), R A = I) at each layer does not.
+- **A nameable intermediate stays in the output tail.** Making the answer something else (009's two-digit codes) leaves
+  the hidden colour the top colour at the answer slot, at ~0.05% mass. D is scale-free, so it still registers. An
+  output-facing check must look at rank and D, not only at probability mass.
+- **Depth-2 brew-code (two stirs + a code lookup) is beyond Qwen3.6-27B without chain of thought** (0/77 pairs). Use
+  depth 1.
+- **Gating digit answers with EOS suppressed causes run-ons** ("8787…"). A strict two-digit parser then rejects valid
+  samples (009: 4.3% unparseable, conservative). Gate code answers without EOS suppression, or score the first two
+  digits.
+- **Role collisions at depth 1.** z = f, and the partner constraints do not stop one member's hidden colour from being
+  the other member's start (13% of 009's dev candidates). A reader echoing the prompt then mimics hidden-colour
+  tracking. Use the collision-free D (`derisk.collides`) for every role.
+- **The Oracle Lens's AR has no public loader** (011). Its LoRA keys carry `._orig_mod` (a torch.compile artifact) and
+  its head keys a `linear.` prefix, both stripped in `ar_vectors.attach_ar`. Our loader is not yet validated (see
+  "Where things stand"): validate it before any Oracle-space intervention.
 
 ## Silly-mistakes log (also in commit messages and reports)
 
@@ -465,3 +539,12 @@ why the NLA runs stopped and the other open issues: `docs/claude_reports/25_nla_
 | 10-05 | Stage 1a run r1 was aborted (to switch scorers) after its prompt-only floor had been printed and read | r1 kept unanalysed; disclosed in the Stage 0/1a status |
 | 10-05 | 007's CPU token-lens script coded G-002 at 1e-3 relative while the spec pre-registered 1e-4; it printed "pass" at 6.2e-4 | corrected to the spec's 1e-4 before reading the analysis: G-002 fails (3 of 45 checks, J_NP cosine at the assistant cell, near-zero scores), so the exploratory analysis is reported, not interpreted |
 | 10-06 | 007 A2 multihop NLA rerun crashed: the parity reference was passed as the 5-argument scorer where a 3-argument call was made | fixed (a wrapping lambda) and relaunched before any gate value was computed; the crashed run is kept and disclosed |
+| 10-06 | 007's multihop "about half of bridge-naming J readouts restate a cue" mixed denominators. On test, among bridge-naming samples with checkable cue words, the share is 0.28 (Oracle L40), 0.24 (Oracle L44), 0.15 (NLA). Found in the up-to-speed read, not caused this session | recorded in report 26; quote the restatement share with its denominator |
+| 10-06 | `CLAUDE.md` and `docs/papers/INDEX.md` called the Oracle Lens a Karvonen activation oracle; it is WSB's reproduction of the paper's A.9.2 oracle lens | corrected (report 26) |
+| 10-06 | 009's first role table missed depth-1 collisions (a member's hidden colour equal to the other member's start; 13% of dev candidates) | collision-free D for every role, written into §E-009 before the outfacing stage or any reader ran |
+| 10-06 | 009's gate parser rejected digit run-ons caused by EOS suppression (4.3% of samples unparseable) | kept for the run (conservative, both arms equal), decided before outcomes; noted for future code-answer gates |
+| 10-06 | 009 tests failed after the collision rule: the fixture lacked start colours, and the reader-free import test flagged `read009` | fixture fixed; `read009*` declared reader-side; a test that label code never imports it |
+| 10-06 | The 009 de-risk report draft had four double-rounding slips from printouts (CI 6.1 → 6.0, 2.1 → 2.0, 0.10 → 0.11, 5.2e-4 → 5.1e-4). The 10-03 lesson, repeated | regenerated from full-precision JSON before commit; the Track B report was checked the same way (no slips) |
+| 10-06 | The 011 vector queue redirected its log into `outputs/011_olens_swaps/` before the directory existed; the launch failed | `mkdir -p` first; relaunched |
+| 10-06 | 011's AR head failed to load (state-dict keys `linear.weight`/`linear.bias`); the run crashed after the stock targets were captured | prefix stripped; rerun |
+| 10-06 | 011's acceptance rule used raw FVE without first checking which metric the published 0.22 is; v1 failed under every convention (raw FVE ≤ −2), while scale-free diagnostics show the AR partly works (retrieval@1 0.35-0.45 among 768) | no swaps run; the metric/loader question is open; any change to the rule goes in an amendment first. Check a published metric's exact definition before pre-setting an acceptance rule on it |
