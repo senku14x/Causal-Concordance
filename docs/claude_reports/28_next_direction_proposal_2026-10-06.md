@@ -1,6 +1,6 @@
 # What we should do next, and why (proposal, 2026-10-06)
 
-*Draft for the PI. Nothing here has run. Costs are GPU time; the code is not the bottleneck. Where a claim rests on
+*Draft for the PI. Nothing here has run. Wording corrected 2026-10-06 (PI): §1 says "no single-cell leverage", not "not used"; superseded in part by `docs/design_specs/008_009_trackb_brewcode.md`. Costs are GPU time; the code is not the bottleneck. Where a claim rests on
 earlier work, the report is named.*
 
 ## 0. The recommendation in one paragraph
@@ -18,7 +18,7 @@ outcomes decide whether the next confirmatory experiment happens on the new fami
 
 | Result | Source | What it says |
 |---|---|---|
-| The readers' z signal does not follow use. The Oracle's D_z is about 1.85× higher at `</think>` (patch share ≈ 0.01) than at `:` (≈ 0.48); the NLA's is about equal | 006 post hoc | Readers report z where the model does not use it |
+| The readers' z signal does not follow single-cell leverage. The Oracle's D_z is about 1.85× higher at `</think>` (patch share ≈ 0.01) than at `:` (≈ 0.48); the NLA's is about equal | 006 post hoc | Readers report z at a cell with no single-cell leverage |
 | The model's own next-token output tracks z at all three cells (D_z 3.66–3.99); z is the runner-up answer in 27/48 tables | 006b | z is output-facing content on brew |
 | From the J piece, the readers name z for the right render but as often as the answer, mostly framed as a result | report 27 | Their content reads like "candidate answers", not "a held step" |
 | The Oracle's z tracking depends on the J subspace (confirmed on test); the NLA's does not; the model's answer gives J no privilege | 007 | A reader–model dissociation, on a weak model-side test |
@@ -57,7 +57,7 @@ needs. Cues must satisfy z′ ≠ z and a′ ≠ a, as in our partner rules.
 
 **Render.** Brew's convention: chat template, thinking off, and an "Answer:" prefill. This gives the same emit cells as
 brew (assistant newline, `</think>`, `:`), so results are comparable across families. Brew's `</think>` cell was exactly
-the "present but unused" cell, and we want to see whether that repeats.
+the "present, no single-cell leverage" cell, and we want to see whether that repeats.
 
 **Gate.** The project standard: greedy correct, and ≥ 9/10 correct at T = 0.8 for both members.
 
@@ -233,7 +233,7 @@ Total before the decision point: about 2–2.5 GPU-h, all within the exploratory
 **We will know:**
 - Whether any of our readers tracks *use* rather than *presence* on a task where output-facing content cannot explain
   the signal. This is the first clean answer to the project's question for one family on Qwen3.6-27B.
-- Whether brew's `</think>` pattern (strong reader signal at an unused cell) generalises, or was the runner-up confound.
+- Whether brew's `</think>` pattern (strong reader signal at a cell with no single-cell leverage) generalises, or was the runner-up confound.
 - Whether the paper's §3.3 J privilege holds on Qwen under the paper's protocol, and so whether 007's dissociation
   stands.
 - Whether J privilege, if any, depends on the norm metric.
