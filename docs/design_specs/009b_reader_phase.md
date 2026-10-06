@@ -27,9 +27,13 @@
   - SEC captures of the gated dev renders, both tasks, at the 3 emit cells;
   - 007's pieces, built with 007's bases: whole, J (the raw-W_U J subspace at the reader's layer), rest_J,
     R0–R2 (random 1,024-dim), rest_R0.
-- **Statistic:** 006's D for z, f and start (start and f on collision-free pairs) as a mean over tables, with:
+- **Statistic:** 006's D for z, f and start as a mean over tables, on **collision-free pairs for every role, z included**,
+  with:
   - a 95% table-cluster bootstrap (10,000 draws, seed 20261004) and sign counts;
   - a 200-derangement null on the whole piece.
+
+- **Collision rule** (added 2026-10-06 17:59 UTC, before any reader ran): a pair is skipped for a role if its two colours for
+  that role coincide with the other role's colour of either member (z = f at depth 1). An all-pairs sensitivity is reported.
 
 ## Gates (per reader, before any outcome is read)
 

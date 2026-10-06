@@ -14,6 +14,7 @@ import c009 as C
 
 CI = {c: i for i, c in enumerate(C.COLOURS)}
 NB = 10000
+ALL_PAIRS = [False]          # set True for the all-pairs sensitivity
 N_DERANGE = 200
 DELTA = 0.5
 
@@ -44,7 +45,8 @@ def pairs_of(meta):
             roles_p = {k: r[k] for k in ("start", "z", "f")}
             coll = {}
             for k in ("start", "z", "f"):
-                others = {v for kk, v in roles_m.items() if kk != k} | {v for kk, v in roles_p.items() if kk != k}
+                other = ("start",) if k in ("z", "f") else ("z", "f")      # z and f are one role at depth 1 (z = f)
+                others = {roles_m[o] for o in other} | {roles_p[o] for o in other}
                 coll[k] = bool({roles_m[k], roles_p[k]} & others)
             out.append({"m": m, "p": i, "item": r["item"], "m_roles": roles_m, "p_roles": roles_p, "collide": coll})
     return out
@@ -53,7 +55,7 @@ def pairs_of(meta):
 def pair_D(LLc, pairs, role, rows=None):
     v = np.full(len(pairs), np.nan)
     for i, p in enumerate(pairs):
-        if role != "z" and p["collide"][role]:
+        if p["collide"][role] and not ALL_PAIRS[0]:            # collision-free primary for every role, z included
             continue
         tm, tp = p["m_roles"][role], p["p_roles"][role]
         if tm == tp:

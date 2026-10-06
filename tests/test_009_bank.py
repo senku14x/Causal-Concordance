@@ -119,7 +119,8 @@ def test_select_partners_cap():
 
 
 def test_d_stat_known_value():
-    rs = [{"item": "t", "role": "member", "z": "red", "f": "blue"}, {"item": "t", "role": "partner", "z": "green", "f": "pink"}]
+    rs = [{"item": "t", "role": "member", "start": "gold", "z": "red", "f": "blue"},
+          {"item": "t", "role": "partner", "start": "teal", "z": "green", "f": "pink"}]
     LL = np.zeros((2, 12))
     ci = {c: k for k, c in enumerate(C.COLOURS)}
     LL[0, ci["red"]] = 2.0          # member favours its own z
@@ -128,6 +129,9 @@ def test_d_stat_known_value():
     assert d["mean"] == pytest.approx(3.0) and d["n_pairs"] == 1
     assert DR.d_stat(LL, rs, [(0, 1)], "f")["mean"] == pytest.approx(0.0)
     assert DR.inside([-0.4, 0.4]) and not DR.inside([-0.6, 0.1])
+    rs2 = [dict(rs[0]), dict(rs[1], start="red")]          # the partner's start = the member's z: a collision
+    assert DR.d_stat(LL, rs2, [(0, 1)], "z") == {"n": 0}
+    assert DR.d_stat(LL, rs2, [(0, 1)], "z", collision_free=False)["n_pairs"] == 1
 
 
 def test_probe_sanity():
@@ -170,9 +174,19 @@ def test_gated_material(tmp_path, monkeypatch):
     assert len(pr) == 1 and rs[pr[0][0]]["role"] == "member"
 
 
+def test_label_code_does_not_import_reader_side_009():
+    for f in (ROOT / "scripts" / "009_brewcode").glob("*.py"):
+        if f.name.startswith("read009"):
+            continue
+        src = f.read_text()
+        assert "read009" not in src, f.name
+
+
 def test_reader_free_imports():
     bad = {"readers", "jspace", "jlens", "peft", "p005", "planted", "vllm", "vllm_lens"}
     for f in (ROOT / "scripts" / "009_brewcode").glob("*.py"):
+        if f.name.startswith("read009"):                       # reader-side by design (009b); label code never imports it
+            continue
         names = set()
         for node in ast.walk(ast.parse(f.read_text())):
             if isinstance(node, ast.Import):

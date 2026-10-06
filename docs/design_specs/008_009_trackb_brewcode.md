@@ -306,3 +306,11 @@ Readers start only when **all** of the following hold on dev:
   - Otherwise g2 runs to completion.
   - Reason: the full depth-2 gate costs about 45 GPU-min, and its outcome would then already be determined.
 - The rest of the reader-free queue (outfacing, captures, probes, profile) runs on whichever gate run passes §2.4.
+- **Collision rule (added 17:59 UTC, before the outfacing stage or any reader ran on 009).**
+  - The depth-1 partner constraints do not exclude a partner whose hidden colour equals the member's start, or the
+    reverse: 271 of 2,134 dev candidate pairs (13%).
+  - A reader echoing the prompt's start colour would then mimic hidden-colour tracking.
+  - **Primary D for z and f (z = f at depth 1) is now collision-free:** pairs are skipped where either member's hidden
+    colour equals either member's start colour. For start, the same rule applies with the roles reversed.
+  - The all-pairs D is reported alongside (`D_all_pairs`).
+  - The outfacing pass rule uses the collision-free D.

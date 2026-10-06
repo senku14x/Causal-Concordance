@@ -95,14 +95,25 @@ def lse(xs):
 
 
 # --------------------------------------------------------------------------------------------- D statistic (006b)
-def d_stat(LL, renders, pairs, role, rng_seed=C.BOOT_SEED):
+def collides(rm, rp, role):
+    """True if the pair's two colours for `role` coincide with another role's colour of either member (z and f count as one
+    role at depth 1, where z = f). Added 2026-10-06 before any 009 outfacing or reader run (design §E-009)."""
+    other = ("start",) if role in ("z", "f") else ("z", "f")
+    vals = {r[o] for r in (rm, rp) for o in other}
+    return bool({rm[role], rp[role]} & vals)
+
+
+def d_stat(LL, renders, pairs, role, rng_seed=C.BOOT_SEED, collision_free=True):
     """006b's D for one role at one slot: per pair [LL_m(t_m) - LL_m(t_p)] - [LL_p(t_m) - LL_p(t_p)], averaged over a
-    table's partners, then a 10,000-draw table-cluster bootstrap of the mean. LL: [n_renders, 12] (colour order C.COLOURS)."""
+    table's partners, then a 10,000-draw table-cluster bootstrap of the mean. LL: [n_renders, 12] (colour order C.COLOURS).
+    collision_free (primary): skip pairs whose role colours coincide with another role's colour of either member."""
     ci = {c: k for k, c in enumerate(C.COLOURS)}
     per = {}
     for m, p in pairs:
         tm, tp = renders[m][role], renders[p][role]
         if tm == tp:
+            continue
+        if collision_free and collides(renders[m], renders[p], role):
             continue
         v = (LL[m, ci[tm]] - LL[m, ci[tp]]) - (LL[p, ci[tm]] - LL[p, ci[tp]])
         per.setdefault(renders[m]["item"], []).append(float(v))
@@ -211,6 +222,8 @@ def summarize_outfacing(renders, LL, rank, cont, slots, depth):
         pr = pairs_of(renders, t)
         S["D"][t] = {s: {role: d_stat(LL[:, si, :], renders, pr, role) for role in ("z", "f", "start")}
                      for si, s in enumerate(slots)}
+        S.setdefault("D_all_pairs", {})[t] = {s: {role: d_stat(LL[:, si, :], renders, pr, role, collision_free=False)
+                                                  for role in ("z", "f", "start")} for si, s in enumerate(slots)}
         mem = [i for i, r in enumerate(renders) if r["role"] == "member" and r["task"] == t]
         S["rank"][t] = {role: {"median": float(np.median(rank[mem, k])), "q10": float(np.quantile(rank[mem, k], .1)),
                                "min": float(np.min(rank[mem, k]))} for k, role in enumerate(("z", "f"))}
