@@ -6,6 +6,31 @@ relevant reading listed at the top of `CLAUDE.md`. That is the PI's rule. The ne
 and report 25 (`docs/claude_reports/25_nla_stops_and_open_issues_2026-10-06.md`). Then `CLAUDE.md`, this file (newest first),
 `docs/reports/005_followups.md` and `docs/reports/006_reader_likelihood.md`.*
 
+**2026-10-06 (new session; branch `008-trackb-brewcode`; relaxed rules per the PI's onboarding prompt §7).**
+- **Reports:**
+  - 26: up-to-speed report and inconsistencies (multihop restatement share is 0.15–0.28, not "about half"; the Oracle
+    Lens is WSB's A.9.2 oracle lens, not Karvonen; nla-rl ships an AR at step 600);
+  - 27: qualitative readouts;
+  - 28: proposal;
+  - 29: 010 reader agreement.
+- **008, Track B** (exploratory; 82 gated dev pairs; all gates pass; `docs/reports/008_trackb.md`): the paper's §3.3
+  protocol on brew (class-mean z swaps clamped per layer over the emit cells × L40–48).
+  - Full-direction lever S 0.21, flips 16%.
+  - The J part carries S 0.02–0.03, the non-J part 0.21; the whitened swap gives J 0.07–0.10 vs non-J 0.11–0.14.
+  - Clamping J coordinates barely changes the non-J effect.
+  - → **no model-side J privilege** at these cells and layers. 007's dissociation stands.
+  - The lens-coordinate swap (arm A) failed its positive control: answer-atom swaps give S 0.01.
+- **010** (exploratory, CPU; report 29):
+  - NLA–Oracle per-pair agreement is weak (r 0.24–0.30);
+  - mid-layer readers track what the J lens reads (r 0.63–0.80), not the model's next-token output (0.2–0.3);
+  - only the late Oracle (L56/L60) follows the model's output.
+- **009, brew-code bank** (design note `docs/design_specs/008_009_trackb_brewcode.md`; reader rules in `009b`):
+  - the code is built and CPU-tested;
+  - the depth-2 gate is failing on the final-code task (1/15 renders after 6 tables), so the early-stop rule (§E-009)
+    falls back to depth 1;
+  - reader-free de-risk queued;
+  - **no readers yet.**
+
 **2026-10-05, 007 — J-subspace split with controls (branch `007-jsubspace`; spec v2 2820e53 + A1 5cdafd9; report `docs/reports/007_jsubspace.md`; per-stage status `results/007_jsubspace/status/`; ~2.2 GPU-h, unattended under rule 12).**
 - **Reader side, confirmed on the brew test:** the Oracle's z tracking at `:` L40 is carried by the J (token-readout) subspace — H_J supported on dev and on the 49 test tables (J 5.8 / 5.0 nats vs whole 3.2 / 2.9; rest of J 0.3); Raw and Visible contradicted at L40 and L44 on both splits; L44 unresolved by positive-control rules. Same pattern at `</think>` (patch share 0.01).
 - **Model side:** J-subspace swaps track content share (L42) or exceed random modestly but not PCA-4 (L40/L44, below margin); in the adapted §3.3 test the J part of a class-mean z direction moves the answer less than its non-J part. → A reader–model dissociation.
