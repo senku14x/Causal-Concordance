@@ -197,8 +197,9 @@ def floor_ok(a, b, mx=0.25, md=0.05):
 
 # ------------------------------------------------------------------------------------------------ the stage
 class Stage:
-    def __init__(self, stage, run_id, nla_posthoc=False):
+    def __init__(self, stage, run_id, nla_posthoc=False, g1_quantile=False):
         self.posthoc = nla_posthoc                                         # A2: NLA only, 006's exact 24-row scorer
+        self.g1_quantile = g1_quantile                                     # A3: noise-aware G-score1 (NLA Stage 1b rerun)
         self.stage = stage
         self.cname = {"stage1a": "colon", "stage1b": "think", "brew_test": "colon"}[stage]
         self.cell = C.CELLS[self.cname]
@@ -389,9 +390,19 @@ class Stage:
         if "G_score1" not in st:
             t0 = time.time()
             single = [i for i, s in enumerate(seqs) if len(s) == 1]
-            a = score(acts("whole", range(4)), base, seqs, False, apb)[:, single]
-            b = score_next(acts("whole", range(4)), base, [seqs[i][0] for i in single])
-            mx, md, ok = floor_ok(a.numpy(), b.cpu().numpy())
+            if self.g1_quantile:                                           # A3 (NLA Stage 1b rerun): median and p99 over 32
+                a = score(acts("whole", range(32)), base, seqs, False, apb)[:, single]
+                b = score_next(acts("whole", range(32)), base, [seqs[i][0] for i in single])
+                dd = np.abs(a.numpy() - b.cpu().numpy())
+                mx, md, p99 = float(dd.max()), float(np.median(dd)), float(np.quantile(dd, 0.99))
+                ok = bool(md <= 0.05 and p99 <= 0.25)
+                st["G_score1_A3"] = {"n_values": int(dd.size), "median": md, "p99": p99, "max": mx, "pass": ok,
+                                     "rule": "A3: median <= 0.05 and p99 <= 0.25 over 32 activations"}
+                self.log(f"G-score1 (A3) {tag}: median {md:.4f} p99 {p99:.4f} max {mx:.4f} -> {'pass' if ok else 'FAIL'}")
+            else:
+                a = score(acts("whole", range(4)), base, seqs, False, apb)[:, single]
+                b = score_next(acts("whole", range(4)), base, [seqs[i][0] for i in single])
+                mx, md, ok = floor_ok(a.numpy(), b.cpu().numpy())
             # G-fastpath: the 2-row scorer vs the original 24-row readers.score_seq, every spelling (bf16 floor)
             if self.posthoc:
                 fok = True
@@ -729,13 +740,15 @@ def main():
     ap.add_argument("stage", choices=["stage1a", "stage1b", "brew_test"])
     ap.add_argument("--run-id", default="r1")
     ap.add_argument("--nla-posthoc", action="store_true", help="A2: the NLA only, on 006's exact 24-row scorer")
+    ap.add_argument("--g1-quantile", action="store_true", help="A3: G-score1 by median and p99 over 32 activations")
     a = ap.parse_args()
     d = C.OUT / a.stage / a.run_id
     d.mkdir(parents=True, exist_ok=True)
     (d / "manifest.json").write_text(json.dumps({"stage": a.stage, "run_id": a.run_id, "manifest": R.manifest_block(),
                                                  "nla_posthoc": a.nla_posthoc,
-                                                 "design": "docs/design_specs/007_jsubspace.md (v2 + A1 + A2)"}, indent=1))
-    Stage(a.stage, a.run_id, nla_posthoc=a.nla_posthoc).run()
+                                                 "design": "docs/design_specs/007_jsubspace.md (v2 + A1 + A2 + A3)"}, indent=1))
+    assert not a.g1_quantile or (a.nla_posthoc and a.stage == "stage1b"), "A3 applies to the NLA Stage 1b rerun only"
+    Stage(a.stage, a.run_id, nla_posthoc=a.nla_posthoc, g1_quantile=a.g1_quantile).run()
 
 
 if __name__ == "__main__":

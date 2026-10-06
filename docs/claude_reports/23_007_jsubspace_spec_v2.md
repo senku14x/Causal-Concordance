@@ -1070,3 +1070,29 @@ outcome had ever been computed (the gate failure stopped the NLA before any piec
   labelled post hoc.
 - **A1 shared-path rule:** the failure was specific to the 2-row scorer path. This rerun uses a different path, by the
   PI's instruction; `disabled_readers.json` is kept as the record of the original failure.
+
+## 23. Amendment A3 — a noise-aware G-score1 for the NLA's post hoc Stage 1b rerun (adopted 2026-10-06, before the rerun)
+
+**Trigger.** The A2 rerun of Stage 1b stopped at its first gate: G-score1 max 0.280 > 0.25 (median 0.046) on 4 `</think>`
+activations. No NLA `</think>` outcome was computed. The PI's answer to the options in report 25: "get me the nla results".
+
+**Basis.** Report 25's engineering diagnostic (`diag_nla_numerics.json`; it computes no research outcome) shows three
+things:
+- the NLA's scores are deterministic per batch layout;
+- any change of layout moves its log-probs by bf16 noise about 2× the Oracle's;
+- the maximum of that noise grows with the number of values checked (at `:`, 0.09 over 1 activation and 0.21 over 16).
+
+A fixed maximum calibrated on the Oracle therefore trips by chance for the NLA. A quantile does not grow with the number
+of values.
+
+**The change (NLA, Stage 1b rerun only; everything else as in A2).** G-score1 is computed on the single-token spellings
+of the first 32 `</think>` activations. It passes if the **median ≤ 0.05 and the 99th percentile ≤ 0.25**; the max is
+reported.
+
+**Unchanged:**
+- the scorer (006's exact path) and the inputs;
+- G-score2, G-repro (against 006's `</think>` NLA likelihoods: median ≤ 0.05, max ≤ 0.25, D_z within 0.1), G-inject with
+  the scale check, and G-mem;
+- the statistics, the categories and the labels.
+
+**Labelling.** Post hoc, dev only, like the Oracle's Stage 1b.
