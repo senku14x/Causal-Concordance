@@ -1,0 +1,1229 @@
+{
+ "label": "EXPLORATORY; Jan's phrase-lens code unmodified (ea85583); rates on clean-correct items only",
+ "runs": {
+  "j_ablation_L24-47": {
+   "n_rows": 96,
+   "categories": {
+    "survives": 59,
+    "contaminated": 5,
+    "uncovered": 9,
+    "disrupted": 23
+   },
+   "n_clean_correct": 82,
+   "survives": {
+    "k": 59,
+    "n": 82,
+    "rate": 0.7195121951219512,
+    "wilson95": [
+     0.6141492745488778,
+     0.805228500120374
+    ]
+   },
+   "random_control": {
+    "k": 82,
+    "n": 82,
+    "rate": 1.0,
+    "wilson95": [
+     0.955249375635518,
+     1.0
+    ]
+   },
+   "unchanged": null,
+   "by_target": {
+    "other_targets": {
+     "survives": 41,
+     "disrupted": 14
+    },
+    "Japan": {
+     "survives": 18,
+     "disrupted": 9
+    }
+   },
+   "by_relation": {
+    "Z": {
+     "survives": 2
+    },
+    "antonym": {
+     "survives": 2
+    },
+    "bird": {
+     "survives": 1
+    },
+    "capital": {
+     "survives": 11,
+     "disrupted": 4
+    },
+    "continent": {
+     "survives": 4,
+     "disrupted": 2
+    },
+    "count": {
+     "survives": 1
+    },
+    "country": {
+     "survives": 1,
+     "disrupted": 2
+    },
+    "currency": {
+     "survives": 3
+    },
+    "desert": {
+     "disrupted": 1
+    },
+    "element": {
+     "survives": 3
+    },
+    "epic": {
+     "disrupted": 1
+    },
+    "faces": {
+     "survives": 1
+    },
+    "firstname": {
+     "survives": 2
+    },
+    "fruit": {
+     "survives": 1
+    },
+    "language": {
+     "survives": 4,
+     "disrupted": 5
+    },
+    "legs": {
+     "survives": 1
+    },
+    "month": {
+     "survives": 3
+    },
+    "monthnum": {
+     "survives": 4,
+     "disrupted": 1
+    },
+    "moons": {
+     "survives": 1
+    },
+    "mountain": {
+     "survives": 1
+    },
+    "mountains": {
+     "disrupted": 1
+    },
+    "ocean": {
+     "disrupted": 1,
+     "survives": 2
+    },
+    "olympic": {
+     "survives": 1
+    },
+    "opposite": {
+     "survives": 4
+    },
+    "players": {
+     "survives": 1
+    },
+    "prevmonth": {
+     "survives": 1
+    },
+    "river": {
+     "survives": 1,
+     "disrupted": 3
+    },
+    "sea": {
+     "disrupted": 1
+    },
+    "season": {
+     "survives": 1
+    },
+    "state": {
+     "disrupted": 1
+    },
+    "symbol": {
+     "survives": 2
+    }
+   },
+   "cos_src_tgt_median_over_layers": {
+    "median": null,
+    "n": 0
+   }
+  },
+  "j_bcast_L24-47": {
+   "n_rows": 192,
+   "categories": {
+    "success": 46,
+    "clean_target_present": 1,
+    "other": 19,
+    "contaminated": 45,
+    "unchanged": 81
+   },
+   "n_clean_correct": 146,
+   "success": {
+    "k": 46,
+    "n": 146,
+    "rate": 0.3150684931506849,
+    "wilson95": [
+     0.24527826355325644,
+     0.394340835171759
+    ]
+   },
+   "random_control": {
+    "k": 3,
+    "n": 146,
+    "rate": 0.02054794520547945,
+    "wilson95": [
+     0.007012381441687324,
+     0.05866676340094516
+    ]
+   },
+   "unchanged": {
+    "k": 81,
+    "n": 146,
+    "rate": 0.5547945205479452,
+    "wilson95": [
+     0.47380203825018546,
+     0.6329774880535137
+    ]
+   },
+   "by_target": {
+    "other_targets": {
+     "success": 46,
+     "other": 19,
+     "unchanged": 81
+    }
+   },
+   "by_relation": {
+    "april": {
+     "unchanged": 6,
+     "success": 1,
+     "other": 1
+    },
+    "canada": {
+     "success": 9,
+     "other": 2
+    },
+    "china": {
+     "success": 10
+    },
+    "eagle": {
+     "unchanged": 3,
+     "success": 3
+    },
+    "egypt": {
+     "success": 10,
+     "other": 1
+    },
+    "february": {
+     "unchanged": 8,
+     "other": 1
+    },
+    "five": {
+     "other": 2,
+     "unchanged": 9,
+     "success": 1
+    },
+    "france": {
+     "success": 8,
+     "other": 1
+    },
+    "july": {
+     "unchanged": 9,
+     "other": 1
+    },
+    "lion": {
+     "success": 1,
+     "unchanged": 1,
+     "other": 2
+    },
+    "nine": {
+     "other": 3,
+     "unchanged": 8,
+     "success": 1
+    },
+    "october": {
+     "unchanged": 9
+    },
+    "seven": {
+     "other": 1,
+     "unchanged": 11
+    },
+    "shark": {
+     "unchanged": 4,
+     "success": 1
+    },
+    "spider": {
+     "unchanged": 3,
+     "other": 2,
+     "success": 1
+    },
+    "three": {
+     "unchanged": 10,
+     "other": 2
+    }
+   },
+   "cos_src_tgt_median_over_layers": {
+    "median": 0.8954442739486694,
+    "n": 146
+   }
+  },
+  "j_swap_L24-35": {
+   "n_rows": 96,
+   "categories": {
+    "unchanged": 42,
+    "contaminated": 5,
+    "uncovered": 9,
+    "other": 2,
+    "success": 38
+   },
+   "n_clean_correct": 82,
+   "success": {
+    "k": 38,
+    "n": 82,
+    "rate": 0.4634146341463415,
+    "wilson95": [
+     0.35955095943425275,
+     0.5705527447875388
+    ]
+   },
+   "random_control": {
+    "k": 1,
+    "n": 82,
+    "rate": 0.012195121951219513,
+    "wilson95": [
+     0.002155992057983412,
+     0.0658933975659014
+    ]
+   },
+   "unchanged": {
+    "k": 42,
+    "n": 82,
+    "rate": 0.5121951219512195,
+    "wilson95": [
+     0.4059077230770538,
+     0.6173910421823492
+    ]
+   },
+   "by_target": {
+    "other_targets": {
+     "unchanged": 41,
+     "other": 2,
+     "success": 12
+    },
+    "Japan": {
+     "success": 26,
+     "unchanged": 1
+    }
+   },
+   "by_relation": {
+    "Z": {
+     "unchanged": 2
+    },
+    "antonym": {
+     "unchanged": 2
+    },
+    "bird": {
+     "unchanged": 1
+    },
+    "capital": {
+     "success": 13,
+     "unchanged": 2
+    },
+    "continent": {
+     "success": 4,
+     "unchanged": 2
+    },
+    "count": {
+     "unchanged": 1
+    },
+    "country": {
+     "success": 1,
+     "unchanged": 2
+    },
+    "currency": {
+     "success": 3
+    },
+    "desert": {
+     "success": 1
+    },
+    "element": {
+     "unchanged": 3
+    },
+    "epic": {
+     "unchanged": 1
+    },
+    "faces": {
+     "unchanged": 1
+    },
+    "firstname": {
+     "unchanged": 2
+    },
+    "fruit": {
+     "unchanged": 1
+    },
+    "language": {
+     "success": 9
+    },
+    "legs": {
+     "unchanged": 1
+    },
+    "month": {
+     "unchanged": 3
+    },
+    "monthnum": {
+     "unchanged": 5
+    },
+    "moons": {
+     "unchanged": 1
+    },
+    "mountain": {
+     "success": 1
+    },
+    "mountains": {
+     "unchanged": 1
+    },
+    "ocean": {
+     "success": 1,
+     "unchanged": 2
+    },
+    "olympic": {
+     "unchanged": 1
+    },
+    "opposite": {
+     "other": 1,
+     "unchanged": 3
+    },
+    "players": {
+     "unchanged": 1
+    },
+    "prevmonth": {
+     "unchanged": 1
+    },
+    "river": {
+     "success": 2,
+     "other": 1,
+     "unchanged": 1
+    },
+    "sea": {
+     "success": 1
+    },
+    "season": {
+     "success": 1
+    },
+    "state": {
+     "success": 1
+    },
+    "symbol": {
+     "unchanged": 2
+    }
+   },
+   "cos_src_tgt_median_over_layers": {
+    "median": 0.7400141954421997,
+    "n": 82
+   }
+  },
+  "j_swap_L24-39": {
+   "n_rows": 96,
+   "categories": {
+    "unchanged": 33,
+    "contaminated": 5,
+    "other": 4,
+    "uncovered": 9,
+    "success": 45
+   },
+   "n_clean_correct": 82,
+   "success": {
+    "k": 45,
+    "n": 82,
+    "rate": 0.5487804878048781,
+    "wilson95": [
+     0.44130776049169684,
+     0.6518873005459147
+    ]
+   },
+   "random_control": {
+    "k": 1,
+    "n": 82,
+    "rate": 0.012195121951219513,
+    "wilson95": [
+     0.002155992057983412,
+     0.0658933975659014
+    ]
+   },
+   "unchanged": {
+    "k": 33,
+    "n": 82,
+    "rate": 0.4024390243902439,
+    "wilson95": [
+     0.3029744308441843,
+     0.5106354470805927
+    ]
+   },
+   "by_target": {
+    "other_targets": {
+     "unchanged": 33,
+     "other": 4,
+     "success": 18
+    },
+    "Japan": {
+     "success": 27
+    }
+   },
+   "by_relation": {
+    "Z": {
+     "unchanged": 2
+    },
+    "antonym": {
+     "other": 1,
+     "unchanged": 1
+    },
+    "bird": {
+     "unchanged": 1
+    },
+    "capital": {
+     "success": 15
+    },
+    "continent": {
+     "success": 5,
+     "unchanged": 1
+    },
+    "count": {
+     "unchanged": 1
+    },
+    "country": {
+     "success": 3
+    },
+    "currency": {
+     "success": 3
+    },
+    "desert": {
+     "success": 1
+    },
+    "element": {
+     "unchanged": 3
+    },
+    "epic": {
+     "unchanged": 1
+    },
+    "faces": {
+     "unchanged": 1
+    },
+    "firstname": {
+     "unchanged": 2
+    },
+    "fruit": {
+     "unchanged": 1
+    },
+    "language": {
+     "success": 9
+    },
+    "legs": {
+     "unchanged": 1
+    },
+    "month": {
+     "unchanged": 2,
+     "success": 1
+    },
+    "monthnum": {
+     "unchanged": 5
+    },
+    "moons": {
+     "unchanged": 1
+    },
+    "mountain": {
+     "success": 1
+    },
+    "mountains": {
+     "unchanged": 1
+    },
+    "ocean": {
+     "success": 1,
+     "unchanged": 2
+    },
+    "olympic": {
+     "unchanged": 1
+    },
+    "opposite": {
+     "other": 2,
+     "unchanged": 2
+    },
+    "players": {
+     "unchanged": 1
+    },
+    "prevmonth": {
+     "other": 1
+    },
+    "river": {
+     "success": 3,
+     "unchanged": 1
+    },
+    "sea": {
+     "success": 1
+    },
+    "season": {
+     "success": 1
+    },
+    "state": {
+     "success": 1
+    },
+    "symbol": {
+     "unchanged": 2
+    }
+   },
+   "cos_src_tgt_median_over_layers": {
+    "median": 0.7223124504089355,
+    "n": 82
+   }
+  },
+  "j_swap_L24-47": {
+   "n_rows": 96,
+   "categories": {
+    "unchanged": 31,
+    "contaminated": 5,
+    "success": 48,
+    "uncovered": 9,
+    "other": 3
+   },
+   "n_clean_correct": 82,
+   "success": {
+    "k": 48,
+    "n": 82,
+    "rate": 0.5853658536585366,
+    "wilson95": [
+     0.47725695749969754,
+     0.6858343993161226
+    ]
+   },
+   "random_control": {
+    "k": 5,
+    "n": 82,
+    "rate": 0.06097560975609756,
+    "wilson95": [
+     0.026323954901191667,
+     0.13492049576030468
+    ]
+   },
+   "unchanged": {
+    "k": 31,
+    "n": 82,
+    "rate": 0.3780487804878049,
+    "wilson95": [
+     0.28078371523417406,
+     0.4862286321717972
+    ]
+   },
+   "by_target": {
+    "other_targets": {
+     "unchanged": 31,
+     "success": 21,
+     "other": 3
+    },
+    "Japan": {
+     "success": 27
+    }
+   },
+   "by_relation": {
+    "Z": {
+     "unchanged": 1,
+     "success": 1
+    },
+    "antonym": {
+     "unchanged": 2
+    },
+    "bird": {
+     "success": 1
+    },
+    "capital": {
+     "success": 15
+    },
+    "continent": {
+     "success": 5,
+     "unchanged": 1
+    },
+    "count": {
+     "unchanged": 1
+    },
+    "country": {
+     "success": 3
+    },
+    "currency": {
+     "success": 3
+    },
+    "desert": {
+     "success": 1
+    },
+    "element": {
+     "unchanged": 3
+    },
+    "epic": {
+     "unchanged": 1
+    },
+    "faces": {
+     "unchanged": 1
+    },
+    "firstname": {
+     "unchanged": 2
+    },
+    "fruit": {
+     "unchanged": 1
+    },
+    "language": {
+     "success": 9
+    },
+    "legs": {
+     "unchanged": 1
+    },
+    "month": {
+     "unchanged": 1,
+     "success": 2
+    },
+    "monthnum": {
+     "unchanged": 5
+    },
+    "moons": {
+     "unchanged": 1
+    },
+    "mountain": {
+     "success": 1
+    },
+    "mountains": {
+     "unchanged": 1
+    },
+    "ocean": {
+     "success": 1,
+     "unchanged": 2
+    },
+    "olympic": {
+     "unchanged": 1
+    },
+    "opposite": {
+     "other": 2,
+     "unchanged": 2
+    },
+    "players": {
+     "unchanged": 1
+    },
+    "prevmonth": {
+     "other": 1
+    },
+    "river": {
+     "success": 3,
+     "unchanged": 1
+    },
+    "sea": {
+     "success": 1
+    },
+    "season": {
+     "success": 1
+    },
+    "state": {
+     "success": 1
+    },
+    "symbol": {
+     "unchanged": 2
+    }
+   },
+   "cos_src_tgt_median_over_layers": {
+    "median": 0.618618369102478,
+    "n": 82
+   }
+  },
+  "j_swap_L36-47": {
+   "n_rows": 96,
+   "categories": {
+    "unchanged": 34,
+    "contaminated": 5,
+    "success": 46,
+    "uncovered": 9,
+    "other": 2
+   },
+   "n_clean_correct": 82,
+   "success": {
+    "k": 46,
+    "n": 82,
+    "rate": 0.5609756097560976,
+    "wilson95": [
+     0.45322921017986706,
+     0.6632646161171475
+    ]
+   },
+   "random_control": {
+    "k": 3,
+    "n": 82,
+    "rate": 0.036585365853658534,
+    "wilson95": [
+     0.01251957298416867,
+     0.10212734715852193
+    ]
+   },
+   "unchanged": {
+    "k": 34,
+    "n": 82,
+    "rate": 0.4146341463414634,
+    "wilson95": [
+     0.31416560068387744,
+     0.5227430425003025
+    ]
+   },
+   "by_target": {
+    "other_targets": {
+     "unchanged": 34,
+     "success": 19,
+     "other": 2
+    },
+    "Japan": {
+     "success": 27
+    }
+   },
+   "by_relation": {
+    "Z": {
+     "unchanged": 2
+    },
+    "antonym": {
+     "unchanged": 2
+    },
+    "bird": {
+     "success": 1
+    },
+    "capital": {
+     "success": 15
+    },
+    "continent": {
+     "success": 5,
+     "unchanged": 1
+    },
+    "count": {
+     "unchanged": 1
+    },
+    "country": {
+     "success": 3
+    },
+    "currency": {
+     "success": 3
+    },
+    "desert": {
+     "success": 1
+    },
+    "element": {
+     "unchanged": 3
+    },
+    "epic": {
+     "unchanged": 1
+    },
+    "faces": {
+     "unchanged": 1
+    },
+    "firstname": {
+     "unchanged": 2
+    },
+    "fruit": {
+     "other": 1
+    },
+    "language": {
+     "success": 9
+    },
+    "legs": {
+     "unchanged": 1
+    },
+    "month": {
+     "unchanged": 2,
+     "success": 1
+    },
+    "monthnum": {
+     "unchanged": 5
+    },
+    "moons": {
+     "unchanged": 1
+    },
+    "mountain": {
+     "success": 1
+    },
+    "mountains": {
+     "unchanged": 1
+    },
+    "ocean": {
+     "success": 1,
+     "unchanged": 2
+    },
+    "olympic": {
+     "unchanged": 1
+    },
+    "opposite": {
+     "unchanged": 4
+    },
+    "players": {
+     "unchanged": 1
+    },
+    "prevmonth": {
+     "other": 1
+    },
+    "river": {
+     "success": 3,
+     "unchanged": 1
+    },
+    "sea": {
+     "success": 1
+    },
+    "season": {
+     "success": 1
+    },
+    "state": {
+     "success": 1
+    },
+    "symbol": {
+     "unchanged": 2
+    }
+   },
+   "cos_src_tgt_median_over_layers": {
+    "median": 0.5149259567260742,
+    "n": 82
+   }
+  },
+  "j_swap_L40-48": {
+   "n_rows": 96,
+   "categories": {
+    "unchanged": 35,
+    "contaminated": 5,
+    "uncovered": 9,
+    "other": 2,
+    "success": 45
+   },
+   "n_clean_correct": 82,
+   "success": {
+    "k": 45,
+    "n": 82,
+    "rate": 0.5487804878048781,
+    "wilson95": [
+     0.44130776049169684,
+     0.6518873005459147
+    ]
+   },
+   "random_control": {
+    "k": 2,
+    "n": 82,
+    "rate": 0.024390243902439025,
+    "wilson95": [
+     0.006714370270737513,
+     0.0846337846125502
+    ]
+   },
+   "unchanged": {
+    "k": 35,
+    "n": 82,
+    "rate": 0.4268292682926829,
+    "wilson95": [
+     0.325419487890423,
+     0.5347879205531598
+    ]
+   },
+   "by_target": {
+    "other_targets": {
+     "unchanged": 35,
+     "other": 2,
+     "success": 18
+    },
+    "Japan": {
+     "success": 27
+    }
+   },
+   "by_relation": {
+    "Z": {
+     "unchanged": 2
+    },
+    "antonym": {
+     "unchanged": 2
+    },
+    "bird": {
+     "success": 1
+    },
+    "capital": {
+     "success": 15
+    },
+    "continent": {
+     "success": 5,
+     "unchanged": 1
+    },
+    "count": {
+     "unchanged": 1
+    },
+    "country": {
+     "success": 3
+    },
+    "currency": {
+     "success": 3
+    },
+    "desert": {
+     "success": 1
+    },
+    "element": {
+     "unchanged": 3
+    },
+    "epic": {
+     "unchanged": 1
+    },
+    "faces": {
+     "unchanged": 1
+    },
+    "firstname": {
+     "unchanged": 2
+    },
+    "fruit": {
+     "unchanged": 1
+    },
+    "language": {
+     "success": 9
+    },
+    "legs": {
+     "unchanged": 1
+    },
+    "month": {
+     "unchanged": 3
+    },
+    "monthnum": {
+     "unchanged": 5
+    },
+    "moons": {
+     "unchanged": 1
+    },
+    "mountain": {
+     "success": 1
+    },
+    "mountains": {
+     "unchanged": 1
+    },
+    "ocean": {
+     "success": 1,
+     "unchanged": 2
+    },
+    "olympic": {
+     "unchanged": 1
+    },
+    "opposite": {
+     "other": 2,
+     "unchanged": 2
+    },
+    "players": {
+     "unchanged": 1
+    },
+    "prevmonth": {
+     "unchanged": 1
+    },
+    "river": {
+     "success": 3,
+     "unchanged": 1
+    },
+    "sea": {
+     "success": 1
+    },
+    "season": {
+     "success": 1
+    },
+    "state": {
+     "success": 1
+    },
+    "symbol": {
+     "unchanged": 2
+    }
+   },
+   "cos_src_tgt_median_over_layers": {
+    "median": 0.5001601576805115,
+    "n": 82
+   }
+  },
+  "logit_swap_L24-47": {
+   "n_rows": 96,
+   "categories": {
+    "unchanged": 81,
+    "contaminated": 5,
+    "uncovered": 9,
+    "other": 1
+   },
+   "n_clean_correct": 82,
+   "success": {
+    "k": 0,
+    "n": 82,
+    "rate": 0.0,
+    "wilson95": [
+     0.0,
+     0.04475062436448195
+    ]
+   },
+   "random_control": {
+    "k": 0,
+    "n": 82,
+    "rate": 0.0,
+    "wilson95": [
+     0.0,
+     0.04475062436448195
+    ]
+   },
+   "unchanged": {
+    "k": 81,
+    "n": 82,
+    "rate": 0.9878048780487805,
+    "wilson95": [
+     0.9341066024340986,
+     0.9978440079420167
+    ]
+   },
+   "by_target": {
+    "other_targets": {
+     "unchanged": 55
+    },
+    "Japan": {
+     "unchanged": 26,
+     "other": 1
+    }
+   },
+   "by_relation": {
+    "Z": {
+     "unchanged": 2
+    },
+    "antonym": {
+     "unchanged": 2
+    },
+    "bird": {
+     "unchanged": 1
+    },
+    "capital": {
+     "unchanged": 15
+    },
+    "continent": {
+     "unchanged": 6
+    },
+    "count": {
+     "unchanged": 1
+    },
+    "country": {
+     "unchanged": 3
+    },
+    "currency": {
+     "unchanged": 3
+    },
+    "desert": {
+     "unchanged": 1
+    },
+    "element": {
+     "unchanged": 3
+    },
+    "epic": {
+     "unchanged": 1
+    },
+    "faces": {
+     "unchanged": 1
+    },
+    "firstname": {
+     "unchanged": 2
+    },
+    "fruit": {
+     "unchanged": 1
+    },
+    "language": {
+     "unchanged": 8,
+     "other": 1
+    },
+    "legs": {
+     "unchanged": 1
+    },
+    "month": {
+     "unchanged": 3
+    },
+    "monthnum": {
+     "unchanged": 5
+    },
+    "moons": {
+     "unchanged": 1
+    },
+    "mountain": {
+     "unchanged": 1
+    },
+    "mountains": {
+     "unchanged": 1
+    },
+    "ocean": {
+     "unchanged": 3
+    },
+    "olympic": {
+     "unchanged": 1
+    },
+    "opposite": {
+     "unchanged": 4
+    },
+    "players": {
+     "unchanged": 1
+    },
+    "prevmonth": {
+     "unchanged": 1
+    },
+    "river": {
+     "unchanged": 4
+    },
+    "sea": {
+     "unchanged": 1
+    },
+    "season": {
+     "unchanged": 1
+    },
+    "state": {
+     "unchanged": 1
+    },
+    "symbol": {
+     "unchanged": 2
+    }
+   },
+   "cos_src_tgt_median_over_layers": {
+    "median": 0.25661084055900574,
+    "n": 82
+   }
+  },
+  "smoke_j_swap_L24-47": {
+   "n_rows": 4,
+   "categories": {
+    "unchanged": 3,
+    "contaminated": 1
+   },
+   "n_clean_correct": 3,
+   "success": {
+    "k": 0,
+    "n": 3,
+    "rate": 0.0,
+    "wilson95": [
+     0.0,
+     0.5614970356393196
+    ]
+   },
+   "random_control": {
+    "k": 0,
+    "n": 3,
+    "rate": 0.0,
+    "wilson95": [
+     0.0,
+     0.5614970356393196
+    ]
+   },
+   "unchanged": {
+    "k": 3,
+    "n": 3,
+    "rate": 1.0,
+    "wilson95": [
+     0.43850296436068037,
+     1.0
+    ]
+   },
+   "by_target": {
+    "other_targets": {
+     "unchanged": 3
+    }
+   },
+   "by_relation": {
+    "month": {
+     "unchanged": 1
+    },
+    "symbol": {
+     "unchanged": 2
+    }
+   },
+   "cos_src_tgt_median_over_layers": {
+    "median": 0.8415076732635498,
+    "n": 3
+   }
+  }
+ }
+}

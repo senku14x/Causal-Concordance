@@ -4,7 +4,9 @@ contamination categories, per-target / per-relation breakdowns, src/tgt cosine, 
 Categories per item (swap runs):
   uncovered     no direction for src or tgt (not evaluated)
   contaminated  clean answer wrong (clean_correct False); excluded from rates, counted
-  no_op         intervention continuation identical to the clean continuation
+  clean_target_present  clean continuation already contains y_b (excluded; review 2026-10-06)
+  unchanged     intervention continuation identical to the clean continuation (an answer-level no-op; says
+                nothing about the size of the activation edit)
   success       counterfactual answer y_b in the intervention continuation (Jan's matcher)
   other         changed continuation without y_b
 Ablation runs: `success` is Jan's outcome (original answer survives; lower = more disruption).
@@ -14,12 +16,29 @@ Ablation runs: `success` is Jan's outcome (original answer survives; lower = mor
 import json
 import math
 import random
+import re
+import unicodedata
 from collections import Counter, defaultdict
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[2]
 RUNS = ROOT / "outputs/012_reader_concordance/stageA/runs"
 RES = ROOT / "results/012_reader_concordance"
+BANKS = Path("/workspace/sources/ext/phrase-lens-src/src/phrase_lens/data/benchmarks/causal")
+
+
+def norm_words(s):
+    s = unicodedata.normalize("NFKC", s or "").lower()
+    return re.sub(r"[^\w\s]", " ", s).split()
+
+
+def contains(text, answers):
+    w = norm_words(text)
+    for a in answers:
+        aw = norm_words(a)
+        if aw and any(w[i:i + len(aw)] == aw for i in range(len(w) - len(aw) + 1)):
+            return True
+    return False
 
 
 def wilson(k, n, z=1.959964):
@@ -42,6 +61,8 @@ def tf(x):
 
 def main():
     out, samples = {}, []
+    bank = {i["name"]: i for b in ("multihop_st", "broadcast_st")
+            for i in json.loads((BANKS / f"{b}.json").read_text())["items"]}
     rng = random.Random(20261006)
     for f in sorted(RUNS.glob("*.jsonl")):
         rows = [json.loads(l) for l in open(f)]
@@ -57,13 +78,17 @@ def main():
             if not tf(r.get("clean_correct")):
                 cat["contaminated"] += 1
                 continue
+            it = bank.get(r["name"], {})
+            if not is_abl and contains(res.get("clean"), [it.get("y_b", "")] + list(it.get("y_b_alts", []))):
+                cat["clean_target_present"] += 1
+                continue
             cs = (res.get("flags") or {}).get("cos_st")
             if cs:
                 cos_med.append(sorted(cs)[len(cs) // 2])
             if is_abl:
                 c = "survives" if tf(r.get("success")) else "disrupted"
             elif res.get("intervention") == res.get("clean"):
-                c = "no_op"
+                c = "unchanged"
             else:
                 c = "success" if tf(r.get("success")) else "other"
             cat[c] += 1
@@ -74,11 +99,11 @@ def main():
             samples.append({"run": name, "name": r["name"], "src": res.get("source"), "tgt": tgt, "category": c,
                             "clean": res.get("clean"), "intervention": res.get("intervention"),
                             "random_success": tf(r.get("random_success"))})
-        n = sum(v for k, v in cat.items() if k not in ("uncovered", "contaminated"))
+        n = sum(v for k, v in cat.items() if k not in ("uncovered", "contaminated", "clean_target_present"))
         key = "survives" if is_abl else "success"
         out[name] = {"n_rows": len(rows), "categories": dict(cat), "n_clean_correct": n,
                      key: rate(cat[key], n), "random_control": rate(rnd["random_hit"], n),
-                     "no_op": None if is_abl else rate(cat["no_op"], n),
+                     "unchanged": None if is_abl else rate(cat["unchanged"], n),
                      "by_target": {k: dict(v) for k, v in by_tgt.items()},
                      "by_relation": {k: dict(v) for k, v in sorted(by_rel.items())},
                      "cos_src_tgt_median_over_layers": {"median": sorted(cos_med)[len(cos_med) // 2] if cos_med else None,

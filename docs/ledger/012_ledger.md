@@ -45,3 +45,19 @@ Spec: `docs/design_specs/012_reader_concordance.md` (v1 → v1.1 §11 → v1.2 �
   - per-target and pooled reporting.
 - Not adopted tonight: per-cell mediation transfers; Q3/Q4 endpoints.
 - Spec v1.2 written and committed before any B/C code ran.
+
+**23:20 — Stage A final** (`stageA_summary.py` now also excludes clean continuations that already contain y_b; there were none on multihop and 1 on broadcast). Clean-correct, n = 82:
+
+| Arm | Success | Random |
+|---|---|---|
+| J L24–47 | 0.585 | 0.061 |
+| J L24–39 | 0.549 | 0.012 |
+| J L24–35 | 0.463 | 0.012 |
+| J L36–47 | 0.561 | 0.037 |
+| **J L40–48** | **0.549** | **0.024** |
+| logit L24–47 | 0.00 | — |
+
+- J ablation L24–47: survival 0.72 (random 1.00).
+- Broadcast J L24–47 (n = 146 clean-correct, 45 clean-incorrect): 0.315 vs random 0.021; Jan's figure shows about 26%.
+- **Finding: L40–48 at every position works on multihop.** So 008's brew arm-A null is not explained by the band alone. What remains: positions (008 edited 3 cells), family (brew), and dose. My report-32 inference ("very likely band/positions") was too strong, as the review said.
+- The "unchanged" category (swap left the greedy answer unchanged) holds 31–42 of 82 items depending on band.

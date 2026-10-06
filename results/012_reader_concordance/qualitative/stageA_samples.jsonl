@@ -1,0 +1,99 @@
+{"run": "j_ablation_L24-47", "name": "bf-olympia-language", "src": "Greece", "tgt": "Japan", "category": "disrupted", "clean": " Greek.\n", "intervention": " German.\n", "random_success": true}
+{"run": "j_ablation_L24-47", "name": "holiday-christmas-monthnum", "src": "December", "tgt": "August", "category": "survives", "clean": " 12.\n", "intervention": " 12.\n", "random_success": true}
+{"run": "j_ablation_L24-47", "name": "b3-mh-blindpoet-epic", "src": "Homer", "tgt": "Dante", "category": "disrupted", "clean": " Iliad.\n", "intervention": " Homeric Hymns", "random_success": true}
+{"run": "j_ablation_L24-47", "name": "bf-tajmahal-continent", "src": "India", "tgt": "Kenya", "category": "survives", "clean": " Asia.\n", "intervention": " Asia.\n", "random_success": true}
+{"run": "j_ablation_L24-47", "name": "b3-mh-lego-capital", "src": "Denmark", "tgt": "Norway", "category": "disrupted", "clean": " Copenhagen.\n", "intervention": " Amsterdam.\n", "random_success": true}
+{"run": "j_ablation_L24-47", "name": "bf-eiffel-currency", "src": "France", "tgt": "Japan", "category": "survives", "clean": " euro.\n", "intervention": " Euro.\n", "random_success": true}
+{"run": "j_ablation_L24-47", "name": "dbl-armistice-antonym", "src": "war", "tgt": "darkness", "category": "survives", "clean": "peace\"\n", "intervention": "peace\"\n", "random_success": true}
+{"run": "j_ablation_L24-47", "name": "bf-madrid-language", "src": "Spain", "tgt": "Japan", "category": "survives", "clean": " Spanish.\n", "intervention": " Spanish.\n", "random_success": true}
+{"run": "j_ablation_L24-47", "name": "b3-mh-pizza-continent", "src": "Italy", "tgt": "Japan", "category": "disrupted", "clean": " Europe.\n", "intervention": " North America.", "random_success": true}
+{"run": "j_ablation_L24-47", "name": "firstletter-populous-country", "src": "China", "tgt": "Japan", "category": "disrupted", "clean": " 'C'.", "intervention": " 'I'.", "random_success": true}
+{"run": "j_ablation_L24-47", "name": "b3-mh-tallest-continent", "src": "Everest", "tgt": "Olympus", "category": "survives", "clean": " Asia.\n", "intervention": " Asia.\n", "random_success": true}
+{"run": "j_ablation_L24-47", "name": "chem-photosynthesis-Z", "src": "oxygen", "tgt": "nitrogen", "category": "survives", "clean": " 8. What", "intervention": " 8. What", "random_success": true}
+{"run": "j_bcast_L24-47", "name": "countries-continent-canada-to-china", "src": "Canada", "tgt": "China", "category": "success", "clean": " North America.", "intervention": " Asia.\n", "random_success": false}
+{"run": "j_bcast_L24-47", "name": "countries-capital-france-to-egypt", "src": "France", "tgt": "Egypt", "category": "success", "clean": " Paris.\n", "intervention": " Cairo.\n", "random_success": false}
+{"run": "j_bcast_L24-47", "name": "months-holiday-april-to-july", "src": "April", "tgt": "July", "category": "unchanged", "clean": " Easter, which", "intervention": " Easter, which", "random_success": false}
+{"run": "j_bcast_L24-47", "name": "countries-continent-china-to-france", "src": "China", "tgt": "France", "category": "success", "clean": " Asia. It", "intervention": " Europe.\n", "random_success": true}
+{"run": "j_bcast_L24-47", "name": "countries-language-egypt-to-france", "src": "Egypt", "tgt": "France", "category": "success", "clean": " Arabic, but", "intervention": " French.\n", "random_success": false}
+{"run": "j_bcast_L24-47", "name": "months-next-month-february-to-april", "src": "February", "tgt": "April", "category": "unchanged", "clean": " March.\n", "intervention": " March.\n", "random_success": false}
+{"run": "j_bcast_L24-47", "name": "numbers-square-seven-to-nine", "src": "seven", "tgt": "nine", "category": "success", "clean": " 49.\n\n", "intervention": " 81.\n", "random_success": false}
+{"run": "j_bcast_L24-47", "name": "numbers-double-nine-to-seven", "src": "nine", "tgt": "seven", "category": "unchanged", "clean": " eighteen.\n\n<think>\n\n", "intervention": " eighteen.\n\n<think>\n\n", "random_success": false}
+{"run": "j_bcast_L24-47", "name": "animals-class-spider-to-shark", "src": "spider", "tgt": "shark", "category": "success", "clean": " arachnid, not", "intervention": " fish.\n\nA.", "random_success": false}
+{"run": "j_bcast_L24-47", "name": "months-number-october-to-july", "src": "October", "tgt": "July", "category": "unchanged", "clean": " 10.\n", "intervention": " 10.\n", "random_success": false}
+{"run": "j_bcast_L24-47", "name": "countries-capital-france-to-china", "src": "France", "tgt": "China", "category": "success", "clean": " Paris.\n", "intervention": " Beijing.\n\n", "random_success": false}
+{"run": "j_bcast_L24-47", "name": "countries-language-egypt-to-canada", "src": "Egypt", "tgt": "Canada", "category": "success", "clean": " Arabic, but", "intervention": " English.\n", "random_success": false}
+{"run": "j_swap_L24-35", "name": "pred-valentines-prevmonth", "src": "February", "tgt": "September", "category": "unchanged", "clean": "January\".\n", "intervention": "January\".\n", "random_success": false}
+{"run": "j_swap_L24-35", "name": "bf-olympia-language", "src": "Greece", "tgt": "Japan", "category": "success", "clean": " Greek.\n", "intervention": " Japanese.\n", "random_success": false}
+{"run": "j_swap_L24-35", "name": "nhop-cube-element", "src": "6", "tgt": "eight", "category": "unchanged", "clean": " carbon. Count", "intervention": " carbon. Count", "random_success": false}
+{"run": "j_swap_L24-35", "name": "bf-giza-continent", "src": "Egypt", "tgt": "Japan", "category": "success", "clean": " Africa.\n", "intervention": " Asia.\n", "random_success": false}
+{"run": "j_swap_L24-35", "name": "inv-sunrise-opposite", "src": "east", "tgt": "north", "category": "unchanged", "clean": " the west.", "intervention": " the west.", "random_success": false}
+{"run": "j_swap_L24-35", "name": "spider-legs", "src": "spider", "tgt": "ant", "category": "unchanged", "clean": " 8.\n", "intervention": " 8.\n", "random_success": false}
+{"run": "j_swap_L24-35", "name": "firstletter-halloween-month", "src": "October", "tgt": "March", "category": "unchanged", "clean": "O\".\n", "intervention": "O\".\n", "random_success": false}
+{"run": "j_swap_L24-35", "name": "etym-caesar-monthnum", "src": "July", "tgt": "October", "category": "unchanged", "clean": " 7.\nQuestion", "intervention": " 7.\nQuestion", "random_success": false}
+{"run": "j_swap_L24-35", "name": "chem-organic-Z", "src": "carbon", "tgt": "nitrogen", "category": "unchanged", "clean": " 6.\n\n", "intervention": " 6.\n\n", "random_success": false}
+{"run": "j_swap_L24-35", "name": "holiday-independence-monthnum", "src": "July", "tgt": "November", "category": "unchanged", "clean": " 7.\nQuestion", "intervention": " 7.\nQuestion", "random_success": false}
+{"run": "j_swap_L24-35", "name": "b3-mh-zeus-country", "src": "Olympus", "tgt": "Fuji", "category": "success", "clean": " Greece.\n", "intervention": " Japan.\n", "random_success": false}
+{"run": "j_swap_L24-35", "name": "firstletter-valentines-month", "src": "February", "tgt": "August", "category": "unchanged", "clean": "F\".\n", "intervention": "F\".\n", "random_success": false}
+{"run": "j_swap_L24-39", "name": "bf-bordeaux-fruit", "src": "wine", "tgt": "sake", "category": "unchanged", "clean": " grape.\n", "intervention": " grape.\n", "random_success": false}
+{"run": "j_swap_L24-39", "name": "bf-sushi-capital", "src": "Japan", "tgt": "France", "category": "success", "clean": " Tokyo.\n", "intervention": " Paris.\n", "random_success": false}
+{"run": "j_swap_L24-39", "name": "inv-roots-opposite", "src": "down", "tgt": "left", "category": "unchanged", "clean": "up\".\n", "intervention": "up\".\n", "random_success": false}
+{"run": "j_swap_L24-39", "name": "b3-mh-longestriver-sea", "src": "Nile", "tgt": "Amazon", "category": "success", "clean": " Mediterranean Sea.\n", "intervention": " Atlantic Ocean.\n", "random_success": true}
+{"run": "j_swap_L24-39", "name": "bf-mapleleaf-capital", "src": "Canada", "tgt": "Japan", "category": "success", "clean": " Ottawa.\n", "intervention": " Tokyo.\n", "random_success": false}
+{"run": "j_swap_L24-39", "name": "bf-madrid-language", "src": "Spain", "tgt": "Japan", "category": "success", "clean": " Spanish.\n", "intervention": " Japanese.\n", "random_success": false}
+{"run": "j_swap_L24-39", "name": "pred-valentines-prevmonth", "src": "February", "tgt": "September", "category": "other", "clean": "January\".\n", "intervention": "February\".\n", "random_success": false}
+{"run": "j_swap_L24-39", "name": "b3-mh-kangaroo-ocean", "src": "Australia", "tgt": "Brazil", "category": "unchanged", "clean": " Indian Ocean.\n", "intervention": " Indian Ocean.\n", "random_success": false}
+{"run": "j_swap_L24-39", "name": "bf-greatwall-language", "src": "China", "tgt": "Japan", "category": "success", "clean": " Mandarin.\n", "intervention": " Japanese.\n", "random_success": false}
+{"run": "j_swap_L24-39", "name": "chem-photosynthesis-Z", "src": "oxygen", "tgt": "nitrogen", "category": "unchanged", "clean": " 8. What", "intervention": " 8. What", "random_success": false}
+{"run": "j_swap_L24-39", "name": "b3-mh-lego-capital", "src": "Denmark", "tgt": "Norway", "category": "success", "clean": " Copenhagen.\n", "intervention": " Oslo.\n", "random_success": false}
+{"run": "j_swap_L24-39", "name": "bf-olympia-language", "src": "Greece", "tgt": "Japan", "category": "success", "clean": " Greek.\n", "intervention": " Japanese.\n", "random_success": false}
+{"run": "j_swap_L24-47", "name": "atomic-26-symbol", "src": "iron", "tgt": "copper", "category": "unchanged", "clean": " Fe.\n", "intervention": " Fe.\n", "random_success": false}
+{"run": "j_swap_L24-47", "name": "b3-mh-aztec-language", "src": "Mexico", "tgt": "Japan", "category": "success", "clean": " Spanish.\n", "intervention": " Japanese.\n", "random_success": false}
+{"run": "j_swap_L24-47", "name": "bf-rio2016-language", "src": "Brazil", "tgt": "Japan", "category": "success", "clean": " Portuguese.\n", "intervention": " Japanese.\n", "random_success": false}
+{"run": "j_swap_L24-47", "name": "bf-fuji-ocean", "src": "Japan", "tgt": "Brazil", "category": "success", "clean": " Pacific Ocean.\n", "intervention": " Atlantic Ocean.\n", "random_success": true}
+{"run": "j_swap_L24-47", "name": "holiday-independence-monthnum", "src": "July", "tgt": "November", "category": "unchanged", "clean": " 7.\nQuestion", "intervention": " 7.\nQuestion", "random_success": false}
+{"run": "j_swap_L24-47", "name": "inv-roots-opposite", "src": "down", "tgt": "left", "category": "unchanged", "clean": "up\".\n", "intervention": "up\".\n", "random_success": false}
+{"run": "j_swap_L24-47", "name": "dbl-altitude-antonym", "src": "high", "tgt": "fast", "category": "unchanged", "clean": "low\"\n", "intervention": "low\"\n", "random_success": false}
+{"run": "j_swap_L24-47", "name": "b3-mh-sphinx-capital", "src": "Egypt", "tgt": "Japan", "category": "success", "clean": " Cairo.\n", "intervention": " Tokyo.\n", "random_success": false}
+{"run": "j_swap_L24-47", "name": "bf-olympia-language", "src": "Greece", "tgt": "Japan", "category": "success", "clean": " Greek.\n", "intervention": " Japanese.\n", "random_success": false}
+{"run": "j_swap_L24-47", "name": "spider-legs", "src": "spider", "tgt": "ant", "category": "unchanged", "clean": " 8.\n", "intervention": " 8.\n", "random_success": false}
+{"run": "j_swap_L24-47", "name": "bf-colosseum-language", "src": "Italy", "tgt": "Japan", "category": "success", "clean": " Italian.\n", "intervention": " Japanese.\n", "random_success": false}
+{"run": "j_swap_L24-47", "name": "b3-mh-tulips-capital", "src": "Netherlands", "tgt": "Japan", "category": "success", "clean": " Amsterdam.\n", "intervention": " Tokyo.\n", "random_success": false}
+{"run": "j_swap_L36-47", "name": "bf-nile-desert", "src": "Africa", "tgt": "Chile", "category": "success", "clean": " Sahara.\nQuestion: What", "intervention": " Atacama Desert.\n", "random_success": false}
+{"run": "j_swap_L36-47", "name": "b3-mh-guinness-capital", "src": "Ireland", "tgt": "Japan", "category": "success", "clean": " Dublin.\n", "intervention": " Tokyo.\n", "random_success": false}
+{"run": "j_swap_L36-47", "name": "inv-antarctica-opposite", "src": "south", "tgt": "east", "category": "unchanged", "clean": " north.\n", "intervention": " north.\n", "random_success": false}
+{"run": "j_swap_L36-47", "name": "b3-mh-pizza-continent", "src": "Italy", "tgt": "Japan", "category": "success", "clean": " Europe.\n", "intervention": " Asia.\n", "random_success": true}
+{"run": "j_swap_L36-47", "name": "b3-mh-fuji-currency", "src": "Japan", "tgt": "Mexico", "category": "success", "clean": " yen.\n", "intervention": " peso.\n", "random_success": false}
+{"run": "j_swap_L36-47", "name": "roman-rings-olympic", "src": "5", "tgt": "ten", "category": "unchanged", "clean": " V.\n", "intervention": " V.\n", "random_success": false}
+{"run": "j_swap_L36-47", "name": "chem-photosynthesis-Z", "src": "oxygen", "tgt": "nitrogen", "category": "unchanged", "clean": " 8. What", "intervention": " 8. What", "random_success": false}
+{"run": "j_swap_L36-47", "name": "b3-mh-cuckoo-mountains", "src": "Switzerland", "tgt": "Morocco", "category": "unchanged", "clean": " Alps.\nQuestion", "intervention": " Alps.\nQuestion", "random_success": false}
+{"run": "j_swap_L36-47", "name": "b3-mh-buenosaires-language", "src": "Argentina", "tgt": "Japan", "category": "success", "clean": " Spanish.\n", "intervention": " Japanese.\n", "random_success": false}
+{"run": "j_swap_L36-47", "name": "bf-kangaroo-capital", "src": "Australia", "tgt": "Japan", "category": "success", "clean": " Canberra.\n", "intervention": " Tokyo.\n", "random_success": false}
+{"run": "j_swap_L36-47", "name": "bf-bordeaux-fruit", "src": "wine", "tgt": "sake", "category": "other", "clean": " grape.\n", "intervention": " apple.\n", "random_success": false}
+{"run": "j_swap_L36-47", "name": "bf-olympia-language", "src": "Greece", "tgt": "Japan", "category": "success", "clean": " Greek.\n", "intervention": " Japanese.\n", "random_success": false}
+{"run": "j_swap_L40-48", "name": "nhop-spider-element", "src": "8", "tgt": "six", "category": "unchanged", "clean": " oxygen. Count", "intervention": " oxygen. Count", "random_success": false}
+{"run": "j_swap_L40-48", "name": "colosseum-currency", "src": "Italy", "tgt": "Japan", "category": "success", "clean": " euro.\n", "intervention": " yen.\n", "random_success": false}
+{"run": "j_swap_L40-48", "name": "dbl-altitude-antonym", "src": "high", "tgt": "fast", "category": "unchanged", "clean": "low\"\n", "intervention": "low\"\n", "random_success": false}
+{"run": "j_swap_L40-48", "name": "inv-sunrise-opposite", "src": "east", "tgt": "north", "category": "unchanged", "clean": " the west.", "intervention": " the west.", "random_success": false}
+{"run": "j_swap_L40-48", "name": "inv-antarctica-opposite", "src": "south", "tgt": "east", "category": "other", "clean": " north.\n", "intervention": " North.\n", "random_success": false}
+{"run": "j_swap_L40-48", "name": "super-smallest-continent", "src": "Vatican", "tgt": "Japan", "category": "success", "clean": " Europe.\n", "intervention": " Asia.\n", "random_success": false}
+{"run": "j_swap_L40-48", "name": "chem-photosynthesis-Z", "src": "oxygen", "tgt": "nitrogen", "category": "unchanged", "clean": " 8. What", "intervention": " 8. What", "random_success": false}
+{"run": "j_swap_L40-48", "name": "b3-mh-pizza-continent", "src": "Italy", "tgt": "Japan", "category": "success", "clean": " Europe.\n", "intervention": " Asia.\n", "random_success": false}
+{"run": "j_swap_L40-48", "name": "holiday-valentines-monthnum", "src": "February", "tgt": "September", "category": "unchanged", "clean": " 2.\n", "intervention": " 2.\n", "random_success": false}
+{"run": "j_swap_L40-48", "name": "bf-olympia-language", "src": "Greece", "tgt": "Japan", "category": "success", "clean": " Greek.\n", "intervention": " Japanese.\n", "random_success": false}
+{"run": "j_swap_L40-48", "name": "bf-madrid-language", "src": "Spain", "tgt": "Japan", "category": "success", "clean": " Spanish.\n", "intervention": " Japanese.\n", "random_success": false}
+{"run": "j_swap_L40-48", "name": "bf-kangaroo-capital", "src": "Australia", "tgt": "Japan", "category": "success", "clean": " Canberra.\n", "intervention": " Tokyo.\n", "random_success": false}
+{"run": "logit_swap_L24-47", "name": "b3-mh-colosseum-capital", "src": "Italy", "tgt": "Japan", "category": "unchanged", "clean": " Rome.\n", "intervention": " Rome.\n", "random_success": false}
+{"run": "logit_swap_L24-47", "name": "nhop-rainbow-element", "src": "7", "tgt": "eight", "category": "unchanged", "clean": " nitrogen. Count", "intervention": " nitrogen. Count", "random_success": false}
+{"run": "logit_swap_L24-47", "name": "b3-mh-tallest-continent", "src": "Everest", "tgt": "Olympus", "category": "unchanged", "clean": " Asia.\n", "intervention": " Asia.\n", "random_success": false}
+{"run": "logit_swap_L24-47", "name": "func-filters-count", "src": "kidney", "tgt": "heart", "category": "unchanged", "clean": " 2.\n", "intervention": " 2.\n", "random_success": false}
+{"run": "logit_swap_L24-47", "name": "bf-relativity-firstname", "src": "Einstein", "tgt": "Newton", "category": "unchanged", "clean": " Albert.\n", "intervention": " Albert.\n", "random_success": false}
+{"run": "logit_swap_L24-47", "name": "firstletter-valentines-month", "src": "February", "tgt": "August", "category": "unchanged", "clean": "F\".\n", "intervention": "F\".\n", "random_success": false}
+{"run": "logit_swap_L24-47", "name": "basketball-players", "src": "basketball", "tgt": "soccer", "category": "unchanged", "clean": " 5.\nQuestion", "intervention": " 5.\nQuestion", "random_success": false}
+{"run": "logit_swap_L24-47", "name": "inv-antarctica-opposite", "src": "south", "tgt": "east", "category": "unchanged", "clean": " north.\n", "intervention": " north.\n", "random_success": false}
+{"run": "logit_swap_L24-47", "name": "super-smallest-continent", "src": "Vatican", "tgt": "Japan", "category": "unchanged", "clean": " Europe.\n", "intervention": " Europe.\n", "random_success": false}
+{"run": "logit_swap_L24-47", "name": "bf-boot-capital", "src": "Italy", "tgt": "Japan", "category": "unchanged", "clean": " Rome.\n", "intervention": " Rome.\n", "random_success": false}
+{"run": "logit_swap_L24-47", "name": "bf-giza-continent", "src": "Egypt", "tgt": "Japan", "category": "unchanged", "clean": " Africa.\n", "intervention": " Africa.\n", "random_success": false}
+{"run": "logit_swap_L24-47", "name": "bf-southpole-bird", "src": "Antarctica", "tgt": "Australia", "category": "unchanged", "clean": " penguin.\nQuestion", "intervention": " penguin.\nQuestion", "random_success": false}
+{"run": "smoke_j_swap_L24-47", "name": "atomic-26-symbol", "src": "iron", "tgt": "copper", "category": "unchanged", "clean": " Fe.\n", "intervention": " Fe.\n", "random_success": false}
+{"run": "smoke_j_swap_L24-47", "name": "birthstone-emerald-month", "src": "May", "tgt": "August", "category": "unchanged", "clean": " 5.\n", "intervention": " 5.\n", "random_success": false}
+{"run": "smoke_j_swap_L24-47", "name": "atomic-79-symbol", "src": "gold", "tgt": "silver", "category": "unchanged", "clean": " Au.\n", "intervention": " Au.\n", "random_success": false}
