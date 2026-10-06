@@ -228,8 +228,9 @@ gates pass; `docs/reports/008_trackb.md`; design `docs/design_specs/008_009_trac
 - Not "reversed": the paper clamps at every position; 008 clamps 3 cells × L40-48, so the paper's mediation result is
   **not reproduced under a band-limited clamp**.
 - **The reader-model dissociation, on matched objects** (report 31): with 007's dense J subspace on both sides, the
-  Oracle's z reading depends on J (Stage 1a / brew_test) while the model's answer moves with J only in proportion to J's
-  content share (Stage 2, adequate lever S_full 0.28). 008's sparse J part (a different object) agrees. The PI's
+  Oracle's z reading depends on J (Stage 1a / brew_test; J beats Δ-matched PCA, P1) while the model's answer does not
+  favour J over Δ-matched PCA-4 (Stage 2 recovery J − PCA4 +0.00 / −0.02 / +0.05 at L40 / L42 / L44, CIs include 0;
+  J − Δ-matched random +0.07 [+0.04, +0.11] / +0.02 [−0.00, +0.03] / +0.09 [+0.02, +0.16]; lever S_full 0.28-0.49). 008's sparse J part (a different object) agrees. The PI's
   2026-10-06 numbers to the TA come from 008 (J_CB corrected to −0.14).
 
 **009, the brew-code bank** (exploratory, reader-free de-risk; `docs/reports/009_brewcode_derisk.md`; design Part 2 and

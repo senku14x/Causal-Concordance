@@ -173,3 +173,17 @@ The headline claim is that the Oracle reads z through J while the model's answer
 2. Do you or the TA know what the AR's `loss_mix_lambda` / `val_jloss` are?
 3. May PID 49691 be killed?
 4. May I fix the docs and the 011 resume bug on the branch (CPU only, no rule changes to `CLAUDE.md`)?
+
+## Corrections to this report (2026-10-06, while applying it)
+
+- The "whitener not public" line is `docs/reports/008_trackb.md:122`, not 009's report (fixed there).
+- "z decodes at q1–q2 (BA 0.94–0.98)" holds at L40–42; over L40–48 the range is 0.93–0.98 (q1 L44 0.929).
+- 006: the NLA *passed* its positive control (G-pc 0.50, at the bar). The error fixed in 006:67 was which colour
+  dominates (green, 6/12), not a failure.
+- The 011 L40 FVE "0.26" is a subagent recomputation, not in a committed JSON (flagged in the 011 note).
+- `queue.sh` line reference corrected (lines 13–18).
+- On the model side, 007 Stage 2's dense-J swaps beat Δ-matched random at L40 / L44 (+0.07 [+0.04, +0.11] /
+  +0.09 [+0.02, +0.16]) but not Δ-matched PCA-4 (CIs include 0 at every layer). The matched-object dissociation is
+  therefore stated against PCA: the reader's J beats PCA (P1), the model's does not.
+- Not fixed (outside §2's list): 002 has four more half-up slips (`</think>` incorrect 0.725 shown 0.72, conflicting
+  0.125 shown 0.12; `:` incorrect 0.425 shown 0.42, z-wrong-role 0.175 shown 0.17).

@@ -7,6 +7,62 @@ results: `docs/reports/008_trackb.md`, `docs/reports/009_brewcode_derisk.md` and
 `docs/reports/007_jsubspace.md` and report 25. Then `CLAUDE.md`, this file (newest first),
 `docs/reports/005_followups.md` and `docs/reports/006_reader_likelihood.md`.*
 
+**2026-10-06, late: 011 s1 finished; AR J-bias check; 011 code fixes (POST HOC / EXPLORATORY; PI go on report 31).**
+- **011 s1** (82/82 pairs; the last 8 ran in 1.05 GPU-min after the resume fix; gates pass: repro 82/82, R·A ≤ 7.2e-15,
+  nothing quarantined). Amendment 3 verdicts (`results/011_olens_swaps/olens_swaps_analysis_s1.json`): the TA's
+  whitened swap and the raw-coordinate swap are **not read** (answer-colour controls 0.016 / 0.050, below 0.15); the
+  additive reading is **partial**: AR colour difference S 0.09 vs the model's class-mean difference 0.20 vs random 0.01
+  (D_ar − D_classmean −0.10 [−0.15, −0.05]; D_ar − D_rand +0.06 [+0.02, +0.11]). The smoke's raw-coordinate 0.16 did
+  not hold (0.005). The loader is still not validated against the published AR (011 note, "Loader caveats").
+- **AR J-bias check** (CPU; `scripts/011_olens_swaps/ar_jbias.py`, rule pre-set in the script): **ambiguous**. The
+  AR's outputs put 1.27× / 1.15× (L40 / L44) as much centred variance in 007's J subspace as the true activations do,
+  above PCA-1,024 (0.77 / 0.85) and random (≈ 1.00). Too small to account for 007's Oracle result alone. What the AR
+  config's `jfve` / `jloss` / `loss_mix_lambda` mean is **open** (no training code public; the Oracle's "joint
+  bullet-FVE" reward most plausibly means bullets fitted jointly).
+- **Code:** 011 resume bookkeeping covers every pair; the analysis has a completeness guard and quarantine handling
+  (`tests/test_011_analysis_guard.py`); `ar_vectors.py` and `queue.sh` refuse to overwrite validation records.
+- **Housekeeping:** the stale 007 queue loop (PID 49691, `gpu_queue_posthoc.sh`) was killed. Its 4 queued jobs had all
+  finished by 05:39 UTC (the last, the multihop NLA run, exited rc=1); it was only polling its queue file.
+- **009 patch profile** (`profile_p1.json`) is complete (n = 48 at every site); §5 of the 009 report matches it.
+
+**2026-10-06, doc corrections from report 31 (`docs/claude_reports/31_onboarding_review_2026-10-06.md` §2).**
+- **Three J objects; never mix them:** (a) the J-lens; (b) 008's sparse k = 25 "J part" of a class-mean direction;
+  (c) 007's dense 1,024-dim "J subspace". The reader–model dissociation is now stated on (c) on both sides
+  (`docs/reports/008_trackb.md` §1 "Reading"):
+  - reader side: Oracle L40 D_z from J vs whole 5.76 vs 3.22 nats (dev, Stage 1a) and 5.03 vs 2.87 (brew test); rest
+    of J 0.30 / 0.29;
+  - model side: 007 Stage 2 dense-J swaps track the Δ-share at L42 and exceed Δ-matched random modestly at L40 / L44
+    (+0.07 / +0.09 recovery), below the 0.10 margin; S_full 0.28 at L40;
+  - 008's result on (b) is separate, consistent evidence. 008 vs the paper: "not reproduced under a band-limited clamp
+    (3 cells × L40–48; the paper clamps at every position)", not "reversed".
+- **Number slips fixed:** 008 J_CB J − non-J −0.14 (was −0.15); subset whitened power 0.09 (was 0.12); J energy
+  3.3–8.7% raw / 0.5–2.0% whitened; J_CB at whitened norm −0.009 [−0.029, −0.000], below 0 (was "ties"); report 29
+  model vs S 0.24–0.33; 002 NLA `:` mention 0.43; 003 z positive in 84–90%.
+- **Held-out ledger (corrected; was "brew test split used once"):**
+  - brew test (49 tables) has been read by the Oracle (pre-registered, AMENDMENT_02 Use 1), the template lens, the
+    prompt-only floor, and the NLA (post hoc A2, 2026-10-06; recorded in AMENDMENT_02's ledger note);
+  - 007 made a multihop split (items 1–50 dev, touched; 51–100 test), and its test half has been read by the Oracle
+    (Stage 3) and the NLA (post hoc A2);
+  - 009's 150 test tables per depth are generated, hashed and untouched.
+- **007 scoping:** confirmed registered contrasts are P1, P2, P3, P5 at L40 and only P5 at L44; the 5.8 vs 3.2 headline
+  is a dev descriptive; `</think>` is dev-only and secondary. "Reader-specific J dependence" holds at `:` only: at
+  `</think>` the NLA also collapses without J (rest of J 0.21 vs rest of random 1.21). Disclosed in the 007 report: the
+  A3 rerun max 0.2549 would have failed the original ≤ 0.25 rule; the 2-row scorer and G-fastpath gate were adopted
+  without an amendment after r1's floor had been seen; the post hoc NLA runs took about 6.9 GPU-h beyond the 2.2.
+- **009:** "110 of 112 probe sites" overstated: 77 sites (q0–q10) precede the differing token and are identical under
+  both questions; z decodes under both at 33 of the 35 post-divergence sites, and already at q1–q2.
+- **PI's post hoc facts (2026-10-06; CPU, hand-read of the mirrored readouts; `docs/reports/007_jsubspace.md` §9):**
+  - multihop test, whole activation: each reader names the bridge on 36/40 items (regex agrees with a hand-read of all
+    240 whole readouts); failures: most-populous-country (all three), Kremlin and IKEA / Guinness (Oracle L40),
+    Kremlin / LEGO / Golden Gate (Oracle L44), Golden Gate / Griffith / Zeus (NLA). Agent spot-check from the jsonl:
+    36/40 each, same items;
+  - the NLA's random-slice bridge hits are mostly weather / airport boilerplate naming the right country (64/80 such
+    readouts; 38 of its 43 hits inside them): the country's identity survives in the slice; this is not reading the
+    question;
+  - the Oracle's rest-of-J readouts often name a wrong country (only-wrong vs right: L40 26 vs 34; L44 41 vs 10);
+  - brew `:` (8 tables): z is named in 0.34 / 0.41 / 0.38 of readouts (Oracle L40 / L44 / NLA) vs an off-path colour
+    in 0.31 / 0.21 / 0.19, and is the first colour named in only 1–6 of 32. Brew results are likelihood-only.
+
 **2026-10-06 (new session; branch `008-trackb-brewcode`; relaxed rules per the PI's onboarding prompt §7).**
 - **Reports:**
   - 26: up-to-speed report and inconsistencies (multihop restatement share is 0.15–0.28, not "about half"; the Oracle
@@ -19,11 +75,15 @@ results: `docs/reports/008_trackb.md`, `docs/reports/009_brewcode_derisk.md` and
   - Full-direction lever S 0.21, flips 16%.
   - The J part carries S 0.02–0.03, the non-J part 0.21; the whitened swap gives J 0.07–0.10 vs non-J 0.11–0.14.
   - Clamping J coordinates barely changes the non-J effect.
-  - → **no model-side J privilege** at these cells and layers. 007's dissociation stands.
+  - → **no model-side privilege for the sparse k = 25 J part** at these cells and layers. ~~007's dissociation
+    stands.~~ (corrected 2026-10-06, report 31: that paired two different J objects; the dissociation is restated on 007's dense J
+    subspace above.)
   - The lens-coordinate swap (arm A) failed its positive control: answer-atom swaps give S 0.01.
 - **010** (exploratory, CPU; report 29):
   - NLA–Oracle per-pair agreement is weak (r 0.24–0.30);
-  - mid-layer readers track what the J lens reads (r 0.63–0.80), not the model's next-token output (0.2–0.3);
+  - the Oracle tracks what the J lens reads (r 0.63–0.80) more than the model's next-token output (0.21–0.30); the
+    NLA tracks neither strongly (J lens 0.33–0.37, model output 0.07) (corrected 2026-10-06, report 31: was "mid-layer readers ...
+    (r 0.63–0.80), not the model's next-token output (0.2–0.3)");
   - only the late Oracle (L56/L60) follows the model's output.
 - **009, brew-code bank** (exploratory, reader-free; `docs/reports/009_brewcode_derisk.md`; design note
   `docs/design_specs/008_009_trackb_brewcode.md` Part 2 and §E-009; reader rules in `009b`):
@@ -32,7 +92,8 @@ results: `docs/reports/008_trackb.md`, `docs/reports/009_brewcode_derisk.md` and
   - **The output-facing check fails, so no readers run** (§2.5.1). With a code answer, z is still the top colour at
     the answer slot in 98% of renders (median rank 11; the model's own D +11.9 nats [11.7, 12.1], 240/240 tables), at
     ~0.05% total colour mass.
-  - Probes decode z under both questions (110 of 112 sites). The patch profile reproduces brew's structure:
+  - Probes decode z under both questions at 33 of the 35 post-divergence sites (corrected 2026-10-06, report 31: was "110 of 112 sites";
+    77 sites precede the differing token and are identical under both questions; z already decodes at q1–q2). The patch profile reproduces brew's structure:
     `</think>` L40-44 has z decodable but no single-cell leverage (S 0.00-0.01).
   - **The PI's call:** keep the rule, run readers post hoc with the model's output as covariate, or redesign. The PI
     thinks the new prompts are weak and leans toward the old prompts and runs.
@@ -51,11 +112,16 @@ results: `docs/reports/008_trackb.md`, `docs/reports/009_brewcode_derisk.md` and
     reconstruct poorly (cos ≈ 0.1).
 
 **2026-10-05, 007 — J-subspace split with controls (branch `007-jsubspace`; spec v2 2820e53 + A1 5cdafd9; report `docs/reports/007_jsubspace.md`; per-stage status `results/007_jsubspace/status/`; ~2.2 GPU-h, unattended under rule 12).**
-- **Reader side, confirmed on the brew test:** the Oracle's z tracking at `:` L40 is carried by the J (token-readout) subspace — H_J supported on dev and on the 49 test tables (J 5.8 / 5.0 nats vs whole 3.2 / 2.9; rest of J 0.3); Raw and Visible contradicted at L40 and L44 on both splits; L44 unresolved by positive-control rules. Same pattern at `</think>` (patch share 0.01).
+- **Reader side, confirmed on the brew test:** the Oracle's z tracking at `:` L40 is carried by the J (token-readout) subspace — H_J supported on dev and on the 49 test tables (J 5.8 / 5.0 nats vs whole 3.2 / 2.9; rest of J 0.3); Raw and Visible contradicted at L40 and L44 on both splits; L44 unresolved by positive-control rules. Same pattern at `</think>` (001 patch share 0.01 at L42, 0.03 at L44; dev only, secondary). (corrected 2026-10-06, report 31: the
+confirmed registered contrasts are P1, P2, P3, P5 at L40 and only P5 at L44; 5.8 vs 3.2 is a dev descriptive; the
+`</think>` share was quoted without its layer.)
 - **Model side:** J-subspace swaps track content share (L42) or exceed random modestly but not PCA-4 (L40/L44, below margin); in the adapted §3.3 test the J part of a class-mean z direction moves the answer less than its non-J part. → A reader–model dissociation.
 - **The NLA is disabled for all of 007** (G-repro 0.41 > 0.25 after my 2-row scorer change; not repaired, rule 12). Post hoc NLA run on 006's 24-row path is the PI's call.
-- Secondary: multihop confounded by restatement (CW-12 rates reproduced); relational stopped after 4a (no high-leverage read-layer position; 12/50 gated); chain (exploratory) signal outside J at L56. Brew test split used once under AMENDMENT_02 (opened this session).
-- **2026-10-06, post hoc NLA rerun (amendment A2, PI: "rerun properly"; 006's exact 24-row scorer; ~4.8 GPU-h):** G-repro now passes (max 0.15, D_z 1.862 vs 1.862). The NLA's z signal is *not* J-concentrated (dev: J 0.95 vs whole 1.86, rest of J 0.63 ≈ rest of random 0.80; test similar); its categories are unresolved/uninformative and none replicates dev → test. → J dependence is reader-specific (Oracle yes, NLA no). Stage 1b NLA first stopped at G-score1 (0.280 > 0.25), diagnosed as bf16 batch-layout noise (report 25), then rerun under amendment A3 (median/p99 gate): at `</think>` the NLA's signal collapses without J (rest of J 0.21 vs 1.21 for rest of random) but J alone keeps only half, and mean removal doubles it; H_J unresolved (post hoc, dev). Multihop NLA: J ≈ whole (as the Oracle). Results page: https://claude.ai/artifact/8vnKTzcXczn4YGMiP1uJTW
+- Secondary: multihop confounded by restatement (CW-12 rates reproduced); relational stopped after 4a (no high-leverage read-layer position; 12/50 gated); chain (exploratory) signal outside J at L56. ~~Brew test split used once under AMENDMENT_02 (opened this session).~~ (corrected 2026-10-06, report 31: brew test was read by the
+Oracle, the template lens and the prompt-only floor under AMENDMENT_02, and later by the NLA post hoc; see the ledger at
+the top.)
+- **2026-10-06, post hoc NLA rerun (amendment A2, PI: "rerun properly"; 006's exact 24-row scorer; ~4.8 GPU-h):** G-repro now passes (max 0.15, D_z 1.862 vs 1.862). The NLA's z signal is *not* J-concentrated (dev: J 0.95 vs whole 1.86, rest of J 0.63 ≈ rest of random 0.80; test similar); its categories are unresolved/uninformative and none replicates dev → test. → J dependence is reader-specific (Oracle yes, NLA no) at `:` only (corrected 2026-10-06, report 31: at `</think>` the NLA also
+collapses without J, as the A3 sentence below says). Stage 1b NLA first stopped at G-score1 (0.280 > 0.25), diagnosed as bf16 batch-layout noise (report 25), then rerun under amendment A3 (median/p99 gate): at `</think>` the NLA's signal collapses without J (rest of J 0.21 vs 1.21 for rest of random) but J alone keeps only half, and mean removal doubles it; H_J unresolved (post hoc, dev). Multihop NLA: J ≈ whole (as the Oracle). Results page: https://claude.ai/artifact/8vnKTzcXczn4YGMiP1uJTW
 
 **2026-10-05, end of session.**
 - `006-reader-likelihood` was merged into `005-amended-full-run` (fast-forward), so 005 and 006 now live on one branch, pushed.
@@ -149,7 +215,7 @@ results: `docs/reports/008_trackb.md`, `docs/reports/009_brewcode_derisk.md` and
 - Gates G1–G3 pass. **G4 (label reliability) fails** (κ 0.37, r(S) 0.41 between disjoint fits), so the labels are
   **descriptive only** and are not used to score readers.
 - At `:` and the assistant newline, L40–44, the decorrelated z direction has a small, mostly positive effect: median
-  S 0.03–0.05, positive in 85–90% of pairs, above the start and answer directions. Clamping it beats random clamps,
+  S 0.03–0.05, positive in 84–90% of pairs (corrected 2026-10-06, report 31: was 85–90%), above the start and answer directions. Clamping it beats random clamps,
   but those clamps were not size-matched. It is "used" (≥ 0.10) in only 10–18% of pairs. No single tested direction
   reproduces the whole-cell effect.
 - At the `</think>` newline, z is readable at the family level and the whole-cell patch has little net leverage (not an
@@ -193,7 +259,8 @@ the point-by-point table). Still open:
 
 `snapshot` (readers, descriptive, 32 min) is done too. The report is complete: `docs/reports/001_leverage_profile.md`.
 It awaits PI review; its proposals for AMENDMENT_02 are in §13. No label and no reader score exists yet, and no
-test-split measurement has been made.
+test-split measurement has been made (true as of 2026-10-02; since then 007 read the brew and multihop test splits, see
+the held-out ledger at the top; noted 2026-10-06, report 31).
 
 | Block | State | Evidence |
 |---|---|---|
@@ -259,7 +326,8 @@ https://claude.ai/artifact/RMRX8R4iFnysbnHaNWTBeC
 **Built and run since (see the top of this file and the reports):** label construction (003: directions, 1-D swaps,
 necessity, random nulls), role-aware reader scoring (002: judge + closed set), prompt-only baseline (002), probe repair
 (001 A2). **Not built yet:** content-span and complement patches, norm-matched ablation controls, per-item null
-calibration, DAS, relational gating, any test-split measurement.
+calibration, DAS, relational gating, any test-split measurement (as of 2026-10-02; superseded by 007, see the held-out ledger at the
+top; noted 2026-10-06, report 31).
 
 **Next (2026-10-02, after the audit of 001–003, `docs/reviews/2026-10-02_codex_audit_001_003/`):**
 1. Done without the GPU: the audit's corrections (report 003 §9; the 002 tracking wording; this file).

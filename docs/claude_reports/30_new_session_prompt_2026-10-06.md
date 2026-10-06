@@ -143,13 +143,17 @@ Read:
 **007 (J-subspace split, pre-registered):**
 - **Reader side, confirmed on 49 held-out brew test tables.** The Oracle's z tracking at `:` L40 is carried by the J
   subspace:
-  - J alone gives 5.8 nats vs 3.2 for the whole activation on dev;
-  - removing J leaves about 0.3.
-- The same pattern holds at `</think>`, where the patch share is 0.01, so the reader's J dependence does not follow use.
-- **NLA (post hoc):** not J-concentrated. J dependence is reader-specific.
+  - the registered contrasts confirmed on dev and test are P1, P2, P3 and P5 at L40, and only P5 at L44;
+  - descriptively, J alone gives 5.76 nats vs 3.22 for the whole activation on dev (5.03 vs 2.87 on test), and removing
+    J leaves 0.30 / 0.29 (not a registered contrast; corrected 2026-10-06, report 31).
+- The same pattern holds at `</think>` (dev only, secondary), where 001's patch share is 0.01 at L42 (0.03 at L44): the
+  reader's J dependence is as strong where observed patch leverage is low (corrected 2026-10-06, report 31: was "does not follow use").
+- **NLA (post hoc):** not J-concentrated at `:`. ~~J dependence is reader-specific.~~ At `</think>` the NLA also
+  collapses without J (rest of J 0.21 vs rest of random 1.21), so "reader-specific" holds at `:` only (corrected 2026-10-06, report 31).
 - **Multihop:** J ≈ whole for both readers, confounded by restatement. Among bridge-naming samples with checkable cue
-  words, the restatement share is 0.28 (Oracle L40), 0.24 (Oracle L44) and 0.15 (NLA). Not "about half": that figure
-  mixed denominators.
+  words, the restatement share is 0.28 (Oracle L40), 0.24 (Oracle L44) and 0.15 (NLA) for the J piece (15/53, 13/54,
+  8/53), and 0.56 / 0.25 / 0.58 for the whole activation (27/48, 12/48, 28/48). Not "about half": that figure mixed
+  denominators.
 - 007's own model-side test (Stage 2b) had a weak lever. 008 replaces it.
 
 **008, Track B: the paper's §3.3 privilege test on brew, done the paper's way** (82 gated dev pairs; all gates pass):
@@ -157,15 +161,21 @@ Read:
 - The lever is adequate: the full direction moves the answer by median S 0.21 [0.11, 0.26], and flips 16% of answers.
 - **No model-side J privilege:**
   - the J part (k = 25) carries S 0.02–0.03 and the non-J part 0.21;
-  - J − non-J is −0.17 [−0.24, −0.09] for J_NP and −0.15 [−0.21, −0.08] for J_CB.
+  - J − non-J is −0.17 [−0.24, −0.09] for J_NP and −0.14 [−0.21, −0.08] for J_CB (corrected 2026-10-06, report 31: −0.14465 was
+    written −0.15; the −0.15 also went into my numbers to the TA).
 - **The real whitened swap** (Ledoit–Wolf Σ from about 50k chat tokens; swap in whitened coordinates; map back) narrows
   the gap but never reverses it: J 0.07 / 0.10 vs non-J 0.14 / 0.11.
 - Clamping the J coordinates barely changes the non-J swap (0.21 → 0.20 / 0.18). On Claude, the paper's clamp took the
   non-J effect from 28% to 6%.
 - The lens-coordinate swap (arm A) is not read: its answer-atom positive control moves S 0.01, below the power bar of
   0.15.
-- → **The reader–model dissociation stands on a powered lever:** the Oracle privileges J for reading z; the model's
-  answer does not. My 2026-10-06 numbers to the TA come from 008.
+- ~~→ **The reader–model dissociation stands on a powered lever:** the Oracle privileges J for reading z; the model's
+  answer does not.~~ (corrected 2026-10-06, report 31: 008's J part is the sparse k = 25 part of a class-mean direction, not 007's dense
+  1,024-dim J subspace, and the paper is "not reproduced under a band-limited clamp (3 cells × L40–48; the paper clamps
+  at every position)", not reversed.) On one object, the dense J subspace: the Oracle L40 reads z from J at 5.76 vs
+  3.22 nats for the whole activation (dev; 5.03 vs 2.87 on test), while 007 Stage 2's dense-J swaps track the Δ-share at
+  L42 and exceed Δ-matched random only modestly at L40/L44 (+0.07 / +0.09 recovery, below the 0.10 margin; S_full 0.28
+  at L40). 008's sparse-J-part result is separate, consistent evidence. My 2026-10-06 numbers to the TA come from 008.
 
 **009, the brew-code bank** (reader-free de-risk):
 - **The idea:** the answer is a two-digit code looked up from the final (or start) colour, so z is needed but never
@@ -177,14 +187,18 @@ Read:
   - With a code answer, z is still the top colour at the answer slot in 98% of renders: median rank 11 of 248,320
     tokens, model D +11.9 nats, 240/240 tables.
   - Yet total colour mass is only about 0.05%. D is scale-free, so the tail still counts.
-- Reader-free probes decode z under both questions (110 of 112 sites).
+- Reader-free probes decode z under both questions at 33 of the 35 post-divergence sites (corrected 2026-10-06, report 31: was "110 of
+  112 sites"; 77 sites precede the differing token and are identical under both questions; z already decodes at
+  q1–q2).
 - The patch profile reproduces brew's structure: `</think>` at L40–44 has z decodable but no single-cell leverage.
 - **My view:** the new prompts are weak, and we should probably go back to the old prompts and runs. 009 readers are on
   hold.
 
 **010, reader agreement** (CPU):
 - NLA–Oracle per-pair agreement is weak (r 0.24–0.30).
-- Mid-layer readers track what the J lens reads (r 0.63–0.80), not the model's next-token output (0.2–0.3).
+- The Oracle tracks what the J lens reads (r 0.63–0.80) more than the model's next-token output (0.21–0.30); the NLA
+  tracks neither strongly (J lens 0.33–0.37, model 0.07) (corrected 2026-10-06, report 31: was "Mid-layer readers ... (r 0.63–0.80), not
+  the model's next-token output (0.2–0.3)").
 - Only the late Oracle (L56/L60) follows the output.
 
 **011, Oracle-space swaps** (my TA's tip: put a colour word through the Oracle Lens's reconstructor, get a vector, do it
@@ -220,8 +234,9 @@ for two colours, swap them in whitened space). **Everything is post hoc and expl
   ≈ 0.5 for 16 tokens). So single-word colour vectors are mostly noise.
 
 **Held-out data already spent:**
-- the brew test split (007, AMENDMENT_02);
-- multihop's test split, items 51–100 (007 Stage 3);
+- the brew test split: read by the Oracle (pre-registered, AMENDMENT_02), the template lens, the prompt-only floor, and
+  the NLA (post hoc A2, 10-06) (corrected 2026-10-06, report 31: it is not "used once");
+- multihop's test split, items 51–100 (007 Stage 3; Oracle, and the NLA post hoc);
 - multihop dev, items 1–50, touched earlier.
 - 009's 150 test tables per depth are generated and hashed but untouched.
 

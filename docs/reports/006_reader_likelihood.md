@@ -64,7 +64,7 @@ The reviewer recomputed everything from the raw `ll_*.npz`; the reported numbers
 - So the readers' z tracking does not follow the cell's demonstrated influence on the answer. It is decodability through the reader, not a marker of use.
 
 **2. Why the Oracle fails its positive control at L40/L44.**
-- NLA L42: raw ID 0.50; it answers "blue" for 2 of 12 colour prompts. With each colour's mean over the other prompts removed (leave-one-out prior), ID is 0.83. The pairwise double difference is positive in 66 of 66 pairs.
+- NLA L42: raw ID 0.50 (at the bar, so it passes); its most frequent answer is "green", for 6 of 12 colour prompts ("blue" 2 of 12; `posthoc.json` `positive_control["NLA L42"].argmax`; corrected 2026-10-06, report 31: only the "blue" count was given, which read as a blue prior; the blue prior is the Oracle's). With each colour's mean over the other prompts removed (leave-one-out prior), ID is 0.83. The pairwise double difference is positive in 66 of 66 pairs.
 - Oracle L40: raw ID 0.33; it answers "blue" for 9 of 12 colour prompts. With each colour's mean over the other prompts removed (leave-one-out prior), ID is 1.00. The pairwise double difference is positive in 66 of 66 pairs.
 - Oracle L44: raw ID 0.42; it answers "blue" for 8 of 12 colour prompts. With each colour's mean over the other prompts removed (leave-one-out prior), ID is 1.00. The pairwise double difference is positive in 66 of 66 pairs.
 - So the Oracle discriminates the colours. The raw control failed on a strong prior for one colour. T2 stays "uninformative by the pre-registered rule", and this is the reason.

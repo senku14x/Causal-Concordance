@@ -31,13 +31,17 @@
    - Partialling out the model's per-pair D_z (006b) barely changes reader–reader r: NLA–Oracle 0.24 → 0.23 and
      0.30 → 0.29; Oracle L40–L44 0.81 → 0.80.
    - Only the late Oracle follows the model's output: L60 vs model r 0.82; L56 0.62.
-4. **The mid-layer readers track what the J lens reads, not the model's next-token output.**
+4. **The Oracle tracks what the J lens reads more than the model's next-token output; the NLA tracks neither
+   strongly** (corrected 2026-10-06, report 31: the heading said "The mid-layer readers track what the J lens reads, not the model's
+   next-token output", which holds for the Oracle only).
    - Oracle L40 vs J_CB L40: 0.63 at `:` (0.75 at `</think>`). Vs the model's output: 0.30 (0.18).
    - 007's Oracle J piece vs J_CB: 0.80. Vs the model: 0.21.
-   - The NLA vs J_NP-cosine L42: 0.37. Vs the model: 0.07.
+   - The NLA vs J_NP-cosine L42: 0.37 (vs J_CB L42: 0.33). Vs the model: 0.07. So "0.63–0.80 with the J lens" is the
+     Oracle's range only; the NLA's is 0.33–0.37.
 5. **Reader D_z has no relation to the `:` cell's single-cell leverage across pairs; the model's own output has a modest
    one.**
-   - Reader vs S: Oracle L40 0.02; NLA −0.08. Model vs S: 0.27–0.33.
+   - Reader vs S: Oracle L40 0.02; NLA −0.08. Model vs S: 0.24–0.33 (L44 0.24, L42 0.27, L40 0.33; corrected 2026-10-06, report 31:
+     was 0.27–0.33).
    - Caveat: 82 gated pairs, and S at `:` only ranges from 0.22 to 0.67, so the test has little power.
 6. **Across cells, the mid-layer readers' change from `:` to `</think>` follows neither the model's output nor the
    change in leverage.**
@@ -57,26 +61,43 @@
    | random 1,024-dim (mean) | 7.8 | 10.6 |
    | mean-removed | 8.7 | 16.5 |
 
-   - The two readers match on whole and J. The NLA keeps much more of the bridge signal outside J: random-slice
-     difference −2.9 [−3.8, −2.3], negative in 40 of 40 items.
-   - From the random slice the NLA names the bridge in 43/80 samples, against the Oracle L44's 14/80.
-   - The whole-activation NLA readouts restate a cue word far more often (28/48 vs 12/48).
+   - The two readers match on whole and J. ~~The NLA keeps much more of the bridge signal outside J~~ (qualified
+     2026-10-06, report 31): as shares of each reader's whole-activation bridge D (`stage3.json`,
+     `posthoc_A2_stage3.json`), the random slice keeps 0.73 for the NLA vs 0.52 for the Oracle L44 (0.59 at L40), and
+     rest of J keeps 0.42 vs 0.13 (0.47 at L40); J keeps 0.99 vs 0.91 (0.88 at L40). The NLA's excess over the Oracle
+     L44 is real in nats (random-slice difference −2.9 [−3.8, −2.3], negative in 40 of 40 items), but against the
+     Oracle L40 the gap is small.
+   - From the random slice the NLA names the bridge in 43/80 samples, against the Oracle L44's 14/80. **PI, post hoc
+     (2026-10-06, hand-read of the mirrored readouts):** 64 of the NLA's 80 random-slice readouts are weather / airport
+     boilerplate, and 38 of its 43 hits fall inside them, naming the right country. Read these hits as the country's
+     identity surviving in the slice, not as the NLA reading the question.
+   - The whole-activation NLA readouts restate a cue word more often than the Oracle L44's (28/48 vs 12/48), but about
+     as often as the Oracle L40's (27/48) (corrected 2026-10-06, report 31: was "far more often", against L44 only). Its J readouts
+     restate less (8/53, against 15/53 and 13/54).
+   - **PI, post hoc (2026-10-06):** on the whole activation each reader names the bridge on 36 of 40 test items; the
+     regex agrees with a hand-read of all 240 whole readouts. Failures: most-populous-country (all three readers);
+     Kremlin and IKEA / Guinness (Oracle L40); Kremlin / LEGO / Golden Gate (Oracle L44); Golden Gate / Griffith / Zeus
+     (NLA). The Oracle's rest-of-J readouts often name a wrong country (only-wrong vs right: L40 26 vs 34; L44 41 vs 10).
+     Details in `docs/reports/007_jsubspace.md` §9.
 
 ## What this changes
 
 - **006b's reading needs a refinement.**
   - "Consistent with reading the model's output-facing distribution" holds at the level of averages: z is the model's
     runner-up answer, and the readers track z.
-  - But pair by pair, the mid-layer readers (Oracle L40/L44, NLA L42) do not track the model's actual next-token output.
-    They track what the J lens reads from the same activation: content the activation is, on average across contexts,
-    poised to make the model say.
+  - But pair by pair, the mid-layer readers (Oracle L40/L44, NLA L42) do not track the model's actual next-token output
+    (r 0.21–0.30 for the Oracle, 0.07 for the NLA). The Oracle tracks what the J lens reads from the same activation
+    (r 0.63–0.80): content the activation is, on average across contexts, poised to make the model say. The NLA tracks
+    it only weakly (0.33–0.37) (corrected 2026-10-06, report 31: said both mid-layer readers track the J lens).
   - Only the late Oracle tracks the model's output.
   - So the brew confound is "token-readable (J-lens) content, which on brew includes z as an answer candidate" more than
     "the model's own next-token distribution". 009's brew-code family is the test of this: there, no colour is ever an
     answer.
 - **The NLA and the Oracle are different instruments.**
   - The Oracle is J-concentrated and layer-consistent.
-  - The NLA is prefix-sensitive, spreads its signal outside J, and restates more.
+  - The NLA is prefix-sensitive and spreads more of its signal outside J (partly weather boilerplate that keeps the
+    country, item 8). Its whole readouts restate more than the Oracle L44's, not more than the Oracle L40's
+    (corrected 2026-10-06, report 31: was "spreads its signal outside J, and restates more").
   - Their weak per-pair agreement at `:` (r ≈ 0.24–0.30) is mostly not shared output content.
 - **Neither reader's signal follows single-cell leverage**, across pairs or across cells. This is the North-Star
   quantity, measured on brew with little power.

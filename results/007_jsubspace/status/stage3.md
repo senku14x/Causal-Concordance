@@ -49,3 +49,16 @@ random: 0.32 / 0.24 vs 0.17 / 0.35. Close to hers on every piece.
   designed (flag 3), D here cannot separate reading the bridge from restating the question.
 - M1 holds (whole-activation bridge D CI above 0); M2 (≥ 50% of bridge-naming J readouts restate the cue) is just under
   (about 0.46-0.48 of bridge-namers).
+
+**Correction note (2026-10-06, report 31; appended, the text above is unchanged).** The restatement share should be
+taken among bridge-naming test samples that have a checkable cue word (the table's P(restates cue) divides by all
+samples with a cue word, and "about half" / "0.46-0.48 of bridge-namers" mixed denominators). Recomputed from
+`outputs/007_jsubspace/stage3/{m1,m1_nla_posthoc}/restatement_*.jsonl` with this file's word match:
+
+| reader | J piece | whole |
+|---|---|---|
+| oracle_L40 | 0.28 (15/53) | 0.56 (27/48) |
+| oracle_L44 | 0.24 (13/54) | 0.25 (12/48) |
+| nla_L42 (post hoc A2) | 0.15 (8/53) | 0.58 (28/48) |
+
+So M2 (≥ 50% of bridge-naming J readouts restate the cue) is not met (0.28 / 0.24), and not "just under".

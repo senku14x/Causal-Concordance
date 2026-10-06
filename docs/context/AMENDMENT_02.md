@@ -19,3 +19,15 @@
 - **No labels are computed.** Labels never use readers, so this use cannot leak into any label.
 - **Consequence recorded:** after 007 the brew test tables have been read by the readers. A later reader evaluation on
   brew test is not on untouched tables.
+
+## Ledger note (appended 2026-10-06, report 31; the text above is unchanged)
+
+- **A second, post hoc read of the brew test tables.** On 2026-10-06 the NLA L42 read the 49 brew test tables under
+  007's post hoc amendment A2 (006's exact 24-row scorer; `results/007_jsubspace/status/posthoc_A2_brew_test.md`,
+  `results/007_jsubspace/analysis/posthoc_A2_brew_test*.json`; 75.9 GPU-min). Use 1 listed the NLA, but the NLA had been
+  disabled by A1's stop gate before the test stage, so it did not read test under Use 1. This read is post hoc. It ran
+  under A2 (PI: "rerun properly", 2026-10-06) and had no separate entry here until this note.
+- **Who has read brew test so far:** the Oracle L40 / L44 (Use 1, pre-registered), the template lens (Use 1,
+  secondary), the prompt-only reader floor (Use 1), and the NLA L42 (post hoc, above). Brew test is not "used once".
+- **Multihop:** 007 Stage 3 defined a multihop split (items 1–50 dev, touched; 51–100 test). Its test half has been read
+  by the Oracle L40 / L44 (Stage 3) and the NLA L42 (post hoc A2).

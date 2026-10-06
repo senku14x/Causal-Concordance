@@ -8,7 +8,8 @@
 - **Code:** `scripts/009_brewcode/` (`bank.py`, `gate.py`, `derisk.py`).
 - **Runs:** gate `g2` (depth 2, stopped early), gate `g1` (depth 1), outfacing `o1`, captures and probes `c1`, profile
   `p1`.
-- **Results:** `results/009_brewcode/analysis/{gate_g1, gate_g2, outfacing, probes}.json`.
+- **Results:** `results/009_brewcode/analysis/{gate_g1, gate_g2, outfacing, probes, profile_p1}.json` (`profile_p1`
+  added to this list 2026-10-06, report 31).
 - **Label: EXPLORATORY.** Dev tables only. The 150 test tables at each depth are generated, hashed and untouched.
 - Every number below is from the JSON, rounded half-up.
 
@@ -29,8 +30,13 @@
     passed 11%. The early-stop rule moved to depth 1.
   - Depth 1: **771 of 1,200** candidate pairs pass, across 241 of 300 tables. Final-code renders pass 80%, start-code
     99.5%.
-- **The model computes the hidden colour even when the question doesn't need it.**
-  - A reader-free probe decodes it under both questions at 110 of 112 (cell × layer) sites.
+- **The hidden colour is decodable even when the question doesn't need it** (wording scoped 2026-10-06, report 31: was
+  "The model computes the hidden colour even when the question doesn't need it"; z is already decodable before the
+  question differs, so this need not be computation for the question).
+  - A reader-free probe decodes it under both questions at 33 of the 35 informative (cell × layer) sites, all but `:` at
+    L56 / L60. (corrected 2026-10-06, report 31: was "at 110 of 112 sites". 77 of the 112 sites, question tokens q0–q10 × 7 layers, come
+    before the one token that differs between the two questions, so their activations are identical under both and
+    count trivially. z already decodes at q1–q2, before the question differs: BA 0.93–0.98 at L40–48.)
   - When the answer needs it, decoding is near-perfect: balanced accuracy 0.86–1.00 at the answer-side cells, L40–60.
   - When it doesn't, decoding is weaker but well above chance (1/12 ≈ 0.08): 0.45–0.76 at the answer-side cells, L40–48.
   - Under the start-code question it then fades at L52–60 (0.22–0.28 at `:`, where it no longer passes).
@@ -132,7 +138,12 @@ Mean over tables [95% table-cluster CI], collision-free pairs:
 - **Reading:**
   - the model computes the hidden colour whether or not the answer needs it;
   - when the answer doesn't need it, the colour is weaker at L40–48 and fades by L52–60 at the answer-side cells;
-  - the "present under both questions" condition for a reader comparison holds at 110 of 112 sites.
+  - the "present under both questions" condition for a reader comparison holds at 33 of the 35 post-divergence sites
+    (q11, q12 and the three emit cells × 7 layers; it fails at `:` L56 / L60). (corrected 2026-10-06, report 31: was "110 of 112 sites";
+    the other 77 sites, q0–q10, precede the differing token and are identical under both questions.)
+  - Because z already decodes at q1–q2 (BA 0.93–0.98 at L40–48; 0.85–0.98 over L40–60), its presence under the
+    start-code question may be carried from the prompt rather than computed for the question. "Computes it whether or
+    not the answer needs it" is scoped accordingly.
 
 ## 5. Single-cell leverage (patch profile)
 
@@ -143,6 +154,9 @@ Mean over tables [95% table-cluster CI], collision-free pairs:
 - The table shows median S [95% table-cluster CI]. Gates G0 and same-source are exact (Δm = 0) on the first 2 pairs per
   question.
 - The answer gap G has median 14.5 nats (final-code) and 18.0 (start-code).
+- Source: `results/009_brewcode/analysis/profile_p1.json`. The run is complete: n = 48 at every cell × layer for both
+  questions, and the log ends at 48/48 for each (`outputs/009_brewcode/profile_p1.out`). Every value below was checked
+  against the JSON, half-up, on 2026-10-06 (report 31); none changed.
 
 | Question | Cell | L40 | L42 | L44 | L48 | L52 | L56 | L60 |
 |---|---|---|---|---|---|---|---|---|
@@ -181,9 +195,11 @@ Mean over tables [95% table-cluster CI], collision-free pairs:
 - An intermediate that the model represents in a nameable form may always leave a trace like this at the answer slot.
 - If so, no family with a nameable hidden step can make "the reader reads output-facing content" impossible.
 - At best it can make that content improbable, as here.
-- Report 29 qualifies how much this matters for the readers. On brew, the mid-layer readers' per-pair z signal tracked
-  what the J lens reads (r 0.63–0.80) much more than the model's own output (r 0.2–0.3). Only the late Oracle (L56/L60)
-  followed the output.
+- Report 29 qualifies how much this matters for the readers. On brew, the Oracle's per-pair z signal tracked what the J
+  lens reads (r 0.63, Oracle L40 vs J_CB L40; 0.80 for 007's Oracle J piece) more than the model's own output (r
+  0.21–0.30). The NLA tracks neither strongly: 0.33–0.37 with the J lens, 0.07 with the model's output. Only the late
+  Oracle (L56/L60) followed the output. (corrected 2026-10-06, report 31: said "the mid-layer readers ... (r 0.63–0.80) ... (r 0.2–0.3)",
+  which holds for the Oracle only.)
 
 **Consequences for the plan:**
 - **Readers do not run on this bank under the committed rule.** The rule asked for the colour to be absent from the
@@ -213,6 +229,8 @@ Mean over tables [95% table-cluster CI], collision-free pairs:
 
 - **Depth-2 early stop** after 30 tables (Wilson upper bound of the pair share 0.048 < 0.25; §E-009).
 - **Collision-free primary D:** 13% of depth-1 pairs have one member's hidden colour equal to the other's start colour.
+- **Partner cap:** the depth-1 gate ran with `--max-partners 4` (`gate.py`, a seeded sample of at most 4 partners per
+  table; `early_stop_d2.sh`, `gpu_queue.sh`; design §E-009), hence "up to 4 partners" in §3 (added 2026-10-06, report 31).
 - **Gate decode check:** the EOS-suppression digit run-ons are rejected by the strict parser, so the gate is
   conservative.
 - **Probes** use logistic regression on train-fold PCA-256 (the fork's choice, documented in the code). The design said

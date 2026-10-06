@@ -4,24 +4,32 @@
 > 1. **`origin/main` holds everything through 007** (fast-forwarded from `007-jsubspace` on 2026-10-06). The newest
 >    work is on branch **`008-trackb-brewcode`**:
 >    - 008, Track B (`docs/reports/008_trackb.md`): the paper's §3.3 test done the paper's way, on a powered lever
->      (S 0.21). The J part carries 0.02-0.03, the non-J part 0.21, so no model-side J privilege; 007's dissociation
->      stands.
+>      (S 0.21). The sparse k = 25 J part carries 0.02-0.03, the non-J part 0.21, so no model-side privilege for that
+>      J part. ~~007's dissociation stands.~~ (corrected 2026-10-06, report 31: that paired 008's sparse J part with 007's dense J
+>      subspace. On the dense subspace both sides: Oracle L40 J 5.76 vs whole 3.22 nats on dev, 5.03 vs 2.87 on test;
+>      007 Stage 2 dense-J swaps track the Δ-share at L42 and exceed Δ-matched random modestly at L40/L44, below the
+>      margin. 008 vs the paper: not reproduced under a band-limited clamp, not "reversed".)
 >    - 009, the brew-code bank (`docs/reports/009_brewcode_derisk.md`): the gate passes at depth 1, but the hidden
 >      colour stays in the output tail, so the output-facing check fails and readers are blocked.
->    - 010, reader agreement (report 29, CPU): readers agree weakly and track what the J lens reads, not the model's
->      output.
+>    - 010, reader agreement (report 29, CPU): readers agree weakly. The Oracle tracks what the J lens reads (r
+>      0.63–0.80) more than the model's output (0.21–0.30); the NLA tracks neither strongly (0.33–0.37; 0.07)
+>      (corrected 2026-10-06, report 31: said both readers track the J lens, not the model's output).
 >    - 011, Oracle-space swaps (`docs/design_specs/011_olens_swaps.md`, post hoc): the AR loader works after two
      fixes. In the smoke, the TA's whitened swap does nothing (its own positive control fails), and an additive
      "minus AR(z), plus AR(z′)" edit moves the answer about half as much as the model's own colour direction. The
      full run is stopped at 74/82, waiting for the PI.
->    - `CLAUDE.md` "Where things stand" has the details and the open PI decisions.
+>    - `CLAUDE.md` "Where things stand" has the details and the open PI decisions. Report 31 (onboarding review) lists
+>      the doc corrections made on 2026-10-06; `STATUS.md` (top) has the corrected held-out ledger: brew test has been
+>      read by the Oracle (pre-registered), the template lens, the prompt-only floor and the NLA (post hoc A2, 10-06),
+>      so it is not "used once"; 007 split multihop into items 1–50 (dev) and 51–100 (test).
 > 2. **Read the workspace paper first** (Gurnee et al. 2026; PDF `docs/papers/2607.15495.pdf`; text
 >    `docs/papers/text/2607.15495_html.md` or `.txt`; digest `docs/papers/text/2607.15495_NOTES_digest.md`), **then the
 >    paper notes** (`docs/claude_reports/04_*`, `04b_*`, `03_*`), then the reading at the top of `CLAUDE.md`.
 > 3. Then `CLAUDE.md` ("Where things stand", "Pitfalls"), `STATUS.md`, `docs/reports/007_jsubspace.md` and
 >    `docs/claude_reports/25_nla_stops_and_open_issues_2026-10-06.md`.
-> 4. 007 in one line: the Oracle reads z through the J subspace (confirmed on held-out tables); the model's answer gives
->    J no privilege; the NLA (post hoc) does not share the Oracle's J dependence. Results page:
+> 4. 007 in one line: the Oracle reads z through the J subspace (confirmed on held-out tables at L40; P5 only at L44);
+>    the model's answer gives J no privilege; the NLA (post hoc) does not share the Oracle's J dependence at `:` (at
+>    `</think>` it also collapses without J; corrected 2026-10-06, report 31). Results page:
 >    https://claude.ai/artifact/8vnKTzcXczn4YGMiP1uJTW
 > 5. Restore outputs on a fresh instance with `scripts/000_setup/rebuild_env.sh` and then
 >    `scripts/000_setup/restore_outputs.py` (`CLAUDE.md`, "Fresh instance").
@@ -32,7 +40,8 @@
 >    before anything else.
 > 2. This file describes the state of 2026-10-03 (experiments 001–004).
 >    - Since then: SPEC_v2 + errata 01, the 005 planted-concepts experiment (smoke, dev pilot, full run, follow-ups), and 006 (reader likelihoods at the brew `:` cell).
->    - All of it is on branch `005-amended-full-run`.
+>    - All of it is on branch `005-amended-full-run` (as of 2026-10-05; corrected 2026-10-06, report 31: since 2026-10-06, `origin/main`
+>      holds everything through 007, and 008–011 are on `008-trackb-brewcode`).
 >    - For the current state, read `CLAUDE.md` ("Where things stand") and `STATUS.md`. The newest results are in `docs/reports/005_followups.md` and `docs/reports/006_reader_likelihood.md`.
 
 For a new session or collaborator taking over. It says where things are and why. Rules live in `CLAUDE.md`, the
@@ -104,7 +113,9 @@ skills). Paper PDFs, text extractions and web sources are committed in `docs/pap
   - **Whole-cell shares cannot say which content matters.**
 - **Probes:**
   - z and start decode well at the emission cells at L40–44; the answer decodes poorly until L56.
-  - Off-path table-colour membership passes only at L60, **provisionally**: the probe controls need repair.
+  - ~~Off-path table-colour membership passes only at L60, **provisionally**: the probe controls need repair.~~
+    (corrected 2026-10-06, report 31: after the A2 probe repair, off-path membership is decodable by the rule at the `:` cell at every
+    layer, L40–60, narrowly at L40–44 (selectivity 0.11–0.13); `docs/reports/001_leverage_profile.md` §7.)
 - **Substitution:** replacing an off-path colour barely moves the answer (39/43 items within the bound) but shifts its
   tail.
 - **Readers (descriptive, 10 tables):**
@@ -131,7 +142,7 @@ skills). Paper PDFs, text extractions and web sources are committed in `docs/pap
 
 - Decorrelated content directions: held-out AUC 1.00; fidelity perfect; 82 pairs, 37k edits.
 - At `:` and the assistant newline, L40–44, **z has a small, mostly positive effect**: median S 0.03–0.05, positive
-  in 85–90% of pairs, above the start and answer directions. It is "used" (≥ 0.10) in only 10–18% of pairs (a few
+  in 84–90% of pairs (corrected 2026-10-06, report 31: was 85–90%), above the start and answer directions. It is "used" (≥ 0.10) in only 10–18% of pairs (a few
   tables, e.g. 0383 at 0.36). No single tested direction reproduces the whole-cell effect.
   - Clamping z beats random clamps, but those were not size-matched, so this is not specificity.
 - At the `</think>` newline: family-level readable, little net patch leverage (not an item label). At `:` L60 the

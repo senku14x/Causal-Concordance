@@ -68,7 +68,7 @@ shows that the per-pair effect really does depend on which tables the direction 
 
 - **At `:` and the assistant newline, L40–44:** the z direction is the only content direction whose median clearly
   exceeds its random-direction null. It is larger than the start and answer directions at every layer. In 46–53 of
-  82 pairs it is the largest of the three. Its effect is positive in 85–90% of pairs at `:` (70, 69 and 74 of 82),
+  82 pairs it is the largest of the three. Its effect is positive in 84–90% of pairs at `:` (70, 69 and 74 of 82; corrected 2026-10-06, report 31: 69/82 = 0.841 was rounded to 85%),
   and positive on average in 28–29 of the 33 tables. **The effects are small, not absent.**
 - **But it carries only 3–5% of the gap**, against 29–50% for the whole cell. **None of the three individually tested
   directions reproduces the whole-cell effect.**
@@ -161,7 +161,7 @@ Under these conditions:
 - the intermediate at `:` and at the assistant newline, L40–44, has a **small, mostly positive** influence along a
   single reader-free direction:
   - above norm-matched random swaps and above the start and answer directions;
-  - 3–5% of the gap in the median (positive in 85–90% of pairs), large in a few tables;
+  - 3–5% of the gap in the median (positive in 84–90% of pairs; corrected 2026-10-06, report 31: was 85–90%), large in a few tables;
   - its clamp beats random clamps that were not size-matched, so specificity is not established;
 - at the `</think>` newline the intermediate is readable at the family level, while the whole cell has little net
   leverage (not an item-level label);

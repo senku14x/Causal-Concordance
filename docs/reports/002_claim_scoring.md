@@ -74,7 +74,7 @@ The design estimated $2.35. The difference is about 385 reasoning tokens per cal
 | | shuffled | 0.07 | 0.57 | 0.10 | 0.25 | 0.05 | 0.25 |
 | NLA L42, `</think>` newline | real | **0.15** | 0.72 (0.45 + 0.28) | 0.00 | 0.12 | **0.28** | 0.60 |
 | | shuffled | 0.05 | 0.68 | 0.07 | 0.20 | 0.00 | 0.20 |
-| NLA L42, `:` | real | **0.05** | 0.42 | 0.15 | 0.38 | 0.17 | 0.42 |
+| NLA L42, `:` | real | **0.05** | 0.42 | 0.15 | 0.38 | 0.17 | 0.43 (corrected 2026-10-06, report 31: 0.425 was written 0.42) |
 | | shuffled | 0.00 | 0.47 | 0.20 | 0.33 | 0.00 | 0.20 |
 | Oracle L40, `:` (k = 4) | real | **0.00** | 0.12 | 0.03 | **0.85** | 0.05 | 0.53 |
 | | shuffled | 0.00 | 0.23 | 0.00 | 0.78 | 0.00 | 0.38 |
