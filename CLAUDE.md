@@ -65,8 +65,8 @@ and vocabulary: J-lens, workspace, J-space, privilege, verbalizable. A session t
    - 009, the brew-code bank: `docs/reports/009_brewcode_derisk.md` (same design note, Part 2, §E-009; reader rules in
      `docs/design_specs/009b_reader_phase.md`);
    - 010, reader agreement (CPU): `docs/claude_reports/29_reader_agreement_010_2026-10-06.md`;
-   - 011, Oracle-space swaps: `docs/design_specs/011_olens_swaps.md` (loader validated post hoc; smokes done; the full
-     run is stopped at 74/82 pairs, unanalysed, waiting for the PI).
+   - 011, Oracle-space swaps: `docs/design_specs/011_olens_swaps.md` (loader accepted post hoc on scale-free criteria, not
+     validated against the published AR; full run s1 done and analysed: partial; AR J-bias check: ambiguous).
 
    Before them, 007 (`docs/reports/007_jsubspace.md`, on `main`), and 005 and 006 (branch `005-amended-full-run`).
    For 006, read `docs/reports/006_reader_likelihood.md` and `docs/design_specs/006_reader_likelihood.md`. For 005,
@@ -220,13 +220,17 @@ gates pass; `docs/reports/008_trackb.md`; design `docs/design_specs/008_009_trac
 - Class-mean z swaps clamped per layer over the three emit cells (assistant newline, `</think>`, `:`) × L40-48.
 - **The lever is adequate:** the full direction moves the answer by median S 0.21 [0.11, 0.26] (flips 16%).
 - **No model-side J privilege.** The J part (k = 25 pursuit) carries S 0.02-0.03, the non-J part 0.21; J − non-J
-  −0.17 (J_NP) / −0.15 (J_CB), CIs below 0. The real whitened swap (Ledoit-Wolf Σ, swap in whitened coordinates, map
-  back) narrows the gap (J 0.07 / 0.10 vs non-J 0.14 / 0.11) but never reverses it. Matched raw or whitened norm: J_CB
-  ties, J_NP below. Clamping the J coordinates barely changes the non-J swap (0.21 → 0.20 / 0.18); the paper's clamp
+  −0.17 (J_NP) / −0.14 (J_CB; −0.15 before report 31's correction), CIs below 0. The real whitened swap (Ledoit-Wolf Σ, swap in whitened coordinates, map
+  back) narrows the gap (J 0.07 / 0.10 vs non-J 0.14 / 0.11) but never reverses it. Matched raw norm: J_CB
+  ties, J_NP below; matched whitened norm: both below (J_CB CI [−0.029, −0.000]). Clamping the J coordinates barely changes the non-J swap (J_NP 0.21 → 0.20; J_CB 0.20 → 0.18); the paper's clamp
   took Claude's from 28% to 6%.
 - The true lens-coordinate swap (arm A) is not read: its answer-atom positive control moves S 0.01 (power bar 0.15).
-- → 007's reader-model dissociation stands, now on a powered lever: the Oracle privileges J for reading z, the
-  model's answer does not. This is what the PI's 2026-10-06 numbers to the TA come from.
+- Not "reversed": the paper clamps at every position; 008 clamps 3 cells × L40-48, so the paper's mediation result is
+  **not reproduced under a band-limited clamp**.
+- **The reader-model dissociation, on matched objects** (report 31): with 007's dense J subspace on both sides, the
+  Oracle's z reading depends on J (Stage 1a / brew_test) while the model's answer moves with J only in proportion to J's
+  content share (Stage 2, adequate lever S_full 0.28). 008's sparse J part (a different object) agrees. The PI's
+  2026-10-06 numbers to the TA come from 008 (J_CB corrected to −0.14).
 
 **009, the brew-code bank** (exploratory, reader-free de-risk; `docs/reports/009_brewcode_derisk.md`; design Part 2 and
 §E-009; reader rules `docs/design_specs/009b_reader_phase.md`):
@@ -237,36 +241,45 @@ gates pass; `docs/reports/008_trackb.md`; design `docs/design_specs/008_009_trac
 - **The output-facing check fails, so readers do not run** (rule §2.5.1). With a code answer, z is still the top colour
   at the answer slot in 98% of renders (median rank 11 of 248,320 tokens; the model's own D +11.9 nats, 240/240
   tables), at only ~0.05% total colour mass. D is scale-free, so the tail still counts.
-- Reader-free probes decode z under both questions (110 of 112 sites). The patch profile reproduces brew's structure
+- Reader-free probes decode z under both questions (110 of 112 sites; but 77 sites precede the differing token and are
+  identical under both questions, so 33 of 35 informative sites; z decodes at q1-q2 already). The patch profile reproduces brew's structure
   (`</think>` L40-44: z decodable, no single-cell leverage).
 - The PI has called the new prompts weak and suggested returning to the old prompts and runs. 009 readers are on hold.
 
 **010, reader agreement** (exploratory, CPU; `docs/claude_reports/29_reader_agreement_010_2026-10-06.md`): NLA-Oracle
-per-pair agreement is weak (r 0.24-0.30). Mid-layer readers track what the J lens reads (r 0.63-0.80), not the model's
-next-token output (0.2-0.3); only the late Oracle (L56/L60) follows the output.
+per-pair agreement is weak (r 0.24-0.30). The mid-layer Oracle tracks what the J lens reads (r 0.63-0.80), not the model's
+next-token output (0.21-0.30); the NLA is weaker on both (0.33-0.37 with the J lens, 0.07 with the output); only the late Oracle (L56/L60) follows the output.
 
 **011, Oracle-space swaps** (the TA's tip: put a colour word through the Oracle Lens's own reconstructor (AR), get a
 vector, do it for two colours, swap them in whitened space; `docs/design_specs/011_olens_swaps.md` with amendments 1-3;
 `scripts/011_olens_swaps/`). **Everything from 011 is post hoc, exploratory.**
 - **The AR loader is ours** (the official one is not public). It failed the pre-set validation twice (v1, v2), then
   passed under post hoc amendment 2. The AR's output is a raw activation, scored in the whitened metric, with the
-  AR's own whitener (`whitening_iolens_pooled`). On 16-token spans it matches the published fit after one global
-  scale (FVE 0.24 vs 0.22), and within-batch retrieval@1 is 0.86 (published 0.93). A global output scale (0.3-0.55)
+  AR's own whitener (`whitening_iolens_pooled`). On 16-token spans its FVE after one fitted global
+  scale is 0.24 (the published 0.22 is unscaled, on 1-32-token spans), and within-batch retrieval@1 is 0.86
+  (published 0.93). **Not validated against the published AR** (unscaled FVE negative; outputs ~2× too long; 64 blocks
+  vs a truncated backbone untested; 011 note "Loader caveats"), so 011 is not "the TA's reconstructor method" yet. A global output scale (0.3-0.55)
   is unexplained, so only colour vectors centred over the 12 colours are used (the scale cancels there).
   Validation: `results/011_olens_swaps/ar_validation_v3.json`, `ar_offline_d2.json`.
 - **Smoke s0b** (2 pairs, one table; observations only; all gates pass; `olens_swaps_s0b.json`), median S:
   - reference (class-mean coordinate swap): 0.23;
   - **the TA's swap as given (AR vectors swapped in whitened coordinates): −0.00.** Its answer-colour positive
-    control is −0.00 too, so it is not read: the clean activations' whitened coordinates on the two AR colour
-    vectors barely differ, so the swap edits almost nothing;
-  - the same directions swapped in raw coordinates: 0.16, but its answer control is 0.08 and one size-matched random
-    edit 0.09 (generic, not colour-specific, on this smoke);
+    control is −0.00 too, so it is not read. Its edit lies along the same raw direction as the additive one; it is null
+    because the clean coordinates do not favour AR(z) over AR(z′) (report 31; "edits almost nothing" was wrong);
+  - the same directions swapped in raw coordinates: 0.16, but its answer control is 0.08 and two size-matched random
+    edits 0.09 / 0.00 (generic, not colour-specific, on this smoke);
   - **additive reading** ("subtract the AR vector for z, add z′'s", at the reference's edit size): 0.10; the AR's
     answer-colour difference 0.12; the model's own class-mean difference 0.23; random 0.01 / −0.02.
-- **Full run s1 was stopped by the PI's request at 74 of 82 pairs** (resumable: `olens_swaps.py --vec-run v3 --run-id
-  s1` skips finished pairs). Not analysed. `olens_swaps_analysis.py --run-id s1` applies amendment 3's reading rules.
+- **Full run s1 (82 pairs; resumed 10-06 after the bookkeeping fix; POST HOC)**: TA's whitened swap and raw-coordinate
+  swap not read (answer controls 0.016 / 0.050, below 0.15); additive **partial**: AR colour difference S 0.09 vs
+  class-mean 0.20 vs random 0.01 (D_ar − D_classmean −0.10 [−0.15, −0.05]; D_ar − D_rand +0.06 [+0.02, +0.11]).
+  The smoke's raw-coordinate 0.16 did not hold (0.005). `results/011_olens_swaps/olens_swaps_analysis_s1.json`.
+- **AR J-bias check** (CPU, exploratory; `ar_jbias.json`): ambiguous by its pre-set rule. The AR over-weights 007's J
+  subspace 1.27× / 1.15× (L40 / L44) relative to the activations, above PCA and random controls; too small to explain
+  007 alone. What the AR config's `jfve` / `loss_mix_lambda` mean is open (no training code public).
 - **Likely limit of the tip:** the AR reconstructs 1-token inputs poorly (cosine ≈ 0.1 with the real activation,
-  vs ≈ 0.5 for 16 tokens). So single-word colour vectors are mostly noise. The proposed next step is vectors built
+  vs ≈ 0.5 for 16 tokens). Single-word colour vectors are noisy but colour-specific (cos 0.15-0.24 with the model's class-mean
+  differences, ≈ 0 for mismatched pairs; report 31). The proposed next step is vectors built
   from several short phrases that start with the colour (a new post hoc amendment first).
 
 **007, the J-subspace split** (`docs/reports/007_jsubspace.md`; design `docs/design_specs/007_jsubspace.md` with
@@ -276,16 +289,19 @@ why the NLA runs stopped and the other open issues: `docs/claude_reports/25_nla_
   how much prompt-specific content a piece holds, or on removing the shared mean direction? Does the model's answer
   depend on J beyond its content share?
 - **Confirmed (pre-registered, dev + 49 held-out brew test tables, AMENDMENT_02):** the **Oracle**'s z tracking at brew
-  `:` L40 is carried by the J subspace. J alone beats the whole activation (dev 5.8 vs 3.2 nats), removing J leaves about
-  0.3, and J beats Δ-matched PCA, random subspaces, and random after mean removal. The same pattern holds at
-  `</think>` (patch share 0.01), so it does not follow use.
+  `:` L40 is carried by the J subspace. Registered contrasts confirmed at L40: P1, P2, P3, P5 (J beats Δ-matched PCA,
+  random subspaces, rest-of-J vs rest-of-random, random after mean removal); at L44 only P5. Descriptive: J alone 5.8 vs
+  whole 3.2 nats (dev; test 5.0 vs 2.9; J − whole is not a registered contrast), rest-of-J ≈ 0.3. Secondary, dev
+  only: the same pattern at `</think>`, a cell with lower observed patch leverage (0.01 vs 0.48 at `:`, L42).
 - **Model side:** J subspace swaps track content share (L42) or exceed random modestly (L40/L44, below margin). In the
   paper's §3.3 test adapted to brew, the J part of a class-mean z direction moves the answer *less* than the non-J part
-  at matched raw norm. This is a reader-model dissociation.
+  at matched raw norm. Like-for-like (dense J on both sides) is Stage 1a vs Stage 2 (report 31).
 - **NLA (post hoc, A2/A3):** first disabled by a G-repro stop gate (my 2-row fast scorer), then rerun on 006's exact
   scorer. Its z signal is **not** J-concentrated at `:` (J ≈ half of whole; removing J costs about as much as removing a
-  random slice). At `</think>` it collapses without J but J alone is not enough. Multihop: J ≈ whole for both readers,
-  confounded by restatement.
+  random slice). At `</think>` it collapses without J but J alone is not enough. So "J dependence is reader-specific" holds at `:` only. Multihop: J ≈ whole for both
+  readers; restatement shares (J piece) 0.28 / 0.24 / 0.15, whole piece 0.56 / 0.25 / 0.58. PI's hand-read (post hoc,
+  10-06): from the whole activation each reader names the bridge on 36/40 test items; the NLA's random-slice hits are
+  mostly weather boilerplate carrying the country (38 of 43); the Oracle's rest-of-J readouts often name a wrong country.
 - **Secondary:** relational stopped after its profile (12/50 gated; no high-leverage read-layer position). Chain
   (exploratory, 7 items): the signal lies outside J at L56. The template lens fails its colour sanity check at L40-44.
 - **The PI's position (2026-10-06):** trusts the results and does not want a confirmatory 007c rerun of the NLA. A TA
@@ -325,12 +341,13 @@ why the NLA runs stopped and the other open issues: `docs/claude_reports/25_nla_
 - Their tracking does not follow 001's patch shares. The Oracle tracks z 2× more at `</think>` (patch share 0.01), which the model's output does not mirror.
 
 **Open PI decisions:**
-- 011: finish the stopped full run (~1 GPU-min); build phrase-based AR colour vectors and rerun (~10 GPU-min).
+- 011: s1 finished and analysed (partial, below). Any next step needs the loader validated against the published AR
+  first; phrase-based AR colour vectors (~10 GPU-min) after that.
 - 009 readers: keep the rule (bank used model-side only), a post hoc reader run with the model's output as covariate,
   or a redesign. The PI leans toward the old prompts and runs.
 - Paid NLA hallucination stripping (an LLM judge costs money; ask first).
 - Done from the TA's list: whitened-space swaps (008), per-method qualitative readouts (report 27), Oracle L44 vs NLA
-  L42 on multihop (010), Oracle-space swaps (011, smoke; full run pending). Open: NLA hallucination stripping and the
+  L42 on multihop (010), Oracle-space swaps (011, full run s1 done: partial). Open: NLA hallucination stripping and the
   NLA reconstructor's FVE. 005 is closed.
 
 **Results page for 000–004** (artifact, shared by link; built by `scripts/000_setup/results_page/make_page.py` from committed JSON only): https://claude.ai/artifact/RMRX8R4iFnysbnHaNWTBeC
@@ -587,3 +604,10 @@ why the NLA runs stopped and the other open issues: `docs/claude_reports/25_nla_
 | 10-06 | 011 v1/d1 loaded the whitener `whitening_L{L}` (lmsys) from the AR's folder; the AR was trained against `whitening_iolens_pooled_L{L}` (`meta.json` `whitener_prefix`) | fixed in amendment 1 before v2 |
 | 10-06 | My summary of 011's smoke gave one size-matched random edit as S 0.10, rounded from the printout's 0.095; the JSON value rounds half-up to 0.09. The double-rounding lesson again | corrected in the next message and in the docs, which take 011 numbers from the JSON |
 | 10-06 | 011's smoke was chained into the full run automatically; the PI wanted to see the smoke first and asked to wait | full run stopped at 74/82 (kept, resumable, unanalysed); stop after smokes from now on ("Working with the PI") |
+| 10-06 | The Track B report and the PI's numbers to the TA gave J_CB J − non-J as −0.15 (JSON −0.14465) and the subset whitened power as 0.12 (0.0906); this log then said the report had "no slips" | corrected (report 31); rounding is done from the JSON by script, never by eye |
+| 10-06 | 008 and this file stated a reader-model dissociation by comparing 007's dense J subspace (reader side) with 008's sparse J part (model side), two different objects | restated on matched objects (dense J both sides: Stage 1a / brew_test vs Stage 2); report 31 |
+| 10-06 | 009's "110 of 112 probe sites" counted 77 sites before the differing token, whose activations are identical under both questions | 33 of 35 informative sites (report 31) |
+| 10-06 | 011's whitened-swap null was explained as "the swap edits almost nothing"; its edit lies along the additive direction and the null comes from the clean coordinates not favouring AR(z) over AR(z′) | corrected in the 011 note |
+| 10-06 | 011's resume path reported gate bookkeeping for newly run pairs only; the analysis had no completeness guard or quarantine handling; rerunning queue.sh would have overwritten `ar_validation_v1.json` | bookkeeping rebuilt from every pair file; guard + quarantine handling with a test (`tests/test_011_analysis_guard.py`); no-overwrite guards |
+| 10-06 | Report 31 copied a subagent's line reference (`queue.sh:183-188`; the file has 20 lines) and its 011 L40 FVE 0.26 is a recomputation not in any committed JSON | reference fixed; the 0.26 is flagged as unverified in the 011 note |
+| 10-06 | Drafted the 011 s1 line in this file from the analysis printout: D_ar − D_rand's lower CI bound came out +0.03 (JSON 0.02498 → +0.02). The double-rounding lesson again, caught by the JSON check before commit | corrected before commit |

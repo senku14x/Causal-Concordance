@@ -1,7 +1,10 @@
 """011 arm C: Oracle-space swaps on brew dev (Camila's suggestion via the PI, 2026-10-06). Model-side intervention along
 directions from the Oracle Lens's own reconstructor (AR); experiments about reader geometry, never labels.
 
-  python olens_swaps.py --vec-run v1 --run-id s1 [--limit-pairs N]
+  python olens_swaps.py --vec-run v3 --run-id s1 [--limit-pairs N]   (resumes: finished pair files are skipped)
+
+SUPERSEDED in part (report 31): v1 failed validation; runs use v3 (amendment 2). Amendment 3 added the C_raw_* and
+D_* arms (additive reading). Gate bookkeeping is rebuilt from every pair file, so resumed runs report all pairs.
 
 Per pair (Track B's 82 gated dev pairs, member <- swap, p -> m margin), clamped per layer at the AR's layers inside the
 band (L40, L44, L48) over the three emit cells, with Track B's clamp primitive (c = R (h - mu); h <- h + A (t - c),
@@ -203,6 +206,30 @@ def summarize(rows):
     return out
 
 
+def bookkeeping(rows, log_path, expected):
+    """Gate bookkeeping over EVERY pair file, so a resumed run reports all pairs, not only the newly run ones
+    (report 31). Pairs written before the per-pair `ra_err` field existed take it from the run log (1 significant
+    digit), and the record says so."""
+    import re
+    done = sorted({r["pair_id"] for r in rows})
+    ra = {r["pair_id"]: r["ra_err"] for r in rows if r.get("name") == "G_repro" and "ra_err" in r}
+    from_log = {}
+    if log_path.exists():
+        for ln in open(log_path):
+            m = re.search(r"\] (\S+) \d+s repro .* RA ([0-9.eE+-]+)", ln)
+            if m and m.group(1) not in ra:
+                from_log[m.group(1)] = max(from_log.get(m.group(1), 0.0), float(m.group(2)))
+    missing_ra = [p for p in done if p not in ra and p not in from_log]
+    errs = list(ra.values()) + list(from_log.values())
+    return {"n_pairs_done": len(done), "n_pairs_expected": len(expected),
+            "complete": set(done) >= set(expected), "missing_pairs": sorted(set(expected) - set(done)),
+            "quarantined": sum(1 for r in rows if r.get("quarantined")),
+            "repro_fail": sorted(r["pair_id"] for r in rows if r.get("name") == "G_repro" and not r["pass"]),
+            "G0": {r["pair_id"]: {"dm": r["dm"], "pass": r["pass"]} for r in rows if r.get("name") == "G0_zero"},
+            "ra_err_max": max(errs) if errs else None,
+            "ra_err_source": {"rows": len(ra), "log_1sigfig": len(from_log), "missing": missing_ra}}
+
+
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--vec-run", default="v1")
@@ -247,7 +274,7 @@ def main():
                 state["G0"][pid] = {"dm": r0["dm"], "pass": abs(r0["dm"]) <= C8.FLOOR and r0["fid_ok"]}
                 rows.append({**r0, "pass": state["G0"][pid]["pass"]})
             conds, err = build(P, AR, WH, D)
-            state["ra_err_max"] = max(state["ra_err_max"], err)
+            rows[1]["ra_err"] = float(err)
             for c in conds:
                 r = P.evaluate(c)
                 if not (r["fid_ok"] and r["clamp_ok"]):
@@ -258,9 +285,11 @@ def main():
             sec.clear()
             log(f"[{n + 1}/{len(ents)}] {pid} {time.time() - t0:.0f}s repro {S_rep:.3f}/{ref001[pid]:.3f} RA {err:.1e}")
     rows = [json.loads(l) for f in sorted((d / "pairs").glob("*.jsonl")) for l in open(f)]
+    state.update(bookkeeping(rows, d / "log.txt", [e["pair"].pair_id for e in ents]))
     summ = summarize(rows)
     ans = summ.get("Cctrl_answer", {}).get("median_S", 0.0)
-    state.update({"minutes": (time.time() - t_all) / 60, "G_RA_pass": state["ra_err_max"] <= 1e-5,
+    state.update({"minutes": (time.time() - t_all) / 60,
+                  "G_RA_pass": state["ra_err_max"] is not None and state["ra_err_max"] <= 1e-5 and not state["ra_err_source"]["missing"],
                   "power_answer_swap": ans, "power_pass": ans >= POWER_MIN, "summary": summ})
     AV.RES.mkdir(parents=True, exist_ok=True)
     (AV.RES / f"olens_swaps_{a.run_id}.json").write_text(json.dumps(state, indent=1, default=float))

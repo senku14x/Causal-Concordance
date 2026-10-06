@@ -2,7 +2,11 @@
 2026-10-06). READER-SIDE code (the Oracle Lens's AR); never imported by label code. One dedicated process: the AR's LoRA
 is attached to this process's copy of the subject model, which is then marked as modified.
 
-  python ar_vectors.py --run-id v1
+  python ar_vectors.py --run-id v3 --posthoc-a2     (current; refuses to overwrite an existing record)
+
+SUPERSEDED in part (011 amendments 1-2, report 31): the AR's whitener is `whitening_iolens_pooled_L{L}`, not
+`whitening_L{L}`; the accepted convention is target block L, read ln_pre, RAW output scored in the whitened metric;
+acceptance was amendment 2's post hoc scale-free rule. The text below is the pre-amendment design.
 
 AR (agu18dec/olens_and_ar @ c95215d, ar_ptag_pooled; README): Qwen3.6-27B text model + LoRA r16/a32 on every linear,
 one shared Linear(5120, 5120) head; input = "[Layer NN]" tag (6 tokens, from heads.pt) + span; read the final hidden
@@ -234,7 +238,12 @@ def main():
     ap.add_argument("--whitener", default=WH_PREFIX[0])
     ap.add_argument("--save-tensors", action="store_true", help="save head outputs and targets for CPU diagnostics")
     ap.add_argument("--posthoc-a2", action="store_true", help="apply amendment 2's post hoc acceptance rule (011 note)")
+    ap.add_argument("--overwrite", action="store_true", help="allow replacing an existing ar_validation_<run-id>.json")
     a = ap.parse_args()
+    # records are never overwritten silently (report 31: rerunning queue.sh would have replaced v1's record)
+    for f in (RES / f"ar_validation_{a.run_id}.json", RES / f"ar_diagnostics_{a.run_id}.json"):
+        if f.exists() and not a.overwrite:
+            raise SystemExit(f"{f} exists; pick a new --run-id (or pass --overwrite deliberately)")
     DIAG_ONLY[0] = a.diag_only
     WH_PREFIX[0] = a.whitener
     out = OUT / a.run_id

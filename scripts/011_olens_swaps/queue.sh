@@ -3,6 +3,10 @@
 # validation accepted a convention.
 set -eo pipefail
 cd /workspace/causal-concordance
+# HISTORICAL (2026-10-06): this queue ran v1/s1 before amendments 1-3. Rerunning it would replace v1's records.
+if [ -f results/011_olens_swaps/ar_validation_v1.json ]; then
+  echo "queue.sh is historical: ar_validation_v1.json exists; run ar_vectors.py / olens_swaps.py by hand" >&2; exit 1
+fi
 PY=/venv/main/bin/python
 LOG=outputs/011_olens_swaps/queue.log
 mkdir -p outputs/011_olens_swaps

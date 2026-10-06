@@ -138,7 +138,7 @@ The headline claim is that the Oracle reads z through J while the model's answer
 - **011 code:**
   - The resume bookkeeping counts G0, quarantine and RA only for newly run pairs (`olens_swaps.py:226-259`).
   - The analysis raises KeyError on any quarantined row and has no completeness guard (`olens_swaps_analysis.py:38-44`).
-  - `queue.sh:183-188` still uses v1; a rerun would overwrite `ar_validation_v1.json`.
+  - `queue.sh` (lines 13-18; the subagent's `:183-188` was wrong) still uses v1; a rerun would overwrite `ar_validation_v1.json` (fixed 2026-10-06: the script now refuses).
   - Docstrings at `ar_vectors.py:10,13-15` and `olens_swaps.py:4,11` describe the setup before the amendments.
 - **011 amendment header times** (`~20:50 / ~21:05 / ~21:30`) disagree with git (20:37:36 / 20:43:06 / 21:07:59). Git shows amendment 3 was committed before s1 started (20:43:53), so it predates the s1 outcomes.
 - **007:**
