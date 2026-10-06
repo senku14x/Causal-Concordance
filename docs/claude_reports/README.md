@@ -19,6 +19,7 @@ Cleaned 2026-10-06:
 | `26_up_to_speed_report_2026-10-06.md` | **Current state of the project** (2026-10-06): instance check, what each experiment showed, weak links, every inconsistency found, next steps |
 | `28_next_direction_proposal_2026-10-06.md` | The proposal behind tonight's work. Superseded in part by the PI's changes in `docs/design_specs/008_009_trackb_brewcode.md` |
 | `docs/reports/008_trackb.md` (not here) | **Newest result:** 007's model-side test done the paper's way; no J privilege |
+| `docs/reports/009_brewcode_derisk.md` (not here) | **009 de-risk:** the brew-code bank's gate passes at depth 1 (771 pairs) but the output-facing check fails: with a code answer the hidden colour is still the top colour (98%) and ranks ~11th at the answer slot, at ~0.05% total probability; readers blocked by the rule; options for the PI |
 | `29_reader_agreement_010_2026-10-06.md` | **Newest analysis:** readers agree weakly; mid-layer readers track what the J lens reads, not the model's next-token output |
 
 ## The paper and the reading

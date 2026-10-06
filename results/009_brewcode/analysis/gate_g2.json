@@ -1,0 +1,741 @@
+{
+ "run_id": "g2",
+ "depth": 2,
+ "complete": false,
+ "n_tables_gated": 30,
+ "gate": {
+  "greedy": true,
+  "k": 10,
+  "min_correct": 9,
+  "temperature": 0.8,
+  "top_p": 0.95,
+  "max_new_tokens": 16,
+  "suppress": [
+   "<|im_end|>",
+   "<|endoftext|>"
+  ]
+ },
+ "renders": {
+  "final": {
+   "n": 107,
+   "pass_rate": 0.11214953271028037,
+   "greedy_rate": 0.5794392523364486,
+   "greedy_names_colour_rate": 0.018691588785046728,
+   "mean_n_correct": 4.4766355140186915
+  },
+  "start": {
+   "n": 107,
+   "pass_rate": 0.9813084112149533,
+   "greedy_rate": 1.0,
+   "greedy_names_colour_rate": 0.34579439252336447,
+   "mean_n_correct": 9.88785046728972
+  }
+ },
+ "pairs": {
+  "candidate": 77,
+  "in": 0,
+  "share_in": 0.0,
+  "share_in_by_task": {
+   "final": 0.0,
+   "start": 0.935064935064935
+  },
+  "tables_with_pair": 0
+ },
+ "decision_rule": "depth 2 ok iff share_in >= 0.25 and pairs in >= 200 (over the full dev bank); else fall back to depth 1 (design \u00a72.4)",
+ "decision": "partial (30/300 tables): share 0.000, projected pairs in ~0",
+ "pair_list": [
+  {
+   "item": "brewcode-dev-d2-0000",
+   "partner": 0,
+   "pass": false,
+   "pass_by_task": {
+    "final": false,
+    "start": true
+   }
+  },
+  {
+   "item": "brewcode-dev-d2-0000",
+   "partner": 1,
+   "pass": false,
+   "pass_by_task": {
+    "final": false,
+    "start": true
+   }
+  },
+  {
+   "item": "brewcode-dev-d2-0000",
+   "partner": 2,
+   "pass": false,
+   "pass_by_task": {
+    "final": false,
+    "start": true
+   }
+  },
+  {
+   "item": "brewcode-dev-d2-0001",
+   "partner": 0,
+   "pass": false,
+   "pass_by_task": {
+    "final": false,
+    "start": true
+   }
+  },
+  {
+   "item": "brewcode-dev-d2-0002",
+   "partner": 0,
+   "pass": false,
+   "pass_by_task": {
+    "final": false,
+    "start": true
+   }
+  },
+  {
+   "item": "brewcode-dev-d2-0003",
+   "partner": 0,
+   "pass": false,
+   "pass_by_task": {
+    "final": false,
+    "start": true
+   }
+  },
+  {
+   "item": "brewcode-dev-d2-0004",
+   "partner": 0,
+   "pass": false,
+   "pass_by_task": {
+    "final": false,
+    "start": true
+   }
+  },
+  {
+   "item": "brewcode-dev-d2-0004",
+   "partner": 1,
+   "pass": false,
+   "pass_by_task": {
+    "final": false,
+    "start": true
+   }
+  },
+  {
+   "item": "brewcode-dev-d2-0005",
+   "partner": 0,
+   "pass": false,
+   "pass_by_task": {
+    "final": false,
+    "start": true
+   }
+  },
+  {
+   "item": "brewcode-dev-d2-0006",
+   "partner": 0,
+   "pass": false,
+   "pass_by_task": {
+    "final": false,
+    "start": true
+   }
+  },
+  {
+   "item": "brewcode-dev-d2-0007",
+   "partner": 0,
+   "pass": false,
+   "pass_by_task": {
+    "final": false,
+    "start": true
+   }
+  },
+  {
+   "item": "brewcode-dev-d2-0008",
+   "partner": 0,
+   "pass": false,
+   "pass_by_task": {
+    "final": false,
+    "start": false
+   }
+  },
+  {
+   "item": "brewcode-dev-d2-0008",
+   "partner": 1,
+   "pass": false,
+   "pass_by_task": {
+    "final": false,
+    "start": false
+   }
+  },
+  {
+   "item": "brewcode-dev-d2-0008",
+   "partner": 2,
+   "pass": false,
+   "pass_by_task": {
+    "final": false,
+    "start": false
+   }
+  },
+  {
+   "item": "brewcode-dev-d2-0008",
+   "partner": 3,
+   "pass": false,
+   "pass_by_task": {
+    "final": false,
+    "start": false
+   }
+  },
+  {
+   "item": "brewcode-dev-d2-0009",
+   "partner": 0,
+   "pass": false,
+   "pass_by_task": {
+    "final": false,
+    "start": true
+   }
+  },
+  {
+   "item": "brewcode-dev-d2-0009",
+   "partner": 1,
+   "pass": false,
+   "pass_by_task": {
+    "final": false,
+    "start": true
+   }
+  },
+  {
+   "item": "brewcode-dev-d2-0009",
+   "partner": 2,
+   "pass": false,
+   "pass_by_task": {
+    "final": false,
+    "start": true
+   }
+  },
+  {
+   "item": "brewcode-dev-d2-0009",
+   "partner": 3,
+   "pass": false,
+   "pass_by_task": {
+    "final": false,
+    "start": true
+   }
+  },
+  {
+   "item": "brewcode-dev-d2-0010",
+   "partner": 0,
+   "pass": false,
+   "pass_by_task": {
+    "final": false,
+    "start": true
+   }
+  },
+  {
+   "item": "brewcode-dev-d2-0010",
+   "partner": 1,
+   "pass": false,
+   "pass_by_task": {
+    "final": false,
+    "start": true
+   }
+  },
+  {
+   "item": "brewcode-dev-d2-0011",
+   "partner": 0,
+   "pass": false,
+   "pass_by_task": {
+    "final": false,
+    "start": true
+   }
+  },
+  {
+   "item": "brewcode-dev-d2-0011",
+   "partner": 1,
+   "pass": false,
+   "pass_by_task": {
+    "final": false,
+    "start": true
+   }
+  },
+  {
+   "item": "brewcode-dev-d2-0011",
+   "partner": 2,
+   "pass": false,
+   "pass_by_task": {
+    "final": false,
+    "start": true
+   }
+  },
+  {
+   "item": "brewcode-dev-d2-0011",
+   "partner": 3,
+   "pass": false,
+   "pass_by_task": {
+    "final": false,
+    "start": true
+   }
+  },
+  {
+   "item": "brewcode-dev-d2-0012",
+   "partner": 0,
+   "pass": false,
+   "pass_by_task": {
+    "final": false,
+    "start": true
+   }
+  },
+  {
+   "item": "brewcode-dev-d2-0012",
+   "partner": 1,
+   "pass": false,
+   "pass_by_task": {
+    "final": false,
+    "start": true
+   }
+  },
+  {
+   "item": "brewcode-dev-d2-0012",
+   "partner": 2,
+   "pass": false,
+   "pass_by_task": {
+    "final": false,
+    "start": true
+   }
+  },
+  {
+   "item": "brewcode-dev-d2-0012",
+   "partner": 3,
+   "pass": false,
+   "pass_by_task": {
+    "final": false,
+    "start": true
+   }
+  },
+  {
+   "item": "brewcode-dev-d2-0012",
+   "partner": 4,
+   "pass": false,
+   "pass_by_task": {
+    "final": false,
+    "start": true
+   }
+  },
+  {
+   "item": "brewcode-dev-d2-0013",
+   "partner": 0,
+   "pass": false,
+   "pass_by_task": {
+    "final": false,
+    "start": true
+   }
+  },
+  {
+   "item": "brewcode-dev-d2-0013",
+   "partner": 1,
+   "pass": false,
+   "pass_by_task": {
+    "final": false,
+    "start": true
+   }
+  },
+  {
+   "item": "brewcode-dev-d2-0013",
+   "partner": 2,
+   "pass": false,
+   "pass_by_task": {
+    "final": false,
+    "start": true
+   }
+  },
+  {
+   "item": "brewcode-dev-d2-0014",
+   "partner": 0,
+   "pass": false,
+   "pass_by_task": {
+    "final": false,
+    "start": true
+   }
+  },
+  {
+   "item": "brewcode-dev-d2-0015",
+   "partner": 0,
+   "pass": false,
+   "pass_by_task": {
+    "final": false,
+    "start": true
+   }
+  },
+  {
+   "item": "brewcode-dev-d2-0015",
+   "partner": 1,
+   "pass": false,
+   "pass_by_task": {
+    "final": false,
+    "start": true
+   }
+  },
+  {
+   "item": "brewcode-dev-d2-0016",
+   "partner": 0,
+   "pass": false,
+   "pass_by_task": {
+    "final": false,
+    "start": true
+   }
+  },
+  {
+   "item": "brewcode-dev-d2-0016",
+   "partner": 1,
+   "pass": false,
+   "pass_by_task": {
+    "final": false,
+    "start": true
+   }
+  },
+  {
+   "item": "brewcode-dev-d2-0016",
+   "partner": 2,
+   "pass": false,
+   "pass_by_task": {
+    "final": false,
+    "start": true
+   }
+  },
+  {
+   "item": "brewcode-dev-d2-0017",
+   "partner": 0,
+   "pass": false,
+   "pass_by_task": {
+    "final": false,
+    "start": true
+   }
+  },
+  {
+   "item": "brewcode-dev-d2-0017",
+   "partner": 1,
+   "pass": false,
+   "pass_by_task": {
+    "final": false,
+    "start": true
+   }
+  },
+  {
+   "item": "brewcode-dev-d2-0017",
+   "partner": 2,
+   "pass": false,
+   "pass_by_task": {
+    "final": false,
+    "start": true
+   }
+  },
+  {
+   "item": "brewcode-dev-d2-0017",
+   "partner": 3,
+   "pass": false,
+   "pass_by_task": {
+    "final": false,
+    "start": true
+   }
+  },
+  {
+   "item": "brewcode-dev-d2-0017",
+   "partner": 4,
+   "pass": false,
+   "pass_by_task": {
+    "final": false,
+    "start": true
+   }
+  },
+  {
+   "item": "brewcode-dev-d2-0018",
+   "partner": 0,
+   "pass": false,
+   "pass_by_task": {
+    "final": false,
+    "start": true
+   }
+  },
+  {
+   "item": "brewcode-dev-d2-0018",
+   "partner": 1,
+   "pass": false,
+   "pass_by_task": {
+    "final": false,
+    "start": true
+   }
+  },
+  {
+   "item": "brewcode-dev-d2-0019",
+   "partner": 0,
+   "pass": false,
+   "pass_by_task": {
+    "final": false,
+    "start": true
+   }
+  },
+  {
+   "item": "brewcode-dev-d2-0019",
+   "partner": 1,
+   "pass": false,
+   "pass_by_task": {
+    "final": false,
+    "start": true
+   }
+  },
+  {
+   "item": "brewcode-dev-d2-0019",
+   "partner": 2,
+   "pass": false,
+   "pass_by_task": {
+    "final": false,
+    "start": true
+   }
+  },
+  {
+   "item": "brewcode-dev-d2-0019",
+   "partner": 3,
+   "pass": false,
+   "pass_by_task": {
+    "final": false,
+    "start": true
+   }
+  },
+  {
+   "item": "brewcode-dev-d2-0019",
+   "partner": 4,
+   "pass": false,
+   "pass_by_task": {
+    "final": false,
+    "start": true
+   }
+  },
+  {
+   "item": "brewcode-dev-d2-0020",
+   "partner": 0,
+   "pass": false,
+   "pass_by_task": {
+    "final": false,
+    "start": true
+   }
+  },
+  {
+   "item": "brewcode-dev-d2-0021",
+   "partner": 0,
+   "pass": false,
+   "pass_by_task": {
+    "final": false,
+    "start": true
+   }
+  },
+  {
+   "item": "brewcode-dev-d2-0022",
+   "partner": 0,
+   "pass": false,
+   "pass_by_task": {
+    "final": false,
+    "start": true
+   }
+  },
+  {
+   "item": "brewcode-dev-d2-0022",
+   "partner": 1,
+   "pass": false,
+   "pass_by_task": {
+    "final": false,
+    "start": true
+   }
+  },
+  {
+   "item": "brewcode-dev-d2-0022",
+   "partner": 2,
+   "pass": false,
+   "pass_by_task": {
+    "final": false,
+    "start": true
+   }
+  },
+  {
+   "item": "brewcode-dev-d2-0022",
+   "partner": 3,
+   "pass": false,
+   "pass_by_task": {
+    "final": false,
+    "start": false
+   }
+  },
+  {
+   "item": "brewcode-dev-d2-0023",
+   "partner": 0,
+   "pass": false,
+   "pass_by_task": {
+    "final": false,
+    "start": true
+   }
+  },
+  {
+   "item": "brewcode-dev-d2-0023",
+   "partner": 1,
+   "pass": false,
+   "pass_by_task": {
+    "final": false,
+    "start": true
+   }
+  },
+  {
+   "item": "brewcode-dev-d2-0023",
+   "partner": 2,
+   "pass": false,
+   "pass_by_task": {
+    "final": false,
+    "start": true
+   }
+  },
+  {
+   "item": "brewcode-dev-d2-0024",
+   "partner": 0,
+   "pass": false,
+   "pass_by_task": {
+    "final": false,
+    "start": true
+   }
+  },
+  {
+   "item": "brewcode-dev-d2-0024",
+   "partner": 1,
+   "pass": false,
+   "pass_by_task": {
+    "final": false,
+    "start": true
+   }
+  },
+  {
+   "item": "brewcode-dev-d2-0024",
+   "partner": 2,
+   "pass": false,
+   "pass_by_task": {
+    "final": false,
+    "start": true
+   }
+  },
+  {
+   "item": "brewcode-dev-d2-0024",
+   "partner": 3,
+   "pass": false,
+   "pass_by_task": {
+    "final": false,
+    "start": true
+   }
+  },
+  {
+   "item": "brewcode-dev-d2-0025",
+   "partner": 0,
+   "pass": false,
+   "pass_by_task": {
+    "final": false,
+    "start": true
+   }
+  },
+  {
+   "item": "brewcode-dev-d2-0025",
+   "partner": 1,
+   "pass": false,
+   "pass_by_task": {
+    "final": false,
+    "start": true
+   }
+  },
+  {
+   "item": "brewcode-dev-d2-0025",
+   "partner": 2,
+   "pass": false,
+   "pass_by_task": {
+    "final": false,
+    "start": true
+   }
+  },
+  {
+   "item": "brewcode-dev-d2-0026",
+   "partner": 0,
+   "pass": false,
+   "pass_by_task": {
+    "final": false,
+    "start": true
+   }
+  },
+  {
+   "item": "brewcode-dev-d2-0027",
+   "partner": 0,
+   "pass": false,
+   "pass_by_task": {
+    "final": false,
+    "start": true
+   }
+  },
+  {
+   "item": "brewcode-dev-d2-0027",
+   "partner": 1,
+   "pass": false,
+   "pass_by_task": {
+    "final": false,
+    "start": true
+   }
+  },
+  {
+   "item": "brewcode-dev-d2-0028",
+   "partner": 0,
+   "pass": false,
+   "pass_by_task": {
+    "final": false,
+    "start": true
+   }
+  },
+  {
+   "item": "brewcode-dev-d2-0028",
+   "partner": 1,
+   "pass": false,
+   "pass_by_task": {
+    "final": false,
+    "start": true
+   }
+  },
+  {
+   "item": "brewcode-dev-d2-0028",
+   "partner": 2,
+   "pass": false,
+   "pass_by_task": {
+    "final": false,
+    "start": true
+   }
+  },
+  {
+   "item": "brewcode-dev-d2-0029",
+   "partner": 0,
+   "pass": false,
+   "pass_by_task": {
+    "final": false,
+    "start": true
+   }
+  },
+  {
+   "item": "brewcode-dev-d2-0029",
+   "partner": 1,
+   "pass": false,
+   "pass_by_task": {
+    "final": false,
+    "start": true
+   }
+  },
+  {
+   "item": "brewcode-dev-d2-0029",
+   "partner": 2,
+   "pass": false,
+   "pass_by_task": {
+    "final": false,
+    "start": true
+   }
+  },
+  {
+   "item": "brewcode-dev-d2-0029",
+   "partner": 3,
+   "pass": false,
+   "pass_by_task": {
+    "final": false,
+    "start": true
+   }
+  }
+ ]
+}

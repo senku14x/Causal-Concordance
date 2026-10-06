@@ -1,0 +1,93 @@
+{
+ "run_id": "g2smoke",
+ "depth": 2,
+ "complete": false,
+ "n_tables_gated": 3,
+ "gate": {
+  "greedy": true,
+  "k": 10,
+  "min_correct": 9,
+  "temperature": 0.8,
+  "top_p": 0.95,
+  "max_new_tokens": 16,
+  "suppress": [
+   "<|im_end|>",
+   "<|endoftext|>"
+  ]
+ },
+ "renders": {
+  "final": {
+   "n": 8,
+   "pass_rate": 0.0,
+   "greedy_rate": 0.625,
+   "greedy_names_colour_rate": 0.0,
+   "mean_n_correct": 3.625
+  },
+  "start": {
+   "n": 8,
+   "pass_rate": 1.0,
+   "greedy_rate": 1.0,
+   "greedy_names_colour_rate": 0.25,
+   "mean_n_correct": 9.75
+  }
+ },
+ "pairs": {
+  "candidate": 5,
+  "in": 0,
+  "share_in": 0.0,
+  "share_in_by_task": {
+   "final": 0.0,
+   "start": 1.0
+  },
+  "tables_with_pair": 0
+ },
+ "decision_rule": "depth 2 ok iff share_in >= 0.25 and pairs in >= 200 (over the full dev bank); else fall back to depth 1 (design \u00a72.4)",
+ "decision": "partial (3/3 tables): share 0.000, projected pairs in ~0",
+ "pair_list": [
+  {
+   "item": "brewcode-dev-d2-0000",
+   "partner": 0,
+   "pass": false,
+   "pass_by_task": {
+    "final": false,
+    "start": true
+   }
+  },
+  {
+   "item": "brewcode-dev-d2-0000",
+   "partner": 1,
+   "pass": false,
+   "pass_by_task": {
+    "final": false,
+    "start": true
+   }
+  },
+  {
+   "item": "brewcode-dev-d2-0000",
+   "partner": 2,
+   "pass": false,
+   "pass_by_task": {
+    "final": false,
+    "start": true
+   }
+  },
+  {
+   "item": "brewcode-dev-d2-0001",
+   "partner": 0,
+   "pass": false,
+   "pass_by_task": {
+    "final": false,
+    "start": true
+   }
+  },
+  {
+   "item": "brewcode-dev-d2-0002",
+   "partner": 0,
+   "pass": false,
+   "pass_by_task": {
+    "final": false,
+    "start": true
+   }
+  }
+ ]
+}

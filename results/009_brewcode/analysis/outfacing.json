@@ -1,0 +1,658 @@
+{
+ "design": "\u00a72.5.1",
+ "depth": 1,
+ "delta": 0.5,
+ "rank_min": 100,
+ "spelled_max": 0.2,
+ "D": {
+  "final": {
+   "emit_asst": {
+    "z": {
+     "n_tables": 240,
+     "n_pairs": 658,
+     "mean": 11.578290046138768,
+     "ci": [
+      11.373760561333162,
+      11.780218889131035
+     ],
+     "pos": 240,
+     "neg": 0
+    },
+    "f": {
+     "n_tables": 240,
+     "n_pairs": 658,
+     "mean": 11.578290046138768,
+     "ci": [
+      11.373760561333162,
+      11.780218889131035
+     ],
+     "pos": 240,
+     "neg": 0
+    },
+    "start": {
+     "n_tables": 240,
+     "n_pairs": 658,
+     "mean": 3.701944813488071,
+     "ci": [
+      3.51377268790981,
+      3.8871175879081648
+     ],
+     "pos": 237,
+     "neg": 3
+    }
+   },
+   "emit_think": {
+    "z": {
+     "n_tables": 240,
+     "n_pairs": 658,
+     "mean": 12.431276611323675,
+     "ci": [
+      12.207647783547518,
+      12.653161552516941
+     ],
+     "pos": 240,
+     "neg": 0
+    },
+    "f": {
+     "n_tables": 240,
+     "n_pairs": 658,
+     "mean": 12.431276611323675,
+     "ci": [
+      12.207647783547518,
+      12.653161552516941
+     ],
+     "pos": 240,
+     "neg": 0
+    },
+    "start": {
+     "n_tables": 240,
+     "n_pairs": 658,
+     "mean": 5.535937613998311,
+     "ci": [
+      5.318602005959895,
+      5.753488804641977
+     ],
+     "pos": 240,
+     "neg": 0
+    }
+   },
+   "emit_colon": {
+    "z": {
+     "n_tables": 240,
+     "n_pairs": 658,
+     "mean": 11.894313795671765,
+     "ci": [
+      11.722517567172659,
+      12.065984099636902
+     ],
+     "pos": 240,
+     "neg": 0
+    },
+    "f": {
+     "n_tables": 240,
+     "n_pairs": 658,
+     "mean": 11.894313795671765,
+     "ci": [
+      11.722517567172659,
+      12.065984099636902
+     ],
+     "pos": 240,
+     "neg": 0
+    },
+    "start": {
+     "n_tables": 240,
+     "n_pairs": 658,
+     "mean": 6.2534756000213045,
+     "ci": [
+      6.047442191416028,
+      6.45972671533252
+     ],
+     "pos": 240,
+     "neg": 0
+    }
+   },
+   "after_answer": {
+    "z": {
+     "n_tables": 240,
+     "n_pairs": 658,
+     "mean": 4.07331036775947,
+     "ci": [
+      3.9440258874707594,
+      4.206615857901756
+     ],
+     "pos": 240,
+     "neg": 0
+    },
+    "f": {
+     "n_tables": 240,
+     "n_pairs": 658,
+     "mean": 4.07331036775947,
+     "ci": [
+      3.9440258874707594,
+      4.206615857901756
+     ],
+     "pos": 240,
+     "neg": 0
+    },
+    "start": {
+     "n_tables": 240,
+     "n_pairs": 658,
+     "mean": 3.539544406821435,
+     "ci": [
+      3.4147311189725307,
+      3.668193552586043
+     ],
+     "pos": 240,
+     "neg": 0
+    }
+   }
+  },
+  "start": {
+   "emit_asst": {
+    "z": {
+     "n_tables": 240,
+     "n_pairs": 658,
+     "mean": 2.0474333588785414,
+     "ci": [
+      1.9119906667805573,
+      2.185894213074631
+     ],
+     "pos": 233,
+     "neg": 7
+    },
+    "f": {
+     "n_tables": 240,
+     "n_pairs": 658,
+     "mean": 2.0474333588785414,
+     "ci": [
+      1.9119906667805573,
+      2.185894213074631
+     ],
+     "pos": 233,
+     "neg": 7
+    },
+    "start": {
+     "n_tables": 240,
+     "n_pairs": 658,
+     "mean": 11.809399836819468,
+     "ci": [
+      11.609907654858468,
+      12.005062027433794
+     ],
+     "pos": 240,
+     "neg": 0
+    }
+   },
+   "emit_think": {
+    "z": {
+     "n_tables": 240,
+     "n_pairs": 658,
+     "mean": 3.4646561788454173,
+     "ci": [
+      3.2596761015385916,
+      3.6615614458476835
+     ],
+     "pos": 238,
+     "neg": 2
+    },
+    "f": {
+     "n_tables": 240,
+     "n_pairs": 658,
+     "mean": 3.4646561788454173,
+     "ci": [
+      3.2596761015385916,
+      3.6615614458476835
+     ],
+     "pos": 238,
+     "neg": 2
+    },
+    "start": {
+     "n_tables": 240,
+     "n_pairs": 658,
+     "mean": 17.61154754093354,
+     "ci": [
+      17.40334478581365,
+      17.818942244877338
+     ],
+     "pos": 240,
+     "neg": 0
+    }
+   },
+   "emit_colon": {
+    "z": {
+     "n_tables": 240,
+     "n_pairs": 658,
+     "mean": 2.7816474809600953,
+     "ci": [
+      2.60954787876454,
+      2.9506934825011055
+     ],
+     "pos": 237,
+     "neg": 3
+    },
+    "f": {
+     "n_tables": 240,
+     "n_pairs": 658,
+     "mean": 2.7816474809600953,
+     "ci": [
+      2.60954787876454,
+      2.9506934825011055
+     ],
+     "pos": 237,
+     "neg": 3
+    },
+    "start": {
+     "n_tables": 240,
+     "n_pairs": 658,
+     "mean": 14.098378835824871,
+     "ci": [
+      13.909875478913541,
+      14.279783437445252
+     ],
+     "pos": 240,
+     "neg": 0
+    }
+   },
+   "after_answer": {
+    "z": {
+     "n_tables": 240,
+     "n_pairs": 658,
+     "mean": 0.583409510017278,
+     "ci": [
+      0.5216662179083714,
+      0.6448553251862309
+     ],
+     "pos": 214,
+     "neg": 26
+    },
+    "f": {
+     "n_tables": 240,
+     "n_pairs": 658,
+     "mean": 0.583409510017278,
+     "ci": [
+      0.5216662179083714,
+      0.6448553251862309
+     ],
+     "pos": 214,
+     "neg": 26
+    },
+    "start": {
+     "n_tables": 240,
+     "n_pairs": 658,
+     "mean": 6.463468529276009,
+     "ci": [
+      6.323273902790628,
+      6.603587024276331
+     ],
+     "pos": 240,
+     "neg": 0
+    }
+   }
+  }
+ },
+ "rank": {
+  "final": {
+   "z": {
+    "median": 11.0,
+    "q10": 7.0,
+    "min": 3.0
+   },
+   "f": {
+    "median": 11.0,
+    "q10": 7.0,
+    "min": 3.0
+   }
+  },
+  "start": {
+   "z": {
+    "median": 82.0,
+    "q10": 28.0,
+    "min": 9.0
+   },
+   "f": {
+    "median": 82.0,
+    "q10": 28.0,
+    "min": 9.0
+   }
+  }
+ },
+ "continuation": {
+  "final": {
+   "n": 241,
+   "spelled_z_or_f_share": 0.5020746887966805,
+   "spelled_z_share": 0.5020746887966805,
+   "spelled_f_share": 0.5020746887966805,
+   "max_logprob_median": {
+    "z": -0.016531678317865495,
+    "f": -0.016531678317865495
+   },
+   "examples": [
+    "\nThe potion starts out gray.\nAccording to the rules: \"A gray potion turns teal when stirred.\"\nSo",
+    "\n43\n43\n43\n43\n43\n43\n43\n43",
+    "\n\n**Step-by-step Deduction:**\n1.  **Initial State:** The potion starts out **pink**.\n",
+    "\n\nThe potion starts out pink.\nAccording to the rules: \"A pink potion turns black when stirred.\"\nSo",
+    "\n\nThe potion starts as purple.\nAccording to the rules: \"A purple potion turns white when stirred.\"\nSo",
+    "\n\n**Step-by-step Deduction:**\n1.  **Initial State:** The potion starts as **green**.\n",
+    "\n\n```json\n{\n  \"initial_color\": \"orange\",\n  \"stir_count\": 1,",
+    "\n\nThe potion starts brown.\nRule: A brown potion turns orange when stirred.\nAfter one stir, the potion"
+   ]
+  },
+  "start": {
+   "n": 241,
+   "spelled_z_or_f_share": 0.0,
+   "spelled_z_share": 0.0,
+   "spelled_f_share": 0.0,
+   "max_logprob_median": {
+    "z": -14.25183391571045,
+    "f": -14.25183391571045
+   },
+   "examples": [
+    "\n\n**Step-by-step Deduction:**\n1.  **Identify the starting condition:** The problem states, \"",
+    "\n\n**Step-by-step Deduction:**\n1.  **Identify the starting condition:** The problem states, \"",
+    "\n\n**Step-by-step Deduction:**\n1.  **Identify the starting condition:** The problem states, \"",
+    "\n\n**Step-by-step Deduction:**\n1.  **Identify the starting color:** The problem states, \"",
+    "\n\n**Step-by-step Deduction:**\n1.  **Identify the starting condition:** The problem states, \"",
+    "\nThe potion starts out green. The code for green is 12. The question asks for the code of the",
+    "\n\n**Step-by-step Deduction:**\n1.  **Identify the starting condition:** The problem states, \"",
+    "\n\n**Step-by-step Deduction:**\n1.  **Identify the starting condition:** The problem states, \""
+   ]
+  }
+ },
+ "D_all_pairs": {
+  "final": {
+   "emit_asst": {
+    "z": {
+     "n_tables": 241,
+     "n_pairs": 771,
+     "mean": 11.220051445122122,
+     "ci": [
+      11.017093264335573,
+      11.41677615722844
+     ],
+     "pos": 241,
+     "neg": 0
+    },
+    "f": {
+     "n_tables": 241,
+     "n_pairs": 771,
+     "mean": 11.220051445122122,
+     "ci": [
+      11.017093264335573,
+      11.41677615722844
+     ],
+     "pos": 241,
+     "neg": 0
+    },
+    "start": {
+     "n_tables": 241,
+     "n_pairs": 771,
+     "mean": 2.8549826980948203,
+     "ci": [
+      2.612931146891484,
+      3.098265172451771
+     ],
+     "pos": 225,
+     "neg": 16
+    }
+   },
+   "emit_think": {
+    "z": {
+     "n_tables": 241,
+     "n_pairs": 771,
+     "mean": 11.919456822306095,
+     "ci": [
+      11.694418930396226,
+      12.138022281919291
+     ],
+     "pos": 241,
+     "neg": 0
+    },
+    "f": {
+     "n_tables": 241,
+     "n_pairs": 771,
+     "mean": 11.919456822306095,
+     "ci": [
+      11.694418930396226,
+      12.138022281919291
+     ],
+     "pos": 241,
+     "neg": 0
+    },
+    "start": {
+     "n_tables": 241,
+     "n_pairs": 771,
+     "mean": 4.61531430330347,
+     "ci": [
+      4.35481294111816,
+      4.87883942117142
+     ],
+     "pos": 235,
+     "neg": 6
+    }
+   },
+   "emit_colon": {
+    "z": {
+     "n_tables": 241,
+     "n_pairs": 771,
+     "mean": 11.293541130169075,
+     "ci": [
+      11.113379261134384,
+      11.471323044023565
+     ],
+     "pos": 241,
+     "neg": 0
+    },
+    "f": {
+     "n_tables": 241,
+     "n_pairs": 771,
+     "mean": 11.293541130169075,
+     "ci": [
+      11.113379261134384,
+      11.471323044023565
+     ],
+     "pos": 241,
+     "neg": 0
+    },
+    "start": {
+     "n_tables": 241,
+     "n_pairs": 771,
+     "mean": 5.366644359280491,
+     "ci": [
+      5.107637961992097,
+      5.625866392718616
+     ],
+     "pos": 240,
+     "neg": 1
+    }
+   },
+   "after_answer": {
+    "z": {
+     "n_tables": 241,
+     "n_pairs": 771,
+     "mean": 3.755941313124461,
+     "ci": [
+      3.629965143192249,
+      3.8836395688775704
+     ],
+     "pos": 241,
+     "neg": 0
+    },
+    "f": {
+     "n_tables": 241,
+     "n_pairs": 771,
+     "mean": 3.755941313124461,
+     "ci": [
+      3.629965143192249,
+      3.8836395688775704
+     ],
+     "pos": 241,
+     "neg": 0
+    },
+    "start": {
+     "n_tables": 241,
+     "n_pairs": 771,
+     "mean": 3.26916664157966,
+     "ci": [
+      3.140597409180448,
+      3.402937828891663
+     ],
+     "pos": 241,
+     "neg": 0
+    }
+   }
+  },
+  "start": {
+   "emit_asst": {
+    "z": {
+     "n_tables": 241,
+     "n_pairs": 771,
+     "mean": 1.2155869532202888,
+     "ci": [
+      1.0279319079210871,
+      1.4009983504349495
+     ],
+     "pos": 196,
+     "neg": 45
+    },
+    "f": {
+     "n_tables": 241,
+     "n_pairs": 771,
+     "mean": 1.2155869532202888,
+     "ci": [
+      1.0279319079210871,
+      1.4009983504349495
+     ],
+     "pos": 196,
+     "neg": 45
+    },
+    "start": {
+     "n_tables": 241,
+     "n_pairs": 771,
+     "mean": 11.621702005358179,
+     "ci": [
+      11.425626888912431,
+      11.819650798406466
+     ],
+     "pos": 241,
+     "neg": 0
+    }
+   },
+   "emit_think": {
+    "z": {
+     "n_tables": 241,
+     "n_pairs": 771,
+     "mean": 2.189460510892827,
+     "ci": [
+      1.8793807704361698,
+      2.488648297464789
+     ],
+     "pos": 200,
+     "neg": 41
+    },
+    "f": {
+     "n_tables": 241,
+     "n_pairs": 771,
+     "mean": 2.189460510892827,
+     "ci": [
+      1.8793807704361698,
+      2.488648297464789
+     ],
+     "pos": 200,
+     "neg": 41
+    },
+    "start": {
+     "n_tables": 241,
+     "n_pairs": 771,
+     "mean": 17.296810648157713,
+     "ci": [
+      17.098126172188373,
+      17.502609117265624
+     ],
+     "pos": 241,
+     "neg": 0
+    }
+   },
+   "emit_colon": {
+    "z": {
+     "n_tables": 241,
+     "n_pairs": 771,
+     "mean": 1.8105115973216912,
+     "ci": [
+      1.5702996962804074,
+      2.045144297096316
+     ],
+     "pos": 201,
+     "neg": 40
+    },
+    "f": {
+     "n_tables": 241,
+     "n_pairs": 771,
+     "mean": 1.8105115973216912,
+     "ci": [
+      1.5702996962804074,
+      2.045144297096316
+     ],
+     "pos": 201,
+     "neg": 40
+    },
+    "start": {
+     "n_tables": 241,
+     "n_pairs": 771,
+     "mean": 13.795362373185398,
+     "ci": [
+      13.609312721226473,
+      13.982386132582802
+     ],
+     "pos": 241,
+     "neg": 0
+    }
+   },
+   "after_answer": {
+    "z": {
+     "n_tables": 241,
+     "n_pairs": 771,
+     "mean": 0.13124951254785547,
+     "ci": [
+      0.026944963233779613,
+      0.22825705275460584
+     ],
+     "pos": 154,
+     "neg": 87
+    },
+    "f": {
+     "n_tables": 241,
+     "n_pairs": 771,
+     "mean": 0.13124951254785547,
+     "ci": [
+      0.026944963233779613,
+      0.22825705275460584
+     ],
+     "pos": 154,
+     "neg": 87
+    },
+    "start": {
+     "n_tables": 241,
+     "n_pairs": 771,
+     "mean": 6.4122666340040775,
+     "ci": [
+      6.277712937386811,
+      6.544657705440864
+     ],
+     "pos": 241,
+     "neg": 0
+    }
+   }
+  }
+ },
+ "pass": {
+  "D_z_answer_slot_inside": false,
+  "D_f_answer_slot_inside": false,
+  "rank_z_gt": false,
+  "rank_f_gt": false,
+  "spelled_le": false,
+  "all": false
+ },
+ "gate_run": "g1",
+ "run_id": "o1",
+ "minutes": 36.94521466493607
+}
