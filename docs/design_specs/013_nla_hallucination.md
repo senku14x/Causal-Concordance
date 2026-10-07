@@ -200,3 +200,43 @@ On eligible explanations (≥ 1 contradicted span; C1 not degenerate), pooled ov
   uses; it doesn't show what the subject model computes.
 - On these prompts the bridge is guessable from the prompt, so "unsupported but true" claims are rare. The C2 arm is
   weak here, and a family with hidden attributes would test it properly.
+
+## 11. Amendment A1 (POST HOC; written 2026-10-07 after the smoke and before any full-run judge call; PI: "yes")
+
+*What this section does: adds analyses that separate the two kinds of false claim the smoke revealed. The
+pre-registered primary (§5–6) is unchanged and is reported as recorded.*
+
+**Seen in the smoke** (ledger 013):
+- Δ = +29.1 [9.1, 54.1], n 19, which reads "H-signal" by §6.
+- But many contradicted spans are misquotes of the prompt that carry the bridge or answer (e.g. "the country that has
+  the Tokyo tower [Japan]"), and deleting them removes true content.
+- Pure confabulation (invented headers and framings) is a different kind.
+
+**Additions:**
+1. **Span kinds.** Judge B (`z-ai/glm-5.3-flash`) tags each of A's contradicted spans with exactly one kind. It is
+   told to use the first kind that applies:
+   - **misquote:** quotes or paraphrases the prompt's own content in altered wording, including versions that swap in
+     an entity or answer;
+   - **invented_context:** asserts text, structure or framing that isn't in the input (headers, instructions, quiz
+     names, answer options, earlier questions, source documents);
+   - **wrong_entity:** names an entity or answer that conflicts with the model's continuation, without misquoting;
+   - **false_fact:** a false statement about the world.
+
+   Cached and cost-logged like the other calls.
+2. **Versions per kind:**
+   - **C1i** = O with only the *invented_context* spans deleted; **C1ii** = O with only the *misquote* spans deleted;
+   - each gets a clause-level random control matched in tokens (**Ri**, **Rii**; 5 seeds, built as R1 in §4).
+3. **A sentence-level random control** for C1, C1i and C1ii (**RS1**, **RSi**, **RSii**): whole sentences from the §3
+   splitter are deleted at random, matched in tokens; 5 seeds.
+4. **Statistics,** each as in §5 (mean over eligible explanations, cluster bootstrap by item), with the §6 bands applied
+   *descriptively*, labelled post hoc:
+   - Δi = FVE(Ri) − FVE(C1i) and ΔSi = FVE(RSi) − FVE(C1i). **The answer to Camila's question is Δi:** does deleting
+     pure confabulation cost more than deleting random text?
+   - Δii and ΔSii likewise;
+   - ΔS1 = FVE(RS1) − FVE(C1), next to the primary Δ.
+   - Eligible means the explanation has ≥ 1 span of that kind and the cleaned version keeps ≥ 10 tokens.
+5. **Hand checks before the full scoring:**
+   - G2 continued: 10 more seeded explanations outside the smoke, for A's precision;
+   - G2k: the kind tags of the smoke's 63 spans, checked by me. I report agreement; if it is below 0.80 the per-kind
+     results are reported as unreliable.
+6. **Spend cap:** the full run's judges stop at $10.

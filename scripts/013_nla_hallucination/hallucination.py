@@ -102,6 +102,20 @@ PROMPT_B = ("You label the sentences of an automatically generated explanation o
             "else \"unsupported\" if it contains any unsupported claim.")
 
 
+KINDS = ["misquote", "invented_context", "wrong_entity", "false_fact"]
+PROMPT_K = ("You classify false claims found in an automatically generated explanation of a language model's internal state.\n\n"
+            "{inputs}\n\nThese spans of the EXPLANATION were judged false (contradicted):\n{spans}\n\n"
+            "Give each span exactly one kind. Use the FIRST kind in this list that applies:\n"
+            "- misquote: it quotes or paraphrases the prompt's own content in altered wording (including versions that swap in an "
+            "entity or answer).\n"
+            "- invented_context: it asserts text, structure or framing that is not in the input (headers, instructions, quiz names, "
+            "answer options, earlier questions, source documents).\n"
+            "- wrong_entity: it names an entity or answer that conflicts with the model's continuation, without misquoting the prompt.\n"
+            "- false_fact: it is a false statement about the world.\n\n"
+            "Return JSON only: {{\"kinds\": [\"misquote\" | \"invented_context\" | \"wrong_entity\" | \"false_fact\", ...]}}, one per "
+            "numbered span, in order.")
+
+
 def sentences(text):
     parts = re.split(r"(?<=[.!?])\s+|\n+", text)
     return [p.strip() for p in parts if p.strip()]
@@ -169,7 +183,8 @@ def phase_judge(which):
     cache = OUT / "judge/cache"
     cache.mkdir(parents=True, exist_ok=True)
     spent, results = 0.0, []
-    for n, r in enumerate(rows):
+    def one(r):
+        spent = 0.0
         inp = judge_inputs(r)
         sents = sentences(r["explanation"])
         recA, hitA = call(MODEL_A, PROMPT_A.format(inputs=inp), cache, "A")
@@ -187,33 +202,73 @@ def phase_judge(which):
         okA = a is not None and isinstance(a.get("contradicted"), list) and isinstance(a.get("unsupported", []), list) and bad_c + bad_u == 0
         labels = (b or {}).get("labels") if b else None
         okB = isinstance(labels, list) and len(labels) == len(sents)
-        results.append({**{k: r[k] for k in ("eid", "item", "state", "sample")}, "A_raw": a, "A_ok": okA, "A_bad_spans": bad_c + bad_u,
+        # Amendment A1: kind of each contradicted span (judge B)
+        cspans = [s for s in ((a or {}).get("contradicted") or []) if isinstance(s, str)]
+        kinds, okK, recK = None, None, None
+        if okA and cspans:
+            pk = PROMPT_K.format(inputs=inp, spans="\n".join(f"{i + 1}. {s}" for i, s in enumerate(cspans)))
+            recK, hitK = call(MODEL_B, pk, cache, "K")
+            kk = parse_json(recK["response"]["choices"][0]["message"]["content"] or "")
+            if not (kk and isinstance(kk.get("kinds"), list) and len(kk["kinds"]) == len(cspans)):
+                recK, hitK = call(MODEL_B, pk + "\n\nReturn valid JSON only, one kind per span.", cache, "K")
+                kk = parse_json(recK["response"]["choices"][0]["message"]["content"] or "")
+            if not hitK:
+                spent += float((recK["response"].get("usage") or {}).get("cost") or 0.0)
+            kinds = kk.get("kinds") if kk else None
+            okK = isinstance(kinds, list) and len(kinds) == len(cspans) and all(k in KINDS for k in kinds)
+        kind_ranges = {k: [] for k in KINDS}
+        if okK:
+            for s, k in zip(cspans, kinds):
+                rr, _ = locate([s], r["explanation"])
+                kind_ranges[k] += rr
+        item = ({**{k: r[k] for k in ("eid", "item", "state", "sample")}, "A_raw": a, "A_ok": okA, "A_bad_spans": bad_c + bad_u,
                         "contradicted_ranges": cr, "unsupported_ranges": ur, "B_labels": labels, "B_ok": okB, "sentences": sents,
-                        "usage": {"A": recA["response"].get("usage"), "B": recB["response"].get("usage")}})
-        if (n + 1) % 10 == 0:
-            print(f"[judge] {n + 1}/{len(rows)} new spend ${spent:.3f}", flush=True)
-        if spent > SPEND_CAP:
-            raise SystemExit(f"spend cap ${SPEND_CAP} passed")
+                        "span_kinds": kinds, "K_ok": okK, "kind_ranges": kind_ranges,
+                        "usage": {"A": recA["response"].get("usage"), "B": recB["response"].get("usage"),
+                                  "K": recK["response"].get("usage") if recK else None}})
+        return item, spent
+
+    from concurrent.futures import ThreadPoolExecutor
+    with ThreadPoolExecutor(8) as ex:
+        outs = list(ex.map(one, rows))
+    results = [o[0] for o in outs]
+    spent = sum(o[1] for o in outs)
+    print(f"[judge] {len(results)} done, new spend ${spent:.3f}", flush=True)
+    if spent > SPEND_CAP:
+        print(f"WARNING: spend ${spent:.2f} above cap ${SPEND_CAP}", flush=True)
     (OUT / "judge").mkdir(parents=True, exist_ok=True)
     with open(OUT / f"judge/judged_{which}.jsonl", "w") as f:
         for x in results:
             f.write(json.dumps(x) + "\n")
     meta = {"which": which, "n": len(results), "models": {"A": MODEL_A, "B": MODEL_B}, "new_spend_usd": spent,
             "prompt_A_template": PROMPT_A, "prompt_B_template": PROMPT_B, "defs": DEFS, "state_note": STATE_NOTE,
-            "G1_A_ok_rate": sum(x["A_ok"] for x in results) / len(results), "B_ok_rate": sum(x["B_ok"] for x in results) / len(results)}
+            "G1_A_ok_rate": sum(x["A_ok"] for x in results) / len(results), "B_ok_rate": sum(x["B_ok"] for x in results) / len(results),
+            "prompt_K_template": PROMPT_K, "K_ok_rate_among_tagged": (lambda t: sum(x["K_ok"] for x in t) / len(t) if t else None)(
+                [x for x in results if x["K_ok"] is not None]),
+            "kind_counts": {k: sum(len(x["kind_ranges"][k]) for x in results) for k in KINDS}}
     (OUT / f"judge/judge_meta_{which}.json").write_text(json.dumps(meta, indent=1))
     print(json.dumps({k: v for k, v in meta.items() if not k.startswith(("prompt", "defs", "state"))}), flush=True)
 
 
 def phase_handset(which):
     rows = {r["eid"]: r for r in explanations()}
-    J = [json.loads(l) for l in open(OUT / f"judge/judged_{which}.jsonl")]
+    if which in ("extra10", "kinds"):
+        allj = [json.loads(l) for l in open(OUT / "judge/judged_all.jsonl")]
+        smoke = {r["eid"] for r in subset(explanations(), "smoke")}
+        if which == "kinds":
+            J = [x for x in allj if x["eid"] in smoke]
+        else:
+            rest = [x for x in allj if x["eid"] not in smoke]
+            J = sorted(random.Random(29).sample(rest, 10), key=lambda x: x["eid"])
+    else:
+        J = [json.loads(l) for l in open(OUT / f"judge/judged_{which}.jsonl")]
     lines = []
     for x in J:
         r = rows[x["eid"]]
         e = r["explanation"]
         lines.append(f"### {x['eid']}  (src {r['src']} -> tgt {r['tgt']})\nPROMPT: {r['prompt']}\nCONTINUATION: {r['continuation']!r}\n"
-                     f"EXPLANATION:\n{e}\n\nA contradicted:\n" + "\n".join(f"  C{i}: {e[a:b]!r}" for i, (a, b) in enumerate(x["contradicted_ranges"]))
+                     f"EXPLANATION:\n{e}\n\nA contradicted (kind from B):\n" + "\n".join(
+                         f"  C{i} [{k}]: {s!r}" for i, (s, k) in enumerate(zip((x["A_raw"] or {}).get("contradicted") or [], x.get("span_kinds") or ["?"] * 99)))
                      + "\nA unsupported:\n" + "\n".join(f"  U{i}: {e[a:b]!r}" for i, (a, b) in enumerate(x["unsupported_ranges"]))
                      + f"\nB labels: {list(zip(range(1, 99), x['B_labels'] or []))}\n")
     (RES / "qualitative").mkdir(parents=True, exist_ok=True)
@@ -265,7 +320,22 @@ def overlaps(u, ranges):
     return any(u[0] < b and a < u[1] for a, b in ranges)
 
 
-def build_versions(e, cr, ur, ntok, eid):
+def sentence_units(text):
+    out, pos = [], 0
+    for s in sentences(text):
+        rx = ws_regex(s)
+        m = rx.search(text, pos) if rx else None
+        if m:
+            out.append((m.start(), m.end()))
+            pos = m.end()
+    return out
+
+
+def matched(e, pool, target, ntok, seed0, salt):
+    return [delete(e, random_match(e, pool, target, ntok, seed0 + 100 * s + salt)[0]) for s in range(N_SEEDS)]
+
+
+def build_versions(e, cr, ur, ntok, eid, kr=None):
     v = {"O": e, "O_tidy": tidy(e), "C1": delete(e, cr), "C2": delete(e, cr + ur)}
     info = {"tok_O": ntok(e), "tok_C1": ntok(v["C1"]), "tok_C2": ntok(v["C2"])}
     us = units(e)
@@ -285,6 +355,19 @@ def build_versions(e, cr, ur, ntok, eid):
     v["K1"] = [delete(e, random_match(e, pool, tgt, ntok, seed0 + 100 * s + 3)[0]) for s in range(N_SEEDS)] if info["K1_computable"] else []
     info["nothing_to_clean"] = len(cr) == 0
     info["cleaned_away"] = info["tok_C1"] < MIN_TOK
+    # Amendment A1: per-kind cleaning, clause- and sentence-level matched controls
+    ss = sentence_units(e)
+    v["RS1"] = matched(e, ss, info["tok_O"] - info["tok_C1"], ntok, seed0, 11) if not info["nothing_to_clean"] else []
+    for kname, short in (("invented_context", "i"), ("misquote", "ii")):
+        rr = (kr or {}).get(kname) or []
+        info[f"has_{short}"] = len(rr) > 0
+        if not rr:
+            continue
+        v[f"C1{short}"] = delete(e, [tuple(x) for x in rr])
+        info[f"tok_C1{short}"] = ntok(v[f"C1{short}"])
+        tg = info["tok_O"] - info[f"tok_C1{short}"]
+        v[f"R{short}"] = matched(e, us, tg, ntok, seed0, 21 if short == "i" else 31)
+        v[f"RS{short}"] = matched(e, ss, tg, ntok, seed0, 41 if short == "i" else 51)
     return v, info
 
 # --------------------------------------------------------------------------------------------- §5 scoring
@@ -324,7 +407,8 @@ def phase_score(which):
     for n, x in enumerate(J):
         r = rows[x["eid"]]
         g = normalize_activation(gold[(r["item"], r["state"])][None], scale)[0]
-        v, info = build_versions(r["explanation"], [tuple(a) for a in x["contradicted_ranges"]], [tuple(a) for a in x["unsupported_ranges"]], ntok, x["eid"])
+        v, info = build_versions(r["explanation"], [tuple(a) for a in x["contradicted_ranges"]], [tuple(a) for a in x["unsupported_ranges"]], ntok, x["eid"],
+                                 x.get("kind_ranges") if x.get("K_ok") else None)
         rec = {**{k: x[k] for k in ("eid", "item", "state", "sample")}, **info, "A_ok": x["A_ok"], "mse": {}, "share_J": {}, "texts": {}}
         for name, val in v.items():
             vals = val if isinstance(val, list) else [val]
@@ -403,6 +487,19 @@ def phase_analyze(which):
         res["primary_verdict"] = verdict(p["mean"], p["ci95"])
     res["secondary_delta_R2_minus_C2"] = stat([s for s in elig if s["tok_C2"] >= MIN_TOK], "R2", "C2")
     res["K1_minus_C1"] = stat([s for s in elig if s["K1_computable"]], "K1", "C1")
+    # Amendment A1 (POST HOC; §6 bands applied descriptively)
+    res["A1_sentence_delta_RS1_minus_C1"] = stat(elig, "RS1", "C1")
+    for short, kname in (("i", "invented_context"), ("ii", "misquote")):
+        ek = [s for s in S if s["A_ok"] and s.get(f"has_{short}") and s.get(f"tok_C1{short}", 0) >= MIN_TOK]
+        out_k = {"n_eligible": len(ek),
+                 "delta_clause": stat(ek, f"R{short}", f"C1{short}"), "delta_sentence": stat(ek, f"RS{short}", f"C1{short}"),
+                 "O_minus_C1k": stat(ek, "O", f"C1{short}"),
+                 "token_share_deleted_mean": float(np.mean([(s["tok_O"] - s[f"tok_C1{short}"]) / s["tok_O"] for s in ek])) if ek else None,
+                 "per_state_delta_clause": {st: stat([s for s in ek if s["state"] == st], f"R{short}", f"C1{short}") for st in STATES}}
+        for kk in ("delta_clause", "delta_sentence"):
+            if out_k[kk]:
+                out_k[kk]["descriptive_band"] = verdict(out_k[kk]["mean"], out_k[kk]["ci95"])
+        res[f"A1_kind_{kname}"] = out_k
     res["O_minus_C1"] = stat(elig, "O", "C1")
     res["O_minus_Otidy"] = stat(S, "O", "O_tidy")
     res["fve_mean"] = {k: float(np.mean([fve(s, k) for s in elig if k in s["mse"]])) for k in ("O", "O_tidy", "C1", "C2", "R1", "R2", "K1")
@@ -445,6 +542,6 @@ def phase_analyze(which):
 if __name__ == "__main__":
     ap = argparse.ArgumentParser()
     ap.add_argument("phase", choices=["judge", "handset", "score", "analyze"])
-    ap.add_argument("--subset", choices=["smoke", "all"], default="smoke")
+    ap.add_argument("--subset", choices=["smoke", "all", "extra10", "kinds"], default="smoke")
     a = ap.parse_args()
     {"judge": phase_judge, "handset": phase_handset, "score": phase_score, "analyze": phase_analyze}[a.phase](a.subset)
