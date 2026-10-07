@@ -394,3 +394,41 @@ The whitened arm (needs Σ for L24–35/47), the class-mean / Fig. 16 arm (needs
 - The agent inspects each new smoke before its full run.
 - A failed gate stops that branch and is recorded in the ledger (`docs/ledger/012_ledger.md`).
 - The independent review (Codex, 2026-10-06) was adopted where listed above. Not adopted tonight: per-cell mediation transfers and the Q3/Q4 endpoint definitions (deferred until the pilot shows variation).
+
+## 13. Stage F: separating bridge reading from answer reading (pre-registered 2026-10-07 ~00:25 UTC, before any F run)
+
+**Why.** Stage D found that every reader's src→tgt shift at the read cell (the answer-producing token) tracks swap success. But so does the model's own output at that cell (AUC 0.96–0.97), and the bridge shift adds only a modest partial association beyond it. Two cheap cuts test whether readers carry bridge content beyond output-facing content and beyond the written edit. Everything here is EXPLORATORY.
+
+**Shared setup:**
+- Cohort: the same 87 covered items; the primary analysis uses 82 clean-correct items.
+- Edit: the J swap at L24–35 (Stage A's lever band, which keeps every reader downstream).
+- Controls: source-preserving random-target controls.
+- Same engine, same float32 margins, same gates (G0 α = 0; edits applied only where specified).
+
+**F1: position split** (the readers read the read cell, L40/L44 Oracle, L42 NLA, token lenses).
+
+| Arm | Positions edited | Control |
+|---|---|---|
+| `J_readonly_L24-35` | the read position only | `rand_readonly_L24-35` |
+| `J_allbutread_L24-35` | every prompt position except the read position | `rand_allbutread_L24-35` |
+| `J_L24-35` (all positions) | existing | existing |
+
+- **Model side:** flip and float32 Δm per arm.
+- **Readers:** bridge d_r and answer d_ans at the read cell. Under `allbutread` the read cell is never written, so a reader shift there is computed by the model.
+- **Reading rules:**
+  - **(i)** If `allbutread` changes answers (flip rate ≥ 0.2 and well above its control), and readers' d_r at the read cell tracks those changes (AUC ≥ 0.8 for success within `allbutread`), then readers follow model-computed states, not only written coordinates.
+  - **(ii)** `readonly` flips show how much of the effect is local to the read cell.
+  - Both remain answer-cell reads, so the output-facing caveat stays. Report d_r together with d_ans and the model's own output.
+
+**F2: earlier positions** (existing all-position `J_L24-35` and `rand_L24-35` edits; read at every prompt position p ≤ T−2, i.e. excluding the read token, and its preceding token when the prompt ends on " is").
+- **Readers:** Oracle L40/L44, NLA L42, J_NP / J_CB / logit. Likelihood only (no sampling): LL(src) and LL(tgt) per position, giving d_r,p.
+- **Model's own output per position:** the next-token log-prob change for the src/tgt bridge tokens (d_model_bridge,p) and the answer first tokens (d_model_answer,p).
+- **Item summary:** the mean over early positions (pre-specified), plus the per-position profile for figures.
+- **Reading rules** (within toward_tgt items, as in Stage D):
+  - **"Bridge content beyond output-facing"** if:
+    - the readers' early-position mean d_r predicts success with AUC ≥ 0.75, **and**
+    - its partial Spearman with Δm, given the model's own early-position output shift and the edit size, stays above 0 (cluster-bootstrap CI excludes 0).
+  - **"Not outcome-specific"** if the readers shift toward tgt at early positions about equally on working and failed swaps (AUC < 0.65). Readers would then detect written content regardless of use.
+  - **"Absent"** if d_r,p ≈ 0 at early positions.
+
+**Not claimed:** that any position is the mechanism's site. Positions are read cells. The edits remain whole-band interventions, apart from F1's split.

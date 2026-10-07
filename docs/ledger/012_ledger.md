@@ -146,3 +146,10 @@ Spec: `docs/design_specs/012_reader_concordance.md` (v1 → v1.1 §11 → v1.2 �
   - The random-target control is not neutral for readers (it removes src).
   - 2 items have no first-token answer score.
   - Japan is the target in 28 of 87 covered items; reported pooled.
+
+## 2026-10-07
+
+**00:25 — Stage F pre-registered** (spec §13), after the PI said "keep on working as long as it makes sense". Goal: separate bridge reading from answer-facing reading.
+- **F1:** position-split edits (read position only / all but the read position).
+- **F2:** reads at early prompt positions, with the model's own per-position output as the covariate.
+- Expected cost: under 1 GPU-h. Built by the same subagent on the Stage B/C code.
