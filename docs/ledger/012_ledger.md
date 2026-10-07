@@ -336,3 +336,9 @@ Median S [table-cluster 95% CI]:
 - Camila's loader, or her answer on the J-loss;
 - drafting gated cue-varied prompts (class-mean arm, MT);
 - fresh hidden-bridge items to test the NLA early-position hint properly.
+
+**(PI: "okay do 1") — Stage I pre-registered** (spec §18): the delayed-question variant.
+- 168 templated prompts from 28 of Jan's country-clue items (`stageI_prompts.py`).
+- Swap the hidden country only up to the end of a carrier sentence; check whether the answers to all three later questions follow.
+- Read at the hold tokens, where the model cannot yet be "about to say" the answer.
+- Hand-written content: one fact table (capital / language / continent for 23 countries). The gate checks that Qwen knows every tgt fact.

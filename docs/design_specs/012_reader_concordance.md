@@ -570,3 +570,55 @@ EXPLORATORY.
 **Amendment.** Recompute the four jfve candidates with one fitted scale per layer, the same alignment as our main FVE. Apply §17's jfve rule (within 0.04 of val_jfve at ≥ 9/11 layers, and the jret1 analogue within 0.07 at ≥ 9/11) to these scaled values.
 
 **Not changed.** §17's loader verdict ("not validated": ret@1 8/12) stands. This amendment only addresses the jfve definition, and any identification it produces is post hoc.
+
+## 18. Stage I: delayed question (pre-registered 2026-10-07, before any I run; the PI chose "do 1")
+
+**Why.** On Jan's prompts the hidden step fixes the answer one-to-one, and the answer is produced at the read token. So readers' tracking of a working swap is largely output-facing (Stage D), and there are no positions where the bridge is held but not yet being used (Stage F). Stage I separates *holding* the bridge from *using* it.
+
+**Prompts** (`scripts/012_reader_concordance/stageI_prompts.py` → `outputs/012_reader_concordance/stageI/prompts.json`):
+- Jan's 28 ST multihop items with a country clue ("Fact: The ⟨relation⟩ of ⟨the country …⟩ is"; New Zealand dropped as not single-token) are rewritten as:
+  "Fact: Consider ⟨clue⟩. ⟨carrier⟩ ⟨question⟩".
+- 2 neutral carriers × 3 questions (capital / main language / continent of "that country"), giving 168 prompts. 154 trials are discriminating, i.e. the src and tgt answer sets don't overlap.
+- Answers come from a hand-written fact table of common facts for 23 countries.
+- **Hold tokens:** H1 = the "." closing the clue sentence; H2 = the final "." of the carrier. In a causal LM the state at H1/H2 is identical whichever question follows.
+- Japan is the swap target for 16 of the 28 clues; results are reported pooled and without Japan.
+
+**Gates:**
+1. **Clean gate per prompt** (src version): greedy contains y_a (Jan's matcher), ≥ 9/10 at T 0.8, and the clean output does not contain y_b.
+2. **Tgt fact check:** "Fact: The ⟨relation⟩ of ⟨tgt⟩ is" gives y_b greedy.
+3. G0 (α = 0 bitwise), the write mask, and float32 margins, as in Stage F.
+
+Trials failing a gate are kept and excluded from the primary analysis.
+
+**Arms** (J_NP rows from Stage A's bank; Jan's `SwapEdit`; band L24–35, so readers at L40/42/44 are downstream; prefill only):
+
+| Arm | Positions edited | Role |
+|---|---|---|
+| `J_pre` | every position up to and including H2, none of the question | primary |
+| `rand_pre` | same positions; source-preserving random-target control | control |
+| `J_all` | every prompt position | reference |
+
+**Model-side measures**, per trial:
+- flip: greedy contains y_b, with Jan's budget and matcher;
+- float32 Δm for y_b vs y_a (all spellings);
+- edit direction at H2 (pinv coordinates, averaged over band layers);
+- the model's own next-token output at H2: the shift for the src/tgt bridge tokens and for the first tokens of all three relations' answers.
+
+**Readers**, at H2 (primary) and H1, on clean / J_pre / rand_pre hold states:
+- Oracle L40/L44, NLA L42, J_NP / J_CB / logit at L40/L44.
+- Bridge LL (src vs tgt names) → d_r.
+- 2 sampled readouts per state for Oracle L44 and NLA L42, saved, with a seeded subset committed.
+
+**Units.** One hold state per (clue, carrier): 56 states, clustered by clue. Its outcome is the fraction of its discriminating questions that flipped. **Hold success** = at least half flipped.
+
+**Decision rules:**
+- **(I-1) Lever:** J_pre flips ≥ 0.20 of the gated discriminating trials, and ≥ 15 points above rand_pre. Otherwise stop: "no lever with a delayed question".
+- **(I-2) Non-output-facing check:** the model's own H2 next-token bridge shift predicts hold success with AUC < 0.65.
+- **(I-3) Reader test** (within toward_tgt hold states):
+  - A reader whose d_r at H2 predicts hold success with AUC ≥ 0.75, **with I-2 met**, reads the hidden step beyond output-facing content.
+  - "NLA-specific" (or "Oracle-specific") if one passes and the other fails (AUC < 0.65).
+- **(I-4) Bridge-level use** (descriptive): the share of clues whose J_pre swap flips every discriminating question.
+
+**Power.** About 28 clues × 2 carriers. This is a pilot: report n, cluster intervals, and per-clue outcomes.
+
+EXPLORATORY.
