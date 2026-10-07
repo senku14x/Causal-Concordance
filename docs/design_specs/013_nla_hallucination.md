@@ -240,3 +240,56 @@ pre-registered primary (§5–6) is unchanged and is reported as recorded.*
    - G2k: the kind tags of the smoke's 63 spans, checked by me. I report agreement; if it is below 0.80 the per-kind
      results are reported as unreliable.
 6. **Spend cap:** the full run's judges stop at $10.
+
+## 12. Amendment A2: factual rewrite against paraphrase (POST HOC; written 2026-10-07 before any rewrite call; PI: "yeah lets do that next")
+
+*What this section does: adds the arm that matches the TA's request as written in report 33 §3.1. An LLM minimally
+rewrites each explanation so it contains only factual content, the reconstructor is run again, and we check whether
+the reconstruction projects more onto the J subspace and whether FVE rises. The deletion analyses (§5–6, A1) are
+unchanged.*
+
+**Why a separate arm.** Deleting false spans also deletes the true content that misquotes carry (smoke: "the country
+that has the Tokyo tower [Japan]"), so deletion can't test whether cleaner text reconstructs *better*. A rewrite
+corrects a misquote instead of removing it. A rewrite also rewords, so it needs a rewrite control.
+
+**Material:** the same 522 explanations (§2). Judge A (`google/gemini-3.8-flash`) writes both rewrites; judge B
+(`z-ai/glm-5.3-flash`, another family) checks them. Calls are cached and cost-logged, with temperature 0 and reasoning
+"low".
+
+**Versions:**
+- **F, factual rewrite.** A rewrites O minimally so that every claim is true given the inputs (§3 definitions):
+  - misquotes are corrected to the prompt's exact wording;
+  - invented context and unsupported claims are removed;
+  - wrong entities and answers are corrected to agree with the model's continuation;
+  - true claims are kept with their wording unchanged, and nothing new is added beyond what a correction needs.
+- **P, paraphrase control.** A rewrites the *same* O, keeping every claim's meaning (true or false) and correcting
+  nothing. It changes about as many words as F did: the target is the word-level edit distance between O and F,
+  passed in the prompt.
+- B labels the sentences of F and P with the §3 labeller. Expected: F has close to no contradicted sentences, and P
+  keeps about the rate O has.
+
+**Measures** (the §5 reconstructor path):
+- FVE and J share (§5 definition) of O, F and P.
+- **Co-primary for this arm,** paired by explanation, cluster bootstrap by item:
+  - (a) **ΔFVE = FVE(F) − FVE(P);**
+  - (b) **ΔJ = share_J(F) − share_J(P).**
+- Also: F − O and P − O for both measures; the edit size (words changed) of F and P; and B's contradicted-sentence
+  rate for O, F and P. Everything is reported per state too.
+
+**Readings** (bands fixed now; post hoc relative to the original spec):
+- **ΔFVE:**
+  - ≥ +2 with the CI above 0: "removing hallucinations improves reconstruction";
+  - ≤ −2 with the CI below 0: "the reconstructor relies on hallucinated content";
+  - CI inside [−2, +2]: "no difference beyond ±2 points";
+  - otherwise unresolved.
+- **ΔJ:** a CI excluding 0 gives "more J" or "less J"; otherwise no detected change. Reported next to the gold
+  activations' own J share.
+
+**Gates:**
+- B's contradicted-sentence rate on F is ≤ 0.10, and on P is at least 0.7 × O's rate. Otherwise the rewrite didn't do
+  its job, and this is reported.
+- I hand-check 20 F (factual, minimal, no new information) and 10 P (claims preserved).
+- F and P must parse and not be empty.
+
+**Smoke first:** the same 20 seeded explanations as the §8 smoke. Stop and report. Then the full 522, unless the PI
+says otherwise.
