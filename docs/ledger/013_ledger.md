@@ -95,3 +95,31 @@ The pre-registered primary (all contradicted spans) stays as recorded.
 - In the J state, correcting a misquote back to the prompt removes swap-carrying text, e.g. Kremlin J: F − P = +3.0; red planet J: −19.2.
 
 **STOP after the rewrite smoke** (the PI's rule). Next, on the PI's go: the full F/P run on 522 (about $1.5, about 10 GPU-min).
+
+**Full rewrite run** (amendment A2; 522 explanations; judges $1.398; total 013 judge spend about $2.35). Results: `results/013_nla_hallucination/analysis/rewrite_all.json`. Hand-check file `qualitative/rewrite_handcheck_all.md`.
+
+*Gates pass:* B's contradicted-sentence rate is O 0.60, **F 0.01**, P 0.59. F and P were produced for 522/522. Words changed: F 61, P 47.
+
+*FVE means:* O 47.3, F 48.9, P 45.8. *J share means:* gold 0.329, O 0.339, F 0.356, P 0.336.
+
+**Co-primary results (A2):**
+- **ΔFVE = F − P = +3.1 [1.3, 4.9]**, giving the band reading "removing hallucinations improves reconstruction". Its parts:
+  - F − O = +1.6 [−0.0, 3.3];
+  - P − O = −1.4 [−1.9, −1.1]: paraphrasing itself costs about 1.4 points, so about half of F − P is the paraphrase penalty F avoids.
+- **ΔJ = F − P = +0.020 [0.016, 0.024]**, giving "more J" (F − O = +0.017 [0.014, 0.021]).
+  - Note: the original reconstruction's J share (0.339) is already above the gold activation's (0.329), and F moves it *further* above (0.356). "More J" is not "closer to the true activation in J".
+- **Per state:**
+  - clean: ΔFVE +5.5 [3.1, 7.9], ΔJ +0.019;
+  - J swap: +3.0 [0.7, 5.1], +0.018;
+  - random swap: +0.8 [−1.8, 3.4], +0.022.
+  - There was no paired contrast between states, so no state-specific claim.
+- **The smoke's +7.8 shrank to +3.1 on the full set** (n = 20 vs 522).
+
+**Test-half restriction** (POST HOC, `analysis/testhalf.json`; 007's items 51–100, to line up with the numbers shared earlier):
+- **Deletion:**
+  - primary +30.0 [23.5, 36.4];
+  - invented context with the sentence control: test +0.4 [−1.6, 2.7], dev −0.5 [−3.1, 2.3];
+  - misquotes: test +34.5, dev +39.1.
+- **Rewrite:** ΔFVE test +3.8 [0.8, 6.5], dev +2.4 [−0.1, 4.8]; ΔJ test +0.024, dev +0.015.
+
+**STOP.**
