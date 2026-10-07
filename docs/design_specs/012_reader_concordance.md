@@ -515,3 +515,50 @@ EXPLORATORY; the brew dev split has already been used in many places.
 **Power caveat:** with about 30% success, the toward_tgt working-swap count may be small (about 40). Report n, and treat a null as weak.
 
 EXPLORATORY.
+
+## 17. Stage E0: validating our Oracle-reconstructor (AR) loader against the published per-layer profile (pre-registered 2026-10-07 ~02:55 UTC, before any E0 run)
+
+**Status of the official loader.** `global_workspace.ola.ar_loader.load_lc_reconstructor` is not public. `agu18dec/local-workspace` holds only checkpoints, data and eval viewers (listed 2026-10-07), and the PI's request to Camila is pending. So we validate our own loader empirically.
+- Its README says "truncates the backbone to the deepest needed layer". The LoRA covers all 64 blocks (checked), so truncation is not the issue.
+- The README's "17-row head" conflicts with `heads.pt`, which has one shared head and 12 tags (20, 24, …, 60, 63). The README is partly stale.
+
+**Published reference** (`ar_ptag_pooled/meta.json`, per layer):
+
+| Metric | Range | Coverage |
+|---|---|---|
+| val_fve | 0.12–0.34 | L20–63 |
+| val_ret1 | 0.88–0.98 | L20–63 |
+| val_jfve | 0.39–0.61 | L20–60 only |
+| val_jret1 | 0.56–0.96 | L20–60 only |
+
+Eval protocol: up to 1,024 rows, micro-batch 24, spans of uniform 1–32 tokens.
+
+**Run.**
+- Our loader (011 conventions: tag + span, backbone final state at the span's last real token, parameter-free LayerNorm, shared head, raw-activation output, target = block-L output at the token before the span).
+- All 12 tag layers; about 1,024 held-out assistant-text spans of uniform 1–32 tokens, from the same source as 011's validation spans.
+- Whitened metric uses `whitening_iolens_pooled_L{L}` (the 9 missing layers are downloaded).
+
+**Metrics per layer:**
+- unscaled whitened FVE, pooled: 1 − Σ‖W(ŷ − y)‖² / Σ‖W(y − μ)‖²;
+- FVE after one fitted global scale;
+- per-sample cosine;
+- retrieval@1 within micro-batches of 24.
+
+**"jfve" candidates** (same spans and layers):
+- (a) FVE of J_ℓ y vs J_ℓ ŷ in raw space;
+- (b) the same with the whitener mean removed first (`jspace_mu_prefix`);
+- (c) FVE of the J-lens logits W_U·norm(J_ℓ y);
+- (d) FVE inside 007's dense J subspace (top-1,024).
+- Each candidate also gets a matching retrieval@1 (the jret1 analogue).
+
+**Decision rules:**
+- **Loader validated up to a global scale:** globally scaled FVE within 0.04 of the published val_fve at ≥ 10/12 layers, **and** ret@1 (micro-batches of 24) within 0.05 of val_ret1 at ≥ 10/12 layers.
+- **Fully validated:** additionally, unscaled FVE within 0.04 at ≥ 10/12 layers.
+- **jfve identified:** one candidate matches val_jfve within 0.04 at ≥ 9/11 layers **and** val_jret1 within 0.07 at ≥ 9/11. Otherwise the definition stays open.
+- If jfve is identified as a J-lens-transformed target, the AR (the Oracle's training ruler) carries an explicit J-lens objective. The 007 discussion must then say so.
+
+**Consequence for Stage E:**
+- If validated up to scale, Camila's AR-vector swaps run with centred or difference vectors (the global scale cancels), labelled "our loader, validated up to a global output scale".
+- If not, Stage E keeps waiting for her loader.
+
+EXPLORATORY.

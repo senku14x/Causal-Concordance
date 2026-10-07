@@ -271,3 +271,11 @@ Median S [table-cluster 95% CI]:
 - Oracle readouts are often partly in Chinese (罗马, 日语, 悉尼).
 - One odd clean Oracle readout: pred-valentines-prevmonth (February) talks about October / September / November.
 - Takeaway: the likelihood numbers overstate how "conceptual" the readouts are. The Oracle's tgt content is largely answer-facing, and the NLA's is diluted by boilerplate.
+
+**02:55 — Stage E0 pre-registered** (spec §17), after the PI asked to try building the loader.
+- **Findings so far:**
+  - The official loader is not public: `local-workspace` has no code (checked).
+  - The LoRA covers all 64 blocks, so "truncation" is not the issue.
+  - The README is partly stale ("17-row head" vs `heads.pt`'s one head and 12 tags).
+  - **Clue:** the published `val_jfve` and `val_jret1` exist for L20–60 but not L63, and the Neuronpedia J-lens matrices cover blocks 0–62. So "jfve" is very likely computed through the J-lens matrices, i.e. a J-lens-transformed reconstruction target with weight `loss_mix_lambda` 0.25.
+- **Plan:** test our loader across all 12 layers against the published profile, and test four jfve definitions. Runs after Stage R (one GPU).
