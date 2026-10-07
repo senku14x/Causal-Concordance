@@ -26,6 +26,7 @@ TH = json.loads((R13 / "analysis/testhalf.json").read_text())
 DR = json.loads((R13 / "analysis/derisk.json").read_text())
 EX = [json.loads(l) for l in open(R13 / "qualitative/examples.jsonl")]
 LS = [json.loads(l) for l in open(R / "qualitative/stageL_samples.jsonl")]
+RC = [json.loads(l) for l in open(R / "qualitative/reader_compare_samples.jsonl")]
 
 
 def h(x, d=2):
@@ -276,6 +277,21 @@ def examples13():
     return "".join(out)
 
 
+def reader_compare():
+    labels = {"clean": "clean", "J_L24-35": "J swap", "rand_L24-35": "random swap"}
+    names = {"oracle L40": "Oracle L40", "oracle L44": "Oracle L44", "nla L42": "NLA L42"}
+    out = []
+    for x in RC:
+        cont = " · ".join(f'{labels[s]}: <b>{E(x["continuation"][s].strip())}</b>' for s in labels)
+        cards = "".join(
+            f'<div class="ro"><div class="rh">{names[r]}</div>'
+            + "".join(f'<p><b>{labels[s]}</b> {E(x["readouts"][r][s][:240])}</p>' for s in labels) + "</div>"
+            for r in names)
+        out.append(f'<details><summary>{E(x["item"])}: {E(x["src"])} → {E(x["tgt"])} · swap {"worked" if x["swap_worked"] else "did not change the answer"}</summary>'
+                   f'<p class="rh">Prompt: {E(x["prompt"])}</p><p class="rh">Model continues with: {cont}</p><div class="ros">{cards}</div></details>')
+    return "".join(out)
+
+
 def stageL_readouts():
     out = []
     for x in LS:
@@ -413,6 +429,9 @@ mark.k-wrong_entity, mark.k-false_fact {{ background:color-mix(in srgb, var(--mu
 <p class="sub">Sampled readouts that name the src or tgt bridge concept (word match; 2 samples per state). Counts: names src (or both) / readouts, names tgt (or both) / readouts, at L24–35 edits.</p>
 <div class="wrap">{naming_table()}</div>
 {readouts()}
+<h2>5b. The three readers on the same prompt</h2>
+<p class="sub">For eight prompts drawn at random (seed 11: four where the J swap changed the answer, four where it did not), the first sampled readout of each reader in each state, next to what the model actually said. The readouts are cut at 240 characters.</p>
+{reader_compare()}
 
 <h2>6. Where the change is built, and what readers see along the way (Stage F)</h2>
 <p class="sub">Same J swap (L24–35), but restricted by position. Bars: answers changed (clean-correct items); hollow dot: random-target control.</p>

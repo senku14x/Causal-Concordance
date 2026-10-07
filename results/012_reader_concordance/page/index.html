@@ -130,6 +130,184 @@ Q&amp;A reasoning setup requires a logical conclusion following the provided fac
 Q&amp;A logic puzzle format establishes a pattern where clues are given as factual statements to be filled in, expecting a direct factual completion.
 
 The sentence structure &quot;The ocean next to [place] in [count</p></div></div></details>
+<h2>5b. The three readers on the same prompt</h2>
+<p class="sub">For eight prompts drawn at random (seed 11: four where the J swap changed the answer, four where it did not), the first sampled readout of each reader in each state, next to what the model actually said. The readouts are cut at 240 characters.</p>
+<details><summary>bf-kathmandu-mountain: Nepal → Japan · swap worked</summary><p class="rh">Prompt: Fact: The tallest mountain in the country whose capital is Kathmandu is</p><p class="rh">Model continues with: clean: <b>Mount Everest.</b> · J swap: <b>Mount Fuji.</b> · random swap: <b>Gaurishank</b></p><div class="ros"><div class="ro"><div class="rh">Oracle L40</div><p><b>clean</b> - Mount Everest (8,848 m). What is the capital of Nepal
+- 珠穆朗玛峰 (Mount Everest). The second highest mountain in that country is
+- 尼泊尔最高的山，且该山是世界上最高的山。请问，这个国家的首都是什么？&quot; (The highest mountain in Nepal is
+- /is Annapurna I. What is the currency </p><p><b>J swap</b> - Mount Fuji. What is the population of the country where its highest mountain is
+- 富士山 (Fujisan), while Japan’s highest mountain is Mount Hallasan. What is the name of the currency used in the
+- 富士山 (Mount Fuji). What is the capital city o</p><p><b>random swap</b> - 大约 2,916 meters high. What is the name of the tallest mountain in that country
+- 印度洋上的最高峰。What is the name of the country where this tallest mountain is located
+- 其 highest mountain (mountain X). If country A&#x27;s largest river is its longes</p></div><div class="ro"><div class="rh">Oracle L44</div><p><b>clean</b> - Mount Everest (8,848 meters). What is the highest peak in Nepal?
+- 珠穆朗玛峰 (Mount Everest). Also, Nepal&#x27;s national animal is the Red Panda.
+- 8848 meters high, and its tallest mountain is named after a famous explorer. What is the tallest m</p><p><b>J swap</b> - Mount Fuji. What is the tallest mountain in Japan
+- 富士山 (Mount Fuji), while the most populous city in that country is Tokyo. What is the highest mountain in
+- 富士山 (Mount Fuji). What is the highest peak in its capital city, Tokyo?&quot; (This i</p><p><b>random swap</b> - 珠穆朗玛峰, which stands at 8848 meters. What is the name of the highest
+- 富士山 (Mount Fuji). The highest mountain in this country is
+-  approximately [Height of highest mountain in that country] meters. The country&#x27;s national flower is the [fl</p></div><div class="ro"><div class="rh">NLA L42</div><p><b>clean</b> &lt;explanation&gt;
+Structured Q&amp;A format for a reasoning chain game, requiring step-by-step logical connections. &quot;Given Facts&quot; establishes premise statements.
+
+The sentence states a factual claim about Nepal&#x27;s tallest mountain (Everest), so the </p><p><b>J swap</b> &lt;explanation&gt;
+Factual/trivia chain puzzle structure: each statement builds on a previous clue, requiring geographic/factual knowledge to complete a logical sequence about a specific country.
+
+The sentence &quot;The tallest mountain in the countr</p><p><b>random swap</b> &lt;explanation&gt;
+A Q&amp;A reasoning chain pattern is established (&quot;first question answer will be the start&quot;), implying a factual statement will now be completed. The task requires a correct geographical fact about Nepal&#x27;s tallest mountain.
+
+The s</p></div></div></details><details><summary>bf-sushi-capital: Japan → France · swap worked</summary><p class="rh">Prompt: Fact: The capital city of the country where sushi originated is</p><p class="rh">Model continues with: clean: <b>Tokyo.</b> · J swap: <b>Paris.</b> · random swap: <b>Tokyo.</b></p><div class="ros"><div class="ro"><div class="rh">Oracle L40</div><p><b>clean</b> - Tokyo. What is the current capital of the country where that fruit originates
+- Tokyo. What is the capital of the country where this food originated?
+- __________ (or its current capital), while Japan&#x27;s capital is Tokyo. What is the capit</p><p><b>J swap</b> - Paris. The country where the food originates is France, and its capital
+- Paris. What is the capital of the country that produced this wine?&quot; (This is a riddle chain: France → Paris
+- [Capital City Name], and the national sport of that co</p><p><b>random swap</b> - _______? The capital of the country where that sport originated is
+- 东京 (Tokyo). What is the capital of the country where that artist is from
+- [Current Capital of Japan]. What is the capital city of the country where that fish originated</p></div><div class="ro"><div class="rh">Oracle L44</div><p><b>clean</b> - _______.&quot; (The capital of the country that produces sushi is Tokyo
+- Tokyo, while the capital of the country known for sushi is ________. What is the name of its current emperor?
+- 东京 (Tokyo), and the capital of the country known for sush</p><p><b>J swap</b> - [City X]. The national sport of this country is played with an oval ball. What is the capital
+- Paris, while the capital of the country that invented the croissant is Rome. What is the capital of the country where the
+- ______, and its ma</p><p><b>random swap</b> - ________. The famous anime from that country&#x27;s capital is
+- Tokyo, and the capital of the country where that sport originated is Tokyo. What is the capital
+- 东京 (Tokyo), while the capital of the country where that sport originated is ___.</p></div><div class="ro"><div class="rh">NLA L42</div><p><b>clean</b> &lt;explanation&gt;
+Quiz/trivia question format with a conversational prompt (&quot;Think carefully&quot;) signals a factual, concise answer is expected about a specific country&#x27;s capital.
+
+The sentence structure &quot;The capital of the country where [sport X]</p><p><b>J swap</b> &lt;explanation&gt;
+Trivia game format establishes a riddle/question structure requiring a direct factual answer about geography and countries.
+
+The prompt &quot;Guess the answer to this question!&quot; promises a specific factual completion — the sentence</p><p><b>random swap</b> &lt;explanation&gt;
+Q&amp;A puzzle/trivia format: a question with a fill-in-the-blank answer structure is expected, targeting a single specific answer.
+
+The sentence &quot;The capital of the country where the sport that originated in [X] is practiced most</p></div></div></details><details><summary>bf-madrid-language: Spain → Japan · swap worked</summary><p class="rh">Prompt: Fact: The language spoken in the country whose capital is Madrid is</p><p class="rh">Model continues with: clean: <b>Spanish.</b> · J swap: <b>Japanese.</b> · random swap: <b>Spanish.</b></p><div class="ros"><div class="ro"><div class="rh">Oracle L40</div><p><b>clean</b> - Spanish. The currency used in this country is the Euro. Therefore, the language spoken in Spain is
+- 西班牙语 (Spanish). Based on this, what is the capital of the country where that language is
+- Spanish (or Castilian). Therefore, the country</p><p><b>J swap</b> - Japanese. What is the capital of that country’s language? The capital of Japan is
+- 日语 (Japanese). What is the population of the country where Japan is located
+- [Japanese]. The largest country in Asia where that language is spoken is Jap</p><p><b>random swap</b> - Spanish. The currency used in that country is the Euro. What language is spoken in
+- 西班牙语 (Spanish). The capital of that country is Madrid. Therefore, the language spoken in Spain is
+- [Spanish], and the population of that country lives i</p></div><div class="ro"><div class="rh">Oracle L44</div><p><b>clean</b> - Spanish. What is the main language spoken in Spain? The answer is
+- 西班牙语 (Spanish). The country&#x27;s capital is Madrid. What language is spoken in the country where Madrid is
+- [Language Name]. If you know that people in Spain speak [Languag</p><p><b>J swap</b> - Japanese. What is the currency of that country? The capital of that country is
+- Japanese (or similar), and its country’s largest city is Tokyo. What language is spoken in Japan
+- [language name]. 2. The currency of that country is [curre</p><p><b>random swap</b> - Spanish. What is the main language of Spain? Therefore, the language spoken in the capital of Spain
+- 西班牙语 (Spanish). If the capital of that country is Madrid, the language spoken there is
+- [Language X]. People from that country primaril</p></div><div class="ro"><div class="rh">NLA L42</div><p><b>clean</b> &lt;explanation&gt;
+Q&amp;A prompt structure signals a fill-in-the-blank answer expected, requiring factual, specific completion consistent with trivia/chain-of-thought exercises.
+
+The subject is Spain (&quot;the country whose capital is Madrid&quot;), so the </p><p><b>J swap</b> &lt;explanation&gt;
+Q&amp;A format example establishing a pattern: &quot;This is an example for: True&quot; sets up a demonstrative statement structure.
+
+The phrase &quot;The language spoken in the country where [landmark/entity] is located is&quot; requires a specific </p><p><b>random swap</b> &lt;explanation&gt;
+The &quot;Chain of Thought&quot; puzzle format signals a logical reasoning example where a multi-hop answer about language/country relationships is expected.
+
+The sentence structure &quot;The language spoken in the country whose capital is M</p></div></div></details><details><summary>bf-olympia-language: Greece → Japan · swap worked</summary><p class="rh">Prompt: Fact: The language of the country where the ancient Olympic Games began is</p><p class="rh">Model continues with: clean: <b>Greek.</b> · J swap: <b>Japanese.</b> · random swap: <b>Greek.</b></p><div class="ros"><div class="ro"><div class="rh">Oracle L40</div><p><b>clean</b> - [Language A], and its official currency is [Currency A]. What country is the modern Olympics named after
+- 希腊语 (Greek), and its capital is Athens. Based on this, what country is the current Olympic Games held
+- Greek (or English, but the </p><p><b>J swap</b> - Japanese. The country that has this ancient sport&#x27;s headquarters is spoken in what language
+- 日语 (Japanese), and its capital is Tokyo. Name three Olympic sports that originated in this country.
+- [insert language], and its main currency i</p><p><b>random swap</b> - [Answer: Greek]. The currency of that country is [Answer: Euro].
+- 希腊语 (Greek), and its current capital city is Athens. What language do athletes in this place speak
+- 【Greek】 (or the current official language of that country). If that co</p></div><div class="ro"><div class="rh">Oracle L44</div><p><b>clean</b> - [Language A]. Its capital city is Athens. What is the name of this country?
+- Greek, and its currency is the Euro. What country is the home of these athletes? The
+- 希腊语 (Greek), and its capital is Athens.&quot; (Clue: Famous for ancient histor</p><p><b>J swap</b> - Japanese. The country&#x27;s main food is sushi. What is the primary language spoken
+- 日语 (Japanese), and its main sport is ______. What is the capital city of this country?
+- [Language X], and its main currency is [Currency]. The capital is T</p><p><b>random swap</b> - [Language]. The most famous sports team in that country is [Team Name]
+- 希腊语 (Greek). The sport most associated with that ancient city is [Sport]. What is the currency of Greece
+- [Language X], and its capital city is [City Y]. What is th</p></div><div class="ro"><div class="rh">NLA L42</div><p><b>clean</b> &lt;explanation&gt;
+Trivia/quiz question format requiring a factual answer about a country and its language, following the pattern &quot;the answer to this question contains clue... the clue is.&quot;
+
+The phrase &quot;The country that participated in the ancie</p><p><b>J swap</b> &lt;explanation&gt;
+Quiz answer format established: factual trivia question requiring a specific answer, typical of &quot;Today&#x27;s Word&quot; puzzles about countries/cities.
+
+The clue structure &quot;The language of the country that [describes a famous event] is</p><p><b>random swap</b> &lt;explanation&gt;
+Jeopardy!-style clue format requires the answer to be a specific factual response following the lead-in sentence.
+
+The trivia prompt establishes a chain (&quot;country&quot; → Olympics → language), so the next tokens must complete a fac</p></div></div></details><details><summary>inv-sunrise-opposite: east → north · swap did not change the answer</summary><p class="rh">Prompt: Fact: The cardinal direction opposite to the one where the sun rises is</p><p class="rh">Model continues with: clean: <b>the west.</b> · J swap: <b>the west.</b> · random swap: <b>west.</b></p><div class="ros"><div class="ro"><div class="rh">Oracle L40</div><p><b>clean</b> - the opposite of where the sun rises. If the Sun rises in the
+- 就是 its opposite direction. If the sun rises in the east, then the direction opposite to where you see it set is
+- 相反 direction (West). What is the opposite direction to where </p><p><b>J swap</b> - always the opposite of where the sun sets. If you look at where the sun rises, the opposite
+- 其 opposite direction is East. What is the direction opposite to where the Sun rises?
+- 那就是 the opposite direction from where the sun rises. What</p><p><b>random swap</b> - the opposite of where the Sun rises. If you are facing the opposite direction of where the Sun rises
+- 即 the opposite direction of where the sun rises. What is the opposite direction of the sunrise?
+- 也就是 East, while the opposite is West.</p></div><div class="ro"><div class="rh">Oracle L44</div><p><b>clean</b> - called ____. If the sun rises in the east, the opposite direction is
+- 相反的方向。如果太阳在东方，那么日落的方向是西方。请问，与日出方向相反
+- 叫 West (or opposite direction). If the Sun rises in the east, the opposite direction is West. What is the opposite direction of t</p><p><b>J swap</b> - called ______. If you face the sunrise, the opposite direction
+- 相反 (opposite). If the sun rises in the east, then the place opposite the sunrise is
+- the opposite of the direction where it sets. If the sun rises in the East, then west is</p><p><b>random swap</b> - __________ of the direction it rises. If you are facing the east, then the opposite direction
+- 相反 to the direction the sun sets. If you face the direction opposite the sunrise, you are looking at west. What is the
+- 其 opposite direction.</p></div><div class="ro"><div class="rh">NLA L42</div><p><b>clean</b> &lt;explanation&gt;
+Trivia/clue format requires a direct factual answer completing the riddle-like sentence about directions.
+The sentence establishes a logical description pattern: &quot;the direction opposite the direction the sun rises in&quot; points t</p><p><b>J swap</b> &lt;explanation&gt;
+Trivia/riddle game format with points system establishes a puzzle-answer interaction requiring a concise, factual response.
+The statement is a logical/definitional clue about cardinal directions, setting up a simple geographic</p><p><b>random swap</b> &lt;explanation&gt;
+Riddle format with &quot;The answer is&quot; signals a declarative statement completing a logical clue, requiring the answer term next.
+
+The riddle establishes a geographic/directional concept about the Sun&#x27;s rising direction (East), se</p></div></div></details><details><summary>basketball-players: basketball → soccer · swap did not change the answer</summary><p class="rh">Prompt: Fact: The number of players per side in the sport invented in Springfield, Massachusetts is</p><p class="rh">Model continues with: clean: <b>5.
+Question</b> · J swap: <b>5.
+Question</b> · random swap: <b>5.
+Question</b></p><div class="ros"><div class="ro"><div class="rh">Oracle L40</div><p><b>clean</b> - ______. The number of players on a team in this sport is
+- 5 (or 10, depending on the variant), and its inventor is a Canadian. What sport is
+- 12 (or 11 for basketball), whereas the national sport played on ice in the US involves 6. Its </p><p><b>J swap</b> - 11, while in basketball it is 5. This sport originated in the USA
+- 2 (or 6, depending on variant). The state where this sport is most popular is
+- 不超过11人, while in soccer it is exactly 11. This sport is played on an oval field
+- 11 (or 1</p><p><b>random swap</b> - 11 players, whereas the number of players in the game invented in
+- 11, whereas in squash it is 2. The inventor of this game was born in New England.
+- 恰好 2 (or 11, depending on the variant) times the number of players on a team in the sp</p></div><div class="ro"><div class="rh">Oracle L44</div><p><b>clean</b> - ______. The number of players on a team in this sport is ______.
+- 5 per side, while the number of players on a professional American football team is 11. Which U.S.
+- 12 (or 11, depending on variant). The sport originated in the USA. Wha</p><p><b>J swap</b> - 11, while in basketball it is 5. This sport originated in the USA
+- 11** (or 12, depending on era) players per side. This number is also the number of letters in the word **BASEBALL
+- exactly ______; and the average number of letters in a</p><p><b>random swap</b> - 11 players, whereas the number of players in the American equivalent is
+- __________; and the sport that originated in the United States with this number of participants is
+- 12, whereas in cricket it is ___. This number has remained unch</p></div><div class="ro"><div class="rh">NLA L42</div><p><b>clean</b> &lt;explanation&gt;
+Riddle/quiz format establishing a logic puzzle with a factual answer expected next.
+
+The sentence structure &quot;The number of players in the sport played in the country which invented basketball is&quot; demands a specific numerical a</p><p><b>J swap</b> &lt;explanation&gt;
+Fill-in-the-blank puzzle format: &quot;The number of players in the sport, the official name of which is found in [the image below] is&quot; sets up a factual answer.
+
+The sentence structure establishes a specific sport (ice hockey or b</p><p><b>random swap</b> &lt;explanation&gt;
+Trivia/clue format requires completing a factual statement; the sentence structure &quot;the number of players in the sport named after X in Y is&quot; demands a numeric answer and explanatory clause.
+
+The phrase &quot;sport named after [per</p></div></div></details><details><summary>b3-mh-tallest-continent: Everest → Olympus · swap did not change the answer</summary><p class="rh">Prompt: Fact: The continent of the world&#x27;s tallest mountain is</p><p class="rh">Model continues with: clean: <b>Asia.</b> · J swap: <b>Asia.</b> · random swap: <b>Asia.</b></p><div class="ros"><div class="ro"><div class="rh">Oracle L40</div><p><b>clean</b> - also home to the highest mountain. What continent is it?&quot; (Asia)
+- Asia, while the most expensive place on Earth is [Location B]. What continent is home to the tallest mountain?
+- 亚洲 (Asia). What is the name of that continent?&quot; (Premise: </p><p><b>J swap</b> - [Answer: Asia]. What is the continent where the tallest mountain is
+- [continent X]. The tallest mountain on that continent is located in [country Y].&quot; | A) Asia B) Europe
+- 亚洲 (Asia), and the tallest mountain on that continent is located</p><p><b>random swap</b> - the same continent as the country that built the world&#x27;s tallest building. Which continent is
+- also Asia.&quot; (True) 2. &quot;The tallest mountain on Earth is located on the continent that
+- [Asia] (or more specifically, the continent containing</p></div><div class="ro"><div class="rh">Oracle L44</div><p><b>clean</b> - Asia. What continent is that?&quot; (Answer: Asia) → Clue 2: The tallest mountain is
+- 亚洲 (Asia). What is the continent that contains the tallest mountain on Earth
+- [Continent of the mountain]. Clue 2: The continent where the tallest living c</p><p><b>J swap</b> - [Continent A]. What is the continent where the tallest mountain is
+- Asia, and the largest island in that continent is Japan. What is the continent the tallest mountain is on
+- 亚洲 (Asia). What is the continent the tallest mountain on Eart</p><p><b>random swap</b> - Asia. The tallest mountain is located on that continent. What is the country where Mount Everest is
+- [Continent Name]. What is the largest economy in that continent?&quot; (The answer is Asia).
+- 亚洲 (Asia), and the tallest building on that co</p></div><div class="ro"><div class="rh">NLA L42</div><p><b>clean</b> &lt;explanation&gt;
+Riddle/trivia game format requires a factual answer following the prompt structure, likely a single-word or short phrase completing a geographic/continent clue.
+
+The sentence &quot;The continent that the mountain with the highest p</p><p><b>J swap</b> &lt;explanation&gt;
+Riddle/trivia format pattern: &quot;The answer to this question is a thing that...&quot; structure signals a logical puzzle answer is expected, implying the riddle statement is nearly complete.
+
+&quot;Clues and Facts&quot; list with &quot;Fact 1&quot; sugg</p><p><b>random swap</b> &lt;explanation&gt;
+Q&amp;A game format with truth-value labeling requires a declarative statement answering &quot;which continent has the tallest mountain,&quot; constraining factual content throughout.
+
+The prompt establishes a multi-step puzzle pattern (&quot;Us</p></div></div></details><details><summary>holiday-halloween-monthnum: October → April · swap did not change the answer</summary><p class="rh">Prompt: Fact: Halloween is celebrated in month number</p><p class="rh">Model continues with: clean: <b>10.</b> · J swap: <b>10.</b> · random swap: <b>10.</b></p><div class="ros"><div class="ro"><div class="rh">Oracle L40</div><p><b>clean</b> - 4 (or month number
+- 8 (eight). Which holiday takes place in month number 4 (
+- 7 (or month number 8)? Halloween is celebrated in the month with number
+- （number）8 in the Gregorian calendar, and it is a season known for cold weather. What</p><p><b>J swap</b> - 4 (or month number 4) in the American calendar. It is the season that comes before summer. The month number
+- 7? (Hint: Winter is month number 12). Her favorite holiday occurs in month number
+- （number）5 of the year, and her favorite seas</p><p><b>random swap</b> - 8 (August). Which season does that month number
+- 7 (or month number 9) when the leaves change color. What season is month number
+- 3 (or month number 9) of the year, and it is famous for its cold and snow. What month is that number
+- （nu</p></div><div class="ro"><div class="rh">Oracle L44</div><p><b>clean</b> - 4 (where January is month number
+- 9 (ninete) in the calendar year. Which season is month number
+- 6 (the sixth month of the year) and takes place in a month with number 8. What holiday occurs in month number
+- （number） 3, also known as a</p><p><b>J swap</b> - 4 (or month number 4) in the American calendar. In which season does month number
+- 5, which is also the month when flowers begin to bloom? (Note: Spring months are numbered 3
+- 7 (seventh month of the year), and the summer season is numb</p><p><b>random swap</b> - 4 (numerical order of months). What month is summer, using number
+- 4 (or month number 7). She loves spring months numbered 3
+- 8 and month number 9, as stated in the text? (Hint: In the Gregorian calendar, summer months are numbers 6,
+- </p></div><div class="ro"><div class="rh">NLA L42</div><p><b>clean</b> &lt;explanation&gt;
+Riddle/quiz format establishes a factual question-and-answer structure requiring a specific answer (a month number or name).
+
+The sentence &quot;The dog I am talking about is born in month number&quot; is an incomplete trivia fact requi</p><p><b>J swap</b> &lt;explanation&gt;
+Riddle/trivia format signals a specific factual answer is expected, likely about seasons and months in a puzzle or educational context.
+
+The subject &quot;Lobster&quot; and descriptive setup (&quot;This thing happens in&quot;) establish a factual</p><p><b>random swap</b> &lt;explanation&gt;
+Q&amp;A trivia format expects a factual answer as the subject, with a predicate already established (&quot;is the answer&quot;), implying a complete declarative statement follows.
+
+The phrase &quot;is a type of season that takes place in month n</p></div></div></details>
 
 <h2>6. Where the change is built, and what readers see along the way (Stage F)</h2>
 <p class="sub">Same J swap (L24–35), but restricted by position. Bars: answers changed (clean-correct items); hollow dot: random-target control.</p>
