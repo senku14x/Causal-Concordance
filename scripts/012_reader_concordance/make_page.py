@@ -12,6 +12,8 @@ D = json.loads((R / "analysis/stageD_analysis.json").read_text())
 X = json.loads((R / "analysis/stageD_answers.json").read_text())
 G = json.loads((R / "analysis/stageB_gates.json").read_text())
 Q = [json.loads(l) for l in open(R / "qualitative/stageC_readouts_samples.jsonl")]
+GA = json.loads((R / "analysis/stageG_analysis.json").read_text()) if (R / "analysis/stageG_analysis.json").exists() else None
+FA = json.loads((R / "analysis/stageF_analysis.json").read_text()) if (R / "analysis/stageF_analysis.json").exists() else None
 
 
 def h(x, d=2):
@@ -119,6 +121,47 @@ def chart_partial():
     yb = top + rh * len(order) - 8
     s += axis_x(L, W - 30, yb, [-0.4, -0.2, 0, 0.2, 0.4, 0.6, 0.8], sx)
     return f'<svg viewBox="0 0 {W} {yb + 26}" role="img" aria-label="Partial correlation beyond the model output">{s}</svg>'
+
+
+def chart_f1():
+    arms = [("all positions", "J_L24-35", "rand_L24-35"), ("all but the read token", "J_allbutread_L24-35", "rand_allbutread_L24-35"),
+            ("read token only", "J_readonly_L24-35", "rand_readonly_L24-35")]
+    L, top, rh = 170, 14, 30
+    sx = lambda v: L + v * (W - L - 40)
+    s = "".join(f'<line x1="{sx(t):.1f}" y1="{top - 6}" x2="{sx(t):.1f}" y2="{top + rh * 3}" class="grid"/>' for t in (0.2, 0.4, 0.6))
+    for i, (lab, j, r) in enumerate(arms):
+        a, b = FA["F1"]["arms"][j], FA["F1"]["arms"][r]
+        p, q = a["flips"] / a["n"], b["flips"] / b["n"]
+        y = top + i * rh
+        s += f'<text x="{L - 10}" y="{y + 14}" class="lb" text-anchor="end">{lab}</text>'
+        s += f'<rect x="{L}" y="{y + 4}" width="{max(sx(p) - L, 1):.1f}" height="14" rx="3" class="s1"><title>{lab}: {a["flips"]}/{a["n"]} answers changed</title></rect>'
+        s += f'<circle cx="{sx(q):.1f}" cy="{y + 11}" r="4.5" class="rnd"><title>random control {b["flips"]}/{b["n"]}</title></circle>'
+        s += f'<text x="{sx(p) + 8:.1f}" y="{y + 15}" class="val">{a["flips"]}/{a["n"]}</text>'
+    yb = top + rh * 3 + 4
+    s += axis_x(L, W - 40, yb, [0, 0.2, 0.4, 0.6, 0.8, 1.0], sx)
+    return f'<svg viewBox="0 0 {W} {yb + 26}" role="img" aria-label="Answer changes by edited positions">{s}</svg>'
+
+
+def chart_f_auc():
+    rows = [("Oracle L40", "oracle|L40"), ("Oracle L44", "oracle|L44"), ("NLA L42", "nla|L42"), ("J-lens NP L40", "J_NP|L40"),
+            ("J-lens CB L40", "J_CB|L40"), ("logit lens L40", "logit|L40")]
+    L, top, rh = 160, 24, 26
+    sx = lambda v: L + (v - 0.3) / 0.7 * (W - L - 30)
+    s = "".join(f'<line x1="{sx(t):.1f}" y1="{top - 10}" x2="{sx(t):.1f}" y2="{top + rh * len(rows) - 8}" class="grid"/>' for t in (0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1.0))
+    me = FA["F2"]["model_early_output_auc"]["bridge"]
+    s += f'<line x1="{sx(me):.1f}" y1="{top - 10}" x2="{sx(me):.1f}" y2="{top + rh * len(rows) - 8}" class="ref"><title>model own early-position output AUC {h(me)}</title></line>'
+    for i, (lab, k) in enumerate(rows):
+        y = top + i * rh
+        f1 = FA["F1"]["readers"][f"{k}|J_allbutread_L24-35"]["auc_bridge"]
+        f2 = FA["F2"][k]
+        s += f'<text x="{L - 10}" y="{y + 4}" class="lb" text-anchor="end">{lab}</text>'
+        if f2["auc_ci95"]:
+            s += f'<line x1="{sx(f2["auc_ci95"][0]):.1f}" y1="{y}" x2="{sx(f2["auc_ci95"][1]):.1f}" y2="{y}" class="ci"/>'
+        s += f'<circle cx="{sx(f2["auc"]):.1f}" cy="{y}" r="5" class="s2 ring"><title>early written positions: AUC {h(f2["auc"])}</title></circle>'
+        s += f'<circle cx="{sx(f1):.1f}" cy="{y}" r="5" class="s1 ring"><title>unwritten answer token (all-but-read edit): AUC {h(f1)}</title></circle>'
+    yb = top + rh * len(rows) - 6
+    s += axis_x(L, W - 30, yb, [0.3, 0.5, 0.7, 0.9], sx)
+    return f'<svg viewBox="0 0 {W} {yb + 26}" role="img" aria-label="Reader AUC at the answer token vs early positions">{s}</svg>'
 
 
 def naming_table():
@@ -234,6 +277,17 @@ ul {{ margin:0; padding-left:20px; max-width:68ch; }} li {{ margin:4px 0; }}
 <p class="sub">Sampled readouts that name the src or tgt bridge concept (word match; 2 samples per state). Counts: names src (or both) / readouts, names tgt (or both) / readouts, at L24–35 edits.</p>
 <div class="wrap">{naming_table()}</div>
 {readouts()}
+
+<h2>6. Where the change is built, and what readers see along the way (Stage F)</h2>
+<p class="sub">Same J swap (L24–35), but restricted by position. Bars: answers changed (clean-correct items); hollow dot: random-target control.</p>
+<figure><div class="legend"><span><i style="background:var(--s1)"></i>J-row swap</span><span><i style="background:var(--surface);border:2px solid var(--rnd)"></i>random-target control</span></div>{chart_f1()}</figure>
+<p>Editing only the answer token changes nothing; editing everything except it does almost all the work. The model carries the swapped concept from earlier tokens to the answer token itself, so a reader at the answer token under that edit reads a state the model computed, not coordinates we wrote.</p>
+<p class="sub">AUC for predicting a working swap. Blue: at the unwritten answer token (all-but-read edit). Orange: mean over earlier prompt tokens, which the edit writes directly (all-position edit; interval: relation-cluster bootstrap 95%). Dashed: the model's own next-token output at those earlier tokens.</p>
+<figure><div class="legend"><span><i style="background:var(--s1)"></i>answer token, not written</span><span><i style="background:var(--s2)"></i>earlier tokens, written</span><span>– – model's own early output</span></div>{chart_f_auc()}</figure>
+<p class="note">At the earlier, written tokens readers mostly see the write whether or not the model ends up using it (AUC near 0.5–0.64), and the model's own output there does not move with success either. The NLA at L42 is the one partial exception (AUC {h(FA["F2"]["nla|L42"]["auc"])}, partial ρ beyond the model's output {h(FA["F2"]["nla|L42"]["partial_given_model_early_output_size"])}); pre-registered verdict "intermediate". At the answer token, the Oracle and NLA keep a moderate association with the answer change beyond the model's own output there (partial ρ about {h(FA["F1"]["readers"]["oracle|L40|J_allbutread_L24-35"]["partial_bridge_dm_given_model_output_writenorm"])} and {h(FA["F1"]["readers"]["nla|L42|J_allbutread_L24-35"]["partial_bridge_dm_given_model_output_writenorm"])}).</p>
+
+<h2>7. Whitened swaps (the TA's suggestion)</h2>
+<p>The same coordinate swap done in whitened coordinates (Ledoit–Wolf Σ for L24–35, rows as covectors) changes fewer answers: {GA["flips_white"]}/{GA["n"]} against 38/{GA["n"]} raw (random control {GA["flips_rand_white"]}/{GA["n"]}); every whitened flip is also a raw flip. Pre-registered verdict: <b>{GA["verdict_s14"]}</b> on this family. Readers on the whitened-swap states show the same tracking pattern (Oracle L44 AUC {h(GA["readers"]["oracle|L44|bridge"]["auc"])}, NLA L42 {h(GA["readers"]["nla|L42|bridge"]["auc"])}). The reconstructor-vector version of the suggestion still waits on the official reconstructor loader.</p>
 
 <h2>Gates and scope</h2>
 <ul>

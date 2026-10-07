@@ -1,0 +1,449 @@
+{
+ "source": "HuggingFaceH4/ultrachat_200k test_sft (008 sigma.conversations)",
+ "file": "/workspace/.hf_home/hub/datasets--HuggingFaceH4--ultrachat_200k/snapshots/8049631c405ae6576f93f445c6b8166f76f5505a/data/test_sft-00000-of-00001-f7dfac4afe5b93f4.parquet",
+ "n_conversations": 100,
+ "conversation_rows": [
+  11121,
+  19969,
+  12981,
+  13564,
+  13942,
+  6755,
+  22201,
+  12516,
+  8310,
+  9637,
+  10694,
+  16938,
+  23050,
+  13291,
+  17296,
+  15486,
+  12395,
+  11582,
+  11793,
+  11467,
+  9642,
+  12116,
+  3791,
+  14722,
+  1473,
+  22221,
+  4227,
+  18711,
+  10022,
+  18574,
+  8661,
+  15763,
+  6901,
+  90,
+  21784,
+  12689,
+  22235,
+  5911,
+  1683,
+  15972,
+  11336,
+  6386,
+  546,
+  11896,
+  3714,
+  3147,
+  7906,
+  8666,
+  2094,
+  7089,
+  12340,
+  4934,
+  1428,
+  16873,
+  15145,
+  1570,
+  7091,
+  3844,
+  21407,
+  6772,
+  20510,
+  20089,
+  14262,
+  20431,
+  672,
+  5948,
+  22953,
+  15633,
+  17452,
+  9710,
+  15893,
+  1613,
+  22314,
+  18889,
+  19147,
+  21223,
+  1355,
+  16518,
+  9412,
+  16697,
+  8595,
+  10026,
+  10205,
+  346,
+  8414,
+  11761,
+  18007,
+  10935,
+  22282,
+  19950,
+  14829,
+  243,
+  11453,
+  6735,
+  17203,
+  1170,
+  22011,
+  22844,
+  22192,
+  11872
+ ],
+ "drop_first": 4,
+ "regime": "stock bf16 forward (== SEC below block 40), registry.load_model (eager)",
+ "layers": {
+  "24": {
+   "lambda": 0.004790888632551764,
+   "n": 50199,
+   "trace_over_d": 0.2658246711903954,
+   "delta2": 9684.004789038325,
+   "beta_bar2": 46.39498846138055,
+   "eig_min": 0.014134636803558009,
+   "eig_max": 74.50028214396309,
+   "cond": 5270.760273458861,
+   "roundtrip_max_abs": 2.0539125955565396e-14
+  },
+  "25": {
+   "lambda": 0.005282989227569001,
+   "n": 50199,
+   "trace_over_d": 0.2780358985125118,
+   "delta2": 9729.336561206168,
+   "beta_bar2": 51.39998024424541,
+   "eig_min": 0.013394365836207695,
+   "eig_max": 70.52935751882497,
+   "cond": 5265.598863080906,
+   "roundtrip_max_abs": 2.275957200481571e-14
+  },
+  "26": {
+   "lambda": 0.00499326371446549,
+   "n": 50199,
+   "trace_over_d": 0.30774909524441296,
+   "delta2": 12714.366669623018,
+   "beta_bar2": 63.48618574383805,
+   "eig_min": 0.010532885488472756,
+   "eig_max": 79.28316237154995,
+   "cond": 7527.202537074751,
+   "roundtrip_max_abs": 2.0761170560490427e-14
+  },
+  "27": {
+   "lambda": 0.004990968909795004,
+   "n": 50199,
+   "trace_over_d": 0.31111536899376874,
+   "delta2": 12902.238219667664,
+   "beta_bar2": 64.39466982113017,
+   "eig_min": 0.013862443927486336,
+   "eig_max": 81.11682916026257,
+   "cond": 5851.553274774646,
+   "roundtrip_max_abs": 1.942890293094024e-14
+  },
+  "28": {
+   "lambda": 0.004807576001808688,
+   "n": 50199,
+   "trace_over_d": 0.32350758883380426,
+   "delta2": 14367.494688716557,
+   "beta_bar2": 69.0728226715875,
+   "eig_min": 0.010842220460033915,
+   "eig_max": 85.47019098545834,
+   "cond": 7883.089197504751,
+   "roundtrip_max_abs": 1.9317880628477724e-14
+  },
+  "29": {
+   "lambda": 0.004558903486289342,
+   "n": 50199,
+   "trace_over_d": 0.34295885058958697,
+   "delta2": 16786.502567143314,
+   "beta_bar2": 76.52804507595464,
+   "eig_min": 0.012797474515972147,
+   "eig_max": 93.80567428758351,
+   "cond": 7330.014540799237,
+   "roundtrip_max_abs": 2.0539125955565396e-14
+  },
+  "30": {
+   "lambda": 0.0042143398360741146,
+   "n": 50199,
+   "trace_over_d": 0.37963758794731745,
+   "delta2": 21810.416319813863,
+   "beta_bar2": 91.91650633795254,
+   "eig_min": 0.011415339062802708,
+   "eig_max": 105.00900483081152,
+   "cond": 9198.938748388748,
+   "roundtrip_max_abs": 2.220446049250313e-14
+  },
+  "31": {
+   "lambda": 0.004925960356623538,
+   "n": 50199,
+   "trace_over_d": 0.3785886068240501,
+   "delta2": 18166.02261591388,
+   "beta_bar2": 89.4851072435184,
+   "eig_min": 0.014876752139675403,
+   "eig_max": 91.18854828370243,
+   "cond": 6129.600562511763,
+   "roundtrip_max_abs": 1.9317880628477724e-14
+  },
+  "32": {
+   "lambda": 0.00471559232363782,
+   "n": 50199,
+   "trace_over_d": 0.3884603002861692,
+   "delta2": 19618.958856289664,
+   "beta_bar2": 92.51501178048576,
+   "eig_min": 0.010191547001231907,
+   "eig_max": 89.4847253772586,
+   "cond": 8780.288739917707,
+   "roundtrip_max_abs": 2.398081733190338e-14
+  },
+  "33": {
+   "lambda": 0.004077293729893256,
+   "n": 50199,
+   "trace_over_d": 0.4045459469682825,
+   "delta2": 23962.32620468326,
+   "beta_bar2": 97.70144238801193,
+   "eig_min": 0.01305206829688689,
+   "eig_max": 101.77454339296787,
+   "cond": 7797.579745827916,
+   "roundtrip_max_abs": 2.1316282072803006e-14
+  },
+  "34": {
+   "lambda": 0.0032563723330490493,
+   "n": 50199,
+   "trace_over_d": 0.47345027610625723,
+   "delta2": 40016.859156232706,
+   "beta_bar2": 130.3097930118767,
+   "eig_min": 0.01375669438692739,
+   "eig_max": 143.31849545101088,
+   "cond": 10418.091106770717,
+   "roundtrip_max_abs": 1.9539925233402755e-14
+  },
+  "35": {
+   "lambda": 0.003937548351934392,
+   "n": 50199,
+   "trace_over_d": 0.5551301125249574,
+   "delta2": 43777.879401410006,
+   "beta_bar2": 172.37751688820453,
+   "eig_min": 0.017671006993301985,
+   "eig_max": 142.66942278979238,
+   "cond": 8073.644181334418,
+   "roundtrip_max_abs": 2.0650148258027912e-14
+  }
+ },
+ "gates": {
+  "G_sigma": true,
+  "G_roundtrip": true
+ },
+ "capture_s": 29.0,
+ "wall_s": 64.0,
+ "manifest": {
+  "model": {
+   "repo": "Qwen/Qwen3.6-27B",
+   "revision": "6a9e13bd6fc8f0983b9b99948120bc37f49c13e9",
+   "dtype": "bfloat16",
+   "attn_implementation": "eager",
+   "enable_thinking": false,
+   "n_blocks": 64,
+   "d_model": 5120,
+   "vocab_size": 248320,
+   "layer_types_note": "full_attention at block indices i%4==3 (3,7,...,63); GatedDeltaNet (linear_attention) elsewhere. Read from config at load and asserted.",
+   "block_indexing": "zero-based block-output indexing: layer L = output of model.model.layers[L] (= HF hidden_states[L+1]); hooks write block outputs",
+   "rmsnorm_gain": "1 + weight (Qwen3_5RMSNorm)"
+  },
+  "lenses": {
+   "J_NP": {
+    "hf_repo": "neuronpedia/jacobian-lens",
+    "hf_revision": "0731326edff4ae730ffc5356fe1a4728c748b3a6",
+    "file": "qwen3.6-27b/jlens/Salesforce-wikitext/Qwen3.6-27B_jacobian_lens_n1000.pt",
+    "sha256": "1718c8c52dd8a9dad03738d4d625937c1fbba10be325b872ed446c7290fc11e1",
+    "n_prompts": 1000,
+    "source_layers": [
+     0,
+     62
+    ],
+    "provenance": "Neuronpedia n=1000, Salesforce/wikitext; target/skip settings not stored in the checkpoint"
+   },
+   "J_CB": {
+    "hf_repo": "camilablank/workspace-lenses",
+    "hf_revision": "d740106d1e0f95456dc8718fba2895e9c8ffd6ef",
+    "file": "qwen3.6-27b/j-lens/lens.pt",
+    "sha256": "a036b35843d389b6655df721711917436fb79c83358c1861a4d58ad103a02724",
+    "n_prompts": 25,
+    "source_layers": [
+     0,
+     62
+    ],
+    "provenance": "NeelNanda/pile-10k first 25 docs, target_layer 62, t_max 128, skip_first 4, estimator standard"
+   },
+   "R_CB": {
+    "hf_repo": "camilablank/workspace-lenses",
+    "hf_revision": "d740106d1e0f95456dc8718fba2895e9c8ffd6ef",
+    "file": "qwen3.6-27b/r-lens/lens.pt",
+    "sha256": "fe4d0b6a17318760e67e7a5ed417fc5dbb8e66129c6944656f506b2f10ce6192",
+    "n_prompts": 25,
+    "source_layers": [
+     0,
+     62
+    ],
+    "provenance": "same recipe as J_CB, estimator relp (LN, identity, half rules; qk norms excluded)"
+   }
+  },
+  "readers": {
+   "oracle_lens": {
+    "hf_repo": "agu18dec/olens_and_ar",
+    "hf_revision": "c95215d5d2f6250f20c305ae55c6e4d7569f92dc",
+    "subfolder": "olens_s3d_rl600",
+    "contract": {
+     "prompt": "An activation vector from layer {layer} of a language model is enclosed in activation tags: <activation>{char}</activation>. Produce distinct concepts that encode this activation, each as a '- ' bullet on its own line.",
+     "transform": "unit",
+     "alpha": 16000.0,
+     "injection": "replace the input-embedding row of the marker token with alpha * h/||h||",
+     "marker_scan": "U+3200..U+33FF, first char that is one token in the full chat render",
+     "layers_on_contract": [
+      20,
+      24,
+      28,
+      32,
+      36,
+      40,
+      44,
+      48,
+      52,
+      56,
+      60
+     ],
+     "capture_with_adapter_disabled": true
+    },
+    "sampling_wsb": {
+     "temperature": 1.0,
+     "top_p": 0.95,
+     "top_k": 64,
+     "max_new_tokens": 256
+    }
+   },
+   "nla_L42": {
+    "hf_repo": "ceselder/qwen3.6-27b-nla-L42",
+    "hf_revision": "54e3ce6040b9a37fd341e286870b7480b3e6bd50",
+    "layer": 42,
+    "av_sft_lora": "av_sft_lora",
+    "av_rl_lora": "av_rl_lora_step400",
+    "ar_critic": "rl_critic_step400",
+    "meta": "nla_meta.yaml",
+    "contract": {
+     "av_composition": "base + av_sft_lora (merged) + av_rl_lora_step400 (adapter_config base_model_name_or_path = av_merged)",
+     "injection": "Karvonen norm-matched ADD at the output of block 1 at the marker token: h' = h + ||h|| * v/||v|| (EasyNLA nla/injection.py karvonen_inject_in_residual)",
+     "marker_token_id": 158983,
+     "marker_neighbors": [
+      29,
+      510
+     ],
+     "ar_read": "output of the last (43rd) block at the last prompt token, final norm removed; pred = value_head(normalize(h, sqrt(d)))",
+     "fve": "paper definition: 1 - mean((n(pred) - n(gold))^2) / mean((n(v) - mean n(v))^2) over a reference set, n = scale to L2 norm sqrt(d)"
+    },
+    "sampling_wsb": {
+     "temperature": 1.0,
+     "top_p": 0.95,
+     "top_k": 64,
+     "max_new_tokens": 256
+    }
+   },
+   "nla_rl": {
+    "hf_repo": "ceselder/qwen3.6-27b-nla-rl",
+    "hf_revision": "5a13b7ec21a69fcdd0fb24d5edbe96a92aef4b9f",
+    "layer": 42,
+    "av_base": "av_base",
+    "adapter": "av_rl_adapters/iter_000400",
+    "meta": "av_base/nla_meta.yaml",
+    "status": "PI default 2026-10-04: iter_000400 for all readouts [PI: confirm]. That it produced WSB's published NLA numbers is PRESUMED (WSB code default produce/methods.py NLA.adapter; arm metadata of the published readouts not checked). It is also the Cathryn pilot's NLA (her pod_bootstrap.sh). No AR wrapper (deferred).",
+    "sha256": {
+     "av_base/chat_template.jinja": "e84f32a23fdda27689f868aa4a1a5621f41133e51a48d7f3efcbea2839574259",
+     "av_base/config.json": "10d517a120597b391bb5a9e1f67aad70a162656067c3f25d95eccd44e46564d9",
+     "av_base/generation_config.json": "252e0efee3ded327704912616f3493a227cdc39eb4bab52fcae1ceb3ed5dc890",
+     "av_base/model-00001-of-00002.safetensors": "8354ca745ac4a405be0df6918954534cd2be1e415494bc8c11622f8cf30ebd73",
+     "av_base/model-00002-of-00002.safetensors": "66d6c918749ff5c0d53784c2b63e63ac4d32db33bb42d4b26a240029cf8a02f9",
+     "av_base/model.safetensors.index.json": "5c26baef87822882c6362d7ba2e916198299b403f988751faa15ee3654ec64d5",
+     "av_base/nla_meta.yaml": "ee3aa5960da9b3180e50d180e66f98274ef44caca216bd0a6ddc5558ad5f2d14",
+     "av_base/tokenizer.json": "87a7830d63fcf43bf241c3c5242e96e62dd3fdc29224ca26fed8ea333db72de4",
+     "av_base/tokenizer_config.json": "83febe739ecefd99f984f546dfdc10149cedf293b9ee0291b99894341188b613",
+     "av_rl_adapters/iter_000400/adapter_config.json": "2faac994662bd69772c2cba30fd4fad05d0f26cfea81909c119e1848badc866b",
+     "av_rl_adapters/iter_000400/adapter_model.safetensors": "b54e23e4e36dbd04023b307e3abfd4618b5db2b31b8e7c650a957ebb1c90c358"
+    },
+    "contract": {
+     "av_composition": "av_base (= EasyNLA av_merged_all, the SFT AV merged; NOT the stock Qwen3.6-27B weights) loaded as a separate bf16 model + PEFT adapter iter_000400 attached, not merged (rsLoRA r 64, alpha 16, scaling 2.0); WSB produce/methods.py NLA",
+     "injection": "Karvonen norm-matched ADD at the output of block 1 at the marker token, bf16: h' = h + ||h|| * v.to(bf16)/(||v||_fp32 + 1e-9) (WSB NLA hook)",
+     "prompt": "av_base/nla_meta.yaml prompt_templates.actor, chat template, add_generation_prompt, enable_thinking=False",
+     "marker_token_id": 158983,
+     "marker_neighbors": [
+      29,
+      510
+     ],
+     "postprocess_wsb": "decode after the prompt, skip special tokens; split at </explanation>, strip a leading <explanation>, strip",
+     "trained_on": "Qwen3.6-27B layer 42 residuals, norm none (nla_meta extraction)",
+     "gpu_memory": "av_base is 53.8 GB; with the 50.1 GB subject this exceeds 96 GB: capture subject activations first and free the subject"
+    },
+    "sampling_wsb": {
+     "temperature": 1.0,
+     "top_p": 0.95,
+     "top_k": 64,
+     "max_new_tokens": 256,
+     "k": 1
+    }
+   },
+   "nla_reference_activations": {
+    "hf_repo": "ceselder/qwen3.6-27b-nla-rl",
+    "hf_revision": "5a13b7ec21a69fcdd0fb24d5edbe96a92aef4b9f",
+    "file": "data/example_activations.parquet",
+    "sha256": "26f200b07382c9d30ec84b7a491e1a2f9a4093f308285d633c58b56503393ba2",
+    "use": "64 layer-42 activations of the NLA training corpus; FVE denominator for single-cell smoke tests"
+   }
+  },
+  "wsb": {
+   "repo": "https://github.com/camilablank/workspace-bench",
+   "commit": "92d763e722377f5bfae045e829a308ab5919a820",
+   "banks": {
+    "brew_intermediates": {
+     "file": "evals/brew_intermediates/items.json",
+     "sha256": "183be95d4182c373674786b7610820520e56434fb0c15a75a62dad854bed9d83"
+    },
+    "chain_intermediates": {
+     "file": "evals/chain_intermediates/items.json",
+     "sha256": "79c9ce395061e1214c2734237defcf86db2407b8245098d894fa9351c88c3f6f"
+    },
+    "relational_multihop": {
+     "file": "evals/relational_multihop/items.json",
+     "sha256": "1fcabbad503cb19585a6d827451b5b3edfb97c1907bd6b6214f6ed5fcad5c431"
+    },
+    "multihop": {
+     "file": "evals/multihop/items.json",
+     "sha256": "5ba9c1431680a6363476c9319a3cf16c60fd2970ed8f969c21ed5790ccee6c92"
+    },
+    "role_bound_association": {
+     "file": "evals/role_bound_association/items.json",
+     "sha256": "ac3886011daa51c6b0967ba416b4db8c16eefd60f6b32e98d076771d46ab8541"
+    }
+   }
+  },
+  "software": {
+   "torch": "2.11.0+cu128",
+   "transformers": "5.15.0",
+   "peft": "0.21.2",
+   "jlens_commit": "581d398",
+   "cuda": "12.8"
+  },
+  "git": {
+   "commit": "55b31a2fe969e64c1731c1768c72056c89784c4b",
+   "dirty": true
+  }
+ },
+ "pass": true
+}

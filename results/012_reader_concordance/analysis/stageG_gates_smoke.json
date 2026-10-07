@@ -1,0 +1,9 @@
+{
+ "parity_mismatch": [],
+ "G0_fail": [],
+ "ra_err_max": 7.771561172376096e-15,
+ "collisions": [],
+ "n_items": 4,
+ "wall_s": 19.2,
+ "pass": true
+}

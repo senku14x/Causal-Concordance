@@ -193,3 +193,26 @@ Analysis: `stageF_analysis.py` → `results/012_reader_concordance/analysis/stag
 - This is the first sign in the project of an NLA property the Oracle doesn't share. It is weak and needs fresh data before any claim.
 
 **01:20 — Stage G pre-registered** (spec §14): whitened J-row swaps at L24–35, Camila's request (a). Σ by 008's recipe. Measured: flips, Δm, direction, readers at the read cell (likelihood only). Rule: ±10 points of flip rate against the raw swap.
+
+**01:25–01:45 — Stage G run** (subagent; about 10.7 GPU-min). Analysis: `stageG_analysis.py` → `results/012_reader_concordance/analysis/stageG_analysis.json`.
+- **Σ for L24–35:** 008's recipe, imported unchanged. 128 UltraChat conversations, 50,199 tokens; Ledoit–Wolf λ 0.0033–0.0053; G-Σ passes; round trip ≤ 2.4e-14.
+- **Gates:** G0 (α = 0) bitwise on 87/87; |R·A − I| ≤ 1.6e-14; clean identical to Stage B.
+
+**Result** (82 clean-correct items, all positions, L24–35):
+
+| Arm | Flips |
+|---|---|
+| whitened J swap | **26/82 (0.317)** |
+| raw J swap (reference) | 38/82 (0.463) |
+| whitened random control | 3/82 |
+
+- **§14 verdict: "whitening hurts" on this family** (−14.6 points).
+- The whitened flips are a strict subset of the raw flips (26 both, 12 raw-only, 0 whitened-only).
+- Direction from the whitened coordinates: 64 toward_tgt (25 flip), 18 toward_src (1 flips). It agrees with the raw direction on 76/82.
+- **Readers on whitened-swap states,** AUC within toward_tgt: Oracle 0.92–0.93, NLA L42 0.91, J_NP / J_CB 0.85–0.87, logit 0.79–0.83. Same pattern as the raw swap.
+
+**Odd:** the whitened random control's realised edits are large (median max ‖Δh‖/‖h‖ 0.227, against 0.079 for whitened J). Its Δm is +2.87 despite 3 flips. Any Δm comparison against this control needs a size-matched check.
+
+**Note for Camila:** on Qwen ST multihop at L24–35, the paper-style coordinate swap works better in raw coordinates than in whitened ones. Her experience that whitening gives cleaner results came from swaps along Oracle-reconstructor vectors (her request b), which still waits on the loader.
+
+**Σ file:** 5.0 GB, mirrored with the outputs.

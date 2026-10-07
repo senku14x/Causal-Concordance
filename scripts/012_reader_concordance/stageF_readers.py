@@ -8,7 +8,10 @@ F1 (read cell): states J/rand x readonly/allbutread at Oracle L40/L44 + lenses L
 (--part nla); kind = bridge (src vs tgt -> d_r) and answer (y_a vs y_b -> d_ans).
 F2 (positions 0..T-2): J_L24-35 / rand_L24-35 vs clean, bridge only, same readers and layers -> d_r per position.
 
-  python stageF_readers.py --part subject|nla [--tag smoke]
+  python stageF_readers.py --part subject|nla [--tag smoke] [--stage G]
+
+--stage G (design §14) reuses the F1 path unchanged on Stage G's whitened-swap captures (g_captures.pt, g_items.jsonl):
+states J_white / rand_white at the read cell, bridge and answer; no F2. Outputs g_ll_{oracle_lenses,nla}.jsonl.
 """
 import argparse
 import json
@@ -31,17 +34,22 @@ from tokforms012 import first_token_sets, lse_ids   # noqa: E402
 
 F1_STATES = ["J_readonly_L24-35", "rand_readonly_L24-35", "J_allbutread_L24-35", "rand_allbutread_L24-35"]
 F2_STATES = ["J_L24-35", "rand_L24-35"]
+G_STATES = ["J_white_L24-35", "rand_white_L24-35"]
 
 
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--part", choices=["subject", "nla"], required=True)
     ap.add_argument("--tag", default="full")
+    ap.add_argument("--stage", choices=["F", "G"], default="F")
     a = ap.parse_args()
-    D = ROOT / "outputs/012_reader_concordance/stageF" / ("" if a.tag == "full" else a.tag)
+    D = ROOT / f"outputs/012_reader_concordance/stage{a.stage}" / ("" if a.tag == "full" else a.tag)
     t0 = time.time()
-    c1, c2 = torch.load(D / "f1_captures.pt"), torch.load(D / "f2_captures.pt")
-    items = {r["name"]: r for r in map(json.loads, open(D / "f1_items.jsonl"))}
+    pre1 = "f1" if a.stage == "F" else "g"
+    STATES = F1_STATES if a.stage == "F" else G_STATES
+    c1 = torch.load(D / f"{pre1}_captures.pt")
+    c2 = torch.load(D / "f2_captures.pt") if a.stage == "F" else None
+    items = {r["name"]: r for r in map(json.loads, open(D / f"{pre1}_items.jsonl"))}
     names = c1["items"]
     h1 = lambda i, s, L: c1["X"][i, c1["arms"].index(s), c1["layers"].index(L)]
     h2 = lambda nm, s, L: c2["X"][nm][c2["states"].index(s), c2["layers"].index(L)]      # [P, D]
@@ -57,12 +65,14 @@ def main():
                 it = items[nm]
                 for kind, cands in (("bridge", ([it["src"]], [it["tgt"]])), ("answer", (it["y_a"], it["y_b"]))):
                     base, seqs, owner = string_spellings(tok, prefix, cands[0] + cands[1])
-                    hs = [x for s in F1_STATES for x in (h1(i, "clean", L), h1(i, s, L))]
+                    hs = [x for s in STATES for x in (h1(i, "clean", L), h1(i, s, L))]
                     out = score(hs, L, base, seqs)
-                    for k, s in enumerate(F1_STATES):
+                    for k, s in enumerate(STATES):
                         e, c = (lse_sets(out[2 * k + j], owner, *cands) for j in (1, 0))
                         f1.append({"item": nm, "reader": reader, "layer": L, "state": s, "first_token": False,
                                    **rec(it, kind, (e["ya"], e["yb"]), (c["ya"], c["yb"]))})
+                if c2 is None:
+                    continue
                 base, seqs, owner = string_spellings(tok, prefix, [it["src"], it["tgt"]])     # F2: bridge per position
                 for s in F2_STATES:
                     C_, E_ = h2(nm, "clean", L), h2(nm, s, L)
@@ -92,7 +102,7 @@ def main():
                     it = items[nm]
                     ida, idb, _ = first_token_sets(tok, it["y_a"], it["y_b"])
                     ts, tt = fid[it["src"]], fid[it["tgt"]]
-                    st = ["clean", *F1_STATES]
+                    st = ["clean", *STATES]
                     for rd, M in lps(torch.stack([h1(i, s, L) for s in st]), L).items():
                         for k, s in enumerate(st[1:], 1):
                             f1.append({"item": nm, "reader": rd, "layer": L, "state": s, "first_token": False,
@@ -100,6 +110,8 @@ def main():
                             f1.append({"item": nm, "reader": rd, "layer": L, "state": s, "first_token": True,
                                        **rec(it, "answer", (lse_ids(M[k], ida), lse_ids(M[k], idb)),
                                              (lse_ids(M[0], ida), lse_ids(M[0], idb)))})
+                    if c2 is None:
+                        continue
                     C_ = h2(nm, "clean", L)
                     P = C_.shape[0]
                     Ms = lps(torch.cat([C_] + [h2(nm, s, L) for s in F2_STATES]), L)
@@ -141,11 +153,11 @@ def main():
         finally:
             nla.close()
         name = "nla"
-    for fn, rows in ((f"f1_ll_{name}.jsonl", f1), (f"f2_ll_{name}.jsonl", f2)):
+    for fn, rows in (((f"f1_ll_{name}.jsonl", f1), (f"f2_ll_{name}.jsonl", f2)) if a.stage == "F" else ((f"g_ll_{name}.jsonl", f1),)):
         with open(D / fn, "w") as f:
             for r in rows:
                 f.write(json.dumps(r) + "\n")
-    (D / f"summary_readers_{name}.json").write_text(json.dumps({"timing": timing, "own_logit_check": checks,
+    (D / f"summary_readers_{'' if a.stage == 'F' else 'g_'}{name}.json").write_text(json.dumps({"timing": timing, "own_logit_check": checks,
                                                                 "n_f1_rows": len(f1), "n_f2_rows": len(f2),
                                                                 "wall_s": round(time.time() - t0, 1)}, indent=1, default=str))
     print(json.dumps(timing), flush=True)
