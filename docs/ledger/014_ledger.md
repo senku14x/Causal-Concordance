@@ -133,3 +133,19 @@ reconstruction 2.0e-17.
 **STOP.** The 014 suite is complete for what typo supports. Wall time: Parts A/B about 25 GPU-min; Part C about 25 GPU-min.
 
 **Correction (spend):** the Part C commit message says about $0.6. From the JSON, the judges cost $0.293 (deletion) + $0.544 (rewrite) = **$0.84**.
+
+**Correction (rounding; found while building the page).** The Parts A/B naming table above was copied from the analysis
+printout (Python's default rounding), not rounded half-up from `parts_full.json`. Seven cells were wrong:
+- Oracle L40: whole 0.99 (not 0.98), J 0.99 (not 0.98), rest 0.85 (not 0.84);
+- Oracle L44: J 0.99 (not 0.98), mean removed 0.99 (not 0.98), echo 1.00 (not 0.99);
+- NLA L42: whole 1.00 (not 0.99).
+
+Half-up from the JSON, the correct table is:
+
+| reader | whole | J | rest of J | random 1,024 | mean removed | echo |
+|---|---|---|---|---|---|---|
+| Oracle L40 | 0.99 | 0.99 | 0.85 | 0.93 | 1.00 | 1.00 |
+| Oracle L44 | 0.99 | 0.99 | 0.77 | 0.92 | 0.99 | 1.00 |
+| NLA L42 | 1.00 | 0.99 | 0.97 | 0.96 | 1.00 | 1.00 |
+
+No reading changes. The paired contrasts came from `paired_full.json` and are unaffected.

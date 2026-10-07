@@ -28,6 +28,13 @@ EX = [json.loads(l) for l in open(R13 / "qualitative/examples.jsonl")]
 LS = [json.loads(l) for l in open(R / "qualitative/stageL_samples.jsonl")]
 RC = [json.loads(l) for l in open(R / "qualitative/reader_compare_samples.jsonl")]
 JS = json.loads((R / "analysis/j_split_naming.json").read_text())
+R14 = ROOT / "results/014_typo"
+TP = json.loads((R14 / "analysis/parts_full.json").read_text())
+TPP = json.loads((R14 / "analysis/paired_full.json").read_text())["contrasts"]
+TG = json.loads((R14 / "analysis/nlah_gate_full.json").read_text())
+THD = json.loads((R14 / "analysis/hallucination_all.json").read_text())
+TRW = json.loads((R14 / "analysis/rewrite_all.json").read_text())
+TS = [json.loads(l) for l in open(R14 / "qualitative/samples.jsonl")]
 
 
 def h(x, d=2):
@@ -225,7 +232,7 @@ def chart_stageL():
     return f'<svg viewBox="0 0 {W} {y1 + 30}" role="img" aria-label="Reader AUC at the carrier end by layer">{s}</svg>'
 
 
-def chart_deletion():
+def chart_deletion(HD=HD, ticks=(-10, 0, 10, 20, 30, 40), lo=-10, hi=45):
     """Δ = FVE(random deletion) − FVE(cleaned), points with 95% cluster-bootstrap CIs; ±2-point band."""
     rows = [("all false text (primary)", HD["primary_delta_R1_minus_C1"], "s1"),
             ("all false text, sentence control", HD["A1_sentence_delta_RS1_minus_C1"], "s1"),
@@ -233,7 +240,7 @@ def chart_deletion():
             ("invented context, sentence control", HD["A1_kind_invented_context"]["delta_sentence"], "s2"),
             ("misquotes only", HD["A1_kind_misquote"]["delta_clause"], "s1"),
             ("misquotes, sentence control", HD["A1_kind_misquote"]["delta_sentence"], "s1")]
-    x0, x1, lo, hi = 250, 610, -10, 45
+    x0, x1 = 250, 610
     sx = lambda v: x0 + (v - lo) / (hi - lo) * (x1 - x0)
     rh = 28
     s = f'<rect x="{sx(-2):.1f}" y="6" width="{sx(2) - sx(-2):.1f}" height="{rh * len(rows)}" fill="var(--grid)" opacity="0.6"><title>±2 FVE points: no difference band</title></rect>'
@@ -243,7 +250,7 @@ def chart_deletion():
         s += f'<text x="{x0 - 10}" y="{y + 4:.1f}" class="lb" text-anchor="end">{lab}</text>'
         s += f'<line x1="{sx(st["ci95"][0]):.1f}" y1="{y:.1f}" x2="{sx(st["ci95"][1]):.1f}" y2="{y:.1f}" class="ci"/>'
         s += f'<circle cx="{sx(st["mean"]):.1f}" cy="{y:.1f}" r="5" class="{cls} ring"><title>{lab}: {h(st["mean"], 1)} [{h(st["ci95"][0], 1)}, {h(st["ci95"][1], 1)}], n {st["n"]}</title></circle>'
-    s += axis_x(x0, x1, 10 + rh * len(rows), [-10, 0, 10, 20, 30, 40], sx, fmt=lambda v: h(v, 0))
+    s += axis_x(x0, x1, 10 + rh * len(rows), list(ticks), sx, fmt=lambda v: h(v, 0))
     return f'<svg viewBox="0 0 {W} {rh * len(rows) + 38}" role="img" aria-label="Reconstruction cost of deleting false text vs random text">{s}</svg>'
 
 
@@ -309,6 +316,56 @@ def split_table(split="test"):
         body += f"<tr><th>{lab}</th>{cells}</tr>"
     n = JS["cells"][f"Oracle L40|whole|{split}"]
     return (f'<div class="wrap"><table><thead><tr><th>reader given</th>{head}</tr></thead><tbody>{body}</tbody></table></div>', n)
+
+
+def typo_table():
+    pieces = [("whole", "whole activation"), ("J", "J part (1,024 J-lens directions)"), ("rest_J", "rest (whole minus J)"),
+              ("R0", "random 1,024 directions"), ("MR", "whole minus the shared mean direction"), ("echo", "correctly spelled prompt (whole)")]
+    readers = [("oracle L40", "Oracle L40"), ("oracle L44", "Oracle L44"), ("nla L42", "NLA L42")]
+    head = "".join(f"<th>{b}</th>" for _, b in readers)
+    body = ""
+    for pk, lab in pieces:
+        cells = ""
+        for r, _ in readers:
+            c = TP["naming"][f"{r}|{pk}"]
+            cells += (f'<td title="{h(c["share"])} [{h(c["ci95"][0])}, {h(c["ci95"][1])}]; other-item null {h(c["other_target_null"])}; '
+                      f'n {c["n_readouts"]} readouts">{h(c["share"])}</td>')
+        body += f"<tr><th>{lab}</th>{cells}</tr>"
+    return f'<div class="wrap"><table><thead><tr><th>reader given</th>{head}</tr></thead><tbody>{body}</tbody></table></div>'
+
+
+def chart_typo_paired():
+    """Paired per-item naming contrasts (share points), 95% item bootstrap."""
+    rows = [("Oracle L40: cost of removing J", TPP["oracle L40|whole_minus_rest_J"], "s1"),
+            ("Oracle L44: cost of removing J", TPP["oracle L44|whole_minus_rest_J"], "s1"),
+            ("NLA L42: cost of removing J", TPP["nla L42|whole_minus_rest_J"], "s2"),
+            ("Oracle L40 − NLA (paired)", TPP["oracle L40_minus_nla L42|whole_minus_rest_J"], "s1"),
+            ("Oracle L44 − NLA (paired)", TPP["oracle L44_minus_nla L42|whole_minus_rest_J"], "s1"),
+            ("Oracle L40: J alone − random slice", TPP["oracle L40|J_minus_R0"], "s1"),
+            ("Oracle L44: J alone − random slice", TPP["oracle L44|J_minus_R0"], "s1"),
+            ("NLA L42: J alone − random slice", TPP["nla L42|J_minus_R0"], "s2")]
+    x0, x1, lo, hi = 250, 610, -0.05, 0.35
+    sx = lambda v: x0 + (v - lo) / (hi - lo) * (x1 - x0)
+    rh = 28
+    s = f'<line x1="{sx(0):.1f}" y1="6" x2="{sx(0):.1f}" y2="{6 + rh * len(rows)}" class="ref"/>'
+    for i, (lab, st, cls) in enumerate(rows):
+        y = 6 + rh * i + rh / 2
+        s += f'<text x="{x0 - 10}" y="{y + 4:.1f}" class="lb" text-anchor="end">{lab}</text>'
+        s += f'<line x1="{sx(st["ci95"][0]):.1f}" y1="{y:.1f}" x2="{sx(st["ci95"][1]):.1f}" y2="{y:.1f}" class="ci"/>'
+        s += f'<circle cx="{sx(st["mean"]):.1f}" cy="{y:.1f}" r="5" class="{cls} ring"><title>{lab}: {h(st["mean"], 3)} [{h(st["ci95"][0], 3)}, {h(st["ci95"][1], 3)}], {st["n_items"]} items</title></circle>'
+    s += axis_x(x0, x1, 10 + rh * len(rows), [0, 0.1, 0.2, 0.3], sx, fmt=lambda v: h(v, 1))
+    return f'<svg viewBox="0 0 {W} {rh * len(rows) + 38}" role="img" aria-label="Paired naming contrasts on typo">{s}</svg>'
+
+
+def typo_samples():
+    out = []
+    for x in TS:
+        cards = "".join(f'<div class="ro"><div class="rh">{R_}</div>'
+                        + "".join(f'<p><b>{lab}</b> {E(x["readouts"][f"{R_}|{pc}"][:240])}</p>' for pc, lab in (("whole", "whole"), ("rest_J", "rest (minus J)")))
+                        + "</div>" for R_ in ("Oracle L40", "Oracle L44", "NLA L42"))
+        out.append(f'<details><summary>{E(x["item"])}: corrected word “{E(x["target"])}”</summary>'
+                   f'<p class="rh">Prompt: {E(x["prompt"])} · model continues: {E(x["continuation"].strip()[:80])}</p><div class="ros">{cards}</div></details>')
+    return "".join(out)
 
 
 def stageL_readouts():
@@ -413,7 +470,7 @@ mark.k-misquote {{ background:color-mix(in srgb, var(--s1) 24%, transparent); }}
 mark.k-wrong_entity, mark.k-false_fact {{ background:color-mix(in srgb, var(--muted) 30%, transparent); }}
 </style>
 <main>
-<div class="eyebrow">Causal-Concordance · 012 + 013 · Qwen3.6-27B · WorkspaceBench multihop (via Jan Chen's bank) · exploratory · 2026-10-07</div>
+<div class="eyebrow">Causal-Concordance · 012 + 013 + 014 · Qwen3.6-27B · WorkspaceBench multihop (via Jan Chen's bank) and typo · exploratory · 2026-10-07</div>
 <h1>Readers on swapped states</h1>
 <p class="lede">J-lens coordinate swaps of the hidden bridge (e.g. Eiffel Tower → France ⇒ Paris; swap France→Japan) change Qwen's answer on about half of the items. Every reader (Oracle Lens, NLA, J-lens, logit lens) then shifts toward the swapped-in concept, much more when the model's answer actually changed. Most of that tracking is also visible in the model's own output at the read cell, so it does not yet separate reading the bridge from reading what the model is about to say.</p>
 
@@ -510,6 +567,24 @@ mark.k-wrong_entity, mark.k-false_fact {{ background:color-mix(in srgb, var(--mu
 <p class="sub">Two chosen to illustrate, twelve drawn at random (seed 5): four clean, four J swap, four random swap. Marked spans: <mark class="k-invented_context">invented context</mark> <mark class="k-misquote">misquote</mark> <mark class="k-wrong_entity">wrong entity or false fact</mark>.</p>
 {examples13()}
 
+<h2 class="part">Part three (014): the same reading tests on a second family, typos</h2>
+<p class="lede">WorkspaceBench typo: 100 one-sentence prompts ending on a misspelled word ("Her birthday falls on the last day of Febuary"); the hidden step is the corrected word (<i>February</i>), read at the last prompt token. No answer depends on it, so only the reading tests run: which part of the activation the readers name it from, and the NLA hallucination test. Nothing here says the model uses the word.</p>
+
+<h2>16. The corrected word is readable almost everywhere, but the Oracle leans on J</h2>
+<p class="sub">Share of sampled readouts (2 per item × {TP["n_items"]} items) that name the corrected word. A readout names another item's word in only {h(min(v["other_target_null"] for v in TP["naming"].values()))}–{h(max(v["other_target_null"] for v in TP["naming"].values()))} of cases, so this is not chance. Pieces as in section 5b (007's J basis at each layer).</p>
+{typo_table()}
+<p class="sub">Paired per-item contrasts (share points, 95% item bootstrap). "Cost of removing J" = whole minus rest.</p>
+<figure><div class="legend"><span><i style="background:var(--s1)"></i>Oracle</span><span><i style="background:var(--s2)"></i>NLA</span></div>{chart_typo_paired()}</figure>
+<p>Unlike the multihop bridge (section 5b), the corrected word survives in every part, even a random fifth of the dimensions, and every reader names it on all 100 items, so their agreement can't be measured. One difference stands out. Removing the J subspace costs the Oracle {h(TPP["oracle L40|whole_minus_rest_J"]["mean"])} (L40) and {h(TPP["oracle L44|whole_minus_rest_J"]["mean"])} (L44) but the NLA only {h(TPP["nla L42|whole_minus_rest_J"]["mean"], 3)}; paired by item, the Oracle − NLA gap is {h(TPP["oracle L40_minus_nla L42|whole_minus_rest_J"]["mean"], 3)} [{h(TPP["oracle L40_minus_nla L42|whole_minus_rest_J"]["ci95"][0], 3)}, {h(TPP["oracle L40_minus_nla L42|whole_minus_rest_J"]["ci95"][1], 3)}] and {h(TPP["oracle L44_minus_nla L42|whole_minus_rest_J"]["mean"], 3)} [{h(TPP["oracle L44_minus_nla L42|whole_minus_rest_J"]["ci95"][0], 3)}, {h(TPP["oracle L44_minus_nla L42|whole_minus_rest_J"]["ci95"][1], 3)}]. That is the same direction as 007 on brew (the Oracle's reading depends on J, the NLA's does not).</p>
+<p class="note">Post hoc: these contrasts were chosen after seeing the table. Naming is near ceiling, 2 samples per cell, and the readers sit at different layers.</p>
+<p class="sub">Four items at random (seed 5): first readout from the whole activation and from the rest.</p>
+{typo_samples()}
+
+<h2>17. The NLA hallucination test on typos</h2>
+<p class="sub">The 013 pipeline unchanged: {THD["n"]} NLA explanations (100 items × 2, layer 42), the same judges and controls. The reconstructor passes its gate ({h(TG["fve_pct_first"], 1)}% FVE against {h(TG["fve_pct_shuffled"], 1)}% for mismatched explanations). False text is {h(100 * THD["flagged_token_share"]["contradicted_mean"], 0)}% of an explanation; most of it misquotes the one-sentence prompt (another subject, changed words, the word misspelled again). Hand check: 60 of 61 flagged spans are false.</p>
+<figure><div class="legend"><span><i style="background:var(--s1)"></i>all false text / misquotes</span><span><i style="background:var(--s2)"></i>invented context</span></div>{chart_deletion(THD, ticks=(-10, 0, 10, 20, 30, 40, 50), lo=-10, hi=55)}</figure>
+<p>Deleting false text costs {h(THD["primary_delta_R1_minus_C1"]["mean"], 1)} [{h(THD["primary_delta_R1_minus_C1"]["ci95"][0], 1)}, {h(THD["primary_delta_R1_minus_C1"]["ci95"][1], 1)}] points more than random text (multihop {h(HD["primary_delta_R1_minus_C1"]["mean"], 1)}), again carried by misquotes ({h(THD["A1_kind_misquote"]["delta_clause"]["mean"], 1)}). Invented context is near 0 ({h(THD["A1_kind_invented_context"]["delta_clause"]["mean"], 1)} [{h(THD["A1_kind_invented_context"]["delta_clause"]["ci95"][0], 1)}, {h(THD["A1_kind_invented_context"]["delta_clause"]["ci95"][1], 1)}]), but with only {THD["A1_kind_invented_context"]["n_eligible"]} explanations the interval is too wide to call it padding. The factual rewrite beats the paraphrase by {h(TRW["dFVE_F_minus_P"]["mean"], 1)} [{h(TRW["dFVE_F_minus_P"]["ci95"][0], 1)}, {h(TRW["dFVE_F_minus_P"]["ci95"][1], 1)}] (multihop {h(RW["dFVE_F_minus_P"]["mean"], 1)}), which does not clearly replicate; paraphrasing alone costs {h(-TRW["dFVE_P_minus_O"]["mean"], 1)} as before.</p>
+
 <h2>Gates and scope</h2>
 <ul>
 <li>Our captures come from the exact labelled runs: greedy text identical to Jan's code on 87/87 items for clean, J and random arms; α = 0 edit bitwise; read position = WSB last-word token on 87/87.</li>
@@ -517,6 +592,7 @@ mark.k-wrong_entity, mark.k-false_fact {{ background:color-mix(in srgb, var(--mu
 <li>Scope: Qwen3.6-27B, 82 clean-correct single-token multihop items (49 of them in 007's already-read test half), one read position, the stated bands. Japan is the target in 28 of 87 covered items. Labels mean "an answer effect under this intervention", not "the bridge is the mediator".</li>
 <li>Exploratory and partly post hoc: the edit-direction stratification and the output-facing analyses were chosen after the smoke and the first summaries. Spec, ledger and code: branch 012-reader-concordance (docs/design_specs/012_reader_concordance.md, docs/ledger/012_ledger.md).</li>
 <li>Stage L and 013: branch 013-nla-hallucination (docs/design_specs/012_reader_concordance.md §22; docs/design_specs/013_nla_hallucination.md with amendments A1-A2; docs/ledger/013_ledger.md). The 013 split by kind and the rewrite arm were added after the smoke, in written amendments, before their runs. Judge spend about $2.35.</li>
+<li>014 (typo): branch 014-typo (docs/design_specs/014_typo.md, docs/ledger/014_ledger.md). Render check 100/100; piece reconstruction exact (2e-17). The other-item null and the paired contrasts were added after the smoke and the full table respectively (post hoc). Judge spend $0.84.</li>
 </ul>
 </main>"""
 (R / "page").mkdir(parents=True, exist_ok=True)

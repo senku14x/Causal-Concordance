@@ -39,7 +39,7 @@ mark.k-misquote { background:color-mix(in srgb, var(--s1) 24%, transparent); }
 mark.k-wrong_entity, mark.k-false_fact { background:color-mix(in srgb, var(--muted) 30%, transparent); }
 </style>
 <main>
-<div class="eyebrow">Causal-Concordance · 012 + 013 · Qwen3.6-27B · WorkspaceBench multihop (via Jan Chen's bank) · exploratory · 2026-10-07</div>
+<div class="eyebrow">Causal-Concordance · 012 + 013 + 014 · Qwen3.6-27B · WorkspaceBench multihop (via Jan Chen's bank) and typo · exploratory · 2026-10-07</div>
 <h1>Readers on swapped states</h1>
 <p class="lede">J-lens coordinate swaps of the hidden bridge (e.g. Eiffel Tower → France ⇒ Paris; swap France→Japan) change Qwen's answer on about half of the items. Every reader (Oracle Lens, NLA, J-lens, logit lens) then shifts toward the swapped-in concept, much more when the model's answer actually changed. Most of that tracking is also visible in the model's own output at the read cell, so it does not yet separate reading the bridge from reading what the model is about to say.</p>
 
@@ -654,6 +654,96 @@ Ending piece &quot;the flightless bird found in this continent is the&quot; call
 &quot;
 &lt;/br&gt;&quot;Within a true/false text understanding setting, a trivia inquiry template, needing the solution to finish: &quot;the flightless bird that lives in this continent is the&quot; — an uncommon avian label unique to southern hemisphere, probably a penguin variety for quiz.</p></div></div></details>
 
+<h2 class="part">Part three (014): the same reading tests on a second family, typos</h2>
+<p class="lede">WorkspaceBench typo: 100 one-sentence prompts ending on a misspelled word ("Her birthday falls on the last day of Febuary"); the hidden step is the corrected word (<i>February</i>), read at the last prompt token. No answer depends on it, so only the reading tests run: which part of the activation the readers name it from, and the NLA hallucination test. Nothing here says the model uses the word.</p>
+
+<h2>16. The corrected word is readable almost everywhere, but the Oracle leans on J</h2>
+<p class="sub">Share of sampled readouts (2 per item × 100 items) that name the corrected word. A readout names another item's word in only 0.01–0.02 of cases, so this is not chance. Pieces as in section 5b (007's J basis at each layer).</p>
+<div class="wrap"><table><thead><tr><th>reader given</th><th>Oracle L40</th><th>Oracle L44</th><th>NLA L42</th></tr></thead><tbody><tr><th>whole activation</th><td title="0.99 [0.97, 1.00]; other-item null 0.01; n 200 readouts">0.99</td><td title="0.99 [0.98, 1.00]; other-item null 0.01; n 200 readouts">0.99</td><td title="1.00 [0.99, 1.00]; other-item null 0.02; n 200 readouts">1.00</td></tr><tr><th>J part (1,024 J-lens directions)</th><td title="0.99 [0.97, 1.00]; other-item null 0.01; n 200 readouts">0.99</td><td title="0.99 [0.97, 1.00]; other-item null 0.01; n 200 readouts">0.99</td><td title="0.99 [0.98, 1.00]; other-item null 0.02; n 200 readouts">0.99</td></tr><tr><th>rest (whole minus J)</th><td title="0.85 [0.78, 0.91]; other-item null 0.02; n 200 readouts">0.85</td><td title="0.77 [0.69, 0.84]; other-item null 0.02; n 200 readouts">0.77</td><td title="0.97 [0.94, 1.00]; other-item null 0.02; n 200 readouts">0.97</td></tr><tr><th>random 1,024 directions</th><td title="0.93 [0.89, 0.97]; other-item null 0.01; n 200 readouts">0.93</td><td title="0.92 [0.87, 0.97]; other-item null 0.01; n 200 readouts">0.92</td><td title="0.96 [0.93, 0.99]; other-item null 0.02; n 200 readouts">0.96</td></tr><tr><th>whole minus the shared mean direction</th><td title="1.00 [1.00, 1.00]; other-item null 0.01; n 200 readouts">1.00</td><td title="0.99 [0.96, 1.00]; other-item null 0.01; n 200 readouts">0.99</td><td title="1.00 [1.00, 1.00]; other-item null 0.02; n 200 readouts">1.00</td></tr><tr><th>correctly spelled prompt (whole)</th><td title="1.00 [1.00, 1.00]; other-item null 0.02; n 200 readouts">1.00</td><td title="1.00 [0.99, 1.00]; other-item null 0.02; n 200 readouts">1.00</td><td title="1.00 [1.00, 1.00]; other-item null 0.02; n 200 readouts">1.00</td></tr></tbody></table></div>
+<p class="sub">Paired per-item contrasts (share points, 95% item bootstrap). "Cost of removing J" = whole minus rest.</p>
+<figure><div class="legend"><span><i style="background:var(--s1)"></i>Oracle</span><span><i style="background:var(--s2)"></i>NLA</span></div><svg viewBox="0 0 640 262" role="img" aria-label="Paired naming contrasts on typo"><line x1="295.0" y1="6" x2="295.0" y2="230" class="ref"/><text x="240" y="24.0" class="lb" text-anchor="end">Oracle L40: cost of removing J</text><line x1="367.0" y1="20.0" x2="484.0" y2="20.0" class="ci"/><circle cx="421.0" cy="20.0" r="5" class="s1 ring"><title>Oracle L40: cost of removing J: 0.140 [0.080, 0.210], 100 items</title></circle><text x="240" y="52.0" class="lb" text-anchor="end">Oracle L44: cost of removing J</text><line x1="434.5" y1="48.0" x2="565.0" y2="48.0" class="ci"/><circle cx="497.5" cy="48.0" r="5" class="s1 ring"><title>Oracle L44: cost of removing J: 0.225 [0.155, 0.300], 100 items</title></circle><text x="240" y="80.0" class="lb" text-anchor="end">NLA L42: cost of removing J</text><line x1="295.0" y1="76.0" x2="344.5" y2="76.0" class="ci"/><circle cx="317.5" cy="76.0" r="5" class="s2 ring"><title>NLA L42: cost of removing J: 0.025 [0.000, 0.055], 100 items</title></circle><text x="240" y="108.0" class="lb" text-anchor="end">Oracle L40 − NLA (paired)</text><line x1="340.0" y1="104.0" x2="466.0" y2="104.0" class="ci"/><circle cx="398.5" cy="104.0" r="5" class="s1 ring"><title>Oracle L40 − NLA (paired): 0.115 [0.050, 0.190], 100 items</title></circle><text x="240" y="136.0" class="lb" text-anchor="end">Oracle L44 − NLA (paired)</text><line x1="412.0" y1="132.0" x2="542.5" y2="132.0" class="ci"/><circle cx="475.0" cy="132.0" r="5" class="s1 ring"><title>Oracle L44 − NLA (paired): 0.200 [0.130, 0.275], 100 items</title></circle><text x="240" y="164.0" class="lb" text-anchor="end">Oracle L40: J alone − random slice</text><line x1="308.5" y1="160.0" x2="385.0" y2="160.0" class="ci"/><circle cx="344.5" cy="160.0" r="5" class="s1 ring"><title>Oracle L40: J alone − random slice: 0.055 [0.015, 0.100], 100 items</title></circle><text x="240" y="192.0" class="lb" text-anchor="end">Oracle L44: J alone − random slice</text><line x1="313.0" y1="188.0" x2="398.5" y2="188.0" class="ci"/><circle cx="353.5" cy="188.0" r="5" class="s1 ring"><title>Oracle L44: J alone − random slice: 0.065 [0.020, 0.115], 100 items</title></circle><text x="240" y="220.0" class="lb" text-anchor="end">NLA L42: J alone − random slice</text><line x1="290.5" y1="216.0" x2="353.5" y2="216.0" class="ci"/><circle cx="322.0" cy="216.0" r="5" class="s2 ring"><title>NLA L42: J alone − random slice: 0.030 [−0.005, 0.065], 100 items</title></circle><line x1="250" y1="234" x2="610" y2="234" class="ax"/><line x1="295.0" y1="234" x2="295.0" y2="238" class="ax"/><text x="295.0" y="250" class="tk" text-anchor="middle">0.0</text><line x1="385.0" y1="234" x2="385.0" y2="238" class="ax"/><text x="385.0" y="250" class="tk" text-anchor="middle">0.1</text><line x1="475.0" y1="234" x2="475.0" y2="238" class="ax"/><text x="475.0" y="250" class="tk" text-anchor="middle">0.2</text><line x1="565.0" y1="234" x2="565.0" y2="238" class="ax"/><text x="565.0" y="250" class="tk" text-anchor="middle">0.3</text></svg></figure>
+<p>Unlike the multihop bridge (section 5b), the corrected word survives in every part, even a random fifth of the dimensions, and every reader names it on all 100 items, so their agreement can't be measured. One difference stands out. Removing the J subspace costs the Oracle 0.14 (L40) and 0.23 (L44) but the NLA only 0.025; paired by item, the Oracle − NLA gap is 0.115 [0.050, 0.190] and 0.200 [0.130, 0.275]. That is the same direction as 007 on brew (the Oracle's reading depends on J, the NLA's does not).</p>
+<p class="note">Post hoc: these contrasts were chosen after seeing the table. Naming is near ceiling, 2 samples per cell, and the readers sit at different layers.</p>
+<p class="sub">Four items at random (seed 5): first readout from the whole activation and from the rest.</p>
+<details><summary>typo-field: corrected word “field”</summary><p class="rh">Prompt: The players jogged out onto the freshly mowed feild · model continues: .
+A. feild
+B</p><div class="ros"><div class="ro"><div class="rh">Oracle L40</div><p><b>whole</b> - /stadium before the game could begin. The players ran onto the green field
+- 上，准备迎接比赛的挑战。 The grass on the fiel
+- , (or &quot;fielD&quot;) as the players took their positions. The stadium lights glowed above the green field
+- （field） and watched th</p><p><b>rest (minus J)</b> - /stadium. They were eager to start the season. The **new** team
+- 2.  **Spelling:** &quot;foriegn&quot; should be **foreign
+- , with its **new** headquarters located in the **city** of London. The **market** was bustling with **
+- 3.  **Spelling &amp; </p></div><div class="ro"><div class="rh">Oracle L44</div><p><b>whole</b> - /stadium, the sun blazing down on the green field. The players rushed onto the field
+- , where the players prepared for the big game. (Note: &#x27;feild&#x27; is misspelled
+- （field） as the sun beat down on the grass. The quarterback threw the ball</p><p><b>rest (minus J)</b> - . The team was moving to the new **camps** to escape the
+- 2.  **was** bustling with activity, as **fans** from around the world had
+- , where they planned to open a new shop.* (Missing &#x27;e&#x27; in *market*)... *The new city center was vibrant</p></div><div class="ro"><div class="rh">NLA L42</div><p><b>whole</b> &lt;explanation&gt;
+Sentence structure establishes a descriptive scene-setting clause, expecting continuation of imagery or action involving the team and field.
+
+The text &quot;The muddy player team ran onto the freshly mowed feild&quot; appears to be a sp</p><p><b>rest (minus J)</b> &lt;explanation&gt;
+Q&amp;A or task-response format signals a short evaluative answer or correction is expected, likely identifying the error in the sentence (e.g., misspelling or logical inconsistency).
+
+The sentence &quot;The team eagerly opened their b</p></div></div></details><details><summary>typo-length: corrected word “length”</summary><p class="rh">Prompt: She measured the table&#x27;s exact lentgh · model continues: .
+A. lentgh
+B</p><div class="ros"><div class="ro"><div class="rh">Oracle L40</div><p><b>whole</b> - ,width and height of the table. (注意：原句 spelling 有误，应为 *exact lengh
+- /width using his ruler. (拼写错误：legnth
+- /width, using the most precise instruments available. (杰克测量木板的确切长/width
+- （length）and width, but he kept making typos. | He measur</p><p><b>rest (minus J)</b> - , height, and width. (Note: *lelngth* is missp
+- /length (Note: The typo `lenght` is intentional to show
+- 3.  The project&#x27;s **lenght** was finalized yesterday. (Note: `length` is misspelled
+- （注意：这里故意保留了原句的拼写错误以体现“错误”）The new city&#x27;s **le</p></div><div class="ro"><div class="rh">Oracle L44</div><p><b>whole</b> - ,width and height.（句中length拼写错误）
+- /wideth of the table before painting it. (注意：length拼写
+- , width, and depth after measuring it carefully. (注意：他故意写错 length 为 lengh
+- （length）and breadth, but she misspelled every measurement word. (他测量桌子的</p><p><b>rest (minus J)</b> - , height, and width, as the project grew.** (Spelling: *lenght
+- /length, and **durati**on.&quot; (Contains typos) -&gt; &quot;The **
+- , width, and height. (Note: Double &#x27;l&#x27; in &quot;length&quot;) -&gt; The project had reached a **
+- （应为 *length*）and breadth. The</p></div><div class="ro"><div class="rh">NLA L42</div><p><b>whole</b> &lt;explanation&gt;
+Instruction format established (&quot;Choose the correct answer:&quot; / &quot;A. …&quot;) implies a multiple-choice question structure likely continuing with options B, C, etc., or transitioning to a sentence demonstrating a concept.
+
+The senten</p><p><b>rest (minus J)</b> &lt;explanation&gt;
+Instruction format established (&quot;Write a sentence using each listed word&quot;) creates expectation of grammatically correct word usage examples.
+The example sentence begins demonstrating the concept &quot;length,&quot; likely targeting voca</p></div></div></details><details><summary>typo-short: corrected word “short”</summary><p class="rh">Prompt: The meeting was kept shrot · model continues: .
+A. 正确
+B</p><div class="ros"><div class="ro"><div class="rh">Oracle L40</div><p><b>whole</b> - /brief to save time for the next meeting. (会议开的短，是为了节省时间。 &quot;kept short
+- by（保持会议简短）to ensure everyone could attend. 会议被记的shor
+- /short due to time constraint.（会议开的短是为了节省时间） *（注：原句 &quot;kepat&quot; 可能是 typo，建议改为 &quot;kept short
+- （保持简短） by the team lead</p><p><b>rest (minus J)</b> - /short, keeping the focus on core business needs. The event was made **keep it short
+- 简短 (short) and the meeting was kept brief. *(Note: The original text said &quot;kurt&quot; which is likely a typo
+- , brief, and focused* (assuming you meant *ke</p></div><div class="ro"><div class="rh">Oracle L44</div><p><b>whole</b> - /brief due to the tight schedule. （会议尽量保持短小精悍。） | meetting was kep short
+- by（保持会议简短）but it was held over for discussion. | kept meeting shrot
+- /short due to limited time.（会议开得很短）-&gt; 英文应为 **kept short
+- （keep short）to avoid overtime. The </p><p><b>rest (minus J)</b> - /short, keeping the focus on core features. The project lasted **sho
+- and concise, despite involving 14 different countries. (Original: &quot;was kept short&quot;
+- 而 (kept short) and the project was developed quickly. -&gt; *Correction: &quot;project wer</p></div><div class="ro"><div class="rh">NLA L42</div><p><b>whole</b> &lt;explanation&gt;
+Formal sentence structure establishing a past-tense factual statement about a meeting. &quot;The meeting was kept shrot&quot; appears to be a misspelled/phonetically written phrase, predicting continuation as a simple descriptive clause</p><p><b>rest (minus J)</b> &lt;explanation&gt;
+Form sentence completion task requires a grammatically valid sentence starting with given constraint. &quot;The club was kept schroot&quot; appears to be a misspelling/typo of &quot;short&quot; or &quot;simple.&quot;
+
+The phrasing &quot;kept schrowt/shor...&quot; si</p></div></div></details><details><summary>typo-within: corrected word “within”</summary><p class="rh">Prompt: The package should arrive wihtin · model continues: 1-2 weeks.
+The</p><div class="ros"><div class="ro"><div class="rh">Oracle L40</div><p><b>whole</b> - 2-3 weeks, or it will arrive within
+- 两周 (within two weeks) after dispatch. 您的包裹预计会在 7-10 天内
+- 5-7 business days. 您的包裹会在 1-2 周内送达。如果有任何问题，请随时联系我，我会立刻处理。
+- /within 2 weeks usually. The tracking number will be provided once it ships. 如果一切顺利</p><p><b>rest (minus J)</b> - 2-3 days, or it will be delivered within
+- 3-5 business days. If you could please confirm the expected delivery date, I would
+- 几个 days (or within a few days) after being ordered. The package will arrive at your specified address within
+-</p></div><div class="ro"><div class="rh">Oracle L44</div><p><b>whole</b> - 2-4 weeks, or you will receive it within
+- 3-5 working days after dispatch. (您的包裹预计会在 3-5 天内到达。
+- 2-3 weeks (您提供的物流时效) after the order is placed. 订单已经在运输途中，预计 2-3 天内
+- （within）5-7 business days. Thank you for your order! / 您的包裹预计会在 5-7 个工</p><p><b>rest (minus J)</b> - 2-3 days, or you
+- 3-5 days. Please be aware that this process may take up to 48 hours
+- 几个步骤 (Depending on the framework you are using, e.g., Laravel, Django, etc.). The code initializes a
+- 当前版本 (The current version) or `register` (for </p></div><div class="ro"><div class="rh">NLA L42</div><p><b>whole</b> &lt;explanation&gt;
+Informal/colloquial register with non-native English phrasing (&quot;i belive&quot;) signals casual messaging or e-commerce communication style.
+
+The phrase &quot;The pacel should arrive withinhin&quot; is an embedded shipping/delivery status sta</p><p><b>rest (minus J)</b> &lt;explanation&gt;
+The response attempts to follow a factual pattern, with &quot;should arrive&quot; establishing an expected outcome statement likely about delivery, data, or a product.
+
+The phrase &quot;within&quot; or similar temporal/conditional language is exp</p></div></div></details>
+
+<h2>17. The NLA hallucination test on typos</h2>
+<p class="sub">The 013 pipeline unchanged: 200 NLA explanations (100 items × 2, layer 42), the same judges and controls. The reconstructor passes its gate (54.7% FVE against −100.8% for mismatched explanations). False text is 54% of an explanation; most of it misquotes the one-sentence prompt (another subject, changed words, the word misspelled again). Hand check: 60 of 61 flagged spans are false.</p>
+<figure><div class="legend"><span><i style="background:var(--s1)"></i>all false text / misquotes</span><span><i style="background:var(--s2)"></i>invented context</span></div><svg viewBox="0 0 640 206" role="img" aria-label="Reconstruction cost of deleting false text vs random text"><rect x="294.3" y="6" width="22.2" height="168" fill="var(--grid)" opacity="0.6"><title>±2 FVE points: no difference band</title></rect><line x1="305.4" y1="6" x2="305.4" y2="174" class="ref"/><text x="240" y="24.0" class="lb" text-anchor="end">all false text (primary)</text><line x1="481.4" y1="20.0" x2="567.2" y2="20.0" class="ci"/><circle cx="523.0" cy="20.0" r="5" class="s1 ring"><title>all false text (primary): 39.3 [31.8, 47.3], n 187</title></circle><text x="240" y="52.0" class="lb" text-anchor="end">all false text, sentence control</text><line x1="446.8" y1="48.0" x2="528.9" y2="48.0" class="ci"/><circle cx="486.9" cy="48.0" r="5" class="s1 ring"><title>all false text, sentence control: 32.8 [25.5, 40.4], n 187</title></circle><text x="240" y="80.0" class="lb" text-anchor="end">invented context only</text><line x1="278.8" y1="76.0" x2="338.3" y2="76.0" class="ci"/><circle cx="308.0" cy="76.0" r="5" class="s2 ring"><title>invented context only: 0.5 [−4.8, 5.9], n 86</title></circle><text x="240" y="108.0" class="lb" text-anchor="end">invented context, sentence control</text><line x1="300.0" y1="104.0" x2="346.4" y2="104.0" class="ci"/><circle cx="320.3" cy="104.0" r="5" class="s2 ring"><title>invented context, sentence control: 2.7 [−1.0, 7.4], n 86</title></circle><text x="240" y="136.0" class="lb" text-anchor="end">misquotes only</text><line x1="495.3" y1="132.0" x2="586.1" y2="132.0" class="ci"/><circle cx="539.1" cy="132.0" r="5" class="s1 ring"><title>misquotes only: 42.2 [34.3, 50.7], n 180</title></circle><text x="240" y="164.0" class="lb" text-anchor="end">misquotes, sentence control</text><line x1="457.0" y1="160.0" x2="547.3" y2="160.0" class="ci"/><circle cx="499.5" cy="160.0" r="5" class="s1 ring"><title>misquotes, sentence control: 35.0 [27.4, 43.7], n 180</title></circle><line x1="250" y1="178" x2="610" y2="178" class="ax"/><line x1="250.0" y1="178" x2="250.0" y2="182" class="ax"/><text x="250.0" y="194" class="tk" text-anchor="middle">−10</text><line x1="305.4" y1="178" x2="305.4" y2="182" class="ax"/><text x="305.4" y="194" class="tk" text-anchor="middle">0</text><line x1="360.8" y1="178" x2="360.8" y2="182" class="ax"/><text x="360.8" y="194" class="tk" text-anchor="middle">10</text><line x1="416.2" y1="178" x2="416.2" y2="182" class="ax"/><text x="416.2" y="194" class="tk" text-anchor="middle">20</text><line x1="471.5" y1="178" x2="471.5" y2="182" class="ax"/><text x="471.5" y="194" class="tk" text-anchor="middle">30</text><line x1="526.9" y1="178" x2="526.9" y2="182" class="ax"/><text x="526.9" y="194" class="tk" text-anchor="middle">40</text><line x1="582.3" y1="178" x2="582.3" y2="182" class="ax"/><text x="582.3" y="194" class="tk" text-anchor="middle">50</text></svg></figure>
+<p>Deleting false text costs 39.3 [31.8, 47.3] points more than random text (multihop 28.6), again carried by misquotes (42.2). Invented context is near 0 (0.5 [−4.8, 5.9]), but with only 86 explanations the interval is too wide to call it padding. The factual rewrite beats the paraphrase by 1.8 [−1.2, 4.6] (multihop 3.1), which does not clearly replicate; paraphrasing alone costs 1.6 as before.</p>
+
 <h2>Gates and scope</h2>
 <ul>
 <li>Our captures come from the exact labelled runs: greedy text identical to Jan's code on 87/87 items for clean, J and random arms; α = 0 edit bitwise; read position = WSB last-word token on 87/87.</li>
@@ -661,5 +751,6 @@ Ending piece &quot;the flightless bird found in this continent is the&quot; call
 <li>Scope: Qwen3.6-27B, 82 clean-correct single-token multihop items (49 of them in 007's already-read test half), one read position, the stated bands. Japan is the target in 28 of 87 covered items. Labels mean "an answer effect under this intervention", not "the bridge is the mediator".</li>
 <li>Exploratory and partly post hoc: the edit-direction stratification and the output-facing analyses were chosen after the smoke and the first summaries. Spec, ledger and code: branch 012-reader-concordance (docs/design_specs/012_reader_concordance.md, docs/ledger/012_ledger.md).</li>
 <li>Stage L and 013: branch 013-nla-hallucination (docs/design_specs/012_reader_concordance.md §22; docs/design_specs/013_nla_hallucination.md with amendments A1-A2; docs/ledger/013_ledger.md). The 013 split by kind and the rewrite arm were added after the smoke, in written amendments, before their runs. Judge spend about $2.35.</li>
+<li>014 (typo): branch 014-typo (docs/design_specs/014_typo.md, docs/ledger/014_ledger.md). Render check 100/100; piece reconstruction exact (2e-17). The other-item null and the paired contrasts were added after the smoke and the full table respectively (post hoc). Judge spend $0.84.</li>
 </ul>
 </main>
