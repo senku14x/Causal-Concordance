@@ -191,3 +191,5 @@ Analysis: `stageF_analysis.py` → `results/012_reader_concordance/analysis/stag
 - At the answer token, readers track a model-computed state, and the Oracle and NLA keep a moderate association with the answer change beyond the model's own output there.
 - At written earlier positions, readers mostly see the write, not the use. The NLA is the possible exception.
 - This is the first sign in the project of an NLA property the Oracle doesn't share. It is weak and needs fresh data before any claim.
+
+**01:20 — Stage G pre-registered** (spec §14): whitened J-row swaps at L24–35, Camila's request (a). Σ by 008's recipe. Measured: flips, Δm, direction, readers at the read cell (likelihood only). Rule: ±10 points of flip rate against the raw swap.

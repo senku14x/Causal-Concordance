@@ -432,3 +432,31 @@ The whitened arm (needs Σ for L24–35/47), the class-mean / Fig. 16 arm (needs
   - **"Absent"** if d_r,p ≈ 0 at early positions.
 
 **Not claimed:** that any position is the mechanism's site. Positions are read cells. The edits remain whole-band interventions, apart from F1's split.
+
+## 14. Stage G: whitened J-row swaps (Camila's request a) (pre-registered 2026-10-07 ~01:20 UTC, before any G run)
+
+**Σ** for L24–35:
+- 008's recipe (`scripts/008_trackb/sigma.py`): the same UltraChat corpus (about 50k chat tokens), Ledoit–Wolf shrinkage with λ reported per layer, the G-Σ gate.
+- W = Σ^{-1/2} in float64; μ = the corpus mean.
+
+**Whitened coordinate swap**, at every prompt position, L24–35, α 1:
+- J rows are covectors, so their whitened images are Ṽ = W⁻¹V (as in 008 §1.4).
+- Coordinates: c̃ = Ṽ⁺ W (h − μ).
+- Clamp to swap(c̃_clean); write Δh = W⁻¹ Ṽ (swap(c̃_clean) − c̃).
+- Control: a source-preserving random-target control in the same whitened construction (src row plus a seeded random unit target, same seed recipe).
+
+**Measures** (same engine as Stage B/F):
+- flips (Jan's matcher and budget) and float32 Δm;
+- edit direction, from the whitened clean coordinates;
+- realised ‖Δh‖ at the read position;
+- readers at the read cell: Oracle L40/L44, NLA L42, token lenses at L40/L44. Bridge and answer LL only; no sampling.
+
+**Gates:** G0 (α = 0 bitwise); G-Σ; a whitened round-trip check (W W⁻¹ ≈ I, max error ≤ 1e-6 in float64).
+
+**Reading rules** (82 clean-correct items; compared with the raw J swap at L24–35: 38/82 flips, random 1/82):
+- **"Whitening helps on this family":** flip rate at least 10 points above raw, with the random control still at most 0.05.
+- **"Whitening hurts":** at least 10 points below raw.
+- **"No material difference":** otherwise.
+- Reader AUCs are reported as in Stage D, within toward_tgt edits defined in whitened coordinates.
+
+EXPLORATORY.
