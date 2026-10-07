@@ -54,3 +54,46 @@ target in the readout).
 **STOP after the smoke** (the PI's rule). Full run on the PI's go:
 - Parts A/B on 100 items: about 15 GPU-min.
 - The Part C gate on 100, then judges on 200 explanations (about $0.4) and scoring (about 10 GPU-min).
+
+**PI go for the full run (2026-10-07):** "lets just start it". `scripts/014_typo/run_full.sh` chains Parts A/B, then the
+Part C gate, judges and scoring (deletion and rewrite arms). Part C analysis waits for the hand check (G2).
+- The estimate was about 15 GPU-min for Parts A/B; it took about 25 (the Oracle reads alone took 16 min).
+- The PI's message also asked for a new-session prompt aimed at coming up to speed on the whole project. Report 35 was
+  rewritten that way.
+
+**Full run, Parts A/B (100 items; `results/014_typo/analysis/parts_full.json`).** Gates: render 100/100; piece
+reconstruction 2.0e-17.
+- **Naming share (2 samples × 100; other-target null 0.01–0.02 everywhere):**
+
+| reader | whole | J | rest of J | random 1,024 (R0) | mean removed | echo (correct spelling) |
+|---|---|---|---|---|---|---|
+| Oracle L40 | 0.98 | 0.98 | 0.84 | 0.93 | 1.00 | 1.00 |
+| Oracle L44 | 0.99 | 0.98 | 0.77 | 0.92 | 0.98 | 0.99 |
+| NLA L42 | 0.99 | 0.99 | 0.97 | 0.96 | 1.00 | 1.00 |
+
+- **κ (P3):** undefined. Every reader names the word on all 100 items from the whole activation.
+- **Token lenses** (median rank of the target, whole / echo): J_CB 4 / 2.5–3; J_NP 38.5–52 / 4.5–8; logit 45–128.5 / 13–38.
+- **Paired contrasts (POST HOC, written after seeing the table; `scripts/014_typo/paired.py` → `paired_full.json`).**
+  Per item, the share of 2 samples naming the target; item bootstrap.
+
+  | reader | whole − rest of J (cost of removing J) | J − random 1,024 |
+  |---|---|---|
+  | Oracle L40 | +0.14 [0.08, 0.21] | +0.055 [0.015, 0.10] |
+  | Oracle L44 | +0.225 [0.155, 0.30] | +0.065 [0.02, 0.115] |
+  | NLA L42 | +0.025 [0.00, 0.055] | +0.03 [−0.005, 0.065] |
+
+  - **Oracle − NLA on the cost of removing J:** L40 +0.115 [0.05, 0.19]; L44 +0.20 [0.13, 0.275].
+- **Reading** (exploratory, post hoc contrasts):
+  - The corrected word is readable almost everywhere. But removing the J subspace costs the Oracle 14–23 points and the NLA about 2.5, and the paired Oracle − NLA difference excludes 0.
+  - This is the same direction as 007 on brew `:` (the Oracle's z reading depends on J; the NLA's does not).
+  - Caveats:
+    - near-ceiling naming;
+    - 2 samples per cell;
+    - different layers (Oracle L40/L44 vs NLA L42);
+    - the contrast was chosen after seeing the table.
+- **Predictions:**
+  - P1 holds (every reader ≥ 0.80 from the whole; close to echo).
+  - P2: rest ≥ 0.40 for every reader and J ≥ 0.70, so "the corrected word is readable outside J". J − R0 is small but positive for the Oracle.
+  - P3 can't be tested (κ undefined, no variance).
+- **Part C gate R1** (`nlah_gate_full.json`, 100 first samples): FVE 54.7% [50.7, 58.1] vs shuffled −100.8%. **Passes.**
+  Judges and scoring are running.

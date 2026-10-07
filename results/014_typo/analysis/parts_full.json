@@ -1,0 +1,280 @@
+{
+ "label": "EXPLORATORY (014 Part A/B, tag full)",
+ "n_items": 100,
+ "naming": {
+  "nla L42|J": {
+   "share": 0.99,
+   "ci95": [
+    0.975,
+    1.0
+   ],
+   "n_readouts": 200,
+   "other_target_null": 0.021161616161616163
+  },
+  "nla L42|MR": {
+   "share": 1.0,
+   "ci95": [
+    1.0,
+    1.0
+   ],
+   "n_readouts": 200,
+   "other_target_null": 0.02393939393939394
+  },
+  "nla L42|R0": {
+   "share": 0.96,
+   "ci95": [
+    0.925,
+    0.99
+   ],
+   "n_readouts": 200,
+   "other_target_null": 0.021464646464646468
+  },
+  "nla L42|echo": {
+   "share": 1.0,
+   "ci95": [
+    1.0,
+    1.0
+   ],
+   "n_readouts": 200,
+   "other_target_null": 0.01585858585858586
+  },
+  "nla L42|rest_J": {
+   "share": 0.97,
+   "ci95": [
+    0.94,
+    0.995
+   ],
+   "n_readouts": 200,
+   "other_target_null": 0.0196969696969697
+  },
+  "nla L42|whole": {
+   "share": 0.995,
+   "ci95": [
+    0.985,
+    1.0
+   ],
+   "n_readouts": 200,
+   "other_target_null": 0.015909090909090907
+  },
+  "oracle L40|J": {
+   "share": 0.985,
+   "ci95": [
+    0.965,
+    1.0
+   ],
+   "n_readouts": 200,
+   "other_target_null": 0.011161616161616164
+  },
+  "oracle L40|MR": {
+   "share": 1.0,
+   "ci95": [
+    1.0,
+    1.0
+   ],
+   "n_readouts": 200,
+   "other_target_null": 0.009646464646464646
+  },
+  "oracle L40|R0": {
+   "share": 0.93,
+   "ci95": [
+    0.885,
+    0.97
+   ],
+   "n_readouts": 200,
+   "other_target_null": 0.012575757575757579
+  },
+  "oracle L40|echo": {
+   "share": 1.0,
+   "ci95": [
+    1.0,
+    1.0
+   ],
+   "n_readouts": 200,
+   "other_target_null": 0.015606060606060608
+  },
+  "oracle L40|rest_J": {
+   "share": 0.845,
+   "ci95": [
+    0.775,
+    0.91
+   ],
+   "n_readouts": 200,
+   "other_target_null": 0.01570707070707071
+  },
+  "oracle L40|whole": {
+   "share": 0.985,
+   "ci95": [
+    0.965,
+    1.0
+   ],
+   "n_readouts": 200,
+   "other_target_null": 0.011717171717171716
+  },
+  "oracle L44|J": {
+   "share": 0.985,
+   "ci95": [
+    0.965,
+    1.0
+   ],
+   "n_readouts": 200,
+   "other_target_null": 0.011060606060606062
+  },
+  "oracle L44|MR": {
+   "share": 0.985,
+   "ci95": [
+    0.96,
+    1.0
+   ],
+   "n_readouts": 200,
+   "other_target_null": 0.010656565656565658
+  },
+  "oracle L44|R0": {
+   "share": 0.92,
+   "ci95": [
+    0.87,
+    0.965
+   ],
+   "n_readouts": 200,
+   "other_target_null": 0.011818181818181821
+  },
+  "oracle L44|echo": {
+   "share": 0.995,
+   "ci95": [
+    0.985,
+    1.0
+   ],
+   "n_readouts": 200,
+   "other_target_null": 0.015151515151515154
+  },
+  "oracle L44|rest_J": {
+   "share": 0.765,
+   "ci95": [
+    0.69,
+    0.84
+   ],
+   "n_readouts": 200,
+   "other_target_null": 0.018434343434343435
+  },
+  "oracle L44|whole": {
+   "share": 0.99,
+   "ci95": [
+    0.975,
+    1.0
+   ],
+   "n_readouts": 200,
+   "other_target_null": 0.011414141414141415
+  }
+ },
+ "lens_rank": {
+  "logit L40|whole": {
+   "median_rank": 45.0,
+   "top10_share": 0.33,
+   "n": 100
+  },
+  "J_NP L40|whole": {
+   "median_rank": 50.0,
+   "top10_share": 0.22,
+   "n": 100
+  },
+  "J_CB L40|whole": {
+   "median_rank": 4.0,
+   "top10_share": 0.63,
+   "n": 100
+  },
+  "logit L40|echo": {
+   "median_rank": 13.0,
+   "top10_share": 0.45,
+   "n": 100
+  },
+  "J_NP L40|echo": {
+   "median_rank": 5.0,
+   "top10_share": 0.59,
+   "n": 100
+  },
+  "J_CB L40|echo": {
+   "median_rank": 2.5,
+   "top10_share": 0.73,
+   "n": 100
+  },
+  "logit L42|whole": {
+   "median_rank": 115.0,
+   "top10_share": 0.18,
+   "n": 100
+  },
+  "J_NP L42|whole": {
+   "median_rank": 38.5,
+   "top10_share": 0.25,
+   "n": 100
+  },
+  "J_CB L42|whole": {
+   "median_rank": 4.0,
+   "top10_share": 0.65,
+   "n": 100
+  },
+  "logit L42|echo": {
+   "median_rank": 38.0,
+   "top10_share": 0.31,
+   "n": 100
+  },
+  "J_NP L42|echo": {
+   "median_rank": 4.5,
+   "top10_share": 0.58,
+   "n": 100
+  },
+  "J_CB L42|echo": {
+   "median_rank": 3.0,
+   "top10_share": 0.71,
+   "n": 100
+  },
+  "logit L44|whole": {
+   "median_rank": 128.5,
+   "top10_share": 0.14,
+   "n": 100
+  },
+  "J_NP L44|whole": {
+   "median_rank": 52.0,
+   "top10_share": 0.18,
+   "n": 100
+  },
+  "J_CB L44|whole": {
+   "median_rank": 4.0,
+   "top10_share": 0.63,
+   "n": 100
+  },
+  "logit L44|echo": {
+   "median_rank": 36.0,
+   "top10_share": 0.3,
+   "n": 100
+  },
+  "J_NP L44|echo": {
+   "median_rank": 8.0,
+   "top10_share": 0.58,
+   "n": 100
+  },
+  "J_CB L44|echo": {
+   "median_rank": 3.0,
+   "top10_share": 0.74,
+   "n": 100
+  }
+ },
+ "agreement": {
+  "oracle L40 vs nla L42": {
+   "kappa": null,
+   "only_first": 0,
+   "only_second": 0,
+   "both": 100
+  },
+  "oracle L44 vs nla L42": {
+   "kappa": null,
+   "only_first": 0,
+   "only_second": 0,
+   "both": 100
+  },
+  "oracle L40 vs oracle L44": {
+   "kappa": null,
+   "only_first": 0,
+   "only_second": 0,
+   "both": 100
+  }
+ }
+}

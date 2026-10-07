@@ -1,0 +1,69 @@
+{
+ "label": "POST HOC, EXPLORATORY (014, tag full): paired per-item naming contrasts",
+ "contrasts": {
+  "oracle L40|whole_minus_rest_J": {
+   "mean": 0.14,
+   "ci95": [
+    0.08,
+    0.21
+   ],
+   "n_items": 100
+  },
+  "oracle L40|J_minus_R0": {
+   "mean": 0.055,
+   "ci95": [
+    0.015,
+    0.1
+   ],
+   "n_items": 100
+  },
+  "oracle L44|whole_minus_rest_J": {
+   "mean": 0.225,
+   "ci95": [
+    0.155,
+    0.3
+   ],
+   "n_items": 100
+  },
+  "oracle L44|J_minus_R0": {
+   "mean": 0.065,
+   "ci95": [
+    0.02,
+    0.115
+   ],
+   "n_items": 100
+  },
+  "nla L42|whole_minus_rest_J": {
+   "mean": 0.025,
+   "ci95": [
+    0.0,
+    0.055
+   ],
+   "n_items": 100
+  },
+  "nla L42|J_minus_R0": {
+   "mean": 0.03,
+   "ci95": [
+    -0.005,
+    0.065
+   ],
+   "n_items": 100
+  },
+  "oracle L40_minus_nla L42|whole_minus_rest_J": {
+   "mean": 0.115,
+   "ci95": [
+    0.05,
+    0.19
+   ],
+   "n_items": 100
+  },
+  "oracle L44_minus_nla L42|whole_minus_rest_J": {
+   "mean": 0.2,
+   "ci95": [
+    0.13,
+    0.275
+   ],
+   "n_items": 100
+  }
+ }
+}
