@@ -58,3 +58,40 @@ Branch `013-nla-hallucination` (off `012-reader-concordance`). Plan for the PI: 
 The pre-registered primary (all contradicted spans) stays as recorded.
 
 **STOP after the smoke** (the PI's rule).
+
+**Full deletion run** (522 explanations; amendment A1; judges $0.82; reconstructor 26.6 GPU-min). Results: `results/013_nla_hallucination/analysis/hallucination_all.json`.
+
+*Gates:*
+- G-repro exact on 87/87.
+- G1 0.964; G3 κ 0.72.
+- G2 0.99 (89/90); G2k 0.83 (75/90), with the invented_context tag's precision 0.62 (`qualitative/handcheck_full_codes.md`).
+
+*Counts:* 474 eligible; 1 had nothing to clean; 29 were cleaned away. Contradicted text covers a mean 64% of tokens.
+
+*FVE means (eligible):* O 47.3; C1 −25.1; R1 3.5; C2 −27.5; R2 −2.3; K1 41.8 (n 87).
+
+**Pre-registered primary:** Δ = FVE_R1 − FVE_C1 = **+28.6 [24.0, 33.4]**, n 474. The §6 label is "H-signal". The same holds in each state (clean +27.6, J +29.1, random +29.0) and with the sentence-level control (+26.0 [21.1, 31.3]).
+
+**Split by kind** (A1, post hoc; the §6 bands applied descriptively):
+
+| Kind | n | Share of tokens deleted | Δ clause control | Δ sentence control |
+|---|---|---|---|---|
+| **invented_context** | 354 | 0.25 | **−1.9 [−4.3, 0.3]** (unresolved) | **−0.1 [−1.8, 1.7]** (no difference beyond ±2) |
+| **misquote** | 453 | 0.49 | **+35.8 [31.1, 40.8]** | **+36.6 [31.7, 41.6]** |
+
+**Reading:**
+- The primary "signal" comes from misquotes: paraphrases of the prompt, often distorted, that still carry the bridge or answer.
+- Pure invented context (headers, quiz names, framings) carries no more signal than the same amount of random text. Within ±2 FVE points by the sentence control, the reconstructor treats it as padding.
+- The invented_context tag's contamination (precision 0.62) is by misquotes, which would push its Δ *up*, so the padding reading isn't an artifact of that contamination.
+
+*J share:* deleting contradicted text lowers the reconstruction's J share 0.010 [0.007, 0.014] more than random deletion does. That is tiny (gold 0.329, O 0.339).
+
+**Rewrite smoke** (amendment A2; 20 explanations; judges $0.055; `results/013_nla_hallucination/analysis/rewrite_smoke.json`).
+- Gates pass: B's contradicted-sentence rate is O 0.59, **F 0.01**, P 0.59. I hand-checked 20 F and 10 P: F factual 20/20; P keeps its claims 10/10. Words changed: F 60, P 45.
+- **ΔFVE = FVE(F) − FVE(P) = +7.8 [3.7, 11.9]**, giving the reading "removing hallucinations improves reconstruction". P − O is −0.8 [−2.5, 0.9]: rewording alone does nothing.
+- **ΔJ = +0.009 [0.002, 0.018]**, giving "more J" (O 0.351 → F 0.359; gold 0.338). Small.
+- *Confound check (post hoc):* F added the correct answer in 4/20 (Cu → Au, Nahuatl, 'C', nine). Without them, ΔFVE is still +8.3 [3.7, 12.7] (n 16).
+- *Still a caveat:* F also restores the prompt's exact wording when correcting misquotes. Part of the gain may be "a more accurate description of the input" rather than "less hallucination", and the two can't be separated here.
+- In the J state, correcting a misquote back to the prompt removes swap-carrying text, e.g. Kremlin J: F − P = +3.0; red planet J: −19.2.
+
+**STOP after the rewrite smoke** (the PI's rule). Next, on the PI's go: the full F/P run on 522 (about $1.5, about 10 GPU-min).
