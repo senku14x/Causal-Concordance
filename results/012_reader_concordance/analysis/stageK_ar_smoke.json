@@ -1,0 +1,62 @@
+{
+ "label": "EXPLORATORY (012 Stage K smoke; rules in spec \u00a721, fixed before any number)",
+ "reference": {
+  "fve_pct_step400": 76.6,
+  "definition": "EasyNLA eval/fve_pct; 128 held-out rows; AR as at step 400"
+ },
+ "n_rows": 64,
+ "extraction_rate_primary": 1.0,
+ "n_valid_primary": 64,
+ "baseline_B": 0.4616343379020691,
+ "mse_scale": 71.55417527999327,
+ "ar_blocks": 43,
+ "fve_pct_primary": 78.07044485508133,
+ "fve_pct_primary_boot95": [
+  75.27988330111293,
+  80.7094787015284
+ ],
+ "fve_pct_all_samples": 76.59116282372128,
+ "n_valid_all_samples": 256,
+ "extraction_rate_all_samples": 1.0,
+ "fve_pct_shuffled": -89.7828742582737,
+ "matched_minus_shuffled": 167.85331911335504,
+ "per_row_fve_primary_median": 0.808202621092303,
+ "pred_norm_raw_median": 71.91768646240234,
+ "gold_norm_median": 88.19434356689453,
+ "explanation_tokens_median": 187.0,
+ "rule": {
+  "band": [
+   71.6,
+   81.6
+  ],
+  "min_extraction": 0.9,
+  "min_matched_minus_shuffled": 20.0
+ },
+ "ar_files_sha256": {
+  "config.json": "43d171bfb4918309c3ca892caeef9c329a56f2585cb735ea44a396e2411a77ae",
+  "generation_config.json": "252e0efee3ded327704912616f3493a227cdc39eb4bab52fcae1ceb3ed5dc890",
+  "model.safetensors": "a2f64fcf22d0013411eae279e4a6e6d34a8c01aafb49a474c0ea82aebe4619df",
+  "saved_at_step.txt": "284b7e6d788f363f910f7beb1910473e23ce9d6c871f1ce0f31f22a982d48ad4",
+  "value_head.safetensors": "8693094f0ec375b6c649255bd1a392487ea0e7b6faffab5c01c5518928b4b20c"
+ },
+ "ar_saved_at_step": "600",
+ "av_meta": {
+  "sampling": {
+   "temperature": 1.0,
+   "top_p": 1.0,
+   "top_k": 0,
+   "max_new_tokens": 256
+  },
+  "k": 4,
+  "seed_rule": "SEED + chunk start",
+  "chunk": 16,
+  "adapter": "av_rl_adapters/iter_000400",
+  "wall_s": 132.53274726867676,
+  "injections": 4
+ },
+ "wall_s_ar": 129.39380884170532,
+ "pass_extraction": true,
+ "pass_band": true,
+ "pass_sanity": true,
+ "verdict": "validated (in band, sanity passes)"
+}

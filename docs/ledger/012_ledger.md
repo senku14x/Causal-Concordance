@@ -472,3 +472,23 @@ All points were checked. Accepted:
   - 128 held-out rows; T 1.0, top_p 1, top_k 0, 256 tokens.
 - Band: [71.6, 81.6] on the parquet's 64 rows. Extraction rate ≥ 0.90. Matched − shuffled ≥ 20 points.
 - `/workspace/.env` recreated. The AR download (35.4 GB, pinned 5a13b7ec) was started in the background before the run.
+
+**Stage K run** (about 4.4 GPU-min: AV 2.2, AR 2.2). Results: `results/012_reader_concordance/analysis/stageK_ar_smoke.json`.
+
+*Gates:*
+- AV injection healthy: the write's norm relative to the residual is 0.99–1.01, and its cosine with the activation is ≥ 0.99998, on every chunk.
+- Extraction 64/64 (and 256/256 over all samples).
+- AR load: only `model.norm.weight` and `lm_head.weight` are reported missing. EasyNLA replaces both with identity, so this is expected.
+
+*§21 verdict: **validated.***
+- Primary FVE (first sample per row, B on the 64 rows = 0.462): **78.1%**, row-bootstrap [75.3, 80.7]. The band is [71.6, 81.6]; the reference is 76.6% at step 400.
+- FVE over all 4 samples: 76.6%.
+- Shuffled control: −89.8%, so matched − shuffled is 167.9 points (rule: ≥ 20).
+- Per-row FVE: median 0.81, range 0.30–0.91.
+- Raw AR output norm median 71.9 (≈ √5120 = 71.6); gold norm median 88.2.
+
+*Caveat:* the 64 parquet rows may have been training rows, so the in-band FVE validates our loading path, not held-out generalisation.
+
+*Qualitative (seeded sample `results/012_reader_concordance/qualitative/stageK_samples.jsonl`):* explanations are genre and continuation descriptions. Row 4 (FVE 0.81) is already a concrete example for the hallucination test: the source is a Seattle-area Holi event (Lake Sammamish, "Vibha Seattle"); the explanation says "Washington DC" and names an organisation "Ynacharya for India". Both are contradicted by the text, yet reconstruction is good.
+
+**STOP (the PI's rule: report after the smoke).** Next, on the PI's go: the main hallucination test (pre-register per §21's decisions), then the late-layer H2 read with Oracle L52–60 (the PI's item 8).
