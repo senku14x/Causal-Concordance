@@ -87,8 +87,14 @@ def phase_read():
     finally:
         ol.unload()
     (OUT / "readouts_oracle.jsonl").write_text("".join(json.dumps(r, ensure_ascii=False) + "\n" for r in rows))
-    del model
-    torch.cuda.empty_cache()
+
+
+def phase_nla():
+    # Fix (logged): the first run did `del model; empty_cache()` in the same process and the NLA refused to load
+    # (47 GB free); the Oracle reads were saved. NLA reads now run in their own process.
+    import readers as RD, p007 as C
+    cap, P, gate = pieces()
+    items, t0 = cap["items"], time.time()
     nla, rows = RD.NLArl(), []
     try:
         for pc in NEW:
@@ -147,4 +153,4 @@ def phase_analyze():
 
 
 if __name__ == "__main__":
-    {"read": phase_read, "analyze": phase_analyze}[sys.argv[1]]()
+    {"read": phase_read, "nla": phase_nla, "analyze": phase_analyze}[sys.argv[1]]()

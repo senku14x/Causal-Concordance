@@ -1,0 +1,228 @@
+{
+ "label": "EXPLORATORY, POST HOC (claude_ovarida): 014 content-matched control",
+ "k_pca": {
+  "40": 23,
+  "42": 20,
+  "44": 17
+ },
+ "n_items": 100,
+ "gates": {
+  "40": {
+   "rest_J_vs_saved_max_rel": 0.0,
+   "centred_share_J": 0.4600254888551328,
+   "centred_share_PCA_k": 0.466986098389701,
+   "k": 23,
+   "energy_removed_share": {
+    "J": 0.27317871085807116,
+    "PCA": 0.4165260395475505,
+    "R0": 0.19202125706890372,
+    "R1": 0.19425882357110458
+   }
+  },
+  "42": {
+   "rest_J_vs_saved_max_rel": 0.0,
+   "centred_share_J": 0.43272663183376414,
+   "centred_share_PCA_k": 0.437870431534489,
+   "k": 20,
+   "energy_removed_share": {
+    "J": 0.23210102132665306,
+    "PCA": 0.37117269976396094,
+    "R0": 0.1933167200559015,
+    "R1": 0.19588770739749561
+   }
+  },
+  "44": {
+   "rest_J_vs_saved_max_rel": 0.0,
+   "centred_share_J": 0.4019841036126618,
+   "centred_share_PCA_k": 0.40637097478782325,
+   "k": 17,
+   "energy_removed_share": {
+    "J": 0.23331289665248048,
+    "PCA": 0.2985595251440364,
+    "R0": 0.19413758689213456,
+    "R1": 0.1968410961623277
+   }
+  }
+ },
+ "readers": {
+  "oracle L40": {
+   "share": {
+    "whole": 0.985,
+    "rest_J": 0.845,
+    "rest_PCA": 0.95,
+    "rest_R0": 0.995,
+    "rest_R1": 1.0
+   },
+   "cost": {
+    "rest_J": {
+     "mean": 0.14,
+     "ci95": [
+      0.08,
+      0.21
+     ]
+    },
+    "rest_PCA": {
+     "mean": 0.035,
+     "ci95": [
+      0.0,
+      0.075
+     ]
+    },
+    "rest_R0": {
+     "mean": -0.01,
+     "ci95": [
+      -0.03,
+      0.01
+     ]
+    },
+    "rest_R1": {
+     "mean": -0.015,
+     "ci95": [
+      -0.035,
+      0.0
+     ]
+    }
+   },
+   "D_PCA": {
+    "mean": 0.105,
+    "ci95": [
+     0.035,
+     0.18
+    ]
+   },
+   "D_R": {
+    "mean": 0.1525,
+    "ci95": [
+     0.0875,
+     0.2225
+    ]
+   },
+   "verdict": "J-specific beyond content"
+  },
+  "oracle L44": {
+   "share": {
+    "whole": 0.99,
+    "rest_J": 0.765,
+    "rest_PCA": 0.97,
+    "rest_R0": 0.975,
+    "rest_R1": 0.985
+   },
+   "cost": {
+    "rest_J": {
+     "mean": 0.225,
+     "ci95": [
+      0.155,
+      0.3
+     ]
+    },
+    "rest_PCA": {
+     "mean": 0.02,
+     "ci95": [
+      -0.005,
+      0.05
+     ]
+    },
+    "rest_R0": {
+     "mean": 0.015,
+     "ci95": [
+      -0.005,
+      0.035
+     ]
+    },
+    "rest_R1": {
+     "mean": 0.005,
+     "ci95": [
+      0.0,
+      0.015
+     ]
+    }
+   },
+   "D_PCA": {
+    "mean": 0.205,
+    "ci95": [
+     0.13,
+     0.28
+    ]
+   },
+   "D_R": {
+    "mean": 0.215,
+    "ci95": [
+     0.1425,
+     0.2900624999999996
+    ]
+   },
+   "verdict": "J-specific beyond content"
+  },
+  "nla L42": {
+   "share": {
+    "whole": 0.995,
+    "rest_J": 0.97,
+    "rest_PCA": 0.99,
+    "rest_R0": 0.99,
+    "rest_R1": 0.99
+   },
+   "cost": {
+    "rest_J": {
+     "mean": 0.025,
+     "ci95": [
+      0.0,
+      0.055
+     ]
+    },
+    "rest_PCA": {
+     "mean": 0.005,
+     "ci95": [
+      -0.01,
+      0.02
+     ]
+    },
+    "rest_R0": {
+     "mean": 0.005,
+     "ci95": [
+      0.0,
+      0.015
+     ]
+    },
+    "rest_R1": {
+     "mean": 0.005,
+     "ci95": [
+      0.0,
+      0.015
+     ]
+    }
+   },
+   "D_PCA": {
+    "mean": 0.02,
+    "ci95": [
+     -0.005,
+     0.055
+    ]
+   },
+   "D_R": {
+    "mean": 0.02,
+    "ci95": [
+     -0.0075,
+     0.0525
+    ]
+   },
+   "verdict": "unresolved"
+  }
+ },
+ "oracle_minus_nla": {
+  "oracle L40 - nla L42 | D_PCA": {
+   "mean": 0.085,
+   "ci95": [
+    0.01,
+    0.165
+   ]
+  },
+  "oracle L44 - nla L42 | D_PCA": {
+   "mean": 0.185,
+   "ci95": [
+    0.115,
+    0.255
+   ]
+  }
+ },
+ "verdict_014_contrast": "survives content matching"
+}

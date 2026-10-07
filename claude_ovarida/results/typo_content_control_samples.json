@@ -1,0 +1,24 @@
+{
+ "note": "Oracle L44, first sample, seed-7 pick among items whose rest_J readout misses the target but rest_PCA names it",
+ "n_such_items": 23,
+ "samples": [
+  {
+   "item": "typo-present",
+   "target": "present",
+   "rest_J": "- , which was **established** at the new site. (Note: The original had a typo \"\n- 2.  **journey** in the new town. (Note: In standard English,\n- /project** from abroad. (Note: *undertake* is more formal; *take up* is cas",
+   "rest_PCA": "- e (present) under the tree. (请注意，这是拼写错误的“Christmas present”，故意写\n- er (礼物) to his friend. (注：英文中圣诞节礼物拼写为 present，但孩子常写成 present\n- /present from my father. He wrapped it with red paper and a golden bow. I could hardly wa"
+  },
+  {
+   "item": "typo-football",
+   "target": "football",
+   "rest_J": "- f on Monday, Tuesday and Wednesday. (Note:\n- 学 in Spring, ______ in Summer.\" -> *Grammar: \"was studying\n- s (or similar) every month.** / The university **held** exams every semester. (Note: \"held\" is past tense,\n- 2. ",
+   "rest_PCA": "- 2 on TV every Sunday. (注意：原句应为 watches football\n- ll, not football, on TV. (李雷在电视上经常看足球。) (请找出错误) | 可能是 \"footbal\n- l on the TV, but I prefer watching football on TV.（注意：这里有两个football，或者拼写错误） | He always watches footbal"
+  },
+  {
+   "item": "typo-training",
+   "target": "training",
+   "rest_J": "- in the **new** year, but they failed to **gain momentum**\n- /study after two years in the digital space. / Her coding **was\n- 过程 (Note: 'prcess' is a typo for 'process') after finishing the\n- 后 (after) setting up their",
+   "rest_PCA": "- ing yesterday and left the office. / The new employees completed their training and left the\n- in was completed, so they left the office today. (注意: 原文是 typetrainning\n- 程 (typo for training) on Friday. / The interns co"
+  }
+ ]
+}
