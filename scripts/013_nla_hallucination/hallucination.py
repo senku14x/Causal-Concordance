@@ -4,6 +4,10 @@
   python hallucination.py handset --subset smoke|all   # writes the hand-check file (§7 G2) - read BEFORE any Δ
   python hallucination.py score   --subset smoke|all   # §4-5: versions + reconstructor (GPU), G-repro
   python hallucination.py analyze --subset smoke|all   # §5-7: Δ, rules, G1/G3, per state, J share
+  NLAH_FAMILY=typo python hallucination.py gate        # 014 Part C: the 013 de-risk gate R1 on typo (before judging)
+
+NLAH_FAMILY=typo (014 Part C, docs/design_specs/014_typo.md §5) swaps the material for typo's whole-activation NLA L42
+readouts (outputs/014_typo/) and writes to outputs/014_typo/nlah, results/014_typo; everything else is unchanged.
 
 Sections referenced (§n) are the spec's.
 """
@@ -12,6 +16,7 @@ import ast
 import hashlib
 import json
 import math
+import os
 import random
 import re
 import sys
@@ -27,17 +32,37 @@ ROOT = HERE.parents[1]
 sys.path.insert(0, str(ROOT / "scripts" / "common"))
 EASYNLA = Path("/workspace/sources/repos/EasyNLA")
 sys.path.insert(0, str(EASYNLA))
-OUT = ROOT / "outputs/013_nla_hallucination"
-RES = ROOT / "results/013_nla_hallucination"
-STATES = ["clean", "J_L24-35", "rand_L24-35"]
+FAMILY = os.environ.get("NLAH_FAMILY", "multihop")
+assert FAMILY in ("multihop", "typo"), FAMILY
+TYPO = ROOT / "outputs/014_typo"
+if FAMILY == "typo":
+    OUT, RES, STATES = TYPO / "nlah", ROOT / "results/014_typo", ["clean"]
+else:
+    OUT, RES, STATES = ROOT / "outputs/013_nla_hallucination", ROOT / "results/013_nla_hallucination", ["clean", "J_L24-35", "rand_L24-35"]
 MODEL_A, MODEL_B = "google/gemini-3.8-flash", "z-ai/glm-5.3-flash"
 N_SEEDS, MIN_TOK = 5, 10
 SPEND_CAP = 10.0
 
 # --------------------------------------------------------------------------------------------- §2 material
 def explanations():
-    """The 522 explanations in a fixed order (item, state, sample)."""
+    """The 522 explanations in a fixed order (item, state, sample); typo: the 200 whole-activation ones."""
     from nla.schema import extract_explanation
+    if FAMILY == "typo":
+        meta = {json.loads(l)["item"]: json.loads(l) for l in open(TYPO / "meta.jsonl")}
+        rows = []
+        for l in open(TYPO / "readouts_nla.jsonl"):
+            r = json.loads(l)
+            if r["piece"] != "whole":
+                continue
+            m = meta[r["item"]]
+            for k, raw in enumerate(r["samples"]):
+                e = extract_explanation(raw)
+                assert e is not None, (r["item"], k)
+                rows.append({"eid": f"{r['item']}|clean|{k}", "item": r["item"], "state": "clean", "sample": k, "prompt": m["prompt"],
+                             "continuation": m["continuation"], "src": None, "tgt": m["target"], "explanation": e})
+        rows.sort(key=lambda x: (x["item"], x["sample"]))
+        assert len(rows) == 2 * len(meta), len(rows)
+        return rows
     items = {json.loads(l)["name"]: json.loads(l) for l in open(ROOT / "outputs/012_reader_concordance/stageB/items.jsonl")}
     rows = []
     for l in open(ROOT / "outputs/012_reader_concordance/stageC/readouts_nla.jsonl"):
@@ -62,6 +87,8 @@ def subset(rows, which):
     if which == "all":
         return rows
     rng = random.Random(13)
+    if FAMILY == "typo":
+        return sorted(rng.sample(rows, 5), key=lambda x: x["eid"])
     pick = []
     for st, n in (("clean", 7), ("J_L24-35", 7), ("rand_L24-35", 6)):
         pool = [r for r in rows if r["state"] == st]
@@ -371,6 +398,67 @@ def build_versions(e, cr, ur, ntok, eid, kr=None):
     return v, info
 
 # --------------------------------------------------------------------------------------------- §5 scoring
+def gold_vectors():
+    """{(item, state): L42 activation, float32}, the exact vectors the NLA read."""
+    if FAMILY == "typo":
+        caps = torch.load(TYPO / "captures.pt", map_location="cpu", weights_only=False)
+        return {(it, "clean"): caps["H"][42][n].float() for n, it in enumerate(caps["items"])}
+    caps = torch.load(ROOT / "outputs/012_reader_concordance/stageB/captures.pt", map_location="cpu", weights_only=False)
+    li = caps["layers"].index(42)
+    return {(it, st): caps["X"][n, caps["arms"].index(st), li].float() for n, it in enumerate(caps["items"]) for st in STATES}
+
+
+def critic_setup():
+    import yaml
+    from transformers import AutoTokenizer
+    from nla.models import NLACriticModel
+    from nla.schema import normalize_activation
+    from nla.utils.critic import critic_predict
+    import readers as RD
+    root = Path(RD.nla_rl_paths()[0])
+    template = yaml.safe_load(open(root / "nla_meta.yaml"))["prompt_templates"]["critic"]
+    scale = math.sqrt(5120)
+    tok = AutoTokenizer.from_pretrained(root / "av_base")
+    critic = NLACriticModel.from_pretrained(str(root / "ar_reconstructor"), dtype=torch.bfloat16, device_map="cuda").eval()
+
+    @torch.no_grad()
+    def recon(text):
+        ids = tok.encode(template.format(explanation=text), add_special_tokens=False)[:1024]
+        p = critic_predict(critic, torch.tensor([ids], device="cuda"), None, scale)[0].float().cpu()
+        return normalize_activation(p[None], scale)[0]
+    return recon, scale
+
+
+def phase_gate(which):
+    """014 Part C gate = 013's de-risk rule R1 (FVE of the first sample >= 40% and matched - shuffled >= 20 points; B =
+    predict-the-mean on the family's own activations; seeded derangement over items, as derisk.py)."""
+    assert FAMILY == "typo", "the multihop gate is derisk.py's"
+    from nla.schema import normalize_activation, compute_predict_mean_baselines
+    recon, scale = critic_setup()
+    gold = gold_vectors()
+    _, B = compute_predict_mean_baselines(torch.stack(list(gold.values())), scale)
+    first = [r for r in explanations() if r["sample"] == 0]
+    gn = [normalize_activation(gold[(r["item"], "clean")][None], scale)[0] for r in first]
+    P = [recon(r["explanation"]) for r in first]
+    idx = list(range(len(first)))
+    perm, rng = idx[:], random.Random(0)
+    while any(a == b for a, b in zip(perm, idx)):
+        rng.shuffle(perm)
+    mse = [float(((P[i] - gn[i]) ** 2).mean()) for i in idx]
+    msh = [float(((P[j] - gn[i]) ** 2).mean()) for i, j in zip(idx, perm)]
+    fve = lambda xs: 100 * (1 - float(np.mean(xs)) / B)
+    rb = random.Random(0)
+    boots = [fve([mse[k] for k in (rb.randrange(len(idx)) for _ in idx)]) for _ in range(2000)]
+    m, s_ = fve(mse), fve(msh)
+    res = {"label": "EXPLORATORY (014 Part C gate = 013 de-risk R1)", "n": len(idx), "baseline_B": B, "fve_pct_first": m,
+           "fve_pct_first_boot95": [float(np.percentile(boots, 2.5)), float(np.percentile(boots, 97.5))],
+           "fve_pct_shuffled": s_, "matched_minus_shuffled": m - s_, "rule": {"R1_min_fve_pct": 40.0, "R1_min_matched_minus_shuffled": 20.0},
+           "R1_pass": m >= 40.0 and m - s_ >= 20.0}
+    (RES / "analysis").mkdir(parents=True, exist_ok=True)
+    (RES / "analysis/nlah_gate.json").write_text(json.dumps(res, indent=1))
+    print(json.dumps(res, indent=1), flush=True)
+
+
 def phase_score(which):
     import yaml
     from transformers import AutoTokenizer
@@ -383,9 +471,7 @@ def phase_score(which):
     scale = math.sqrt(5120)
     tok = AutoTokenizer.from_pretrained(root / "av_base")
     ntok = lambda t: len(tok.encode(t, add_special_tokens=False))
-    caps = torch.load(ROOT / "outputs/012_reader_concordance/stageB/captures.pt", map_location="cpu", weights_only=False)
-    li = caps["layers"].index(42)
-    gold = {(it, st): caps["X"][n, caps["arms"].index(st), li].float() for n, it in enumerate(caps["items"]) for st in STATES}
+    gold = gold_vectors()
     G = torch.stack(list(gold.values()))
     _, B = compute_predict_mean_baselines(G, scale)
     Gn = normalize_activation(G, scale)
@@ -423,9 +509,9 @@ def phase_score(which):
         if (n + 1) % 10 == 0:
             print(f"[score] {n + 1}/{len(J)} ({time.time() - t0:.0f}s)", flush=True)
     # G-repro against the de-risk scores (clean, first sample)
-    dr = [json.loads(l) for l in open(OUT / "derisk/multihop_ar_scores.jsonl")]
+    dr = [json.loads(l) for l in open(OUT / "derisk/multihop_ar_scores.jsonl")] if FAMILY == "multihop" else []
     order = sorted({r["item"] for r in rows.values()})
-    ref = {(order[d["i"]], d["sample"]): d["mse"] for d in dr if "mse" in d}
+    ref = {(order[d["i"]], d["sample"]): d["mse"] for d in dr if "mse" in d}  # typo: no reference (the gate phase stands in)
     diffs = [abs(o["mse"]["O"] - ref[(o["item"], 0)]) for o in out if o["state"] == "clean" and o["sample"] == 0 and (o["item"], 0) in ref]
     meta = {"which": which, "baseline_B": B, "n": len(out), "G_repro_n": len(diffs), "G_repro_max_abs": max(diffs) if diffs else None,
             "G_repro_pass": bool(diffs) and max(diffs) <= 1e-6, "wall_s": time.time() - t0}
@@ -541,7 +627,7 @@ def phase_analyze(which):
 
 if __name__ == "__main__":
     ap = argparse.ArgumentParser()
-    ap.add_argument("phase", choices=["judge", "handset", "score", "analyze"])
+    ap.add_argument("phase", choices=["judge", "handset", "score", "analyze", "gate"])
     ap.add_argument("--subset", choices=["smoke", "all", "extra10", "kinds"], default="smoke")
     a = ap.parse_args()
-    {"judge": phase_judge, "handset": phase_handset, "score": phase_score, "analyze": phase_analyze}[a.phase](a.subset)
+    {"judge": phase_judge, "handset": phase_handset, "score": phase_score, "analyze": phase_analyze, "gate": phase_gate}[a.phase](a.subset)

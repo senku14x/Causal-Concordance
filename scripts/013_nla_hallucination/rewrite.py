@@ -125,9 +125,7 @@ def phase_score(which):
     template = yaml.safe_load(open(root / "nla_meta.yaml"))["prompt_templates"]["critic"]
     scale = math.sqrt(5120)
     tok = AutoTokenizer.from_pretrained(root / "av_base")
-    caps = torch.load(H.ROOT / "outputs/012_reader_concordance/stageB/captures.pt", map_location="cpu", weights_only=False)
-    li = caps["layers"].index(42)
-    gold = {(it, st): caps["X"][n, caps["arms"].index(st), li].float() for n, it in enumerate(caps["items"]) for st in H.STATES}
+    gold = H.gold_vectors()
     G = torch.stack(list(gold.values()))
     _, B = compute_predict_mean_baselines(G, scale)
     mu = normalize_activation(G, scale).mean(0)
