@@ -1,0 +1,41 @@
+{
+ "label": "EXPLORATORY (013 de-risk; rules in claude_suggestions/013_plan \u00a74, fixed before the run)",
+ "rule": {
+  "R1_min_fve_pct": 40.0,
+  "R1_min_matched_minus_shuffled": 20.0
+ },
+ "brew": {
+  "n_acts": 231,
+  "n_valid_first": 231,
+  "baseline_B": 0.03063012659549713,
+  "extraction_rate_all": 1.0,
+  "fve_pct_first": -556.2049997466161,
+  "fve_pct_first_boot95": [
+   -568.1087835314664,
+   -544.9151047605799
+  ],
+  "fve_pct_all_samples": -553.0110444595014,
+  "fve_pct_shuffled": -583.1816111720838,
+  "matched_minus_shuffled": 26.976611425467695,
+  "R1_pass": false,
+  "fve_by_role_first": {
+   "member": -561.4799348804596,
+   "partner": -554.8214102033128
+  }
+ },
+ "multihop": {
+  "n_acts": 87,
+  "n_valid_first": 87,
+  "baseline_B": 0.2849551737308502,
+  "extraction_rate_all": 1.0,
+  "fve_pct_first": 49.92866065580138,
+  "fve_pct_first_boot95": [
+   46.01472544477039,
+   53.6092068424447
+  ],
+  "fve_pct_all_samples": 50.072159202283764,
+  "fve_pct_shuffled": -79.03815993753778,
+  "matched_minus_shuffled": 128.96682059333915,
+  "R1_pass": true
+ }
+}
