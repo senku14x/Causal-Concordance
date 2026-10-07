@@ -383,3 +383,30 @@ Median S [table-cluster 95% CI]:
 - **J1:** a relaxed clean gate (fixed 8-token budget, ≥ 8/10 at T 0.8), re-scoring Stage I's flips. A stated amendment, written after seeing I's 35/168 pass rate.
 - **J2:** swap only the clue's own tokens (positions before the clue's final "."), then read at that "." (H1) and at the carrier end (H2). Both are computed by the model, not written. The model's own output at H1 is the output-facing control.
 - **Correction logged:** my message suggested "swap only the tokens after the clue and read at the clue end". In a causal LM such edits cannot reach the clue end. The corrected design edits the clue tokens before H1.
+
+## Corrections after the independent Codex audit (2026-10-07; the PI shared reviews 09–15)
+
+All points were checked. Accepted:
+
+1. **A real bug in Stages F2 and R (mine).** `keep()` excluded the token before " is" using `is_read_minus_1`, which only the model rows carry. Reader averages therefore included a position the model covariate did not.
+   - **Fixed:** one shared (item, pos) mask, built from the model rows and applied to both. `stageF_analysis.py` and `stageR_analysis.py` re-run; the numbers match the audit's independent recomputation.
+   - **F2, NLA L42:** AUC 0.72 → **0.59 [0.44, 0.77]**; partial 0.54 → **0.17 [−0.17, 0.39]**. Verdict "intermediate" → **"not outcome-specific"**. **The NLA early-position hint was an artifact of this bug; withdrawn.**
+   - **R:** NLA partial 0.34 → −0.06 [−0.37, 0.23], Oracle L44 0.40 → 0.07. The verdict ("does not replicate") is unchanged, and no positive residual estimate remains.
+2. **"NLA-specific if NLA passes and others fail" (§16, also §18–19) is an invalid specificity rule:** it compares two significance outcomes. It is replaced by a paired reader contrast with a stated threshold (spec §20). Existing paired check from the audit: R NLA − Oracle L44 AUC −0.0004 [−0.019, 0.020].
+3. **Scope.** J-derived intervention labels show outcome tracking under these interventions, not natural mediation of the bridge. Wording narrowed on the page and here.
+4. **E0's "held-out spans" were reused calibration contexts:** 1,024 overlapping crops from the same 12 responses 011 used to select the loader conventions; 792 distinct target positions; retrieval on 1,008 rows. Not independent validation.
+5. **"One global scale" was wrong:** E0 fits one scalar *per layer*, on the same samples it scores (scaled FVE = squared cosine). The depth trend is *compatible* with a scale-invariant loss but does not identify it. "Implies the published FVEs are scale-aligned" is withdrawn as too strong.
+6. **E0a candidates (a), (c) and (d) subtracted separate sample means** and reused E0's retrieval values computed on different vectors, so their FVE and retrieval entries describe different geometries. Candidate (b) is unaffected. E0's ledger line "unscaled candidates miss everywhere" was also stale: (b) matched at L52 and L56.
+7. **The J-objective chain is not established.** Each link needs its own evidence: a candidate jfve metric → an active AR training loss → the Oracle's reward → an explanation of 007. "The AR was then trained with a J term" is withdrawn. New wording: "the metadata and profile support a J-aware reconstructor hypothesis; the exact objective and the reward's dependence on J remain unverified." Questions for the PI to ask separately: the AR training loss, the definitions of validation FVE and J-FVE, the Oracle reward, and an official input/output fixture.
+8. **Earlier wording corrected:**
+   - "Oracle-only 7, NLA-only 0" pooled 4 Oracle samples (2 layers) against 2 NLA samples. At equal opportunity it is Oracle L40-only 7 vs NLA-only 2 (or L44 6 vs 1).
+   - The 14 "failed swaps naming tgt" all have positive answer-margin changes, so they are not false positives.
+   - "Ensembling adds nothing" → "no demonstrated gain" (increment CI [−0.023, 0.021]).
+   - Stage H: "family, not positions" is too strong. H also changed the numeric regime and the atom convention, and its late-band answer control failed the power bar. "Not established which difference explains 008's null."
+
+**Still supported:**
+- the J-swap lever (Stage A: 48/82 vs random; R: 39/146 vs 0);
+- F1 propagation (35/82 without editing the read cell; 0/82 editing only it);
+- readers track successful interventions;
+- the Stage D output-facing result;
+- Stage I's model-side finding.

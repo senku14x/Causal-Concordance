@@ -658,3 +658,10 @@ EXPLORATORY.
 **Units:** hold states (clue × carrier), clustered by clue; hold success = at least half of the gated discriminating questions flipped. Japan reported pooled and excluded. A pilot; report n.
 
 EXPLORATORY.
+
+## 20. Corrections adopted after the Codex audit (2026-10-07)
+
+- **F2 and R analyses:** one shared (item, pos) mask for readers and the model covariate, with an implementation fix. The corrected F2 NLA verdict is "not outcome-specific". See the ledger.
+- **Reader-specificity rules in §16, §18 and §19 are replaced.** "X-specific" now requires a **paired** contrast on the same items: the AUC difference between readers with a paired cluster-bootstrap 95% CI excluding 0 and |ΔAUC| ≥ 0.10. A single reader passing a threshold while another fails is not specificity. Lack of a detected difference is reported as "unresolved", not equivalence.
+- **Labels:** "answer effect under the specified J-derived intervention", not natural mediation.
+- **E0:** "reused calibration contexts", not held-out validation. The scale is "per-layer, same-sample calibration".

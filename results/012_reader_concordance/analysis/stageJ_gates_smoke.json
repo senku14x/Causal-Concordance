@@ -1,0 +1,39 @@
+{
+ "G0_fail": [],
+ "write_mask_violations": [],
+ "hold_identity": {
+  "bf-fuji-ocean|c1": {
+   "n_prompts": 3,
+   "max_abs_diff_X": 0.0,
+   "max_abs_diff_logprob": 0.0
+  },
+  "bf-fuji-ocean|c2": {
+   "n_prompts": 3,
+   "max_abs_diff_X": 0.0,
+   "max_abs_diff_logprob": 0.0
+  },
+  "bf-rio2016-language|c1": {
+   "n_prompts": 3,
+   "max_abs_diff_X": 0.0,
+   "max_abs_diff_logprob": 0.0
+  },
+  "bf-rio2016-language|c2": {
+   "n_prompts": 3,
+   "max_abs_diff_X": 0.0,
+   "max_abs_diff_logprob": 0.0
+  }
+ },
+ "clean_parity_vs_stageI": {
+  "bf-fuji-ocean|c1": 0.0,
+  "bf-fuji-ocean|c2": 0.0,
+  "bf-rio2016-language|c1": 0.0,
+  "bf-rio2016-language|c2": 0.0
+ },
+ "n_prompts": 12,
+ "n_j1_gated": 5,
+ "n_j1_gated_discriminating": 5,
+ "hold_identity_all_bitwise": true,
+ "clean_parity_all_bitwise": true,
+ "wall_s": 65.9,
+ "pass": true
+}

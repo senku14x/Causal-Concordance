@@ -1,0 +1,351 @@
+{
+ "G0_fail": [],
+ "write_mask_violations": [],
+ "hold_identity": {
+  "bf-fuji-ocean|c1": {
+   "n_prompts": 3,
+   "max_abs_diff_X": 0.0,
+   "max_abs_diff_logprob": 0.0
+  },
+  "bf-fuji-ocean|c2": {
+   "n_prompts": 3,
+   "max_abs_diff_X": 0.0,
+   "max_abs_diff_logprob": 0.0
+  },
+  "bf-rio2016-language|c1": {
+   "n_prompts": 3,
+   "max_abs_diff_X": 0.0,
+   "max_abs_diff_logprob": 0.0
+  },
+  "bf-rio2016-language|c2": {
+   "n_prompts": 3,
+   "max_abs_diff_X": 0.0,
+   "max_abs_diff_logprob": 0.0
+  },
+  "bf-sushi-capital|c1": {
+   "n_prompts": 3,
+   "max_abs_diff_X": 0.0,
+   "max_abs_diff_logprob": 0.0
+  },
+  "bf-sushi-capital|c2": {
+   "n_prompts": 3,
+   "max_abs_diff_X": 0.0,
+   "max_abs_diff_logprob": 0.0
+  },
+  "b3-mh-acropolis-capital|c1": {
+   "n_prompts": 3,
+   "max_abs_diff_X": 0.0,
+   "max_abs_diff_logprob": 0.0
+  },
+  "b3-mh-acropolis-capital|c2": {
+   "n_prompts": 3,
+   "max_abs_diff_X": 0.0,
+   "max_abs_diff_logprob": 0.0
+  },
+  "b3-mh-buenosaires-language|c1": {
+   "n_prompts": 3,
+   "max_abs_diff_X": 0.0,
+   "max_abs_diff_logprob": 0.0
+  },
+  "b3-mh-buenosaires-language|c2": {
+   "n_prompts": 3,
+   "max_abs_diff_X": 0.0,
+   "max_abs_diff_logprob": 0.0
+  },
+  "b3-mh-colosseum-capital|c1": {
+   "n_prompts": 3,
+   "max_abs_diff_X": 0.0,
+   "max_abs_diff_logprob": 0.0
+  },
+  "b3-mh-colosseum-capital|c2": {
+   "n_prompts": 3,
+   "max_abs_diff_X": 0.0,
+   "max_abs_diff_logprob": 0.0
+  },
+  "b3-mh-cuckoo-mountains|c1": {
+   "n_prompts": 3,
+   "max_abs_diff_X": 0.0,
+   "max_abs_diff_logprob": 0.0
+  },
+  "b3-mh-cuckoo-mountains|c2": {
+   "n_prompts": 3,
+   "max_abs_diff_X": 0.0,
+   "max_abs_diff_logprob": 0.0
+  },
+  "b3-mh-eiffel-capital|c1": {
+   "n_prompts": 3,
+   "max_abs_diff_X": 0.0,
+   "max_abs_diff_logprob": 0.0
+  },
+  "b3-mh-eiffel-capital|c2": {
+   "n_prompts": 3,
+   "max_abs_diff_X": 0.0,
+   "max_abs_diff_logprob": 0.0
+  },
+  "b3-mh-fjords-capital|c1": {
+   "n_prompts": 3,
+   "max_abs_diff_X": 0.0,
+   "max_abs_diff_logprob": 0.0
+  },
+  "b3-mh-fjords-capital|c2": {
+   "n_prompts": 3,
+   "max_abs_diff_X": 0.0,
+   "max_abs_diff_logprob": 0.0
+  },
+  "b3-mh-fuji-currency|c1": {
+   "n_prompts": 3,
+   "max_abs_diff_X": 0.0,
+   "max_abs_diff_logprob": 0.0
+  },
+  "b3-mh-fuji-currency|c2": {
+   "n_prompts": 3,
+   "max_abs_diff_X": 0.0,
+   "max_abs_diff_logprob": 0.0
+  },
+  "b3-mh-greatwall-river|c1": {
+   "n_prompts": 3,
+   "max_abs_diff_X": 0.0,
+   "max_abs_diff_logprob": 0.0
+  },
+  "b3-mh-greatwall-river|c2": {
+   "n_prompts": 3,
+   "max_abs_diff_X": 0.0,
+   "max_abs_diff_logprob": 0.0
+  },
+  "b3-mh-guinness-capital|c1": {
+   "n_prompts": 3,
+   "max_abs_diff_X": 0.0,
+   "max_abs_diff_logprob": 0.0
+  },
+  "b3-mh-guinness-capital|c2": {
+   "n_prompts": 3,
+   "max_abs_diff_X": 0.0,
+   "max_abs_diff_logprob": 0.0
+  },
+  "b3-mh-kilts-capital|c1": {
+   "n_prompts": 3,
+   "max_abs_diff_X": 0.0,
+   "max_abs_diff_logprob": 0.0
+  },
+  "b3-mh-kilts-capital|c2": {
+   "n_prompts": 3,
+   "max_abs_diff_X": 0.0,
+   "max_abs_diff_logprob": 0.0
+  },
+  "b3-mh-kremlin-language|c1": {
+   "n_prompts": 3,
+   "max_abs_diff_X": 0.0,
+   "max_abs_diff_logprob": 0.0
+  },
+  "b3-mh-kremlin-language|c2": {
+   "n_prompts": 3,
+   "max_abs_diff_X": 0.0,
+   "max_abs_diff_logprob": 0.0
+  },
+  "b3-mh-nokia-capital|c1": {
+   "n_prompts": 3,
+   "max_abs_diff_X": 0.0,
+   "max_abs_diff_logprob": 0.0
+  },
+  "b3-mh-nokia-capital|c2": {
+   "n_prompts": 3,
+   "max_abs_diff_X": 0.0,
+   "max_abs_diff_logprob": 0.0
+  },
+  "b3-mh-samba-river|c1": {
+   "n_prompts": 3,
+   "max_abs_diff_X": 0.0,
+   "max_abs_diff_logprob": 0.0
+  },
+  "b3-mh-samba-river|c2": {
+   "n_prompts": 3,
+   "max_abs_diff_X": 0.0,
+   "max_abs_diff_logprob": 0.0
+  },
+  "b3-mh-sphinx-capital|c1": {
+   "n_prompts": 3,
+   "max_abs_diff_X": 0.0,
+   "max_abs_diff_logprob": 0.0
+  },
+  "b3-mh-sphinx-capital|c2": {
+   "n_prompts": 3,
+   "max_abs_diff_X": 0.0,
+   "max_abs_diff_logprob": 0.0
+  },
+  "b3-mh-tajmahal-river|c1": {
+   "n_prompts": 3,
+   "max_abs_diff_X": 0.0,
+   "max_abs_diff_logprob": 0.0
+  },
+  "b3-mh-tajmahal-river|c2": {
+   "n_prompts": 3,
+   "max_abs_diff_X": 0.0,
+   "max_abs_diff_logprob": 0.0
+  },
+  "b3-mh-tulips-capital|c1": {
+   "n_prompts": 3,
+   "max_abs_diff_X": 0.0,
+   "max_abs_diff_logprob": 0.0
+  },
+  "b3-mh-tulips-capital|c2": {
+   "n_prompts": 3,
+   "max_abs_diff_X": 0.0,
+   "max_abs_diff_logprob": 0.0
+  },
+  "carnival-ocean|c1": {
+   "n_prompts": 3,
+   "max_abs_diff_X": 0.0,
+   "max_abs_diff_logprob": 0.0
+  },
+  "carnival-ocean|c2": {
+   "n_prompts": 3,
+   "max_abs_diff_X": 0.0,
+   "max_abs_diff_logprob": 0.0
+  },
+  "firstletter-greatwall-country|c1": {
+   "n_prompts": 3,
+   "max_abs_diff_X": 0.0,
+   "max_abs_diff_logprob": 0.0
+  },
+  "firstletter-greatwall-country|c2": {
+   "n_prompts": 3,
+   "max_abs_diff_X": 0.0,
+   "max_abs_diff_logprob": 0.0
+  },
+  "bf-kangaroo-capital|c1": {
+   "n_prompts": 3,
+   "max_abs_diff_X": 0.0,
+   "max_abs_diff_logprob": 0.0
+  },
+  "bf-kangaroo-capital|c2": {
+   "n_prompts": 3,
+   "max_abs_diff_X": 0.0,
+   "max_abs_diff_logprob": 0.0
+  },
+  "bf-mapleleaf-capital|c1": {
+   "n_prompts": 3,
+   "max_abs_diff_X": 0.0,
+   "max_abs_diff_logprob": 0.0
+  },
+  "bf-mapleleaf-capital|c2": {
+   "n_prompts": 3,
+   "max_abs_diff_X": 0.0,
+   "max_abs_diff_logprob": 0.0
+  },
+  "bf-olympia-language|c1": {
+   "n_prompts": 3,
+   "max_abs_diff_X": 0.0,
+   "max_abs_diff_logprob": 0.0
+  },
+  "bf-olympia-language|c2": {
+   "n_prompts": 3,
+   "max_abs_diff_X": 0.0,
+   "max_abs_diff_logprob": 0.0
+  },
+  "b3-mh-ikea-capital|c1": {
+   "n_prompts": 3,
+   "max_abs_diff_X": 0.0,
+   "max_abs_diff_logprob": 0.0
+  },
+  "b3-mh-ikea-capital|c2": {
+   "n_prompts": 3,
+   "max_abs_diff_X": 0.0,
+   "max_abs_diff_logprob": 0.0
+  },
+  "b3-mh-lego-capital|c1": {
+   "n_prompts": 3,
+   "max_abs_diff_X": 0.0,
+   "max_abs_diff_logprob": 0.0
+  },
+  "b3-mh-lego-capital|c2": {
+   "n_prompts": 3,
+   "max_abs_diff_X": 0.0,
+   "max_abs_diff_logprob": 0.0
+  },
+  "b3-mh-pizza-continent|c1": {
+   "n_prompts": 3,
+   "max_abs_diff_X": 0.0,
+   "max_abs_diff_logprob": 0.0
+  },
+  "b3-mh-pizza-continent|c2": {
+   "n_prompts": 3,
+   "max_abs_diff_X": 0.0,
+   "max_abs_diff_logprob": 0.0
+  },
+  "bf-greatwall-language|c1": {
+   "n_prompts": 3,
+   "max_abs_diff_X": 0.0,
+   "max_abs_diff_logprob": 0.0
+  },
+  "bf-greatwall-language|c2": {
+   "n_prompts": 3,
+   "max_abs_diff_X": 0.0,
+   "max_abs_diff_logprob": 0.0
+  }
+ },
+ "clean_parity_vs_stageI": {
+  "bf-fuji-ocean|c1": 0.0,
+  "bf-fuji-ocean|c2": 0.0,
+  "bf-rio2016-language|c1": 0.0,
+  "bf-rio2016-language|c2": 0.0,
+  "bf-sushi-capital|c1": 0.0,
+  "bf-sushi-capital|c2": 0.0,
+  "b3-mh-acropolis-capital|c1": 0.0,
+  "b3-mh-acropolis-capital|c2": 0.0,
+  "b3-mh-buenosaires-language|c1": 0.0,
+  "b3-mh-buenosaires-language|c2": 0.0,
+  "b3-mh-colosseum-capital|c1": 0.0,
+  "b3-mh-colosseum-capital|c2": 0.0,
+  "b3-mh-cuckoo-mountains|c1": 0.0,
+  "b3-mh-cuckoo-mountains|c2": 0.0,
+  "b3-mh-eiffel-capital|c1": 0.0,
+  "b3-mh-eiffel-capital|c2": 0.0,
+  "b3-mh-fjords-capital|c1": 0.0,
+  "b3-mh-fjords-capital|c2": 0.0,
+  "b3-mh-fuji-currency|c1": 0.0,
+  "b3-mh-fuji-currency|c2": 0.0,
+  "b3-mh-greatwall-river|c1": 0.0,
+  "b3-mh-greatwall-river|c2": 0.0,
+  "b3-mh-guinness-capital|c1": 0.0,
+  "b3-mh-guinness-capital|c2": 0.0,
+  "b3-mh-kilts-capital|c1": 0.0,
+  "b3-mh-kilts-capital|c2": 0.0,
+  "b3-mh-kremlin-language|c1": 0.0,
+  "b3-mh-kremlin-language|c2": 0.0,
+  "b3-mh-nokia-capital|c1": 0.0,
+  "b3-mh-nokia-capital|c2": 0.0,
+  "b3-mh-samba-river|c1": 0.0,
+  "b3-mh-samba-river|c2": 0.0,
+  "b3-mh-sphinx-capital|c1": 0.0,
+  "b3-mh-sphinx-capital|c2": 0.0,
+  "b3-mh-tajmahal-river|c1": 0.0,
+  "b3-mh-tajmahal-river|c2": 0.0,
+  "b3-mh-tulips-capital|c1": 0.0,
+  "b3-mh-tulips-capital|c2": 0.0,
+  "carnival-ocean|c1": 0.0,
+  "carnival-ocean|c2": 0.0,
+  "firstletter-greatwall-country|c1": 0.0,
+  "firstletter-greatwall-country|c2": 0.0,
+  "bf-kangaroo-capital|c1": 0.0,
+  "bf-kangaroo-capital|c2": 0.0,
+  "bf-mapleleaf-capital|c1": 0.0,
+  "bf-mapleleaf-capital|c2": 0.0,
+  "bf-olympia-language|c1": 0.0,
+  "bf-olympia-language|c2": 0.0,
+  "b3-mh-ikea-capital|c1": 0.0,
+  "b3-mh-ikea-capital|c2": 0.0,
+  "b3-mh-lego-capital|c1": 0.0,
+  "b3-mh-lego-capital|c2": 0.0,
+  "b3-mh-pizza-continent|c1": 0.0,
+  "b3-mh-pizza-continent|c2": 0.0,
+  "bf-greatwall-language|c1": 0.0,
+  "bf-greatwall-language|c2": 0.0
+ },
+ "n_prompts": 168,
+ "n_j1_gated": 60,
+ "n_j1_gated_discriminating": 60,
+ "hold_identity_all_bitwise": true,
+ "clean_parity_all_bitwise": true,
+ "wall_s": 835.4,
+ "pass": true
+}

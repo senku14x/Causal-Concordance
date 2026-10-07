@@ -6,7 +6,10 @@ PREFIX0["oracle"], [clean, edited] pairs, acts_per_batch 2) at L40/L44; NLA (006
 at L42; token lenses J_NP / J_CB standard and logit at L40/L44 (resolved single-token forms). d_r per state.
 Readouts: 2 samples per state for Oracle L44 and NLA L42 at H2 (read_batch, k 2, seed p007.SEED, chunks of 32).
 
-  python stageI_readers.py --part subject|nla [--tag smoke]
+  python stageI_readers.py --part subject|nla [--tag smoke] [--stage J]
+
+--stage J (design §19, J2): the same path on stageJ/j2_hold_captures.pt (clean / J_clue / rand_clue); sampled readouts
+at H1 instead of H2; outputs j2_hold_ll_*.jsonl, j2_readouts_*.jsonl.
 """
 import argparse
 import json
@@ -26,19 +29,21 @@ import p007 as C                                    # noqa: E402
 from multihop import string_spellings               # noqa: E402
 from c012 import category, d_r, lse_owner           # noqa: E402
 
-EDITED = ["J_pre", "rand_pre"]
 
 
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--part", choices=["subject", "nla"], required=True)
     ap.add_argument("--tag", default="full")
+    ap.add_argument("--stage", choices=["I", "J"], default="I")
     a = ap.parse_args()
-    D = ROOT / "outputs/012_reader_concordance/stageI" / ("" if a.tag == "full" else a.tag)
+    D = ROOT / f"outputs/012_reader_concordance/stage{a.stage}" / ("" if a.tag == "full" else a.tag)
     t0 = time.time()
-    cap = torch.load(D / "hold_captures.pt")
+    pre, RPOS = ("i_", "H2") if a.stage == "I" else ("j2_", "H1")
+    cap = torch.load(D / ("hold_captures.pt" if a.stage == "I" else "j2_hold_captures.pt"))
     holds, arms, poss, layers, X, meta = cap["holds"], cap["arms"], cap["positions"], cap["layers"], cap["X"], cap["meta"]
     h = lambda i, s, P, L: X[i, arms.index(s), poss.index(P), layers.index(L)]
+    EDITED = arms[1:]
     rows, timing, checks = [], {}, {}
 
     def pair_reader(reader, Ls, tok, prefix, score):
@@ -60,11 +65,11 @@ def main():
         order = [(i, s) for i in range(len(holds)) for s in arms]
         outs = []
         for j in range(0, len(order), 32):
-            outs += read([h(i, s, "H2", L) for i, s in order[j:j + 32]])
-        with open(D / f"i_readouts_{reader}.jsonl", "w") as f:
+            outs += read([h(i, s, RPOS, L) for i, s in order[j:j + 32]])
+        with open(D / f"{pre}readouts_{reader}.jsonl", "w") as f:
             for (i, s), smp in zip(order, outs):
                 mt = meta[holds[i]]
-                f.write(json.dumps({"hold": holds[i], **mt, "reader": reader, "layer": L, "pos": "H2", "state": s, "samples": smp,
+                f.write(json.dumps({"hold": holds[i], **mt, "reader": reader, "layer": L, "pos": RPOS, "state": s, "samples": smp,
                                     "category": [category(x, [mt["src"]], [mt["tgt"]]) for x in smp]}, ensure_ascii=False) + "\n")
 
     if a.part == "subject":
@@ -130,10 +135,10 @@ def main():
         finally:
             nla.close()
         name = "nla"
-    with open(D / f"i_hold_ll_{name}.jsonl", "w") as f:
+    with open(D / f"{pre}hold_ll_{name}.jsonl", "w") as f:
         for r in rows:
             f.write(json.dumps(r) + "\n")
-    (D / f"summary_readers_i_{name}.json").write_text(json.dumps({"timing": timing, "own_logit_check": checks, "n_rows": len(rows),
+    (D / f"summary_readers_{pre}{name}.json").write_text(json.dumps({"timing": timing, "own_logit_check": checks, "n_rows": len(rows),
                                                                   "wall_s": round(time.time() - t0, 1)}, indent=1, default=str))
     print(json.dumps(timing), flush=True)
 

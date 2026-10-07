@@ -79,7 +79,15 @@ def main():
     out["F1"]["model_output_auc_allbutread"] = {"bridge": auc([x["mb"] for x in mo if x["mb"] is not None], [x["success"] for x in mo if x["mb"] is not None]),
                                                "answer": auc([x["ma"] for x in mo if x["ma"] is not None], [x["success"] for x in mo if x["ma"] is not None])}
     # F2
-    keep = lambda r: r["item"] in base and not (r.get("is_read_minus_1") in (True, "True") and base[r["item"]]["read_token"].strip() == "is")
+    # ONE shared (item, pos) mask for readers and the model covariate (fix 2026-10-07, Codex audit): the reader rows
+    # carry no is_read_minus_1 flag, so the exclusion set is built from the model rows and applied to both by (item, pos)
+    excl = set()
+    for l in open(F / "f2_model.jsonl"):
+        r = json.loads(l)
+        it = r.get("item", r.get("name"))
+        if it in base and r.get("is_read_minus_1") in (True, "True") and base[it]["read_token"].strip() == "is":
+            excl.add((it, int(r["pos"])))
+    keep = lambda r: r["item"] in base and (r["item"], int(r["pos"])) not in excl
     mod = defaultdict(lambda: {"mb": [], "ma": []})
     for l in open(F / "f2_model.jsonl"):
         r = json.loads(l)

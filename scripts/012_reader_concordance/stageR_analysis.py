@@ -26,7 +26,15 @@ def main():
         ed = r["edit_direction"]["L24-35"] if isinstance(r["edit_direction"], dict) else r["edit_direction"]
         base[r["name"]] = {"rel": r["src"], "read_token": r.get("read_token", ""), "dir": ed, "s": J["success"] in (True, "True"),
                            "dm": float(J["dm"]), "size": float(np.mean(dh)) if dh else 0.0}
-    keep = lambda r: r["item"] in base and not (r.get("is_read_minus_1") in (True, "True") and base[r["item"]]["read_token"].strip() == "is")
+    # ONE shared (item, pos) mask for readers and the model covariate (fix 2026-10-07, Codex audit): the reader rows
+    # carry no is_read_minus_1 flag, so the exclusion set is built from the model rows and applied to both by (item, pos)
+    excl = set()
+    for l in open(D / "f2_model.jsonl"):
+        r = json.loads(l)
+        it = r.get("item", r.get("name"))
+        if it in base and r.get("is_read_minus_1") in (True, "True") and base[it]["read_token"].strip() == "is":
+            excl.add((it, int(r["pos"])))
+    keep = lambda r: r["item"] in base and (r["item"], int(r["pos"])) not in excl
     mod = defaultdict(lambda: {"mb": [], "ma": []})
     for l in open(D / "f2_model.jsonl"):
         r = json.loads(l)
