@@ -1,0 +1,9 @@
+{
+ "write_mask_violations": [],
+ "parity_mismatch": [],
+ "G0_fail": [],
+ "max_write_outside_mask": 0.0,
+ "n_items": 4,
+ "wall_s": 22.3,
+ "pass": true
+}

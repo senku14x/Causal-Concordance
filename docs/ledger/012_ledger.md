@@ -153,3 +153,41 @@ Spec: `docs/design_specs/012_reader_concordance.md` (v1 → v1.1 §11 → v1.2 �
 - **F1:** position-split edits (read position only / all but the read position).
 - **F2:** reads at early prompt positions, with the model's own per-position output as the covariate.
 - Expected cost: under 1 GPU-h. Built by the same subagent on the Stage B/C code.
+
+**00:30–01:15 — Stage F run** (subagent; about 42.5 GPU-min). Gates:
+- write masks exact: the max write outside the mask is 0.0 at every band layer for every item;
+- G0 (α = 0, allbutread mask) bitwise on 87/87;
+- clean, J and random arms bitwise-identical to Stage B on 87/87.
+
+Analysis: `stageF_analysis.py` → `results/012_reader_concordance/analysis/stageF_analysis.json`. Rules from spec §13. Cohort: 82 clean-correct items.
+
+*F1, position split* (J swap L24–35):
+
+| Arm | Flips | Median Δm |
+|---|---|---|
+| all positions | 38/82 | +5.05 |
+| **all but the read position** | **35/82** | +4.42 |
+| **read position only** | **0/82** | +0.14 |
+| random controls | 1/82, 1/82, 0/82 | — |
+
+- **The answer change is carried from earlier positions to the answer token by the model itself;** the read cell's own edit is not sufficient.
+- **Readers at the unwritten read cell** (all-but-read arm), AUC for that arm's success: Oracle L40/L44 0.96 / 0.96, NLA L42 0.94, J_NP / J_CB 0.94–0.95, logit 0.93–0.94.
+  - **Rule (i) met:** readers follow states the model computed, not only written coordinates.
+  - The model's own read-cell output under this arm: AUC 0.97 (bridge and answer).
+  - Partial Spearman with Δm, given the model's read-cell output and the write norm:
+    - Oracle 0.48 [0.18, 0.63] (L40) and 0.44 [0.13, 0.60] (L44);
+    - **NLA 0.46 [0.18, 0.60]**;
+    - token lenses 0.34–0.41, with L44 CIs touching 0.
+- **Read-position-only edits** change no answers, yet readers shift at the written cell (J_NP +3.08, Oracle L40 +1.11, NLA +0.68). That shift is detection of the write itself.
+
+*F2, early positions* (all-position J swap L24–35; prompt positions before the read token, minus the token before " is"; mean per item; toward_tgt n = 64):
+- The model's own next-token output shift at those positions does not track success: AUC 0.55 (bridge) / 0.56 (answer). So these positions are not output-facing, as intended.
+- **Readers there shift toward tgt about equally on working and failed swaps:**
+  - J_NP / J_CB AUC 0.59–0.64, logit 0.47–0.52, Oracle L40/L44 0.48 / 0.58. Verdict: **not outcome-specific**. They detect the written edit whether or not the model uses it.
+  - **NLA L42: AUC 0.72 [0.58, 0.84], partial 0.54 [0.20, 0.69].** Verdict: **intermediate** (between the 0.65 and 0.75 bars, partial CI above 0). The only reader with some outcome-specific signal at early positions. Single reader, single layer, post hoc interest; flagged for a test with fresh data.
+- Bug, cosmetic: the per-position profile in `stageF_analysis.json` is keyed by absolute position, not offset from the end, because the reader rows carry no `n_prompt`. Not used in any verdict.
+
+*What Stage F adds:*
+- At the answer token, readers track a model-computed state, and the Oracle and NLA keep a moderate association with the answer change beyond the model's own output there.
+- At written earlier positions, readers mostly see the write, not the use. The NLA is the possible exception.
+- This is the first sign in the project of an NLA property the Oracle doesn't share. It is weak and needs fresh data before any claim.
