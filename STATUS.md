@@ -7,6 +7,12 @@ results: `docs/reports/008_trackb.md`, `docs/reports/009_brewcode_derisk.md` and
 `docs/reports/007_jsubspace.md` and report 25. Then `CLAUDE.md`, this file (newest first),
 `docs/reports/005_followups.md` and `docs/reports/006_reader_likelihood.md`.*
 
+**2026-10-07, 012 later (EXPLORATORY).**
+- **Stages I/J (delayed question):** a swap before the question changes later answers (42/60; clue-only 36/60; random 0). Readers at the carrier end see nothing. At the computed clue end they track the swap (about 0.8, equal to the logit lens), but the model's own output there does too (0.69, above the pre-set bar).
+- **Codex audit:** accepted and corrected. The F2/R position-mask bug is fixed and the NLA hint withdrawn; the specificity rule is now a paired contrast; E0 wording corrected.
+- **NLA repo read in full:** pairing step 400 with the final reconstructor is fine (model card).
+- Ledger `docs/ledger/012_ledger.md`; session prompt `docs/claude_reports/33_new_session_prompt_2026-10-07.md`.
+
 **2026-10-07, 012 overnight (branch `012-reader-concordance`; EXPLORATORY).** J-row coordinate swaps on Jan Chen's ST multihop bank (all WSB items) change Qwen's answer on 0.585 of 82 clean-correct items at L24-47 (random 0.06; logit rows 0). The swap operator's direction is set by the clean state (toward_src edits all fail at L24-47). Readers on the swapped states (Oracle L40/L44/L52/L56, NLA L42, token lenses) shift toward the swapped-in concept far more when the answer changed (AUC 0.88-0.97; Oracle ≈ NLA), but the model's own read-cell output does too (AUC 0.96-0.97 at L24-35); beyond it, the readers' bridge shift keeps only a modest partial association (ρ ~0.3-0.5). Details: `docs/ledger/012_ledger.md`; page https://claude.ai/artifact/NoevKvBkXNUTvtpnJPVsuq.
 
 **2026-10-06, late: 011 s1 finished; AR J-bias check; 011 code fixes (POST HOC / EXPLORATORY; PI go on report 31).**

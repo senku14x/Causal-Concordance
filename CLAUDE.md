@@ -60,6 +60,7 @@ and vocabulary: J-lens, workspace, J-space, privilege, verbalizable. A session t
    callout, §8 A4/A7/A8/A9, §12, §14 and §15.
 4. **docs/context/SPEC_v2_errata_01.md** (accepted 2026-10-04): V2-E1–E9 correct SPEC_v2 passages; an erratum wins over the text.
    **docs/context/AMENDMENT_01.md**: the PI's 2026-10-02 decisions (its §6 lists each conflict by SPEC.md line).
+4b. **012, the newest** (branch `012-reader-concordance`): `docs/ledger/012_ledger.md` first, then the spec §12-§20 and `docs/claude_reports/33_new_session_prompt_2026-10-07.md`.
 5. **The latest experiments (2026-10-06, branch `008-trackb-brewcode`, all exploratory):**
    - 008, Track B: `docs/reports/008_trackb.md` (design `docs/design_specs/008_009_trackb_brewcode.md` Part 1, §E);
    - 009, the brew-code bank: `docs/reports/009_brewcode_derisk.md` (same design note, Part 2, §E-009; reader rules in
@@ -206,6 +207,7 @@ without the PI's say-so.
 **Branches.** **`origin/main` holds everything through 007:** on 2026-10-06 the PI had `007-jsubspace` fast-forwarded
 into `main` ("merge with main"). On this instance the local `main` ref was left stale (95ab0e5), so branch from
 `origin/main`, not `main`. Never push to `main` without the PI's explicit say-so.
+- **`012-reader-concordance`** (off `008-trackb-brewcode`, 2026-10-07, pushed): experiment 012, reports 31-33, ledger, Codex audits. **The newest work.** Not merged.
 - **`008-trackb-brewcode`** (off `origin/main`, 2026-10-06, pushed): experiments 008-011, reports 26-29, the
   `claude_reports` cleanup. **The newest work.** Not merged.
 - `007-jsubspace` (off `005-amended-full-run`): experiment 007 (design, amendments A1-A3, all code, results, status files,
@@ -215,7 +217,23 @@ into `main` ("merge with main"). On this instance the local `main` ref was left 
 - `spec-v2` @ 9709712: SPEC_v2 + errata 01, checks C1-C3, the NLA loader, and 005 up to the dev pilot.
 - `main`: up to date with `007-jsubspace` since the 2026-10-06 fast-forward (before that @ 95ab0e5, the 000-004 scaffold).
 
-- **012** (branch `012-reader-concordance`, exploratory, 2026-10-07): J-row swaps change Qwen's multihop answer (0.585 vs random 0.06 at L24-47); every reader's src→tgt shift tracks the change (Oracle ≈ NLA), mostly through output-facing content at the read cell. Stage F: the change is carried from earlier positions (edit all-but-read 35/82 flips, read-only 0/82); readers at the unwritten answer cell follow it; at written early positions readers detect the write regardless of use (NLA L42 the one partial exception). Stage G: whitened swaps flip fewer (26 vs 38/82). Stage H: every-position answer-atom control still below the power bar on brew (S 0.073 at L40-48), but H also changed regime and atom convention, so which difference explains 008's null is not established. Stage F2's NLA early-position hint was a position-mask bug (withdrawn). Spec `docs/design_specs/012_reader_concordance.md`, ledger `docs/ledger/012_ledger.md`, page https://claude.ai/artifact/NoevKvBkXNUTvtpnJPVsuq.
+- **012, readers on swapped states** (branch `012-reader-concordance`, all EXPLORATORY, 2026-10-06/07).
+  - **Docs:** spec `docs/design_specs/012_reader_concordance.md` (§12–§20 are the live contract), ledger `docs/ledger/012_ledger.md` (read it: every run, oddity and correction), page https://claude.ai/artifact/NoevKvBkXNUTvtpnJPVsuq, Codex audits `docs/reviews/012_codex_audits/`.
+  - **Bank:** Jan Chen's phrase-lens ST multihop bank, i.e. 96 WSB multihop items plus swap targets; local clone `/workspace/sources/ext/phrase-lens-src`; Jan cleared use.
+  - **Lever:** J-row coordinate swaps at every prompt position change the answer on 48/82 (L24-47) and 38/82 (L24-35); random about 0; logit rows 0/82. The swap is a reflection, so its direction is set by the clean state; toward_src edits fail.
+  - **Readers** (Oracle L40/44/52/56, NLA L42, J_NP/J_CB/logit) track working swaps (AUC 0.9-0.96), but the model's own output at the read token does too (0.97). Mostly output-facing; no Oracle/NLA difference.
+  - **F1:** editing everything but the read token flips 35/82; editing only it flips 0/82.
+  - **F2/R:** at written early positions readers detect the write, not use. The NLA hint was a position-mask bug and is withdrawn.
+  - **G:** whitened swaps flip fewer (26 vs 38/82).
+  - **H:** brew every-position answer-atom control 0.073, below the power bar; why 008 failed is not established.
+  - **Q:** readers share one signal; no demonstrated ensemble gain.
+  - **I/J, delayed question** ("Consider <clue>. <carrier> The <relation> of that country is"):
+    - swapping before the question flips 42/60, and clue-only swapping 36/60 (random 0);
+    - hold states are identical across questions, so the model holds and uses the swapped country;
+    - readers at the carrier end see nothing (about 0.47); at the computed clue end about 0.8, equal to the logit lens, while the model's own H1 output gives 0.69, so the pre-set bar fails.
+  - **E0:** our Oracle-AR loader fails its validation (retrieval 8/12). A J-lens training term is a hypothesis only.
+  - **Net:** no evidence that any reader reads the hidden step beyond output-facing content, and no NLA-vs-Oracle difference.
+  - **The prompts are a good lever but structurally can't separate bridge from answer.**
 
 **008, Track B: the paper's §3.3 privilege test on brew, done the paper's way** (exploratory; dev, 82 gated pairs; all
 gates pass; `docs/reports/008_trackb.md`; design `docs/design_specs/008_009_trackb_brewcode.md` Part 1 and §E):
@@ -344,6 +362,13 @@ why the NLA runs stopped and the other open issues: `docs/claude_reports/25_nla_
 - Their tracking does not follow 001's patch shares. The Oracle tracks z 2× more at `</think>` (patch share 0.01), which the model's output does not mirror.
 
 **Open PI decisions:**
+- **012 next (PI, 2026-10-07):**
+  - **(a) Camila's NLA hallucination test is UNBLOCKED.** Load `ceselder/qwen3.6-27b-nla-rl` `ar_reconstructor/` (final AR; the model card says to pair it with any AV adapter) via EasyNLA's `nla/utils/critic.py`. Validate it on the repo's 64 `data/example_activations.parquet` against the published ~77% FVE. Then compare original vs LLM-cleaned explanations (FVE, J-subspace share) on our saved 012 NLA readouts.
+  - **(b)** A systematic content labelling of Oracle vs NLA readouts (Camila's ask 3).
+  - **(c)** A new prompt family where readers could differ (recommended: hidden user attributes).
+  - **Paid judge approved by the PI:** OpenRouter (key in `/workspace/.env`), Gemini 3.8 Flash or GLM/Kimi; validate the judge on a hand-checked sample.
+  - Questions for Camila are pending (Oracle-AR loader / fixture; AR loss, jfve and Oracle reward definitions).
+  - **No subagents unless the PI asks:** the PI's usage limit is tight.
 - 011: s1 finished and analysed (partial, below). Any next step needs the loader validated against the published AR
   first; phrase-based AR colour vectors (~10 GPU-min) after that.
 - 009 readers: keep the rule (bank used model-side only), a post hoc reader run with the model's output as covariate,
