@@ -40,7 +40,7 @@ Your first job is to come fully up to speed with the whole project: the paper it
    - **012, readers on swapped states:** `docs/ledger/012_ledger.md` (read it fully; Stages K and L are at its end), spec `docs/design_specs/012_reader_concordance.md` §12–§22, `docs/reviews/012_codex_audits/`, report 34.
    - **013, the NLA hallucination test:** `docs/ledger/013_ledger.md`, spec `docs/design_specs/013_nla_hallucination.md` (§1–10, A1 §11, A2 §12).
    - **014, typo:** `docs/ledger/014_ledger.md`, spec `docs/design_specs/014_typo.md`.
-   - **Results page** (public by link): https://claude.ai/artifact/NoevKvBkXNUTvtpnJPVsuq.
+   - **Results page** (v13, public by link; covers 012, 013 and 014): https://claude.ai/artifact/NoevKvBkXNUTvtpnJPVsuq. It is built from committed JSON by `scripts/012_reader_concordance/make_page.py`.
    - **My plain-language notes** (outside the repo): `/workspace/claude_suggestions/`. Of these, `project_map_prompts_and_numbers_2026-10-07.md` maps which prompt set produced which number.
 5. `STATUS.md` (newest first) and report 30 for the history of 001–011.
 
@@ -50,7 +50,8 @@ Your first job is to come fully up to speed with the whole project: the paper it
 
 - **Hardware:** 1× RTX PRO 6000 Blackwell (96 GB). Python is `/venv/main/bin/python`; each Bash call is a fresh shell.
 - **Memory:** the subject (50 GB) and the NLA av_base (54 GB) don't fit together, so capture first, then free.
-- **`/workspace` is NOT persistent.** Outputs are mirrored to the public HF dataset `senku21x/causal-concordance-outputs`.
+- **`/workspace` is NOT persistent.** Every output through 014 is mirrored to the public HF dataset `senku21x/causal-concordance-outputs` (`scripts/000_setup/mirror_outputs.py`; restore with `restore_outputs.py`).
+- **Page checks:** `/venv/page` (playwright + headless Chromium) for the 1280 / 400 px render check before publishing.
 - **OpenRouter key:** `/workspace/.env` only. Never log it.
 - **Git:**
   - Push with `env -u GITHUB_TOKEN git -c credential.helper='!gh auth git-credential' push origin <branch>`.
@@ -75,7 +76,7 @@ Your first job is to come fully up to speed with the whole project: the paper it
 2. **Check the instance:**
    - `git status` on `014-typo`: only `CLAUDE.md` modified;
    - the GPU is free;
-   - the CPU tests pass (`python -m pytest scripts/common/tests tests -q -m "not gpu"`).
+   - the CPU tests pass (`python -m pytest scripts/common/tests tests -q -m "not gpu"`; 140 passed on 2026-10-07).
 3. **Write `docs/claude_reports/36_up_to_speed_<date>.md`.** Commit and push it, and add it to the reports README. It must contain:
    - **(a) The paper in your own words** (about one page): its main claims, its methods (J-lens, J-space, the privilege test, verbalizers), and what it does *not* show.
    - **(b) My notes:** the points I stress, and where the merged notes (03 §14–15) correct or disagree with the paper.
