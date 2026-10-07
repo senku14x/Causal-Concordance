@@ -464,3 +464,11 @@ All points were checked. Accepted:
 - **Contents:** RL adapters `iter_000100`–`000800` (the README lists only up to 600); `ar_reconstructor/` (43-block truncated backbone plus value head, `saved_at_step` 600, "latest only"); SFT-init and SFT checkpoints of the reconstructor; `nla_meta.yaml`; `run_config.yaml` (reward = −reconstruction MSE, no J term); `fve_trajectory.json`; `data/example_activations.parquet` (64 layer-42 activations with source text, a ready validation set).
 - **The README says to "pair any AV adapter with the provided (final) AR".** The project's earlier framing that "AR step 600 is not step-paired with our AV iter_000400", treated as a blocker for the reconstructor / hallucination test, was an unchecked assumption.
 - Keeping iter_000400 for the reading experiments remains justified, since it is WSB's and Cathryn's NLA.
+
+**Stage K pre-registered** (spec §21; the PI's "go" on report 34 (e)1). This is the smoke validating the nla-rl reconstructor (AR) against the card's 76.6% FVE at step 400.
+- Reference read from `fve_trajectory.json`, `run_config.yaml` and EasyNLA's eval loop:
+  - FVE = 1 − MSE(n(pred), n(gold)) / B, with n scaling to norm √5120;
+  - B is the predict-the-mean baseline on the scored set itself;
+  - 128 held-out rows; T 1.0, top_p 1, top_k 0, 256 tokens.
+- Band: [71.6, 81.6] on the parquet's 64 rows. Extraction rate ≥ 0.90. Matched − shuffled ≥ 20 points.
+- `/workspace/.env` recreated. The AR download (35.4 GB, pinned 5a13b7ec) was started in the background before the run.

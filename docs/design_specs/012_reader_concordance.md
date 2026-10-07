@@ -665,3 +665,58 @@ EXPLORATORY.
 - **Reader-specificity rules in §16, §18 and §19 are replaced.** "X-specific" now requires a **paired** contrast on the same items: the AUC difference between readers with a paired cluster-bootstrap 95% CI excluding 0 and |ΔAUC| ≥ 0.10. A single reader passing a threshold while another fails is not specificity. Lack of a detected difference is reported as "unresolved", not equivalence.
 - **Labels:** "answer effect under the specified J-derived intervention", not natural mediation.
 - **E0:** "reused calibration contexts", not held-out validation. The scale is "per-layer, same-sample calibration".
+
+## 21. Stage K: NLA reconstructor (AR) validation smoke (pre-registered 2026-10-07, before any K number was seen; PI: "go")
+
+**Why.** Camila's hallucination test (§3.1 of report 33) scores NLA explanations through the nla-rl reconstructor. The reconstructor is only usable if our path reproduces the published FVE. This smoke checks that and nothing else. EXPLORATORY.
+
+**Reference, read from the sources** (`fve_trajectory.json`, `run_config.yaml`, model card; EasyNLA @ 4d72847 `nla/train_rl_self_contained.py:1298–1390`, `nla/schema.py`, `nla/utils/critic.py`, `nla/models.py`):
+- The card's **76.6% at step 400** is `eval/fve_pct`: FVE = 1 − mean_valid MSE(n(pred), n(gold)) / B.
+  - n(·) rescales a vector to L2 norm √d = √5120 (`mse_scale` defaults to `sqrt_d_model`; `nla_meta.yaml` sets none).
+  - B is the predict-the-mean baseline on **the scored set itself**: the mean over rows and elements of (n(v) − μ)², where μ is the set's mean of n(v) ("paper def", `compute_predict_mean_baselines`, raw-variance variant).
+  - The mean runs over rows whose explanation was extracted (`<explanation>…</explanation>`, stripped); rows that fail extraction are excluded and the extraction rate is logged.
+- **Eval set:** 128 doc-disjoint held-out rows (dataset rows past 449,846), one sample per row.
+- **Sampling:** temperature 1.0 (`eval_temperature: null` falls back to `temperature: 1.0`), top_p 1.0, top_k 0, max_new_tokens 256.
+- **AV:** av_base + `iter_000400`. **AR:** the AR *as it was at step 400*, which is not saved.
+
+**Our smoke:**
+- **Data:** `data/example_activations.parquet`: 64 other L42 activations with source text. Whether these were training rows is unknown; their doc_ids are corpus ids, not NLA split ids.
+- **AV:** av_base + `iter_000400` through `readers.NLArl` (WSB's call; Karvonen norm-matched add at the layer-1 output, as in EasyNLA `karvonen_inject_in_residual`; actor prompt via the chat template with `enable_thinking=False`, as the card instructs). Sampling is set to EasyNLA's eval settings above, not WSB's.
+- **Samples:** 4 per activation in one batch, seed 0. The **first** is the primary sample (one per row, as in the eval); all 4 are used descriptively.
+- **AR:** the final AR (`ar_reconstructor/`, `saved_at_step` 600), loaded with EasyNLA's own `NLACriticModel.from_pretrained` (final norm replaced by identity, fp32 value head).
+  - Input: the critic template ("Summary of the following text: <text>{explanation}</text> <summary>"), tokenised without special tokens, at most 1,024 tokens.
+  - `critic_predict` at the last token, with mse_scale √5120.
+- AV and AR run one after the other; the subject model is not loaded.
+
+**Pass band (fixed now):**
+- **Primary FVE** (first sample per row, the definition above, B computed on our 64): **within 76.6 ± 5 points, i.e. [71.6, 81.6]**.
+- Tolerance sources:
+  - n = 64 rather than 128, and different rows;
+  - the final AR rather than the step-400 AR (the card: "to reproduce a number exactly you'd need that step's AR");
+  - bf16 batch-layout noise.
+- **Extraction rate ≥ 0.90.** Below that, report and do not judge FVE.
+
+**Loader sanity control (fixed now):**
+- The same AR scores each row's activation against a *different* row's explanation (a seeded derangement of the primary samples).
+- Required: matched FVE − shuffled FVE ≥ 20 points. If not, the AR path is not reading the explanation, whatever the matched FVE.
+
+**Descriptive only (no rule):**
+- FVE over all 4 samples;
+- a row-bootstrap 95% CI of the primary FVE (seed 0, 2,000 draws);
+- per-row MSE;
+- the norm of the raw AR output;
+- the baseline B.
+
+**Outputs:**
+- `results/012_reader_concordance/analysis/stageK_ar_smoke.json`;
+- every explanation in `outputs/012_reader_concordance/stageK/`;
+- a seeded sample of 8 rows (source text, explanation, per-row FVE) in `results/012_reader_concordance/qualitative/stageK_samples.jsonl`.
+
+**Stop after the smoke and report.** If FVE falls outside the band, nothing is tuned to fit. The likely causes (AR loading, normalisation, the prompt or chat template, the distribution of the 64 rows) are reported for the PI.
+
+**Decisions for the main hallucination test** (PI, 2026-10-07; to be written in full as their own pre-registration before any judge call):
+- the cleaning rule's primary category is claims **contradicted** by the prompt or the response; claims **unsupported** by the prompt are secondary;
+- a **length-matched random-deletion** control on the same explanations;
+- the LLM that rewrites and the LLM that labels come from **different model families**.
+
+EXPLORATORY.
