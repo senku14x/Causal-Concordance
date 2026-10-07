@@ -492,3 +492,26 @@ All points were checked. Accepted:
 *Qualitative (seeded sample `results/012_reader_concordance/qualitative/stageK_samples.jsonl`):* explanations are genre and continuation descriptions. Row 4 (FVE 0.81) is already a concrete example for the hallucination test: the source is a Seattle-area Holi event (Lake Sammamish, "Vibha Seattle"); the explanation says "Washington DC" and names an organisation "Ynacharya for India". Both are contradicted by the text, yet reconstruction is good.
 
 **STOP (the PI's rule: report after the smoke).** Next, on the PI's go: the main hallucination test (pre-register per §21's decisions), then the late-layer H2 read with Oracle L52–60 (the PI's item 8).
+
+**Stage L run** (2026-10-07, on branch `013-nla-hallucination`; spec §22, the PI's item 8; about 5 GPU-min). Analysis: `stageL_analysis.py` → `results/012_reader_concordance/analysis/stageL_analysis.json`. Gates: `stageL_gates.json`.
+- **Gate:** the captures at L40/42/44 reproduce Stage J's bitwise on 56/56 holds.
+- **At H2** (the carrier's end; Stage J's 48 holds, 31 successes): every reader is at chance through **L48** (AUC 0.41–0.46), then rises at **L52**:
+
+  | Reader | L52 | L56 | L60 |
+  |---|---|---|---|
+  | J_NP | 0.71 | 0.71 | 0.72 |
+  | J_CB | 0.72 | 0.69 | 0.72 |
+  | logit | 0.71 | 0.67 | 0.71 |
+  | Oracle | 0.70 | 0.69 | **0.73** [0.56, 0.88] |
+
+  The CIs' lower bounds are about 0.52–0.58.
+- **§22 verdict: "arrives late"** (best Oracle L60 0.73 ≥ 0.70). This matches the model's own H2 output (0.70, Stage J).
+- **No-Japan AUCs at H2, L52–60:** 0.48–0.70.
+- **At H1:** 0.70–0.79 at every layer, as in J.
+- **Sampled Oracle readouts at H2, L56** (2 per state; `stageL/l_readouts_oracle.jsonl`) almost never name a country: after the swap the target appears in 8/112; clean, the source in 6/112. They describe the carrier sentence ("the town square…").
+
+**Reading:**
+- Stage J's "no reader sees the held country at H2" was a **layer effect**. The swapped country becomes decodable at the carrier's end between L48 and L52, plausibly brought in by attention from the clue tokens (not tested).
+- From L52 on, every reader decodes it about as well as the model's own next-token output, with no Oracle advantage over the logit lens (no paired contrast run).
+- It is decodable by likelihood but not stated in sampled readouts.
+- This doesn't change 012's net: still no evidence that any reader reads the hidden step beyond output-facing content.
