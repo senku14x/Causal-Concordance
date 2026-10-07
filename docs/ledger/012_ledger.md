@@ -218,3 +218,29 @@ Analysis: `stageF_analysis.py` → `results/012_reader_concordance/analysis/stag
 **Σ file:** 5.0 GB, mirrored with the outputs.
 
 **01:55 — Stage H pre-registered** (spec §15): 008's arm A on brew, rerun at every position (L24–47 and L40–48), with the answer-atom control. Question: positions or family?
+
+**02:00–02:15 — Stage H run** (subagent; about 12 GPU-min; `stageH.py` → `results/012_reader_concordance/analysis/stageH_summary.json`).
+- **Setup:** 008's 82 gated brew dev pairs (33 tables), with G taken from 008's recorded values (our recomputation is within 0.24 nats). All 12 colour words resolve to single " w" tokens. G0 bitwise on 82/82.
+
+Median S [table-cluster 95% CI]:
+
+| Arm | S | Flips |
+|---|---|---|
+| answer atom, L40–48, every position | **0.073 [0.056, 0.089]** | 0/82 |
+| answer atom, L24–47 | 0.155 [0.115, 0.231] | 0/82 |
+| z atom, L24–47 | 0.019 [0.004, 0.028] | 0/82 |
+| z atom, L40–48 | 0.005 [0.002, 0.012] | 0/82 |
+| random controls | −0.006 to 0.032 | — |
+
+- 008's 3-cell answer control was 0.010; 008's class-mean full-direction lever was 0.21.
+- **§15 verdict: "family explains it."** Every-position editing lifts the answer-atom control from 0.010 to 0.073, still below the 0.15 bar. So 008's brew null is not about positions. The z arm is not read under the rule.
+- Descriptive, outside the rule: even at L24–47, where the answer control just passes, the z-atom swap moves S by only 0.019 and flips nothing.
+- The J-row edits at the `:` cell are about 1–2% of ‖h‖. Brew's colour concepts load weakly on their J rows, so the coordinate swap barely edits anything.
+- **Contrast with multihop:** every-position J-row swaps there change about half the answers. Consistent with the paper's report that swap success tracks workspace loading. Loading itself was not measured here.
+- The CLAUDE.md mistakes-log row on report 32's "band/positions" inference stands: positions are now ruled out as the explanation too.
+
+**Stopping point for tonight.** The next steps need PI input or external material:
+1. the class-mean arm (J-independent in construction): needs about 10–16 gated, cue-varied prompts per concept, i.e. drafting;
+2. MT: needs directions for multi-token concepts (class means, or Jan's template tensors);
+3. Stage E (Camila's reconstructor vectors): needs her loader;
+4. a fresh-data test of the NLA's early-position signal (Stage F2, "intermediate").

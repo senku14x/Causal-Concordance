@@ -12,6 +12,7 @@ D = json.loads((R / "analysis/stageD_analysis.json").read_text())
 X = json.loads((R / "analysis/stageD_answers.json").read_text())
 G = json.loads((R / "analysis/stageB_gates.json").read_text())
 Q = [json.loads(l) for l in open(R / "qualitative/stageC_readouts_samples.jsonl")]
+HA = json.loads((R / "analysis/stageH_summary.json").read_text()) if (R / "analysis/stageH_summary.json").exists() else None
 GA = json.loads((R / "analysis/stageG_analysis.json").read_text()) if (R / "analysis/stageG_analysis.json").exists() else None
 FA = json.loads((R / "analysis/stageF_analysis.json").read_text()) if (R / "analysis/stageF_analysis.json").exists() else None
 
@@ -288,6 +289,9 @@ ul {{ margin:0; padding-left:20px; max-width:68ch; }} li {{ margin:4px 0; }}
 
 <h2>7. Whitened swaps (the TA's suggestion)</h2>
 <p>The same coordinate swap done in whitened coordinates (Ledoit–Wolf Σ for L24–35, rows as covectors) changes fewer answers: {GA["flips_white"]}/{GA["n"]} against 38/{GA["n"]} raw (random control {GA["flips_rand_white"]}/{GA["n"]}); every whitened flip is also a raw flip. Pre-registered verdict: <b>{GA["verdict_s14"]}</b> on this family. Readers on the whitened-swap states show the same tracking pattern (Oracle L44 AUC {h(GA["readers"]["oracle|L44|bridge"]["auc"])}, NLA L42 {h(GA["readers"]["nla|L42|bridge"]["auc"])}). The reconstructor-vector version of the suggestion still waits on the official reconstructor loader.</p>
+
+<h2>8. Why the earlier brew swaps failed (Stage H)</h2>
+<p>008's lens-coordinate swap on brew edited three cells at L40–48 and its answer-atom control moved the answer share by only 0.010. Rerun at every prompt position, the answer-atom control reaches 0.073 at L40–48 and 0.155 at L24–47, with no answers flipped; the hidden-colour swap stays near zero (0.019 at L24–47). Pre-registered verdict: <b>the family, not positions</b>. The J-row edits at the brew answer cell are only 1–2% of the activation norm: colour concepts there load weakly on their J rows, while multihop bridges load enough for every-position swaps to change about half the answers.</p>
 
 <h2>Gates and scope</h2>
 <ul>
