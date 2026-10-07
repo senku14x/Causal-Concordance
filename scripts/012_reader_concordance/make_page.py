@@ -12,6 +12,7 @@ D = json.loads((R / "analysis/stageD_analysis.json").read_text())
 X = json.loads((R / "analysis/stageD_answers.json").read_text())
 G = json.loads((R / "analysis/stageB_gates.json").read_text())
 Q = [json.loads(l) for l in open(R / "qualitative/stageC_readouts_samples.jsonl")]
+EA = json.loads((R / "analysis/stageE0_ar_profile.json").read_text()) if (R / "analysis/stageE0_ar_profile.json").exists() else None
 HA = json.loads((R / "analysis/stageH_summary.json").read_text()) if (R / "analysis/stageH_summary.json").exists() else None
 GA = json.loads((R / "analysis/stageG_analysis.json").read_text()) if (R / "analysis/stageG_analysis.json").exists() else None
 FA = json.loads((R / "analysis/stageF_analysis.json").read_text()) if (R / "analysis/stageF_analysis.json").exists() else None
@@ -165,6 +166,25 @@ def chart_f_auc():
     return f'<svg viewBox="0 0 {W} {yb + 26}" role="img" aria-label="Reader AUC at the answer token vs early positions">{s}</svg>'
 
 
+def chart_e0():
+    Ls = [20, 24, 28, 32, 36, 40, 44, 48, 52, 56, 60]
+    L0, T, w, hg = 46, 12, W - 70, 200
+    sx = lambda i: L0 + i * w / (len(Ls) - 1)
+    sy = lambda v: T + hg - v / 0.7 * hg
+    s = "".join(f'<line x1="{L0}" y1="{sy(v):.1f}" x2="{L0 + w}" y2="{sy(v):.1f}" class="grid"/><text x="{L0 - 6}" y="{sy(v) + 4:.1f}" class="tk" text-anchor="end">{h(v, 1)}</text>' for v in (0.0, 0.2, 0.4, 0.6))
+    series = [("pub_fve", lambda L: EA["layers"][str(L)]["published"]["fve"], "ref2"), ("our_fve", lambda L: EA["layers"][str(L)]["white"]["fve_scaled"], "s1"),
+              ("pub_jfve", lambda L: EA["layers"][str(L)]["published"]["jfve"], "ref2"), ("our_jfve", lambda L: EA["jfve_scaled"]["layers"][str(L)]["b_mu_removed"]["fve_scaled"], "s2")]
+    for name, f, cls in series:
+        pts = " ".join(f"{sx(i):.1f},{sy(f(L)):.1f}" for i, L in enumerate(Ls))
+        dash = ' stroke-dasharray="4 3"' if name.startswith("pub") else ""
+        col = "var(--muted)" if name.startswith("pub") else ("var(--s1)" if "jfve" not in name else "var(--s2)")
+        s += f'<polyline points="{pts}" fill="none" stroke="{col}" stroke-width="2"{dash}/>'
+        if not name.startswith("pub"):
+            s += "".join(f'<circle cx="{sx(i):.1f}" cy="{sy(f(L)):.1f}" r="4" class="{cls} ring"><title>L{L}: ours {h(f(L))}</title></circle>' for i, L in enumerate(Ls))
+    s += "".join(f'<text x="{sx(i):.1f}" y="{T + hg + 16}" class="tk" text-anchor="middle">L{L}</text>' for i, L in enumerate(Ls))
+    return f'<svg viewBox="0 0 {W} {T + hg + 26}" role="img" aria-label="Our AR loader vs the published per-layer profile">{s}</svg>'
+
+
 def naming_table():
     rows = []
     for rd, lay in (("oracle", "L40"), ("oracle", "L44"), ("nla", "L42")):
@@ -292,6 +312,11 @@ ul {{ margin:0; padding-left:20px; max-width:68ch; }} li {{ margin:4px 0; }}
 
 <h2>8. Why the earlier brew swaps failed (Stage H)</h2>
 <p>008's lens-coordinate swap on brew edited three cells at L40–48 and its answer-atom control moved the answer share by only 0.010. Rerun at every prompt position, the answer-atom control reaches 0.073 at L40–48 and 0.155 at L24–47, with no answers flipped; the hidden-colour swap stays near zero (0.019 at L24–47). Pre-registered verdict: <b>the family, not positions</b>. The J-row edits at the brew answer cell are only 1–2% of the activation norm: colour concepts there load weakly on their J rows, while multihop bridges load enough for every-position swaps to change about half the answers.</p>
+
+<h2>9. The Oracle's reconstructor: our loader and its J-lens target</h2>
+<p class="sub">The official reconstructor (AR) loader is not public, so we tested our own against the published per-layer validation profile (1,024 held-out spans, all 12 tag layers). Solid: ours (one fitted scale per layer); dashed grey: published. Blue: whitened FVE; orange: FVE of the J-lens transform of the mean-centred activation, our best guess at the AR's undocumented "jfve" term.</p>
+<figure><div class="legend"><span><i style="background:var(--s1)"></i>our FVE</span><span><i style="background:var(--s2)"></i>our J-lens-target FVE</span><span>– – published</span></div>{chart_e0()}</figure>
+<p>Our loader matches the published FVE profile at every layer once a per-layer scale is fitted, but its retrieval@1 falls short at L20–32, so by the pre-registered rule it is <b>not validated</b> and the TA's reconstructor-vector swaps stay blocked. The fitted scale rises from about 0.1 to 2.3 with depth, consistent with a scale-invariant training loss. The J-lens-target candidate matches the published "jfve" within 0.04 at every layer from L32 up but misses L20–28 (8/11 against a pre-set bar of 9/11; post hoc): suggestive, not established, that the Oracle's training ruler includes a J-lens objective, which would bear directly on why the Oracle's readings concentrate in J (007).</p>
 
 <h2>Gates and scope</h2>
 <ul>

@@ -312,3 +312,27 @@ Median S [table-cluster 95% CI]:
 - This plausibly explains 011's "unexplained global output scale" (post hoc interpretation, untested).
 - It also implies the published FVEs are scale-aligned, which our scaled FVE matches at 12/12. The jfve candidates should be compared the same way.
 - The AR config's jspace file has the same sha256 as our J_NP pin.
+
+**03:55–04:05 — §17a run** (POST HOC; subagent; about 4 GPU-min; `stageE0a_jfve_scaled.py`; results under `jfve_scaled` in `stageE0_ar_profile.json`). The spans were regenerated deterministically; L44's scaled FVE reproduces E0 exactly.
+
+| Candidate | Scaled FVE within 0.04 | jret1 within 0.07 |
+|---|---|---|
+| (a) raw J transform | 0/11 | 9/11 |
+| **(b) J transform of the mean-centred activation** | **8/11** | **10/11** |
+| (c) J-lens logits | 0/11 | 8/11 |
+| (d) 007's dense J subspace | 0/3 | 3/3 |
+
+- Candidate (b) is **within 0.04 at every layer from L32 to L60** (e.g. L44 0.564 vs 0.589; L48 0.622 vs 0.608). It misses only L20–28 (0.26–0.37 vs 0.39–0.48), the same early layers where our loader's retrieval also falls short.
+- **By rule (9/11): jfve stays open.**
+- **Post hoc reading:** it is likely that the AR's "jfve" is the FVE of the J-lens transform J_ℓ(y − μ). The AR was then trained with a J-lens-transformed reconstruction term (`loss_mix_lambda` 0.25).
+- The Oracle is RL-trained on a "joint bullet-FVE" computed on this AR. If that FVE includes the J term, the Oracle is rewarded partly for reconstructing J-lens content, which would be a design reason for 007's finding that the Oracle's z reading is concentrated in J.
+- **Question for the PI to put to Camila / WSB:**
+  1. Does the AR loss include λ = 0.25 on J_ℓ(y − μ)?
+  2. Does the Oracle's joint bullet-FVE reward include the J part?
+
+**Page v4 published** (section 9: the reconstructor).
+
+**Stopping point (04:05).** GPU idle. Remaining items need the PI or outside material:
+- Camila's loader, or her answer on the J-loss;
+- drafting gated cue-varied prompts (class-mean arm, MT);
+- fresh hidden-bridge items to test the NLA early-position hint properly.
