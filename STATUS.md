@@ -1,11 +1,27 @@
-# STATUS — 2026-10-07 (branch `012-reader-concordance`: 012 on top of `008-trackb-brewcode`, which holds 008-011 on top of `origin/main` = 007)
+# STATUS — 2026-10-07 (branch `014-typo`: 014 on top of `013-nla-hallucination` on top of `012-reader-concordance`, which builds on `008-trackb-brewcode` and `origin/main` = 007)
 
-*New session? Start from `docs/claude_reports/33_new_session_prompt_2026-10-07.md`. **First read the Anthropic workspace
+*New session? Start from `docs/claude_reports/35_new_session_prompt_2026-10-07.md` (branch `014-typo`). **First read the Anthropic workspace
 paper** (Gurnee et al. 2026, `docs/papers/2607.15495.pdf`; text in `docs/papers/text/`), then the paper notes, then
 `CLAUDE.md`. That is the PI's rule. The newest work is 012: `docs/ledger/012_ledger.md` and
 `docs/design_specs/012_reader_concordance.md` §12-§20; the latest up-to-speed report is
 `docs/claude_reports/34_up_to_speed_2026-10-07.md`. Before 012: `docs/reports/008_trackb.md`,
 `docs/reports/009_brewcode_derisk.md`, report 29 (010), `docs/reports/007_jsubspace.md`.*
+
+**2026-10-07, 014 typo smoke (branch `014-typo`; EXPLORATORY; `docs/ledger/014_ledger.md`).** Reading-only suite on WSB typo
+(hidden step = the corrected word). On the 10-item smoke, every reader names it from every activation part (whole, J, rest,
+a random 1,024-direction slice, mean removed: 0.80-1.00; other-target null ≤ 0.06), so the J-vs-rest contrast does not
+discriminate on typo. The NLA reconstructor gate passes (FVE 52.8%, n 10), and the 013 pipeline runs on typo
+(`NLAH_FAMILY=typo`). Stopped after the smoke; the full 100 awaits the PI's go.
+
+**2026-10-07, 013 NLA hallucination test (branch `013-nla-hallucination`; EXPLORATORY; `docs/ledger/013_ledger.md`).**
+- **Material:** 522 NLA L42 explanations of 012's multihop states, scored by nla-rl's final reconstructor (validated in Stage K: FVE 78.1% vs published about 77%).
+- **Deletion:** deleting judge-flagged false spans costs 28.6 [24.0, 33.4] FVE points more than random deletion.
+  - Misquotes of the prompt carry it (+35.8).
+  - Invented context is padding.
+- **Rewrite:** a factual rewrite beats a paraphrase by +3.1 [1.3, 4.9].
+- **Brew** failed the de-risk and was dropped.
+- **012 Stage L:** the held country arrives at the carrier end between L48 and L52, matching the model's own output there.
+- Page v12.
 
 **2026-10-07, after report 34 (housekeeping; PI-approved).** Stale numbers corrected and missing ones added to the 012
 analysis JSON (CPU reruns; existing values unchanged): J1 re-scored flips, R's 39/146, Q equal-opportunity naming and the

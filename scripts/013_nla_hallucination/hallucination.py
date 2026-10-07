@@ -34,7 +34,8 @@ EASYNLA = Path("/workspace/sources/repos/EasyNLA")
 sys.path.insert(0, str(EASYNLA))
 FAMILY = os.environ.get("NLAH_FAMILY", "multihop")
 assert FAMILY in ("multihop", "typo"), FAMILY
-TYPO = ROOT / "outputs/014_typo"
+TYPO_TAG = os.environ.get("NLAH_TYPO_TAG", "full")          # 014: "smoke" reads outputs/014_typo/smoke
+TYPO = ROOT / "outputs/014_typo" / ("" if TYPO_TAG == "full" else TYPO_TAG)
 if FAMILY == "typo":
     OUT, RES, STATES = TYPO / "nlah", ROOT / "results/014_typo", ["clean"]
 else:
@@ -455,7 +456,7 @@ def phase_gate(which):
            "fve_pct_shuffled": s_, "matched_minus_shuffled": m - s_, "rule": {"R1_min_fve_pct": 40.0, "R1_min_matched_minus_shuffled": 20.0},
            "R1_pass": m >= 40.0 and m - s_ >= 20.0}
     (RES / "analysis").mkdir(parents=True, exist_ok=True)
-    (RES / "analysis/nlah_gate.json").write_text(json.dumps(res, indent=1))
+    (RES / f"analysis/nlah_gate_{TYPO_TAG}.json").write_text(json.dumps(res, indent=1))
     print(json.dumps(res, indent=1), flush=True)
 
 

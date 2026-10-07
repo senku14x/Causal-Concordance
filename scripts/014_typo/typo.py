@@ -178,16 +178,22 @@ def phase_analyze(tag):
     meta = {json.loads(l)["item"]: json.loads(l) for l in open(D / "meta.jsonl")}
     rows = [json.loads(l) for f in ("readouts_oracle.jsonl", "readouts_nla.jsonl") if (D / f).exists() for l in open(D / f)]
     cells, named = {}, {}
+    T = {i: m["target"] for i, m in meta.items()}
     for r in rows:
         k = f"{r['reader']} L{r['layer']}|{r['piece']}"
-        hits = [bool(_hit(s, [meta[r["item"]]["target"]])) for s in r["samples"]]
-        c = cells.setdefault(k, {"v": [], "i": []})
+        hits = [bool(_hit(s, [T[r["item"]]])) for s in r["samples"]]
+        # POST HOC (added after the smoke, before the full run): other-target null = the share of the other items'
+        # targets a readout names (typo targets are common words, so incidental naming must be ruled out)
+        null = [float(np.mean([_hit(s, [t]) for i, t in T.items() if i != r["item"]])) for s in r["samples"]]
+        c = cells.setdefault(k, {"v": [], "i": [], "null": []})
         c["v"] += hits
+        c["null"] += null
         c["i"] += [r["item"]] * len(hits)
         named[(k, r["item"])] = any(hits)
     out = {"label": f"EXPLORATORY (014 Part A/B, tag {tag})", "n_items": len(meta), "naming": {}, "lens_rank": {}, "agreement": {}}
     for k, c in sorted(cells.items()):
-        out["naming"][k] = {"share": float(np.mean(c["v"])), "ci95": boot(c["v"], c["i"]), "n_readouts": len(c["v"])}
+        out["naming"][k] = {"share": float(np.mean(c["v"])), "ci95": boot(c["v"], c["i"]), "n_readouts": len(c["v"]),
+                            "other_target_null": float(np.mean(c["null"]))}
     lr = [json.loads(l) for l in open(D / "lens_ranks.jsonl")]
     for r in lr:
         out["lens_rank"].setdefault(f"{r['lens']} L{r['layer']}|{r['src']}", []).append(r["rank"])
@@ -203,7 +209,7 @@ def phase_analyze(tag):
     p.mkdir(parents=True, exist_ok=True)
     (p / f"parts_{tag}.json").write_text(json.dumps(out, indent=1))
     for k, v in out["naming"].items():
-        print(f"{k:22s} {v['share']:.2f} [{v['ci95'][0]:.2f}, {v['ci95'][1]:.2f}] n={v['n_readouts']}")
+        print(f"{k:22s} {v['share']:.2f} [{v['ci95'][0]:.2f}, {v['ci95'][1]:.2f}] null {v['other_target_null']:.2f} n={v['n_readouts']}")
     print(json.dumps(out["agreement"]))
 
 

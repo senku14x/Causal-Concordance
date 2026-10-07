@@ -1,0 +1,17 @@
+{
+ "label": "EXPLORATORY (014 Part C gate = 013 de-risk R1)",
+ "n": 10,
+ "baseline_B": 0.28505417704582214,
+ "fve_pct_first": 52.84002953110202,
+ "fve_pct_first_boot95": [
+  45.720407703753466,
+  61.55306367279254
+ ],
+ "fve_pct_shuffled": -110.27756998529297,
+ "matched_minus_shuffled": 163.117599516395,
+ "rule": {
+  "R1_min_fve_pct": 40.0,
+  "R1_min_matched_minus_shuffled": 20.0
+ },
+ "R1_pass": true
+}
