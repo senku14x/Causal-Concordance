@@ -131,3 +131,5 @@ reconstruction 2.0e-17.
   - the factual rewrite helps by a few points: not shown (+1.8, CI includes 0).
 
 **STOP.** The 014 suite is complete for what typo supports. Wall time: Parts A/B about 25 GPU-min; Part C about 25 GPU-min.
+
+**Correction (spend):** the Part C commit message says about $0.6. From the JSON, the judges cost $0.293 (deletion) + $0.544 (rewrite) = **$0.84**.
