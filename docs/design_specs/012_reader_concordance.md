@@ -491,3 +491,27 @@ EXPLORATORY.
 - If the control passes, the z-atom arm is read: median S, against its random control, and against 008's class-mean full-direction lever (0.21).
 
 EXPLORATORY; the brew dev split has already been used in many places.
+
+## 16. Stage R: does the NLA's early-position signal replicate on fresh items? (pre-registered 2026-10-07 ~02:40 UTC, before any R run)
+
+**Why.** Stage F2 found one reader-specific hint: at early, directly written prompt positions, NLA L42's tgt shift separated working from failed swaps (AUC 0.72 [0.58, 0.84]; partial ρ 0.54 [0.20, 0.69] beyond the model's own early-position output). No other reader showed this (verdict "intermediate"). It was post hoc interest on one family.
+
+**Fresh items:** Jan's ST **broadcast** bank (`causal_st_broadcast`; Stage A: J swap L24–47 success 0.315 on 146 clean-correct items).
+- Caveat: the source concept is **explicit** in these prompts ("The capital of France is the city of"), unlike multihop's hidden bridge.
+- So a replication supports the NLA property generalising, while a failure does not refute the multihop hint. This is a different family.
+
+**Protocol** (identical to F2):
+- J swap at L24–35, every position, with its source-preserving random-target control.
+- Clean gate and primary cohort as in §12; edit direction at the read position.
+- Read every prompt position before the read token. Readers: NLA L42, Oracle L40/L44, J_NP / J_CB / logit at L40/L44; likelihood only.
+- The model's own next-token output per position.
+- Item summary: the mean over early positions.
+
+**Pre-registered test** (within toward_tgt items):
+- **Replicates:** NLA L42 early-position AUC ≥ 0.65 **and** partial Spearman with Δm, given the model's own early output and the edit size, with a CI excluding 0.
+- **Fails:** AUC < 0.65, or a partial CI including 0.
+- The Oracle and the lenses are reported with the same statistics. "NLA-specific" requires them to fail the same test.
+
+**Power caveat:** with about 30% success, the toward_tgt working-swap count may be small (about 40). Report n, and treat a null as weak.
+
+EXPLORATORY.

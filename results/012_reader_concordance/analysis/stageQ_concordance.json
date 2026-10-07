@@ -1,0 +1,125 @@
+{
+ "label": "EXPLORATORY, POST HOC (012 Stage Q)",
+ "n": 64,
+ "n_success": 36,
+ "spearman_matrix": {
+  "Oracle L40": {
+   "Oracle L40": 0.9999999999999998,
+   "Oracle L44": 0.9813644688644687,
+   "NLA L42": 0.8988553113553113,
+   "J_NP L40": 0.8802197802197802,
+   "J_CB L40": 0.8862637362637362,
+   "logit L40": 0.8184523809523809
+  },
+  "Oracle L44": {
+   "Oracle L40": 0.9813644688644687,
+   "Oracle L44": 0.9999999999999998,
+   "NLA L42": 0.8976190476190475,
+   "J_NP L40": 0.890018315018315,
+   "J_CB L40": 0.893315018315018,
+   "logit L40": 0.8301739926739926
+  },
+  "NLA L42": {
+   "Oracle L40": 0.8988553113553113,
+   "Oracle L44": 0.8976190476190475,
+   "NLA L42": 0.9999999999999998,
+   "J_NP L40": 0.8436355311355311,
+   "J_CB L40": 0.8382326007326006,
+   "logit L40": 0.7452838827838827
+  },
+  "J_NP L40": {
+   "Oracle L40": 0.8802197802197802,
+   "Oracle L44": 0.890018315018315,
+   "NLA L42": 0.8436355311355311,
+   "J_NP L40": 0.9999999999999998,
+   "J_CB L40": 0.9806318681318679,
+   "logit L40": 0.9302655677655678
+  },
+  "J_CB L40": {
+   "Oracle L40": 0.8862637362637362,
+   "Oracle L44": 0.893315018315018,
+   "NLA L42": 0.8382326007326006,
+   "J_NP L40": 0.9806318681318679,
+   "J_CB L40": 0.9999999999999998,
+   "logit L40": 0.9622710622710621
+  },
+  "logit L40": {
+   "Oracle L40": 0.8184523809523809,
+   "Oracle L44": 0.8301739926739926,
+   "NLA L42": 0.7452838827838827,
+   "J_NP L40": 0.9302655677655678,
+   "J_CB L40": 0.9622710622710621,
+   "logit L40": 0.9999999999999998
+  }
+ },
+ "kappa_tgt_named": {
+  "oracle L40 vs nla L42": 0.3559322033898305,
+  "oracle L44 vs nla L42": 0.5071868583162218,
+  "oracle L40 vs oracle L44": 0.6296296296296297
+ },
+ "coverage": {
+  "Oracle L40": {
+   "misses_working_dr_le_0": 0,
+   "strong_shift_on_failed": 0
+  },
+  "Oracle L44": {
+   "misses_working_dr_le_0": 0,
+   "strong_shift_on_failed": 0
+  },
+  "NLA L42": {
+   "misses_working_dr_le_0": 0,
+   "strong_shift_on_failed": 0
+  },
+  "J_NP L40": {
+   "misses_working_dr_le_0": 0,
+   "strong_shift_on_failed": 0
+  },
+  "J_CB L40": {
+   "misses_working_dr_le_0": 0,
+   "strong_shift_on_failed": 0
+  },
+  "logit L40": {
+   "misses_working_dr_le_0": 0,
+   "strong_shift_on_failed": 0
+  },
+  "oracle L40 (naming)": {
+   "working_swaps_not_naming_tgt": 2,
+   "failed_swaps_naming_tgt": 14
+  },
+  "oracle L44 (naming)": {
+   "working_swaps_not_naming_tgt": 2,
+   "failed_swaps_naming_tgt": 8
+  },
+  "nla L42 (naming)": {
+   "working_swaps_not_naming_tgt": 7,
+   "failed_swaps_naming_tgt": 8
+  }
+ },
+ "working_swaps_tgt_named_by_only_one_family": {
+  "oracle_only": 7
+ },
+ "auc": {
+  "Oracle L40": 0.9533730158730159,
+  "Oracle L44": 0.9613095238095238,
+  "NLA L42": 0.9454365079365079,
+  "J_NP L40": 0.9186507936507936,
+  "J_CB L40": 0.9246031746031746,
+  "logit L40": 0.9017857142857143,
+  "family_ensemble": 0.9513888888888888,
+  "family_ensemble_ci95": [
+   0.8722922239051272,
+   0.9944993990448536
+  ],
+  "ensemble_without_oracle": 0.9409722222222222,
+  "ensemble_without_nla": 0.9399801587301587,
+  "ensemble_without_jlens": 0.9538690476190477,
+  "ensemble_without_logit": 0.9563492063492064,
+  "model_output": 0.9692460317460317,
+  "model_output_plus_family_ensemble": 0.9712301587301587,
+  "best_single": "Oracle L44",
+  "ensemble_minus_best_ci95": [
+   -0.039100030921459465,
+   0.009690056690072703
+  ]
+ }
+}

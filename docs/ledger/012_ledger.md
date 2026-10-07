@@ -244,3 +244,30 @@ Median S [table-cluster 95% CI]:
 2. MT: needs directions for multi-token concepts (class means, or Jan's template tensors);
 3. Stage E (Camila's reconstructor vectors): needs her loader;
 4. a fresh-data test of the NLA's early-position signal (Stage F2, "intermediate").
+
+**02:30 — Stage Q: reader agreement and ensembles** (CPU, POST HOC, the PI's Q1/Q2/Q4; `stageQ_concordance.py` → `results/012_reader_concordance/analysis/stageQ_concordance.json`). Cohort: J swap L24–35, toward_tgt items, n = 64 (36 working).
+- **Agreement:**
+  - Readers' bridge d_r agree strongly across items (Spearman 0.83–0.90; Oracle L44 vs NLA 0.90, J_NP vs NLA 0.84, logit vs Oracle 0.83).
+  - "Names tgt" agrees only moderately: κ Oracle L40 vs NLA 0.36, Oracle L44 vs NLA 0.51, Oracle L40 vs L44 0.63.
+- **Coverage:**
+  - Working swaps not naming tgt: Oracle L40 2/36, Oracle L44 2/36, NLA 7/36.
+  - Failed swaps naming tgt anyway: Oracle L40 14/28, Oracle L44 8/28, NLA 8/28.
+  - Working swaps named by only one family: Oracle 7, NLA 0.
+  - No reader has d_r ≤ 0 on any working swap.
+- **Ensembles** (against "the model's answer changed"):
+  - best single reader Oracle L44 AUC 0.961;
+  - family-balanced rank ensemble 0.951 [0.87, 0.99]; ensemble minus best [−0.04, +0.01];
+  - leave-one-family-out 0.94–0.96;
+  - the model's own read-cell output alone 0.969, plus the readers 0.971.
+  - **On this task, ensembling readers adds nothing** beyond the best reader or the model's own output; the readers share one signal.
+
+**02:35 — Hand-read sample** (seed 7: 4 working, 2 failed; Oracle L40 and NLA L42, clean vs J at L24–35).
+- **The Oracle mostly names the answer after the swap, not the bridge:**
+  - Kremlin→Japan: "Japanese… Buddhism";
+  - kangaroo→Japan: "Tokyo… 东京 (Tokyo)";
+  - Colosseum→Japan: "Tokyo".
+- **It also names the new concept when the answer did not change:** Great Wall→Egypt (failed): "Egypt's longest river is the Nile". This fits "failed swaps naming tgt" (14/28 at L40) and F2: the Oracle detects the edit.
+- **NLA L42 readouts are mostly format boilerplate** ("Q&A trivia format establishes a factual answer is expected…"). Concept content appears only sometimes and late ("likely Tokyo. The clue references Japan's landmark…").
+- Oracle readouts are often partly in Chinese (罗马, 日语, 悉尼).
+- One odd clean Oracle readout: pred-valentines-prevmonth (February) talks about October / September / November.
+- Takeaway: the likelihood numbers overstate how "conceptual" the readouts are. The Oracle's tgt content is largely answer-facing, and the NLA's is diluted by boilerplate.
