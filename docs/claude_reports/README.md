@@ -21,11 +21,11 @@ Cleaned 2026-10-06:
 | `32_012_outlook_2026-10-06.md` | **012 outlook**: what phrase-lens contains (checked), whether PJ directions are needed, porting 008–011 to its multihop banks, fixes to the prompt set and the 012 draft, recommended order |
 | `31_onboarding_review_2026-10-06.md` | **Onboarding review** (new session, 2026-10-06): 001–011 checked against JSON; the dissociation uses mismatched J objects; the AR config hints at a J-lens loss term; number slips (008 J_CB −0.14, not −0.15); ranked next steps |
 | `30_new_session_prompt_2026-10-06.md` | **The prompt for the next session** (end of 2026-10-06): read order (paper → paper notes → docs), where 001–011 stand, pending decisions, environment, working rules |
-| `26_up_to_speed_report_2026-10-06.md` | **Current state of the project** (2026-10-06): instance check, what each experiment showed, weak links, every inconsistency found, next steps |
+| `26_up_to_speed_report_2026-10-06.md` | State of the project on 2026-10-06 (before 012; superseded by 34): instance check, what each experiment showed, weak links, every inconsistency found, next steps |
 | `28_next_direction_proposal_2026-10-06.md` | The proposal behind tonight's work. Superseded in part by the PI's changes in `docs/design_specs/008_009_trackb_brewcode.md` |
-| `docs/reports/008_trackb.md` (not here) | **Newest result:** 007's model-side test done the paper's way; no J privilege |
+| `docs/reports/008_trackb.md` (not here) | 008 result (before 012): 007's model-side test done the paper's way; no J privilege |
 | `docs/reports/009_brewcode_derisk.md` (not here) | **009 de-risk:** the brew-code bank's gate passes at depth 1 (771 pairs) but the output-facing check fails: with a code answer the hidden colour is still the top colour (98%) and ranks ~11th at the answer slot, at ~0.05% total probability; readers blocked by the rule; options for the PI |
-| `29_reader_agreement_010_2026-10-06.md` | **Newest analysis:** readers agree weakly; mid-layer readers track what the J lens reads, not the model's next-token output |
+| `29_reader_agreement_010_2026-10-06.md` | 010 analysis: readers agree weakly; mid-layer readers track what the J lens reads, not the model's next-token output |
 | `docs/design_specs/011_olens_swaps.md` (not here) | **011, Oracle-space swaps** (post hoc): loader validated after two fixes; smoke: the TA's whitened swap does nothing, the additive AR difference does about half of the class-mean's; full run stopped at 74/82 for the PI (status at the end of the note) |
 
 ## The paper and the reading

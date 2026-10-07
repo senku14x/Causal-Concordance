@@ -1,11 +1,16 @@
-# STATUS — 2026-10-06 (branch `008-trackb-brewcode`: 008-011 on top of `origin/main` = 007)
+# STATUS — 2026-10-07 (branch `012-reader-concordance`: 012 on top of `008-trackb-brewcode`, which holds 008-011 on top of `origin/main` = 007)
 
-*New session? `origin/main` holds everything through 007; the newest work (008-011) is on branch `008-trackb-brewcode`.
-**First read the Anthropic workspace paper** (Gurnee et al. 2026, `docs/papers/2607.15495.pdf`; text in
-`docs/papers/text/`) and the relevant reading listed at the top of `CLAUDE.md`. That is the PI's rule. The newest
-results: `docs/reports/008_trackb.md`, `docs/reports/009_brewcode_derisk.md` and report 29 (010). Before them,
-`docs/reports/007_jsubspace.md` and report 25. Then `CLAUDE.md`, this file (newest first),
-`docs/reports/005_followups.md` and `docs/reports/006_reader_likelihood.md`.*
+*New session? Start from `docs/claude_reports/33_new_session_prompt_2026-10-07.md`. **First read the Anthropic workspace
+paper** (Gurnee et al. 2026, `docs/papers/2607.15495.pdf`; text in `docs/papers/text/`), then the paper notes, then
+`CLAUDE.md`. That is the PI's rule. The newest work is 012: `docs/ledger/012_ledger.md` and
+`docs/design_specs/012_reader_concordance.md` §12-§20; the latest up-to-speed report is
+`docs/claude_reports/34_up_to_speed_2026-10-07.md`. Before 012: `docs/reports/008_trackb.md`,
+`docs/reports/009_brewcode_derisk.md`, report 29 (010), `docs/reports/007_jsubspace.md`.*
+
+**2026-10-07, after report 34 (housekeeping; PI-approved).** Stale numbers corrected and missing ones added to the 012
+analysis JSON (CPU reruns; existing values unchanged): J1 re-scored flips, R's 39/146, Q equal-opportunity naming and the
+output-increment CI, a §20 paired NLA − Oracle contrast for R, and audit notes on the H and E0 JSON. Page v8. Details in the
+ledger's correction block ("Additions after report 34").
 
 **2026-10-07, 012 later (EXPLORATORY).**
 - **Stages I/J (delayed question):** a swap before the question changes later answers (42/60; clue-only 36/60; random 0). Readers at the carrier end see nothing. At the computed clue end they track the swap (about 0.8, equal to the logit lens), but the model's own output there does too (0.69, above the pre-set bar).
@@ -13,7 +18,7 @@ results: `docs/reports/008_trackb.md`, `docs/reports/009_brewcode_derisk.md` and
 - **NLA repo read in full:** pairing step 400 with the final reconstructor is fine (model card).
 - Ledger `docs/ledger/012_ledger.md`; session prompt `docs/claude_reports/33_new_session_prompt_2026-10-07.md`.
 
-**2026-10-07, 012 overnight (branch `012-reader-concordance`; EXPLORATORY).** J-row coordinate swaps on Jan Chen's ST multihop bank (all WSB items) change Qwen's answer on 0.585 of 82 clean-correct items at L24-47 (random 0.06; logit rows 0). The swap operator's direction is set by the clean state (toward_src edits all fail at L24-47). Readers on the swapped states (Oracle L40/L44/L52/L56, NLA L42, token lenses) shift toward the swapped-in concept far more when the answer changed (AUC 0.88-0.97; Oracle ≈ NLA), but the model's own read-cell output does too (AUC 0.96-0.97 at L24-35); beyond it, the readers' bridge shift keeps only a modest partial association (ρ ~0.3-0.5). Details: `docs/ledger/012_ledger.md`; page https://claude.ai/artifact/NoevKvBkXNUTvtpnJPVsuq.
+**2026-10-07, 012 overnight (branch `012-reader-concordance`; EXPLORATORY).** J-row coordinate swaps on Jan Chen's ST multihop bank (all WSB items) change Qwen's answer on 0.585 of 82 clean-correct items at L24-47 (random 0.06; logit rows 0). The swap operator's direction is set by the clean state (toward_src edits all fail at L24-47). Readers on the swapped states (Oracle L40/L44/L52/L56, NLA L42, token lenses) shift toward the swapped-in concept far more when the answer changed (AUC 0.88-0.97; Oracle ≈ NLA), but the model's own read-cell output does too (AUC 0.96-0.97 at L24-35); beyond it, the readers' bridge shift keeps only a modest partial association (ρ 0.31-0.57 across readers and layers; corrected 2026-10-07, first written as ~0.3-0.5 from a printed subset). Details: `docs/ledger/012_ledger.md`; page https://claude.ai/artifact/NoevKvBkXNUTvtpnJPVsuq.
 
 **2026-10-06, late: 011 s1 finished; AR J-bias check; 011 code fixes (POST HOC / EXPLORATORY; PI go on report 31).**
 - **011 s1** (82/82 pairs; the last 8 ran in 1.05 GPU-min after the resume fix; gates pass: repro 82/82, R·A ≤ 7.2e-15,

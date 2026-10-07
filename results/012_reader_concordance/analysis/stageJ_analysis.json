@@ -4,6 +4,12 @@
  "J_clue": 36,
  "rand_clue": 0,
  "J1_lever": true,
+ "J1_rescored_stageI_arms": {
+  "n": 60,
+  "J_pre": 42,
+  "rand_pre": 0,
+  "J_all": 50
+ },
  "n_holds": 48,
  "n_hold_success": 31,
  "J2_model_H1_bridge_auc": 0.6935483870967742,

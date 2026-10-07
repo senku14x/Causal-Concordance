@@ -85,6 +85,18 @@ def main():
                 only["none"] += 1
     out["coverage"] = cov
     out["working_swaps_tgt_named_by_only_one_family"] = dict(only)
+    out["working_swaps_tgt_named_by_only_one_family_note"] = (
+        "pooled: Oracle has 2 layers x 2 samples vs NLA 1 layer x 2 samples (unequal opportunity); use "
+        "naming_equal_opportunity (added after Codex audit 12, 2026-10-07)")
+    eq = {}
+    for o in ("oracle L40", "oracle L44"):
+        w = [n for n in common if items[n]["s"]]
+        eq[f"{o} vs nla L42"] = {"n_working": len(w),
+                                 "oracle_only": sum(1 for n in w if tgt_named[o][n] and not tgt_named["nla L42"][n]),
+                                 "nla_only": sum(1 for n in w if tgt_named["nla L42"][n] and not tgt_named[o][n]),
+                                 "both": sum(1 for n in w if tgt_named[o][n] and tgt_named["nla L42"][n]),
+                                 "neither": sum(1 for n in w if not tgt_named[o][n] and not tgt_named["nla L42"][n])}
+    out["naming_equal_opportunity"] = eq
     # Q4
     R = {k: rank([d[k][n] for n in names]) / len(names) for k in READERS}
     fam = defaultdict(list)
@@ -106,6 +118,12 @@ def main():
     out["auc"]["best_single"] = best
     diff = lambda xs: auc([ens(list(famr))[x["i"]] for x in xs], [y[x["i"]] for x in xs]) - auc([R[best][x["i"]] for x in xs], [y[x["i"]] for x in xs])
     out["auc"]["ensemble_minus_best_ci95"] = cluster_boot(diff, rows)
+    # paired increments over the model's own output (added after Codex audit 12, 2026-10-07)
+    pair = lambda a, b: (lambda xs: auc([a[x["i"]] for x in xs], [y[x["i"]] for x in xs]) - auc([b[x["i"]] for x in xs], [y[x["i"]] for x in xs]))
+    out["auc"]["model_output_plus_family_ensemble_minus_model_output"] = out["auc"]["model_output_plus_family_ensemble"] - out["auc"]["model_output"]
+    out["auc"]["model_output_plus_family_ensemble_minus_model_output_ci95"] = cluster_boot(pair((mor + ens(list(famr))) / 2, mor), rows)
+    for k in ("Oracle L44", "NLA L42"):
+        out["auc"][f"{k}_minus_model_output_ci95"] = cluster_boot(pair(R[k], mor), rows)
     (RES / "analysis/stageQ_concordance.json").write_text(json.dumps(out, indent=1))
     r2 = lambda v: v if not isinstance(v, float) else round(v, 3)
     print("n", out["n"], "success", out["n_success"])
@@ -114,6 +132,8 @@ def main():
     print("coverage", cov, dict(only))
     print("spearman Oracle L44 vs NLA", r2(out["spearman_matrix"]["Oracle L44"]["NLA L42"]), "J_NP vs NLA", r2(out["spearman_matrix"]["J_NP L40"]["NLA L42"]),
           "Oracle vs J_NP", r2(out["spearman_matrix"]["Oracle L44"]["J_NP L40"]), "logit vs Oracle", r2(out["spearman_matrix"]["logit L40"]["Oracle L44"]))
+    off = [v for a, row in out["spearman_matrix"].items() for b, v in row.items() if FAMILY[a] != FAMILY[b]]
+    print("spearman across families: min", r2(min(off)), "max", r2(max(off)), "(full matrix in the JSON; quote ranges from it, not from this line)")
 
 
 if __name__ == "__main__":

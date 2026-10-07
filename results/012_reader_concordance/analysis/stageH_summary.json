@@ -103,5 +103,6 @@
   "verdict": "family explains it",
   "read_Az": false
  },
- "wall_s": 708.8
+ "wall_s": 708.8,
+ "audit_note": "Codex audit (2026-10-07) and report 34: 'family explains it' is the literal label of the \u00a715 rule (answer-atom control Aa_L40-48 below 0.15). It is not a supported explanation: the late-band control fails the power bar, and Stage H also changed the numerical regime and the atom convention relative to 008. Which difference explains 008's brew null is not established."
 }

@@ -25,6 +25,10 @@ def main():
     out = {"label": "EXPLORATORY (012 Stage J; §19, §20)", "n_gated": len(g),
            "J_clue": sum(tf(arms(t)["J_clue"]["success"]) for t in g), "rand_clue": sum(tf(arms(t)["rand_clue"]["success"]) for t in g)}
     out["J1_lever"] = out["J_clue"] / len(g) >= 0.20 and (out["J_clue"] - out["rand_clue"]) / len(g) >= 0.15
+    # J1 re-scoring of Stage I's arms on the J1 cohort (8-token budget); added 2026-10-07 so the ledger's numbers are in JSON
+    j1 = [json.loads(l) for l in open(J / "j1_items.jsonl")]
+    j1 = [t for t in j1 if tf(t["j1_gated"]) and tf(t["discriminating"])]
+    out["J1_rescored_stageI_arms"] = {"n": len(j1), **{a: sum(tf(lit(t["arms"])[a]["success"]) for t in j1) for a in ("J_pre", "rand_pre", "J_all")}}
     hs = defaultdict(list)
     for t in g:
         hs[f"{t['clue_id']}|{t['carrier']}"].append(tf(arms(t)["J_clue"]["success"]))

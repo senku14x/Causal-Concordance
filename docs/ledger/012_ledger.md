@@ -411,6 +411,29 @@ All points were checked. Accepted:
 - the Stage D output-facing result;
 - Stage I's model-side finding.
 
+**Additions after report 34** (2026-10-07; the PI checked report 34 and approved this housekeeping; the lines above are left as written):
+1. **ledger:186 kept F2's other readers at their pre-correction values.** Corrected (`stageF_analysis.json` `F2.*.auc`): J_NP / J_CB 0.47–0.51, logit 0.39–0.43, Oracle L40 / L44 0.40 / 0.47 (NLA 0.59). Every reader is "not outcome-specific".
+2. **Pattern, recorded, not interpreted:**
+   - 8 of the 9 corrected F2 partials are negative (e.g. Oracle L40 −0.38 [−0.50, −0.07], logit L40 −0.32 [−0.65, 0.01]); the NLA (+0.17) is the exception.
+   - The readers' d_r correlate 0.75–0.98 (Stage Q, read cell), so these are not nine independent tests.
+   - Stage J's H2 no-Japan AUCs are 0.30–0.36 for every reader (`stageJ_analysis.json` `readers.*|H2.auc_no_japan`).
+3. **ledger:250's "0.83–0.90" was written from the printed subset** (`stageQ_concordance.py:115–116`). The full matrix runs from 0.75 (logit–NLA) to 0.98 (Oracle L40–L44); the cross-family maximum is 0.96 (J_CB–logit). The script now also prints the cross-family min / max.
+4. **Numbers that were quoted but missing from JSON are now in JSON** (CPU reruns; every existing value is unchanged, checked key by key):
+   - J1 re-scored J_pre 42/60, rand_pre 0/60, J_all 50/60 (`stageJ_analysis.json` `J1_rescored_stageI_arms`);
+   - R: J swap 39/146, random 0/146 (`stageR_analysis.json` `J_L24-35_success`, `rand_L24-35_success`);
+   - Q naming at equal opportunity: Oracle L40-only 7 vs NLA-only 2; Oracle L44-only 6 vs NLA-only 1 (`naming_equal_opportunity`);
+   - Q: output plus readers minus output alone, +0.002 [−0.020, +0.020] (`auc.model_output_plus_family_ensemble_minus_model_output*`; our seeded bootstrap; audit 12 reported [−0.023, 0.021] from its own bootstrap); Oracle L44 − output [−0.06, +0.02]; NLA − output [−0.10, +0.03].
+5. **Spec §20 paired contrast for R** (`stageR_analysis.json` `paired_nla_minus_oracle`):
+   - NLA − Oracle L44: 0.000 [−0.018, +0.019], n 109. Both AUCs are 0.9505 under the corrected mask; audit 14's −0.0004 was on the pre-fix endpoint.
+   - NLA − Oracle L40: +0.03 [+0.01, +0.07]. The CI excludes 0 but |ΔAUC| < 0.10, so this is not "specific" under §20.
+6. **`audit_note` fields** were added to `stageH_summary.json` (the rule's label "family explains it" is not a supported explanation) and `stageE0_ar_profile.json` (`global_scale` is per layer; the spans are reused calibration contexts) by `annotate_audit_notes.py`. Labels and key names are unchanged.
+7. **Page v8:**
+   - the early-position AUC range and the read-cell partial range are now computed from JSON (they were hard-coded as "0.5–0.64" and "0.3–0.5");
+   - the E0 caption's "held-out" became "reused calibration contexts";
+   - the Stage J H2 sentence now gives the model's own H2 output (0.70).
+8. **H2 is output-facing by our rule:** the model's own H2 output gives 0.70 in J and 0.82 in I, both ≥ 0.65. Report 34's first draft said it was not; corrected.
+9. **`/workspace/.env` was missing on this instance.** The OpenRouter key was re-entered from the PI's message. It is in no mirror.
+
 **Stage J run** (the last subagent task; about 25 GPU-min). Analysis is mine, CPU only: `stageJ_analysis.py` → `results/012_reader_concordance/analysis/stageJ_analysis.json`.
 
 *Gates:* G0 bitwise 168/168; no write at positions ≥ H1; clean H1/H2 captures bitwise equal to Stage I; holds identical across questions.

@@ -3,6 +3,8 @@
  "n_primary": 146,
  "n_toward_tgt": 109,
  "n_tt_success": 32,
+ "J_L24-35_success": 39,
+ "rand_L24-35_success": 0,
  "readers": {
   "J_CB|L40": {
    "n": 109,
@@ -134,6 +136,24 @@
  "model_early_output_auc": {
   "bridge": 0.9626623376623377,
   "answer": 0.9358766233766234
+ },
+ "paired_nla_minus_oracle": {
+  "nla_L42_minus_oracle_L40": {
+   "n": 109,
+   "diff": 0.028814935064935043,
+   "ci95": [
+    0.005204354072548537,
+    0.06826825557809318
+   ]
+  },
+  "nla_L42_minus_oracle_L44": {
+   "n": 109,
+   "diff": 0.0,
+   "ci95": [
+    -0.0177676066920457,
+    0.01889676667703718
+   ]
+  }
  },
  "verdict_s16": "does not replicate"
 }

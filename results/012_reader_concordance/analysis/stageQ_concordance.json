@@ -98,6 +98,23 @@
  "working_swaps_tgt_named_by_only_one_family": {
   "oracle_only": 7
  },
+ "working_swaps_tgt_named_by_only_one_family_note": "pooled: Oracle has 2 layers x 2 samples vs NLA 1 layer x 2 samples (unequal opportunity); use naming_equal_opportunity (added after Codex audit 12, 2026-10-07)",
+ "naming_equal_opportunity": {
+  "oracle L40 vs nla L42": {
+   "n_working": 36,
+   "oracle_only": 7,
+   "nla_only": 2,
+   "both": 27,
+   "neither": 0
+  },
+  "oracle L44 vs nla L42": {
+   "n_working": 36,
+   "oracle_only": 6,
+   "nla_only": 1,
+   "both": 28,
+   "neither": 1
+  }
+ },
  "auc": {
   "Oracle L40": 0.9533730158730159,
   "Oracle L44": 0.9613095238095238,
@@ -120,6 +137,19 @@
   "ensemble_minus_best_ci95": [
    -0.039100030921459465,
    0.009690056690072703
+  ],
+  "model_output_plus_family_ensemble_minus_model_output": 0.001984126984126977,
+  "model_output_plus_family_ensemble_minus_model_output_ci95": [
+   -0.019937448089700906,
+   0.02007949125596177
+  ],
+  "Oracle L44_minus_model_output_ci95": [
+   -0.06423735119047624,
+   0.023170205920205852
+  ],
+  "NLA L42_minus_model_output_ci95": [
+   -0.10234115694642013,
+   0.025002413127413133
   ]
  }
 }

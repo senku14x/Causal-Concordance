@@ -25,7 +25,8 @@ def main():
         dh = [v["dh"] / v["h"] for v in diag.values() if isinstance(v, dict) and v.get("h")]
         ed = r["edit_direction"]["L24-35"] if isinstance(r["edit_direction"], dict) else r["edit_direction"]
         base[r["name"]] = {"rel": r["src"], "read_token": r.get("read_token", ""), "dir": ed, "s": J["success"] in (True, "True"),
-                           "dm": float(J["dm"]), "size": float(np.mean(dh)) if dh else 0.0}
+                           "dm": float(J["dm"]), "size": float(np.mean(dh)) if dh else 0.0,
+                           "s_rand": r["arms"]["rand_L24-35"]["success"] in (True, "True")}
     # ONE shared (item, pos) mask for readers and the model covariate (fix 2026-10-07, Codex audit): the reader rows
     # carry no is_read_minus_1 flag, so the exclusion set is built from the model rows and applied to both by (item, pos)
     excl = set()
@@ -54,7 +55,10 @@ def main():
                 rd[f"{r['reader']}|L{r['layer']}"][r["item"]].append(float(r["d_r"]))
     out = {"label": "EXPLORATORY (012 Stage R; rule in spec §16)", "n_primary": len(base),
            "n_toward_tgt": sum(v["dir"] == "toward_tgt" for v in base.values()),
-           "n_tt_success": sum(v["dir"] == "toward_tgt" and v["s"] for v in base.values()), "readers": {}}
+           "n_tt_success": sum(v["dir"] == "toward_tgt" and v["s"] for v in base.values()),
+           # lever counts on the primary cohort (added 2026-10-07 so the ledger's 39/146 is in JSON)
+           "J_L24-35_success": sum(v["s"] for v in base.values()), "rand_L24-35_success": sum(v["s_rand"] for v in base.values()),
+           "readers": {}}
     tt_items = [k for k in base if base[k]["dir"] == "toward_tgt" and mod[k]["mb"] and mod[k]["ma"]]
     out["model_early_output_auc"] = {"bridge": auc([np.mean(mod[k]["mb"]) for k in tt_items], [base[k]["s"] for k in tt_items]),
                                      "answer": auc([np.mean(mod[k]["ma"]) for k in tt_items], [base[k]["s"] for k in tt_items])}
@@ -68,6 +72,13 @@ def main():
         rep = a is not None and a >= 0.65 and pc is not None and pc[0] > 0
         out["readers"][key] = {"n": len(rows), "auc": a, "auc_ci95": cluster_boot(lambda xs: auc([x["d"] for x in xs], [x["s"] for x in xs]), rows),
                                "partial": pf(rows), "partial_ci95": pc, "passes_s16_test": rep}
+    # spec §20 paired contrast, NLA L42 minus Oracle L44 / L40 on common toward_tgt items (added 2026-10-07, Codex audits 14/16)
+    out["paired_nla_minus_oracle"] = {}
+    for ok in ("oracle|L40", "oracle|L44"):
+        com = [k for k in tt_items if k in rd["nla|L42"] and k in rd[ok]]
+        rows = [{"rel": base[k]["rel"], "s": base[k]["s"], "n_": float(np.mean(rd["nla|L42"][k])), "o": float(np.mean(rd[ok][k]))} for k in com]
+        fd = lambda xs: (auc([x["n_"] for x in xs], [x["s"] for x in xs]) or np.nan) - (auc([x["o"] for x in xs], [x["s"] for x in xs]) or np.nan)
+        out["paired_nla_minus_oracle"][f"nla_L42_minus_{ok.replace('|', '_')}"] = {"n": len(rows), "diff": fd(rows), "ci95": cluster_boot(fd, rows)}
     nla = out["readers"].get("nla|L42", {})
     others = [k for k in out["readers"] if not k.startswith("nla")]
     out["verdict_s16"] = ("replicates, NLA-specific" if nla.get("passes_s16_test") and not any(out["readers"][k]["passes_s16_test"] for k in others)

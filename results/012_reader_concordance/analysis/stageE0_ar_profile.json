@@ -928,5 +928,6 @@
   },
   "jfve": "open",
   "wall_s": 218.6
- }
+ },
+ "audit_note": "Codex audit (2026-10-07) and report 34: keys named 'global_scale' / 'validated_up_to_global_scale' hold one least-squares scale fitted per layer on the same samples it scores (scaled FVE = squared cosine), not one global scale. The 1,024 spans are reused calibration contexts (crops of 011's 12 responses, 792 distinct targets), not held-out validation. Key names kept for continuity."
 }
