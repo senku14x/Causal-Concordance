@@ -10,6 +10,9 @@ Readouts: 2 samples per state for Oracle L44 and NLA L42 at H2 (read_batch, k 2,
 
 --stage J (design §19, J2): the same path on stageJ/j2_hold_captures.pt (clean / J_clue / rand_clue); sampled readouts
 at H1 instead of H2; outputs j2_hold_ll_*.jsonl, j2_readouts_*.jsonl.
+
+--stage L (design §22): stageL/l_hold_captures.pt (Stage J's states at more layers); token lenses at L48/52/56/60, Oracle
+at L52/56/60, sampled Oracle readouts at H2, L56; subject part only (the NLA was trained on L42). Outputs l_hold_ll_*.jsonl.
 """
 import argparse
 import json
@@ -35,12 +38,14 @@ def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--part", choices=["subject", "nla"], required=True)
     ap.add_argument("--tag", default="full")
-    ap.add_argument("--stage", choices=["I", "J"], default="I")
+    ap.add_argument("--stage", choices=["I", "J", "L"], default="I")
     a = ap.parse_args()
+    assert not (a.stage == "L" and a.part == "nla"), "Stage L runs the subject-side readers only"
     D = ROOT / f"outputs/012_reader_concordance/stage{a.stage}" / ("" if a.tag == "full" else a.tag)
     t0 = time.time()
-    pre, RPOS = ("i_", "H2") if a.stage == "I" else ("j2_", "H1")
-    cap = torch.load(D / ("hold_captures.pt" if a.stage == "I" else "j2_hold_captures.pt"))
+    pre, RPOS = {"I": ("i_", "H2"), "J": ("j2_", "H1"), "L": ("l_", "H2")}[a.stage]
+    cap = torch.load(D / {"I": "hold_captures.pt", "J": "j2_hold_captures.pt", "L": "l_hold_captures.pt"}[a.stage])
+    LENS_L, ORACLE_L, RO_L = ((48, 52, 56, 60), (52, 56, 60), 56) if a.stage == "L" else ((40, 44), (40, 44), 44)
     holds, arms, poss, layers, X, meta = cap["holds"], cap["arms"], cap["positions"], cap["layers"], cap["X"], cap["meta"]
     h = lambda i, s, P, L: X[i, arms.index(s), poss.index(P), layers.index(L)]
     EDITED = arms[1:]
@@ -78,9 +83,9 @@ def main():
         forms = json.loads((ROOT / "outputs/012_reader_concordance/stageA/words_st_report.json").read_text())["resolved_form"]
         fid = {w: tok.encode(f, add_special_tokens=False)[0] for w, f in forms.items()}
         t1 = time.time()
-        VL = RD.VectorLenses(model, tok, [40, 44], lens_names=("J_NP", "J_CB"))
+        VL = RD.VectorLenses(model, tok, list(LENS_L), lens_names=("J_NP", "J_CB"))
         with torch.no_grad():
-            for L in (40, 44):
+            for L in LENS_L:
                 for i, hk in enumerate(holds):
                     mt = meta[hk]
                     ts, tt = fid[mt["src"]], fid[mt["tgt"]]
@@ -108,10 +113,10 @@ def main():
                 if first:
                     checks[L] = ol.last_check
                 return o
-            pair_reader("oracle", (40, 44), tok, RS.PREFIX0["oracle"], score)
+            pair_reader("oracle", ORACLE_L, tok, RS.PREFIX0["oracle"], score)
             timing["oracle_ll_s"] = round(time.time() - t1, 1)
             t1 = time.time()
-            readouts("oracle", 44, lambda hs: ol.read_batch(hs, 44, k=2, seed=C.SEED))
+            readouts("oracle", RO_L, lambda hs: ol.read_batch(hs, RO_L, k=2, seed=C.SEED))
             timing["oracle_readouts_s"] = round(time.time() - t1, 1)
         finally:
             ol.unload()

@@ -720,3 +720,33 @@ EXPLORATORY.
 - the LLM that rewrites and the LLM that labels come from **different model families**.
 
 EXPLORATORY.
+
+## 22. Stage L: is the held country readable at the carrier end in later layers? (pre-registered 2026-10-07, before any L run; PI item 8: "yes, after the smoke"; adding Oracle L52-60)
+
+*What this section does: tests whether Stage J's "no reader sees the held country at H2" is a layer effect.*
+
+**Seen in J:**
+- At H2 (the carrier's final "."), every reader at L40–44 is at chance for hold success (AUC 0.46–0.49).
+- But the model's own next-token output there tracks it (0.70, `stageJ_analysis.json` `J2_model_H2_bridge_auc`).
+- So the information reaches H2 by the final layer but isn't readable at L40–44.
+
+**Run:**
+- **Captures (model side; Stage J's edits exactly).** One prompt per hold (the first of its questions; hold states are identical across questions, as J showed bitwise). Same J_NP SwapEdit, band L24–35, masked to the clue tokens (positions < H1). Same random-target seeds. States: clean / J_clue / rand_clue.
+  - Block outputs at H1 and H2, at L40, 42, 44, 48, 52, 56, 60 and 63, captured in the prefill under the same BandEditor path.
+  - **Gate:** L40/42/44 reproduce Stage J's `j2_hold_captures.pt`; the max |Δ| is reported, and the gate is ≤ 1e-3 relative to the norm (bitwise expected).
+- **Readers** (Stage J's primitives and layouts):
+  - token lenses J_NP / J_CB / logit at L48, 52, 56 and 60;
+  - **Oracle at L52, 56 and 60** (on contract; `reader_split.oracle_fast`);
+  - bridge LL → d_r at H1 and H2;
+  - 2 sampled Oracle readouts per state at H2, L56, saved.
+  - The NLA is not run: it was trained on L42 only.
+- **Labels:** Stage J's J1 cohort and hold success (`stageJ_analysis.json`: 48 holds, 31 successes), unchanged.
+
+**Rule (H2, every hold, as in Stage J's reader table):**
+- **"Arrives late":** some reader at some layer ≥ 48 has AUC ≥ 0.70 for hold success at H2, i.e. at least the model's own output.
+- **"Not readable through L60":** every reader at every layer ≥ 48 has AUC ≤ 0.60.
+- **Otherwise "partial".**
+- H1, no-Japan AUCs and the per-layer curve are descriptive.
+- Any Oracle-vs-lens difference needs §20's paired contrast.
+
+EXPLORATORY.
