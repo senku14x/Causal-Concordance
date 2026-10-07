@@ -60,7 +60,12 @@ and vocabulary: J-lens, workspace, J-space, privilege, verbalizable. A session t
    callout, §8 A4/A7/A8/A9, §12, §14 and §15.
 4. **docs/context/SPEC_v2_errata_01.md** (accepted 2026-10-04): V2-E1–E9 correct SPEC_v2 passages; an erratum wins over the text.
    **docs/context/AMENDMENT_01.md**: the PI's 2026-10-02 decisions (its §6 lists each conflict by SPEC.md line).
-4b. **012, the newest** (branch `012-reader-concordance`): `docs/ledger/012_ledger.md` first, then the spec §12-§20 and `docs/claude_reports/33_new_session_prompt_2026-10-07.md`.
+4b. **The newest work** (start from `docs/claude_reports/35_new_session_prompt_2026-10-07.md`):
+   - **014, typo** (branch `014-typo`): spec `docs/design_specs/014_typo.md`, ledger `docs/ledger/014_ledger.md`;
+   - **013, the NLA hallucination test** (branch `013-nla-hallucination`): spec `docs/design_specs/013_nla_hallucination.md`
+     (§1-10, amendments A1 §11 and A2 §12), ledger `docs/ledger/013_ledger.md`;
+   - **012** (branch `012-reader-concordance`): `docs/ledger/012_ledger.md` first (Stages K and L at its end), then the
+     spec §12-§22.
 5. **The latest experiments (2026-10-06, branch `008-trackb-brewcode`, all exploratory):**
    - 008, Track B: `docs/reports/008_trackb.md` (design `docs/design_specs/008_009_trackb_brewcode.md` Part 1, §E);
    - 009, the brew-code bank: `docs/reports/009_brewcode_derisk.md` (same design note, Part 2, §E-009; reader rules in
@@ -207,7 +212,9 @@ without the PI's say-so.
 **Branches.** **`origin/main` holds everything through 007:** on 2026-10-06 the PI had `007-jsubspace` fast-forwarded
 into `main` ("merge with main"). On this instance the local `main` ref was left stale (95ab0e5), so branch from
 `origin/main`, not `main`. Never push to `main` without the PI's explicit say-so.
-- **`012-reader-concordance`** (off `008-trackb-brewcode`, 2026-10-07, pushed): experiment 012, reports 31-33, ledger, Codex audits. **The newest work.** Not merged.
+- **`014-typo`** (off `013-nla-hallucination`, 2026-10-07): experiment 014, the reading-only suite on WSB typo. **The newest work.** Not merged.
+- **`013-nla-hallucination`** (off `012-reader-concordance`, 2026-10-07, pushed): experiment 013, 012 Stages K and L, results page v9-v12. Not merged.
+- **`012-reader-concordance`** (off `008-trackb-brewcode`, 2026-10-07, pushed): experiment 012, reports 31-34, ledger, Codex audits. Not merged.
 - **`008-trackb-brewcode`** (off `origin/main`, 2026-10-06, pushed): experiments 008-011, reports 26-29, the
   `claude_reports` cleanup. Not merged; 012 builds on it.
 - `007-jsubspace` (off `005-amended-full-run`): experiment 007 (design, amendments A1-A3, all code, results, status files,
@@ -217,6 +224,33 @@ into `main` ("merge with main"). On this instance the local `main` ref was left 
 - `spec-v2` @ 9709712: SPEC_v2 + errata 01, checks C1-C3, the NLA loader, and 005 up to the dev pilot.
 - `main`: up to date with `007-jsubspace` since the 2026-10-06 fast-forward (before that @ 95ab0e5, the 000-004 scaffold).
 
+- **014, typo** (branch `014-typo`, EXPLORATORY, 2026-10-07; spec `docs/design_specs/014_typo.md`, ledger
+  `docs/ledger/014_ledger.md`). The PI asked to run "at least what we can" of the suite on WSB typo (100 items, hidden
+  step = the corrected word, read at the last prompt token). Typo has no answer that depends on the corrected word, so
+  only the reading parts run: Part A (readers on 007's activation pieces), Part B (reader agreement), Part C (the 013
+  pipeline on typo's NLA explanations, after the R1 de-risk gate). The 013 scripts take `NLAH_FAMILY=typo`. Results: see
+  the ledger.
+- **013, the NLA hallucination test** (branch `013-nla-hallucination`, EXPLORATORY, 2026-10-07; Camila's ask; spec
+  `docs/design_specs/013_nla_hallucination.md`, ledger `docs/ledger/013_ledger.md`, notes for the PI in
+  `/workspace/claude_suggestions/`, outside the repo).
+  - **Reconstructor:** nla-rl's final `ar_reconstructor/` through EasyNLA's own code (`NLACriticModel` + `critic_predict`).
+    Validated in 012 Stage K: FVE 78.1% [75.3, 80.7] on the release's 64 examples (published about 77%; all samples 76.6%).
+  - **De-risk:** multihop passes R1 (FVE 49.9%, shuffled −79.0%); brew fails (FVE −556%), so brew is dropped.
+  - **Material:** the 522 NLA L42 explanations of 012 (87 items × clean / J swap / random swap × 2 samples).
+  - **Judges (OpenRouter, about $2.35 in all):** Gemini 3.8 Flash marks false spans and rewrites; GLM-5.3-flash labels sentences and span kinds.
+    Hand checks passed.
+  - **Deletion:** removing the false spans costs 28.6 FVE points more than random clause deletion [24.0, 33.4] (n 474).
+    Misquotes of the prompt carry it (+35.8 [31.1, 40.8]). Invented context is padding (−1.9 [−4.3, 0.3] clause control;
+    −0.1 [−1.8, 1.7] sentence control). Flagged text is 64% of tokens.
+  - **Rewrite (A2):** a minimal factual rewrite beats a paraphrase control by +3.1 FVE [1.3, 4.9]. F − O is +1.6, and
+    paraphrasing alone costs 1.4. The J share rises (+0.020) but was already above the gold activation's.
+  - **Matches Cathryn's CW-16b** in direction (correction gains a few points; restatements carry the content; framing is
+    padding). Comparison: `/workspace/claude_suggestions/013_vs_cathryn_cw16b_2026-10-07.md`.
+- **012 Stages K and L** (2026-10-07, ledger end; spec §21-§22). K: the NLA reconstructor smoke above. L: at the Stage J
+  carrier end (H2), the held country arrives between L48 and L52 (reader AUC 0.41-0.46 → 0.67-0.73, best Oracle L60
+  0.73), matching the model's own H2 output (0.70); all readers alike; readouts rarely name it.
+- **Results page** (v12; public by link): https://claude.ai/artifact/NoevKvBkXNUTvtpnJPVsuq. It covers 012, Stage L and 013,
+  readers side by side, and naming by activation part. Build it with `scripts/012_reader_concordance/make_page.py`.
 - **012, readers on swapped states** (branch `012-reader-concordance`, all EXPLORATORY, 2026-10-06/07).
   - **Docs:** spec `docs/design_specs/012_reader_concordance.md` (§12–§20 are the live contract), ledger `docs/ledger/012_ledger.md` (read it: every run, oddity and correction), page https://claude.ai/artifact/NoevKvBkXNUTvtpnJPVsuq, Codex audits `docs/reviews/012_codex_audits/`.
   - **Bank:** Jan Chen's phrase-lens ST multihop bank, i.e. 96 WSB multihop items plus swap targets; local clone `/workspace/sources/ext/phrase-lens-src`; Jan cleared use.
@@ -363,7 +397,7 @@ why the NLA runs stopped and the other open issues: `docs/claude_reports/25_nla_
 
 **Open PI decisions:**
 - **012 next (PI, 2026-10-07):**
-  - **(a) Camila's NLA hallucination test is UNBLOCKED.** Load `ceselder/qwen3.6-27b-nla-rl` `ar_reconstructor/` (final AR; the model card says to pair it with any AV adapter) via EasyNLA's `nla/utils/critic.py`. Validate it on the repo's 64 `data/example_activations.parquet` against the published ~77% FVE. Then compare original vs LLM-cleaned explanations (FVE, J-subspace share) on our saved 012 NLA readouts.
+  - **(a) Camila's NLA hallucination test: done** (013, above).
   - **(b)** A systematic content labelling of Oracle vs NLA readouts (Camila's ask 3).
   - **(c)** A new prompt family where readers could differ (recommended: hidden user attributes).
   - **Paid judge approved by the PI:** OpenRouter (key in `/workspace/.env`), Gemini 3.8 Flash or GLM/Kimi; validate the judge on a hand-checked sample.
@@ -373,10 +407,10 @@ why the NLA runs stopped and the other open issues: `docs/claude_reports/25_nla_
   first; phrase-based AR colour vectors (~10 GPU-min) after that.
 - 009 readers: keep the rule (bank used model-side only), a post hoc reader run with the model's output as covariate,
   or a redesign. The PI leans toward the old prompts and runs.
-- Paid NLA hallucination stripping (an LLM judge costs money; ask first).
+- Optional: rescore 013 saving the reconstruction vectors, to report Cathryn's inside-J / inside-rest FVE alongside ours.
 - Done from the TA's list: whitened-space swaps (008), per-method qualitative readouts (report 27), Oracle L44 vs NLA
-  L42 on multihop (010), Oracle-space swaps (011, full run s1 done: partial). Open: NLA hallucination stripping and the
-  NLA reconstructor's FVE. 005 is closed.
+  L42 on multihop (010), Oracle-space swaps (011, full run s1 done: partial). NLA hallucination stripping and the NLA
+  reconstructor's FVE are done (013). 005 is closed.
 
 **Results page for 000–004** (artifact, shared by link; built by `scripts/000_setup/results_page/make_page.py` from committed JSON only): https://claude.ai/artifact/RMRX8R4iFnysbnHaNWTBeC
 - The repo has been **private** since 2026-10-04: the paper PDFs are in it.
@@ -441,7 +475,7 @@ why the NLA runs stopped and the other open issues: `docs/claude_reports/25_nla_
    `docs/papers/text/`, `docs/sources/web/`; PI 2026-10-03). Copy them to `/workspace/sources/{papers,web}` if a
    script expects that path. **Keep the repo private while they are in it** (redistribution is not cleared).
 5. Restore the agent's memory notes: see `docs/context/agent_notes/README.md` (updated 2026-10-05).
-6. **Secrets are in neither mirror.** The OpenRouter key (002's judge) lives only in `/workspace/.env`; ask the PI
+6. **Secrets are in neither mirror.** The OpenRouter key (002's, 013's and 014's judges) lives only in `/workspace/.env`; ask the PI
    for it on a new instance. It was pasted in chat on 2026-10-02 and should be rotated.
 
 ## Pitfalls (read before writing code)
@@ -646,3 +680,7 @@ why the NLA runs stopped and the other open issues: `docs/claude_reports/25_nla_
 | 10-07 | Treated "nla-rl's AR (step 600) is not step-paired with our AV iter_000400" as a blocker for the NLA reconstructor / hallucination test, and repeated it to the PI, without reading the model card, which says to pair any AV adapter with the final AR (FVE 76.6% at step 400 vs about 77% at 600) | read the repo in full; keep iter_000400 for reading comparability only; read a model card before declaring a pairing constraint |
 | 10-07 | Ranges written from printed subsets instead of the full JSON: ledger:250's between-reader Spearman "0.83–0.90" came from the four pairs `stageQ_concordance.py:115–116` prints (full matrix 0.75–0.98); `STATUS.md`'s "ρ ~0.3–0.5" (JSON 0.31–0.57); `make_page.py:310` hard-coded "AUC near 0.5–0.64", left over from before the F2 mask fix (corrected 0.39–0.59). Found in report 34 | ledger addition; the page computes both ranges from JSON (v8); stageQ prints the cross-family min / max. Quote a range only from the full JSON, never from a printed subset |
 | 10-07 | Report 34 (a) called the Stage J carrier end (H2) "neither written nor output-facing"; the model's own H2 output gives AUC 0.70, above the 0.65 bar (`stageJ_analysis.json` `J2_model_H2_bridge_auc`). Caught by the PI | corrected in report 34, the page (v8) and this file's 012 block |
+| 10-07 | 013 hand check coded one unflagged explanation (Sphinx) as a judge recall miss; it was a G1 parse failure (the span was not a verbatim substring) | hand-check codes corrected before the analysis |
+| 10-07 | A notes file in `/workspace/claude_suggestions/` quoted numbers from a pasted chat thread instead of committed JSON | replaced with numbers from committed docs; pasted threads stay in the chat |
+| 10-07 | Labelled 007's "PCA" piece as if comparable to Cathryn's PCA control; 007's is a small PCA-k (3-4 directions), hers 1,024 | labelled PCA-k on the page (v12) |
+| 10-07 | The 014 spec was committed a few minutes after its 10-item smoke launched (written before it) | noted in the commit and the 014 ledger; commit the spec before launching |
