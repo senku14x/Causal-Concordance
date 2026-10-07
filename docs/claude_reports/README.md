@@ -16,6 +16,7 @@ Cleaned 2026-10-06:
 
 | File | What it is |
 |---|---|
+| `34_up_to_speed_2026-10-07.md` | **Up-to-speed report after 012** (new session, 2026-10-07): 012 summary, stage table with every number from JSON (half-up, keys cited), audit corrections, 19 stale/inconsistent items with file:line, next steps with GPU estimates, questions |
 | `33_new_session_prompt_2026-10-07.md` | **The prompt for the next session** (after 012): read order (paper → notes → CLAUDE.md → 012 ledger/spec/audits), 012 state after the audit corrections, next steps (NLA reconstructor + hallucination test unblocked; content labelling; better prompt family), environment, working rules |
 | `32_012_outlook_2026-10-06.md` | **012 outlook**: what phrase-lens contains (checked), whether PJ directions are needed, porting 008–011 to its multihop banks, fixes to the prompt set and the 012 draft, recommended order |
 | `31_onboarding_review_2026-10-06.md` | **Onboarding review** (new session, 2026-10-06): 001–011 checked against JSON; the dissociation uses mismatched J objects; the AR config hints at a J-lens loss term; number slips (008 J_CB −0.14, not −0.15); ranked next steps |
