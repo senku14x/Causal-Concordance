@@ -27,6 +27,7 @@ DR = json.loads((R13 / "analysis/derisk.json").read_text())
 EX = [json.loads(l) for l in open(R13 / "qualitative/examples.jsonl")]
 LS = [json.loads(l) for l in open(R / "qualitative/stageL_samples.jsonl")]
 RC = [json.loads(l) for l in open(R / "qualitative/reader_compare_samples.jsonl")]
+JS = json.loads((R / "analysis/j_split_naming.json").read_text())
 
 
 def h(x, d=2):
@@ -292,6 +293,24 @@ def reader_compare():
     return "".join(out)
 
 
+def split_table(split="test"):
+    pieces = [("whole", "whole activation"), ("J", "J part (1,024 J-lens directions)"), ("rest_J", "rest (whole minus J)"),
+              ("R0", "random 1,024 directions"), ("MR", "whole minus the shared mean direction"),
+              ("PCA", "PCA-k (3–4 directions, matched to J's share of the pair difference)")]
+    readers = ["Oracle L40", "Oracle L44", "NLA L42"]
+    head = "".join(f"<th>{r}</th>" for r in readers)
+    body = ""
+    for pk, lab in pieces:
+        cells = ""
+        for r in readers:
+            c = JS["cells"][f"{r}|{pk}|{split}"]
+            cells += (f'<td title="hidden step {h(c["bridge"])} [{h(c["bridge_ci95"][0])}, {h(c["bridge_ci95"][1])}]; answer {h(c["answer"])} '
+                      f'[{h(c["answer_ci95"][0])}, {h(c["answer_ci95"][1])}]">{h(c["bridge"])} <span class="sub">({h(c["answer"])})</span></td>')
+        body += f"<tr><th>{lab}</th>{cells}</tr>"
+    n = JS["cells"][f"Oracle L40|whole|{split}"]
+    return (f'<div class="wrap"><table><thead><tr><th>reader given</th>{head}</tr></thead><tbody>{body}</tbody></table></div>', n)
+
+
 def stageL_readouts():
     out = []
     for x in LS:
@@ -429,7 +448,12 @@ mark.k-wrong_entity, mark.k-false_fact {{ background:color-mix(in srgb, var(--mu
 <p class="sub">Sampled readouts that name the src or tgt bridge concept (word match; 2 samples per state). Counts: names src (or both) / readouts, names tgt (or both) / readouts, at L24–35 edits.</p>
 <div class="wrap">{naming_table()}</div>
 {readouts()}
-<h2>5b. The three readers on the same prompt</h2>
+<h2>5b. Which part of the activation the readers name the hidden step from</h2>
+<p class="sub">From 007 (same multihop prompts, clean state, no edit): each reader was given the whole activation or one part of it. Share of sampled readouts that name the hidden step, with the share naming the answer in brackets; hover a cell for its 95% item-bootstrap interval. Test half, {split_table()[1]["n_items"]} items × 2 samples. Re-scored with this page's word matcher (post hoc).</p>
+{split_table()[0]}
+<p>Every reader gets the hidden step from the J part as well as from the whole activation, and mostly loses it from the rest. The rest keeps more for the Oracle at L40 ({h(JS["cells"]["Oracle L40|rest_J|test"]["bridge"])}) than at L44 ({h(JS["cells"]["Oracle L44|rest_J|test"]["bridge"])}) or for the NLA ({h(JS["cells"]["NLA L42|rest_J|test"]["bridge"])}). A random part of the same size keeps some of it, most for the NLA. This says where the hidden step is decodable; it does not say the model uses it from there (sections 1–6 and 007's model-side tests).</p>
+
+<h2>5c. The three readers on the same prompt</h2>
 <p class="sub">For eight prompts drawn at random (seed 11: four where the J swap changed the answer, four where it did not), the first sampled readout of each reader in each state, next to what the model actually said. The readouts are cut at 240 characters.</p>
 {reader_compare()}
 

@@ -1,0 +1,517 @@
+{
+ "label": "POST HOC, EXPLORATORY: 007 multihop readouts re-scored by piece (word match)",
+ "pieces": {
+  "whole": "whole activation",
+  "J": "J part",
+  "rest_J": "rest (whole minus J)",
+  "R0": "random part (same size as J)",
+  "PCA": "PCA part (same size)",
+  "MR": "mean removed"
+ },
+ "cells": {
+  "Oracle L40|whole|dev": {
+   "n_readouts": 54,
+   "n_items": 27,
+   "bridge": 0.5925925925925926,
+   "bridge_ci95": [
+    0.42592592592592593,
+    0.7592592592592593
+   ],
+   "answer": 0.8148148148148148,
+   "answer_ci95": [
+    0.7037037037037037,
+    0.9259259259259259
+   ]
+  },
+  "Oracle L40|whole|test": {
+   "n_readouts": 80,
+   "n_items": 40,
+   "bridge": 0.85,
+   "bridge_ci95": [
+    0.7375,
+    0.95
+   ],
+   "answer": 0.9375,
+   "answer_ci95": [
+    0.8625,
+    1.0
+   ]
+  },
+  "Oracle L40|J|dev": {
+   "n_readouts": 54,
+   "n_items": 27,
+   "bridge": 0.5370370370370371,
+   "bridge_ci95": [
+    0.37037037037037035,
+    0.7037037037037037
+   ],
+   "answer": 0.6481481481481481,
+   "answer_ci95": [
+    0.48148148148148145,
+    0.7962962962962963
+   ]
+  },
+  "Oracle L40|J|test": {
+   "n_readouts": 80,
+   "n_items": 40,
+   "bridge": 0.9125,
+   "bridge_ci95": [
+    0.8125,
+    0.9753124999999983
+   ],
+   "answer": 0.925,
+   "answer_ci95": [
+    0.85,
+    0.9875
+   ]
+  },
+  "Oracle L40|rest_J|dev": {
+   "n_readouts": 54,
+   "n_items": 27,
+   "bridge": 0.2222222222222222,
+   "bridge_ci95": [
+    0.09259259259259259,
+    0.37037037037037035
+   ],
+   "answer": 0.46296296296296297,
+   "answer_ci95": [
+    0.29583333333333334,
+    0.6300925925925901
+   ]
+  },
+  "Oracle L40|rest_J|test": {
+   "n_readouts": 80,
+   "n_items": 40,
+   "bridge": 0.425,
+   "bridge_ci95": [
+    0.3,
+    0.5503124999999983
+   ],
+   "answer": 0.55,
+   "answer_ci95": [
+    0.4125,
+    0.6753124999999983
+   ]
+  },
+  "Oracle L40|R0|dev": {
+   "n_readouts": 54,
+   "n_items": 27,
+   "bridge": 0.35185185185185186,
+   "bridge_ci95": [
+    0.18518518518518517,
+    0.5185185185185185
+   ],
+   "answer": 0.3888888888888889,
+   "answer_ci95": [
+    0.2222222222222222,
+    0.5740740740740741
+   ]
+  },
+  "Oracle L40|R0|test": {
+   "n_readouts": 80,
+   "n_items": 40,
+   "bridge": 0.3375,
+   "bridge_ci95": [
+    0.2125,
+    0.4625
+   ],
+   "answer": 0.65,
+   "answer_ci95": [
+    0.5125,
+    0.7875
+   ]
+  },
+  "Oracle L40|PCA|dev": {
+   "n_readouts": 54,
+   "n_items": 27,
+   "bridge": 0.018518518518518517,
+   "bridge_ci95": [
+    0.0,
+    0.05555555555555555
+   ],
+   "answer": 0.09259259259259259,
+   "answer_ci95": [
+    0.018518518518518517,
+    0.2037037037037037
+   ]
+  },
+  "Oracle L40|PCA|test": {
+   "n_readouts": 80,
+   "n_items": 40,
+   "bridge": 0.0,
+   "bridge_ci95": [
+    0.0,
+    0.0
+   ],
+   "answer": 0.0375,
+   "answer_ci95": [
+    0.0,
+    0.1
+   ]
+  },
+  "Oracle L40|MR|dev": {
+   "n_readouts": 54,
+   "n_items": 27,
+   "bridge": 0.42592592592592593,
+   "bridge_ci95": [
+    0.25925925925925924,
+    0.5925925925925926
+   ],
+   "answer": 0.6111111111111112,
+   "answer_ci95": [
+    0.4444444444444444,
+    0.7592592592592593
+   ]
+  },
+  "Oracle L40|MR|test": {
+   "n_readouts": 80,
+   "n_items": 40,
+   "bridge": 0.45,
+   "bridge_ci95": [
+    0.3125,
+    0.5875
+   ],
+   "answer": 0.7625,
+   "answer_ci95": [
+    0.6375,
+    0.8625
+   ]
+  },
+  "Oracle L44|whole|dev": {
+   "n_readouts": 54,
+   "n_items": 27,
+   "bridge": 0.6111111111111112,
+   "bridge_ci95": [
+    0.4439814814814815,
+    0.7777777777777778
+   ],
+   "answer": 0.8333333333333334,
+   "answer_ci95": [
+    0.7037037037037037,
+    0.9444444444444444
+   ]
+  },
+  "Oracle L44|whole|test": {
+   "n_readouts": 80,
+   "n_items": 40,
+   "bridge": 0.8625,
+   "bridge_ci95": [
+    0.75,
+    0.95
+   ],
+   "answer": 0.9,
+   "answer_ci95": [
+    0.8,
+    0.975
+   ]
+  },
+  "Oracle L44|J|dev": {
+   "n_readouts": 54,
+   "n_items": 27,
+   "bridge": 0.5555555555555556,
+   "bridge_ci95": [
+    0.37037037037037035,
+    0.7222222222222222
+   ],
+   "answer": 0.7962962962962963,
+   "answer_ci95": [
+    0.6666666666666666,
+    0.9074074074074074
+   ]
+  },
+  "Oracle L44|J|test": {
+   "n_readouts": 80,
+   "n_items": 40,
+   "bridge": 0.9375,
+   "bridge_ci95": [
+    0.8746875000000001,
+    0.9875
+   ],
+   "answer": 0.95,
+   "answer_ci95": [
+    0.8875,
+    1.0
+   ]
+  },
+  "Oracle L44|rest_J|dev": {
+   "n_readouts": 54,
+   "n_items": 27,
+   "bridge": 0.1111111111111111,
+   "bridge_ci95": [
+    0.037037037037037035,
+    0.2037037037037037
+   ],
+   "answer": 0.07407407407407407,
+   "answer_ci95": [
+    0.0,
+    0.18518518518518517
+   ]
+  },
+  "Oracle L44|rest_J|test": {
+   "n_readouts": 80,
+   "n_items": 40,
+   "bridge": 0.125,
+   "bridge_ci95": [
+    0.05,
+    0.2125
+   ],
+   "answer": 0.1375,
+   "answer_ci95": [
+    0.0625,
+    0.2253124999999983
+   ]
+  },
+  "Oracle L44|R0|dev": {
+   "n_readouts": 54,
+   "n_items": 27,
+   "bridge": 0.2222222222222222,
+   "bridge_ci95": [
+    0.09259259259259259,
+    0.37037037037037035
+   ],
+   "answer": 0.3333333333333333,
+   "answer_ci95": [
+    0.18518518518518517,
+    0.5004629629629604
+   ]
+  },
+  "Oracle L44|R0|test": {
+   "n_readouts": 80,
+   "n_items": 40,
+   "bridge": 0.1875,
+   "bridge_ci95": [
+    0.0875,
+    0.2875
+   ],
+   "answer": 0.5125,
+   "answer_ci95": [
+    0.375,
+    0.6625
+   ]
+  },
+  "Oracle L44|PCA|dev": {
+   "n_readouts": 54,
+   "n_items": 27,
+   "bridge": 0.0,
+   "bridge_ci95": [
+    0.0,
+    0.0
+   ],
+   "answer": 0.12962962962962962,
+   "answer_ci95": [
+    0.037037037037037035,
+    0.25925925925925924
+   ]
+  },
+  "Oracle L44|PCA|test": {
+   "n_readouts": 80,
+   "n_items": 40,
+   "bridge": 0.0,
+   "bridge_ci95": [
+    0.0,
+    0.0
+   ],
+   "answer": 0.025,
+   "answer_ci95": [
+    0.0,
+    0.075
+   ]
+  },
+  "Oracle L44|MR|dev": {
+   "n_readouts": 54,
+   "n_items": 27,
+   "bridge": 0.3888888888888889,
+   "bridge_ci95": [
+    0.2222222222222222,
+    0.5555555555555556
+   ],
+   "answer": 0.6481481481481481,
+   "answer_ci95": [
+    0.48148148148148145,
+    0.7962962962962963
+   ]
+  },
+  "Oracle L44|MR|test": {
+   "n_readouts": 80,
+   "n_items": 40,
+   "bridge": 0.425,
+   "bridge_ci95": [
+    0.3,
+    0.5625
+   ],
+   "answer": 0.825,
+   "answer_ci95": [
+    0.7125,
+    0.925
+   ]
+  },
+  "NLA L42|whole|dev": {
+   "n_readouts": 54,
+   "n_items": 27,
+   "bridge": 0.5,
+   "bridge_ci95": [
+    0.3333333333333333,
+    0.6481481481481481
+   ],
+   "answer": 0.6666666666666666,
+   "answer_ci95": [
+    0.48148148148148145,
+    0.8152777777777752
+   ]
+  },
+  "NLA L42|whole|test": {
+   "n_readouts": 80,
+   "n_items": 40,
+   "bridge": 0.8,
+   "bridge_ci95": [
+    0.6875,
+    0.8875
+   ],
+   "answer": 0.8875,
+   "answer_ci95": [
+    0.8,
+    0.9625
+   ]
+  },
+  "NLA L42|J|dev": {
+   "n_readouts": 54,
+   "n_items": 27,
+   "bridge": 0.5370370370370371,
+   "bridge_ci95": [
+    0.37037037037037035,
+    0.7037037037037037
+   ],
+   "answer": 0.6666666666666666,
+   "answer_ci95": [
+    0.48148148148148145,
+    0.8333333333333334
+   ]
+  },
+  "NLA L42|J|test": {
+   "n_readouts": 80,
+   "n_items": 40,
+   "bridge": 0.8875,
+   "bridge_ci95": [
+    0.7875,
+    0.975
+   ],
+   "answer": 0.9,
+   "answer_ci95": [
+    0.8125,
+    0.975
+   ]
+  },
+  "NLA L42|rest_J|dev": {
+   "n_readouts": 54,
+   "n_items": 27,
+   "bridge": 0.09259259259259259,
+   "bridge_ci95": [
+    0.0,
+    0.2037037037037037
+   ],
+   "answer": 0.1111111111111111,
+   "answer_ci95": [
+    0.018518518518518517,
+    0.2222222222222222
+   ]
+  },
+  "NLA L42|rest_J|test": {
+   "n_readouts": 80,
+   "n_items": 40,
+   "bridge": 0.225,
+   "bridge_ci95": [
+    0.1125,
+    0.35
+   ],
+   "answer": 0.0875,
+   "answer_ci95": [
+    0.025,
+    0.1625
+   ]
+  },
+  "NLA L42|R0|dev": {
+   "n_readouts": 54,
+   "n_items": 27,
+   "bridge": 0.4074074074074074,
+   "bridge_ci95": [
+    0.24074074074074073,
+    0.5740740740740741
+   ],
+   "answer": 0.18518518518518517,
+   "answer_ci95": [
+    0.07407407407407407,
+    0.3148148148148148
+   ]
+  },
+  "NLA L42|R0|test": {
+   "n_readouts": 80,
+   "n_items": 40,
+   "bridge": 0.5375,
+   "bridge_ci95": [
+    0.3871875,
+    0.6875
+   ],
+   "answer": 0.3125,
+   "answer_ci95": [
+    0.1875,
+    0.4375
+   ]
+  },
+  "NLA L42|PCA|dev": {
+   "n_readouts": 54,
+   "n_items": 27,
+   "bridge": 0.0,
+   "bridge_ci95": [
+    0.0,
+    0.0
+   ],
+   "answer": 0.0,
+   "answer_ci95": [
+    0.0,
+    0.0
+   ]
+  },
+  "NLA L42|PCA|test": {
+   "n_readouts": 80,
+   "n_items": 40,
+   "bridge": 0.0,
+   "bridge_ci95": [
+    0.0,
+    0.0
+   ],
+   "answer": 0.0,
+   "answer_ci95": [
+    0.0,
+    0.0
+   ]
+  },
+  "NLA L42|MR|dev": {
+   "n_readouts": 54,
+   "n_items": 27,
+   "bridge": 0.46296296296296297,
+   "bridge_ci95": [
+    0.2962962962962963,
+    0.6296296296296297
+   ],
+   "answer": 0.42592592592592593,
+   "answer_ci95": [
+    0.25925925925925924,
+    0.593055555555553
+   ]
+  },
+  "NLA L42|MR|test": {
+   "n_readouts": 80,
+   "n_items": 40,
+   "bridge": 0.7125,
+   "bridge_ci95": [
+    0.575,
+    0.8378124999999983
+   ],
+   "answer": 0.5625,
+   "answer_ci95": [
+    0.4125,
+    0.7
+   ]
+  }
+ }
+}
