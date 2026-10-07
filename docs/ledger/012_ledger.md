@@ -436,3 +436,8 @@ All points were checked. Accepted:
 - **No evidence that any reader reads the hidden step beyond output-facing content, and no Oracle/NLA difference.**
 
 **STOP (PI: limit nearly gone; no more subagents).** GPU idle.
+
+**NLA repo read in full** (`ceselder/qwen3.6-27b-nla-rl` @ 5a13b7ec, at the PI's request).
+- **Contents:** RL adapters `iter_000100`–`000800` (the README lists only up to 600); `ar_reconstructor/` (43-block truncated backbone plus value head, `saved_at_step` 600, "latest only"); SFT-init and SFT checkpoints of the reconstructor; `nla_meta.yaml`; `run_config.yaml` (reward = −reconstruction MSE, no J term); `fve_trajectory.json`; `data/example_activations.parquet` (64 layer-42 activations with source text, a ready validation set).
+- **The README says to "pair any AV adapter with the provided (final) AR".** The project's earlier framing that "AR step 600 is not step-paired with our AV iter_000400", treated as a blocker for the reconstructor / hallucination test, was an unchecked assumption.
+- Keeping iter_000400 for the reading experiments remains justified, since it is WSB's and Cathryn's NLA.
