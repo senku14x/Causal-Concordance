@@ -7,6 +7,8 @@ results: `docs/reports/008_trackb.md`, `docs/reports/009_brewcode_derisk.md` and
 `docs/reports/007_jsubspace.md` and report 25. Then `CLAUDE.md`, this file (newest first),
 `docs/reports/005_followups.md` and `docs/reports/006_reader_likelihood.md`.*
 
+**2026-10-07, 012 overnight (branch `012-reader-concordance`; EXPLORATORY).** J-row coordinate swaps on Jan Chen's ST multihop bank (all WSB items) change Qwen's answer on 0.585 of 82 clean-correct items at L24-47 (random 0.06; logit rows 0). The swap operator's direction is set by the clean state (toward_src edits all fail at L24-47). Readers on the swapped states (Oracle L40/L44/L52/L56, NLA L42, token lenses) shift toward the swapped-in concept far more when the answer changed (AUC 0.88-0.97; Oracle ≈ NLA), but the model's own read-cell output does too (AUC 0.96-0.97 at L24-35); beyond it, the readers' bridge shift keeps only a modest partial association (ρ ~0.3-0.5). Details: `docs/ledger/012_ledger.md`; page https://claude.ai/artifact/NoevKvBkXNUTvtpnJPVsuq.
+
 **2026-10-06, late: 011 s1 finished; AR J-bias check; 011 code fixes (POST HOC / EXPLORATORY; PI go on report 31).**
 - **011 s1** (82/82 pairs; the last 8 ran in 1.05 GPU-min after the resume fix; gates pass: repro 82/82, R·A ≤ 7.2e-15,
   nothing quarantined). Amendment 3 verdicts (`results/011_olens_swaps/olens_swaps_analysis_s1.json`): the TA's

@@ -215,6 +215,8 @@ into `main` ("merge with main"). On this instance the local `main` ref was left 
 - `spec-v2` @ 9709712: SPEC_v2 + errata 01, checks C1-C3, the NLA loader, and 005 up to the dev pilot.
 - `main`: up to date with `007-jsubspace` since the 2026-10-06 fast-forward (before that @ 95ab0e5, the 000-004 scaffold).
 
+- **012** (branch `012-reader-concordance`, exploratory, 2026-10-07): J-row swaps change Qwen's multihop answer (0.585 vs random 0.06 at L24-47); every reader's src→tgt shift tracks the change (Oracle ≈ NLA), mostly through output-facing content at the read cell. Spec `docs/design_specs/012_reader_concordance.md`, ledger `docs/ledger/012_ledger.md`, page https://claude.ai/artifact/NoevKvBkXNUTvtpnJPVsuq.
+
 **008, Track B: the paper's §3.3 privilege test on brew, done the paper's way** (exploratory; dev, 82 gated pairs; all
 gates pass; `docs/reports/008_trackb.md`; design `docs/design_specs/008_009_trackb_brewcode.md` Part 1 and §E):
 - Class-mean z swaps clamped per layer over the three emit cells (assistant newline, `</think>`, `:`) × L40-48.
@@ -612,3 +614,5 @@ why the NLA runs stopped and the other open issues: `docs/claude_reports/25_nla_
 | 10-06 | 011's resume path reported gate bookkeeping for newly run pairs only; the analysis had no completeness guard or quarantine handling; rerunning queue.sh would have overwritten `ar_validation_v1.json` | bookkeeping rebuilt from every pair file; guard + quarantine handling with a test (`tests/test_011_analysis_guard.py`); no-overwrite guards |
 | 10-06 | Report 31 copied a subagent's line reference (`queue.sh:183-188`; the file has 20 lines) and its 011 L40 FVE 0.26 is a recomputation not in any committed JSON | reference fixed; the 0.26 is flagged as unverified in the 011 note |
 | 10-06 | Drafted the 011 s1 line in this file from the analysis printout: D_ar − D_rand's lower CI bound came out +0.03 (JSON 0.02498 → +0.02). The double-rounding lesson again, caught by the JSON check before commit | corrected before commit |
+| 10-06 | 012 smoke note explained three unchanged swaps as near-parallel src/tgt J rows making the coordinate swap "barely move the activation"; for this pseudoinverse swap the edit is a reflection of the contrast component (Δh = −2u(uᵀh)), and high cosine does not shrink it. The independent review caught it | withdrawn in spec §12; Stage B logs the realised edit; "unchanged" names an answer-level outcome only |
+| 10-06 | Report 32 said 008's brew arm-A null was "very likely about band and positions"; Stage A then showed every-position swaps work at L40-48 on multihop, so the band alone is not the explanation, and family/positions/dose remain | corrected in the 012 ledger; don't promote a cross-family difference to a cause without a within-family test |

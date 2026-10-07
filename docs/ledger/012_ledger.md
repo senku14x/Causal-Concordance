@@ -121,3 +121,28 @@ Spec: `docs/design_specs/012_reader_concordance.md` (v1 → v1.1 §11 → v1.2 �
   - an earlier position (e.g. the bridge-cue tokens);
   - prompts where the answer position comes later.
 - First-token NA: the token lenses and the model output have no answer score for 2 items whose answers share a first digit token (chem-bones-Z, double-dice-faces).
+- Correction to the entry above: the model's own read-cell output predicts swap success with AUC **0.97 (bridge) / 0.96 (answer) at L24–35** and 0.91 / 0.92 at L24–47. Values from `stageD_answers.json`.
+
+**~00:15 — Results page published:** https://claude.ai/artifact/NoevKvBkXNUTvtpnJPVsuq
+- Built by `scripts/012_reader_concordance/make_page.py`, only from committed JSON, with inline SVG charts. Source: `results/012_reader_concordance/page/index.html`.
+- The visual render check was skipped because `/venv/page` doesn't exist on this instance; only a structural check was done (the SVGs are well-formed).
+
+**Where this leaves 012 (for the PI, morning of 2026-10-07)**
+- Established tonight (exploratory, scoped to Qwen3.6-27B, 82 ST multihop items, final-token reads):
+  1. J-row swaps at L24–47 change the answer on 0.585 of items, against 0.06 random; logit rows do nothing.
+  2. The swap operator has a direction set by the clean state, which explains about a third of the failures.
+  3. Every reader's src→tgt shift tracks whether the answer changed. Oracle ≈ NLA, with no detectable difference.
+  4. Most of that tracking is shared with the model's own output at the read cell.
+- **Not established:** that any reader reads the bridge *as distinct from* the upcoming answer.
+- **Next, in order of information per GPU-hour:**
+  1. Read cells where the bridge is present but the answer is not yet output-facing: earlier prompt positions (the cue tokens), position-split edits (read position only vs everything else), or prompts with a delayed answer slot.
+  2. The whitened swap (Camila's a; needs Σ for L24–47).
+  3. The class-mean arm (J-independent in construction, Fig. 16 split).
+  4. The brew arm-A rerun at every position.
+  5. MT.
+  6. Stage E when the loader arrives.
+- **Odd and open:**
+  - Jan's scorer uses bf16 logits; ours are float32.
+  - The random-target control is not neutral for readers (it removes src).
+  - 2 items have no first-token answer score.
+  - Japan is the target in 28 of 87 covered items; reported pooled.
