@@ -202,14 +202,14 @@ Sources (read-only clones, pinned in `scripts/000_setup/rebuild_env.sh`): `/work
 `env -u GITHUB_TOKEN git -c credential.helper='!gh auth git-credential' push origin <branch>`. Do not push to `main`
 without the PI's say-so.
 
-## Where things stand (2026-10-06)
+## Where things stand (2026-10-07)
 
 **Branches.** **`origin/main` holds everything through 007:** on 2026-10-06 the PI had `007-jsubspace` fast-forwarded
 into `main` ("merge with main"). On this instance the local `main` ref was left stale (95ab0e5), so branch from
 `origin/main`, not `main`. Never push to `main` without the PI's explicit say-so.
 - **`012-reader-concordance`** (off `008-trackb-brewcode`, 2026-10-07, pushed): experiment 012, reports 31-33, ledger, Codex audits. **The newest work.** Not merged.
 - **`008-trackb-brewcode`** (off `origin/main`, 2026-10-06, pushed): experiments 008-011, reports 26-29, the
-  `claude_reports` cleanup. **The newest work.** Not merged.
+  `claude_reports` cleanup. Not merged; 012 builds on it.
 - `007-jsubspace` (off `005-amended-full-run`): experiment 007 (design, amendments A1-A3, all code, results, status files,
   reports 22-25) plus everything below. Identical to `main` at the merge; kept for reference.
 - `005-amended-full-run` (off `spec-v2`): amendment 01, the 005 full run and follow-ups, 006 and 006b.
@@ -220,8 +220,8 @@ into `main` ("merge with main"). On this instance the local `main` ref was left 
 - **012, readers on swapped states** (branch `012-reader-concordance`, all EXPLORATORY, 2026-10-06/07).
   - **Docs:** spec `docs/design_specs/012_reader_concordance.md` (§12–§20 are the live contract), ledger `docs/ledger/012_ledger.md` (read it: every run, oddity and correction), page https://claude.ai/artifact/NoevKvBkXNUTvtpnJPVsuq, Codex audits `docs/reviews/012_codex_audits/`.
   - **Bank:** Jan Chen's phrase-lens ST multihop bank, i.e. 96 WSB multihop items plus swap targets; local clone `/workspace/sources/ext/phrase-lens-src`; Jan cleared use.
-  - **Lever:** J-row coordinate swaps at every prompt position change the answer on 48/82 (L24-47) and 38/82 (L24-35); random about 0; logit rows 0/82. The swap is a reflection, so its direction is set by the clean state; toward_src edits fail.
-  - **Readers** (Oracle L40/44/52/56, NLA L42, J_NP/J_CB/logit) track working swaps (AUC 0.9-0.96), but the model's own output at the read token does too (0.97). Mostly output-facing; no Oracle/NLA difference.
+  - **Lever:** J-row coordinate swaps at every prompt position change the answer on 48/82 (L24-47) and 38/82 (L24-35); random-target controls 5/82 and 1/82; logit rows 0/82. The swap is a reflection, so its direction is set by the clean state; toward_src edits fail.
+  - **Readers** (Oracle L40/44/52/56, NLA L42, J_NP/J_CB/logit) track working swaps (AUC 0.88-0.97), but the model's own output at the read token does too (0.97). Mostly output-facing; no Oracle/NLA difference.
   - **F1:** editing everything but the read token flips 35/82; editing only it flips 0/82.
   - **F2/R:** at written early positions readers detect the write, not use. The NLA hint was a position-mask bug and is withdrawn.
   - **G:** whitened swaps flip fewer (26 vs 38/82).
@@ -230,7 +230,7 @@ into `main` ("merge with main"). On this instance the local `main` ref was left 
   - **I/J, delayed question** ("Consider <clue>. <carrier> The <relation> of that country is"):
     - swapping before the question flips 42/60, and clue-only swapping 36/60 (random 0);
     - hold states are identical across questions, so the model holds and uses the swapped country;
-    - readers at the carrier end see nothing (about 0.47); at the computed clue end about 0.8, equal to the logit lens, while the model's own H1 output gives 0.69, so the pre-set bar fails.
+    - readers at L40-44 at the carrier end see nothing (0.46-0.49), though the model's own output there tracks success (0.70), so it is output-facing by our rule; at the computed clue end about 0.8, equal to the logit lens, while the model's own H1 output gives 0.69, so the pre-set bar fails.
   - **E0:** our Oracle-AR loader fails its validation (retrieval 8/12). A J-lens training term is a hypothesis only.
   - **Net:** no evidence that any reader reads the hidden step beyond output-facing content, and no NLA-vs-Oracle difference.
   - **The prompts are a good lever but structurally can't separate bridge from answer.**
@@ -639,8 +639,10 @@ why the NLA runs stopped and the other open issues: `docs/claude_reports/25_nla_
 | 10-06 | 011's resume path reported gate bookkeeping for newly run pairs only; the analysis had no completeness guard or quarantine handling; rerunning queue.sh would have overwritten `ar_validation_v1.json` | bookkeeping rebuilt from every pair file; guard + quarantine handling with a test (`tests/test_011_analysis_guard.py`); no-overwrite guards |
 | 10-06 | Report 31 copied a subagent's line reference (`queue.sh:183-188`; the file has 20 lines) and its 011 L40 FVE 0.26 is a recomputation not in any committed JSON | reference fixed; the 0.26 is flagged as unverified in the 011 note |
 | 10-06 | Drafted the 011 s1 line in this file from the analysis printout: D_ar − D_rand's lower CI bound came out +0.03 (JSON 0.02498 → +0.02). The double-rounding lesson again, caught by the JSON check before commit | corrected before commit |
+| 10-06 | 012 smoke note explained three unchanged swaps as near-parallel src/tgt J rows making the coordinate swap "barely move the activation"; for this pseudoinverse swap the edit is a reflection of the contrast component (Δh = −2u(uᵀh)), and high cosine does not shrink it. The independent review caught it | withdrawn in spec §12; Stage B logs the realised edit; "unchanged" names an answer-level outcome only |
+| 10-06 | Report 32 said 008's brew arm-A null was "very likely about band and positions"; Stage A then showed every-position swaps work at L40-48 on multihop, so the band alone is not the explanation, and family/positions/dose remain | corrected in the 012 ledger; don't promote a cross-family difference to a cause without a within-family test |
 | 10-07 | 012 Stage F2 / R analysis excluded the token before " is" via a flag only the model rows carried, so reader and model averages used different positions; the F2 "NLA intermediate" hint (AUC 0.72, partial 0.54) was an artifact (corrected 0.59 / 0.17) | fixed with one shared (item, pos) mask; hint withdrawn (Codex audit) |
 | 10-07 | 012 E0 called 011's reused calibration crops "held-out spans", called a per-layer same-sample scale a "global scale", and the ledger went from a jfve candidate to "the AR was trained with a J term" | wording corrected; each link of the J-objective chain stated as unverified (Codex audit) |
 | 10-07 | Treated "nla-rl's AR (step 600) is not step-paired with our AV iter_000400" as a blocker for the NLA reconstructor / hallucination test, and repeated it to the PI, without reading the model card, which says to pair any AV adapter with the final AR (FVE 76.6% at step 400 vs about 77% at 600) | read the repo in full; keep iter_000400 for reading comparability only; read a model card before declaring a pairing constraint |
-| 10-06 | 012 smoke note explained three unchanged swaps as near-parallel src/tgt J rows making the coordinate swap "barely move the activation"; for this pseudoinverse swap the edit is a reflection of the contrast component (Δh = −2u(uᵀh)), and high cosine does not shrink it. The independent review caught it | withdrawn in spec §12; Stage B logs the realised edit; "unchanged" names an answer-level outcome only |
-| 10-06 | Report 32 said 008's brew arm-A null was "very likely about band and positions"; Stage A then showed every-position swaps work at L40-48 on multihop, so the band alone is not the explanation, and family/positions/dose remain | corrected in the 012 ledger; don't promote a cross-family difference to a cause without a within-family test |
+| 10-07 | Ranges written from printed subsets instead of the full JSON: ledger:250's between-reader Spearman "0.83–0.90" came from the four pairs `stageQ_concordance.py:115–116` prints (full matrix 0.75–0.98); `STATUS.md`'s "ρ ~0.3–0.5" (JSON 0.31–0.57); `make_page.py:310` hard-coded "AUC near 0.5–0.64", left over from before the F2 mask fix (corrected 0.39–0.59). Found in report 34 | ledger addition; the page computes both ranges from JSON (v8); stageQ prints the cross-family min / max. Quote a range only from the full JSON, never from a printed subset |
+| 10-07 | Report 34 (a) called the Stage J carrier end (H2) "neither written nor output-facing"; the model's own H2 output gives AUC 0.70, above the 0.65 bar (`stageJ_analysis.json` `J2_model_H2_bridge_auc`). Caught by the PI | corrected in report 34, the page (v8) and this file's 012 block |
