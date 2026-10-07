@@ -18,6 +18,13 @@ EA = json.loads((R / "analysis/stageE0_ar_profile.json").read_text()) if (R / "a
 HA = json.loads((R / "analysis/stageH_summary.json").read_text()) if (R / "analysis/stageH_summary.json").exists() else None
 GA = json.loads((R / "analysis/stageG_analysis.json").read_text()) if (R / "analysis/stageG_analysis.json").exists() else None
 FA = json.loads((R / "analysis/stageF_analysis.json").read_text()) if (R / "analysis/stageF_analysis.json").exists() else None
+LA = json.loads((R / "analysis/stageL_analysis.json").read_text())
+R13 = ROOT / "results/013_nla_hallucination"
+HD = json.loads((R13 / "analysis/hallucination_all.json").read_text())
+RW = json.loads((R13 / "analysis/rewrite_all.json").read_text())
+TH = json.loads((R13 / "analysis/testhalf.json").read_text())
+DR = json.loads((R13 / "analysis/derisk.json").read_text())
+EX = [json.loads(l) for l in open(R13 / "qualitative/examples.jsonl")]
 
 
 def h(x, d=2):
@@ -187,6 +194,95 @@ def chart_e0():
     return f'<svg viewBox="0 0 {W} {T + hg + 26}" role="img" aria-label="Our AR loader vs the published per-layer profile">{s}</svg>'
 
 
+def chart_stageL():
+    """AUC for hold success at H2 by layer: Stage J (L40/44) and Stage L (L48-60); model's own H2 output as reference."""
+    series = [("Oracle", "oracle", "var(--s1)", ""), ("logit lens", "logit", "var(--s2)", ""),
+              ("J_NP", "J_NP", "var(--fg2)", ""), ("J_CB", "J_CB", "var(--fg2)", "4 3")]
+    x0, x1, y0, y1 = 56, 610, 16, 196
+    Ls = [40, 44, 48, 52, 56, 60]
+    sx = lambda L: x0 + (L - 40) / 20 * (x1 - x0)
+    sy = lambda v: y1 - (v - 0.3) / 0.6 * (y1 - y0)
+    s = ""
+    for v in (0.3, 0.5, 0.7, 0.9):
+        s += f'<line x1="{x0}" y1="{sy(v):.1f}" x2="{x1}" y2="{sy(v):.1f}" class="grid"/><text x="{x0 - 8}" y="{sy(v) + 4:.1f}" class="tk" text-anchor="end">{h(v, 1)}</text>'
+    mo = JA["J2_model_H2_bridge_auc"]
+    s += f'<line x1="{x0}" y1="{sy(mo):.1f}" x2="{x1}" y2="{sy(mo):.1f}" class="ref"><title>model\'s own next-token output at H2: AUC {h(mo)}</title></line>'
+    s += f'<text x="{x1}" y="{sy(mo) - 6:.1f}" class="tk" text-anchor="end">model\'s own output {h(mo)}</text>'
+    for name, rd, col, dash in series:
+        pts = []
+        for L in Ls:
+            src = JA["readers"] if L in (40, 44) else LA["readers"]
+            k = f"{rd}|L{L}|H2"
+            if k in src:
+                pts.append((L, src[k]["auc"]))
+        s += f'<polyline points="{" ".join(f"{sx(L):.1f},{sy(v):.1f}" for L, v in pts)}" fill="none" stroke="{col}" stroke-width="2" stroke-dasharray="{dash}"/>'
+        for L, v in pts:
+            s += f'<circle cx="{sx(L):.1f}" cy="{sy(v):.1f}" r="3.5" fill="{col}" class="ring"><title>{name} L{L}: AUC {h(v)}</title></circle>'
+    s += axis_x(x0, x1, y1 + 4, Ls, sx, fmt=lambda L: f"L{L}")
+    return f'<svg viewBox="0 0 {W} {y1 + 30}" role="img" aria-label="Reader AUC at the carrier end by layer">{s}</svg>'
+
+
+def chart_deletion():
+    """Δ = FVE(random deletion) − FVE(cleaned), points with 95% cluster-bootstrap CIs; ±2-point band."""
+    rows = [("all false text (primary)", HD["primary_delta_R1_minus_C1"], "s1"),
+            ("all false text, sentence control", HD["A1_sentence_delta_RS1_minus_C1"], "s1"),
+            ("invented context only", HD["A1_kind_invented_context"]["delta_clause"], "s2"),
+            ("invented context, sentence control", HD["A1_kind_invented_context"]["delta_sentence"], "s2"),
+            ("misquotes only", HD["A1_kind_misquote"]["delta_clause"], "s1"),
+            ("misquotes, sentence control", HD["A1_kind_misquote"]["delta_sentence"], "s1")]
+    x0, x1, lo, hi = 250, 610, -10, 45
+    sx = lambda v: x0 + (v - lo) / (hi - lo) * (x1 - x0)
+    rh = 28
+    s = f'<rect x="{sx(-2):.1f}" y="6" width="{sx(2) - sx(-2):.1f}" height="{rh * len(rows)}" fill="var(--grid)" opacity="0.6"><title>±2 FVE points: no difference band</title></rect>'
+    s += f'<line x1="{sx(0):.1f}" y1="6" x2="{sx(0):.1f}" y2="{6 + rh * len(rows)}" class="ref"/>'
+    for i, (lab, st, cls) in enumerate(rows):
+        y = 6 + rh * i + rh / 2
+        s += f'<text x="{x0 - 10}" y="{y + 4:.1f}" class="lb" text-anchor="end">{lab}</text>'
+        s += f'<line x1="{sx(st["ci95"][0]):.1f}" y1="{y:.1f}" x2="{sx(st["ci95"][1]):.1f}" y2="{y:.1f}" class="ci"/>'
+        s += f'<circle cx="{sx(st["mean"]):.1f}" cy="{y:.1f}" r="5" class="{cls} ring"><title>{lab}: {h(st["mean"], 1)} [{h(st["ci95"][0], 1)}, {h(st["ci95"][1], 1)}], n {st["n"]}</title></circle>'
+    s += axis_x(x0, x1, 10 + rh * len(rows), [-10, 0, 10, 20, 30, 40], sx, fmt=lambda v: h(v, 0))
+    return f'<svg viewBox="0 0 {W} {rh * len(rows) + 38}" role="img" aria-label="Reconstruction cost of deleting false text vs random text">{s}</svg>'
+
+
+def mark_spans(text, spans):
+    """Explanation with judge-A contradicted spans highlighted by kind (whitespace-flexible match)."""
+    import re as _re
+    hits = []
+    for sp in spans:
+        toks = sp["text"].split()
+        m = _re.search(r"\s+".join(_re.escape(x) for x in toks), text) if toks else None
+        if m:
+            hits.append((m.start(), m.end(), sp["kind"]))
+    hits.sort()
+    out, last = "", 0
+    for a, b, k in hits:
+        if a < last:
+            continue
+        out += E(text[last:a]) + f'<mark class="k-{E(k)}" title="{E(k.replace("_", " "))}">{E(text[a:b])}</mark>'
+        last = b
+    return out + E(text[last:])
+
+
+def examples13():
+    out = []
+    for x in EX:
+        fv = x["fve"]
+        out.append(f'<details><summary>{E(x["eid"])} · {E(x["selection"])}</summary>'
+                   f'<p class="rh">Prompt: {E(x["prompt"])} · model continues: {E(x["continuation"].strip())}</p>'
+                   f'<div class="ros"><div class="ro"><div class="rh">NLA explanation (FVE {h(fv["O"], 1)}); false spans marked</div><p class="ex">{mark_spans(x["explanation"], x["contradicted_spans"])}</p></div>'
+                   f'<div class="ro"><div class="rh">Factual rewrite (FVE {h(fv["F"], 1)})</div><p class="ex">{E(x["F"])}</p></div>'
+                   f'<div class="ro"><div class="rh">Paraphrase control (FVE {h(fv["P"], 1)})</div><p class="ex">{E(x["P"])}</p></div></div></details>')
+    return "".join(out)
+
+
+def rewrite_table():
+    fm, jm = RW["fve_mean"], RW["share_J_mean"]
+    rows = [("real activation", None, jm["gold"]), ("NLA explanation as written", fm["O"], jm["O"]),
+            ("factual rewrite", fm["F"], jm["F"]), ("paraphrase control", fm["P"], jm["P"])]
+    body = "".join(f"<tr><th>{a}</th><td>{h(b, 1) if b is not None else '–'}</td><td>{h(c, 3)}</td></tr>" for a, b, c in rows)
+    return f'<div class="wrap"><table><thead><tr><th></th><th>FVE (%)</th><th>J share of reconstruction</th></tr></thead><tbody>{body}</tbody></table></div>'
+
+
 def naming_table():
     rows = []
     for rd, lay in (("oracle", "L40"), ("oracle", "L44"), ("nla", "L42")):
@@ -263,9 +359,15 @@ details {{ border:1px solid var(--grid); border-radius:6px; padding:8px 12px; ba
 .ros {{ display:grid; grid-template-columns:repeat(auto-fit, minmax(260px, 1fr)); gap:10px; margin-top:8px; }} .ro p {{ font:12px/1.45 var(--mono); color:var(--fg2); margin-top:4px; }} .rh {{ font-size:12px; color:var(--muted); }}
 .note {{ border-left:3px solid var(--accent); padding-left:12px; }}
 ul {{ margin:0; padding-left:20px; max-width:68ch; }} li {{ margin:4px 0; }}
+.part {{ border-top:1px solid var(--axis); padding-top:18px; margin-top:12px; }}
+.ex {{ white-space:pre-wrap; }}
+mark {{ color:inherit; border-radius:2px; padding:0 1px; }}
+mark.k-invented_context {{ background:color-mix(in srgb, var(--s2) 28%, transparent); }}
+mark.k-misquote {{ background:color-mix(in srgb, var(--s1) 24%, transparent); }}
+mark.k-wrong_entity, mark.k-false_fact {{ background:color-mix(in srgb, var(--muted) 30%, transparent); }}
 </style>
 <main>
-<div class="eyebrow">Causal-Concordance · 012 · Qwen3.6-27B · ST multihop (Jan Chen's bank, all WSB items) · exploratory · 2026-10-07</div>
+<div class="eyebrow">Causal-Concordance · 012 + 013 · Qwen3.6-27B · WorkspaceBench multihop (via Jan Chen's bank) · exploratory · 2026-10-07</div>
 <h1>Readers on swapped states</h1>
 <p class="lede">J-lens coordinate swaps of the hidden bridge (e.g. Eiffel Tower → France ⇒ Paris; swap France→Japan) change Qwen's answer on about half of the items. Every reader (Oracle Lens, NLA, J-lens, logit lens) then shifts toward the swapped-in concept, much more when the model's answer actually changed. Most of that tracking is also visible in the model's own output at the read cell, so it does not yet separate reading the bridge from reading what the model is about to say.</p>
 
@@ -328,12 +430,37 @@ ul {{ margin:0; padding-left:20px; max-width:68ch; }} li {{ margin:4px 0; }}
 <h2>11. Swapping only the clue, reading where the model computes it (Stage J)</h2>
 <p>With a looser vetting rule (8-token answers, 8/10 samples), {JA["n_gated"]} delayed prompts pass. Swapping only the clue's own tokens (nothing after them is written) changes the later answer on {JA["J_clue"]}/{JA["n_gated"]} (random {JA["rand_clue"]}/{JA["n_gated"]}). At the clue's final token, which the model computes from the edited clue, every reader tracks whether the swap worked (Oracle L44 AUC {h(JA["readers"]["oracle|L44|H1"]["auc"])}, NLA L42 {h(JA["readers"]["nla|L42|H1"]["auc"])}, plain logit lens {h(JA["readers"]["logit|L44|H1"]["auc"])}), but the model's own next-token output there carries a similar signal (AUC {h(JA["J2_model_H1_bridge_auc"])}, above the pre-set 0.65 bar), the effect leans on Japan-target items, and Oracle and NLA do not differ (paired difference {h(JA["paired_oracle_vs_nla"]["oracle_L44_minus_nla_L42_H1"]["diff"])}). At the end of the unrelated sentence no reader at L40–44 tracks it (AUC {h(min(v["auc"] for k, v in JA["readers"].items() if k.endswith("H2")))}–{h(max(v["auc"] for k, v in JA["readers"].items() if k.endswith("H2")))}), although the model's own next-token output there does (AUC {h(JA["J2_model_H2_bridge_auc"])}), so that token is not free of output-facing content either.</p>
 
+<h2>12. The held country does reach the carrier end, in later layers (Stage L)</h2>
+<p class="sub">Same prompts and edits as Stage J (hold states reproduced bitwise, {LA["n_holds"]} holds, {LA["n_success"]} working). AUC for telling working swaps from failed ones from each reader's shift toward the swapped-in country, at the end of the unrelated sentence. Dashed line: the model's own next-token output there.</p>
+<figure><div class="legend"><span><i style="background:var(--s1)"></i>Oracle</span><span><i style="background:var(--s2)"></i>logit lens</span><span><i style="background:var(--fg2)"></i>J_NP / J_CB (dashed)</span></div>{chart_stageL()}</figure>
+<p>Through L48 no reader can tell (AUC {h(min(v["auc"] for k, v in LA["readers"].items() if "|L48|H2" in k))}–{h(max(v["auc"] for k, v in LA["readers"].items() if "|L48|H2" in k))}). From L52 every reader can, about as well as the model's own output ({h(min(v["auc"] for k, v in LA["readers"].items() if k.endswith("|H2") and "|L48|" not in k))}–{h(max(v["auc"] for k, v in LA["readers"].items() if k.endswith("|H2") and "|L48|" not in k))}; best {E(LA["H2_best"]["key"].split("|")[0])} at {E(LA["H2_best"]["key"].split("|")[1])}, {h(LA["H2_best"]["auc"])}). The Oracle does no better than the plain logit lens, and its sampled readouts there describe the carrier sentence and almost never name a country. So Stage J's "nothing at the carrier end" was a layer effect: the swapped country arrives between L48 and L52, and what arrives is about as readable as the model's own next-token output.</p>
+
+<h2 class="part">Part two (013): do the NLA's false claims carry signal?</h2>
+<p class="lede">NLA explanations are mostly not true of the prompt. We checked what that false text does for the NLA's own reconstructor, which turns an explanation back into an activation (fraction of variance explained, FVE).</p>
+<p class="sub">Material: the {RW["n"]} NLA explanations saved in 012 (87 items × clean / J swap / random swap × 2 samples, layer 42). NLA: nla-rl av_base + iter_000400 with its final reconstructor (validated: 78.1% FVE on the release's own examples against 76.6% published). On these prompts the clean-state explanations reconstruct at {h(DR["multihop"]["fve_pct_first"], 1)}% FVE ({h(RW["fve_mean"]["O"], 1)}% over all three states); on brew at {h(DR["brew"]["fve_pct_first"], 0)}%, so brew was dropped. Judges: Gemini 3.8 Flash marks false spans and rewrites; GLM-5.3-flash labels sentences and tags each false span by kind. Hand checks: false-span precision 89/90; kind tags 75/90 (the "invented context" tag only 24/39).</p>
+
+<h2>13. Deleting false text: invented context is padding, misquotes carry the content</h2>
+<p class="sub">Δ = FVE after deleting the same amount of random text minus FVE after deleting the false text, in FVE points. Above 0: the false text carried more signal than average text. Grey band: within ±2 points. Interval: 95% cluster bootstrap over items.</p>
+<figure><div class="legend"><span><i style="background:var(--s1)"></i>all false text / misquotes</span><span><i style="background:var(--s2)"></i>invented context</span></div>{chart_deletion()}</figure>
+<p>False text is {h(100 * HD["flagged_token_share"]["contradicted_mean"], 0)}% of an average explanation. Two kinds behave differently. <b>Invented context</b> (made-up headers, quiz names, framings; about a quarter of the text) costs no more to delete than random text. <b>Misquotes</b> (paraphrases of the prompt in altered wording, about half the text) cost far more, because they still carry the bridge and the answer. The pre-registered headline ("false claims carry extra signal") comes from the misquotes. On 007's test half alone: invented context {h(TH["deletion_test"]["invented_context_sentence"]["mean"], 1)} [{h(TH["deletion_test"]["invented_context_sentence"]["ci95"][0], 1)}, {h(TH["deletion_test"]["invented_context_sentence"]["ci95"][1], 1)}], misquotes {h(TH["deletion_test"]["misquote_sentence"]["mean"], 1)}.</p>
+
+<h2>14. Rewriting to keep only facts (the TA's suggestion)</h2>
+<p class="sub">Each explanation rewritten minimally so every claim is true (misquotes corrected to the prompt's wording, invented context removed), against a paraphrase that changes about as many words but keeps every claim. The judge finds contradicted sentences in {h(RW["B_contradicted_sentence_rate"]["O"])} of the originals, {h(RW["B_contradicted_sentence_rate"]["F"])} of the factual rewrites and {h(RW["B_contradicted_sentence_rate"]["P"])} of the paraphrases.</p>
+{rewrite_table()}
+<p>The factual rewrite reconstructs {h(RW["dFVE_F_minus_P"]["mean"], 1)} points better than the paraphrase [{h(RW["dFVE_F_minus_P"]["ci95"][0], 1)}, {h(RW["dFVE_F_minus_P"]["ci95"][1], 1)}]; about half of that is the cost paraphrasing itself carries. Against the original it gains {h(RW["dFVE_F_minus_O"]["mean"], 1)} [{h(RW["dFVE_F_minus_O"]["ci95"][0], 1)}, {h(RW["dFVE_F_minus_O"]["ci95"][1], 1)}]. The reconstruction also moves further into the J subspace (+{h(RW["dJ_F_minus_P"]["mean"], 3)}), but the original was already more J than the real activation ({h(RW["share_J_mean"]["O"], 3)} against {h(RW["share_J_mean"]["gold"], 3)}), so this does not mean the cleaned text is more faithful.</p>
+<p class="note">Reading: removing the NLA's hallucinations makes its reconstruction slightly better. The made-up framing is padding; the information sits in what it paraphrases from the prompt, sometimes wrongly. The reconstructor was trained together with this NLA, so this describes what that pair uses, not what the model computes.</p>
+
+<h2>15. Sample explanations</h2>
+<p class="sub">Two chosen to illustrate, four drawn at random (seed 5). Marked spans: <mark class="k-invented_context">invented context</mark> <mark class="k-misquote">misquote</mark> <mark class="k-wrong_entity">wrong entity or false fact</mark>.</p>
+{examples13()}
+
 <h2>Gates and scope</h2>
 <ul>
 <li>Our captures come from the exact labelled runs: greedy text identical to Jan's code on 87/87 items for clean, J and random arms; α = 0 edit bitwise; read position = WSB last-word token on 87/87.</li>
 <li>Margins in float32 (Jan's scorer uses bf16 logits; identity-clamp floor median 0.001 nats).</li>
 <li>Scope: Qwen3.6-27B, 82 clean-correct single-token multihop items (49 of them in 007's already-read test half), one read position, the stated bands. Japan is the target in 28 of 87 covered items. Labels mean "an answer effect under this intervention", not "the bridge is the mediator".</li>
 <li>Exploratory and partly post hoc: the edit-direction stratification and the output-facing analyses were chosen after the smoke and the first summaries. Spec, ledger and code: branch 012-reader-concordance (docs/design_specs/012_reader_concordance.md, docs/ledger/012_ledger.md).</li>
+<li>Stage L and 013: branch 013-nla-hallucination (docs/design_specs/012_reader_concordance.md §22; docs/design_specs/013_nla_hallucination.md with amendments A1-A2; docs/ledger/013_ledger.md). The 013 split by kind and the rewrite arm were added after the smoke, in written amendments, before their runs. Judge spend about $2.35.</li>
 </ul>
 </main>"""
 (R / "page").mkdir(parents=True, exist_ok=True)
