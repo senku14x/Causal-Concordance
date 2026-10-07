@@ -12,6 +12,7 @@ D = json.loads((R / "analysis/stageD_analysis.json").read_text())
 X = json.loads((R / "analysis/stageD_answers.json").read_text())
 G = json.loads((R / "analysis/stageB_gates.json").read_text())
 Q = [json.loads(l) for l in open(R / "qualitative/stageC_readouts_samples.jsonl")]
+JA = json.loads((R / "analysis/stageJ_analysis.json").read_text()) if (R / "analysis/stageJ_analysis.json").exists() else None
 IA = json.loads((R / "analysis/stageI_analysis.json").read_text()) if (R / "analysis/stageI_analysis.json").exists() else None
 EA = json.loads((R / "analysis/stageE0_ar_profile.json").read_text()) if (R / "analysis/stageE0_ar_profile.json").exists() else None
 HA = json.loads((R / "analysis/stageH_summary.json").read_text()) if (R / "analysis/stageH_summary.json").exists() else None
@@ -323,6 +324,9 @@ ul {{ margin:0; padding-left:20px; max-width:68ch; }} li {{ margin:4px 0; }}
 <p class="sub">"Fact: Consider the country of Mount Fuji. [unrelated sentence] The capital / main language / continent of that country is". The model's state at the end of the unrelated sentence is identical whichever question follows (checked bitwise). We swap the hidden country only up to that point.</p>
 <p>The swap still changes the later answer on {IA["I1_lever"]["J_pre"]}/{IA["I1_lever"]["gated_n"]} vetted prompts (random control {IA["I1_lever"]["rand_pre"]}/{IA["I1_lever"]["gated_n"]}): the model holds the swapped country and uses it for whichever question comes. But at the end of the unrelated sentence no reader sees it (Oracle L44 AUC {h(IA["gated_primary"]["readers"]["oracle|L44|H2|all"]["auc"])}, NLA L42 {h(IA["gated_primary"]["readers"]["nla|L42|H2|all"]["auc"])}; readouts there almost never name either country), while the model's own next-token output there still leaks it (AUC {h(IA["gated_primary"]["I2_model_H2_bridge_auc"])}). At the end of the clue sentence, which the swap writes, every reader tracks it (AUC about {h(IA["gated_primary"]["readers"]["oracle|L44|H1|all"]["auc"])}, logit lens included). Only {IA["I1_lever"]["gated_n"]} of 168 delayed prompts passed the clean gate, so these are small numbers.</p>
 <p class="note">Reading: the hidden step can be held in context and used later without being visible in the residual stream at the token that holds it. A reader that reads one token sees it where it is written or about to be said, not where it is merely held.</p>
+
+<h2>11. Swapping only the clue, reading where the model computes it (Stage J)</h2>
+<p>With a looser vetting rule (8-token answers, 8/10 samples), {JA["n_gated"]} delayed prompts pass. Swapping only the clue's own tokens (nothing after them is written) changes the later answer on {JA["J_clue"]}/{JA["n_gated"]} (random {JA["rand_clue"]}/{JA["n_gated"]}). At the clue's final token, which the model computes from the edited clue, every reader tracks whether the swap worked (Oracle L44 AUC {h(JA["readers"]["oracle|L44|H1"]["auc"])}, NLA L42 {h(JA["readers"]["nla|L42|H1"]["auc"])}, plain logit lens {h(JA["readers"]["logit|L44|H1"]["auc"])}), but the model's own next-token output there carries a similar signal (AUC {h(JA["J2_model_H1_bridge_auc"])}, above the pre-set 0.65 bar), the effect leans on Japan-target items, and Oracle and NLA do not differ (paired difference {h(JA["paired_oracle_vs_nla"]["oracle_L44_minus_nla_L42_H1"]["diff"])}). At the end of the unrelated sentence nothing is readable (AUC about 0.47).</p>
 
 <h2>Gates and scope</h2>
 <ul>

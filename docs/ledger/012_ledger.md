@@ -410,3 +410,29 @@ All points were checked. Accepted:
 - readers track successful interventions;
 - the Stage D output-facing result;
 - Stage I's model-side finding.
+
+**Stage J run** (the last subagent task; about 25 GPU-min). Analysis is mine, CPU only: `stageJ_analysis.py` → `results/012_reader_concordance/analysis/stageJ_analysis.json`.
+
+*Gates:* G0 bitwise 168/168; no write at positions ≥ H1; clean H1/H2 captures bitwise equal to Stage I; holds identical across questions.
+
+*J1, relaxed gate (8-token budget, ≥ 8/10):*
+- 60/168 pass (capital 24, language 36, continent 0); 27 clues.
+- Flips on the J1 cohort: J_pre 42/60 (0.70), rand_pre 0/60, J_all 50/60. This confirms Stage I on about twice the trials.
+
+*J2, clue-only edit* (positions before H1; H1, the carrier and the question are never written):
+- **J-1: PASS.** J_clue flips 36/60 (0.60), median Δm +8.94; rand_clue 0/60. 48 holds, 31 successes.
+- **J-2: FAILS, narrowly.** The model's own next-token bridge shift at H1 predicts hold success with AUC 0.69 (bar < 0.65); at H2, 0.70.
+- **J-3: not met** (J-2 failed). Descriptive:
+  - **At H1** (computed by the model, not written), every reader's d_r predicts hold success: Oracle L40 / L44 0.75 / 0.80, NLA L42 0.79, J_NP / J_CB 0.79–0.81, **logit lens 0.79–0.81**. d_r is about 9–11 after working swaps vs 3–4 after failed ones.
+  - Without Japan targets: 0.57–0.67.
+  - **At H2,** every reader is about 0.46–0.49: no signal.
+- **Paired Oracle − NLA at H1** (§20): L40 −0.04 [−0.16, 0.08], L44 +0.01 [−0.10, 0.11]. **Unresolved, with no detected difference.**
+
+*Reading:*
+- The model holds and uses the swapped country from the clue tokens alone (strong).
+- At the clue's end, which the model computes from the edited clue, readers track whether the swap works about as well as the plain logit lens.
+- The model's own next-token output there carries a similar signal, and the effect leans on Japan-target items.
+- At the carrier end nothing is readable.
+- **No evidence that any reader reads the hidden step beyond output-facing content, and no Oracle/NLA difference.**
+
+**STOP (PI: limit nearly gone; no more subagents).** GPU idle.

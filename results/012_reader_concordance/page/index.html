@@ -149,6 +149,9 @@ The sentence structure &quot;The ocean next to [place] in [count</p></div></div>
 <p>The swap still changes the later answer on 25/35 vetted prompts (random control 0/35): the model holds the swapped country and uses it for whichever question comes. But at the end of the unrelated sentence no reader sees it (Oracle L44 AUC 0.60, NLA L42 0.58; readouts there almost never name either country), while the model's own next-token output there still leaks it (AUC 0.82). At the end of the clue sentence, which the swap writes, every reader tracks it (AUC about 0.89, logit lens included). Only 35 of 168 delayed prompts passed the clean gate, so these are small numbers.</p>
 <p class="note">Reading: the hidden step can be held in context and used later without being visible in the residual stream at the token that holds it. A reader that reads one token sees it where it is written or about to be said, not where it is merely held.</p>
 
+<h2>11. Swapping only the clue, reading where the model computes it (Stage J)</h2>
+<p>With a looser vetting rule (8-token answers, 8/10 samples), 60 delayed prompts pass. Swapping only the clue's own tokens (nothing after them is written) changes the later answer on 36/60 (random 0/60). At the clue's final token, which the model computes from the edited clue, every reader tracks whether the swap worked (Oracle L44 AUC 0.80, NLA L42 0.79, plain logit lens 0.81), but the model's own next-token output there carries a similar signal (AUC 0.69, above the pre-set 0.65 bar), the effect leans on Japan-target items, and Oracle and NLA do not differ (paired difference 0.01). At the end of the unrelated sentence nothing is readable (AUC about 0.47).</p>
+
 <h2>Gates and scope</h2>
 <ul>
 <li>Our captures come from the exact labelled runs: greedy text identical to Jan's code on 87/87 items for clean, J and random arms; α = 0 edit bitwise; read position = WSB last-word token on 87/87.</li>
