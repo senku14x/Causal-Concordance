@@ -378,3 +378,8 @@ Median S [table-cluster 95% CI]:
 - (1) Strong model-side evidence: the hidden country is held and used at the bridge level, across a carrier, for any question asked later.
 - (2) At a token where it is held but neither written nor (much) output-facing, **no reader sees it.** That is a limitation of reading one token's residual: the information lives in context (earlier tokens), not at the read cell.
 - (3) Where the swap is written (the clue end), readers track success, but without a reader-specific advantage, and confounded by the write.
+
+**(PI: "go") — Stage J pre-registered** (spec §19).
+- **J1:** a relaxed clean gate (fixed 8-token budget, ≥ 8/10 at T 0.8), re-scoring Stage I's flips. A stated amendment, written after seeing I's 35/168 pass rate.
+- **J2:** swap only the clue's own tokens (positions before the clue's final "."), then read at that "." (H1) and at the carrier end (H2). Both are computed by the model, not written. The model's own output at H1 is the output-facing control.
+- **Correction logged:** my message suggested "swap only the tokens after the clue and read at the clue end". In a causal LM such edits cannot reach the clue end. The corrected design edits the clue tokens before H1.

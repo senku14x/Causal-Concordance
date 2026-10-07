@@ -622,3 +622,39 @@ Trials failing a gate are kept and excluded from the primary analysis.
 **Power.** About 28 clues × 2 carriers. This is a pilot: report n, cluster intervals, and per-clue outcomes.
 
 EXPLORATORY.
+
+## 19. Stage J: relaxed gate, and reading the clue end when it is computed rather than written (pre-registered 2026-10-07, before any J run; PI: "go")
+
+**J1: relaxed clean gate** (an amendment to §18's gate, written after seeing Stage I's results; the reason is stated).
+- **Seen in I:** only 35/168 prompts passed. Many failed because Jan's short answer budget (answer length + 2 tokens) cut off wandering continuations ("located in the"), so no continent question passed.
+- **J1 gate:**
+  - every generation (gate samples, greedy, every arm's greedy) uses a fixed **8-token budget**;
+  - greedy contains y_a (Jan's matcher);
+  - **≥ 8/10** correct at T 0.8, top_p 0.95 (Jan's own threshold was 8/10);
+  - the clean output does not contain y_b.
+- Flips for J_pre / rand_pre / J_all are re-scored with the same 8-token budget.
+- The hold-state reads from Stage I (H1/H2) are reused unchanged; the state does not depend on generation.
+- §18's rules I-1 to I-3 are re-applied on the J1 cohort and reported **next to** the Stage I numbers, not instead of them.
+
+**J2: clue-only edit** (the follow-up as corrected: in a causal LM, edits after the clue cannot reach H1).
+
+| Arm | Positions edited | Read at |
+|---|---|---|
+| `J_clue` | clue tokens before H1, i.e. positions < H1 | H1 and H2, both computed by the model, not written |
+| `rand_clue` | same mask; source-preserving random-target control | — |
+
+- Positions ≥ H1 (the clue's final ".", the carrier, the question) are never written.
+- Band L24–35. Same engine, gates (G0 α = 0, write mask) and float32 margins as Stage I. Flips use the 8-token budget, on the J1 cohort.
+- **Readers** at H1 and H2 on the clean / J_clue / rand_clue hold states: Oracle L40/L44, NLA L42, J_NP / J_CB / logit at L40/L44. Bridge LL → d_r. 2 sampled readouts per state for Oracle L44 and NLA L42 at H1.
+- **The model's own next-token output at H1 and H2** (bridge tokens; answer first tokens) for J_clue.
+
+**Decision rules (J2):**
+- **(J-1) Lever:** J_clue flips ≥ 0.20 of the J1-gated discriminating trials and ≥ 15 points above rand_clue. If not, readers are reported descriptively only.
+- **(J-2) Output-facing check at H1:** the model's own H1 next-token bridge shift predicts hold success with AUC < 0.65.
+- **(J-3) Reader test at H1:** a reader whose J_clue d_r at H1 predicts hold success with AUC ≥ 0.75, with J-1 and J-2 met, **reads the hidden step at a token that is neither written nor output-facing.** That would be the project's first such evidence.
+  - "Reader-specific" if one family passes and the other (Oracle vs NLA) has AUC < 0.65.
+  - The same test at H2 is secondary.
+
+**Units:** hold states (clue × carrier), clustered by clue; hold success = at least half of the gated discriminating questions flipped. Japan reported pooled and excluded. A pilot; report n.
+
+EXPLORATORY.
