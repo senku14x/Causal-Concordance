@@ -460,3 +460,34 @@ The whitened arm (needs Σ for L24–35/47), the class-mean / Fig. 16 arm (needs
 - Reader AUCs are reported as in Stage D, within toward_tgt edits defined in whitened coordinates.
 
 EXPLORATORY.
+
+## 15. Stage H: brew rerun of 008 arm A at every position (pre-registered 2026-10-07 ~01:55 UTC, before any H run)
+
+**Question.** 008's lens-coordinate swap (arm A) on brew edited 3 emit cells at L40–48, and its answer-atom positive control moved S by only 0.010. On multihop, every-position J-row swaps work at L24–47 and at L40–48 (Stage A: 0.585 / 0.549). Is the brew null about **positions** or about the **family**?
+
+**Material:** 008's 82 gated dev pairs (the same renders, partners, z/z′, a/a′ and spelling sets as 008; chat template plus the "Answer:" prefill).
+
+**Edit:** Jan's clamp primitive (`SwapEdit`, raw coordinates, unit J_NP rows, every prompt position, prefill only, α 1). Arms:
+
+| Arm | Swap | Band |
+|---|---|---|
+| `Az_L24-47` | z atom → z′ atom (single-token colour words, phrase-lens surface-form rule) | L24–47 |
+| `Az_L40-48` | z atom → z′ atom | L40–48 |
+| `Aa_L24-47` | answer-atom positive control (a → a′) | L24–47 |
+| `Aa_L40-48` | answer-atom positive control (a → a′) | L40–48 |
+| controls | source-preserving random target, for each arm | as above |
+
+**Scores:**
+- 008's S = Δm / G: m = LSE log P(a′) − LSE log P(a) over every spelling and token, float32 logits, with the member's clean gap G from 008;
+- greedy flip to a′;
+- G0 (α = 0 bitwise);
+- the realised ‖Δh‖.
+
+**Reading rules:**
+- **Positions explain 008's null:** the answer-atom control at L40–48, every position, reaches median S ≥ 0.15 (008's power bar), where 008's 3-cell version reached 0.010.
+- **Family explains it:**
+  - if even every-position answer-atom swaps stay below 0.15, J-row atoms are a weak handle on brew;
+  - the z-atom arm is then not read.
+- If the control passes, the z-atom arm is read: median S, against its random control, and against 008's class-mean full-direction lever (0.21).
+
+EXPLORATORY; the brew dev split has already been used in many places.

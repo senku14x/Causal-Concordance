@@ -216,3 +216,5 @@ Analysis: `stageF_analysis.py` → `results/012_reader_concordance/analysis/stag
 **Note for Camila:** on Qwen ST multihop at L24–35, the paper-style coordinate swap works better in raw coordinates than in whitened ones. Her experience that whitening gives cleaner results came from swaps along Oracle-reconstructor vectors (her request b), which still waits on the loader.
 
 **Σ file:** 5.0 GB, mirrored with the outputs.
+
+**01:55 — Stage H pre-registered** (spec §15): 008's arm A on brew, rerun at every position (L24–47 and L40–48), with the answer-atom control. Question: positions or family?
