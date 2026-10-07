@@ -292,3 +292,23 @@ Median S [table-cluster 95% CI]:
 - Partial Spearman beyond the model's early output: NLA L42 0.34 [−0.21, 0.60], Oracle L44 0.40 [−0.04, 0.63], others 0.24–0.30, all CIs including 0.
 - **§16 verdict: "does not replicate."**
 - **Qualification (written after seeing the result):** the broadcast early positions are not the non-output-facing setting that made F2 informative. So this is a weak test of the hint, not a clean refutation. The F2 NLA hint stays unconfirmed; a proper test needs fresh *hidden-bridge* items.
+
+**03:35–03:50 — Stage E0 run** (subagent; about 8 GPU-min). `stageE0_ar_profile.py` imports 011's `ar_vectors` unchanged. Output: `results/012_reader_concordance/analysis/stageE0_ar_profile.json`. 1,024 held-out spans of 1–32 tokens (mean 16.4); all 12 tag layers. The 9 missing whiteners were downloaded from the public `local-workspace` dataset.
+
+*Verdicts:*
+
+| Check | Met at | Rule | Result |
+|---|---|---|---|
+| scaled FVE within 0.04 of published | 12/12 layers | ≥ 10/12 | met |
+| ret@1 (micro-batches of 24) within 0.05 | **8/12** | ≥ 10/12 | **missed** |
+| unscaled FVE within 0.04 | 2/12 | ≥ 10/12 | missed |
+
+- The ret@1 misses are L20–32, each 0.05–0.11 short.
+- **§17 verdict: not validated, even up to scale.** Stage E stays blocked under the rule.
+- **jfve: open.** Unscaled candidate FVEs miss everywhere. Candidate (b), the μ-removed J transform, matches jret1 at 10/11 layers but not jfve.
+
+*Observation:* the best-fitting output scale rises steadily with depth (0.11 at L20 → 2.33 at L63) instead of being one global constant.
+- That is what a scale-invariant training loss would produce (the head's output norm roughly fixed while true activation norms grow with depth). Anthropic's own reconstructor uses "cosine error in the whitened metric".
+- This plausibly explains 011's "unexplained global output scale" (post hoc interpretation, untested).
+- It also implies the published FVEs are scale-aligned, which our scaled FVE matches at 12/12. The jfve candidates should be compared the same way.
+- The AR config's jspace file has the same sha256 as our J_NP pin.

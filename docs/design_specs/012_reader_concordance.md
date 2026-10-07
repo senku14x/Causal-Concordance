@@ -562,3 +562,11 @@ Eval protocol: up to 1,024 rows, micro-batch 24, spans of uniform 1–32 tokens.
 - If not, Stage E keeps waiting for her loader.
 
 EXPLORATORY.
+
+### §17a. POST HOC amendment (2026-10-07 ~03:55 UTC; written after seeing E0's results)
+
+**Seen.** Our loader's scaled FVE matches the published val_fve at 12/12 layers, but the best scale rises from 0.11 to 2.33 with depth. This suggests a scale-invariant AR loss, under which the published FVEs are scale-aligned. The unscaled jfve candidates all missed.
+
+**Amendment.** Recompute the four jfve candidates with one fitted scale per layer, the same alignment as our main FVE. Apply §17's jfve rule (within 0.04 of val_jfve at ≥ 9/11 layers, and the jret1 analogue within 0.07 at ≥ 9/11) to these scaled values.
+
+**Not changed.** §17's loader verdict ("not validated": ret@1 8/12) stands. This amendment only addresses the jfve definition, and any identification it produces is post hoc.
