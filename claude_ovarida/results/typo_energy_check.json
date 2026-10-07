@@ -1,0 +1,61 @@
+{
+ "label": "EXPLORATORY, CPU (claude_ovarida): energy share of 007's J subspace in 014 typo activations",
+ "rule": "step 2 warranted if share_J >= 1.5 x max random share at L40 or L44 (uncentred)",
+ "layers": {
+  "40": {
+   "uncentred": {
+    "share_J": 0.27317871085807116,
+    "random_min": 0.19173705278251574,
+    "random_median": 0.1992969515084301,
+    "random_max": 0.21227148142361152,
+    "ratio_J_to_random_max": 1.2869308162640674,
+    "pca_k_matching_J": 1
+   },
+   "centred": {
+    "share_J": 0.4600254888551328,
+    "random_min": 0.19771427455672583,
+    "random_median": 0.20016710620237446,
+    "random_max": 0.20215078982202073,
+    "ratio_J_to_random_max": 2.275655164445077,
+    "pca_k_matching_J": 23
+   }
+  },
+  "42": {
+   "uncentred": {
+    "share_J": 0.23210102132665306,
+    "random_min": 0.1900712794591174,
+    "random_median": 0.1989442036913491,
+    "random_max": 0.21219421294003943,
+    "ratio_J_to_random_max": 1.0938140965806582,
+    "pca_k_matching_J": 1
+   },
+   "centred": {
+    "share_J": 0.43272663183376414,
+    "random_min": 0.1980798584970561,
+    "random_median": 0.20000960561292822,
+    "random_max": 0.2020016339208964,
+    "ratio_J_to_random_max": 2.14219372108257,
+    "pca_k_matching_J": 20
+   }
+  },
+  "44": {
+   "uncentred": {
+    "share_J": 0.23331289665248048,
+    "random_min": 0.19050964308214177,
+    "random_median": 0.2004210844813282,
+    "random_max": 0.21117120607040138,
+    "ratio_J_to_random_max": 1.1048518450697173,
+    "pca_k_matching_J": 1
+   },
+   "centred": {
+    "share_J": 0.4019841036126618,
+    "random_min": 0.19764330870085917,
+    "random_median": 0.20012061746895246,
+    "random_max": 0.20182029133641016,
+    "ratio_J_to_random_max": 1.9917923066645593,
+    "pca_k_matching_J": 17
+   }
+  }
+ },
+ "step2_warranted": false
+}

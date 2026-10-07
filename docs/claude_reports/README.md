@@ -16,7 +16,6 @@ Cleaned 2026-10-06:
 
 | File | What it is |
 |---|---|
-| `36_up_to_speed_2026-10-07.md` | **Up-to-speed report after 013 and 014** (new session, 2026-10-07): the paper in my own words, the PI's notes, one row per experiment 001–014 with JSON keys, current beliefs with scope, 17 inconsistencies with file:line, open threads, questions |
 | `35_new_session_prompt_2026-10-07.md` | **The prompt for the next session** (after 013 and 014): read the paper, the notes and every experiment 001–014, then write up-to-speed report 36 (paper, notes, per-experiment table, current beliefs, inconsistencies, open threads, questions) for the PI to vet |
 | `34_up_to_speed_2026-10-07.md` | **Up-to-speed report after 012** (new session, 2026-10-07): 012 summary, stage table with every number from JSON (half-up, keys cited), audit corrections, 19 stale/inconsistent items with file:line, next steps with GPU estimates, questions |
 | `33_new_session_prompt_2026-10-07.md` | **The prompt for the next session** (after 012): read order (paper → notes → CLAUDE.md → 012 ledger/spec/audits), 012 state after the audit corrections, next steps (NLA reconstructor + hallucination test unblocked; content labelling; better prompt family), environment, working rules |
@@ -99,7 +98,7 @@ Reading notes on the readers' papers: `docs/context/reading_notes.md` and `readi
 
 ## Conventions for new files
 
-- Numbered filenames continue from 37, with a date suffix.
+- Numbered filenames continue from 31, with a date suffix.
 - Add a row to the right section above.
 - **Don't copy canonical documents here; link them.** Copies drift.
 - The scratch copy outside the repo is `/workspace/claude_reports/`. It also holds the PI's
