@@ -1,0 +1,11 @@
+{
+ "G0_fail": [],
+ "parity_mismatch": [],
+ "n_uncovered": 0,
+ "n_items": 192,
+ "n_covered": 192,
+ "wall_s": 490.3,
+ "n_clean_correct": 147,
+ "n_primary": 146,
+ "pass": true
+}

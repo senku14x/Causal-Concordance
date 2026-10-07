@@ -12,6 +12,8 @@ F2 (positions 0..T-2): J_L24-35 / rand_L24-35 vs clean, bridge only, same reader
 
 --stage G (design §14) reuses the F1 path unchanged on Stage G's whitened-swap captures (g_captures.pt, g_items.jsonl):
 states J_white / rand_white at the read cell, bridge and answer; no F2. Outputs g_ll_{oracle_lenses,nla}.jsonl.
+--stage R (design §16) runs the F2 path only, unchanged, on Stage R's broadcast captures (stageR/f2_captures.pt,
+r_items.jsonl). Outputs f2_ll_{oracle_lenses,nla}.jsonl in stageR/.
 """
 import argparse
 import json
@@ -41,16 +43,16 @@ def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--part", choices=["subject", "nla"], required=True)
     ap.add_argument("--tag", default="full")
-    ap.add_argument("--stage", choices=["F", "G"], default="F")
+    ap.add_argument("--stage", choices=["F", "G", "R"], default="F")
     a = ap.parse_args()
     D = ROOT / f"outputs/012_reader_concordance/stage{a.stage}" / ("" if a.tag == "full" else a.tag)
     t0 = time.time()
-    pre1 = "f1" if a.stage == "F" else "g"
-    STATES = F1_STATES if a.stage == "F" else G_STATES
-    c1 = torch.load(D / f"{pre1}_captures.pt")
-    c2 = torch.load(D / "f2_captures.pt") if a.stage == "F" else None
-    items = {r["name"]: r for r in map(json.loads, open(D / f"{pre1}_items.jsonl"))}
-    names = c1["items"]
+    pre1 = {"F": "f1", "G": "g", "R": None}[a.stage]
+    STATES = {"F": F1_STATES, "G": G_STATES, "R": []}[a.stage]
+    c1 = torch.load(D / f"{pre1}_captures.pt") if pre1 else None
+    c2 = torch.load(D / "f2_captures.pt") if a.stage in ("F", "R") else None
+    items = {r["name"]: r for r in map(json.loads, open(D / f"{pre1 or 'r'}_items.jsonl")) if r.get("status", "evaluated") == "evaluated"}
+    names = c1["items"] if c1 is not None else list(c2["X"])
     h1 = lambda i, s, L: c1["X"][i, c1["arms"].index(s), c1["layers"].index(L)]
     h2 = lambda nm, s, L: c2["X"][nm][c2["states"].index(s), c2["layers"].index(L)]      # [P, D]
     f1, f2, timing, checks = [], [], {}, {}
@@ -63,7 +65,7 @@ def main():
         for L in layers:
             for i, nm in enumerate(names):
                 it = items[nm]
-                for kind, cands in (("bridge", ([it["src"]], [it["tgt"]])), ("answer", (it["y_a"], it["y_b"]))):
+                for kind, cands in ((("bridge", ([it["src"]], [it["tgt"]])), ("answer", (it["y_a"], it["y_b"]))) if c1 is not None else ()):
                     base, seqs, owner = string_spellings(tok, prefix, cands[0] + cands[1])
                     hs = [x for s in STATES for x in (h1(i, "clean", L), h1(i, s, L))]
                     out = score(hs, L, base, seqs)
@@ -103,7 +105,7 @@ def main():
                     ida, idb, _ = first_token_sets(tok, it["y_a"], it["y_b"])
                     ts, tt = fid[it["src"]], fid[it["tgt"]]
                     st = ["clean", *STATES]
-                    for rd, M in lps(torch.stack([h1(i, s, L) for s in st]), L).items():
+                    for rd, M in (lps(torch.stack([h1(i, s, L) for s in st]), L).items() if c1 is not None else ()):
                         for k, s in enumerate(st[1:], 1):
                             f1.append({"item": nm, "reader": rd, "layer": L, "state": s, "first_token": False,
                                        **rec(it, "bridge", (float(M[k, ts]), float(M[k, tt])), (float(M[0, ts]), float(M[0, tt])))})
@@ -153,11 +155,12 @@ def main():
         finally:
             nla.close()
         name = "nla"
-    for fn, rows in (((f"f1_ll_{name}.jsonl", f1), (f"f2_ll_{name}.jsonl", f2)) if a.stage == "F" else ((f"g_ll_{name}.jsonl", f1),)):
+    for fn, rows in {"F": ((f"f1_ll_{name}.jsonl", f1), (f"f2_ll_{name}.jsonl", f2)), "G": ((f"g_ll_{name}.jsonl", f1),),
+                     "R": ((f"f2_ll_{name}.jsonl", f2),)}[a.stage]:
         with open(D / fn, "w") as f:
             for r in rows:
                 f.write(json.dumps(r) + "\n")
-    (D / f"summary_readers_{'' if a.stage == 'F' else 'g_'}{name}.json").write_text(json.dumps({"timing": timing, "own_logit_check": checks,
+    (D / f"summary_readers_{ {'F': '', 'G': 'g_', 'R': 'r_'}[a.stage] }{name}.json").write_text(json.dumps({"timing": timing, "own_logit_check": checks,
                                                                 "n_f1_rows": len(f1), "n_f2_rows": len(f2),
                                                                 "wall_s": round(time.time() - t0, 1)}, indent=1, default=str))
     print(json.dumps(timing), flush=True)

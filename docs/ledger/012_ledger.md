@@ -279,3 +279,16 @@ Median S [table-cluster 95% CI]:
   - The README is partly stale ("17-row head" vs `heads.pt`'s one head and 12 tags).
   - **Clue:** the published `val_jfve` and `val_jret1` exist for L20–60 but not L63, and the Neuronpedia J-lens matrices cover blocks 0–62. So "jfve" is very likely computed through the J-lens matrices, i.e. a J-lens-transformed reconstruction target with weight `loss_mix_lambda` 0.25.
 - **Plan:** test our loader across all 12 layers against the published profile, and test four jfve definitions. Runs after Stage R (one GPU).
+
+**02:45–03:30 — Stage R run** (subagent; about 41 GPU-min; F2 protocol on Jan's broadcast ST bank). Analysis: `stageR_analysis.py` → `results/012_reader_concordance/analysis/stageR_analysis.json`.
+- **Gates:** G0 bitwise on 192/192; clean text, budget and clean_correct match Stage A's broadcast rows on 192/192.
+- **Cohort:** 146 clean-correct items (1 dropped because its clean output contains y_b); 109 toward_tgt (32 working), 37 toward_src (7 working).
+- J swap L24–35 success 39/146 (0.267); random 0/146.
+
+*Early-position test:*
+- The model's own early-position output **does** track success here: AUC 0.96 (bridge) / 0.94 (answer), against 0.55 / 0.56 on multihop.
+- The concept is explicit in these short prompts, so the early positions are outcome-informative.
+- Every reader's early-position AUC is about 0.91–0.95.
+- Partial Spearman beyond the model's early output: NLA L42 0.34 [−0.21, 0.60], Oracle L44 0.40 [−0.04, 0.63], others 0.24–0.30, all CIs including 0.
+- **§16 verdict: "does not replicate."**
+- **Qualification (written after seeing the result):** the broadcast early positions are not the non-output-facing setting that made F2 informative. So this is a weak test of the hint, not a clean refutation. The F2 NLA hint stays unconfirmed; a proper test needs fresh *hidden-bridge* items.
