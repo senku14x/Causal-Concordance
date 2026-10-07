@@ -102,7 +102,18 @@ You're joining an ongoing mechanistic-interpretability research project as my re
 - **Privacy:** private messages I paste (Slack/TA threads) stay in the chat. Never put them in the repo, commits, reports or memory.
 - **Communication:** lead with conclusions in plain language, put caveats next to the claims they qualify, give estimates in GPU time, and be concise.
 
-**First task:**
-1. Read §1.
-2. Check the instance: `git status` on `012-reader-concordance` (only `CLAUDE.md`'s rules hunk modified); GPU free; CPU tests pass (`python -m pytest scripts/common/tests tests -q -m "not gpu"`, 140 passed on 2026-10-07).
-3. Report back briefly, then propose the NLA-reconstructor smoke from §3.1 with a GPU estimate. Wait for my go before any GPU run.
+**First task (no GPU, no subagents):**
+
+1. **Read §1.**
+2. **Check the instance:**
+   - `git status` on `012-reader-concordance`: only `CLAUDE.md`'s rules hunk modified;
+   - GPU free;
+   - CPU tests pass (`python -m pytest scripts/common/tests tests -q -m "not gpu"`; 140 passed on 2026-10-07).
+3. **Write a come-up-to-speed report:** `docs/claude_reports/34_up_to_speed_<date>.md`. Commit it to `012-reader-concordance`, push, and add it to the reports README. It must contain:
+   - **(a)** a one-page summary of the project and of 012, in your own words;
+   - **(b)** a table of 012's stages (A–J, Q, R, E0) giving what each tested, the key numbers, and the verdict. Take every number from the full-precision JSON in `results/012_reader_concordance/analysis/` (half-up), and cite the JSON key;
+   - **(c)** what was corrected after the Codex audit, and what still stands;
+   - **(d)** anything that looks inconsistent, stale or wrong across the ledger, spec, `CLAUDE.md`, `STATUS.md` and the page, with file:line;
+   - **(e)** the next steps you would prioritise, with GPU estimates (start from §3);
+   - **(f)** your questions for me.
+4. **Paste the full report in your reply to me, then stop.** I'll have it checked before we continue. Wait for my go before any GPU run.
