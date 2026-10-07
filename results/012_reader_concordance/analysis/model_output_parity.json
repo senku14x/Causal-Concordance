@@ -1,0 +1,10 @@
+{
+ "n_items": 87,
+ "capture_max_abs": 0.0,
+ "first_token_mismatch": [],
+ "alpha0_logit_max_abs": 0.0,
+ "rule": "captures bitwise equal to Stage B's, greedy first token equal, alpha0 logits bitwise equal to clean",
+ "pass": true,
+ "n_answer_NA": 2,
+ "wall_s": 93.1
+}

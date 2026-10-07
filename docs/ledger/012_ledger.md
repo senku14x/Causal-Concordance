@@ -111,3 +111,13 @@ Spec: `docs/design_specs/012_reader_concordance.md` (v1 → v1.1 §11 → v1.2 �
 - The plain logit lens tracks swap success almost as well as the Oracle and NLA. The read cell is the answer-producing token.
 - So readers may be tracking answer-facing content (y_b) rather than the bridge.
 - **Check running now:** reader LL for answers (y_a vs y_b) on the same captures, plus the model's own read-position output for bridge and answer tokens.
+
+**~00:30 (2026-10-07) — the output-facing check** (answer-vs-bridge rescoring of the same saved captures plus the model's own read-position output: 6.7 GPU-min, parity 87/87 bitwise; analysis `stageD_answers.py` → `results/012_reader_concordance/analysis/stageD_answers.json`; POST HOC).
+- **The model's own output at the read cell already predicts swap success:** AUC for its bridge-token shift and its answer-token shift is about 0.91–0.92, within toward_tgt items.
+- **Readers' answer shifts (y_b vs y_a) track success as well as their bridge shifts:** AUC about 0.83–0.96 against 0.88–0.97. The two shifts correlate with ρ 0.6–0.92.
+- **Beyond the model's own output and the edit size,** the bridge shift keeps a modest partial association with Δm: ρ about 0.3–0.57, with cluster-bootstrap CIs mostly above 0. Several touch 0 (Oracle L44, L52, L56; J_NP and J_CB L44; logit L44).
+- **Reading:** readers do follow states the model demonstrably acts on. But at this cell (the answer-producing token) most of that tracking is shared with output-facing content: the model is about to say y_b, and every reader, including the plain logit lens, sees it. This is the 006b / 009 confound reappearing on multihop. No reader stands out (Oracle ≈ NLA ≈ token lenses).
+- **What would separate bridge reading from answer reading:** read cells where the bridge is present but the answer is not yet output-facing:
+  - an earlier position (e.g. the bridge-cue tokens);
+  - prompts where the answer position comes later.
+- First-token NA: the token lenses and the model output have no answer score for 2 items whose answers share a first digit token (chem-bones-Z, double-dice-faces).

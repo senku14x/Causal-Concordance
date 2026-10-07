@@ -1,0 +1,251 @@
+{
+ "label": "EXPLORATORY, POST HOC (012 Stage D add-on)",
+ "cells": {
+  "J_CB|L40|L24-35": {
+   "n_toward_tgt": 63,
+   "n_success": 36,
+   "auc_bridge": 0.9218106995884774,
+   "auc_answer": 0.948559670781893,
+   "spearman_bridge_answer": 0.8786962365591399,
+   "partial_bridge_dm_given_answer_size": 0.15843702433293533,
+   "partial_bridge_dm_given_model_output_size": 0.3786141197629139,
+   "partial_bridge_dm_given_model_output_size_ci95": [
+    0.052228188688425665,
+    0.5771793398689103
+   ]
+  },
+  "J_CB|L44|L24-35": {
+   "n_toward_tgt": 63,
+   "n_success": 36,
+   "auc_bridge": 0.9320987654320988,
+   "auc_answer": 0.9475308641975309,
+   "spearman_bridge_answer": 0.8906490015360983,
+   "partial_bridge_dm_given_answer_size": 0.2696374969952402,
+   "partial_bridge_dm_given_model_output_size": 0.3518465839827812,
+   "partial_bridge_dm_given_model_output_size_ci95": [
+    -0.006437519140211068,
+    0.5887708918046131
+   ]
+  },
+  "J_CB|L52|L24-47": {
+   "n_toward_tgt": 68,
+   "n_success": 48,
+   "auc_bridge": 0.8875,
+   "auc_answer": 0.8802083333333334,
+   "spearman_bridge_answer": 0.7756231629575905,
+   "partial_bridge_dm_given_answer_size": 0.5194027215630245,
+   "partial_bridge_dm_given_model_output_size": 0.5356213159751123,
+   "partial_bridge_dm_given_model_output_size_ci95": [
+    0.2055338675997273,
+    0.6727214969568808
+   ]
+  },
+  "J_CB|L56|L24-47": {
+   "n_toward_tgt": 68,
+   "n_success": 48,
+   "auc_bridge": 0.903125,
+   "auc_answer": 0.884375,
+   "spearman_bridge_answer": 0.8474634500133601,
+   "partial_bridge_dm_given_answer_size": 0.45410084490915814,
+   "partial_bridge_dm_given_model_output_size": 0.532481399059705,
+   "partial_bridge_dm_given_model_output_size_ci95": [
+    0.06531027323570962,
+    0.6689625718916368
+   ]
+  },
+  "J_NP|L40|L24-35": {
+   "n_toward_tgt": 63,
+   "n_success": 36,
+   "auc_bridge": 0.9197530864197531,
+   "auc_answer": 0.948559670781893,
+   "spearman_bridge_answer": 0.8844086021505375,
+   "partial_bridge_dm_given_answer_size": 0.1497225996473399,
+   "partial_bridge_dm_given_model_output_size": 0.40738244977670546,
+   "partial_bridge_dm_given_model_output_size_ci95": [
+    0.04105092265707211,
+    0.6329277434407251
+   ]
+  },
+  "J_NP|L44|L24-35": {
+   "n_toward_tgt": 63,
+   "n_success": 36,
+   "auc_bridge": 0.9351851851851852,
+   "auc_answer": 0.9495884773662552,
+   "spearman_bridge_answer": 0.9004896313364056,
+   "partial_bridge_dm_given_answer_size": 0.22267577828010504,
+   "partial_bridge_dm_given_model_output_size": 0.3959300422659167,
+   "partial_bridge_dm_given_model_output_size_ci95": [
+    0.002654609042796676,
+    0.6450964030413135
+   ]
+  },
+  "J_NP|L52|L24-47": {
+   "n_toward_tgt": 68,
+   "n_success": 48,
+   "auc_bridge": 0.878125,
+   "auc_answer": 0.8802083333333334,
+   "spearman_bridge_answer": 0.8048249799595373,
+   "partial_bridge_dm_given_answer_size": 0.47037186640062145,
+   "partial_bridge_dm_given_model_output_size": 0.5520745502795156,
+   "partial_bridge_dm_given_model_output_size_ci95": [
+    0.19783128654085297,
+    0.6840504641060563
+   ]
+  },
+  "J_NP|L56|L24-47": {
+   "n_toward_tgt": 68,
+   "n_success": 48,
+   "auc_bridge": 0.909375,
+   "auc_answer": 0.8854166666666666,
+   "spearman_bridge_answer": 0.863801198610528,
+   "partial_bridge_dm_given_answer_size": 0.5032795818782182,
+   "partial_bridge_dm_given_model_output_size": 0.5698882832773241,
+   "partial_bridge_dm_given_model_output_size_ci95": [
+    0.10816820921332494,
+    0.7242633147371984
+   ]
+  },
+  "logit|L40|L24-35": {
+   "n_toward_tgt": 63,
+   "n_success": 36,
+   "auc_bridge": 0.8981481481481481,
+   "auc_answer": 0.8703703703703703,
+   "spearman_bridge_answer": 0.6905721966205838,
+   "partial_bridge_dm_given_answer_size": 0.580877201825939,
+   "partial_bridge_dm_given_model_output_size": 0.36753066974300275,
+   "partial_bridge_dm_given_model_output_size_ci95": [
+    0.04326552328992163,
+    0.5751124493921975
+   ]
+  },
+  "logit|L44|L24-35": {
+   "n_toward_tgt": 63,
+   "n_success": 36,
+   "auc_bridge": 0.9197530864197531,
+   "auc_answer": 0.8292181069958847,
+   "spearman_bridge_answer": 0.602870583717358,
+   "partial_bridge_dm_given_answer_size": 0.6945000709128237,
+   "partial_bridge_dm_given_model_output_size": 0.3747041457936082,
+   "partial_bridge_dm_given_model_output_size_ci95": [
+    -0.016756694519474685,
+    0.6184566657854067
+   ]
+  },
+  "logit|L52|L24-47": {
+   "n_toward_tgt": 68,
+   "n_success": 48,
+   "auc_bridge": 0.8760416666666667,
+   "auc_answer": 0.85625,
+   "spearman_bridge_answer": 0.6835515517043935,
+   "partial_bridge_dm_given_answer_size": 0.5652049951193104,
+   "partial_bridge_dm_given_model_output_size": 0.4261432276504336,
+   "partial_bridge_dm_given_model_output_size_ci95": [
+    0.05665542594730021,
+    0.5837730123972199
+   ]
+  },
+  "logit|L56|L24-47": {
+   "n_toward_tgt": 68,
+   "n_success": 48,
+   "auc_bridge": 0.9,
+   "auc_answer": 0.884375,
+   "spearman_bridge_answer": 0.835324655494904,
+   "partial_bridge_dm_given_answer_size": 0.4246006446077668,
+   "partial_bridge_dm_given_model_output_size": 0.48708292842439893,
+   "partial_bridge_dm_given_model_output_size_ci95": [
+    0.027290841180175315,
+    0.6234774800806886
+   ]
+  },
+  "nla|L42|L24-35": {
+   "n_toward_tgt": 63,
+   "n_success": 36,
+   "auc_bridge": 0.9434156378600823,
+   "auc_answer": 0.9557613168724279,
+   "spearman_bridge_answer": 0.8659274193548387,
+   "partial_bridge_dm_given_answer_size": 0.4353280364892887,
+   "partial_bridge_dm_given_model_output_size": 0.4283292633388691,
+   "partial_bridge_dm_given_model_output_size_ci95": [
+    0.08135602217555402,
+    0.658400847853997
+   ]
+  },
+  "nla_offtrain|L44|L24-35": {
+   "n_toward_tgt": 63,
+   "n_success": 36,
+   "auc_bridge": 0.9722222222222222,
+   "auc_answer": 0.9609053497942387,
+   "spearman_bridge_answer": 0.8886328725038402,
+   "partial_bridge_dm_given_answer_size": 0.45907792305308576,
+   "partial_bridge_dm_given_model_output_size": 0.3995491664769663,
+   "partial_bridge_dm_given_model_output_size_ci95": [
+    0.07885203236171996,
+    0.7118825312539546
+   ]
+  },
+  "oracle|L40|L24-35": {
+   "n_toward_tgt": 63,
+   "n_success": 36,
+   "auc_bridge": 0.9516460905349794,
+   "auc_answer": 0.9506172839506173,
+   "spearman_bridge_answer": 0.9167146697388633,
+   "partial_bridge_dm_given_answer_size": 0.394557996641025,
+   "partial_bridge_dm_given_model_output_size": 0.46606952837878857,
+   "partial_bridge_dm_given_model_output_size_ci95": [
+    0.040791132303101496,
+    0.7361610686353991
+   ]
+  },
+  "oracle|L44|L24-35": {
+   "n_toward_tgt": 63,
+   "n_success": 36,
+   "auc_bridge": 0.9598765432098766,
+   "auc_answer": 0.9598765432098766,
+   "spearman_bridge_answer": 0.9066340245775729,
+   "partial_bridge_dm_given_answer_size": 0.4914112519982526,
+   "partial_bridge_dm_given_model_output_size": 0.46804552760674056,
+   "partial_bridge_dm_given_model_output_size_ci95": [
+    -0.013342813120776417,
+    0.7415453740984908
+   ]
+  },
+  "oracle|L52|L24-47": {
+   "n_toward_tgt": 68,
+   "n_success": 48,
+   "auc_bridge": 0.9166666666666666,
+   "auc_answer": 0.9125,
+   "spearman_bridge_answer": 0.8504790624880709,
+   "partial_bridge_dm_given_answer_size": 0.3575575017079222,
+   "partial_bridge_dm_given_model_output_size": 0.3102172613193727,
+   "partial_bridge_dm_given_model_output_size_ci95": [
+    -0.24856960626459199,
+    0.7066461554921891
+   ]
+  },
+  "oracle|L56|L24-47": {
+   "n_toward_tgt": 68,
+   "n_success": 48,
+   "auc_bridge": 0.9229166666666667,
+   "auc_answer": 0.9260416666666667,
+   "spearman_bridge_answer": 0.8538763980608466,
+   "partial_bridge_dm_given_answer_size": 0.3921038207738316,
+   "partial_bridge_dm_given_model_output_size": 0.3149746588867193,
+   "partial_bridge_dm_given_model_output_size_ci95": [
+    -0.32099781707275393,
+    0.7304581567287035
+   ]
+  }
+ },
+ "model_output": {
+  "L24-35": {
+   "n": 64,
+   "auc_d_model_bridge": 0.9692460317460317,
+   "auc_d_model_answer": 0.9609053497942387
+  },
+  "L24-47": {
+   "n": 68,
+   "auc_d_model_bridge": 0.9135416666666667,
+   "auc_d_model_answer": 0.9229166666666667
+  }
+ }
+}
