@@ -1,5 +1,5 @@
-"""013: qualitative examples for the results page (CPU). Two illustrative explanations (named) plus four seeded random
-ones (random.Random(5)): the original with judge A's contradicted spans and B's kinds, the factual rewrite F, the
+"""013: qualitative examples for the results page (CPU). Two illustrative explanations (named) plus twelve seeded random
+ones (random.Random(5), 4 per state): the original with judge A's contradicted spans and B's kinds, the factual rewrite F, the
 paraphrase P, and per-version FVE (deletion C1 and rewrite F / P), all from the full-run outputs.
 
   python make_examples.py  ->  results/013_nla_hallucination/qualitative/examples.jsonl
@@ -25,7 +25,10 @@ def main():
     Bd = json.loads((H.OUT / "score_meta_all.json").read_text())["baseline_B"]
     Br = json.loads((H.OUT / "rewrite/score_meta_all.json").read_text())["baseline_B"]
     pool = [e for e in rows if e not in ILLUSTRATIVE and J[e]["A_ok"] and J[e]["K_ok"]]
-    pick = [(e, "illustrative") for e in ILLUSTRATIVE] + [(e, "random (seed 5)") for e in random.Random(5).sample(sorted(pool), 4)]
+    rng = random.Random(5)
+    pick = [(e, "illustrative") for e in ILLUSTRATIVE]
+    for st in H.STATES:                                    # 4 random per state (seed 5), stratified
+        pick += [(e, f"random, {st} (seed 5)") for e in rng.sample(sorted(x for x in pool if rows[x]["state"] == st), 4)]
     out = []
     for e, why in pick:
         r, j, w, sd, sr = rows[e], J[e], RW[e], SD[e], SR[e]

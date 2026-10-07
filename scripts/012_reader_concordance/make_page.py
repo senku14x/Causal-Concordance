@@ -25,6 +25,7 @@ RW = json.loads((R13 / "analysis/rewrite_all.json").read_text())
 TH = json.loads((R13 / "analysis/testhalf.json").read_text())
 DR = json.loads((R13 / "analysis/derisk.json").read_text())
 EX = [json.loads(l) for l in open(R13 / "qualitative/examples.jsonl")]
+LS = [json.loads(l) for l in open(R / "qualitative/stageL_samples.jsonl")]
 
 
 def h(x, d=2):
@@ -275,6 +276,16 @@ def examples13():
     return "".join(out)
 
 
+def stageL_readouts():
+    out = []
+    for x in LS:
+        cells = "".join(f'<div class="ro"><div class="rh">{lab}</div><p class="ex">{E(x[s]["samples"][0][:280])}</p></div>'
+                        for s, lab in (("clean", "clean"), ("J_clue", f"after swap ({E(x['src'])} → {E(x['tgt'])})")))
+        out.append(f'<details><summary>{E(x["hold"])} · swap {"worked" if x["swap_worked"] else "failed"}</summary>'
+                   f'<p class="rh">Read at the final token of: {E(x["prefix_H2"])}</p><div class="ros">{cells}</div></details>')
+    return "".join(out)
+
+
 def rewrite_table():
     fm, jm = RW["fve_mean"], RW["share_J_mean"]
     rows = [("real activation", None, jm["gold"]), ("NLA explanation as written", fm["O"], jm["O"]),
@@ -434,6 +445,8 @@ mark.k-wrong_entity, mark.k-false_fact {{ background:color-mix(in srgb, var(--mu
 <p class="sub">Same prompts and edits as Stage J (hold states reproduced bitwise, {LA["n_holds"]} holds, {LA["n_success"]} working). AUC for telling working swaps from failed ones from each reader's shift toward the swapped-in country, at the end of the unrelated sentence. Dashed line: the model's own next-token output there.</p>
 <figure><div class="legend"><span><i style="background:var(--s1)"></i>Oracle</span><span><i style="background:var(--s2)"></i>logit lens</span><span><i style="background:var(--fg2)"></i>J_NP / J_CB (dashed)</span></div>{chart_stageL()}</figure>
 <p>Through L48 no reader can tell (AUC {h(min(v["auc"] for k, v in LA["readers"].items() if "|L48|H2" in k))}–{h(max(v["auc"] for k, v in LA["readers"].items() if "|L48|H2" in k))}). From L52 every reader can, about as well as the model's own output ({h(min(v["auc"] for k, v in LA["readers"].items() if k.endswith("|H2") and "|L48|" not in k))}–{h(max(v["auc"] for k, v in LA["readers"].items() if k.endswith("|H2") and "|L48|" not in k))}; best {E(LA["H2_best"]["key"].split("|")[0])} at {E(LA["H2_best"]["key"].split("|")[1])}, {h(LA["H2_best"]["auc"])}). The Oracle does no better than the plain logit lens, and its sampled readouts there describe the carrier sentence and almost never name a country. So Stage J's "nothing at the carrier end" was a layer effect: the swapped country arrives between L48 and L52, and what arrives is about as readable as the model's own next-token output.</p>
+<p class="sub">Oracle readouts at that token (layer 56, first of two samples). Four holds where the swap worked and two where it failed, drawn at random (seed 7).</p>
+{stageL_readouts()}
 
 <h2 class="part">Part two (013): do the NLA's false claims carry signal?</h2>
 <p class="lede">NLA explanations are mostly not true of the prompt. We checked what that false text does for the NLA's own reconstructor, which turns an explanation back into an activation (fraction of variance explained, FVE).</p>
@@ -451,7 +464,7 @@ mark.k-wrong_entity, mark.k-false_fact {{ background:color-mix(in srgb, var(--mu
 <p class="note">Reading: removing the NLA's hallucinations makes its reconstruction slightly better. The made-up framing is padding; the information sits in what it paraphrases from the prompt, sometimes wrongly. The reconstructor was trained together with this NLA, so this describes what that pair uses, not what the model computes.</p>
 
 <h2>15. Sample explanations</h2>
-<p class="sub">Two chosen to illustrate, four drawn at random (seed 5). Marked spans: <mark class="k-invented_context">invented context</mark> <mark class="k-misquote">misquote</mark> <mark class="k-wrong_entity">wrong entity or false fact</mark>.</p>
+<p class="sub">Two chosen to illustrate, twelve drawn at random (seed 5): four clean, four J swap, four random swap. Marked spans: <mark class="k-invented_context">invented context</mark> <mark class="k-misquote">misquote</mark> <mark class="k-wrong_entity">wrong entity or false fact</mark>.</p>
 {examples13()}
 
 <h2>Gates and scope</h2>
