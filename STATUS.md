@@ -7,11 +7,13 @@ paper** (Gurnee et al. 2026, `docs/papers/2607.15495.pdf`; text in `docs/papers/
 `docs/claude_reports/34_up_to_speed_2026-10-07.md`. Before 012: `docs/reports/008_trackb.md`,
 `docs/reports/009_brewcode_derisk.md`, report 29 (010), `docs/reports/007_jsubspace.md`.*
 
-**2026-10-07, 014 typo smoke (branch `014-typo`; EXPLORATORY; `docs/ledger/014_ledger.md`).** Reading-only suite on WSB typo
-(hidden step = the corrected word). On the 10-item smoke, every reader names it from every activation part (whole, J, rest,
-a random 1,024-direction slice, mean removed: 0.80-1.00; other-target null ≤ 0.06), so the J-vs-rest contrast does not
-discriminate on typo. The NLA reconstructor gate passes (FVE 52.8%, n 10), and the 013 pipeline runs on typo
-(`NLAH_FAMILY=typo`). Stopped after the smoke; the full 100 awaits the PI's go.
+**2026-10-07, 014 typo (branch `014-typo`; EXPLORATORY; `docs/ledger/014_ledger.md`).** Reading-only suite on WSB typo
+(100 items; hidden step = the corrected word; no answer depends on it, so no causal parts).
+- **Readers:** every reader names the word from almost every activation part (0.77-1.00; other-target null ≤ 0.02); κ is undefined.
+- **J dependence:** removing 007's J subspace costs the Oracle 0.14 / 0.225 (L40 / L44) and the NLA 0.025. The paired Oracle − NLA difference is +0.115 [0.05, 0.19] / +0.20 [0.13, 0.275] (POST HOC). Same direction as 007 on brew.
+- **NLA hallucination test (013 pipeline):** reconstructor gate FVE 54.7%.
+  - Deletion: +39.3 [31.8, 47.3], carried by misquotes (+42.2); invented context ≈ 0 (CI wide).
+  - Rewrite: F − P +1.8 [−1.2, 4.6], unresolved (multihop +3.1).
 
 **2026-10-07, 013 NLA hallucination test (branch `013-nla-hallucination`; EXPLORATORY; `docs/ledger/013_ledger.md`).**
 - **Material:** 522 NLA L42 explanations of 012's multihop states, scored by nla-rl's final reconstructor (validated in Stage K: FVE 78.1% vs published about 77%).

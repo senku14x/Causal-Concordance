@@ -97,3 +97,37 @@ reconstruction 2.0e-17.
   - P3 can't be tested (κ undefined, no variance).
 - **Part C gate R1** (`nlah_gate_full.json`, 100 first samples): FVE 54.7% [50.7, 58.1] vs shuffled −100.8%. **Passes.**
   Judges and scoring are running.
+
+**Full run, Part C** (200 whole-activation NLA L42 explanations = 100 items × 2; judges: deletion $0.293 plus the rewrite arm;
+`results/014_typo/analysis/{hallucination_all,rewrite_all}.json`; hand-check files in `results/014_typo/qualitative/`).
+- **Judge gates:**
+  - G1 A parse 0.985; B 0.995; K 1.00.
+  - G3 κ (A vs B, sentence contradicted) 0.74.
+  - Kinds: misquote 488, invented context 118, wrong entity 8, false fact 2.
+- **Hand check G2** (20 seeded explanations, seed 14, read before any Δ):
+  - Contradicted spans: 60/61 false given the inputs (precision 0.98). The miss is often C4, a hedged next-token prediction.
+  - Kinds: about 4 mislabelled (e.g. world C4, a misquote tagged invented; within C0, an invented quote tagged misquote).
+  - What typo hallucinations look like: mostly misquotes of the one-sentence prompt (another subject, "Lucy" / "The boy"; changed words; the misspelling re-misspelled, "gaet", "withinhin").
+- **Rewrite check:** 4 seeded F/P pairs read. F restores the prompt's wording and drops the invented framing; P keeps the claims. The rewrite gates pass (B's contradicted-sentence rate: O 0.57, F 0.02, P 0.58).
+- **Material:** eligible 187/200 (4 had nothing to clean, 6 were cleaned away). Flagged-token share 0.54.
+- **FVE means:** O 55.6, C1 −13.0, R1 26.3.
+- **Deletion:**
+  - **Primary R1 − C1 = +39.3 [31.8, 47.3]**: false claims carry extra signal (multihop +28.6 [24.0, 33.4]). Sentence control RS1 − C1 = +32.8 [25.5, 40.4].
+  - **Misquotes:** +42.2 [34.3, 50.7] clause control, +35.0 [27.4, 43.7] sentence control (n 180). They carry it, as on multihop (+35.8).
+  - **Invented context:** +0.5 [−4.8, 5.9] clause control, +2.7 [−1.0, 7.4] sentence control (n 86). Band "unresolved": the CIs are wider than ±2, but there is no sign of signal. Consistent with multihop's padding result, less tight (fewer spans).
+  - K1 − C1 (kind-matched) +20.7 [13.5, 27.9]. O − O_tidy −0.02 (tidying is harmless).
+  - **J share:** gold 0.434, O 0.437. Deleting false spans lowers the reconstruction's J share 0.033 [0.024, 0.043] more than random deletion (multihop 0.010).
+- **Rewrite (A2):**
+  - **ΔFVE = F − P = +1.8 [−1.2, 4.6]: "unresolved"** (multihop +3.1 [1.3, 4.9]). F − O +0.2 [−2.6, 3.0]; P − O −1.6 [−2.2, −1.1] (the same paraphrase penalty as multihop, −1.4).
+  - ΔJ = F − P = +0.006 [0.002, 0.010]: "more J", but tiny.
+  - FVE means: O 55.7, F 55.9, P 54.1.
+- **Reading** (EXPLORATORY):
+  - The 013 deletion pattern replicates on a second family: misquotes of the prompt carry the reconstruction signal; invented context does not.
+  - Typo explanations are mostly misquotes of a short prompt. "Hallucinated" text here is largely wrong restatement of the input, and removing it removes the input description.
+  - The rewrite gain does not clearly replicate (CI includes 0): on typo, correcting the misquotes to the exact prompt barely beats a paraphrase.
+- **Predictions (P4):**
+  - invented context ±2: unresolved (n 86, wide CI; point estimates near 0);
+  - misquotes > +2: holds;
+  - the factual rewrite helps by a few points: not shown (+1.8, CI includes 0).
+
+**STOP.** The 014 suite is complete for what typo supports. Wall time: Parts A/B about 25 GPU-min; Part C about 25 GPU-min.
