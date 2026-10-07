@@ -35,6 +35,10 @@ TG = json.loads((R14 / "analysis/nlah_gate_full.json").read_text())
 THD = json.loads((R14 / "analysis/hallucination_all.json").read_text())
 TRW = json.loads((R14 / "analysis/rewrite_all.json").read_text())
 TS = [json.loads(l) for l in open(R14 / "qualitative/samples.jsonl")]
+CO = ROOT / "claude_ovarida/results"
+TCC = json.loads((CO / "typo_content_control.json").read_text())
+TEN = json.loads((CO / "typo_energy_check.json").read_text())
+TCS = json.loads((CO / "typo_content_control_samples.json").read_text())
 
 
 def h(x, d=2):
@@ -357,6 +361,37 @@ def chart_typo_paired():
     return f'<svg viewBox="0 0 {W} {rh * len(rows) + 38}" role="img" aria-label="Paired naming contrasts on typo">{s}</svg>'
 
 
+def chart_typo_control():
+    """Cost of removing each piece (whole minus piece naming share), 95% item bootstrap; content-matched control."""
+    rows = []
+    for rd, lab, cls in (("oracle L40", "Oracle L40", "s1"), ("oracle L44", "Oracle L44", "s1"), ("nla L42", "NLA L42", "s2")):
+        c = TCC["readers"][rd]["cost"]
+        rows += [(f"{lab}: remove J", c["rest_J"], cls), (f"{lab}: remove matched PCA", c["rest_PCA"], cls),
+                 (f"{lab}: remove random (R0)", c["rest_R0"], cls)]
+    for k, lab in (("oracle L40 - nla L42 | D_PCA", "Oracle L40 − NLA: J beyond PCA"), ("oracle L44 - nla L42 | D_PCA", "Oracle L44 − NLA: J beyond PCA")):
+        rows.append((lab, TCC["oracle_minus_nla"][k], "s1"))
+    x0, x1, lo, hi = 250, 610, -0.05, 0.35
+    sx = lambda v: x0 + (v - lo) / (hi - lo) * (x1 - x0)
+    rh = 26
+    s = f'<line x1="{sx(0):.1f}" y1="6" x2="{sx(0):.1f}" y2="{6 + rh * len(rows)}" class="ref"/>'
+    for i, (lab, st, cls) in enumerate(rows):
+        y = 6 + rh * i + rh / 2
+        s += f'<text x="{x0 - 10}" y="{y + 4:.1f}" class="lb" text-anchor="end">{lab}</text>'
+        s += f'<line x1="{sx(st["ci95"][0]):.1f}" y1="{y:.1f}" x2="{sx(st["ci95"][1]):.1f}" y2="{y:.1f}" class="ci"/>'
+        s += f'<circle cx="{sx(st["mean"]):.1f}" cy="{y:.1f}" r="5" class="{cls} ring"><title>{lab}: {h(st["mean"], 3)} [{h(st["ci95"][0], 3)}, {h(st["ci95"][1], 3)}], 100 items</title></circle>'
+    s += axis_x(x0, x1, 10 + rh * len(rows), [0, 0.1, 0.2, 0.3], sx, fmt=lambda v: h(v, 1))
+    return f'<svg viewBox="0 0 {W} {rh * len(rows) + 38}" role="img" aria-label="Content-matched control on typo">{s}</svg>'
+
+
+def typo_control_samples():
+    out = []
+    for x in TCS["samples"]:
+        out.append(f'<details><summary>{E(x["item"])}: corrected word “{E(x["target"])}” (Oracle L44)</summary><div class="ros">'
+                   f'<div class="ro"><div class="rh">minus J</div><p>{E(x["rest_J"][:240])}</p></div>'
+                   f'<div class="ro"><div class="rh">minus matched PCA</div><p>{E(x["rest_PCA"][:240])}</p></div></div></details>')
+    return "".join(out)
+
+
 def typo_samples():
     out = []
     for x in TS:
@@ -580,6 +615,14 @@ mark.k-wrong_entity, mark.k-false_fact {{ background:color-mix(in srgb, var(--mu
 <p class="sub">Four items at random (seed 5): first readout from the whole activation and from the rest.</p>
 {typo_samples()}
 
+<h2>16b. Is it J, or just the item-specific content J happens to hold?</h2>
+<p class="sub">Follow-up after section 16 (claude_ovarida reports 37–38; exploratory, post hoc, rules fixed in the script before any read). On the activations the readers read, J holds {h(TEN["layers"]["44"]["uncentred"]["share_J"])}–{h(TEN["layers"]["40"]["uncentred"]["share_J"])} of the energy against about {h(TEN["layers"]["40"]["uncentred"]["random_median"])} for a random 1,024 directions, but {h(TEN["layers"]["44"]["centred"]["share_J"])}–{h(TEN["layers"]["40"]["centred"]["share_J"])} of the item-to-item variance (random {h(TEN["layers"]["40"]["centred"]["random_median"])}). So the control removes the top principal components of the 100 activations instead, as many as match J's item-to-item share (k {TCC["k_pca"]["40"]} / {TCC["k_pca"]["44"]} / {TCC["k_pca"]["42"]} at L40 / L44 / L42), and a random 1,024-dim slice. Same readers, seeds and scoring as section 16.</p>
+<figure><div class="legend"><span><i style="background:var(--s1)"></i>Oracle</span><span><i style="background:var(--s2)"></i>NLA</span></div>{chart_typo_control()}</figure>
+<p>Removing the matched principal components costs the Oracle only {h(TCC["readers"]["oracle L40"]["cost"]["rest_PCA"]["mean"])} (L40) and {h(TCC["readers"]["oracle L44"]["cost"]["rest_PCA"]["mean"])} (L44), against {h(TCC["readers"]["oracle L40"]["cost"]["rest_J"]["mean"])} and {h(TCC["readers"]["oracle L44"]["cost"]["rest_J"]["mean"])} for J; a random slice costs nothing. J beyond the matched control: {h(TCC["readers"]["oracle L40"]["D_PCA"]["mean"])} [{h(TCC["readers"]["oracle L40"]["D_PCA"]["ci95"][0])}, {h(TCC["readers"]["oracle L40"]["D_PCA"]["ci95"][1])}] and {h(TCC["readers"]["oracle L44"]["D_PCA"]["mean"])} [{h(TCC["readers"]["oracle L44"]["D_PCA"]["ci95"][0])}, {h(TCC["readers"]["oracle L44"]["D_PCA"]["ci95"][1])}] for the Oracle, {h(TCC["readers"]["nla L42"]["D_PCA"]["mean"])} [{h(TCC["readers"]["nla L42"]["D_PCA"]["ci95"][0])}, {h(TCC["readers"]["nla L42"]["D_PCA"]["ci95"][1])}] for the NLA. Pre-set verdict: the Oracle − NLA J contrast <b>{TCC["verdict_014_contrast"]}</b>. Without J, the Oracle keeps the typo-correction frame but loses which word it is.</p>
+<p class="note">The matched-PCA piece removes more total energy than J ({h(TCC["gates"]["40"]["energy_removed_share"]["PCA"])} vs {h(TCC["gates"]["40"]["energy_removed_share"]["J"])} at L40), so it is the stricter control. Caveats as in section 16; PCA is fitted on the same 100 activations. Why the Oracle depends on J (for instance a J-lens term in its reconstructor's training) is not tested.</p>
+<p class="sub">Seed-7 pick among the {TCS["n_such_items"]} items where the minus-J readout misses the word and the minus-PCA readout names it (first Oracle L44 readout).</p>
+{typo_control_samples()}
+
 <h2>17. The NLA hallucination test on typos</h2>
 <p class="sub">The 013 pipeline unchanged: {THD["n"]} NLA explanations (100 items × 2, layer 42), the same judges and controls. The reconstructor passes its gate ({h(TG["fve_pct_first"], 1)}% FVE against {h(TG["fve_pct_shuffled"], 1)}% for mismatched explanations). False text is {h(100 * THD["flagged_token_share"]["contradicted_mean"], 0)}% of an explanation; most of it misquotes the one-sentence prompt (another subject, changed words, the word misspelled again). Hand check: 60 of 61 flagged spans are false.</p>
 <figure><div class="legend"><span><i style="background:var(--s1)"></i>all false text / misquotes</span><span><i style="background:var(--s2)"></i>invented context</span></div>{chart_deletion(THD, ticks=(-10, 0, 10, 20, 30, 40, 50), lo=-10, hi=55)}</figure>
@@ -592,7 +635,7 @@ mark.k-wrong_entity, mark.k-false_fact {{ background:color-mix(in srgb, var(--mu
 <li>Scope: Qwen3.6-27B, 82 clean-correct single-token multihop items (49 of them in 007's already-read test half), one read position, the stated bands. Japan is the target in 28 of 87 covered items. Labels mean "an answer effect under this intervention", not "the bridge is the mediator".</li>
 <li>Exploratory and partly post hoc: the edit-direction stratification and the output-facing analyses were chosen after the smoke and the first summaries. Spec, ledger and code: branch 012-reader-concordance (docs/design_specs/012_reader_concordance.md, docs/ledger/012_ledger.md).</li>
 <li>Stage L and 013: branch 013-nla-hallucination (docs/design_specs/012_reader_concordance.md §22; docs/design_specs/013_nla_hallucination.md with amendments A1-A2; docs/ledger/013_ledger.md). The 013 split by kind and the rewrite arm were added after the smoke, in written amendments, before their runs. Judge spend about $2.35.</li>
-<li>014 (typo): branch 014-typo (docs/design_specs/014_typo.md, docs/ledger/014_ledger.md). Render check 100/100; piece reconstruction exact (2e-17). The other-item null and the paired contrasts were added after the smoke and the full table respectively (post hoc). Judge spend $0.84.</li>
+<li>014 (typo): branch 014-typo (docs/design_specs/014_typo.md, docs/ledger/014_ledger.md). Render check 100/100; piece reconstruction exact (2e-17). The other-item null and the paired contrasts were added after the smoke and the full table respectively (post hoc). Judge spend $0.84. Section 16b: claude_ovarida/ (reports 37–38, typo_content_control.py; outputs mirrored to HF).</li>
 </ul>
 </main>"""
 (R / "page").mkdir(parents=True, exist_ok=True)

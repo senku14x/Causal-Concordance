@@ -11,3 +11,9 @@ Everything from the "ovarida" sessions (2026-10-07 onward) lives here, so the ca
 | `scripts/typo_content_control.py`, `results/typo_content_control*.json` | Script (rules in header, committed before the run) and results for 38; raw readouts in `outputs/claude_ovarida/014_content_control/` (mirrored to HF) |
 | `scripts/typo_energy_check.py` | The CPU script for 37 (reads `outputs/014_typo/captures.pt`) |
 | `results/typo_energy_check.json` | Its full-precision output |
+
+**Results page v14 (built, not published).** Section 16b (the content-matched control) was added to
+`scripts/012_reader_concordance/make_page.py`; the built page is `results/012_reader_concordance/page/index.html`
+(render-checked at 1280 / 400 px, no overflow or script errors). Publishing to
+https://claude.ai/artifact/NoevKvBkXNUTvtpnJPVsuq was refused from this session (version check; the artifact is owned
+outside this session's org), so the PI publishes it.
