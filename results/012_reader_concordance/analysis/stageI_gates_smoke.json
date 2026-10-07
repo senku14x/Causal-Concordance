@@ -1,0 +1,94 @@
+{
+ "prefix_mismatch": [],
+ "G0_fail": [],
+ "write_mask_violations": [],
+ "hold_identity": {
+  "bf-fuji-ocean|c1": {
+   "n_prompts": 3,
+   "max_abs_diff": 0.0
+  },
+  "bf-fuji-ocean|c2": {
+   "n_prompts": 3,
+   "max_abs_diff": 0.0
+  },
+  "bf-rio2016-language|c1": {
+   "n_prompts": 3,
+   "max_abs_diff": 0.0
+  },
+  "bf-rio2016-language|c2": {
+   "n_prompts": 3,
+   "max_abs_diff": 0.0
+  }
+ },
+ "tgt_checks": [
+  {
+   "country": "Brazil",
+   "relation": "capital",
+   "prompt": "Fact: The capital of Brazil is",
+   "answers": [
+    "Brasília",
+    "Brasilia"
+   ],
+   "text": " Brasilia.\n",
+   "pass": true
+  },
+  {
+   "country": "Brazil",
+   "relation": "continent",
+   "prompt": "Fact: The continent of Brazil is",
+   "answers": [
+    "South America"
+   ],
+   "text": " South America.\n",
+   "pass": true
+  },
+  {
+   "country": "Brazil",
+   "relation": "language",
+   "prompt": "Fact: The main language of Brazil is",
+   "answers": [
+    "Portuguese"
+   ],
+   "text": " Portuguese.\n",
+   "pass": true
+  },
+  {
+   "country": "Japan",
+   "relation": "capital",
+   "prompt": "Fact: The capital of Japan is",
+   "answers": [
+    "Tokyo"
+   ],
+   "text": " Tokyo.\n",
+   "pass": true
+  },
+  {
+   "country": "Japan",
+   "relation": "continent",
+   "prompt": "Fact: The continent of Japan is",
+   "answers": [
+    "Asia"
+   ],
+   "text": " located in the",
+   "pass": false
+  },
+  {
+   "country": "Japan",
+   "relation": "language",
+   "prompt": "Fact: The main language of Japan is",
+   "answers": [
+    "Japanese"
+   ],
+   "text": " Japanese.\n",
+   "pass": true
+  }
+ ],
+ "n_prompts": 12,
+ "n_gated": 4,
+ "n_gated_discriminating": 4,
+ "n_tgt_checks": 6,
+ "n_tgt_checks_pass": 5,
+ "hold_identity_all_bitwise": true,
+ "wall_s": 44.5,
+ "pass": true
+}

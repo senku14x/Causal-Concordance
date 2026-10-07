@@ -12,6 +12,7 @@ D = json.loads((R / "analysis/stageD_analysis.json").read_text())
 X = json.loads((R / "analysis/stageD_answers.json").read_text())
 G = json.loads((R / "analysis/stageB_gates.json").read_text())
 Q = [json.loads(l) for l in open(R / "qualitative/stageC_readouts_samples.jsonl")]
+IA = json.loads((R / "analysis/stageI_analysis.json").read_text()) if (R / "analysis/stageI_analysis.json").exists() else None
 EA = json.loads((R / "analysis/stageE0_ar_profile.json").read_text()) if (R / "analysis/stageE0_ar_profile.json").exists() else None
 HA = json.loads((R / "analysis/stageH_summary.json").read_text()) if (R / "analysis/stageH_summary.json").exists() else None
 GA = json.loads((R / "analysis/stageG_analysis.json").read_text()) if (R / "analysis/stageG_analysis.json").exists() else None
@@ -317,6 +318,11 @@ ul {{ margin:0; padding-left:20px; max-width:68ch; }} li {{ margin:4px 0; }}
 <p class="sub">The official reconstructor (AR) loader is not public, so we tested our own against the published per-layer validation profile (1,024 held-out spans, all 12 tag layers). Solid: ours (one fitted scale per layer); dashed grey: published. Blue: whitened FVE; orange: FVE of the J-lens transform of the mean-centred activation, our best guess at the AR's undocumented "jfve" term.</p>
 <figure><div class="legend"><span><i style="background:var(--s1)"></i>our FVE</span><span><i style="background:var(--s2)"></i>our J-lens-target FVE</span><span>– – published</span></div>{chart_e0()}</figure>
 <p>Our loader matches the published FVE profile at every layer once a per-layer scale is fitted, but its retrieval@1 falls short at L20–32, so by the pre-registered rule it is <b>not validated</b> and the TA's reconstructor-vector swaps stay blocked. The fitted scale rises from about 0.1 to 2.3 with depth, consistent with a scale-invariant training loss. The J-lens-target candidate matches the published "jfve" within 0.04 at every layer from L32 up but misses L20–28 (8/11 against a pre-set bar of 9/11; post hoc): suggestive, not established, that the Oracle's training ruler includes a J-lens objective, which would bear directly on why the Oracle's readings concentrate in J (007).</p>
+
+<h2>10. Holding the hidden country before the question is asked (Stage I)</h2>
+<p class="sub">"Fact: Consider the country of Mount Fuji. [unrelated sentence] The capital / main language / continent of that country is". The model's state at the end of the unrelated sentence is identical whichever question follows (checked bitwise). We swap the hidden country only up to that point.</p>
+<p>The swap still changes the later answer on {IA["I1_lever"]["J_pre"]}/{IA["I1_lever"]["gated_n"]} vetted prompts (random control {IA["I1_lever"]["rand_pre"]}/{IA["I1_lever"]["gated_n"]}): the model holds the swapped country and uses it for whichever question comes. But at the end of the unrelated sentence no reader sees it (Oracle L44 AUC {h(IA["gated_primary"]["readers"]["oracle|L44|H2|all"]["auc"])}, NLA L42 {h(IA["gated_primary"]["readers"]["nla|L42|H2|all"]["auc"])}; readouts there almost never name either country), while the model's own next-token output there still leaks it (AUC {h(IA["gated_primary"]["I2_model_H2_bridge_auc"])}). At the end of the clue sentence, which the swap writes, every reader tracks it (AUC about {h(IA["gated_primary"]["readers"]["oracle|L44|H1|all"]["auc"])}, logit lens included). Only {IA["I1_lever"]["gated_n"]} of 168 delayed prompts passed the clean gate, so these are small numbers.</p>
+<p class="note">Reading: the hidden step can be held in context and used later without being visible in the residual stream at the token that holds it. A reader that reads one token sees it where it is written or about to be said, not where it is merely held.</p>
 
 <h2>Gates and scope</h2>
 <ul>

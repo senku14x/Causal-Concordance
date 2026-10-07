@@ -342,3 +342,39 @@ Median S [table-cluster 95% CI]:
 - Swap the hidden country only up to the end of a carrier sentence; check whether the answers to all three later questions follow.
 - Read at the hold tokens, where the model cannot yet be "about to say" the answer.
 - Hand-written content: one fact table (capital / language / continent for 23 countries). The gate checks that Qwen knows every tgt fact.
+
+**Stage I run** (subagent; about 19 GPU-min). Analysis: `stageI_analysis.py` → `results/012_reader_concordance/analysis/stageI_analysis.json`.
+
+*Gates:* G0, write masks and prefix tokenization all pass. The hold states are **bitwise identical across the three questions** of every (clue, carrier), 56/56.
+- **Clean gate: only 35 of 168 prompts pass** (12 capital, 23 language, **0 continent**; 29 hold states over 20 clues).
+  - 98 fall below 9/10 at T 0.8; 27 are wrong when greedy; 8 already contain y_b.
+  - Qwen's short continuations of these delayed prompts wander.
+- Tgt fact checks: 26/27 pass ("continent of Japan" fails).
+
+*I-1, lever: PASS.*
+- J_pre (edit only before the question) flips 25/35 gated trials (0.71); rand_pre 0/35; J_all 28/35.
+- Ungated: 92/154 vs 1/154.
+- 69% of gated hold states flip every gated question.
+- **The model holds the swapped country through the carrier and uses it for whichever question follows. A swap made before the question exists acts at the bridge level.**
+
+*I-2, non-output-facing check: FAILS.* The model's own next-token bridge shift at H2 predicts hold success (AUC 0.82 gated, 0.76 ungated). The swapped country leaks into H2's next-token tail (009's lesson). **So I-3 cannot be passed by rule.**
+
+*I-3, readers at H2* (the carrier's final "."):
+- They do **not** track hold success: AUC 0.45–0.66 across readers, cohorts and strata; median d_r about 0 to 2.
+- Sampled readouts at H2 almost never name either country (Oracle L44 clean "neither" 55/58; NLA 58/58).
+- **Readers at the hold token see nothing of the held country, though the model demonstrably uses it.** The likely reason is that it is stored at the clue tokens and read back by attention, not carried in H2's residual. That reason is inferred, not tested.
+
+*H1, the clue's final "." (secondary; a written position; the model's own output at H1 was not measured):*
+- Every reader's d_r predicts hold success on the gated cohort: AUC 0.88–0.93 (CIs about [0.65, 1.0]; 29 holds, 22 successes). d_r is about 11–14 after working swaps vs 3–8 after failed ones.
+- No reader stands out: the logit lens is 0.88–0.90.
+- Ungated: 0.63–0.75, with Oracle / NLA 0.71–0.75 against token lenses 0.63–0.66.
+- Not decisive: the position is written (F2: readers detect writes), the gated n is small, and there is no output control.
+
+*Post hoc, labelled:*
+- The edit direction measured at H2 does not predict flips (15 of 22 gated toward_src trials flip). H2 is the wrong token to define direction for these prompts. The analysis reports both the pre-registered toward_tgt stratum and all holds.
+- Japan is the target in 19 of the 35 gated trials; no-Japan AUCs are 0.39–0.51, n small.
+
+*What Stage I adds:*
+- (1) Strong model-side evidence: the hidden country is held and used at the bridge level, across a carrier, for any question asked later.
+- (2) At a token where it is held but neither written nor (much) output-facing, **no reader sees it.** That is a limitation of reading one token's residual: the information lives in context (earlier tokens), not at the read cell.
+- (3) Where the swap is written (the clue end), readers track success, but without a reader-specific advantage, and confounded by the write.

@@ -1,0 +1,1000 @@
+{
+ "label": "EXPLORATORY (012 Stage I; rules in spec \u00a718)",
+ "I1_lever": {
+  "gated_n": 35,
+  "J_pre": 25,
+  "rand_pre": 0,
+  "J_all": 28,
+  "ungated_disc_n": 154,
+  "ungated_J_pre": 92,
+  "ungated_rand_pre": 1,
+  "gated_by_relation": {
+   "capital": 12,
+   "language": 23,
+   "continent": 0
+  },
+  "passes": true
+ },
+ "gated_primary": {
+  "n_holds": 29,
+  "n_success": 22,
+  "n_clues": 20,
+  "bridge_level_all_flipped_share": 0.6896551724137931,
+  "I2_model_H2_bridge_auc": 0.8246753246753247,
+  "I2_met": false,
+  "readers": {
+   "J_CB|L40|H1|toward_tgt_H2": {
+    "n": 12,
+    "n_success": 10,
+    "auc": 1.0,
+    "auc_ci95": [
+     1.0,
+     1.0
+    ],
+    "auc_no_japan": null,
+    "d_median_success": 14.565075874328613,
+    "d_median_fail": 4.4666266441345215,
+    "I3_passes": false
+   },
+   "J_CB|L40|H1|all": {
+    "n": 29,
+    "n_success": 22,
+    "auc": 0.8766233766233766,
+    "auc_ci95": [
+     0.6690656565656565,
+     1.0
+    ],
+    "auc_no_japan": 0.7111111111111111,
+    "d_median_success": 14.41049587726593,
+    "d_median_fail": 4.4666266441345215,
+    "I3_passes": false
+   },
+   "J_CB|L40|H2|toward_tgt_H2": {
+    "n": 12,
+    "n_success": 10,
+    "auc": 0.5,
+    "auc_ci95": [
+     0.2222222222222222,
+     0.7829365079365068
+    ],
+    "auc_no_japan": null,
+    "d_median_success": 1.7985806465148926,
+    "d_median_fail": 1.7933578491210938,
+    "I3_passes": false
+   },
+   "J_CB|L40|H2|all": {
+    "n": 29,
+    "n_success": 22,
+    "auc": 0.5909090909090909,
+    "auc_ci95": [
+     0.23057126696832578,
+     0.9716060606060601
+    ],
+    "auc_no_japan": 0.4666666666666667,
+    "d_median_success": -0.2570509910583496,
+    "d_median_fail": 0.18088531494140625,
+    "I3_passes": false
+   },
+   "J_CB|L44|H1|toward_tgt_H2": {
+    "n": 12,
+    "n_success": 10,
+    "auc": 1.0,
+    "auc_ci95": [
+     1.0,
+     1.0
+    ],
+    "auc_no_japan": null,
+    "d_median_success": 11.237351894378662,
+    "d_median_fail": 3.1404809951782227,
+    "I3_passes": false
+   },
+   "J_CB|L44|H1|all": {
+    "n": 29,
+    "n_success": 22,
+    "auc": 0.9285714285714286,
+    "auc_ci95": [
+     0.7727272727272727,
+     1.0
+    ],
+    "auc_no_japan": 0.8,
+    "d_median_success": 11.237351894378662,
+    "d_median_fail": 3.1404809951782227,
+    "I3_passes": false
+   },
+   "J_CB|L44|H2|toward_tgt_H2": {
+    "n": 12,
+    "n_success": 10,
+    "auc": 0.5,
+    "auc_ci95": [
+     0.2222222222222222,
+     0.7829365079365068
+    ],
+    "auc_no_japan": null,
+    "d_median_success": 1.3759393692016602,
+    "d_median_fail": 1.338388442993164,
+    "I3_passes": false
+   },
+   "J_CB|L44|H2|all": {
+    "n": 29,
+    "n_success": 22,
+    "auc": 0.5844155844155844,
+    "auc_ci95": [
+     0.22992788461538463,
+     0.956062801932367
+    ],
+    "auc_no_japan": 0.4666666666666667,
+    "d_median_success": -0.20866107940673828,
+    "d_median_fail": 0.16169071197509766,
+    "I3_passes": false
+   },
+   "J_NP|L40|H1|toward_tgt_H2": {
+    "n": 12,
+    "n_success": 10,
+    "auc": 1.0,
+    "auc_ci95": [
+     1.0,
+     1.0
+    ],
+    "auc_no_japan": null,
+    "d_median_success": 14.428643584251404,
+    "d_median_fail": 4.39221978187561,
+    "I3_passes": false
+   },
+   "J_NP|L40|H1|all": {
+    "n": 29,
+    "n_success": 22,
+    "auc": 0.8766233766233766,
+    "auc_ci95": [
+     0.6954347826086956,
+     1.0
+    ],
+    "auc_no_japan": 0.7111111111111111,
+    "d_median_success": 13.962754964828491,
+    "d_median_fail": 4.39221978187561,
+    "I3_passes": false
+   },
+   "J_NP|L40|H2|toward_tgt_H2": {
+    "n": 12,
+    "n_success": 10,
+    "auc": 0.45,
+    "auc_ci95": [
+     0.2,
+     0.7272727272727273
+    ],
+    "auc_no_japan": null,
+    "d_median_success": 1.6886420249938965,
+    "d_median_fail": 1.6630959510803223,
+    "I3_passes": false
+   },
+   "J_NP|L40|H2|all": {
+    "n": 29,
+    "n_success": 22,
+    "auc": 0.5844155844155844,
+    "auc_ci95": [
+     0.225,
+     0.9716060606060601
+    ],
+    "auc_no_japan": 0.4444444444444444,
+    "d_median_success": -0.22837114334106445,
+    "d_median_fail": 0.20151519775390625,
+    "I3_passes": false
+   },
+   "J_NP|L44|H1|toward_tgt_H2": {
+    "n": 12,
+    "n_success": 10,
+    "auc": 1.0,
+    "auc_ci95": [
+     1.0,
+     1.0
+    ],
+    "auc_no_japan": null,
+    "d_median_success": 11.868432998657227,
+    "d_median_fail": 3.3498575687408447,
+    "I3_passes": false
+   },
+   "J_NP|L44|H1|all": {
+    "n": 29,
+    "n_success": 22,
+    "auc": 0.8896103896103896,
+    "auc_ci95": [
+     0.7136335403726708,
+     1.0
+    ],
+    "auc_no_japan": 0.7111111111111111,
+    "d_median_success": 11.676202535629272,
+    "d_median_fail": 3.3498575687408447,
+    "I3_passes": false
+   },
+   "J_NP|L44|H2|toward_tgt_H2": {
+    "n": 12,
+    "n_success": 10,
+    "auc": 0.5,
+    "auc_ci95": [
+     0.2222222222222222,
+     0.7829365079365068
+    ],
+    "auc_no_japan": null,
+    "d_median_success": 1.4050698280334473,
+    "d_median_fail": 1.2521467208862305,
+    "I3_passes": false
+   },
+   "J_NP|L44|H2|all": {
+    "n": 29,
+    "n_success": 22,
+    "auc": 0.577922077922078,
+    "auc_ci95": [
+     0.22916666666666666,
+     0.9469944874501521
+    ],
+    "auc_no_japan": 0.4666666666666667,
+    "d_median_success": -0.19089317321777344,
+    "d_median_fail": 0.19754409790039062,
+    "I3_passes": false
+   },
+   "logit|L40|H1|toward_tgt_H2": {
+    "n": 12,
+    "n_success": 10,
+    "auc": 1.0,
+    "auc_ci95": [
+     1.0,
+     1.0
+    ],
+    "auc_no_japan": null,
+    "d_median_success": 4.163690567016602,
+    "d_median_fail": 1.5294933319091797,
+    "I3_passes": false
+   },
+   "logit|L40|H1|all": {
+    "n": 29,
+    "n_success": 22,
+    "auc": 0.8766233766233766,
+    "auc_ci95": [
+     0.650719696969697,
+     1.0
+    ],
+    "auc_no_japan": 0.8,
+    "d_median_success": 4.163690567016602,
+    "d_median_fail": 1.5294933319091797,
+    "I3_passes": false
+   },
+   "logit|L40|H2|toward_tgt_H2": {
+    "n": 12,
+    "n_success": 10,
+    "auc": 0.5,
+    "auc_ci95": [
+     0.2222222222222222,
+     0.7829365079365068
+    ],
+    "auc_no_japan": null,
+    "d_median_success": 0.525723934173584,
+    "d_median_fail": 0.4721684455871582,
+    "I3_passes": false
+   },
+   "logit|L40|H2|all": {
+    "n": 29,
+    "n_success": 22,
+    "auc": 0.5974025974025974,
+    "auc_ci95": [
+     0.23267558528428095,
+     1.0
+    ],
+    "auc_no_japan": 0.4666666666666667,
+    "d_median_success": -0.1297593116760254,
+    "d_median_fail": -0.007864952087402344,
+    "I3_passes": false
+   },
+   "logit|L44|H1|toward_tgt_H2": {
+    "n": 12,
+    "n_success": 10,
+    "auc": 1.0,
+    "auc_ci95": [
+     1.0,
+     1.0
+    ],
+    "auc_no_japan": null,
+    "d_median_success": 3.7860727310180664,
+    "d_median_fail": 1.244206428527832,
+    "I3_passes": false
+   },
+   "logit|L44|H1|all": {
+    "n": 29,
+    "n_success": 22,
+    "auc": 0.9025974025974026,
+    "auc_ci95": [
+     0.7172585227272728,
+     1.0
+    ],
+    "auc_no_japan": 0.8,
+    "d_median_success": 3.7860727310180664,
+    "d_median_fail": 1.244206428527832,
+    "I3_passes": false
+   },
+   "logit|L44|H2|toward_tgt_H2": {
+    "n": 12,
+    "n_success": 10,
+    "auc": 0.5,
+    "auc_ci95": [
+     0.25,
+     0.75
+    ],
+    "auc_no_japan": null,
+    "d_median_success": 0.4691586494445801,
+    "d_median_fail": 0.4267606735229492,
+    "I3_passes": false
+   },
+   "logit|L44|H2|all": {
+    "n": 29,
+    "n_success": 22,
+    "auc": 0.5974025974025974,
+    "auc_ci95": [
+     0.25,
+     0.9716060606060601
+    ],
+    "auc_no_japan": 0.4888888888888889,
+    "d_median_success": -0.11109304428100586,
+    "d_median_fail": -0.014752388000488281,
+    "I3_passes": false
+   },
+   "nla|L42|H1|toward_tgt_H2": {
+    "n": 12,
+    "n_success": 10,
+    "auc": 1.0,
+    "auc_ci95": [
+     1.0,
+     1.0
+    ],
+    "auc_no_japan": null,
+    "d_median_success": 13.54497907114171,
+    "d_median_fail": 4.86961312710944,
+    "I3_passes": false
+   },
+   "nla|L42|H1|all": {
+    "n": 29,
+    "n_success": 22,
+    "auc": 0.9025974025974026,
+    "auc_ci95": [
+     0.7333333333333333,
+     1.0
+    ],
+    "auc_no_japan": 0.7111111111111111,
+    "d_median_success": 11.246128695126888,
+    "d_median_fail": 4.86961312710944,
+    "I3_passes": false
+   },
+   "nla|L42|H2|toward_tgt_H2": {
+    "n": 12,
+    "n_success": 10,
+    "auc": 0.55,
+    "auc_ci95": [
+     0.2777777777777778,
+     0.8
+    ],
+    "auc_no_japan": null,
+    "d_median_success": 2.1332596766782843,
+    "d_median_fail": 1.9177390134619756,
+    "I3_passes": false
+   },
+   "nla|L42|H2|all": {
+    "n": 29,
+    "n_success": 22,
+    "auc": 0.577922077922078,
+    "auc_ci95": [
+     0.24,
+     0.9565217391304348
+    ],
+    "auc_no_japan": 0.4222222222222222,
+    "d_median_success": 0.00555256878467647,
+    "d_median_fail": 0.9092198374642697,
+    "I3_passes": false
+   },
+   "oracle|L40|H1|toward_tgt_H2": {
+    "n": 12,
+    "n_success": 10,
+    "auc": 1.0,
+    "auc_ci95": [
+     1.0,
+     1.0
+    ],
+    "auc_no_japan": null,
+    "d_median_success": 14.295647805404002,
+    "d_median_fail": 8.45717984806245,
+    "I3_passes": false
+   },
+   "oracle|L40|H1|all": {
+    "n": 29,
+    "n_success": 22,
+    "auc": 0.9025974025974026,
+    "auc_ci95": [
+     0.7401233766233767,
+     1.0
+    ],
+    "auc_no_japan": 0.7111111111111111,
+    "d_median_success": 13.228131731992686,
+    "d_median_fail": 8.034052384720377,
+    "I3_passes": false
+   },
+   "oracle|L40|H2|toward_tgt_H2": {
+    "n": 12,
+    "n_success": 10,
+    "auc": 0.6,
+    "auc_ci95": [
+     0.3125,
+     0.8546428571428561
+    ],
+    "auc_no_japan": null,
+    "d_median_success": 1.4391323656074544,
+    "d_median_fail": 0.8588454299063137,
+    "I3_passes": false
+   },
+   "oracle|L40|H2|all": {
+    "n": 29,
+    "n_success": 22,
+    "auc": 0.6103896103896104,
+    "auc_ci95": [
+     0.276772030651341,
+     0.9565217391304348
+    ],
+    "auc_no_japan": 0.5111111111111111,
+    "d_median_success": -0.006216199037334391,
+    "d_median_fail": 0.20982195925281744,
+    "I3_passes": false
+   },
+   "oracle|L44|H1|toward_tgt_H2": {
+    "n": 12,
+    "n_success": 10,
+    "auc": 1.0,
+    "auc_ci95": [
+     1.0,
+     1.0
+    ],
+    "auc_no_japan": null,
+    "d_median_success": 12.182625864944443,
+    "d_median_fail": 4.9685472575924425,
+    "I3_passes": false
+   },
+   "oracle|L44|H1|all": {
+    "n": 29,
+    "n_success": 22,
+    "auc": 0.8896103896103896,
+    "auc_ci95": [
+     0.707144764957265,
+     1.0
+    ],
+    "auc_no_japan": 0.7111111111111111,
+    "d_median_success": 12.038809454244854,
+    "d_median_fail": 4.9685472575924425,
+    "I3_passes": false
+   },
+   "oracle|L44|H2|toward_tgt_H2": {
+    "n": 12,
+    "n_success": 10,
+    "auc": 0.6,
+    "auc_ci95": [
+     0.3125,
+     0.8546428571428561
+    ],
+    "auc_no_japan": null,
+    "d_median_success": 1.1842460716030914,
+    "d_median_fail": 0.5767850476406995,
+    "I3_passes": false
+   },
+   "oracle|L44|H2|all": {
+    "n": 29,
+    "n_success": 22,
+    "auc": 0.5974025974025974,
+    "auc_ci95": [
+     0.2780072463768116,
+     0.9367874999999998
+    ],
+    "auc_no_japan": 0.4666666666666667,
+    "d_median_success": 0.07300243207074075,
+    "d_median_fail": 0.11541474202236301,
+    "I3_passes": false
+   }
+  }
+ },
+ "ungated_sensitivity": {
+  "n_holds": 56,
+  "n_success": 36,
+  "n_clues": 28,
+  "bridge_level_all_flipped_share": 0.3392857142857143,
+  "I2_model_H2_bridge_auc": 0.7625,
+  "I2_met": false,
+  "readers": {
+   "J_CB|L40|H1|toward_tgt_H2": {
+    "n": 30,
+    "n_success": 18,
+    "auc": 0.5810185185185185,
+    "auc_ci95": [
+     0.30141586140038157,
+     0.91078869047619
+    ],
+    "auc_no_japan": null,
+    "d_median_success": 14.792234241962433,
+    "d_median_fail": 12.847674235701561,
+    "I3_passes": false
+   },
+   "J_CB|L40|H1|all": {
+    "n": 56,
+    "n_success": 36,
+    "auc": 0.6333333333333333,
+    "auc_ci95": [
+     0.41442244372605364,
+     0.847109194410902
+    ],
+    "auc_no_japan": 0.5571428571428572,
+    "d_median_success": 14.41049587726593,
+    "d_median_fail": 6.894587516784668,
+    "I3_passes": false
+   },
+   "J_CB|L40|H2|toward_tgt_H2": {
+    "n": 30,
+    "n_success": 18,
+    "auc": 0.6111111111111112,
+    "auc_ci95": [
+     0.352245670995671,
+     0.8496496924128502
+    ],
+    "auc_no_japan": null,
+    "d_median_success": 3.0214781761169434,
+    "d_median_fail": 1.7632622718811035,
+    "I3_passes": false
+   },
+   "J_CB|L40|H2|all": {
+    "n": 56,
+    "n_success": 36,
+    "auc": 0.5291666666666667,
+    "auc_ci95": [
+     0.33194444444444443,
+     0.7240515348226485
+    ],
+    "auc_no_japan": 0.40714285714285714,
+    "d_median_success": 0.9995646476745605,
+    "d_median_fail": 0.624788761138916,
+    "I3_passes": false
+   },
+   "J_CB|L44|H1|toward_tgt_H2": {
+    "n": 30,
+    "n_success": 18,
+    "auc": 0.5810185185185185,
+    "auc_ci95": [
+     0.30063725490196075,
+     0.91078869047619
+    ],
+    "auc_no_japan": null,
+    "d_median_success": 10.76123958826065,
+    "d_median_fail": 9.533083885908127,
+    "I3_passes": false
+   },
+   "J_CB|L44|H1|all": {
+    "n": 56,
+    "n_success": 36,
+    "auc": 0.6611111111111111,
+    "auc_ci95": [
+     0.43328125,
+     0.8703322259136211
+    ],
+    "auc_no_japan": 0.6,
+    "d_median_success": 10.938574224710464,
+    "d_median_fail": 5.033001184463501,
+    "I3_passes": false
+   },
+   "J_CB|L44|H2|toward_tgt_H2": {
+    "n": 30,
+    "n_success": 18,
+    "auc": 0.5833333333333334,
+    "auc_ci95": [
+     0.32802579365079365,
+     0.8200965909090904
+    ],
+    "auc_no_japan": null,
+    "d_median_success": 2.1694860458374023,
+    "d_median_fail": 1.2598786354064941,
+    "I3_passes": false
+   },
+   "J_CB|L44|H2|all": {
+    "n": 56,
+    "n_success": 36,
+    "auc": 0.5236111111111111,
+    "auc_ci95": [
+     0.32311579955636216,
+     0.7180502031181379
+    ],
+    "auc_no_japan": 0.4,
+    "d_median_success": 0.7169036865234375,
+    "d_median_fail": 0.4692845344543457,
+    "I3_passes": false
+   },
+   "J_NP|L40|H1|toward_tgt_H2": {
+    "n": 30,
+    "n_success": 18,
+    "auc": 0.5902777777777778,
+    "auc_ci95": [
+     0.3159104053840896,
+     0.9149918367346938
+    ],
+    "auc_no_japan": null,
+    "d_median_success": 13.404677420854568,
+    "d_median_fail": 12.7534911185503,
+    "I3_passes": false
+   },
+   "J_NP|L40|H1|all": {
+    "n": 56,
+    "n_success": 36,
+    "auc": 0.6472222222222223,
+    "auc_ci95": [
+     0.42499022048364155,
+     0.8542429091771194
+    ],
+    "auc_no_japan": 0.5714285714285714,
+    "d_median_success": 13.427800297737122,
+    "d_median_fail": 6.747628927230835,
+    "I3_passes": false
+   },
+   "J_NP|L40|H2|toward_tgt_H2": {
+    "n": 30,
+    "n_success": 18,
+    "auc": 0.6018518518518519,
+    "auc_ci95": [
+     0.3333333333333333,
+     0.8458779761904759
+    ],
+    "auc_no_japan": null,
+    "d_median_success": 2.681126594543457,
+    "d_median_fail": 1.526371955871582,
+    "I3_passes": false
+   },
+   "J_NP|L40|H2|all": {
+    "n": 56,
+    "n_success": 36,
+    "auc": 0.5305555555555556,
+    "auc_ci95": [
+     0.3272266214177979,
+     0.725168815674758
+    ],
+    "auc_no_japan": 0.39285714285714285,
+    "d_median_success": 0.8838253021240234,
+    "d_median_fail": 0.5388054847717285,
+    "I3_passes": false
+   },
+   "J_NP|L44|H1|toward_tgt_H2": {
+    "n": 30,
+    "n_success": 18,
+    "auc": 0.5902777777777778,
+    "auc_ci95": [
+     0.3253637566137566,
+     0.91078869047619
+    ],
+    "auc_no_japan": null,
+    "d_median_success": 10.836141124367714,
+    "d_median_fail": 9.714906185865402,
+    "I3_passes": false
+   },
+   "J_NP|L44|H1|all": {
+    "n": 56,
+    "n_success": 36,
+    "auc": 0.6583333333333333,
+    "auc_ci95": [
+     0.44150809716599193,
+     0.8631514000949218
+    ],
+    "auc_no_japan": 0.5714285714285714,
+    "d_median_success": 11.676202535629272,
+    "d_median_fail": 5.311116456985474,
+    "I3_passes": false
+   },
+   "J_NP|L44|H2|toward_tgt_H2": {
+    "n": 30,
+    "n_success": 18,
+    "auc": 0.625,
+    "auc_ci95": [
+     0.37214285714285716,
+     0.855
+    ],
+    "auc_no_japan": null,
+    "d_median_success": 2.206533432006836,
+    "d_median_fail": 1.229687213897705,
+    "I3_passes": false
+   },
+   "J_NP|L44|H2|all": {
+    "n": 56,
+    "n_success": 36,
+    "auc": 0.5347222222222222,
+    "auc_ci95": [
+     0.3378408834798287,
+     0.7254964785067479
+    ],
+    "auc_no_japan": 0.40714285714285714,
+    "d_median_success": 0.6333775520324707,
+    "d_median_fail": 0.4246487617492676,
+    "I3_passes": false
+   },
+   "logit|L40|H1|toward_tgt_H2": {
+    "n": 30,
+    "n_success": 18,
+    "auc": 0.5810185185185185,
+    "auc_ci95": [
+     0.2922148503670243,
+     0.918937312687312
+    ],
+    "auc_no_japan": null,
+    "d_median_success": 5.281874179840088,
+    "d_median_fail": 4.389620780944824,
+    "I3_passes": false
+   },
+   "logit|L40|H1|all": {
+    "n": 56,
+    "n_success": 36,
+    "auc": 0.6361111111111111,
+    "auc_ci95": [
+     0.414409590903473,
+     0.8537868480725621
+    ],
+    "auc_no_japan": 0.5714285714285714,
+    "d_median_success": 4.448800086975098,
+    "d_median_fail": 2.3391175270080566,
+    "I3_passes": false
+   },
+   "logit|L40|H2|toward_tgt_H2": {
+    "n": 30,
+    "n_success": 18,
+    "auc": 0.5925925925925926,
+    "auc_ci95": [
+     0.3332954545454545,
+     0.8409389952153109
+    ],
+    "auc_no_japan": null,
+    "d_median_success": 0.8290615081787109,
+    "d_median_fail": 0.5724492073059082,
+    "I3_passes": false
+   },
+   "logit|L40|H2|all": {
+    "n": 56,
+    "n_success": 36,
+    "auc": 0.5208333333333334,
+    "auc_ci95": [
+     0.3182254041967664,
+     0.7173624105260031
+    ],
+    "auc_no_japan": 0.4,
+    "d_median_success": 0.3040766716003418,
+    "d_median_fail": 0.1818866729736328,
+    "I3_passes": false
+   },
+   "logit|L44|H1|toward_tgt_H2": {
+    "n": 30,
+    "n_success": 18,
+    "auc": 0.5810185185185185,
+    "auc_ci95": [
+     0.2856766917293233,
+     0.9275621118012422
+    ],
+    "auc_no_japan": null,
+    "d_median_success": 4.210594415664673,
+    "d_median_fail": 3.576457977294922,
+    "I3_passes": false
+   },
+   "logit|L44|H1|all": {
+    "n": 56,
+    "n_success": 36,
+    "auc": 0.65,
+    "auc_ci95": [
+     0.43206914344685243,
+     0.8625
+    ],
+    "auc_no_japan": 0.6142857142857143,
+    "d_median_success": 4.108089923858643,
+    "d_median_fail": 1.9897189140319824,
+    "I3_passes": false
+   },
+   "logit|L44|H2|toward_tgt_H2": {
+    "n": 30,
+    "n_success": 18,
+    "auc": 0.5833333333333334,
+    "auc_ci95": [
+     0.3333333333333333,
+     0.8222395833333332
+    ],
+    "auc_no_japan": null,
+    "d_median_success": 0.6538138389587402,
+    "d_median_fail": 0.4934248924255371,
+    "I3_passes": false
+   },
+   "logit|L44|H2|all": {
+    "n": 56,
+    "n_success": 36,
+    "auc": 0.5180555555555556,
+    "auc_ci95": [
+     0.3157894736842105,
+     0.7154642014162076
+    ],
+    "auc_no_japan": 0.4,
+    "d_median_success": 0.22771263122558594,
+    "d_median_fail": 0.10028696060180664,
+    "I3_passes": false
+   },
+   "nla|L42|H1|toward_tgt_H2": {
+    "n": 30,
+    "n_success": 18,
+    "auc": 0.7106481481481481,
+    "auc_ci95": [
+     0.462120636716225,
+     0.9423611111111108
+    ],
+    "auc_no_japan": null,
+    "d_median_success": 11.716745545156897,
+    "d_median_fail": 7.678533303959458,
+    "I3_passes": false
+   },
+   "nla|L42|H1|all": {
+    "n": 56,
+    "n_success": 36,
+    "auc": 0.7388888888888889,
+    "auc_ci95": [
+     0.5497749530846822,
+     0.9025841631104787
+    ],
+    "auc_no_japan": 0.6857142857142857,
+    "d_median_success": 11.021054698411046,
+    "d_median_fail": 6.525957820441887,
+    "I3_passes": false
+   },
+   "nla|L42|H2|toward_tgt_H2": {
+    "n": 30,
+    "n_success": 18,
+    "auc": 0.6388888888888888,
+    "auc_ci95": [
+     0.41174836601307185,
+     0.8478605935127672
+    ],
+    "auc_no_japan": null,
+    "d_median_success": 2.8100314455204445,
+    "d_median_fail": 1.0739317847045777,
+    "I3_passes": false
+   },
+   "nla|L42|H2|all": {
+    "n": 56,
+    "n_success": 36,
+    "auc": 0.5333333333333333,
+    "auc_ci95": [
+     0.3452289377289377,
+     0.7243749999999999
+    ],
+    "auc_no_japan": 0.4,
+    "d_median_success": 0.5226740629888211,
+    "d_median_fail": 0.6908236451182144,
+    "I3_passes": false
+   },
+   "oracle|L40|H1|toward_tgt_H2": {
+    "n": 30,
+    "n_success": 18,
+    "auc": 0.7199074074074074,
+    "auc_ci95": [
+     0.43883527369281045,
+     0.9773409090909088
+    ],
+    "auc_no_japan": null,
+    "d_median_success": 13.09577474420154,
+    "d_median_fail": 7.555780790472907,
+    "I3_passes": false
+   },
+   "oracle|L40|H1|all": {
+    "n": 56,
+    "n_success": 36,
+    "auc": 0.7472222222222222,
+    "auc_ci95": [
+     0.5503003414804657,
+     0.9231292517006803
+    ],
+    "auc_no_japan": 0.6142857142857143,
+    "d_median_success": 11.925588949155424,
+    "d_median_fail": 7.3442170588018705,
+    "I3_passes": false
+   },
+   "oracle|L40|H2|toward_tgt_H2": {
+    "n": 30,
+    "n_success": 18,
+    "auc": 0.6435185185185185,
+    "auc_ci95": [
+     0.4215557275541796,
+     0.8471971131772262
+    ],
+    "auc_no_japan": null,
+    "d_median_success": 1.9061367096587052,
+    "d_median_fail": 0.8313982816382071,
+    "I3_passes": false
+   },
+   "oracle|L40|H2|all": {
+    "n": 56,
+    "n_success": 36,
+    "auc": 0.5472222222222223,
+    "auc_ci95": [
+     0.35961705152208584,
+     0.7296930068346509
+    ],
+    "auc_no_japan": 0.44285714285714284,
+    "d_median_success": 0.34995881065257883,
+    "d_median_fail": 0.32262409886656584,
+    "I3_passes": false
+   },
+   "oracle|L44|H1|toward_tgt_H2": {
+    "n": 30,
+    "n_success": 18,
+    "auc": 0.7384259259259259,
+    "auc_ci95": [
+     0.4444444444444444,
+     1.0
+    ],
+    "auc_no_japan": null,
+    "d_median_success": 11.626282489036784,
+    "d_median_fail": 6.549075517535621,
+    "I3_passes": false
+   },
+   "oracle|L44|H1|all": {
+    "n": 56,
+    "n_success": 36,
+    "auc": 0.7111111111111111,
+    "auc_ci95": [
+     0.5014224751066856,
+     0.9125094696969697
+    ],
+    "auc_no_japan": 0.6142857142857143,
+    "d_median_success": 11.626282489036784,
+    "d_median_fail": 5.984181916015179,
+    "I3_passes": false
+   },
+   "oracle|L44|H2|toward_tgt_H2": {
+    "n": 30,
+    "n_success": 18,
+    "auc": 0.6574074074074074,
+    "auc_ci95": [
+     0.42603276353276354,
+     0.860870382477934
+    ],
+    "auc_no_japan": null,
+    "d_median_success": 1.4815395005226115,
+    "d_median_fail": 0.7188275458130988,
+    "I3_passes": false
+   },
+   "oracle|L44|H2|all": {
+    "n": 56,
+    "n_success": 36,
+    "auc": 0.5472222222222223,
+    "auc_ci95": [
+     0.3641406957196431,
+     0.7300527903469077
+    ],
+    "auc_no_japan": 0.4142857142857143,
+    "d_median_success": 0.34894698744281527,
+    "d_median_fail": 0.2352835352041449,
+    "I3_passes": false
+   }
+  }
+ },
+ "naming_H2": {
+  "nla L42|J_pre|fail": {
+   "neither": 13,
+   "tgt-only": 1
+  },
+  "nla L42|J_pre|success": {
+   "neither": 42,
+   "tgt-only": 1,
+   "src-only": 1
+  },
+  "nla L42|clean": {
+   "neither": 58
+  },
+  "oracle L44|J_pre|fail": {
+   "neither": 14
+  },
+  "oracle L44|J_pre|success": {
+   "neither": 42,
+   "tgt-only": 2
+  },
+  "oracle L44|clean": {
+   "neither": 55,
+   "src-only": 1,
+   "tgt-only": 2
+  }
+ }
+}
