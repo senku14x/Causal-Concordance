@@ -146,3 +146,20 @@ per-state F − P).
   CW-16b centres on its 70 targets).
 - 013 A2's F − P is the amendment's co-primary, post hoc relative to the 013 spec (spec §12). It is not the original
   pre-registered primary, which is the deletion Δ.
+
+## 2026-10-11: note from 015 (observation only; no 013 number changes)
+
+- **013's random-deletion controls sometimes delete the whole explanation.**
+  - When C1 keeps little more than the 10-token floor, `random_match`'s final "add one more unit if closer" step can
+    take every unit.
+  - In 013's eligible set (474), R1 is empty for at least one of 5 seeds on 12 explanations (26 texts), and RS1 on 75
+    (208 texts). Per kind: Ri 2/354, RSi 6/354, Rii 3/453, RSii 31/453.
+  - The NLA AR scores an empty text through its template far below C1: FVE −142 to −193 against C1 −64 to −158, on 5
+    cases in 015's smoke.
+- **Direction:**
+  - It lowers R1 / RS1, so it biases the primary Δ and the sentence-control Δ toward 0 (against 013's H-signal).
+  - For the invented-context padding reading it biases toward padding, but on only 2 (Ri) and 6 (RSi) of 354
+    explanations.
+- Source: 015 report 46 §3c.
+- **Also:** 4 of 013's 522 P texts are wrapped in PROMPT_P's `<<<` `>>>` delimiters (lisbon J 0, tajmahal rand 1,
+  olympia J 0, caesar rand 1). 013's F − P includes them.

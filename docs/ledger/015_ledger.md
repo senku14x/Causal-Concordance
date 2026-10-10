@@ -138,3 +138,43 @@ Nothing has been scored on smoke versions yet.
   - 4d: Oracle misquote tags;
   - 4e: a note in the 013 ledger.
 - Full run not started.
+
+## 2026-10-11: full-run amendment (written and committed before any full-run judge call)
+
+**The PI's go:** "okay start it", in reply to report 46. No choice was made among §4's options, so my recommendations are
+adopted. All of the following are POST HOC relative to the spec and none changes a pre-registered quantity.
+- **4a. Scale-free reader view (descriptive):** each reader's Δ divided by its cell's step-2 matched − shuffled mean
+  (`r1.json`), × 100, then differenced (NLA − Oracle) as §7. The §7 claim rule is unchanged and uses the raw contrasts.
+- **4b. Fc arm (Oracle readouts with ≥ 1 flagged span).**
+  - Judge A, temperature 0, with the readout's own A spans listed. Exact text: `oh.py` `PROMPT_FC`. It corrects each
+    listed span in place, leaves a span that can't be corrected in place (invented context) unchanged, and deletes or
+    adds nothing.
+  - Pc: PROMPT_P with Fc's realised edit size, the same 20% re-ask, delimiters stripped.
+  - Reported: Fc − Pc, Fc − O, Pc − O, F − P on the same readouts, and Fc − Pc with Pc within 20%. Both scorers,
+    descriptive.
+  - Checks: Fc keeps the line count; hand check of 10 Fc.
+- **4c.** Δ_A on the PA-computable subset is reported next to Δ_AP. PA is unchanged.
+- **4d.** The Oracle per-kind misquote results are reported as unreliable, unless the 10-readout extra hand check shows
+  correct misquote tags.
+- **4e.** A note in the 013 ledger (appended today).
+
+**Mechanics (no effect on any number):**
+- The judge runs 16 threads in chunks of 64. It aborts if the projected spend passes $10; the projection over-estimates,
+  because Oracle rows come first and cost more.
+- The NLA AR runs in 3 shards (unique text index mod 3), one text per forward as before, so a shard can't change a
+  score: shards 0 and 1 on GPU 1, shard 2 on GPU 0 alongside the Oracle AR (about 91 GB).
+- The Oracle AR accumulates running sums.
+- The analysis asserts that every version entry is scored exactly once per scorer.
+
+**Regression check of the new analysis code on the smoke:** 0 differences in every previously committed field of
+`oh_smoke.json`. The regenerated file adds `dA_on_PA_subset`, the scaled contrasts and the Fc fields (empty in the smoke).
+
+**Correction to report 46 (my mistake, found by the new field):**
+- §2a said "the position-matched control eats most of that gap". That compared Δ_A on 19 readouts with Δ_AP on a
+  different 10.
+- On the same 10, Δ_A is +7.1 [+2.1, +12.4] against Δ_AP +5.3 [−0.7, +12.1]. So the position control accounts for about
+  a quarter of the answer effect.
+- Report 46 is corrected in place, marked with the date.
+
+**G2's 10 extra readouts:** `random.Random(15).sample` of the non-smoke Oracle readouts (`oh.py handset --subset
+extra10`). Hand-checked before the full analysis is opened.

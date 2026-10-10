@@ -101,6 +101,19 @@ PROMPT_ANS = (
     "Return JSON only: {{\"answer_spans\": [...]}}. Each span is copied EXACTLY, character for character, from the text. Spans must "
     "not overlap. An empty list is allowed.")
 REASK = "\n\nYour previous paraphrase changed {n} words; change about {target}."
+# POST HOC (ledger, full-run amendment; report 46 §4b): correction-only rewrite of the Oracle's flagged spans, nothing deleted
+PROMPT_FC = (
+    "You correct false claims in an automatically generated text about a language model's internal state.\n\n"
+    "{inputs}\n\n" + H.DEFS + "\n\n"
+    "These spans of the READOUT were judged false (contradicted):\n{spans}\n\n"
+    "Rewrite the READOUT so that each listed span is corrected IN PLACE:\n"
+    "- correct wrong entities or answers so they agree with the model's continuation;\n"
+    "- correct false statements about the world to true ones;\n"
+    "- correct misquotes of the prompt to the prompt's exact wording;\n"
+    "- if a listed span cannot be corrected in place (for example invented context), leave it unchanged.\n"
+    "Change nothing else: do not delete or add any sentence, question, placeholder, bullet or follow-on, even if it is "
+    "invented or odd, and keep the wording of everything outside the listed spans. Keep the structure.\n\n"
+    "Return JSON only: {{\"rewrite\": \"...\"}}.")
 
 
 def parse(txt):
@@ -204,7 +217,18 @@ def judge_oracle(r, cache):
         if txt:
             lab[name], _, c = b_labels(r, txt, cache, "BL")
             spent += c
-    return {**{k: r[k] for k in ("eid", "item", "state", "sample", "reader")}, "A_raw": A_raw, "A_ok": okA,
+    fc = {"Fc": None, "Pc": None}                                      # POST HOC Fc arm (only with >= 1 flagged span)
+    if okA and cspans:
+        Fc, c, _ = ask_json(H.MODEL_A, PROMPT_FC.format(inputs=inp, spans="\n".join(f"{i + 1}. {s}" for i, s in enumerate(cspans))),
+                            cache, "Fc", "rewrite", lambda x: isinstance(x, str) and x.strip())
+        spent += c
+        if Fc:
+            pc, c = paraphrase(r, Fc, cache, "Pc", PROMPT_P_O)
+            spent += c
+            fc = {"Fc": Fc, "words_changed_Fc": RW.words_changed(r["explanation"], Fc),
+                  "Fc_lines_same": len(Fc.strip().split("\n")) == len(r["explanation"].strip().split("\n")),
+                  "Pc": pc["P"], **{f"Pc_{k}": v for k, v in pc.items() if k != "P"}}
+    return {**{k: r[k] for k in ("eid", "item", "state", "sample", "reader")}, **fc, "A_raw": A_raw, "A_ok": okA,
             "A_bad_spans": bad_c + bad_u, "contradicted_ranges": cr, "unsupported_ranges": ur, "B_labels": labs,
             "B_ok": isinstance(labs, list), "sentences": sents, "span_kinds": kinds, "K_ok": okK, "kind_ranges": kind_ranges,
             "answer": ans, "F": F, "words_changed_F": RW.words_changed(r["explanation"], F) if F else None, **par,
@@ -234,10 +258,18 @@ def phase_judge(which):
     nrows = H.subset(nla_rows(), which)
     assert [r["eid"] for r in orows] == [r["eid"] for r in nrows], "smoke eids must be paired across readers"
     rw013 = {json.loads(l)["eid"]: json.loads(l) for l in open(H.OUT / "rewrite/rewrites_all.jsonl")}
-    with ThreadPoolExecutor(8) as ex:
-        oo = list(ex.map(lambda r: judge_oracle(r, cache), orows))
-        nn = list(ex.map(lambda r: judge_nla(r, cache, rw013), nrows))
-    spent = sum(x[1] for x in oo) + sum(x[1] for x in nn)
+    jobs = [("o", r) for r in orows] + [("n", r) for r in nrows]
+    res, spent, t0 = [], 0.0, time.time()
+    with ThreadPoolExecutor(16) as ex:                                 # §9: abort if the projected spend passes the cap
+        for j in range(0, len(jobs), 64):
+            ch = jobs[j:j + 64]
+            res += list(ex.map(lambda kr: judge_oracle(kr[1], cache) if kr[0] == "o" else judge_nla(kr[1], cache, rw013), ch))
+            spent = sum(c for _, c in res)
+            proj = spent / len(res) * len(jobs)                    # Oracle rows first and dearer, so this over-projects
+            print(f"[judge] {len(res)}/{len(jobs)} spent ${spent:.3f} projected ${proj:.2f} ({time.time() - t0:.0f}s)", flush=True)
+            if proj > SPEND_CAP:
+                raise SystemExit(f"ABORT: projected spend ${proj:.2f} > cap ${SPEND_CAP}")
+    oo, nn = res[:len(orows)], res[len(orows):]
     (OUT / "judge").mkdir(parents=True, exist_ok=True)
     for name, xs in (("oracle", oo), ("nla", nn)):
         with open(OUT / f"judge/judged_{name}_{which}.jsonl", "w") as f:
@@ -266,8 +298,14 @@ def phase_judge(which):
 def phase_handset(which):
     O = {r["eid"]: r for r in oracle_rows()}
     N = {r["eid"]: r for r in nla_rows()}
-    jo = [json.loads(l) for l in open(OUT / f"judge/judged_oracle_{which}.jsonl")]
-    jn = [json.loads(l) for l in open(OUT / f"judge/judged_nla_{which}.jsonl")]
+    if which == "extra10":                     # §8 G2's 10 more: seeded, outside the smoke, from the full judge run
+        smoke = {r["eid"] for r in H.subset(oracle_rows(), "smoke")}
+        allo = [json.loads(l) for l in open(OUT / "judge/judged_oracle_all.jsonl")]
+        jo = sorted(random.Random(15).sample([x for x in allo if x["eid"] not in smoke], 10), key=lambda x: x["eid"])
+        jn = []
+    else:
+        jo = [json.loads(l) for l in open(OUT / f"judge/judged_oracle_{which}.jsonl")]
+        jn = [json.loads(l) for l in open(OUT / f"judge/judged_nla_{which}.jsonl")]
     lines = ["# 015 smoke hand checks (G2, G2k, G2a on Oracle readouts; G2a on 10 NLA explanations; F/P)\n"]
     for x in jo:
         r = O[x["eid"]]
@@ -279,8 +317,12 @@ def phase_handset(which):
                      + "\nA unsupported:\n" + "\n".join(f"  U{i}: {e[a:b]!r}" for i, (a, b) in enumerate(x["unsupported_ranges"]))
                      + "\nANSWER spans:\n" + "\n".join(f"  S{i}: {s!r}" for i, s in enumerate(x["answer"]["spans"] or []))
                      + f"\n\nF (words changed {x['words_changed_F']}):\n{x['F']}\n\nP (target {x.get('target')}, changed "
-                     f"{x.get('words_changed_P')}, re-asked {x.get('reasked')}):\n{x['P']}\n")
-    lines.append("\n# NLA answer spans (first 10 smoke explanations)\n")
+                     f"{x.get('words_changed_P')}, re-asked {x.get('reasked')}):\n{x['P']}\n"
+                     + (f"\nFc (POST HOC; words changed {x.get('words_changed_Fc')}, same line count {x.get('Fc_lines_same')}):\n{x['Fc']}\n"
+                        f"\nPc (target {x.get('Pc_target')}, changed {x.get('Pc_words_changed_P')}, re-asked {x.get('Pc_reasked')}):\n{x['Pc']}\n"
+                        if x.get("Fc") else ""))
+    if jn:
+        lines.append("\n# NLA answer spans (first 10 smoke explanations)\n")
     for x in jn[:10]:
         r = N[x["eid"]]
         lines.append(f"## {x['eid']}\nCONTINUATION: {r['continuation']!r}\nEXPLANATION:\n{r['explanation']}\nANSWER spans:\n"
@@ -440,6 +482,14 @@ def phase_versions(which):
             info["P_had_delimiters"] = P != x["P"]
             info["words_changed_P"] = RW.words_changed(e, P)
             info["P_match_ratio"] = info["words_changed_P"] / max(info["words_changed_F"], 1)
+        Pc = strip_delims(x.get("Pc"))                                 # POST HOC Fc arm
+        if x.get("Fc") and Pc:
+            v["Fc"], v["Pc"] = x["Fc"], Pc
+            info["words_changed_Fc"] = RW.words_changed(e, x["Fc"])
+            info["words_changed_Pc"] = RW.words_changed(e, Pc)
+            info["Pc_match_ratio"] = info["words_changed_Pc"] / max(info["words_changed_Fc"], 1)
+            info["Pc_had_delimiters"] = Pc != x["Pc"]
+            info["Fc_lines_same"] = x.get("Fc_lines_same")
         info["A_ok"], info["non_english_O"] = x["A_ok"], non_english(e)
         info["tok_F"] = q_n(v["F"]) if "F" in v else None
         out.append({"eid": x["eid"], "reader": "oracle", "item": r["item"], "state": r["state"], "sample": r["sample"],
@@ -537,10 +587,12 @@ def phase_score_oracle_ar(which):
         ch = flat[j:j + CH]
         y = AV.ar_forward(pt, head, heads, [p for _, p in ch], 44)["ln_pre"].double()
         for (u, _), yy in zip(ch, y):
-            acc.setdefault(u, []).append(yy)
-        log(f"pieces {min(j + CH, len(flat))}/{len(flat)} ({time.time() - t0:.0f}s)")
-    for u, ys in acc.items():
-        preds[u] = torch.stack(ys).mean(0)
+            s_, n_ = acc.get(u, (0.0, 0))
+            acc[u] = (s_ + yy, n_ + 1)
+        if (j // CH) % 10 == 0 or j + CH >= len(flat):
+            log(f"pieces {min(j + CH, len(flat))}/{len(flat)} ({time.time() - t0:.0f}s)")
+    for u, (s_, n_) in acc.items():
+        preds[u] = s_ / n_
     gold_share = {f"{k[0]}|{k[1]}": share(v) for k, v in g.items()}
     with open(OUT / f"score/oracle_ar_{which}.jsonl", "w") as f:
         for e_ in ent:
@@ -558,22 +610,31 @@ def phase_score_oracle_ar(which):
     log("saved")
 
 
-def phase_score_nla_ar(which):
+def phase_score_nla_ar(which, shard=None):
+    """shard 'i/n': unique texts with index % n == i (one text per forward, so sharding cannot change a score)."""
     from nla.schema import normalize_activation
     (OUT / "score").mkdir(parents=True, exist_ok=True)
     recon, scale = H.critic_setup()
     uniq, ent = entries(which)
+    tag = which
+    if shard:
+        i, n = map(int, shard.split("/"))
+        keep = {u for u in range(len(uniq)) if u % n == i}
+        uniq = [t if u in keep else None for u, t in enumerate(uniq)]
+        ent = [e_ for e_ in ent if e_["u"] in keep]
+        tag = f"{which}.shard{i}of{n}"
     gold = H.gold_vectors()
     Gn = normalize_activation(torch.stack(list(gold.values())), scale)
     mu = Gn.mean(0)
     QJ = jbasis(42).float()
     share = lambda v: float(((v - mu) @ QJ).pow(2).sum() / (v - mu).pow(2).sum())             # noqa: E731 (013's)
-    preds, t0 = [], time.time()
-    for n, (_, t) in enumerate(uniq):
-        preds.append(recon(t))
-        if (n + 1) % 200 == 0:
-            print(f"[nla_ar] {n + 1}/{len(uniq)} ({time.time() - t0:.0f}s)", flush=True)
-    with open(OUT / f"score/nla_ar_{which}.jsonl", "w") as f:
+    preds, t0, done = [], time.time(), 0
+    for jt in uniq:
+        preds.append(recon(jt[1]) if jt is not None else None)
+        done += jt is not None
+        if jt is not None and done % 500 == 0:
+            print(f"[nla_ar] {done}/{sum(x is not None for x in uniq)} ({time.time() - t0:.0f}s)", flush=True)
+    with open(OUT / f"score/nla_ar_{tag}.jsonl", "w") as f:
         for e_ in ent:
             p = preds[e_["u"]]
             gg = normalize_activation(gold[(e_["item"], e_["state"])][None], scale)[0]
@@ -581,8 +642,8 @@ def phase_score_nla_ar(which):
             rec.update({"mse": float(((p - gg) ** 2).mean()), "cos": float(p @ gg / (p.norm() * gg.norm())), "share_J": share(p),
                         "degenerate": False})
             f.write(json.dumps(rec) + "\n")
-    (OUT / f"score/nla_ar_meta_{which}.json").write_text(json.dumps(
-        {"n_unique_texts": len(uniq), "n_entries": len(ent), "scale": scale,
+    (OUT / f"score/nla_ar_meta_{tag}.json").write_text(json.dumps(
+        {"n_unique_texts": sum(x is not None for x in uniq), "n_entries": len(ent), "scale": scale, "shard": shard,
          "gold_share_J": {f"{k[0]}|{k[1]}": share(normalize_activation(v[None], scale)[0]) for k, v in gold.items()},
          "wall_s": time.time() - t0}, indent=1))
     print("[nla_ar] saved", flush=True)
@@ -608,11 +669,21 @@ def phase_analyze(which):
     r1j = json.loads((RES / "r1.json").read_text())["B"]
     assert all(abs(B[k] - r1j[k]) < 1e-9 for k in B), (B, r1j)
     V = {(x["eid"], x["reader"]): x for x in map(json.loads, open(OUT / f"versions/versions_{which}.jsonl"))}
-    SC = {}
+    SC, meta = {}, {}
     for scorer in ("oracle_ar", "nla_ar"):
-        for x in map(json.loads, open(OUT / f"score/{scorer}_{which}.jsonl")):
-            SC.setdefault((scorer, x["eid"], x["reader"]), {}).setdefault(x["version"], []).append(x)
-    meta = {s: json.loads((OUT / f"score/{s}_meta_{which}.json").read_text()) for s in ("oracle_ar", "nla_ar")}
+        files = [OUT / f"score/{scorer}_{which}.jsonl"]
+        if not files[0].exists():                                      # NLA AR shards (one text per forward)
+            files = sorted((OUT / "score").glob(f"{scorer}_{which}.shard*.jsonl"))
+        for fp in files:
+            for x in map(json.loads, open(fp)):
+                SC.setdefault((scorer, x["eid"], x["reader"]), {}).setdefault(x["version"], []).append(x)
+        ms = [json.loads((OUT / f"score/{scorer}_meta_{fp.name[len(scorer) + 1:-6]}.json").read_text()) for fp in files]
+        meta[scorer] = {**ms[0], "n_unique_texts": sum(m["n_unique_texts"] for m in ms), "n_entries": sum(m["n_entries"] for m in ms),
+                        "wall_s": max(m["wall_s"] for m in ms), "n_files": len(ms)}
+    V_ent = sum(len(t) for x in V.values() for t in x["texts"].values())
+    for scorer in ("oracle_ar", "nla_ar"):
+        n_sc = sum(len(xs) for k, d_ in SC.items() if k[0] == scorer for xs in d_.values())
+        assert n_sc == V_ent, (scorer, n_sc, V_ent)                    # every version entry scored exactly once
     eids = sorted({k[0] for k in V})
     item_of = {e: V[(e, "oracle")]["item"] for e in eids}
     eng = {e for e in eids if not V[(e, "oracle")]["info"]["non_english_O"]}
@@ -687,6 +758,14 @@ def phase_analyze(which):
                  "P_minus_O": stat(s, rd, "P", "O", eids),
                  "per_state_primary": {st: stat(s, rd, "R1", "C1", [e for e in ep if V[(e, rd)]["state"] == st]) for st in STATES},
                  "fve_mean": {}, "cos_mean": {}, "share_J_mean": {}}
+            c["dA_on_PA_subset"] = stat(s, rd, "RA", "CA", eap)            # ledger full-run amendment (4c)
+            if rd == "oracle":                                                 # POST HOC Fc arm (4b)
+                efc = [e for e in eids if "Fc" in V[(e, rd)]["texts"] and "Pc" in V[(e, rd)]["texts"]]
+                c["Fc_minus_Pc"] = stat(s, rd, "Fc", "Pc", efc)
+                c["Fc_minus_Pc_within20pct"] = stat(s, rd, "Fc", "Pc", [e for e in efc if abs(V[(e, rd)]["info"]["Pc_match_ratio"] - 1) <= 0.2])
+                c["Fc_minus_O"] = stat(s, rd, "Fc", "O", efc)
+                c["Pc_minus_O"] = stat(s, rd, "Pc", "O", efc)
+                c["F_minus_P_on_Fc_set"] = stat(s, rd, "F", "P", efc)
             mk = "P_match_ratio" if rd == "oracle" else "Pstar_match_ratio"                    # ledger: matched-size subset
             matched20 = [e for e in eids if abs(V[(e, rd)]["info"].get(mk, 9.0) - 1) <= 0.2]
             c["F_minus_" + ("P" if rd == "oracle" else "Pstar") + "_within20pct"] = stat(s, rd, "F", "P" if rd == "oracle" else "Pstar", matched20)
@@ -715,7 +794,11 @@ def phase_analyze(which):
             res["cells"][f"{rd}_texts|{s}"] = c
 
     # pre-named reader contrasts (spec §7): NLA - Oracle, paired on (item, state), averaged over samples
-    def reader_diff(s, a, b, elig, tokkey, english=False):
+    r1c = json.loads((RES / "r1.json").read_text())["cells"]
+    R1RANGE = {(rd, s): r1c[f"{rd}_texts|{s}"]["matched_minus_shuffled"]["mean"] for rd in ("oracle", "nla") for s in ("oracle_ar", "nla_ar")}
+
+    def reader_diff(s, a, b, elig, tokkey, english=False, scaled=False):
+        """scaled (4a, POST HOC, descriptive): each reader's Δ as % of its cell's step-2 matched - shuffled range."""
         by = {}
         for rd in ("nla", "oracle"):
             for e in elig(rd):
@@ -726,7 +809,8 @@ def phase_analyze(which):
                     continue
                 inf = V[(e, rd)]["info"]
                 key = (item_of[e], V[(e, rd)]["state"])
-                by.setdefault(key, {}).setdefault(rd, []).append((x - y, (inf["tok_O"] - inf[tokkey]) / inf["tok_O"]))
+                dd = (x - y) * (100 / R1RANGE[(rd, s)] if scaled else 1)
+                by.setdefault(key, {}).setdefault(rd, []).append((dd, (inf["tok_O"] - inf[tokkey]) / inf["tok_O"]))
         rows = [(k, v) for k, v in sorted(by.items()) if "nla" in v and "oracle" in v]
         if not rows:
             return None
@@ -742,7 +826,8 @@ def phase_analyze(which):
                  "dAP": ("PA", "CA", lambda rd: elig_ans(rd, True), "tok_CA")}
     res["reader_contrasts_nla_minus_oracle"] = {}
     for cname, (a, b, el, tk) in contrasts.items():
-        rc = {s: {"all": reader_diff(s, a, b, el, tk), "english_only": reader_diff(s, a, b, el, tk, True)} for s in ("oracle_ar", "nla_ar")}
+        rc = {s: {"all": reader_diff(s, a, b, el, tk), "english_only": reader_diff(s, a, b, el, tk, True),
+                  "scaled_pct_of_R1_range_descriptive": reader_diff(s, a, b, el, tk, scaled=True)} for s in ("oracle_ar", "nla_ar")}
         for s, o in (("oracle_ar", "nla_ar"), ("nla_ar", "oracle_ar")):
             x = rc[s]["all"]
             if not x or not rc[o]["all"]:
@@ -762,7 +847,7 @@ def phase_analyze(which):
     sf = lambda x: 1 - (x["tt"] - 2 * a_ * x["pt"] + a_ ** 2 * x["pp"]) / x["tt"]               # noqa: E731
     res["cw20_metric_oracle_texts"] = {"global_scale": a_, "scaled_fve_mean": {
         n: float(np.mean([np.mean([sf(x) for x in SC[("oracle_ar", e, "oracle")][n]]) for e in eids if n in SC.get(("oracle_ar", e, "oracle"), {})]))
-        for n in ("O", "C1", "R1", "CA", "RA", "PA", "F", "P")}}
+        for n in ("O", "C1", "R1", "CA", "RA", "PA", "F", "P", "Fc", "Pc")}}
 
     # gates and checks
     jo = {x["eid"]: x for x in map(json.loads, open(OUT / f"judge/judged_oracle_{which}.jsonl"))}
@@ -812,7 +897,15 @@ def phase_analyze(which):
                    "P_match_ratio_median": float(np.median([i["P_match_ratio"] for i in inf("oracle") if "P_match_ratio" in i])),
                    "P_within_20pct": sum(abs(i["P_match_ratio"] - 1) <= 0.2 for i in inf("oracle") if "P_match_ratio" in i),
                    "F_composition_sum": {k: sum(i["F_composition"][k] for i in inf("oracle") if "F_composition" in i)
-                                         for k in ("deleted", "replaced_O", "replaced_F", "inserted", "words_O")}},
+                                         for k in ("deleted", "replaced_O", "replaced_F", "inserted", "words_O")},
+                   "Fc": {"n": sum("words_changed_Fc" in i for i in inf("oracle")),
+                          "words_changed_Fc_mean": mr([i.get("words_changed_Fc") for i in inf("oracle")]),
+                          "words_changed_Pc_mean": mr([i.get("words_changed_Pc") for i in inf("oracle")]),
+                          "Pc_match_ratio_median": float(np.median([i["Pc_match_ratio"] for i in inf("oracle") if "Pc_match_ratio" in i]))
+                          if any("Pc_match_ratio" in i for i in inf("oracle")) else None,
+                          "Pc_within_20pct": sum(abs(i["Pc_match_ratio"] - 1) <= 0.2 for i in inf("oracle") if "Pc_match_ratio" in i),
+                          "Pc_had_delimiters": sum(i.get("Pc_had_delimiters", False) for i in inf("oracle")),
+                          "Fc_lines_same": sum(bool(i.get("Fc_lines_same")) for i in inf("oracle") if "words_changed_Fc" in i)}},
         "nla": {"words_changed_F_mean": mr([i.get("words_changed_F") for i in inf("nla")]),
                 "words_changed_P013_mean": mr([i.get("words_changed_P") for i in inf("nla")]),
                 "words_changed_Pstar_mean": mr([i.get("words_changed_Pstar") for i in inf("nla")]),
@@ -877,6 +970,10 @@ if __name__ == "__main__":
     ap = argparse.ArgumentParser()
     ap.add_argument("phase")
     ap.add_argument("--subset", default="smoke")
+    ap.add_argument("--shard", default=None)
     a = ap.parse_args()
+    if a.phase == "score_nla_ar":
+        phase_score_nla_ar(a.subset, a.shard)
+        raise SystemExit
     {"judge": phase_judge, "handset": phase_handset, "versions": phase_versions, "score_oracle_ar": phase_score_oracle_ar,
      "score_nla_ar": phase_score_nla_ar, "analyze": phase_analyze, "examples": phase_examples}[a.phase](a.subset)
