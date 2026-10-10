@@ -161,7 +161,7 @@ Under these conditions:
 - the intermediate at `:` and at the assistant newline, L40–44, has a **small, mostly positive** influence along a
   single reader-free direction:
   - above norm-matched random swaps and above the start and answer directions;
-  - 3–5% of the gap in the median (positive in 84–90% of pairs; corrected 2026-10-06, report 31: was 85–90%), large in a few tables;
+  - 2–5% of the gap in the median (corrected 2026-10-09: was 3–5%; the assistant newline L42 median is 0.024) (positive in 84–90% of pairs; corrected 2026-10-06, report 31: was 85–90%), large in a few tables;
   - its clamp beats random clamps that were not size-matched, so specificity is not established;
 - at the `</think>` newline the intermediate is readable at the family level, while the whole cell has little net
   leverage (not an item-level label);

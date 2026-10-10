@@ -123,3 +123,26 @@ The pre-registered primary (all contradicted spans) stays as recorded.
 - **Rewrite:** ΔFVE test +3.8 [0.8, 6.5], dev +2.4 [−0.1, 4.8]; ΔJ test +0.024, dev +0.015.
 
 **STOP.**
+
+
+## 2026-10-09: rewrite split by state (POST HOC; CPU; from the analysis chat)
+
+`scripts/013_nla_hallucination/rewrite_by_state.py` → `results/013_nla_hallucination/analysis/rewrite_by_state.json`.
+Same scored rows, FVE baseline and item-cluster bootstrap as `rewrite_all.json` (parity asserted on the pooled and
+per-state F − P).
+
+| State | n | F − O | P − O | F − P |
+|---|---|---|---|---|
+| clean | 174 | +4.1 [1.8, 6.3] | −1.4 [−2.0, −0.9] | +5.5 [3.1, 7.9] |
+| J swap L24-35 | 174 | +1.3 [−1.0, 3.3] | −1.7 [−2.3, −1.2] | +3.0 [0.7, 5.1] |
+| random swap L24-35 | 174 | −0.4 [−2.9, 2.1] | −1.2 [−1.7, −0.7] | +0.8 [−1.8, 3.4] |
+| clean, items 31-100 (61 items) | 122 | +4.6 [1.6, 7.5] | −1.1 [−1.8, −0.5] | +5.7 [2.4, 8.8] |
+| clean, items 1-30 (26 items) | 52 | +2.9 [−0.6, 6.2] | −2.2 [−3.2, −1.2] | +5.1 [1.4, 8.6] |
+
+- Cathryn's CW-16b (clean, items 31-100, corrected in place vs original): +5.4 [2.6, 8.0]. On clean states our F − O
+  is close to hers. The pooled +1.6 is lower mainly because of the swapped states (descriptive; no paired state
+  contrast).
+- Not like for like: our F also deletes invented context, and the FVE baselines differ (ours from the 261 gold vectors, 87 items × 3 states;
+  CW-16b centres on its 70 targets).
+- 013 A2's F − P is the amendment's co-primary, post hoc relative to the 013 spec (spec §12). It is not the original
+  pre-registered primary, which is the deletion Δ.

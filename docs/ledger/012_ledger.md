@@ -515,3 +515,68 @@ All points were checked. Accepted:
 - From L52 on, every reader decodes it about as well as the model's own next-token output, with no Oracle advantage over the logit lens (no paired contrast run).
 - It is decodable by likelihood but not stated in sampled readouts.
 - This doesn't change 012's net: still no evidence that any reader reads the hidden step beyond output-facing content.
+
+
+## 2026-10-09 (from the analysis chat; CPU only)
+
+**Lever split** (POST HOC: groupings chosen after seeing per-item outcomes; `scripts/012_reader_concordance/stageA_splits.py`
+→ `results/012_reader_concordance/analysis/stageA_splits.json`; parity with `stageA_summary.json` and
+`stageD_answers.json` asserted). Cohort: the 82 clean-correct items.
+
+| | L24-35 J | L24-35 random | L24-47 J | L24-47 random |
+|---|---|---|---|---|
+| Japan target (27) | 26 | 0 | 27 | 2 |
+| other targets (55) | 12 | 1 | 21 | 3 |
+| country bridge (42; includes all 27 Japan) | 33 | 0 | 38 | 4 |
+| country bridge, not Japan (15) | 7 | 0 | 11 | 2 |
+| other bridge (40) | 5 | 1 | 10 | 1 |
+| named place: country or geographic place (49) | 37 | 1 | 44 | 5 |
+| geographic place, not a country (7) | 4 | 1 | 6 | 1 |
+| not a named place (33) | 1 | 0 | 4 | 0 |
+
+The named-place rows were added on 2026-10-10 (PI), after these outcomes had been seen. The 7 places are Africa,
+Antarctica, Chicago, Everest, Nile, Olympus and Sydney (`stageA_splits.py` `GEO_PLACES`).
+
+- Relations shared by Japan and non-Japan targets (capital, continent, country, currency): Japan 16/17 and 17/17, others
+  5/10 and 9/10.
+- Edit size at the read position (‖Δh‖/‖h‖, mean over band layers; median over items): J 0.0077 / 0.0074, random
+  0.041 / 0.067 (L24-35 / L24-47); random larger on 82/82. J size is the same for working and failed swaps (0.0077 vs
+  0.0077 at L24-35). Only the read position is logged; F1 shows the flips come from the other positions.
+- The random arm changes the greedy text on 12/82 and 36/82 (J: 40 and 51); median Δm J +5.0 / +8.8 nats, random
+  +0.28 / +0.79.
+- Model's own read-cell bridge shift, AUC for success within toward_tgt: all 0.97 (n 64) / 0.91 (n 68); without Japan
+  0.94 (n 39, 12 successes) / 0.84 (n 41, 21); country bridges 0.95 / 0.85; other bridges 0.96 (n 27, 5) / 0.88
+  (n 26, 10); named places 0.94 (n 44, 35) / 0.87 (n 49, 44); not a named place 1.00 (n 20, 1) / 0.82 (n 19, 4).
+- **Reading.** The lever is real but concentrated in bridges that are named places (countries plus 7 geographic
+  places; POST HOC). Japan is a subset of that and can't be separated from it here. The output-facing reading of Stage D survives without Japan.
+
+**Japan counts are consistent.** 29 of 96 bank items (spec §2 table), 28 of 87 covered (line 148 above), 27 of 82
+clean-correct: three cohorts, no conflict.
+
+**"17-row head" (hypothesis, unverified).** The README also says `layer_idx=None → [b, 12, d]`, and the AR config's
+`layer_indices` are [5..16], indices into a 17-entry grid (L0-60 step 4, plus L63). So "17-row" is most likely a
+leftover from a grid-indexed head, not evidence that our loader reads the wrong rows. Config `n_layers` is 11 while there
+are 12 tags; also unexplained. Questions for the TA, via the PI.
+
+**Oracle-AR loader status (POST HOC acceptance, L36-60).** §17's pre-set rule still fails (ret@1 within 0.05 at 8/12;
+misses L20-32). The loader is accepted for L36-60 on three grounds:
+- the TA reviewed its outputs (10-08) and said to use it as is; the training loss is scale-invariant, which accounts
+  for E0's per-layer scale (0.11 at L20 → 2.33 at L63);
+- at L36-60, scaled FVE and ret@1 are within 0.04 of the published values (ret@1 0.885 / 0.901 / 0.914 vs 0.92 / 0.92 /
+  0.93 at L36 / L40 / L44);
+- Cathryn's CW-20 (L44, Oracle bullets, our loader at b8d458e imported unchanged) gives capture cosine min 0.9997,
+  cosine 0.46, fitted scale 0.43 and retrieval@1 0.84 among 70, against E0's L44 cosine 0.46 and scale 0.42 on
+  assistant spans.
+
+What this does not settle:
+- the L20-32 retrieval gap (possibly E0's overlapping crops; untested);
+- the exact loss and the J term;
+- the definition of the card's 0.487 "joint bullet-FVE".
+
+CW-20 also scored a whole write-up as one text: +0.02, against +0.21 bullet by bullet (her `STATUS.md` CW-20,
+"Checks"; `runs/cw20/analysis.txt`, original +0.209). The one-text +0.02 equals her other-prompt control (another
+prompt's write-up, +0.02): read as one text, a write-up does no better than a mismatched one. So a one-span reading
+of the reward is unlikely, at least on these texts.
+
+**Correction to line 101** ("J_NP and J_CB about 0.88–0.91"): at L40/L44 the AUCs are 0.92–0.93
+(`stageD_analysis.json` `cells.J_*|L4x|L24-35.auc_tt`); 0.88–0.91 is L52/L56 (report 36 E8).

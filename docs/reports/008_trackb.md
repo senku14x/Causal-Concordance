@@ -23,7 +23,8 @@
     written −0.15); J wins in only 8–10 of 82 pairs.
 - **The paper's mediation result is not reproduced under a band-limited clamp** (3 cells × L40–48; the paper clamps at
   every position) (corrected 2026-10-06, report 31; was "reversed here"). Clamping the J-lens coordinates of the J part's support barely
-  changes the non-J swap (0.21 → 0.20 / 0.18). On Claude, the paper's clamp took the non-J effect from 28% to 6%.
+  changes the non-J swap (J_NP 0.21 → 0.20; J_CB 0.20 → 0.18; corrected 2026-10-09: J_CB's unclamped median is 0.2048,
+  `trackb_b1.json` `conditions.emit3|B_raw_nonJ_J_CB.median_S`; report 36 E13). On Claude, the paper's clamp took the non-J effect from 28% to 6%.
 - **Whitening narrows the gap but never reverses it.**
   - In the real whitened swap (whiten with Σ, split and swap in whitened coordinates, map back), the J part holds only
     0.5–2.0% of the whitened energy (corrected 2026-10-06, report 31; was 0.6–1.7%) and moves S 0.07 (J_NP) / 0.10 (J_CB), against 0.14 / 0.11 for the non-J part.
@@ -44,7 +45,7 @@
     - reader side (007 Stage 1a dev, brew test; `results/007_jsubspace/analysis/{stage1a,brew_test}.json`): the
       Oracle L40's D_z from J alone is 5.76 vs 3.22 nats for the whole activation on dev and 5.03 vs 2.87 on test;
       rest of J keeps 0.30 / 0.29;
-    - model side (007 Stage 2, 33 pairs, `stage2.json`; S_full 0.28 / 0.43 / 0.49 at L40 / L42 / L44): dense-J swaps
+    - model side (007 Stage 2, 33 pairs, 32 for the L40 recovery contrasts (corrected 2026-10-09), `stage2.json`; S_full 0.28 / 0.43 / 0.49 at L40 / L42 / L44): dense-J swaps
       track the Δ-share at L42 (recovery J − Δ-matched random +0.02 [−0.00, +0.03]) and exceed Δ-matched random
       modestly at L40 / L44 (+0.07 [+0.04, +0.11] / +0.09 [+0.02, +0.16]), below the pre-registered 0.10 margin.
   - 008's sparse-J-part result is separate evidence on a different object, consistent with Stage 2.

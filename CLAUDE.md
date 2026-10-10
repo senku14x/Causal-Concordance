@@ -72,7 +72,8 @@ and vocabulary: J-lens, workspace, J-space, privilege, verbalizable. A session t
      `docs/design_specs/009b_reader_phase.md`);
    - 010, reader agreement (CPU): `docs/claude_reports/29_reader_agreement_010_2026-10-06.md`;
    - 011, Oracle-space swaps: `docs/design_specs/011_olens_swaps.md` (loader accepted post hoc on scale-free criteria, not
-     validated against the published AR; full run s1 done and analysed: partial; AR J-bias check: ambiguous).
+     validated against the published AR; 012 E0's post hoc acceptance for L36-60, directions only, covers 011's
+     L40/L44 (PI, 2026-10-10); full run s1 done and analysed: partial; AR J-bias check: ambiguous).
 
    Before them, 007 (`docs/reports/007_jsubspace.md`, on `main`), and 005 and 006 (branch `005-amended-full-run`).
    For 006, read `docs/reports/006_reader_likelihood.md` and `docs/design_specs/006_reader_likelihood.md`. For 005,
@@ -228,8 +229,17 @@ into `main` ("merge with main"). On this instance the local `main` ref was left 
   `docs/ledger/014_ledger.md`). The PI asked to run "at least what we can" of the suite on WSB typo (100 items, hidden
   step = the corrected word, read at the last prompt token). Typo has no answer that depends on the corrected word, so
   only the reading parts run: Part A (readers on 007's activation pieces), Part B (reader agreement), Part C (the 013
-  pipeline on typo's NLA explanations, after the R1 de-risk gate). The 013 scripts take `NLAH_FAMILY=typo`. Results: see
-  the ledger.
+  pipeline on typo's NLA explanations, after the R1 de-risk gate). The 013 scripts take `NLAH_FAMILY=typo`. Results
+  (added 2026-10-09; details in the ledger):
+  - every reader names the corrected word from almost every activation part (0.77-1.00; other-target null ≤ 0.02);
+    WSB's prompt-only baseline is 1.00, so naming can come from the prompt;
+  - removing 007's J subspace costs the Oracle 0.14 / 0.225 (L40 / L44) and the NLA 0.025 (POST HOC paired
+    Oracle − NLA +0.115 [0.05, 0.19] / +0.20 [0.13, 0.275]);
+  - report 38's content-matched control (PCA-k with the same centred share as J, which removes more raw energy):
+    the Oracle loses 0.035 / 0.02, so its J cost exceeds it by 0.105 [0.035, 0.18] / 0.205 [0.13, 0.28]; NLA
+    unresolved (0.02 [−0.005, 0.055]) (`claude_ovarida/results/typo_content_control.json`, POST HOC);
+  - Part C: reconstructor gate FVE 54.7%; deletion +39.3 [31.8, 47.3], carried by misquotes; rewrite F − P +1.8
+    [−1.2, 4.6], unresolved.
 - **013, the NLA hallucination test** (branch `013-nla-hallucination`, EXPLORATORY, 2026-10-07; Camila's ask; spec
   `docs/design_specs/013_nla_hallucination.md`, ledger `docs/ledger/013_ledger.md`, notes for the PI in
   `/workspace/claude_suggestions/`, outside the repo).
@@ -244,17 +254,36 @@ into `main` ("merge with main"). On this instance the local `main` ref was left 
     −0.1 [−1.8, 1.7] sentence control). Flagged text is 64% of tokens.
   - **Rewrite (A2):** a minimal factual rewrite beats a paraphrase control by +3.1 FVE [1.3, 4.9]. F − O is +1.6, and
     paraphrasing alone costs 1.4. The J share rises (+0.020) but was already above the gold activation's.
-  - **Matches Cathryn's CW-16b** in direction (correction gains a few points; restatements carry the content; framing is
-    padding). Comparison: `/workspace/claude_suggestions/013_vs_cathryn_cw16b_2026-10-07.md`.
+    By state (POST HOC, `results/013_nla_hallucination/analysis/rewrite_by_state.json`): F − O clean +4.1 [1.8, 6.3],
+    J swap +1.3 [−1.0, 3.3], random swap −0.4 [−2.9, 2.1] (n 174 each; no paired state contrast, descriptive).
+  - **Matches Cathryn's CW-16b** in direction (correction gains a few points; restatements carry the content; framing
+    is padding), and on clean states in size: our clean F − O on her items 31-100 (61 shared items) is +4.6
+    [1.6, 7.5] vs her corrected − original +5.4 [2.6, 8.0]. Not like for like: our F also deletes invented context,
+    and the FVE baselines differ. Comparison: `/workspace/claude_suggestions/013_vs_cathryn_cw16b_2026-10-07.md`.
 - **012 Stages K and L** (2026-10-07, ledger end; spec §21-§22). K: the NLA reconstructor smoke above. L: at the Stage J
   carrier end (H2), the held country arrives between L48 and L52 (reader AUC 0.41-0.46 → 0.67-0.73, best Oracle L60
-  0.73), matching the model's own H2 output (0.70); all readers alike; readouts rarely name it.
-- **Results page** (v12; public by link): https://claude.ai/artifact/NoevKvBkXNUTvtpnJPVsuq. It covers 012, Stage L and 013,
-  readers side by side, and naming by activation part. Build it with `scripts/012_reader_concordance/make_page.py`.
+  0.73), matching the model's own H2 output (0.70); all readers alike (descriptive: no paired reader contrast was run);
+  readouts rarely name it.
+- **Results page** (v13 live, covering 012, Stage L, 013 and 014; v14 with section 16b built at b8d458e, not yet
+  published: the PI publishes; corrected 2026-10-09, was "v12"; public by link): https://claude.ai/artifact/NoevKvBkXNUTvtpnJPVsuq. It shows the readers
+  side by side and naming by activation part. Build it with `scripts/012_reader_concordance/make_page.py`.
 - **012, readers on swapped states** (branch `012-reader-concordance`, all EXPLORATORY, 2026-10-06/07).
   - **Docs:** spec `docs/design_specs/012_reader_concordance.md` (§12–§20 are the live contract), ledger `docs/ledger/012_ledger.md` (read it: every run, oddity and correction), page https://claude.ai/artifact/NoevKvBkXNUTvtpnJPVsuq, Codex audits `docs/reviews/012_codex_audits/`.
   - **Bank:** Jan Chen's phrase-lens ST multihop bank, i.e. 96 WSB multihop items plus swap targets; local clone `/workspace/sources/ext/phrase-lens-src`; Jan cleared use.
-  - **Lever:** J-row coordinate swaps at every prompt position change the answer on 48/82 (L24-47) and 38/82 (L24-35); random-target controls 5/82 and 1/82; logit rows 0/82. The swap is a reflection, so its direction is set by the clean state; toward_src edits fail.
+  - **Lever:** J-row coordinate swaps at every prompt position change the answer on 48/82 (L24-47) and 38/82 (L24-35); random-target controls 5/82 and 1/82; logit rows 0/82.
+    - **It works mainly where the bridge is a named place** (POST HOC: groupings chosen after seeing per-item outcomes;
+      `stageA_splits.json` `by_bridge`; L24-35 / L24-47): a country or a geographic place 37/49 and 44/49 (random
+      1/49 and 5/49); other bridges (numbers, months, elements, directions, people …) 1/33 and 4/33 (random 0/33).
+      Countries alone flip 33/42 and 38/42; the 7 other places (Africa, Antarctica, Chicago, Everest, Nile, Olympus,
+      Sydney) 4/7 and 6/7, too few to separate from countries.
+    - All 27 Japan targets have country bridges and flip 26/27 and 27/27; country bridges with other targets flip 7/15
+      and 11/15. With 15 such items, target identity and bridge type can't be separated.
+    - The random-target arm keeps the source J row and swaps toward a random unit direction. At the read position its
+      edit is larger (median ‖Δh‖/‖h‖ 0.041 vs 0.0077 at L24-35, 0.067 vs 0.0074 at L24-47; larger on 82/82), and it
+      changes the greedy text on 12/82 and 36/82, yet gives the target's answer on 1/82 and 5/82. Edit sizes at the
+      other positions, where F1 shows the effect comes from, are not logged.
+    - The swap is a reflection, so its direction is set by the clean state; toward_src edits fail (2/18 at L24-35,
+      0/14 at L24-47). Japan is the target in 27 of the 82 (28 of 87 covered, 29 of the 96 bank items).
   - **Readers** (Oracle L40/44/52/56, NLA L42, J_NP/J_CB/logit) track working swaps (AUC 0.88-0.97), but the model's own output at the read token does too (0.97). Mostly output-facing; no Oracle/NLA difference.
   - **F1:** editing everything but the read token flips 35/82; editing only it flips 0/82.
   - **F2/R:** at written early positions readers detect the write, not use. The NLA hint was a position-mask bug and is withdrawn.
@@ -265,7 +294,19 @@ into `main` ("merge with main"). On this instance the local `main` ref was left 
     - swapping before the question flips 42/60, and clue-only swapping 36/60 (random 0);
     - hold states are identical across questions, so the model holds and uses the swapped country;
     - readers at L40-44 at the carrier end see nothing (0.46-0.49), though the model's own output there tracks success (0.70), so it is output-facing by our rule; at the computed clue end about 0.8, equal to the logit lens, while the model's own H1 output gives 0.69, so the pre-set bar fails.
-  - **E0:** our Oracle-AR loader fails its validation (retrieval 8/12). A J-lens training term is a hypothesis only.
+  - **E0:** our Oracle-AR loader matches the published scaled FVE at 12/12 layers, but retrieval@1 (micro-batches of
+    24) only at 8/12 (misses L20-32, 0.05-0.11 short), so the pre-set rule (≥ 10/12) fails. **Accepted post hoc for
+    L36-60** (2026-10-09):
+    - the TA reviewed the loader's outputs on 10-08 and said to use it as is; its training loss is scale-invariant,
+      so the per-layer scale E0 fits (0.11 at L20 → 2.33 at L63, `stageE0_ar_profile.json`
+      `layers.*.white.global_scale`) is expected;
+    - Cathryn's CW-20 checks at L44 are consistent with it (her `STATUS.md` CW-20, `runs/cw20/gate.txt`): capture
+      cosine min 0.9997; unedited Oracle bullets give cosine 0.46, fitted scale 0.43, retrieval@1 0.84 among 70
+      targets; E0 at L44 gives cosine 0.46 and scale 0.42. This is not a test of agreement: CW-20 scores Oracle
+      bullets among 70 targets, E0 assistant spans, and her FVE level uses a corpus-centred score chosen post hoc;
+    - the L20-32 retrieval gap is unexplained (E0's spans were overlapping crops from 12 responses, ledger
+      correction 4), so those layers are not used;
+    - the exact loss and whether a J term was active are unknown. A J-lens training term is a hypothesis only.
   - **Net:** no evidence that any reader reads the hidden step beyond output-facing content, and no NLA-vs-Oracle difference.
   - **The prompts are a good lever but structurally can't separate bridge from answer.**
 
@@ -295,15 +336,21 @@ gates pass; `docs/reports/008_trackb.md`; design `docs/design_specs/008_009_trac
   pairs (241 of 300 tables).
 - **The output-facing check fails, so readers do not run** (rule §2.5.1). With a code answer, z is still the top colour
   at the answer slot in 98% of renders (median rank 11 of 248,320 tokens; the model's own D +11.9 nats, 240/240
-  tables), at only ~0.05% total colour mass. D is scale-free, so the tail still counts.
+  tables), at only ~0.05% total colour mass. (2026-10-09: "98%" and the mass figure have no committed JSON key,
+  report 36 E11; D +11.9 is the `:` cell on the 240-table / 658-pair set, `outfacing.json` `D.final.emit_colon.z`;
+  over all 771 pairs it is +11.3 [11.1, 11.5], `D_all_pairs`.) D is scale-free, so the tail still counts.
 - Reader-free probes decode z under both questions (110 of 112 sites; but 77 sites precede the differing token and are
   identical under both questions, so 33 of 35 informative sites; z decodes at q1-q2 already). The patch profile reproduces brew's structure
   (`</think>` L40-44: z decodable, no single-cell leverage).
 - The PI has called the new prompts weak and suggested returning to the old prompts and runs. 009 readers are on hold.
 
 **010, reader agreement** (exploratory, CPU; `docs/claude_reports/29_reader_agreement_010_2026-10-06.md`): NLA-Oracle
-per-pair agreement is weak (r 0.24-0.30). The mid-layer Oracle tracks what the J lens reads (r 0.63-0.80), not the model's
-next-token output (0.21-0.30); the NLA is weaker on both (0.33-0.37 with the J lens, 0.07 with the output); only the late Oracle (L56/L60) follows the output.
+per-pair agreement is weak (r 0.24-0.30). At `:` (`agreement.json` `agreement.colon|z`, pairs, Pearson) the mid-layer
+Oracle (L40/L44) tracks the J lenses (r 0.33-0.63; same layer 0.43-0.63) more than the model's next-token output
+(0.24-0.30); the NLA is weaker on both (0.30-0.37 with the J lenses, 0.07 with the output); only the late Oracle
+(L56/L60) follows the output (0.62 / 0.82). Across `:`, `</think>` and the assistant newline the mid-layer Oracle gives
+0.33-0.75 with the J lenses and 0.12-0.30 with the output. (corrected 2026-10-09: "0.63-0.80" and "0.21-0.30" came from a
+subset; report 36 E10.)
 
 **011, Oracle-space swaps** (the TA's tip: put a colour word through the Oracle Lens's own reconstructor (AR), get a
 vector, do it for two colours, swap them in whitened space; `docs/design_specs/011_olens_swaps.md` with amendments 1-3;
@@ -311,10 +358,15 @@ vector, do it for two colours, swap them in whitened space; `docs/design_specs/0
 - **The AR loader is ours** (the official one is not public). It failed the pre-set validation twice (v1, v2), then
   passed under post hoc amendment 2. The AR's output is a raw activation, scored in the whitened metric, with the
   AR's own whitener (`whitening_iolens_pooled`). On 16-token spans its FVE after one fitted global
-  scale is 0.24 (the published 0.22 is unscaled, on 1-32-token spans), and within-batch retrieval@1 is 0.86
-  (published 0.93). **Not validated against the published AR** (unscaled FVE negative; outputs ~2× too long; 64 blocks
-  vs a truncated backbone untested; 011 note "Loader caveats"), so 011 is not "the TA's reconstructor method" yet. A global output scale (0.3-0.55)
-  is unexplained, so only colour vectors centred over the 12 colours are used (the scale cancels there).
+  scale is 0.24 (the published 0.22, on 1-32-token spans, matches E0's *scaled* FVE at L40-44, so it is most likely
+  scale-aligned; corrected 2026-10-09, was "is unscaled"), and within-batch retrieval@1 is 0.86
+  (published 0.93). **Not validated against the published AR** (unscaled FVE negative, which the scale-invariant loss
+  explains; outputs ~2× too long; 64 blocks vs a truncated backbone untested; 011 note "Loader caveats"). The
+  2026-10-09 acceptance (012 E0 above: L36-60, directions only) covers 011's L40/L44 and meets the precondition for a
+  next 011 step (PI, 2026-10-10; was "so 011 is not 'the TA's reconstructor method' yet"). s1 below is unchanged. The output scale is per layer and
+  rises with depth (E0: 0.38 / 0.42 at L40 / L44, 0.11 at L20 → 2.33 at L63), consistent with a scale-invariant loss,
+  so only colour vectors centred over the 12 colours are used (the scale cancels there). (corrected 2026-10-09: was "a
+  global output scale (0.3-0.55) is unexplained", a range with no JSON key; report 36 E12.)
   Validation: `results/011_olens_swaps/ar_validation_v3.json`, `ar_offline_d2.json`.
 - **Smoke s0b** (2 pairs, one table; observations only; all gates pass; `olens_swaps_s0b.json`), median S:
   - reference (class-mean coordinate swap): 0.23;
@@ -333,8 +385,8 @@ vector, do it for two colours, swap them in whitened space; `docs/design_specs/0
   subspace 1.27× / 1.15× (L40 / L44) relative to the activations, above PCA and random controls; too small to explain
   007 alone. What the AR config's `jfve` / `loss_mix_lambda` mean is open (no training code public).
 - **Likely limit of the tip:** the AR reconstructs 1-token inputs poorly (cosine ≈ 0.1 with the real activation,
-  vs ≈ 0.5 for 16 tokens). Single-word colour vectors are noisy but colour-specific (cos 0.15-0.24 with the model's class-mean
-  differences, ≈ 0 for mismatched pairs; report 31). The proposed next step is vectors built
+  vs ≈ 0.5 for 16 tokens; no committed JSON key). Single-word colour vectors are noisy but colour-specific (cos 0.15-0.24 with the model's class-mean
+  differences, ≈ 0 for mismatched pairs; report 31; first 10 tables only, no committed JSON key: report 36 E12). The proposed next step is vectors built
   from several short phrases that start with the colour (a new post hoc amendment first).
 
 **007, the J-subspace split** (`docs/reports/007_jsubspace.md`; design `docs/design_specs/007_jsubspace.md` with
@@ -375,7 +427,7 @@ why the NLA runs stopped and the other open issues: `docs/claude_reports/25_nla_
 - Stages so far: the smoke failed its report gate; a dev pilot and steps 7b–11; amendment 01 was adopted; the full run on 45 held-out test concepts; then the exploratory follow-ups.
 - **Read the conclusions as corrected by the follow-ups:**
   - **The model-side measure is lexical priming, not report.** The concept's log-prob rises about equally at every prefill position (A2b) and more on an unrelated prompt. Every "report" result (M1, M3, M2, P11′) is about priming of the concept token. Qwen almost never *says* the planted concept.
-  - **No J-space privilege for this priming at matched norm** (M1 not supported on R1′). At natural norm the non-J part (≈ 95% of the vector) does more (M3 reversed).
+  - **No J-space privilege for this priming at matched norm** (M1 not supported on R1′). At natural norm the non-J part (≈ 95% of the vector; no committed JSON key, report 36 E13) does more (M3 reversed).
   - **The clamp.** The J-coordinate clamp is specific from about L50, but blocking the plain output direction does as much (M2 control). It blocks the answer; no re-entry into J-space is shown.
   - **The concept's own token atom is almost never in its J part** (1 of 45). The J part is related plus junk tokens.
   - **The logit-lens direction is as potent a write direction as the J-lens atom** at s = 1/16–1/4 (Q-c).
@@ -393,7 +445,10 @@ why the NLA runs stopped and the other open issues: `docs/claude_reports/25_nla_
 **006 and 006b, reader likelihoods at the brew cells** (dev, 48 tables, saved 001 captures; `docs/reports/006_reader_likelihood.md`):
 - The NLA's and the Oracle's colour likelihoods track the cell's z: z is decodable through them where 002 found they rarely state it. The NLA's rule is supported. The Oracle's is uninformative by rule (its positive control failed on a "blue" prior).
 - **006b:** the model's *own* final-layer distribution at the same cells already tracks z (+3.7–4.0 nats, z the runner-up behind the answer in 56% of tables). So the readers' tracking is consistent with reading the output-facing distribution. "Beyond the model" was not testable (9 pairs < 15).
-- Their tracking does not follow 001's patch shares. The Oracle tracks z 2× more at `</think>` (patch share 0.01), which the model's output does not mirror.
+- Their tracking does not follow 001's patch shares. The Oracle tracks z 1.87× / 1.84× more at `</think>` (L40 / L44; ratio of `cells.Oracle L4x.emit_think.mean` to
+  `emit_colon.mean` in `006_reader_likelihood/analysis/posthoc.json`, whose stored key is the difference
+  `think_minus_colon`, +2.79 / +2.73 nats;
+  corrected 2026-10-09, was "2×") (patch share 0.01), which the model's output does not mirror.
 
 **Open PI decisions:**
 - **012 next (PI, 2026-10-07):**
@@ -403,8 +458,9 @@ why the NLA runs stopped and the other open issues: `docs/claude_reports/25_nla_
   - **Paid judge approved by the PI:** OpenRouter (key in `/workspace/.env`), Gemini 3.8 Flash or GLM/Kimi; validate the judge on a hand-checked sample.
   - Questions for Camila are pending (Oracle-AR loader / fixture; AR loss, jfve and Oracle reward definitions).
   - **No subagents unless the PI asks:** the PI's usage limit is tight.
-- 011: s1 finished and analysed (partial, below). Any next step needs the loader validated against the published AR
-  first; phrase-based AR colour vectors (~10 GPU-min) after that.
+- 011: s1 finished and analysed (partial, below). The loader precondition for a next step is met by the 2026-10-09
+  acceptance (L36-60, directions only; PI, 2026-10-10; was "needs the loader validated against the published AR
+  first"). Candidate next step: phrase-based AR colour vectors (~10 GPU-min).
 - 009 readers: keep the rule (bank used model-side only), a post hoc reader run with the model's output as covariate,
   or a redesign. The PI leans toward the old prompts and runs.
 - Optional: rescore 013 saving the reconstruction vectors, to report Cathryn's inside-J / inside-rest FVE alongside ours.
@@ -446,8 +502,8 @@ why the NLA runs stopped and the other open issues: `docs/claude_reports/25_nla_
 
 `/workspace` is not persistent. To come back on a new instance:
 1. `git clone https://github.com/senku14x/Causal-Concordance` (private; `gh auth login` as senku14x). `main` holds
-   everything through 007 (fast-forwarded from `007-jsubspace` on 2026-10-06); check out `008-trackb-brewcode` for
-   008-011.
+   everything through 007 (fast-forwarded from `007-jsubspace` on 2026-10-06); check out `014-typo` for
+   everything through 014 (it contains 008-013; corrected 2026-10-09, was "`008-trackb-brewcode` for 008-011").
 2. `bash scripts/000_setup/rebuild_env.sh`: venvs, pinned source clones, model and lens downloads, and hash checks.
 3. `python scripts/000_setup/restore_outputs.py`: downloads `outputs/` from the public HF dataset
    `senku21x/causal-concordance-outputs` and checks every file against its `MANIFEST.json` (sha256).
@@ -556,7 +612,10 @@ why the NLA runs stopped and the other open issues: `docs/claude_reports/25_nla_
   - target = the activation at the token *preceding* the span, block-L output;
   - the published ret@1 is within small batches, and FVE is on spans of uniform 1-32 tokens; 1-token spans
     reconstruct poorly (cos ≈ 0.1);
-  - an unexplained global output scale (0.3-0.55): use only centred or difference vectors.
+  - the output scale is per layer and rises with depth (E0 fit: 0.11 at L20 → 2.33 at L63,
+    `stageE0_ar_profile.json` `layers.*.white.global_scale`), consistent with a scale-invariant training loss: use only
+    directions (cosines, centred or difference vectors), never raw norms. (corrected 2026-10-09: was "an unexplained
+    global output scale (0.3-0.55)".)
   - Read the training run's `meta.json` (`ckpts/ar/ptag/ar.asst.ptag.pooled.s0/.../meta.json`) before assuming any
     convention.
 
@@ -685,3 +744,6 @@ why the NLA runs stopped and the other open issues: `docs/claude_reports/25_nla_
 | 10-07 | Labelled 007's "PCA" piece as if comparable to Cathryn's PCA control; 007's is a small PCA-k (3-4 directions), hers 1,024 | labelled PCA-k on the page (v12) |
 | 10-07 | The 014 spec was committed a few minutes after its 10-item smoke launched (written before it) | noted in the commit and the 014 ledger; commit the spec before launching |
 | 10-07 | The 014 Parts A/B naming table in the ledger (and my report to the PI) was copied from the analysis printout; 7 cells were off by 0.01 against half-up rounding of `parts_full.json` (e.g. Oracle L40 rest 0.84 → 0.85). The double-rounding lesson again | caught by the page build (which rounds from JSON); ledger correction appended |
+| 10-09 | The 012 lever was reported pooled (48/82, 38/82) in CLAUDE.md, STATUS and the page, although `stageA_summary.json` had `by_target` and `by_relation`. Split, most working swaps have a named-place bridge (44/49 vs 4/33 at L24-47; countries 38/42), and all 27 Japan targets flip | `stageA_splits.json` (named-place group added 10-10); lever text restated (analysis chat) |
+| 10-09 | The analysis chat's up-to-speed report flagged the Japan counts (29/96, 28/87, 27/82) as inconsistent; they are three cohorts and all correct. It also flagged spec §17's "held-out", which §20 and ledger correction 4 already correct, and called the read-position edit sizes "mean" (they were item medians) | withdrawn in the patch list |
+| 10-10 | The 10-09 patch, checked before commit (claude_ovarida 40), had: CW-20's bullet-by-bullet score as +0.22 (0.22 is the published reconstructor value; hers is +0.209 → +0.21); CW-20 "agree" with E0 (different inputs and centring); a country / other bridge split that put 7 geographic places (flips 4/7, 6/7) among the "other" bridges; a stale "It covers 012, Stage L and 013" clause; a misplaced CW-16b parenthetical; a leftover "PI's call" sentence; and a derived ratio cited as a JSON value | fixed before commit: +0.21 with sources, "consistent with", a named-place group in `stageA_splits.py` (POST HOC), clauses fixed, "ratio of" |

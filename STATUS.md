@@ -2,9 +2,12 @@
 
 *New session? Start from `docs/claude_reports/35_new_session_prompt_2026-10-07.md` (branch `014-typo`). **First read the Anthropic workspace
 paper** (Gurnee et al. 2026, `docs/papers/2607.15495.pdf`; text in `docs/papers/text/`), then the paper notes, then
-`CLAUDE.md`. That is the PI's rule. The newest work is 012: `docs/ledger/012_ledger.md` and
-`docs/design_specs/012_reader_concordance.md` §12-§20; the latest up-to-speed report is
-`docs/claude_reports/34_up_to_speed_2026-10-07.md`. Before 012: `docs/reports/008_trackb.md`,
+`CLAUDE.md`. That is the PI's rule. The newest work is 014: `docs/ledger/014_ledger.md` and
+`docs/design_specs/014_typo.md`, then `claude_ovarida/` reports 36-38 (README first; 36 is the latest up-to-speed
+report). 012: `docs/ledger/012_ledger.md` and `docs/design_specs/012_reader_concordance.md` §12-§22. Results page:
+v13 live, v14 built at b8d458e and not yet published (the PI publishes). Lever split by bridge type and target:
+`results/012_reader_concordance/analysis/stageA_splits.json` (2026-10-09). (corrected 2026-10-09: pointed at 012 and
+report 34.) Before 012: `docs/reports/008_trackb.md`,
 `docs/reports/009_brewcode_derisk.md`, report 29 (010), `docs/reports/007_jsubspace.md`.*
 
 **2026-10-07, 014 typo (branch `014-typo`; EXPLORATORY; `docs/ledger/014_ledger.md`).** Reading-only suite on WSB typo
@@ -20,7 +23,9 @@ paper** (Gurnee et al. 2026, `docs/papers/2607.15495.pdf`; text in `docs/papers/
 - **Deletion:** deleting judge-flagged false spans costs 28.6 [24.0, 33.4] FVE points more than random deletion.
   - Misquotes of the prompt carry it (+35.8).
   - Invented context is padding.
-- **Rewrite:** a factual rewrite beats a paraphrase by +3.1 [1.3, 4.9].
+- **Rewrite:** a factual rewrite beats a paraphrase by +3.1 [1.3, 4.9]. F − O on clean states +4.1 [1.8, 6.3];
+  on Cathryn's items 31-100 +4.6 [1.6, 7.5] vs her CW-16b +5.4 [2.6, 8.0] (added 2026-10-09, POST HOC,
+  `rewrite_by_state.json`).
 - **Brew** failed the de-risk and was dropped.
 - **012 Stage L:** the held country arrives at the carrier end between L48 and L52, matching the model's own output there.
 - Page v12.
@@ -36,7 +41,9 @@ ledger's correction block ("Additions after report 34").
 - **NLA repo read in full:** pairing step 400 with the final reconstructor is fine (model card).
 - Ledger `docs/ledger/012_ledger.md`; session prompt `docs/claude_reports/33_new_session_prompt_2026-10-07.md`.
 
-**2026-10-07, 012 overnight (branch `012-reader-concordance`; EXPLORATORY).** J-row coordinate swaps on Jan Chen's ST multihop bank (all WSB items) change Qwen's answer on 0.585 of 82 clean-correct items at L24-47 (random 0.06; logit rows 0). The swap operator's direction is set by the clean state (toward_src edits all fail at L24-47). Readers on the swapped states (Oracle L40/L44/L52/L56, NLA L42, token lenses) shift toward the swapped-in concept far more when the answer changed (AUC 0.88-0.97; Oracle ≈ NLA), but the model's own read-cell output does too (AUC 0.96-0.97 at L24-35); beyond it, the readers' bridge shift keeps only a modest partial association (ρ 0.31-0.57 across readers and layers; corrected 2026-10-07, first written as ~0.3-0.5 from a printed subset). Details: `docs/ledger/012_ledger.md`; page https://claude.ai/artifact/NoevKvBkXNUTvtpnJPVsuq.
+**2026-10-07, 012 overnight (branch `012-reader-concordance`; EXPLORATORY).** J-row coordinate swaps on Jan Chen's ST multihop bank (all WSB items) change Qwen's answer on 0.585 of 82 clean-correct items at L24-47 (random 0.06; logit rows 0), mostly where the bridge
+is a named place, a country or a geographic place (44/49 vs 4/33 other bridges; all 27 Japan targets flip; POST HOC,
+`stageA_splits.json`; added 2026-10-09, named-place group 2026-10-10). The swap operator's direction is set by the clean state (toward_src edits all fail at L24-47). Readers on the swapped states (Oracle L40/L44/L52/L56, NLA L42, token lenses) shift toward the swapped-in concept far more when the answer changed (AUC 0.88-0.97; Oracle ≈ NLA), but the model's own read-cell output does too (AUC 0.96-0.97 at L24-35); beyond it, the readers' bridge shift keeps only a modest partial association (ρ 0.31-0.57 across readers and layers; corrected 2026-10-07, first written as ~0.3-0.5 from a printed subset). Details: `docs/ledger/012_ledger.md`; page https://claude.ai/artifact/NoevKvBkXNUTvtpnJPVsuq.
 
 **2026-10-06, late: 011 s1 finished; AR J-bias check; 011 code fixes (POST HOC / EXPLORATORY; PI go on report 31).**
 - **011 s1** (82/82 pairs; the last 8 ran in 1.05 GPU-min after the resume fix; gates pass: repro 82/82, R·A ≤ 7.2e-15,
@@ -44,7 +51,8 @@ ledger's correction block ("Additions after report 34").
   whitened swap and the raw-coordinate swap are **not read** (answer-colour controls 0.016 / 0.050, below 0.15); the
   additive reading is **partial**: AR colour difference S 0.09 vs the model's class-mean difference 0.20 vs random 0.01
   (D_ar − D_classmean −0.10 [−0.15, −0.05]; D_ar − D_rand +0.06 [+0.02, +0.11]). The smoke's raw-coordinate 0.16 did
-  not hold (0.005). The loader is still not validated against the published AR (011 note, "Loader caveats").
+  not hold (0.005). The loader is not validated against the published AR (011 note, "Loader caveats"), but 012 E0's
+  2026-10-09 acceptance (L36-60, directions only) covers L40/L44 (PI, 2026-10-10).
 - **AR J-bias check** (CPU; `scripts/011_olens_swaps/ar_jbias.py`, rule pre-set in the script): **ambiguous**. The
   AR's outputs put 1.27× / 1.15× (L40 / L44) as much centred variance in 007's J subspace as the true activations do,
   above PCA-1,024 (0.77 / 0.85) and random (≈ 1.00). Too small to account for 007's Oracle result alone. What the AR
@@ -112,8 +120,9 @@ ledger's correction block ("Additions after report 34").
   - The lens-coordinate swap (arm A) failed its positive control: answer-atom swaps give S 0.01.
 - **010** (exploratory, CPU; report 29):
   - NLA–Oracle per-pair agreement is weak (r 0.24–0.30);
-  - the Oracle tracks what the J lens reads (r 0.63–0.80) more than the model's next-token output (0.21–0.30); the
-    NLA tracks neither strongly (J lens 0.33–0.37, model output 0.07) (corrected 2026-10-06, report 31: was "mid-layer readers ...
+  - the Oracle tracks what the J lens reads (at `:`, r 0.33–0.63 for L40/L44; same layer 0.43–0.63) more than the
+    model's next-token output (0.24–0.30); the NLA tracks neither strongly (J lens 0.30–0.37, model output 0.07)
+    (corrected 2026-10-09: the ranges were from a subset of `agreement.json`; report 36 E10) (corrected 2026-10-06, report 31: was "mid-layer readers ...
     (r 0.63–0.80), not the model's next-token output (0.2–0.3)");
   - only the late Oracle (L56/L60) follows the model's output.
 - **009, brew-code bank** (exploratory, reader-free; `docs/reports/009_brewcode_derisk.md`; design note
@@ -121,7 +130,9 @@ ledger's correction block ("Additions after report 34").
   - **Gate:** depth 2 stopped early by the §E-009 rule (0/77 pairs after 30 tables); depth 1 passes 771 of 1,200
     pairs (241 of 300 tables).
   - **The output-facing check fails, so no readers run** (§2.5.1). With a code answer, z is still the top colour at
-    the answer slot in 98% of renders (median rank 11; the model's own D +11.9 nats [11.7, 12.1], 240/240 tables), at
+    the answer slot in 98% of renders (median rank 11; the model's own D +11.9 nats [11.7, 12.1], 240/240 tables;
+    2026-10-09: "98%" and the mass figure have no committed JSON key; D is the `:` cell, 240 tables / 658 pairs; all 771
+    pairs +11.3 [11.1, 11.5]), at
     ~0.05% total colour mass.
   - Probes decode z under both questions at 33 of the 35 post-divergence sites (corrected 2026-10-06, report 31: was "110 of 112 sites";
     77 sites precede the differing token and are identical under both questions; z already decodes at q1–q2). The patch profile reproduces brew's structure:
@@ -138,7 +149,8 @@ ledger's correction block ("Additions after report 34").
     failed answer-colour control, so it is not read. Raw-coordinate swap 0.16 vs a size-matched random 0.09 (generic).
     Additive "minus AR(z), plus AR(z′)" at the reference's edit size: 0.10, vs the model's class-mean difference 0.23
     and random 0.01 / −0.02.
-  - **Full run s1 stopped at 74/82 pairs at the PI's request** (resumable; unanalysed).
+  - **Full run s1 stopped at 74/82 pairs at the PI's request** (resumable; unanalysed). *(Superseded: s1 finished
+    82/82 and was analysed, see the 2026-10-06 late entry above.)*
   - **Next, pending the PI:** finish s1 (~1 GPU-min); phrase-based AR vectors (~10 GPU-min), since 1-token inputs
     reconstruct poorly (cos ≈ 0.1).
 
@@ -147,7 +159,8 @@ ledger's correction block ("Additions after report 34").
 confirmed registered contrasts are P1, P2, P3, P5 at L40 and only P5 at L44; 5.8 vs 3.2 is a dev descriptive; the
 `</think>` share was quoted without its layer.)
 - **Model side:** J-subspace swaps track content share (L42) or exceed random modestly but not PCA-4 (L40/L44, below margin); in the adapted §3.3 test the J part of a class-mean z direction moves the answer less than its non-J part. → A reader–model dissociation.
-- **The NLA is disabled for all of 007** (G-repro 0.41 > 0.25 after my 2-row scorer change; not repaired, rule 12). Post hoc NLA run on 006's 24-row path is the PI's call.
+- **The NLA is disabled for all of 007** (G-repro 0.41 > 0.25 after my 2-row scorer change; not repaired, rule 12).
+  *(Superseded: 007 A2/A3 reran the NLA post hoc on 006's exact scorer; `docs/reports/007_jsubspace.md`.)*
 - Secondary: multihop confounded by restatement (CW-12 rates reproduced); relational stopped after 4a (no high-leverage read-layer position; 12/50 gated); chain (exploratory) signal outside J at L56. ~~Brew test split used once under AMENDMENT_02 (opened this session).~~ (corrected 2026-10-06, report 31: brew test was read by the
 Oracle, the template lens and the prompt-only floor under AMENDMENT_02, and later by the NLA post hoc; see the ledger at
 the top.)
@@ -246,8 +259,8 @@ collapses without J, as the A3 sentence below says). Stage 1b NLA first stopped 
 - Gates G1–G3 pass. **G4 (label reliability) fails** (κ 0.37, r(S) 0.41 between disjoint fits), so the labels are
   **descriptive only** and are not used to score readers.
 - At `:` and the assistant newline, L40–44, the decorrelated z direction has a small, mostly positive effect: median
-  S 0.03–0.05, positive in 84–90% of pairs (corrected 2026-10-06, report 31: was 85–90%), above the start and answer directions. Clamping it beats random clamps,
-  but those clamps were not size-matched. It is "used" (≥ 0.10) in only 10–18% of pairs. No single tested direction
+  S 0.02–0.05 (corrected 2026-10-09: was 0.03–0.05; the assistant newline L42 is 0.024, `003_labels/analysis/summary.json`), positive in 84–90% of pairs (corrected 2026-10-06, report 31: was 85–90%), above the start and answer directions. Clamping it beats random clamps,
+  but those clamps were not size-matched. It is "used" (≥ 0.10) in only 9–18% of pairs (corrected 2026-10-09: was 10–18%; assistant newline L42 0.085). No single tested direction
   reproduces the whole-cell effect.
 - At the `</think>` newline, z is readable at the family level and the whole-cell patch has little net leverage (not an
   item-level label). At `:` L60 the answer direction carries the cell. (Corrected after the audit of 001–003.)
@@ -529,6 +542,8 @@ also on an exception. `SecReplay.capture` checks only blocks ≤ l0. The 001 pip
 
 ## Open questions for the PI
 
+*(Dated 2026-10-02/03 and kept for the record; the live list is `CLAUDE.md` "Open PI decisions".)*
+
 Resolved in design 001 v3 §9: regime (SEC for L ≥ 40), reader snapshot (included, after hashing), chain split (50/50 by
 group), reader-input bridge (checked on the snapshot). Still open:
 
@@ -557,6 +572,8 @@ Review 2 (of `56cb7ab`): integrity check at use time; cross-fitted substitution 
 pairs plus a pre-difference-prefix identity check; snapshot on 10 distinct tables. Accepted → design 001 v3, approved.
 
 ## Next
+
+*(Dated 2026-10-02/03 and kept for the record; the live list is `CLAUDE.md` "Open PI decisions".)*
 
 001 `run` → `probes` → `snapshot` → `analysis` → `figures` → report 001 → AMENDMENT_02 (thresholds frozen, 002
 critiques recorded) → design 002 (labels) → PI approval.

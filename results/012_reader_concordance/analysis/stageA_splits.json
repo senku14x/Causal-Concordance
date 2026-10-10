@@ -1,0 +1,1079 @@
+{
+ "label": "EXPLORATORY, POST HOC (groupings chosen after seeing per-item outcomes); 012 Stage B per-item records; cohort = clean-correct items whose clean continuation lacks y_b (as Stage A/D)",
+ "n": 82,
+ "countries": [
+  "Argentina",
+  "Australia",
+  "Brazil",
+  "Canada",
+  "China",
+  "Denmark",
+  "Egypt",
+  "Finland",
+  "France",
+  "Greece",
+  "India",
+  "Ireland",
+  "Italy",
+  "Japan",
+  "Mexico",
+  "Nepal",
+  "Netherlands",
+  "Norway",
+  "Portugal",
+  "Russia",
+  "Scotland",
+  "Spain",
+  "Sweden",
+  "Switzerland",
+  "Vatican"
+ ],
+ "geographic_places": [
+  "Africa",
+  "Antarctica",
+  "Chicago",
+  "Everest",
+  "Nile",
+  "Olympus",
+  "Sydney"
+ ],
+ "named_place_note": "named place = country or geographic place; grouping added 2026-10-10 (PI), POST HOC",
+ "bands": {
+  "L24-35": {
+   "by_target": {
+    "Japan": {
+     "J": {
+      "k": 26,
+      "n": 27,
+      "wilson95": [
+       0.8171653389987218,
+       0.9934318540919532
+      ]
+     },
+     "rand": {
+      "k": 0,
+      "n": 27,
+      "wilson95": [
+       0.0,
+       0.12455503146207125
+      ]
+     }
+    },
+    "other": {
+     "J": {
+      "k": 12,
+      "n": 55,
+      "wilson95": [
+       0.12946023986944538,
+       0.3437003413027866
+      ]
+     },
+     "rand": {
+      "k": 1,
+      "n": 55,
+      "wilson95": [
+       0.0032167804192709745,
+       0.0960577615848674
+      ]
+     }
+    }
+   },
+   "by_bridge": {
+    "country": {
+     "J": {
+      "k": 33,
+      "n": 42,
+      "wilson95": [
+       0.6406015455808396,
+       0.8829420018037826
+      ]
+     },
+     "rand": {
+      "k": 0,
+      "n": 42,
+      "wilson95": [
+       0.0,
+       0.08379879207691124
+      ]
+     },
+     "n_japan_target": 27
+    },
+    "not_country": {
+     "J": {
+      "k": 5,
+      "n": 40,
+      "wilson95": [
+       0.05459500216399486,
+       0.26112119967985287
+      ]
+     },
+     "rand": {
+      "k": 1,
+      "n": 40,
+      "wilson95": [
+       0.004426831453704344,
+       0.12881369088183614
+      ]
+     },
+     "n_japan_target": 0
+    },
+    "country_not_japan": {
+     "J": {
+      "k": 7,
+      "n": 15,
+      "wilson95": [
+       0.24809535232620925,
+       0.6988302012468901
+      ]
+     },
+     "rand": {
+      "k": 0,
+      "n": 15,
+      "wilson95": [
+       0.0,
+       0.20388330359648707
+      ]
+     }
+    },
+    "named_place": {
+     "J": {
+      "k": 37,
+      "n": 49,
+      "wilson95": [
+       0.6191368089723774,
+       0.8539765480255896
+      ]
+     },
+     "rand": {
+      "k": 1,
+      "n": 49,
+      "wilson95": [
+       0.003611672549881484,
+       0.10693521629394014
+      ]
+     },
+     "n_japan_target": 27
+    },
+    "not_named_place": {
+     "J": {
+      "k": 1,
+      "n": 33,
+      "wilson95": [
+       0.005369410477441133,
+       0.15318725526474106
+      ]
+     },
+     "rand": {
+      "k": 0,
+      "n": 33,
+      "wilson95": [
+       0.0,
+       0.10426999901587139
+      ]
+     }
+    },
+    "place_not_country": {
+     "J": {
+      "k": 4,
+      "n": 7,
+      "wilson95": [
+       0.25045836275303557,
+       0.8417801460075546
+      ]
+     },
+     "rand": {
+      "k": 1,
+      "n": 7,
+      "wilson95": [
+       0.025679624057823897,
+       0.5131278321392249
+      ]
+     },
+     "srcs": [
+      "Africa",
+      "Antarctica",
+      "Chicago",
+      "Everest",
+      "Nile",
+      "Olympus",
+      "Sydney"
+     ]
+    }
+   },
+   "shared_relations": {
+    "relations": [
+     "capital",
+     "continent",
+     "country",
+     "currency"
+    ],
+    "Japan": {
+     "J": {
+      "k": 16,
+      "n": 17,
+      "wilson95": [
+       0.7301796914154303,
+       0.9895395991310502
+      ]
+     }
+    },
+    "other": {
+     "J": {
+      "k": 5,
+      "n": 10,
+      "wilson95": [
+       0.23659308901147935,
+       0.7634069109885206
+      ]
+     }
+    }
+   },
+   "by_relation": {
+    "Z": {
+     "n": 2,
+     "J": 0,
+     "rand": 0,
+     "n_japan": 0,
+     "n_country_bridge": 0,
+     "n_named_place": 0
+    },
+    "antonym": {
+     "n": 2,
+     "J": 0,
+     "rand": 0,
+     "n_japan": 0,
+     "n_country_bridge": 0,
+     "n_named_place": 0
+    },
+    "bird": {
+     "n": 1,
+     "J": 0,
+     "rand": 0,
+     "n_japan": 0,
+     "n_country_bridge": 0,
+     "n_named_place": 1
+    },
+    "capital": {
+     "n": 15,
+     "J": 13,
+     "rand": 0,
+     "n_japan": 10,
+     "n_country_bridge": 15,
+     "n_named_place": 15
+    },
+    "continent": {
+     "n": 6,
+     "J": 4,
+     "rand": 0,
+     "n_japan": 4,
+     "n_country_bridge": 5,
+     "n_named_place": 6
+    },
+    "count": {
+     "n": 1,
+     "J": 0,
+     "rand": 0,
+     "n_japan": 0,
+     "n_country_bridge": 0,
+     "n_named_place": 0
+    },
+    "country": {
+     "n": 3,
+     "J": 1,
+     "rand": 0,
+     "n_japan": 1,
+     "n_country_bridge": 1,
+     "n_named_place": 3
+    },
+    "currency": {
+     "n": 3,
+     "J": 3,
+     "rand": 0,
+     "n_japan": 2,
+     "n_country_bridge": 3,
+     "n_named_place": 3
+    },
+    "desert": {
+     "n": 1,
+     "J": 1,
+     "rand": 0,
+     "n_japan": 0,
+     "n_country_bridge": 0,
+     "n_named_place": 1
+    },
+    "element": {
+     "n": 3,
+     "J": 0,
+     "rand": 0,
+     "n_japan": 0,
+     "n_country_bridge": 0,
+     "n_named_place": 0
+    },
+    "epic": {
+     "n": 1,
+     "J": 0,
+     "rand": 0,
+     "n_japan": 0,
+     "n_country_bridge": 0,
+     "n_named_place": 0
+    },
+    "faces": {
+     "n": 1,
+     "J": 0,
+     "rand": 0,
+     "n_japan": 0,
+     "n_country_bridge": 0,
+     "n_named_place": 0
+    },
+    "firstname": {
+     "n": 2,
+     "J": 0,
+     "rand": 0,
+     "n_japan": 0,
+     "n_country_bridge": 0,
+     "n_named_place": 0
+    },
+    "fruit": {
+     "n": 1,
+     "J": 0,
+     "rand": 0,
+     "n_japan": 0,
+     "n_country_bridge": 0,
+     "n_named_place": 0
+    },
+    "language": {
+     "n": 9,
+     "J": 9,
+     "rand": 0,
+     "n_japan": 9,
+     "n_country_bridge": 9,
+     "n_named_place": 9
+    },
+    "legs": {
+     "n": 1,
+     "J": 0,
+     "rand": 0,
+     "n_japan": 0,
+     "n_country_bridge": 0,
+     "n_named_place": 0
+    },
+    "month": {
+     "n": 3,
+     "J": 0,
+     "rand": 0,
+     "n_japan": 0,
+     "n_country_bridge": 0,
+     "n_named_place": 0
+    },
+    "monthnum": {
+     "n": 5,
+     "J": 0,
+     "rand": 0,
+     "n_japan": 0,
+     "n_country_bridge": 0,
+     "n_named_place": 0
+    },
+    "moons": {
+     "n": 1,
+     "J": 0,
+     "rand": 0,
+     "n_japan": 0,
+     "n_country_bridge": 0,
+     "n_named_place": 0
+    },
+    "mountain": {
+     "n": 1,
+     "J": 1,
+     "rand": 0,
+     "n_japan": 1,
+     "n_country_bridge": 1,
+     "n_named_place": 1
+    },
+    "mountains": {
+     "n": 1,
+     "J": 0,
+     "rand": 0,
+     "n_japan": 0,
+     "n_country_bridge": 1,
+     "n_named_place": 1
+    },
+    "ocean": {
+     "n": 3,
+     "J": 1,
+     "rand": 0,
+     "n_japan": 0,
+     "n_country_bridge": 3,
+     "n_named_place": 3
+    },
+    "olympic": {
+     "n": 1,
+     "J": 0,
+     "rand": 0,
+     "n_japan": 0,
+     "n_country_bridge": 0,
+     "n_named_place": 0
+    },
+    "opposite": {
+     "n": 4,
+     "J": 0,
+     "rand": 0,
+     "n_japan": 0,
+     "n_country_bridge": 0,
+     "n_named_place": 0
+    },
+    "players": {
+     "n": 1,
+     "J": 0,
+     "rand": 0,
+     "n_japan": 0,
+     "n_country_bridge": 0,
+     "n_named_place": 0
+    },
+    "prevmonth": {
+     "n": 1,
+     "J": 0,
+     "rand": 0,
+     "n_japan": 0,
+     "n_country_bridge": 0,
+     "n_named_place": 0
+    },
+    "river": {
+     "n": 4,
+     "J": 2,
+     "rand": 0,
+     "n_japan": 0,
+     "n_country_bridge": 4,
+     "n_named_place": 4
+    },
+    "sea": {
+     "n": 1,
+     "J": 1,
+     "rand": 1,
+     "n_japan": 0,
+     "n_country_bridge": 0,
+     "n_named_place": 1
+    },
+    "season": {
+     "n": 1,
+     "J": 1,
+     "rand": 0,
+     "n_japan": 0,
+     "n_country_bridge": 0,
+     "n_named_place": 0
+    },
+    "state": {
+     "n": 1,
+     "J": 1,
+     "rand": 0,
+     "n_japan": 0,
+     "n_country_bridge": 0,
+     "n_named_place": 1
+    },
+    "symbol": {
+     "n": 2,
+     "J": 0,
+     "rand": 0,
+     "n_japan": 0,
+     "n_country_bridge": 0,
+     "n_named_place": 0
+    }
+   },
+   "by_direction": {
+    "toward_src": {
+     "J": {
+      "k": 2,
+      "n": 18,
+      "wilson95": [
+       0.031019522364791025,
+       0.32799765336109676
+      ]
+     },
+     "n_japan": 2
+    },
+    "toward_tgt": {
+     "J": {
+      "k": 36,
+      "n": 64,
+      "wilson95": [
+       0.44086208863767085,
+       0.6770599037828904
+      ]
+     },
+     "n_japan": 25
+    }
+   },
+   "edit_size_read_position": {
+    "J_median": 0.007671337939057324,
+    "J_mean": 0.008312160180168001,
+    "rand_median": 0.04056764477046162,
+    "rand_mean": 0.04179911748024476,
+    "n_rand_larger": 82,
+    "J_median_success": 0.007683847269780192,
+    "J_median_fail": 0.007657920464466682,
+    "note": "||dh||/||h|| at the read position only, mean over band layers; the swap edits every prompt position"
+   },
+   "arm_effects": {
+    "J": {
+     "n_text_changed": 40,
+     "median_dm": 5.045447735115886,
+     "note": "text = greedy continuation vs the clean arm's; dm = change in the y_b - y_a margin (nats, positive = toward the target's answer)"
+    },
+    "rand": {
+     "n_text_changed": 12,
+     "median_dm": 0.2778318449854851,
+     "note": "text = greedy continuation vs the clean arm's; dm = change in the y_b - y_a margin (nats, positive = toward the target's answer)"
+    }
+   },
+   "model_output_auc_toward_tgt": {
+    "all": {
+     "n": 64,
+     "n_success": 36,
+     "auc_d_model_bridge": 0.9692460317460317
+    },
+    "no_japan": {
+     "n": 39,
+     "n_success": 12,
+     "auc_d_model_bridge": 0.9351851851851852
+    },
+    "country_bridge": {
+     "n": 37,
+     "n_success": 31,
+     "auc_d_model_bridge": 0.9516129032258065
+    },
+    "not_country_bridge": {
+     "n": 27,
+     "n_success": 5,
+     "auc_d_model_bridge": 0.9636363636363636
+    },
+    "named_place": {
+     "n": 44,
+     "n_success": 35,
+     "auc_d_model_bridge": 0.9365079365079365
+    },
+    "not_named_place": {
+     "n": 20,
+     "n_success": 1,
+     "auc_d_model_bridge": 1.0
+    }
+   }
+  },
+  "L24-47": {
+   "by_target": {
+    "Japan": {
+     "J": {
+      "k": 27,
+      "n": 27,
+      "wilson95": [
+       0.8754449685379289,
+       1.0
+      ]
+     },
+     "rand": {
+      "k": 2,
+      "n": 27,
+      "wilson95": [
+       0.020554653875390336,
+       0.23369592848118886
+      ]
+     }
+    },
+    "other": {
+     "J": {
+      "k": 21,
+      "n": 55,
+      "wilson95": [
+       0.26515954178218065,
+       0.5139077987094005
+      ]
+     },
+     "rand": {
+      "k": 3,
+      "n": 55,
+      "wilson95": [
+       0.018723215408912114,
+       0.1485306064439705
+      ]
+     }
+    }
+   },
+   "by_bridge": {
+    "country": {
+     "J": {
+      "k": 38,
+      "n": 42,
+      "wilson95": [
+       0.779348940671948,
+       0.9623377514562665
+      ]
+     },
+     "rand": {
+      "k": 4,
+      "n": 42,
+      "wilson95": [
+       0.03766224854373333,
+       0.2206510593280519
+      ]
+     },
+     "n_japan_target": 27
+    },
+    "not_country": {
+     "J": {
+      "k": 10,
+      "n": 40,
+      "wilson95": [
+       0.1418711857438798,
+       0.40193961548535195
+      ]
+     },
+     "rand": {
+      "k": 1,
+      "n": 40,
+      "wilson95": [
+       0.004426831453704344,
+       0.12881369088183614
+      ]
+     },
+     "n_japan_target": 0
+    },
+    "country_not_japan": {
+     "J": {
+      "k": 11,
+      "n": 15,
+      "wilson95": [
+       0.48049565748447975,
+       0.8910254675038264
+      ]
+     },
+     "rand": {
+      "k": 2,
+      "n": 15,
+      "wilson95": [
+       0.03736125876428492,
+       0.37881983053980567
+      ]
+     }
+    },
+    "named_place": {
+     "J": {
+      "k": 44,
+      "n": 49,
+      "wilson95": [
+       0.7824363833807433,
+       0.9556204535360855
+      ]
+     },
+     "rand": {
+      "k": 5,
+      "n": 49,
+      "wilson95": [
+       0.04437954646391447,
+       0.21756361661925666
+      ]
+     },
+     "n_japan_target": 27
+    },
+    "not_named_place": {
+     "J": {
+      "k": 4,
+      "n": 33,
+      "wilson95": [
+       0.048161612759131084,
+       0.2732550531619836
+      ]
+     },
+     "rand": {
+      "k": 0,
+      "n": 33,
+      "wilson95": [
+       0.0,
+       0.10426999901587139
+      ]
+     }
+    },
+    "place_not_country": {
+     "J": {
+      "k": 6,
+      "n": 7,
+      "wilson95": [
+       0.486872167860775,
+       0.9743203759421759
+      ]
+     },
+     "rand": {
+      "k": 1,
+      "n": 7,
+      "wilson95": [
+       0.025679624057823897,
+       0.5131278321392249
+      ]
+     },
+     "srcs": [
+      "Africa",
+      "Antarctica",
+      "Chicago",
+      "Everest",
+      "Nile",
+      "Olympus",
+      "Sydney"
+     ]
+    }
+   },
+   "shared_relations": {
+    "relations": [
+     "capital",
+     "continent",
+     "country",
+     "currency"
+    ],
+    "Japan": {
+     "J": {
+      "k": 17,
+      "n": 17,
+      "wilson95": [
+       0.8156818626193445,
+       1.0
+      ]
+     }
+    },
+    "other": {
+     "J": {
+      "k": 9,
+      "n": 10,
+      "wilson95": [
+       0.5958499704752279,
+       0.982123787103926
+      ]
+     }
+    }
+   },
+   "by_relation": {
+    "Z": {
+     "n": 2,
+     "J": 1,
+     "rand": 0,
+     "n_japan": 0,
+     "n_country_bridge": 0,
+     "n_named_place": 0
+    },
+    "antonym": {
+     "n": 2,
+     "J": 0,
+     "rand": 0,
+     "n_japan": 0,
+     "n_country_bridge": 0,
+     "n_named_place": 0
+    },
+    "bird": {
+     "n": 1,
+     "J": 1,
+     "rand": 0,
+     "n_japan": 0,
+     "n_country_bridge": 0,
+     "n_named_place": 1
+    },
+    "capital": {
+     "n": 15,
+     "J": 15,
+     "rand": 0,
+     "n_japan": 10,
+     "n_country_bridge": 15,
+     "n_named_place": 15
+    },
+    "continent": {
+     "n": 6,
+     "J": 5,
+     "rand": 2,
+     "n_japan": 4,
+     "n_country_bridge": 5,
+     "n_named_place": 6
+    },
+    "count": {
+     "n": 1,
+     "J": 0,
+     "rand": 0,
+     "n_japan": 0,
+     "n_country_bridge": 0,
+     "n_named_place": 0
+    },
+    "country": {
+     "n": 3,
+     "J": 3,
+     "rand": 0,
+     "n_japan": 1,
+     "n_country_bridge": 1,
+     "n_named_place": 3
+    },
+    "currency": {
+     "n": 3,
+     "J": 3,
+     "rand": 0,
+     "n_japan": 2,
+     "n_country_bridge": 3,
+     "n_named_place": 3
+    },
+    "desert": {
+     "n": 1,
+     "J": 1,
+     "rand": 0,
+     "n_japan": 0,
+     "n_country_bridge": 0,
+     "n_named_place": 1
+    },
+    "element": {
+     "n": 3,
+     "J": 0,
+     "rand": 0,
+     "n_japan": 0,
+     "n_country_bridge": 0,
+     "n_named_place": 0
+    },
+    "epic": {
+     "n": 1,
+     "J": 0,
+     "rand": 0,
+     "n_japan": 0,
+     "n_country_bridge": 0,
+     "n_named_place": 0
+    },
+    "faces": {
+     "n": 1,
+     "J": 0,
+     "rand": 0,
+     "n_japan": 0,
+     "n_country_bridge": 0,
+     "n_named_place": 0
+    },
+    "firstname": {
+     "n": 2,
+     "J": 0,
+     "rand": 0,
+     "n_japan": 0,
+     "n_country_bridge": 0,
+     "n_named_place": 0
+    },
+    "fruit": {
+     "n": 1,
+     "J": 0,
+     "rand": 0,
+     "n_japan": 0,
+     "n_country_bridge": 0,
+     "n_named_place": 0
+    },
+    "language": {
+     "n": 9,
+     "J": 9,
+     "rand": 0,
+     "n_japan": 9,
+     "n_country_bridge": 9,
+     "n_named_place": 9
+    },
+    "legs": {
+     "n": 1,
+     "J": 0,
+     "rand": 0,
+     "n_japan": 0,
+     "n_country_bridge": 0,
+     "n_named_place": 0
+    },
+    "month": {
+     "n": 3,
+     "J": 2,
+     "rand": 0,
+     "n_japan": 0,
+     "n_country_bridge": 0,
+     "n_named_place": 0
+    },
+    "monthnum": {
+     "n": 5,
+     "J": 0,
+     "rand": 0,
+     "n_japan": 0,
+     "n_country_bridge": 0,
+     "n_named_place": 0
+    },
+    "moons": {
+     "n": 1,
+     "J": 0,
+     "rand": 0,
+     "n_japan": 0,
+     "n_country_bridge": 0,
+     "n_named_place": 0
+    },
+    "mountain": {
+     "n": 1,
+     "J": 1,
+     "rand": 0,
+     "n_japan": 1,
+     "n_country_bridge": 1,
+     "n_named_place": 1
+    },
+    "mountains": {
+     "n": 1,
+     "J": 0,
+     "rand": 0,
+     "n_japan": 0,
+     "n_country_bridge": 1,
+     "n_named_place": 1
+    },
+    "ocean": {
+     "n": 3,
+     "J": 1,
+     "rand": 2,
+     "n_japan": 0,
+     "n_country_bridge": 3,
+     "n_named_place": 3
+    },
+    "olympic": {
+     "n": 1,
+     "J": 0,
+     "rand": 0,
+     "n_japan": 0,
+     "n_country_bridge": 0,
+     "n_named_place": 0
+    },
+    "opposite": {
+     "n": 4,
+     "J": 0,
+     "rand": 0,
+     "n_japan": 0,
+     "n_country_bridge": 0,
+     "n_named_place": 0
+    },
+    "players": {
+     "n": 1,
+     "J": 0,
+     "rand": 0,
+     "n_japan": 0,
+     "n_country_bridge": 0,
+     "n_named_place": 0
+    },
+    "prevmonth": {
+     "n": 1,
+     "J": 0,
+     "rand": 0,
+     "n_japan": 0,
+     "n_country_bridge": 0,
+     "n_named_place": 0
+    },
+    "river": {
+     "n": 4,
+     "J": 3,
+     "rand": 0,
+     "n_japan": 0,
+     "n_country_bridge": 4,
+     "n_named_place": 4
+    },
+    "sea": {
+     "n": 1,
+     "J": 1,
+     "rand": 1,
+     "n_japan": 0,
+     "n_country_bridge": 0,
+     "n_named_place": 1
+    },
+    "season": {
+     "n": 1,
+     "J": 1,
+     "rand": 0,
+     "n_japan": 0,
+     "n_country_bridge": 0,
+     "n_named_place": 0
+    },
+    "state": {
+     "n": 1,
+     "J": 1,
+     "rand": 0,
+     "n_japan": 0,
+     "n_country_bridge": 0,
+     "n_named_place": 1
+    },
+    "symbol": {
+     "n": 2,
+     "J": 0,
+     "rand": 0,
+     "n_japan": 0,
+     "n_country_bridge": 0,
+     "n_named_place": 0
+    }
+   },
+   "by_direction": {
+    "toward_src": {
+     "J": {
+      "k": 0,
+      "n": 14,
+      "wilson95": [
+       0.0,
+       0.21531080540298042
+      ]
+     },
+     "n_japan": 0
+    },
+    "toward_tgt": {
+     "J": {
+      "k": 48,
+      "n": 68,
+      "wilson95": [
+       0.5889372018013297,
+       0.8008098945969291
+      ]
+     },
+     "n_japan": 27
+    }
+   },
+   "edit_size_read_position": {
+    "J_median": 0.007370108049110306,
+    "J_mean": 0.007979144541111642,
+    "rand_median": 0.06676772386748547,
+    "rand_mean": 0.06329778696801305,
+    "n_rand_larger": 82,
+    "J_median_success": 0.0075262455249704725,
+    "J_median_fail": 0.007268879815446957,
+    "note": "||dh||/||h|| at the read position only, mean over band layers; the swap edits every prompt position"
+   },
+   "arm_effects": {
+    "J": {
+     "n_text_changed": 51,
+     "median_dm": 8.77201946079731,
+     "note": "text = greedy continuation vs the clean arm's; dm = change in the y_b - y_a margin (nats, positive = toward the target's answer)"
+    },
+    "rand": {
+     "n_text_changed": 36,
+     "median_dm": 0.7851597964763641,
+     "note": "text = greedy continuation vs the clean arm's; dm = change in the y_b - y_a margin (nats, positive = toward the target's answer)"
+    }
+   },
+   "model_output_auc_toward_tgt": {
+    "all": {
+     "n": 68,
+     "n_success": 48,
+     "auc_d_model_bridge": 0.9135416666666667
+    },
+    "no_japan": {
+     "n": 41,
+     "n_success": 21,
+     "auc_d_model_bridge": 0.8428571428571429
+    },
+    "country_bridge": {
+     "n": 42,
+     "n_success": 38,
+     "auc_d_model_bridge": 0.8486842105263158
+    },
+    "not_country_bridge": {
+     "n": 26,
+     "n_success": 10,
+     "auc_d_model_bridge": 0.88125
+    },
+    "named_place": {
+     "n": 49,
+     "n_success": 44,
+     "auc_d_model_bridge": 0.8727272727272727
+    },
+    "not_named_place": {
+     "n": 19,
+     "n_success": 4,
+     "auc_d_model_bridge": 0.8166666666666667
+    }
+   }
+  }
+ }
+}
