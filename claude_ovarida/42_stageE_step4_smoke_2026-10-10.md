@@ -166,7 +166,9 @@ brackets where logged.
 **What the smoke checks.** The mechanics work:
 - every arm runs and logs its edit at every position;
 - the J-row reference flips here as in parity;
-- the concept-specific controls (mismatched) and the nulls stay near the noise floor's scale (within about ±2 nats).
+- the mismatched control and the nulls stay near the random-null scale: up to about 1.7 nats (rand_full_1 on
+  basketball-players), well above the identity-clamp noise floor (max 0.13). They are not at the floor (corrected
+  2026-10-10, PI: said "near the noise floor's scale").
 
 **Observations** (5 items; hypotheses, not results):
 - **The full reconstructor difference is a strong margin handle** at class-mean size, far above both random nulls. It

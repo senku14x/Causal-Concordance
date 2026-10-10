@@ -499,3 +499,60 @@ rescued and an original concept could therefore carry a style difference.
      write.
 5. **Stop** and report: parity, floors, edit sizes, and the class-mean lever-rule status.
 
+## 16. Full-run additions (PI, 2026-10-10; POST HOC: written after the 5-item smoke had been seen, before any full-run edit)
+
+Everything else stays as fixed in §9 and §15.
+
+**Material and sizes.**
+- **Items:** all 82 cohort items, split across both GPUs. Each item's clean run is recomputed in the same process.
+- **References (not re-run):** the J-row swap and its random control come from the parity run. The class-mean swap and
+  its random control come from the lever run. Both are deterministic in this regime: parity reproduced Stage A's
+  generated text on every item. They are joined by item name.
+- **Two edit sizes** for every additive arm, per (layer, position):
+  - **J size:** the J-row swap's clean-state edit size. This is the primary (fix 2, since the class-mean lever failed).
+  - **C size:** the class-mean swap's clean-state edit size on the 51 covered items. On the 31 uncovered items it is a
+    fixed profile: per layer, the median over the 51 covered items and their prompt positions of (class-mean clean-state
+    edit size / ‖h‖), applied per position as profile[L] × ‖h_clean(L, p)‖. A one-pass GPU pre-run measures the
+    profile on clean activations only, before the full run.
+
+**Arms.**
+
+| Size | Arms |
+|---|---|
+| J | AR_full, AR_Jrem, AR_rrem, AR_answer, AR_mismatched, AR_mismatched_Jrem, rand_full × 2, rand_Jcomp × 2, AR_{starts, mentions, template, word} full and Jrem |
+| C | AR_full, AR_Jrem, AR_rrem, AR_answer, rand_full × 2, rand_Jcomp × 2 |
+| — | C_white (all items); CM_swap_Jrem (covered items) |
+
+**Rules (fixed now).**
+
+1. **Power at J size.**
+   - AR_full@J and AR_answer@J are each compared with the mean of rand_full@J on Δm, paired per item, with a
+     relation-cluster bootstrap (10k).
+   - If neither has a 95% CI above 0, the J-size primary is reported as **"no power at this size"**. It is not then a
+     negative result for the J-removed arm.
+2. **Primary (§9, at J size).** Both conditions must hold:
+   - **relative:** AR_Jrem@J against the mean of rand_Jcomp@J on Δm, paired, relation-cluster CI above 0;
+   - **absolute:** AR_Jrem@J flips ≥ 30% and ≥ 20 points above the mean flip rate of rand_Jcomp@J.
+
+   "Relative passes, absolute fails" reads as a weak handle.
+3. **The J reading on the margin.**
+   - The contrast is (AR_full − AR_Jrem) against (AR_full − AR_rrem), paired on Δm, at both sizes.
+   - It is read under §9's rule (J share ≥ 0.30 holds: report 41), **whether or not AR_full clears the absolute flip
+     bar**.
+   - If AR_full is a weak handle, the result is called **"J-attribution on the margin"**, not a lever.
+4. **Like-for-like lever (CPU, from the parity run).** J-row L36–47 flips and median Δm on the 51 covered items, and
+   within the class-mean swap's 28 toward_tgt items, next to the class-mean swap's 10/51 and 9/28.
+
+**Subsets reported.**
+- all 82;
+- covered (51) and uncovered (31), for the C-size arms;
+- the 13 rescued-concept items, separately;
+- within each reference's toward_tgt items;
+- by bridge type (named place / other) and Japan target.
+
+**Secondary contrasts (paired Δm, descriptive):**
+- AR_full − AR_word;
+- AR_starts − AR_mentions;
+- (AR_starts + AR_mentions)/2 − AR_template;
+- AR_mismatched − rand_full.
+
