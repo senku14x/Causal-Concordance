@@ -400,3 +400,41 @@ append-only (012 ledger).
    - nearest-tag median cosine ≥ 0.7;
    - brew absolute bar S ≥ 0.05.
 6. **Still needed before step 2:** the OpenRouter key in `/workspace/.env`, ideally rotated.
+
+## 14. Execution notes, step 2 (2026-10-10; dated, written after step 2's data had been seen)
+
+None of these changes a threshold or a decision rule. Each changes how the material was produced, and each was found
+in a smoke run or by a check.
+
+**Changes made during generation:**
+1. **Generator `max_tokens` 2000 → 16000.** In the smoke run, the France prompts and the brew "red" phrases were cut
+   off (`finish_reason: length`), because the model spent about 1,920 tokens reasoning even at effort "minimal".
+2. **Cue-varied prompts: 3 requests of 24 per concept**, merged in request order (§4 said 24). In the France gate
+   smoke, 7 of 21 prompts passed. Request 0 keeps its seed. The text, checks, gate and caps are unchanged.
+3. **Fallback parser.** One response (brew "green", "starts") listed its phrases without quotes, taking the prompt's
+   "no quotes" literally. Phrases are split at a comma followed by a capital letter, and the code checks then apply as
+   usual. Flagged in the record.
+
+**Change made during gating:**
+
+4. **Answer matcher v2.** It folds accents, maps number words 0–20 to digits, and matches token prefixes. v1 kept only
+   ASCII letters, so "Brasília" ≠ "Brasilia" and "five" ≠ "5", and it matched "Lyon" inside "Lyonnais".
+   - v2 changes the gate rows of 42 concepts, mostly numerals and elements. Those 42 were re-gated; every other
+     concept's rows are identical under v1 and v2.
+   - The v1 records are kept (`outputs/.../stageE/gate/gate_shard*.json`). The re-gates are `gate_v2a`/`gate_v2b`.
+
+**My interpretation (PI to confirm):**
+
+5. **The "phrase vector"** used for the gate, and proposed as the primary AR vector, pools the two LLM sets (starts +
+   mentions). Each set is also reported alone.
+
+**What the checks rejected:**
+
+6. **The 5-gram rule** rejected 696 prompt candidates, mostly because the bank's own frames ("fact the capital of the")
+   are 5-grams shared with the evaluation prompts. The rule is kept as written.
+7. **Single-letter answers** C, F, J, M and O got no valid "starts" phrases (all 40 failed the position check). They
+   keep their other sets (flagged weak inputs, §3).
+
+**Results:** `stageE_bases.json`, `stageE_generation_*.json`, `stageE_ar.json`, `stageE_gate.json`,
+`stageE_phrases.json` and `stageE_precheck.json` (`results/012_reader_concordance/analysis/`).
+

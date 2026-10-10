@@ -1,0 +1,95 @@
+{
+ "label": "012 Stage E: 007 dense J (J_raw) bases rebuilt at the edit layers; 007 construction unchanged",
+ "construction": "eig of sum_t unit(W[t] @ J_L) outer itself; W = lm_head (raw, no gain); top 1,024 used",
+ "layers": {
+  "36": {
+   "share_top_1024": 0.9585967297798096,
+   "seconds": 17.8
+  },
+  "37": {
+   "share_top_1024": 0.9537250653512437,
+   "seconds": 17.8
+  },
+  "38": {
+   "share_top_1024": 0.9481277372348442,
+   "seconds": 17.7
+  },
+  "39": {
+   "share_top_1024": 0.9440671189715115,
+   "seconds": 17.9
+  },
+  "40": {
+   "share_top_1024": 0.9392103958502463,
+   "seconds": 18.0
+  },
+  "41": {
+   "share_top_1024": 0.9337521820394677,
+   "seconds": 17.7
+  },
+  "42": {
+   "share_top_1024": 0.9259574064773461,
+   "seconds": 17.8
+  },
+  "43": {
+   "share_top_1024": 0.9161099325296675,
+   "seconds": 17.7
+  },
+  "44": {
+   "share_top_1024": 0.9056150500342527,
+   "seconds": 18.0
+  },
+  "45": {
+   "share_top_1024": 0.891655412521765,
+   "seconds": 18.2
+  },
+  "46": {
+   "share_top_1024": 0.8744709956622008,
+   "seconds": 18.0
+  },
+  "47": {
+   "share_top_1024": 0.8609360058784209,
+   "seconds": 18.0
+  },
+  "48": {
+   "share_top_1024": 0.8347468116433824,
+   "seconds": 17.7
+  }
+ },
+ "sanity_vs_007": {
+  "40": {
+   "mean_cos2": 0.9999999999999993,
+   "min_cos2": 0.9999999999999931,
+   "frac_cos2_gt_0.9": 1.0,
+   "frac_cos2_lt_0.1": 0.0,
+   "dims": [
+    1024,
+    1024
+   ],
+   "random_expectation": 0.2
+  },
+  "42": {
+   "mean_cos2": 0.9999999999999996,
+   "min_cos2": 0.9999999999999927,
+   "frac_cos2_gt_0.9": 1.0,
+   "frac_cos2_lt_0.1": 0.0,
+   "dims": [
+    1024,
+    1024
+   ],
+   "random_expectation": 0.2
+  },
+  "44": {
+   "mean_cos2": 0.9999999999999992,
+   "min_cos2": 0.9999999999999893,
+   "frac_cos2_gt_0.9": 1.0,
+   "frac_cos2_lt_0.1": 0.0,
+   "dims": [
+    1024,
+    1024
+   ],
+   "random_expectation": 0.2
+  }
+ },
+ "sanity_pass": true,
+ "seconds_total": 238.6
+}

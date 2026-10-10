@@ -1,0 +1,40 @@
+{
+ "label": "EXPLORATORY; 012 Stage E AR outputs (design 012E \u00a75)",
+ "read": "ln_pre",
+ "tags": {
+  "multihop": [
+   36,
+   40,
+   44
+  ],
+  "brew": [
+   40,
+   44,
+   48
+  ]
+ },
+ "space": "raw head output",
+ "counts": {
+  "multihop": 146,
+  "brew": 73
+ },
+ "regression_vs_011_v3": {
+  "40": {
+   "median_cos": 0.9999073764495059,
+   "min_cos": 0.9999073764495059,
+   "n": 1
+  },
+  "44": {
+   "median_cos": 0.9999507033462156,
+   "min_cos": 0.9999507033462156,
+   "n": 1
+  },
+  "48": {
+   "median_cos": 0.9999191462555694,
+   "min_cos": 0.9999191462555694,
+   "n": 1
+  }
+ },
+ "regression_pass": true,
+ "seconds": 59.3
+}

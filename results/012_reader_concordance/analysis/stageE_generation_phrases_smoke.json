@@ -1,0 +1,29 @@
+{
+ "label": "EXPLORATORY; 012 Stage E generation (design 012E §3-§4)",
+ "model": "google/gemini-3.8-flash",
+ "params": {
+  "temperature": 1.0,
+  "top_p": 1.0,
+  "max_tokens": 16000,
+  "reasoning": {
+   "effort": "minimal"
+  },
+  "usage": {
+   "include": true
+  }
+ },
+ "seed0": 20261010,
+ "prompt_text": "Write 40 short English phrases (3–12 words each) of the kind that appear in an assistant's reply. Every phrase must {rule}. Vary the topic and the sentence form. Do not use any of these words: {forbidden}. No numbering, quotes or lists. Return JSON: {{\"phrases\": [...]}}.",
+ "only": [
+  "France",
+  "Paris",
+  "red"
+ ],
+ "requests": 6,
+ "cost_usd": 0.03282,
+ "fail_counts": {
+  "ngram5": 1
+ },
+ "dropped": [],
+ "seconds": 21.7
+}

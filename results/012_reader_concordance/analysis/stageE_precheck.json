@@ -1,0 +1,825 @@
+{
+ "label": "EXPLORATORY; 012 Stage E pre-checks and vector-quality gate (design 012E \u00a76)",
+ "phrase_vector": "pooled LLM phrases (starts + mentions); starts, mentions, template and word also reported",
+ "brew": {
+  "40": {
+   "phrases": {
+    "specificity": {
+     "matched_median": 0.07666957159476301,
+     "matched_minus_mismatched": {
+      "mean": 0.08285807182829959,
+      "median": 0.08109834547860592,
+      "n": 82,
+      "n_clusters": 33,
+      "ci95": [
+       0.07543037533291516,
+       0.09051427762885267
+      ]
+     }
+    },
+    "stability": {
+     "median_cos": 0.6573022694165662,
+     "n": 12
+    },
+    "decodability": {
+     "acc": 0.44052863436123346,
+     "n": 227,
+     "chance": 0.08333333333333333,
+     "n_concepts": 12
+    },
+    "jshare_ar_diff_median": 0.5053180508017863,
+    "jshare_classmean_diff_median": 0.3556307244374873
+   },
+   "starts": {
+    "specificity": {
+     "matched_median": 0.07432830630465745,
+     "matched_minus_mismatched": {
+      "mean": 0.07302576001346957,
+      "median": 0.07276957143000456,
+      "n": 82,
+      "n_clusters": 33,
+      "ci95": [
+       0.06429268431745457,
+       0.08211820807486088
+      ]
+     }
+    },
+    "stability": {
+     "median_cos": 0.7467986587119129,
+     "n": 12
+    },
+    "decodability": {
+     "acc": 0.3524229074889868,
+     "n": 227,
+     "chance": 0.08333333333333333,
+     "n_concepts": 12
+    }
+   },
+   "mentions": {
+    "specificity": {
+     "matched_median": 0.06626344728984371,
+     "matched_minus_mismatched": {
+      "mean": 0.06803857509744314,
+      "median": 0.0673113624061818,
+      "n": 82,
+      "n_clusters": 33,
+      "ci95": [
+       0.06198093040341447,
+       0.0744774302557099
+      ]
+     }
+    },
+    "stability": {
+     "median_cos": 0.5001958273572933,
+     "n": 12
+    },
+    "decodability": {
+     "acc": 0.3303964757709251,
+     "n": 227,
+     "chance": 0.08333333333333333,
+     "n_concepts": 12
+    }
+   },
+   "template": {
+    "specificity": {
+     "matched_median": 0.16674817422468724,
+     "matched_minus_mismatched": {
+      "mean": 0.1715822810255177,
+      "median": 0.17050778283620194,
+      "n": 82,
+      "n_clusters": 33,
+      "ci95": [
+       0.16059458142017743,
+       0.18318915458580662
+      ]
+     }
+    },
+    "decodability": {
+     "acc": 0.6079295154185022,
+     "n": 227,
+     "chance": 0.08333333333333333,
+     "n_concepts": 12
+    }
+   },
+   "word": {
+    "specificity": {
+     "matched_median": 0.14909711563029868,
+     "matched_minus_mismatched": {
+      "mean": 0.15082530098319047,
+      "median": 0.1503714235698943,
+      "n": 82,
+      "n_clusters": 33,
+      "ci95": [
+       0.14078042881172115,
+       0.16185728382311995
+      ]
+     }
+    },
+    "decodability": {
+     "acc": 0.5770925110132159,
+     "n": 227,
+     "chance": 0.08333333333333333,
+     "n_concepts": 12
+    }
+   }
+  },
+  "44": {
+   "phrases": {
+    "specificity": {
+     "matched_median": 0.07598333497722574,
+     "matched_minus_mismatched": {
+      "mean": 0.07827732802446837,
+      "median": 0.074447535207825,
+      "n": 82,
+      "n_clusters": 33,
+      "ci95": [
+       0.0712300709067843,
+       0.08575414622558868
+      ]
+     }
+    },
+    "stability": {
+     "median_cos": 0.6685463690933389,
+     "n": 12
+    },
+    "decodability": {
+     "acc": 0.4669603524229075,
+     "n": 227,
+     "chance": 0.08333333333333333,
+     "n_concepts": 12
+    },
+    "jshare_ar_diff_median": 0.5105023662934423,
+    "jshare_classmean_diff_median": 0.35010193923975674
+   },
+   "starts": {
+    "specificity": {
+     "matched_median": 0.06733784709778368,
+     "matched_minus_mismatched": {
+      "mean": 0.07181474401368645,
+      "median": 0.07158010563993605,
+      "n": 82,
+      "n_clusters": 33,
+      "ci95": [
+       0.0627738829721588,
+       0.08150507306868023
+      ]
+     }
+    },
+    "stability": {
+     "median_cos": 0.7543204324165005,
+     "n": 12
+    },
+    "decodability": {
+     "acc": 0.42731277533039647,
+     "n": 227,
+     "chance": 0.08333333333333333,
+     "n_concepts": 12
+    }
+   },
+   "mentions": {
+    "specificity": {
+     "matched_median": 0.057240679117336664,
+     "matched_minus_mismatched": {
+      "mean": 0.06085615733127494,
+      "median": 0.056915216386247906,
+      "n": 82,
+      "n_clusters": 33,
+      "ci95": [
+       0.05589978254950505,
+       0.06597943076555872
+      ]
+     }
+    },
+    "stability": {
+     "median_cos": 0.4867502359814846,
+     "n": 12
+    },
+    "decodability": {
+     "acc": 0.32599118942731276,
+     "n": 227,
+     "chance": 0.08333333333333333,
+     "n_concepts": 12
+    }
+   },
+   "template": {
+    "specificity": {
+     "matched_median": 0.1657509387299052,
+     "matched_minus_mismatched": {
+      "mean": 0.17389589015994286,
+      "median": 0.1754275978544699,
+      "n": 82,
+      "n_clusters": 33,
+      "ci95": [
+       0.1639750326579386,
+       0.18477406399879226
+      ]
+     }
+    },
+    "decodability": {
+     "acc": 0.6167400881057269,
+     "n": 227,
+     "chance": 0.08333333333333333,
+     "n_concepts": 12
+    }
+   },
+   "word": {
+    "specificity": {
+     "matched_median": 0.15335667132897446,
+     "matched_minus_mismatched": {
+      "mean": 0.15271245240212225,
+      "median": 0.15324609193050692,
+      "n": 82,
+      "n_clusters": 33,
+      "ci95": [
+       0.1433980296577575,
+       0.16303445212604697
+      ]
+     }
+    },
+    "decodability": {
+     "acc": 0.6123348017621145,
+     "n": 227,
+     "chance": 0.08333333333333333,
+     "n_concepts": 12
+    }
+   }
+  },
+  "48": {
+   "phrases": {
+    "specificity": {
+     "matched_median": 0.07419774715671948,
+     "matched_minus_mismatched": {
+      "mean": 0.08154393552208329,
+      "median": 0.08142699927124683,
+      "n": 82,
+      "n_clusters": 33,
+      "ci95": [
+       0.07360684642735055,
+       0.08938963090413818
+      ]
+     }
+    },
+    "stability": {
+     "median_cos": 0.6552472525209994,
+     "n": 12
+    },
+    "jshare_ar_diff_median": 0.4909641104809054,
+    "jshare_classmean_diff_median": 0.280094587677281
+   },
+   "starts": {
+    "specificity": {
+     "matched_median": 0.07627785429222372,
+     "matched_minus_mismatched": {
+      "mean": 0.07391049091968262,
+      "median": 0.07201318936930323,
+      "n": 82,
+      "n_clusters": 33,
+      "ci95": [
+       0.06412784173343856,
+       0.08409142648206665
+      ]
+     }
+    },
+    "stability": {
+     "median_cos": 0.7642819746247691,
+     "n": 12
+    }
+   },
+   "mentions": {
+    "specificity": {
+     "matched_median": 0.061632678758250306,
+     "matched_minus_mismatched": {
+      "mean": 0.06354661535381184,
+      "median": 0.059866562663069375,
+      "n": 82,
+      "n_clusters": 33,
+      "ci95": [
+       0.05830847434864963,
+       0.06851875845315242
+      ]
+     }
+    },
+    "stability": {
+     "median_cos": 0.45901295468977615,
+     "n": 12
+    }
+   },
+   "template": {
+    "specificity": {
+     "matched_median": 0.17583357734017163,
+     "matched_minus_mismatched": {
+      "mean": 0.1844342280646106,
+      "median": 0.1776692162042483,
+      "n": 82,
+      "n_clusters": 33,
+      "ci95": [
+       0.173430008324571,
+       0.19535792463106677
+      ]
+     }
+    }
+   },
+   "word": {
+    "specificity": {
+     "matched_median": 0.15903345347925288,
+     "matched_minus_mismatched": {
+      "mean": 0.16487000853562805,
+      "median": 0.16642392214488724,
+      "n": 82,
+      "n_clusters": 33,
+      "ci95": [
+       0.1536779719920166,
+       0.17576192766127308
+      ]
+     }
+    }
+   }
+  }
+ },
+ "multihop": {
+  "36": {
+   "phrases": {
+    "specificity": {
+     "matched_median": 0.3327438563834254,
+     "matched_minus_mismatched": {
+      "mean": 0.2911439844510465,
+      "median": 0.33827878683350554,
+      "n": 38,
+      "n_clusters": 13,
+      "ci95": [
+       0.24214422100935803,
+       0.3259598450359219
+      ]
+     }
+    },
+    "stability": {
+     "median_cos": 0.8896999646148882,
+     "n": 89
+    },
+    "decodability": {
+     "acc": 0.6313291139240507,
+     "n": 632,
+     "chance": 0.021739130434782608,
+     "n_concepts": 46
+    }
+   },
+   "starts": {
+    "specificity": {
+     "matched_median": 0.3159242386759198,
+     "matched_minus_mismatched": {
+      "mean": 0.2807061702772059,
+      "median": 0.30503999453943237,
+      "n": 38,
+      "n_clusters": 13,
+      "ci95": [
+       0.23202357605956245,
+       0.31598500712634314
+      ]
+     }
+    },
+    "stability": {
+     "median_cos": 0.8632654272106162,
+     "n": 89
+    },
+    "decodability": {
+     "acc": 0.615506329113924,
+     "n": 632,
+     "chance": 0.021739130434782608,
+     "n_concepts": 46
+    }
+   },
+   "mentions": {
+    "specificity": {
+     "matched_median": 0.2903179710120751,
+     "matched_minus_mismatched": {
+      "mean": 0.25679070903397877,
+      "median": 0.28485906551252577,
+      "n": 38,
+      "n_clusters": 13,
+      "ci95": [
+       0.20837521586132782,
+       0.2838547274994135
+      ]
+     }
+    },
+    "stability": {
+     "median_cos": 0.772245885038308,
+     "n": 89
+    },
+    "decodability": {
+     "acc": 0.4936708860759494,
+     "n": 632,
+     "chance": 0.021739130434782608,
+     "n_concepts": 46
+    }
+   },
+   "template": {
+    "specificity": {
+     "matched_median": 0.3229852408080323,
+     "matched_minus_mismatched": {
+      "mean": 0.30620810046866737,
+      "median": 0.3182128607354102,
+      "n": 38,
+      "n_clusters": 13,
+      "ci95": [
+       0.27597413836363327,
+       0.342802424242689
+      ]
+     }
+    },
+    "decodability": {
+     "acc": 0.6376582278481012,
+     "n": 632,
+     "chance": 0.021739130434782608,
+     "n_concepts": 46
+    }
+   },
+   "word": {
+    "specificity": {
+     "matched_median": 0.31999922471161774,
+     "matched_minus_mismatched": {
+      "mean": 0.29894488587756934,
+      "median": 0.3167012483086909,
+      "n": 38,
+      "n_clusters": 13,
+      "ci95": [
+       0.2579548118777339,
+       0.33561523169583163
+      ]
+     }
+    },
+    "decodability": {
+     "acc": 0.5965189873417721,
+     "n": 632,
+     "chance": 0.021739130434782608,
+     "n_concepts": 46
+    }
+   }
+  },
+  "40": {
+   "phrases": {
+    "specificity": {
+     "matched_median": 0.35194894311433056,
+     "matched_minus_mismatched": {
+      "mean": 0.32210523401832936,
+      "median": 0.36894494837399217,
+      "n": 38,
+      "n_clusters": 13,
+      "ci95": [
+       0.2677865164147042,
+       0.3584584857010532
+      ]
+     }
+    },
+    "stability": {
+     "median_cos": 0.8837537634009713,
+     "n": 89
+    },
+    "decodability": {
+     "acc": 0.6503164556962026,
+     "n": 632,
+     "chance": 0.021739130434782608,
+     "n_concepts": 46
+    }
+   },
+   "starts": {
+    "specificity": {
+     "matched_median": 0.3413802591122328,
+     "matched_minus_mismatched": {
+      "mean": 0.3165169571712161,
+      "median": 0.3503932314963131,
+      "n": 38,
+      "n_clusters": 13,
+      "ci95": [
+       0.2622244500268375,
+       0.35542796790824743
+      ]
+     }
+    },
+    "stability": {
+     "median_cos": 0.8617291180157532,
+     "n": 89
+    },
+    "decodability": {
+     "acc": 0.6455696202531646,
+     "n": 632,
+     "chance": 0.021739130434782608,
+     "n_concepts": 46
+    }
+   },
+   "mentions": {
+    "specificity": {
+     "matched_median": 0.29322426097158133,
+     "matched_minus_mismatched": {
+      "mean": 0.27177306978002097,
+      "median": 0.2911598034714439,
+      "n": 38,
+      "n_clusters": 13,
+      "ci95": [
+       0.21664536840577076,
+       0.2982901436815317
+      ]
+     }
+    },
+    "stability": {
+     "median_cos": 0.7634649112528331,
+     "n": 89
+    },
+    "decodability": {
+     "acc": 0.4936708860759494,
+     "n": 632,
+     "chance": 0.021739130434782608,
+     "n_concepts": 46
+    }
+   },
+   "template": {
+    "specificity": {
+     "matched_median": 0.3487216119772553,
+     "matched_minus_mismatched": {
+      "mean": 0.35308166880939046,
+      "median": 0.34856350432072153,
+      "n": 38,
+      "n_clusters": 13,
+      "ci95": [
+       0.31825920395672824,
+       0.38753756401642064
+      ]
+     }
+    },
+    "decodability": {
+     "acc": 0.6503164556962026,
+     "n": 632,
+     "chance": 0.021739130434782608,
+     "n_concepts": 46
+    }
+   },
+   "word": {
+    "specificity": {
+     "matched_median": 0.34991003569034007,
+     "matched_minus_mismatched": {
+      "mean": 0.35445793333472064,
+      "median": 0.3583524080697812,
+      "n": 38,
+      "n_clusters": 13,
+      "ci95": [
+       0.30478533172888,
+       0.3907644785565498
+      ]
+     }
+    },
+    "decodability": {
+     "acc": 0.6218354430379747,
+     "n": 632,
+     "chance": 0.021739130434782608,
+     "n_concepts": 46
+    }
+   }
+  },
+  "44": {
+   "phrases": {
+    "specificity": {
+     "matched_median": 0.25212156033054794,
+     "matched_minus_mismatched": {
+      "mean": 0.24031481435447852,
+      "median": 0.27665457756380896,
+      "n": 38,
+      "n_clusters": 13,
+      "ci95": [
+       0.2004592076638555,
+       0.26785932021196884
+      ]
+     }
+    },
+    "stability": {
+     "median_cos": 0.8789792429236718,
+     "n": 89
+    },
+    "decodability": {
+     "acc": 0.6075949367088608,
+     "n": 632,
+     "chance": 0.021739130434782608,
+     "n_concepts": 46
+    }
+   },
+   "starts": {
+    "specificity": {
+     "matched_median": 0.23089831976917335,
+     "matched_minus_mismatched": {
+      "mean": 0.229199046550825,
+      "median": 0.24915873446524628,
+      "n": 38,
+      "n_clusters": 13,
+      "ci95": [
+       0.18707423348792424,
+       0.25802816511092563
+      ]
+     }
+    },
+    "stability": {
+     "median_cos": 0.8639158182407103,
+     "n": 89
+    },
+    "decodability": {
+     "acc": 0.5822784810126582,
+     "n": 632,
+     "chance": 0.021739130434782608,
+     "n_concepts": 46
+    }
+   },
+   "mentions": {
+    "specificity": {
+     "matched_median": 0.20689934656269693,
+     "matched_minus_mismatched": {
+      "mean": 0.20169898380654058,
+      "median": 0.21872440645909014,
+      "n": 38,
+      "n_clusters": 13,
+      "ci95": [
+       0.16924661762203155,
+       0.22024040702435904
+      ]
+     }
+    },
+    "stability": {
+     "median_cos": 0.7657734865259467,
+     "n": 89
+    },
+    "decodability": {
+     "acc": 0.4699367088607595,
+     "n": 632,
+     "chance": 0.021739130434782608,
+     "n_concepts": 46
+    }
+   },
+   "template": {
+    "specificity": {
+     "matched_median": 0.26002687474520214,
+     "matched_minus_mismatched": {
+      "mean": 0.2834702695407556,
+      "median": 0.2662234455575365,
+      "n": 38,
+      "n_clusters": 13,
+      "ci95": [
+       0.2572823774384796,
+       0.31061031533058503
+      ]
+     }
+    },
+    "decodability": {
+     "acc": 0.5917721518987342,
+     "n": 632,
+     "chance": 0.021739130434782608,
+     "n_concepts": 46
+    }
+   },
+   "word": {
+    "specificity": {
+     "matched_median": 0.2582520066880828,
+     "matched_minus_mismatched": {
+      "mean": 0.28503964023630424,
+      "median": 0.2709653607852464,
+      "n": 38,
+      "n_clusters": 13,
+      "ci95": [
+       0.24589612047101972,
+       0.31254966728880385
+      ]
+     }
+    },
+    "decodability": {
+     "acc": 0.5632911392405063,
+     "n": 632,
+     "chance": 0.021739130434782608,
+     "n_concepts": 46
+    }
+   }
+  }
+ },
+ "multihop_prechecks": {
+  "gate_summary": {
+   "n_concepts_generated": 89,
+   "n_kept": 46,
+   "regated_matcher_v2": [
+    "5",
+    "6",
+    "7",
+    "8",
+    "Brazil",
+    "Cairo",
+    "December",
+    "Egypt",
+    "Everest",
+    "February",
+    "France",
+    "Fuji",
+    "Greece",
+    "Homer",
+    "Japan",
+    "Miami",
+    "Morocco",
+    "Norway",
+    "November",
+    "Russia",
+    "Spain",
+    "Sweden",
+    "Switzerland",
+    "basketball",
+    "carbon",
+    "darkness",
+    "down",
+    "east",
+    "eight",
+    "fast",
+    "heart",
+    "high",
+    "left",
+    "nitrogen",
+    "north",
+    "oxygen",
+    "soccer",
+    "south",
+    "spider",
+    "summer",
+    "ten",
+    "war"
+   ],
+   "dropped": [
+    "5",
+    "6",
+    "7",
+    "8",
+    "April",
+    "Armstrong",
+    "August",
+    "Brazil",
+    "Canada",
+    "China",
+    "Dante",
+    "December",
+    "Denmark",
+    "Einstein",
+    "February",
+    "Fuji",
+    "Homer",
+    "July",
+    "March",
+    "Mars",
+    "May",
+    "Miami",
+    "Newton",
+    "Nile",
+    "November",
+    "October",
+    "Olympus",
+    "September",
+    "Sydney",
+    "copper",
+    "down",
+    "eight",
+    "fast",
+    "gold",
+    "heart",
+    "high",
+    "oxygen",
+    "sake",
+    "silver",
+    "six",
+    "south",
+    "spider",
+    "ten"
+   ]
+  },
+  "jshare_ar_diff_median_by_layer": {
+   "36": 0.526072209410822,
+   "37": 0.5341501821697341,
+   "38": 0.5337593502792,
+   "39": 0.5398834486039716,
+   "40": 0.589549385483027,
+   "41": 0.6026877299401431,
+   "42": 0.6095877256094767,
+   "43": 0.6112070812567892,
+   "44": 0.6163341411552246,
+   "45": 0.6169311913965518,
+   "46": 0.6106537650814887,
+   "47": 0.6051322219543727
+  },
+  "jshare_classmean_diff_median_by_layer": {
+   "36": 0.36529596106635254,
+   "37": 0.36380765615847416,
+   "38": 0.36228521286210547,
+   "39": 0.41086751468004334,
+   "40": 0.42827601985884695,
+   "41": 0.44783060352094006,
+   "42": 0.44981705189941007,
+   "43": 0.45214602622192235,
+   "44": 0.4418932239620251,
+   "45": 0.43353433791567425,
+   "46": 0.4179736527210798,
+   "47": 0.41631386183088964
+  },
+  "nearest_tag_adjacent_cos_median": {
+   "36-40": 0.9233369155552296,
+   "40-44": 0.9327294550540295
+  }
+ }
+}

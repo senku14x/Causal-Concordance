@@ -1,0 +1,62 @@
+{
+ "label": "EXPLORATORY; 012 Stage E generation (design 012E §3-§4)",
+ "model": "google/gemini-3.8-flash",
+ "params": {
+  "temperature": 1.0,
+  "top_p": 1.0,
+  "max_tokens": 16000,
+  "reasoning": {
+   "effort": "minimal"
+  },
+  "usage": {
+   "include": true
+  }
+ },
+ "seed0": 20261010,
+ "prompt_text": "Write 40 short English phrases (3–12 words each) of the kind that appear in an assistant's reply. Every phrase must {rule}. Vary the topic and the sentence form. Do not use any of these words: {forbidden}. No numbering, quotes or lists. Return JSON: {{\"phrases\": [...]}}.",
+ "only": [],
+ "requests": 356,
+ "cost_usd": 0.0,
+ "fail_counts": {
+  "position": 223,
+  "ngram5": 2,
+  "forbidden": 2,
+  "length": 1
+ },
+ "dropped": [
+  [
+   "multihop",
+   "C",
+   "starts",
+   0
+  ],
+  [
+   "multihop",
+   "F",
+   "starts",
+   0
+  ],
+  [
+   "multihop",
+   "J",
+   "starts",
+   0
+  ],
+  [
+   "multihop",
+   "M",
+   "starts",
+   0
+  ],
+  [
+   "multihop",
+   "O",
+   "starts",
+   0
+  ]
+ ],
+ "seconds": 0.5,
+ "note": "This record is the final re-parse from cache (after the fallback parser was added), so cost_usd is 0 here. The phrase requests' spend is in the first full run's log; total_api_spend_usd covers every saved response (phrases, prompts and smoke runs).",
+ "total_api_spend_usd": 3.8809,
+ "n_saved_responses": 642
+}
