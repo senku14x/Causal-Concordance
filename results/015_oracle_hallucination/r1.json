@@ -1,0 +1,149 @@
+{
+ "label": "EXPLORATORY; 015 step 2: R1 on all four cells (O versions, clean first samples, no judge calls)",
+ "B": {
+  "oracle_ar": 0.7031621431656242,
+  "nla_ar": 0.28179703953509566
+ },
+ "n_items": 87,
+ "derangement": "013 de-risk: random.Random(1)",
+ "cells": {
+  "oracle_texts|oracle_ar": {
+   "reader_texts": "oracle",
+   "scorer": "oracle",
+   "B": 0.7031621431656242,
+   "matched_fve_mean": -54.22273370626818,
+   "shuffled_fve_mean": -142.78528954506373,
+   "matched_minus_shuffled": {
+    "mean": 88.56255583879556,
+    "ci95": [
+     80.96843834433596,
+     96.09436418512792
+    ],
+    "n": 87
+   },
+   "matched_cos_mean": 0.4577820602111957,
+   "shuffled_cos_mean": 0.14641287737203185,
+   "retrieval_at_1": 0.7816091954022989,
+   "ci_excludes_0": true,
+   "gate": {
+    "rule": "matched - shuffled CI > 0 and >= 10 points; retrieval@1 >= 0.5",
+    "pass": true
+   }
+  },
+  "oracle_texts|nla_ar": {
+   "reader_texts": "oracle",
+   "scorer": "nla",
+   "B": 0.28179703953509566,
+   "matched_fve_mean": -23.572865320691708,
+   "shuffled_fve_mean": -99.14476937345171,
+   "matched_minus_shuffled": {
+    "mean": 75.57190405276003,
+    "ci95": [
+     66.85574468494606,
+     84.78198499262281
+    ],
+    "n": 87
+   },
+   "matched_cos_mean": 0.8258876619287999,
+   "shuffled_cos_mean": 0.7194079677583096,
+   "retrieval_at_1": 0.6781609195402298,
+   "ci_excludes_0": true
+  },
+  "nla_texts|nla_ar": {
+   "reader_texts": "nla",
+   "scorer": "nla",
+   "B": 0.28179703953509566,
+   "matched_fve_mean": 49.36752325303973,
+   "shuffled_fve_mean": -81.04459578687782,
+   "matched_minus_shuffled": {
+    "mean": 130.41211903991757,
+    "ci95": [
+     117.96604369835151,
+     142.90028863769663
+    ],
+    "n": 87
+   },
+   "matched_cos_mean": 0.9286595897418851,
+   "shuffled_cos_mean": 0.7449108444171489,
+   "retrieval_at_1": 0.7471264367816092,
+   "ci_excludes_0": true
+  },
+  "nla_texts|oracle_ar": {
+   "reader_texts": "nla",
+   "scorer": "oracle",
+   "B": 0.7031621431656242,
+   "matched_fve_mean": -165.35706512621704,
+   "shuffled_fve_mean": -175.08313205285128,
+   "matched_minus_shuffled": {
+    "mean": 9.726066926634266,
+    "ci95": [
+     7.390215010380296,
+     12.018724436707878
+    ],
+    "n": 87
+   },
+   "matched_cos_mean": 0.06705478690854562,
+   "shuffled_cos_mean": 0.03285977658502339,
+   "retrieval_at_1": 0.26436781609195403,
+   "ci_excludes_0": true
+  }
+ },
+ "stop_gate_pass": true,
+ "determinism_max_abs_diff": 0.0,
+ "determinism_pass": true,
+ "batch_layout_fve_noise_points": {
+  "median": 0.0,
+  "p90": 0.1145145044399515,
+  "max": 0.3478021869022869,
+  "note": "same texts scored in a different batch composition (bf16)"
+ },
+ "whole_readout_check": {
+  "reader_texts": "oracle (whole readout, one span)",
+  "scorer": "oracle",
+  "B": 0.7031621431656242,
+  "matched_fve_mean": -141.68872763561748,
+  "shuffled_fve_mean": -165.34608891500457,
+  "matched_minus_shuffled": {
+   "mean": 23.657361279387082,
+   "ci95": [
+    18.20914373926514,
+    28.992186633702527
+   ],
+   "n": 87
+  },
+  "matched_cos_mean": 0.15026818148383195,
+  "shuffled_cos_mean": 0.06709337718954556,
+  "retrieval_at_1": 0.4482758620689655,
+  "ci_excludes_0": true
+ },
+ "piece_stats": {
+  "oracle_bullets": {
+   "n_texts": 174,
+   "n_pieces": 727,
+   "n_split_pieces": 28
+  },
+  "nla_sentences": {
+   "n_texts": 87,
+   "n_pieces": 735,
+   "n_split_pieces": 203
+  }
+ },
+ "G_repro_nla": {
+  "max_abs_diff_mse": 1.89552232243706e-07,
+  "n": 87,
+  "pass_1e-6": true
+ },
+ "cw20_consistency": {
+  "n_shared_items": 61,
+  "n_writeups": 122,
+  "global_scale": 0.43923528285510455,
+  "scaled_fve_mean": 0.21488434090621872,
+  "cos_mean": 0.466465294473951,
+  "cw20": {
+   "scaled_fve": 0.21,
+   "cos": 0.46,
+   "global_scale": 0.434,
+   "n_writeups": 140
+  }
+ }
+}
