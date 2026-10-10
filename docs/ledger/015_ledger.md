@@ -109,3 +109,32 @@ first 10 NLA explanations).
 9. **Added descriptive check:** F − P on the texts whose P is within 20% of F's edit size (Oracle P; NLA P*).
 
 Nothing has been scored on smoke versions yet.
+
+## 2026-10-11: step 3, smoke scored and analysed (report `claude_ovarida/46_015_smoke_2026-10-11.md`)
+
+- **Scoring:** both scorers, every version of both readers' 20 paired texts (1,170 unique texts, 1,822 entries; Oracle AR
+  102 s on GPU 0, NLA AR 178 s on GPU 1). Results `results/015_oracle_hallucination/analysis/oh_smoke.json`.
+- **Checks:**
+  - G-repro exact: the NLA AR reproduces 013's MSE at 0.0 on 252 version values and on F/P, and the versions are
+    identical 20/20;
+  - Oracle O vs step 2: max 0.25 points (layout);
+  - rewrite gates pass for both readers;
+  - G3 κ 0.67.
+- **Descriptive, n 20 (paired; 13 (item, state)):**
+  - Oracle texts × Oracle AR: Δ_A +15.9 [+7.0, +24.1] (n 19), Δ_AP +5.3 [−0.7, +12.1] (n 10, unresolved), primary
+    +1.1 [−6.2, +8.5];
+  - NLA texts × NLA AR: primary +29.1 [+9.1, +54.1] (013's pattern);
+  - F − P: Oracle −7.6 [−12.4, −3.5] (Oracle AR), NLA +7.8 [+3.7, +11.9] (NLA AR).
+- **Found in analysis:**
+  - Under the Oracle AR, every NLA version lies within −171.0 to −164.1 points, so the paired reader contrast there is
+    mostly the Oracle side (report 46 §4a).
+  - The Oracle's F mostly deletes unflagged follow-on text (§2c).
+  - **013's controls:** in 013's eligible set, R1 is empty for at least one seed on 12/474 explanations and RS1 on
+    75/474. An empty text scores far below C1, so this biases 013's Δ toward 0. Observation only; 013 is unchanged.
+- **Open for the PI** (report 46 §4):
+  - 4a: scale-free descriptive view of the reader contrasts;
+  - 4b: a correction-only Fc arm;
+  - 4c: PA coverage;
+  - 4d: Oracle misquote tags;
+  - 4e: a note in the 013 ledger.
+- Full run not started.
