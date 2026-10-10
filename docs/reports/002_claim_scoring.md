@@ -70,27 +70,36 @@ The design estimated $2.35. The difference is about 385 reasoning tokens per cal
 
 | Reader, cell | Arm | z correct | incorrect (other candidate + non-candidate) | no claim | conflicting | z in the wrong role | **mention(z)**, the 001 measure |
 |---|---|---|---|---|---|---|---|
-| NLA L42, assistant newline | real | **0.15** | 0.60 (0.12 + 0.47) | 0.05 | 0.20 | 0.07 | 0.55 |
-| | shuffled | 0.07 | 0.57 | 0.10 | 0.25 | 0.05 | 0.25 |
-| NLA L42, `</think>` newline | real | **0.15** | 0.72 (0.45 + 0.28) | 0.00 | 0.12 | **0.28** | 0.60 |
-| | shuffled | 0.05 | 0.68 | 0.07 | 0.20 | 0.00 | 0.20 |
-| NLA L42, `:` | real | **0.05** | 0.42 | 0.15 | 0.38 | 0.17 | 0.43 (corrected 2026-10-06, report 31: 0.425 was written 0.42) |
-| | shuffled | 0.00 | 0.47 | 0.20 | 0.33 | 0.00 | 0.20 |
-| Oracle L40, `:` (k = 4) | real | **0.00** | 0.12 | 0.03 | **0.85** | 0.05 | 0.53 |
+| NLA L42, assistant newline | real | **0.15** | 0.60 (0.13 + 0.48) | 0.05 | 0.20 | 0.08 | 0.55 |
+| | shuffled | 0.08 | 0.58 | 0.10 | 0.25 | 0.05 | 0.25 |
+| NLA L42, `</think>` newline | real | **0.15** | 0.73 (0.45 + 0.28) | 0.00 | 0.13 | **0.28** | 0.60 |
+| | shuffled | 0.05 | 0.68 | 0.08 | 0.20 | 0.00 | 0.20 |
+| NLA L42, `:` | real | **0.05** | 0.43 | 0.15 | 0.38 | 0.18 | 0.43 (corrected 2026-10-06, report 31: 0.425 was written 0.42) |
+| | shuffled | 0.00 | 0.48 | 0.20 | 0.33 | 0.00 | 0.20 |
+| Oracle L40, `:` (k = 4) | real | **0.00** | 0.13 | 0.03 | **0.85** | 0.05 | 0.53 |
 | | shuffled | 0.00 | 0.23 | 0.00 | 0.78 | 0.00 | 0.38 |
 | | none | 0.00 | 0.00 | 1.00 | 0.00 | 0.00 | 0.00 |
-| Oracle L44, `:` (k = 4) | real | 0.03 | 0.17 | 0.23 | 0.57 | 0.00 | 0.30 |
+| Oracle L44, `:` (k = 4) | real | 0.03 | 0.18 | 0.23 | 0.58 | 0.00 | 0.30 |
 
-40 readouts per row (10 tables × 4 samples). WSB-grid Oracle rows (k = 1, L20–60) are on the results page; the
-role-correct rate there is 0–0.10 at every layer.
+40 readouts per row (10 tables × 4 samples). WSB-grid Oracle rows (k = 1, L20–60) are on the results page (member
+renders at `:`); the role-correct rate there is 0–0.10 at every layer (corrected 2026-10-10: scoped to `:`; at `</think>`
+L60 the member rate is 0.20, n = 10, and partner and substituted renders reach 0.30; `scores.json` `rates`).
+
+(Corrected 2026-10-10: 14 numbers in the table (13 cells) had been rounded down from values
+ending in 5 (all rates are multiples of 1/40), not half-up. Half-up from `analysis/scores.json` `rates`: assistant newline real
+(0.12 + 0.47) → (0.13 + 0.48) and wrong role 0.07 → 0.08, shuffled 0.07 → 0.08 and 0.57 → 0.58; `</think>` real
+0.72 → 0.73 and conflicting 0.12 → 0.13, shuffled no claim 0.07 → 0.08; `:` real 0.42 → 0.43 and wrong role
+0.17 → 0.18, shuffled 0.47 → 0.48; Oracle L40 real 0.12 → 0.13; Oracle L44 real 0.17 → 0.18 and conflicting
+0.57 → 0.58. Report 31 listed 4 of them as not fixed. No reading changes.)
 
 - **The 001 mention rates overstate what the verbalizers claim.**
-  - NLA at `:`: z is mentioned in 42% of readouts but put in the intermediate role in 5%.
+  - NLA at `:`: z is mentioned in 43% of readouts but put in the intermediate role in 5% (corrected 2026-10-10: 0.425
+    was written 42%).
   - Oracle L40: z is mentioned in 53%, never placed in its role. 85% of the Oracle's samples contradict themselves
     (different colours for the same role across bullets).
 - **The NLA places z in the wrong role** in up to 28% of readouts (`</think>` cell), usually as the start of a
   two-step chain. This matches the role reading of report 001 §8.
-- **Real vs shuffled:** role-correct z is higher with the real activation for the NLA (0.05–0.15 vs 0.00–0.07) and
+- **Real vs shuffled:** role-correct z is higher with the real activation for the NLA (0.05–0.15 vs 0.00–0.08; corrected 2026-10-10: the shuffled assistant-newline 0.075 was written 0.07) and
   not at all for the Oracle.
 
 ## 4. Do the claims follow the activation? (within table, 10 tables)

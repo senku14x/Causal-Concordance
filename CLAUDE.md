@@ -25,8 +25,10 @@ and vocabulary: J-lens, workspace, J-space, privilege, verbalizable. A session t
    - `docs/claude_reports/04_user_workspace_paper_notes_verbatim.md`: the PI's own notes;
    - `docs/claude_reports/04b_user_workspace_paper_notes_combined_2026-10-05.md`: the PI's combined notes (paper plus
      follow-up literature);
-   - `docs/claude_reports/03_workspace_paper_notes_merged.md`: the agent's notes merged with the PI's, with corrections
-     in §14 and disagreements in §15.
+   - `docs/claude_reports/03_workspace_paper_notes_merged.md`: the agent's notes merged with the PI's. §14 corrects the
+     PI's notes against their sources; §15 lists where the agent's reading differs from the PI's. Neither corrects the
+     paper: the notes' corrections of and disagreements with the paper are 04 §2.3 and §9, and 04b (corrected 2026-10-10:
+     was "with corrections in §14 and disagreements in §15", which was read as corrections to the paper).
 3. **The relevant reading** (`docs/context/READING_LIST.md` is the full list):
    - Readers:
      - Karvonen et al. 2025, *Activation Oracles* (`2512.15674`): the activation-oracle idea. **The Oracle Lens is
@@ -238,6 +240,11 @@ into `main` ("merge with main"). On this instance the local `main` ref was left 
   - report 38's content-matched control (PCA-k with the same centred share as J, which removes more raw energy):
     the Oracle loses 0.035 / 0.02, so its J cost exceeds it by 0.105 [0.035, 0.18] / 0.205 [0.13, 0.28]; NLA
     unresolved (0.02 [−0.005, 0.055]) (`claude_ovarida/results/typo_content_control.json`, POST HOC);
+  - **scope (PI, 2026-10-10): the Oracle-vs-NLA J difference holds on brew `:` and typo, not on multihop.** On multihop
+    the NLA loses the hidden step without J as the Oracle does, on the same J basis (007's `J_raw_L42` equals
+    Cathryn's CW-12/14 basis): 007 test half, naming whole → rest of J 0.80 → 0.225 (NLA L42) vs 0.85 → 0.425 and
+    0.8625 → 0.125 (Oracle L40 / L44; `results/012_reader_concordance/analysis/j_split_naming.json`); CW-14 (70
+    prompts, L42) J − rest +0.65 (NLA) vs +0.71 (Oracle). It is not a general property of the NLA;
   - Part C: reconstructor gate FVE 54.7%; deletion +39.3 [31.8, 47.3], carried by misquotes; rewrite F − P +1.8
     [−1.2, 4.6], unresolved.
 - **013, the NLA hallucination test** (branch `013-nla-hallucination`, EXPLORATORY, 2026-10-07; Camila's ask; spec
@@ -366,7 +373,9 @@ vector, do it for two colours, swap them in whitened space; `docs/design_specs/0
   next 011 step (PI, 2026-10-10; was "so 011 is not 'the TA's reconstructor method' yet"). s1 below is unchanged. The output scale is per layer and
   rises with depth (E0: 0.38 / 0.42 at L40 / L44, 0.11 at L20 → 2.33 at L63), consistent with a scale-invariant loss,
   so only colour vectors centred over the 12 colours are used (the scale cancels there). (corrected 2026-10-09: was "a
-  global output scale (0.3-0.55) is unexplained", a range with no JSON key; report 36 E12.)
+  global output scale (0.3-0.55) is unexplained", a range with no JSON key; report 36 E12.) The 011 spec's notes still
+  call the scale unexplained and the published 0.22 unscaled (`011_olens_swaps.md:109`, `:126`, `:150`, `:186-189`);
+  the spec is not edited, and this block supersedes those lines (2026-10-10).
   Validation: `results/011_olens_swaps/ar_validation_v3.json`, `ar_offline_d2.json`.
 - **Smoke s0b** (2 pairs, one table; observations only; all gates pass; `olens_swaps_s0b.json`), median S:
   - reference (class-mean coordinate swap): 0.23;
@@ -747,3 +756,4 @@ why the NLA runs stopped and the other open issues: `docs/claude_reports/25_nla_
 | 10-09 | The 012 lever was reported pooled (48/82, 38/82) in CLAUDE.md, STATUS and the page, although `stageA_summary.json` had `by_target` and `by_relation`. Split, most working swaps have a named-place bridge (44/49 vs 4/33 at L24-47; countries 38/42), and all 27 Japan targets flip | `stageA_splits.json` (named-place group added 10-10); lever text restated (analysis chat) |
 | 10-09 | The analysis chat's up-to-speed report flagged the Japan counts (29/96, 28/87, 27/82) as inconsistent; they are three cohorts and all correct. It also flagged spec §17's "held-out", which §20 and ledger correction 4 already correct, and called the read-position edit sizes "mean" (they were item medians) | withdrawn in the patch list |
 | 10-10 | The 10-09 patch, checked before commit (claude_ovarida 40), had: CW-20's bullet-by-bullet score as +0.22 (0.22 is the published reconstructor value; hers is +0.209 → +0.21); CW-20 "agree" with E0 (different inputs and centring); a country / other bridge split that put 7 geographic places (flips 4/7, 6/7) among the "other" bridges; a stale "It covers 012, Stage L and 013" clause; a misplaced CW-16b parenthetical; a leftover "PI's call" sentence; and a derived ratio cited as a JSON value | fixed before commit: +0.21 with sources, "consistent with", a named-place group in `stageA_splits.py` (POST HOC), clauses fixed, "ratio of" |
+| 10-10 | My up-to-speed report (claude_ovarida 39, uncommitted draft) counted 002's rounding slips as 12 cells (they are 14 numbers in 13 cells, plus 2 bullets) and named a cause (Python's `round`) without checking it. My report to the PI then gave the CPU tests as "140 passed"; the run gives 104 passed, 29 deselected | corrected in claude_ovarida 39 and 40 before commit; test counts are quoted from the run's own output |

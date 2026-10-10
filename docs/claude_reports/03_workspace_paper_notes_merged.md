@@ -206,8 +206,11 @@ This is the selectivity of "verbalizable, not an impulse to verbalize".
 - Split each into a J-space component (k=16 via gradient pursuit) and a non-J remainder.
   - The J-space component carries a **median of only 6–7% of variance**.
   - Swap with equal-magnitude perturbations: pure J-lens vectors 88% top-5; J-space component **59%**; non-J component **5%**.
+    These are the prose values. The rendered Fig. 8 bars read about 87% / 55% / 9%, and about 1% for the non-J component
+    with the J coordinates clamped (read off the PDF, p. 13, ±2 points; corrected 2026-10-10; §14 item 7).
   - Injection: the J-space component reports nearly as often as pure J-lens vectors; the non-J component is rare even at several-fold higher strength.
-- Clamp control: clamping the J-lens coordinates to clean values → the non-J effect falls to 0 (swap) or near 0 (injection). So the non-J residual effect is itself mediated by the J-space.
+- Clamp control: clamping the J-lens coordinates to clean values → the non-J effect falls to 0 (swap) or near 0 (injection) in the prose; the bars show about 1% (swap) and 3%
+  (injection, at strength 0.32) (corrected 2026-10-10). So the non-J residual effect is itself mediated by the J-space.
 
 **[my note] Near-tautology risk.** J-lens vectors are *defined* as the directions with the largest average first-order effect on producing token v. "At equal norm, the J-component drives the report of v more than the orthogonal remainder" is therefore partly guaranteed by construction. The more informative tests of privilege are §3.3 (probes for intermediates), §3.5 and §7, where the downstream use isn't the token itself.
 
@@ -1008,12 +1011,21 @@ Repos: `github.com/mirella-54/j-lens-text-degradation`, `github.com/amaljithkutt
 4. **"NLA-RL multihop-mt .75"**: .75 is plain multihop. multihop-mt NLA-RL is ≈.22. typo-mt .75 is correct.
 5. **Hallucination:** logit ≈.20, tuned ≈.27, R ≈.21 (the notes had logit .27 and R .20). Patchscopes has the lowest at ≈.06.
 6. **Multihop "too easy" explanation.** Zeisler's Qwen run on *Anthropic's own* items still has answer swaps dominating, so the dataset-difficulty explanation isn't supported for Qwen.
+7. **Fig. 8's bars differ from its prose (added 2026-10-10).** 04's quick-reference row (`04:393`; 04 is verbatim and
+   left unedited) and §4.1 above give the prose values 88 / 59 / 5 / 0. Read off the rendered bars (PDF p. 13, ±2
+   points):
+   - swap, target in the top 5: about 87 / 55 / 9 / 1;
+   - injected thought: about 89 / 79 / 12 / 3, each at its best strength from a sweep (0.02 / 0.04 / 0.16 / 0.32);
+   - the left panel's worked example ("thunder") has a J component holding 12% of the variance (prose median 6–7%).
+   Fig. 16 (p. 19) has a bar the prose omits: the probe's J component with the orthogonal complement clamped still flips
+   54%. It also gives the J part as 16% of probe variance (prose: 10–15%). 04b already notes the Fig. 8 discrepancy.
 
 **Checked and matching:**
 - the Nanda review content and cost numbers
 - R-lens methods and comments
 - WorkspaceBench design and precision/recall
-- the paper's numbers in the user's §§2–8 and quick-reference table
+- the paper's numbers in the user's §§2–8 and quick-reference table, against the paper's prose (figures were inspected
+  for A.9 only, so the Fig. 8 bars were not compared; see item 7; corrected 2026-10-10)
 
 **Not checked (figure-only):** R-lens per-model pass@10 and ablation numbers; meta-token steering magnitudes.
 

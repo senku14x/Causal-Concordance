@@ -33,7 +33,7 @@ Cleaned 2026-10-06:
 
 | File | What it is |
 |---|---|
-| `03_workspace_paper_notes_merged.md` | The agent's notes on the workspace (J-lens) paper merged with the PI's; corrections in §14, disagreements in §15 |
+| `03_workspace_paper_notes_merged.md` | The agent's notes on the workspace (J-lens) paper merged with the PI's; §14 corrects the PI's notes against their sources, §15 lists where the agent's reading differs from the PI's (neither corrects the paper; corrected 2026-10-10) |
 | `04_user_workspace_paper_notes_verbatim.md` | The PI's own notes on the paper, verbatim |
 | `04b_user_workspace_paper_notes_combined_2026-10-05.md` | The PI's combined notes (paper + follow-up literature), 2026-10-05 |
 

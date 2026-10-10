@@ -149,3 +149,17 @@ Half-up from the JSON, the correct table is:
 | NLA L42 | 1.00 | 0.99 | 0.97 | 0.96 | 1.00 | 1.00 |
 
 No reading changes. The paired contrasts came from `paired_full.json` and are unaffected.
+
+## 2026-10-10: scope of the Oracle-vs-NLA J contrast (PI)
+
+The Oracle-vs-NLA J difference in Parts A/B, and in report 38's content-matched control, holds on brew `:` (007) and
+typo only. On multihop the NLA loses the hidden step without J as the Oracle does. This is on the same J basis: 007's
+`J_raw_L42` equals Cathryn's CW-12/14 basis (mean cos² 0.99999997, `007_jsubspace/analysis/geometry_overlaps.json`
+`ours_raw_L42_vs_cw`).
+- 007 test half, naming whole → rest of J (`012_reader_concordance/analysis/j_split_naming.json` `cells`):
+  - NLA L42: 0.80 → 0.225;
+  - Oracle L40 / L44: 0.85 → 0.425 and 0.8625 → 0.125.
+- CW-14 (70 prompts, L42, pre-set), J − rest: +0.65 for the NLA, +0.71 for the Oracle.
+
+So the difference is not a general property of the NLA. On typo, the NLA's rest-of-J naming may come from re-solving
+the inverted input (`claude_ovarida/39_up_to_speed_2026-10-10.md`, S3).

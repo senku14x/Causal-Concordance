@@ -56,6 +56,11 @@ Without J, the Oracle keeps the *frame*: there is a typo, a correction is being 
 - On typo, at L40/L44, the Oracle's naming of the corrected word depends on 007's J subspace beyond its content share
   and beyond random subspaces. The NLA's L42 naming barely depends on it. This matches 007 on brew `:` (Oracle J-dependent,
   NLA not), so 014 now counts as **a second family** for report 36's R6. Confidence moves from low-medium to medium.
+  *(Corrected 2026-10-10: the pattern holds on brew `:` and typo only. On multihop the NLA loses the hidden step without J
+  as the Oracle does, on the same J basis: 007 test half, naming 0.80 → 0.225 for the NLA vs 0.85 → 0.425 and
+  0.8625 → 0.125 for the Oracle (`j_split_naming.json`); Cathryn's CW-14 J − rest +0.65 vs +0.71. So typo is a second
+  family with the pattern, not evidence of a general reader property. On typo the NLA's rest-of-J naming may also come
+  from re-solving the inverted input (report 39, S3). Confidence in a general Oracle-vs-NLA difference stays low.)*
 - **It doesn't show why.** The open hypothesis is still that the Oracle's reconstructor was trained with a J-lens term
   (report 36, (g)5). This result is what that hypothesis predicts, but it doesn't test it.
 - **Caveats:**

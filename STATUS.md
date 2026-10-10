@@ -13,7 +13,8 @@ report 34.) Before 012: `docs/reports/008_trackb.md`,
 **2026-10-07, 014 typo (branch `014-typo`; EXPLORATORY; `docs/ledger/014_ledger.md`).** Reading-only suite on WSB typo
 (100 items; hidden step = the corrected word; no answer depends on it, so no causal parts).
 - **Readers:** every reader names the word from almost every activation part (0.77-1.00; other-target null ≤ 0.02); κ is undefined.
-- **J dependence:** removing 007's J subspace costs the Oracle 0.14 / 0.225 (L40 / L44) and the NLA 0.025. The paired Oracle − NLA difference is +0.115 [0.05, 0.19] / +0.20 [0.13, 0.275] (POST HOC). Same direction as 007 on brew.
+- **J dependence:** removing 007's J subspace costs the Oracle 0.14 / 0.225 (L40 / L44) and the NLA 0.025. The paired Oracle − NLA difference is +0.115 [0.05, 0.19] / +0.20 [0.13, 0.275] (POST HOC). Same direction as 007 on brew `:`; not on multihop, where the NLA also loses the step without J (007
+  test half 0.80 → 0.225; Cathryn's CW-14) (added 2026-10-10).
 - **NLA hallucination test (013 pipeline):** reconstructor gate FVE 54.7%.
   - Deletion: +39.3 [31.8, 47.3], carried by misquotes (+42.2); invented context ≈ 0 (CI wide).
   - Rewrite: F − P +1.8 [−1.2, 4.6], unresolved (multihop +3.1).
@@ -143,8 +144,10 @@ is a named place, a country or a geographic place (44/49 vs 4/33 other bridges; 
   amendments 1-3; **post hoc, exploratory**):
   - **AR loader:** failed the pre-set validation twice (v1, v2), passed under post hoc amendment 2 (v3). The head
     outputs a raw activation scored in the AR's whitened metric. On 16-token spans the FVE after one global scale is
-    0.24 (published 0.22), and within-batch retrieval@1 is 0.86 (published 0.93). The global scale is unexplained, so
-    only centred colour vectors are used.
+    0.24 (published 0.22), and within-batch retrieval@1 is 0.86 (published 0.93). The output scale is per layer and
+    expected under the scale-invariant loss (E0: 0.11 at L20 → 2.33 at L63, 0.38 / 0.42 at L40 / L44,
+    `stageE0_ar_profile.json` `layers.*.white.global_scale`), so only centred colour vectors are used (corrected
+    2026-10-10: was "the global scale is unexplained").
   - **Smoke s0b (2 pairs):** the TA's swap as given (AR vectors swapped in whitened coordinates) S −0.00, with a
     failed answer-colour control, so it is not read. Raw-coordinate swap 0.16 vs a size-matched random 0.09 (generic).
     Additive "minus AR(z), plus AR(z′)" at the reference's edit size: 0.10, vs the model's class-mean difference 0.23
@@ -181,7 +184,8 @@ collapses without J, as the A3 sentence below says). Stage 1b NLA first stopped 
 - **B2 (readers beyond the model): not testable.** Only 9 pairs have model D_z ≤ 0 (the minimum is 15). The secondary OLS intercepts are positive but extrapolated.
 - **Per-pair reader–model r:** 0.07 (NLA) to 0.30 (Oracle L40).
 - **Reading.** 006's z tracking is consistent with the readers reading the model's output-facing distribution (z as the runner-up answer). No held intermediate beyond it is shown.
-  - The Oracle's 2× at `</think>` is not mirrored by the model and stays unexplained.
+  - The Oracle's 1.87× / 1.84× at `</think>` (L40 / L44; ratio of `posthoc.json` `emit_think.mean` to `emit_colon.mean`;
+    corrected 2026-10-10: was "2×") is not mirrored by the model and stays unexplained.
   - D magnitudes are compared only within an instrument.
 - **Also post hoc** (PI-forwarded review, `posthoc.json`, commit 70ba3e1): the readers' tracking does not follow 001's patch shares, and the Oracle's G-pc failure is a "blue" prior. The review's "`</think>` ≥ `:` for every reader" had the NLA's sign reversed (NLA −0.41 [−0.87, 0.04]).
 - The page https://claude.ai/artifact/P35xhVkdzKjsdGhogp7PQY (v8) carries both.

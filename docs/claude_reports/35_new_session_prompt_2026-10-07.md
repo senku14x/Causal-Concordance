@@ -24,7 +24,8 @@ Your first job is to come fully up to speed with the whole project: the paper it
    - `docs/papers/2607.15495.pdf`; text in `docs/papers/text/`.
    - Read the main text and the appendices the project leans on (A.8, A.9 / A.9.2, A.12, A.21, A.24.3, §3.1 with Figs. 7–8, §3.3).
    - Text inside figures is only in the PDF: render pages with `pypdfium2` from `/venv/main`.
-2. **My notes, after the paper:** `docs/claude_reports/04_user_workspace_paper_notes_verbatim.md`, `04b_*` (combined), and `03_*` (merged, with corrections in §14 and disagreements in §15).
+2. **My notes, after the paper:** `docs/claude_reports/04_user_workspace_paper_notes_verbatim.md`, `04b_*` (combined), and `03_*` (merged; §14 corrects my notes against their sources, §15 lists where the agent's reading differs from
+   mine; corrected 2026-10-10).
 3. **`CLAUDE.md`, all of it:** rules, non-negotiables, conventions, environment, "Where things stand", pitfalls, the mistakes log.
 4. **What the project has done and what it concluded,** in time order:
    - **001–004:** `STATUS.md` and the reports in `docs/reports/` (dev split only).
@@ -79,7 +80,9 @@ Your first job is to come fully up to speed with the whole project: the paper it
    - the CPU tests pass (`python -m pytest scripts/common/tests tests -q -m "not gpu"`; 140 passed on 2026-10-07).
 3. **Write `docs/claude_reports/36_up_to_speed_<date>.md`.** Commit and push it, and add it to the reports README. It must contain:
    - **(a) The paper in your own words** (about one page): its main claims, its methods (J-lens, J-space, the privilege test, verbalizers), and what it does *not* show.
-   - **(b) My notes:** the points I stress, and where the merged notes (03 §14–15) correct or disagree with the paper.
+   - **(b) My notes:** the points I stress, where my notes correct or disagree with the paper (04 §2.3 and §9, 04b),
+     and where the merged notes correct my notes (03 §14) or differ from me (03 §15) (corrected 2026-10-10: said
+     03 §14–15 correct or disagree with the paper).
    - **(c) The project, one row per experiment (001–014):**
      - the question;
      - the prompt set;
