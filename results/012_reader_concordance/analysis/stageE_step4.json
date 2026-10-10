@@ -1192,5 +1192,3825 @@
     "47": 0.0872349739074707
    }
   }
+ },
+ "full": {
+  "n_items": 82,
+  "J_size": {
+   "all": {
+    "n": 82,
+    "power": {
+     "AR_full_minus_rand_full": {
+      "mean": 7.293888041872369,
+      "median": 4.596413031089461,
+      "n": 82,
+      "n_clusters": 31,
+      "ci95": [
+       3.4959502571661507,
+       10.192469391235482
+      ]
+     },
+     "AR_answer_minus_rand_full": {
+      "mean": 7.160315982680783,
+      "median": 5.267898554901375,
+      "n": 82,
+      "n_clusters": 31,
+      "ci95": [
+       3.568900283036461,
+       9.90124249914916
+      ]
+     },
+     "has_power": true
+    },
+    "primary_relative_AR_Jrem_minus_rand_Jcomp": {
+     "mean": 0.29423850421198366,
+     "median": 0.0956070339307189,
+     "n": 82,
+     "n_clusters": 31,
+     "ci95": [
+      0.08013009140202285,
+      0.4616996719710391
+     ]
+    },
+    "primary_absolute": {
+     "flips": {
+      "k": 0,
+      "n": 82,
+      "rate": 0.0
+     },
+     "null_mean_flip_rate": 0.0,
+     "pass": false
+    },
+    "primary_verdict": "weak handle",
+    "AR_full_absolute": {
+     "flips": {
+      "k": 37,
+      "n": 82,
+      "rate": 0.45121951219512196
+     },
+     "null_mean_flip_rate": 0.0,
+     "pass": true
+    },
+    "J_reading": {
+     "full_minus_Jrem": {
+      "mean": 7.113966005544767,
+      "median": 4.391865428090691,
+      "n": 82,
+      "n_clusters": 31,
+      "ci95": [
+       3.368282865445121,
+       9.940737012542197
+      ]
+     },
+     "full_minus_rrem": {
+      "mean": -0.7409592949265962,
+      "median": -0.5905372351408005,
+      "n": 82,
+      "n_clusters": 31,
+      "ci95": [
+       -0.9996308957763785,
+       -0.46137726896266446
+      ]
+     },
+     "contrast_rrem_minus_Jrem": {
+      "mean": 7.854925300471363,
+      "median": 4.984780453945712,
+      "n": 82,
+      "n_clusters": 31,
+      "ci95": [
+       3.8933552061372,
+       10.81832988100472
+      ]
+     },
+     "verdict": "J-attribution (lever)",
+     "rule": "\u00a79: J share >= 0.30 (report 41: 0.53-0.62) and (full - Jrem) > (full - rrem), CI > 0"
+    },
+    "arm_table": {
+     "AR_Jrem@J": {
+      "median_dm": 0.4238792359828949,
+      "k": 0,
+      "n": 82,
+      "rate": 0.0
+     },
+     "AR_answer@J": {
+      "median_dm": 5.713387060910463,
+      "k": 37,
+      "n": 82,
+      "rate": 0.45121951219512196
+     },
+     "AR_full@J": {
+      "median_dm": 5.2525444477796555,
+      "k": 37,
+      "n": 82,
+      "rate": 0.45121951219512196
+     },
+     "AR_mentions@J": {
+      "median_dm": 2.927713561666068,
+      "k": 34,
+      "n": 82,
+      "rate": 0.4146341463414634
+     },
+     "AR_mentions_Jrem@J": {
+      "median_dm": 0.23201659880578518,
+      "k": 0,
+      "n": 82,
+      "rate": 0.0
+     },
+     "AR_mismatched@J": {
+      "median_dm": 0.05682650115340948,
+      "k": 0,
+      "n": 82,
+      "rate": 0.0
+     },
+     "AR_mismatched_Jrem@J": {
+      "median_dm": 0.06694825777804336,
+      "k": 0,
+      "n": 82,
+      "rate": 0.0
+     },
+     "AR_rrem@J": {
+      "median_dm": 6.092850229088268,
+      "k": 41,
+      "n": 82,
+      "rate": 0.5
+     },
+     "AR_starts@J": {
+      "median_dm": 5.373118333518505,
+      "k": 38,
+      "n": 82,
+      "rate": 0.4634146341463415
+     },
+     "AR_starts_Jrem@J": {
+      "median_dm": 0.40584659576416016,
+      "k": 0,
+      "n": 82,
+      "rate": 0.0
+     },
+     "AR_template@J": {
+      "median_dm": 5.905234565174405,
+      "k": 41,
+      "n": 82,
+      "rate": 0.5
+     },
+     "AR_template_Jrem@J": {
+      "median_dm": 0.6339787205510836,
+      "k": 0,
+      "n": 82,
+      "rate": 0.0
+     },
+     "AR_word@J": {
+      "median_dm": 5.672768376075351,
+      "k": 40,
+      "n": 82,
+      "rate": 0.4878048780487805
+     },
+     "AR_word_Jrem@J": {
+      "median_dm": 0.6138180196285248,
+      "k": 0,
+      "n": 82,
+      "rate": 0.0
+     },
+     "rand_Jcomp_0@J": {
+      "median_dm": 0.1402820162475109,
+      "k": 0,
+      "n": 82,
+      "rate": 0.0
+     },
+     "rand_Jcomp_1@J": {
+      "median_dm": 0.14724357982298208,
+      "k": 0,
+      "n": 82,
+      "rate": 0.0
+     },
+     "rand_full_0@J": {
+      "median_dm": 0.17342017524988185,
+      "k": 0,
+      "n": 82,
+      "rate": 0.0
+     },
+     "rand_full_1@J": {
+      "median_dm": 0.3693239539861679,
+      "k": 0,
+      "n": 82,
+      "rate": 0.0
+     }
+    }
+   },
+   "covered": {
+    "n": 51,
+    "power": {
+     "AR_full_minus_rand_full": {
+      "mean": 11.023423754140454,
+      "median": 12.221982136368752,
+      "n": 51,
+      "n_clusters": 15,
+      "ci95": [
+       6.854725375581278,
+       13.439593266868082
+      ]
+     },
+     "AR_answer_minus_rand_full": {
+      "mean": 10.427946789573117,
+      "median": 10.580556657165289,
+      "n": 51,
+      "n_clusters": 15,
+      "ci95": [
+       6.2869547146173925,
+       12.78793304938209
+      ]
+     },
+     "has_power": true
+    },
+    "primary_relative_AR_Jrem_minus_rand_Jcomp": {
+     "mean": 0.470369152384804,
+     "median": 0.5007147789001465,
+     "n": 51,
+     "n_clusters": 15,
+     "ci95": [
+      0.20545942623764515,
+      0.6666046374358235
+     ]
+    },
+    "primary_absolute": {
+     "flips": {
+      "k": 0,
+      "n": 51,
+      "rate": 0.0
+     },
+     "null_mean_flip_rate": 0.0,
+     "pass": false
+    },
+    "primary_verdict": "weak handle",
+    "AR_full_absolute": {
+     "flips": {
+      "k": 36,
+      "n": 51,
+      "rate": 0.7058823529411765
+     },
+     "null_mean_flip_rate": 0.0,
+     "pass": true
+    },
+    "J_reading": {
+     "full_minus_Jrem": {
+      "mean": 10.741134540257978,
+      "median": 11.908853779001339,
+      "n": 51,
+      "n_clusters": 15,
+      "ci95": [
+       6.5809766914846834,
+       13.076691855778751
+      ]
+     },
+     "full_minus_rrem": {
+      "mean": -1.0701935956611401,
+      "median": -0.8704387247562408,
+      "n": 51,
+      "n_clusters": 15,
+      "ci95": [
+       -1.4336049640135173,
+       -0.7864708445983396
+      ]
+     },
+     "contrast_rrem_minus_Jrem": {
+      "mean": 11.811328135919116,
+      "median": 12.379936426877975,
+      "n": 51,
+      "n_clusters": 15,
+      "ci95": [
+       7.596420672787427,
+       14.167979004584442
+      ]
+     },
+     "verdict": "J-attribution (lever)",
+     "rule": "\u00a79: J share >= 0.30 (report 41: 0.53-0.62) and (full - Jrem) > (full - rrem), CI > 0"
+    },
+    "arm_table": {
+     "AR_Jrem@J": {
+      "median_dm": 0.7289659604430199,
+      "k": 0,
+      "n": 51,
+      "rate": 0.0
+     },
+     "AR_answer@J": {
+      "median_dm": 10.995335802435875,
+      "k": 34,
+      "n": 51,
+      "rate": 0.6666666666666666
+     },
+     "AR_full@J": {
+      "median_dm": 12.818151990883052,
+      "k": 36,
+      "n": 51,
+      "rate": 0.7058823529411765
+     },
+     "AR_mentions@J": {
+      "median_dm": 10.763786613941193,
+      "k": 33,
+      "n": 51,
+      "rate": 0.6470588235294118
+     },
+     "AR_mentions_Jrem@J": {
+      "median_dm": 0.4645915627479553,
+      "k": 0,
+      "n": 51,
+      "rate": 0.0
+     },
+     "AR_mismatched@J": {
+      "median_dm": 0.058432718738913536,
+      "k": 0,
+      "n": 51,
+      "rate": 0.0
+     },
+     "AR_mismatched_Jrem@J": {
+      "median_dm": 0.09982478618621826,
+      "k": 0,
+      "n": 51,
+      "rate": 0.0
+     },
+     "AR_rrem@J": {
+      "median_dm": 14.213150405562441,
+      "k": 39,
+      "n": 51,
+      "rate": 0.7647058823529411
+     },
+     "AR_starts@J": {
+      "median_dm": 12.359925838187337,
+      "k": 37,
+      "n": 51,
+      "rate": 0.7254901960784313
+     },
+     "AR_starts_Jrem@J": {
+      "median_dm": 0.6543042063713074,
+      "k": 0,
+      "n": 51,
+      "rate": 0.0
+     },
+     "AR_template@J": {
+      "median_dm": 12.463874399662018,
+      "k": 38,
+      "n": 51,
+      "rate": 0.7450980392156863
+     },
+     "AR_template_Jrem@J": {
+      "median_dm": 0.8372730016708374,
+      "k": 0,
+      "n": 51,
+      "rate": 0.0
+     },
+     "AR_word@J": {
+      "median_dm": 12.516082435846329,
+      "k": 37,
+      "n": 51,
+      "rate": 0.7254901960784313
+     },
+     "AR_word_Jrem@J": {
+      "median_dm": 0.8385051935911179,
+      "k": 0,
+      "n": 51,
+      "rate": 0.0
+     },
+     "rand_Jcomp_0@J": {
+      "median_dm": 0.23561249673366547,
+      "k": 0,
+      "n": 51,
+      "rate": 0.0
+     },
+     "rand_Jcomp_1@J": {
+      "median_dm": 0.15242145955562592,
+      "k": 0,
+      "n": 51,
+      "rate": 0.0
+     },
+     "rand_full_0@J": {
+      "median_dm": 0.4309954047203064,
+      "k": 0,
+      "n": 51,
+      "rate": 0.0
+     },
+     "rand_full_1@J": {
+      "median_dm": 0.42177116870880127,
+      "k": 0,
+      "n": 51,
+      "rate": 0.0
+     }
+    }
+   },
+   "uncovered": {
+    "n": 31,
+    "power": {
+     "AR_full_minus_rand_full": {
+      "mean": 1.1582002571732612,
+      "median": 0.2280299412086606,
+      "n": 31,
+      "n_clusters": 20,
+      "ci95": [
+       0.4379707370189148,
+       2.2327610657932713
+      ]
+     },
+     "AR_answer_minus_rand_full": {
+      "mean": 1.7845362681159727,
+      "median": 0.30279967188835144,
+      "n": 31,
+      "n_clusters": 20,
+      "ci95": [
+       0.6923484307468174,
+       3.4766773394814776
+      ]
+     },
+     "has_power": true
+    },
+    "primary_relative_AR_Jrem_minus_rand_Jcomp": {
+     "mean": 0.004475179798634074,
+     "median": -0.019892767071723938,
+     "n": 31,
+     "n_clusters": 20,
+     "ci95": [
+      -0.10519273631688185,
+      0.12580561567430623
+     ]
+    },
+    "primary_absolute": {
+     "flips": {
+      "k": 0,
+      "n": 31,
+      "rate": 0.0
+     },
+     "null_mean_flip_rate": 0.0,
+     "pass": false
+    },
+    "primary_verdict": "not shown",
+    "AR_full_absolute": {
+     "flips": {
+      "k": 1,
+      "n": 31,
+      "rate": 0.03225806451612903
+     },
+     "null_mean_flip_rate": 0.0,
+     "pass": false
+    },
+    "J_reading": {
+     "full_minus_Jrem": {
+      "mean": 1.14668873875852,
+      "median": 0.31632590666413307,
+      "n": 31,
+      "n_clusters": 20,
+      "ci95": [
+       0.5550599381233154,
+       2.0561957340842354
+      ]
+     },
+     "full_minus_rrem": {
+      "mean": -0.19931576791170133,
+      "median": -0.05428553931415081,
+      "n": 31,
+      "n_clusters": 20,
+      "ci95": [
+       -0.34226100221207245,
+       -0.09553088898020413
+      ]
+     },
+     "contrast_rrem_minus_Jrem": {
+      "mean": 1.3460045066702213,
+      "median": 0.361979104578495,
+      "n": 31,
+      "n_clusters": 20,
+      "ci95": [
+       0.6602890021428119,
+       2.37682709658779
+      ]
+     },
+     "verdict": "J-attribution on the margin",
+     "rule": "\u00a79: J share >= 0.30 (report 41: 0.53-0.62) and (full - Jrem) > (full - rrem), CI > 0"
+    },
+    "arm_table": {
+     "AR_Jrem@J": {
+      "median_dm": 0.06147128343582153,
+      "k": 0,
+      "n": 31,
+      "rate": 0.0
+     },
+     "AR_answer@J": {
+      "median_dm": 0.3726481646299362,
+      "k": 3,
+      "n": 31,
+      "rate": 0.0967741935483871
+     },
+     "AR_full@J": {
+      "median_dm": 0.4122469946742058,
+      "k": 1,
+      "n": 31,
+      "rate": 0.03225806451612903
+     },
+     "AR_mentions@J": {
+      "median_dm": 0.28225794807076454,
+      "k": 1,
+      "n": 31,
+      "rate": 0.03225806451612903
+     },
+     "AR_mentions_Jrem@J": {
+      "median_dm": 0.07298088073730469,
+      "k": 0,
+      "n": 31,
+      "rate": 0.0
+     },
+     "AR_mismatched@J": {
+      "median_dm": 0.055220283567905426,
+      "k": 0,
+      "n": 31,
+      "rate": 0.0
+     },
+     "AR_mismatched_Jrem@J": {
+      "median_dm": 0.002134373084146546,
+      "k": 0,
+      "n": 31,
+      "rate": 0.0
+     },
+     "AR_rrem@J": {
+      "median_dm": 0.48546955827623606,
+      "k": 2,
+      "n": 31,
+      "rate": 0.06451612903225806
+     },
+     "AR_starts@J": {
+      "median_dm": 0.2977943252772093,
+      "k": 1,
+      "n": 31,
+      "rate": 0.03225806451612903
+     },
+     "AR_starts_Jrem@J": {
+      "median_dm": 0.10473358631134033,
+      "k": 0,
+      "n": 31,
+      "rate": 0.0
+     },
+     "AR_template@J": {
+      "median_dm": 1.4680809378623962,
+      "k": 3,
+      "n": 31,
+      "rate": 0.0967741935483871
+     },
+     "AR_template_Jrem@J": {
+      "median_dm": 0.38456907868385315,
+      "k": 0,
+      "n": 31,
+      "rate": 0.0
+     },
+     "AR_word@J": {
+      "median_dm": 1.5352286100387573,
+      "k": 3,
+      "n": 31,
+      "rate": 0.0967741935483871
+     },
+     "AR_word_Jrem@J": {
+      "median_dm": 0.5212712287902832,
+      "k": 0,
+      "n": 31,
+      "rate": 0.0
+     },
+     "rand_Jcomp_0@J": {
+      "median_dm": 0.0359797477722168,
+      "k": 0,
+      "n": 31,
+      "rate": 0.0
+     },
+     "rand_Jcomp_1@J": {
+      "median_dm": 0.11187786608934402,
+      "k": 0,
+      "n": 31,
+      "rate": 0.0
+     },
+     "rand_full_0@J": {
+      "median_dm": -0.0163849126547575,
+      "k": 0,
+      "n": 31,
+      "rate": 0.0
+     },
+     "rand_full_1@J": {
+      "median_dm": 0.21606922149658203,
+      "k": 0,
+      "n": 31,
+      "rate": 0.0
+     }
+    }
+   },
+   "rescued_concept": {
+    "n": 13,
+    "power": {
+     "AR_full_minus_rand_full": {
+      "mean": 10.225500064448179,
+      "median": 11.040987730026245,
+      "n": 13,
+      "n_clusters": 6,
+      "ci95": [
+       6.287662089207075,
+       13.948803036509512
+      ]
+     },
+     "AR_answer_minus_rand_full": {
+      "mean": 9.218321177761608,
+      "median": 9.199319042265415,
+      "n": 13,
+      "n_clusters": 6,
+      "ci95": [
+       6.648724321028915,
+       12.114612394571305
+      ]
+     },
+     "has_power": true
+    },
+    "primary_relative_AR_Jrem_minus_rand_Jcomp": {
+     "mean": 0.5257614779260413,
+     "median": 0.6701531335912994,
+     "n": 13,
+     "n_clusters": 6,
+     "ci95": [
+      0.1643986693982567,
+      0.7798039987472452
+     ]
+    },
+    "primary_absolute": {
+     "flips": {
+      "k": 0,
+      "n": 13,
+      "rate": 0.0
+     },
+     "null_mean_flip_rate": 0.0,
+     "pass": false
+    },
+    "primary_verdict": "weak handle",
+    "AR_full_absolute": {
+     "flips": {
+      "k": 9,
+      "n": 13,
+      "rate": 0.6923076923076923
+     },
+     "null_mean_flip_rate": 0.0,
+     "pass": true
+    },
+    "J_reading": {
+     "full_minus_Jrem": {
+      "mean": 9.920734296715995,
+      "median": 9.820930480957031,
+      "n": 13,
+      "n_clusters": 6,
+      "ci95": [
+       5.920523587967804,
+       13.847436396591366
+      ]
+     },
+     "full_minus_rrem": {
+      "mean": -1.4340908962321384,
+      "median": -1.0097091794013977,
+      "n": 13,
+      "n_clusters": 6,
+      "ci95": [
+       -2.3660136403945775,
+       -0.7659146603051543
+      ]
+     },
+     "contrast_rrem_minus_Jrem": {
+      "mean": 11.354825192948132,
+      "median": 11.054900288581848,
+      "n": 13,
+      "n_clusters": 6,
+      "ci95": [
+       6.74085300065028,
+       16.04386269878596
+      ]
+     },
+     "verdict": "J-attribution (lever)",
+     "rule": "\u00a79: J share >= 0.30 (report 41: 0.53-0.62) and (full - Jrem) > (full - rrem), CI > 0"
+    },
+    "arm_table": {
+     "AR_Jrem@J": {
+      "median_dm": 0.8634753227233887,
+      "k": 0,
+      "n": 13,
+      "rate": 0.0
+     },
+     "AR_answer@J": {
+      "median_dm": 9.788186786696315,
+      "k": 7,
+      "n": 13,
+      "rate": 0.5384615384615384
+     },
+     "AR_full@J": {
+      "median_dm": 11.213666200637817,
+      "k": 9,
+      "n": 13,
+      "rate": 0.6923076923076923
+     },
+     "AR_mentions@J": {
+      "median_dm": 9.243183200247586,
+      "k": 6,
+      "n": 13,
+      "rate": 0.46153846153846156
+     },
+     "AR_mentions_Jrem@J": {
+      "median_dm": 0.9005691707134247,
+      "k": 0,
+      "n": 13,
+      "rate": 0.0
+     },
+     "AR_mismatched@J": {
+      "median_dm": -0.024724162183701992,
+      "k": 0,
+      "n": 13,
+      "rate": 0.0
+     },
+     "AR_mismatched_Jrem@J": {
+      "median_dm": 0.07164172906469268,
+      "k": 0,
+      "n": 13,
+      "rate": 0.0
+     },
+     "AR_rrem@J": {
+      "median_dm": 12.447636008262634,
+      "k": 9,
+      "n": 13,
+      "rate": 0.6923076923076923
+     },
+     "AR_starts@J": {
+      "median_dm": 10.57124149799347,
+      "k": 9,
+      "n": 13,
+      "rate": 0.6923076923076923
+     },
+     "AR_starts_Jrem@J": {
+      "median_dm": 0.8166812120773623,
+      "k": 0,
+      "n": 13,
+      "rate": 0.0
+     },
+     "AR_template@J": {
+      "median_dm": 8.795543203130364,
+      "k": 8,
+      "n": 13,
+      "rate": 0.6153846153846154
+     },
+     "AR_template_Jrem@J": {
+      "median_dm": 0.8372730016708374,
+      "k": 0,
+      "n": 13,
+      "rate": 0.0
+     },
+     "AR_word@J": {
+      "median_dm": 9.570943024940789,
+      "k": 8,
+      "n": 13,
+      "rate": 0.6153846153846154
+     },
+     "AR_word_Jrem@J": {
+      "median_dm": 0.897388830780983,
+      "k": 0,
+      "n": 13,
+      "rate": 0.0
+     },
+     "rand_Jcomp_0@J": {
+      "median_dm": 0.1996967959117324,
+      "k": 0,
+      "n": 13,
+      "rate": 0.0
+     },
+     "rand_Jcomp_1@J": {
+      "median_dm": 0.2738647758960724,
+      "k": 0,
+      "n": 13,
+      "rate": 0.0
+     },
+     "rand_full_0@J": {
+      "median_dm": 0.5247464071060621,
+      "k": 0,
+      "n": 13,
+      "rate": 0.0
+     },
+     "rand_full_1@J": {
+      "median_dm": 0.6282199025154114,
+      "k": 0,
+      "n": 13,
+      "rate": 0.0
+     }
+    }
+   },
+   "covered_not_rescued": {
+    "n": 38,
+    "power": {
+     "AR_full_minus_rand_full": {
+      "mean": 11.296397647982548,
+      "median": 12.718163214623928,
+      "n": 38,
+      "n_clusters": 13,
+      "ci95": [
+       5.863784306204427,
+       13.958074157481203
+      ]
+     },
+     "AR_answer_minus_rand_full": {
+      "mean": 10.841766077824426,
+      "median": 11.697754979133606,
+      "n": 38,
+      "n_clusters": 13,
+      "ci95": [
+       5.544202895961792,
+       13.558884115590219
+      ]
+     },
+     "has_power": true
+    },
+    "primary_relative_AR_Jrem_minus_rand_Jcomp": {
+     "mean": 0.45141914627859125,
+     "median": 0.49219489470124245,
+     "n": 38,
+     "n_clusters": 13,
+     "ci95": [
+      0.07472163357694599,
+      0.6723933473444103
+     ]
+    },
+    "primary_absolute": {
+     "flips": {
+      "k": 0,
+      "n": 38,
+      "rate": 0.0
+     },
+     "null_mean_flip_rate": 0.0,
+     "pass": false
+    },
+    "primary_verdict": "weak handle",
+    "AR_full_absolute": {
+     "flips": {
+      "k": 27,
+      "n": 38,
+      "rate": 0.7105263157894737
+     },
+     "null_mean_flip_rate": 0.0,
+     "pass": true
+    },
+    "J_reading": {
+     "full_minus_Jrem": {
+      "mean": 11.021797781469706,
+      "median": 12.005426650128417,
+      "n": 38,
+      "n_clusters": 13,
+      "ci95": [
+       5.610934791636829,
+       13.583970198160932
+      ]
+     },
+     "full_minus_rrem": {
+      "mean": -0.9457024138868513,
+      "median": -0.8029883950948715,
+      "n": 38,
+      "n_clusters": 13,
+      "ci95": [
+       -1.216015013162773,
+       -0.6739006981503576
+      ]
+     },
+     "contrast_rrem_minus_Jrem": {
+      "mean": 11.967500195356557,
+      "median": 12.633972391486168,
+      "n": 38,
+      "n_clusters": 13,
+      "ci95": [
+       6.417194459056499,
+       14.550574899943618
+      ]
+     },
+     "verdict": "J-attribution (lever)",
+     "rule": "\u00a79: J share >= 0.30 (report 41: 0.53-0.62) and (full - Jrem) > (full - rrem), CI > 0"
+    },
+    "arm_table": {
+     "AR_Jrem@J": {
+      "median_dm": 0.5491205751895905,
+      "k": 0,
+      "n": 38,
+      "rate": 0.0
+     },
+     "AR_answer@J": {
+      "median_dm": 12.20453579723835,
+      "k": 27,
+      "n": 38,
+      "rate": 0.7105263157894737
+     },
+     "AR_full@J": {
+      "median_dm": 13.320562273263931,
+      "k": 27,
+      "n": 38,
+      "rate": 0.7105263157894737
+     },
+     "AR_mentions@J": {
+      "median_dm": 11.9127786308527,
+      "k": 27,
+      "n": 38,
+      "rate": 0.7105263157894737
+     },
+     "AR_mentions_Jrem@J": {
+      "median_dm": 0.4095868021249771,
+      "k": 0,
+      "n": 38,
+      "rate": 0.0
+     },
+     "AR_mismatched@J": {
+      "median_dm": 0.09941264986991882,
+      "k": 0,
+      "n": 38,
+      "rate": 0.0
+     },
+     "AR_mismatched_Jrem@J": {
+      "median_dm": 0.12657830119132996,
+      "k": 0,
+      "n": 38,
+      "rate": 0.0
+     },
+     "AR_rrem@J": {
+      "median_dm": 14.29276026471283,
+      "k": 30,
+      "n": 38,
+      "rate": 0.7894736842105263
+     },
+     "AR_starts@J": {
+      "median_dm": 13.38605822622776,
+      "k": 28,
+      "n": 38,
+      "rate": 0.7368421052631579
+     },
+     "AR_starts_Jrem@J": {
+      "median_dm": 0.5075446151758349,
+      "k": 0,
+      "n": 38,
+      "rate": 0.0
+     },
+     "AR_template@J": {
+      "median_dm": 13.359395787119865,
+      "k": 30,
+      "n": 38,
+      "rate": 0.7894736842105263
+     },
+     "AR_template_Jrem@J": {
+      "median_dm": 0.8284701108932495,
+      "k": 0,
+      "n": 38,
+      "rate": 0.0
+     },
+     "AR_word@J": {
+      "median_dm": 13.467760786414146,
+      "k": 29,
+      "n": 38,
+      "rate": 0.7631578947368421
+     },
+     "AR_word_Jrem@J": {
+      "median_dm": 0.7150668501853943,
+      "k": 0,
+      "n": 38,
+      "rate": 0.0
+     },
+     "rand_Jcomp_0@J": {
+      "median_dm": 0.27201875671744347,
+      "k": 0,
+      "n": 38,
+      "rate": 0.0
+     },
+     "rand_Jcomp_1@J": {
+      "median_dm": 0.10250145196914673,
+      "k": 0,
+      "n": 38,
+      "rate": 0.0
+     },
+     "rand_full_0@J": {
+      "median_dm": 0.4216286540031433,
+      "k": 0,
+      "n": 38,
+      "rate": 0.0
+     },
+     "rand_full_1@J": {
+      "median_dm": 0.382064089179039,
+      "k": 0,
+      "n": 38,
+      "rate": 0.0
+     }
+    }
+   },
+   "J_toward_tgt": {
+    "n": 68,
+    "power": {
+     "AR_full_minus_rand_full": {
+      "mean": 8.76335952255395,
+      "median": 7.118713950253801,
+      "n": 68,
+      "n_clusters": 27,
+      "ci95": [
+       4.695780638162151,
+       11.309090522336012
+      ]
+     },
+     "AR_answer_minus_rand_full": {
+      "mean": 8.570192356198387,
+      "median": 8.627952389419079,
+      "n": 68,
+      "n_clusters": 27,
+      "ci95": [
+       4.796680445969167,
+       10.9976779427033
+      ]
+     },
+     "has_power": true
+    },
+    "primary_relative_AR_Jrem_minus_rand_Jcomp": {
+     "mean": 0.35301346369766706,
+     "median": 0.21632627584040165,
+     "n": 68,
+     "n_clusters": 27,
+     "ci95": [
+      0.10362231573881885,
+      0.5199298566842844
+     ]
+    },
+    "primary_absolute": {
+     "flips": {
+      "k": 0,
+      "n": 68,
+      "rate": 0.0
+     },
+     "null_mean_flip_rate": 0.0,
+     "pass": false
+    },
+    "primary_verdict": "weak handle",
+    "AR_full_absolute": {
+     "flips": {
+      "k": 37,
+      "n": 68,
+      "rate": 0.5441176470588235
+     },
+     "null_mean_flip_rate": 0.0,
+     "pass": true
+    },
+    "J_reading": {
+     "full_minus_Jrem": {
+      "mean": 8.530629130939705,
+      "median": 7.02683536058956,
+      "n": 68,
+      "n_clusters": 27,
+      "ci95": [
+       4.51825846293328,
+       11.045924778050134
+      ]
+     },
+     "full_minus_rrem": {
+      "mean": -0.888007493952994,
+      "median": -0.7182533939753193,
+      "n": 68,
+      "n_clusters": 27,
+      "ci95": [
+       -1.1533160249082404,
+       -0.6057721841687427
+      ]
+     },
+     "contrast_rrem_minus_Jrem": {
+      "mean": 9.418636624892699,
+      "median": 8.382292225290385,
+      "n": 68,
+      "n_clusters": 27,
+      "ci95": [
+       5.240125530007177,
+       11.98922588337648
+      ]
+     },
+     "verdict": "J-attribution (lever)",
+     "rule": "\u00a79: J share >= 0.30 (report 41: 0.53-0.62) and (full - Jrem) > (full - rrem), CI > 0"
+    },
+    "arm_table": {
+     "AR_Jrem@J": {
+      "median_dm": 0.580540991818828,
+      "k": 0,
+      "n": 68,
+      "rate": 0.0
+     },
+     "AR_answer@J": {
+      "median_dm": 8.76834487915039,
+      "k": 37,
+      "n": 68,
+      "rate": 0.5441176470588235
+     },
+     "AR_full@J": {
+      "median_dm": 7.687041342258453,
+      "k": 37,
+      "n": 68,
+      "rate": 0.5441176470588235
+     },
+     "AR_mentions@J": {
+      "median_dm": 6.112659083990865,
+      "k": 34,
+      "n": 68,
+      "rate": 0.5
+     },
+     "AR_mentions_Jrem@J": {
+      "median_dm": 0.3899819627404213,
+      "k": 0,
+      "n": 68,
+      "rate": 0.0
+     },
+     "AR_mismatched@J": {
+      "median_dm": 0.08342779334634542,
+      "k": 0,
+      "n": 68,
+      "rate": 0.0
+     },
+     "AR_mismatched_Jrem@J": {
+      "median_dm": 0.0882830023765564,
+      "k": 0,
+      "n": 68,
+      "rate": 0.0
+     },
+     "AR_rrem@J": {
+      "median_dm": 8.637084789597816,
+      "k": 41,
+      "n": 68,
+      "rate": 0.6029411764705882
+     },
+     "AR_starts@J": {
+      "median_dm": 7.488758981227875,
+      "k": 38,
+      "n": 68,
+      "rate": 0.5588235294117647
+     },
+     "AR_starts_Jrem@J": {
+      "median_dm": 0.48259184589635495,
+      "k": 0,
+      "n": 68,
+      "rate": 0.0
+     },
+     "AR_template@J": {
+      "median_dm": 9.3806188153103,
+      "k": 41,
+      "n": 68,
+      "rate": 0.6029411764705882
+     },
+     "AR_template_Jrem@J": {
+      "median_dm": 0.7212254516780376,
+      "k": 0,
+      "n": 68,
+      "rate": 0.0
+     },
+     "AR_word@J": {
+      "median_dm": 8.23023055605468,
+      "k": 40,
+      "n": 68,
+      "rate": 0.5882352941176471
+     },
+     "AR_word_Jrem@J": {
+      "median_dm": 0.7150668501853943,
+      "k": 0,
+      "n": 68,
+      "rate": 0.0
+     },
+     "rand_Jcomp_0@J": {
+      "median_dm": 0.27201875671744347,
+      "k": 0,
+      "n": 68,
+      "rate": 0.0
+     },
+     "rand_Jcomp_1@J": {
+      "median_dm": 0.16712103225290775,
+      "k": 0,
+      "n": 68,
+      "rate": 0.0
+     },
+     "rand_full_0@J": {
+      "median_dm": 0.4093247354030609,
+      "k": 0,
+      "n": 68,
+      "rate": 0.0
+     },
+     "rand_full_1@J": {
+      "median_dm": 0.3956748992204666,
+      "k": 0,
+      "n": 68,
+      "rate": 0.0
+     }
+    }
+   },
+   "CM_toward_tgt": {
+    "n": 28,
+    "power": {
+     "AR_full_minus_rand_full": {
+      "mean": 12.471035366022319,
+      "median": 14.825895607471466,
+      "n": 28,
+      "n_clusters": 10,
+      "ci95": [
+       6.784706928228706,
+       15.202244786989349
+      ]
+     },
+     "AR_answer_minus_rand_full": {
+      "mean": 12.234927168259972,
+      "median": 14.971213225275278,
+      "n": 28,
+      "n_clusters": 10,
+      "ci95": [
+       6.901758596763959,
+       14.852781144752157
+      ]
+     },
+     "has_power": true
+    },
+    "primary_relative_AR_Jrem_minus_rand_Jcomp": {
+     "mean": 0.5930390769638362,
+     "median": 0.6603033505480911,
+     "n": 28,
+     "n_clusters": 10,
+     "ci95": [
+      0.26649177274470076,
+      0.8180366979759287
+     ]
+    },
+    "primary_absolute": {
+     "flips": {
+      "k": 0,
+      "n": 28,
+      "rate": 0.0
+     },
+     "null_mean_flip_rate": 0.0,
+     "pass": false
+    },
+    "primary_verdict": "weak handle",
+    "AR_full_absolute": {
+     "flips": {
+      "k": 20,
+      "n": 28,
+      "rate": 0.7142857142857143
+     },
+     "null_mean_flip_rate": 0.0,
+     "pass": true
+    },
+    "J_reading": {
+     "full_minus_Jrem": {
+      "mean": 12.134682035772753,
+      "median": 14.8221715092659,
+      "n": 28,
+      "n_clusters": 10,
+      "ci95": [
+       6.354666221696212,
+       14.805473771045566
+      ]
+     },
+     "full_minus_rrem": {
+      "mean": -1.1510069926217137,
+      "median": -0.9831655621528625,
+      "n": 28,
+      "n_clusters": 10,
+      "ci95": [
+       -1.5360636037546582,
+       -0.9324467149946032
+      ]
+     },
+     "contrast_rrem_minus_Jrem": {
+      "mean": 13.285689028394469,
+      "median": 15.766694098711014,
+      "n": 28,
+      "n_clusters": 10,
+      "ci95": [
+       7.657203847511348,
+       15.890472289917856
+      ]
+     },
+     "verdict": "J-attribution (lever)",
+     "rule": "\u00a79: J share >= 0.30 (report 41: 0.53-0.62) and (full - Jrem) > (full - rrem), CI > 0"
+    },
+    "arm_table": {
+     "AR_Jrem@J": {
+      "median_dm": 0.7493424958969712,
+      "k": 0,
+      "n": 28,
+      "rate": 0.0
+     },
+     "AR_answer@J": {
+      "median_dm": 14.71375373005867,
+      "k": 20,
+      "n": 28,
+      "rate": 0.7142857142857143
+     },
+     "AR_full@J": {
+      "median_dm": 15.37129208445549,
+      "k": 20,
+      "n": 28,
+      "rate": 0.7142857142857143
+     },
+     "AR_mentions@J": {
+      "median_dm": 13.118053838610649,
+      "k": 18,
+      "n": 28,
+      "rate": 0.6428571428571429
+     },
+     "AR_mentions_Jrem@J": {
+      "median_dm": 0.49710405319749507,
+      "k": 0,
+      "n": 28,
+      "rate": 0.0
+     },
+     "AR_mismatched@J": {
+      "median_dm": 0.04302358627319336,
+      "k": 0,
+      "n": 28,
+      "rate": 0.0
+     },
+     "AR_mismatched_Jrem@J": {
+      "median_dm": 0.21532204993372428,
+      "k": 0,
+      "n": 28,
+      "rate": 0.0
+     },
+     "AR_rrem@J": {
+      "median_dm": 16.315814673900604,
+      "k": 22,
+      "n": 28,
+      "rate": 0.7857142857142857
+     },
+     "AR_starts@J": {
+      "median_dm": 14.858500730246305,
+      "k": 21,
+      "n": 28,
+      "rate": 0.75
+     },
+     "AR_starts_Jrem@J": {
+      "median_dm": 0.7304480709135532,
+      "k": 0,
+      "n": 28,
+      "rate": 0.0
+     },
+     "AR_template@J": {
+      "median_dm": 15.20727713033557,
+      "k": 22,
+      "n": 28,
+      "rate": 0.7857142857142857
+     },
+     "AR_template_Jrem@J": {
+      "median_dm": 0.8959117494523525,
+      "k": 0,
+      "n": 28,
+      "rate": 0.0
+     },
+     "AR_word@J": {
+      "median_dm": 15.023183491081,
+      "k": 21,
+      "n": 28,
+      "rate": 0.75
+     },
+     "AR_word_Jrem@J": {
+      "median_dm": 0.9230082780122757,
+      "k": 0,
+      "n": 28,
+      "rate": 0.0
+     },
+     "rand_Jcomp_0@J": {
+      "median_dm": 0.1910756164645866,
+      "k": 0,
+      "n": 28,
+      "rate": 0.0
+     },
+     "rand_Jcomp_1@J": {
+      "median_dm": 0.11833473851105047,
+      "k": 0,
+      "n": 28,
+      "rate": 0.0
+     },
+     "rand_full_0@J": {
+      "median_dm": 0.48000785163767157,
+      "k": 0,
+      "n": 28,
+      "rate": 0.0
+     },
+     "rand_full_1@J": {
+      "median_dm": 0.477783739566803,
+      "k": 0,
+      "n": 28,
+      "rate": 0.0
+     }
+    }
+   },
+   "named_place": {
+    "n": 49,
+    "power": {
+     "AR_full_minus_rand_full": {
+      "mean": 11.598391965926488,
+      "median": 12.425899191293865,
+      "n": 49,
+      "n_clusters": 13,
+      "ci95": [
+       7.962124760036701,
+       13.828962483790011
+      ]
+     },
+     "AR_answer_minus_rand_full": {
+      "mean": 11.129176128715258,
+      "median": 10.919874340295792,
+      "n": 49,
+      "n_clusters": 13,
+      "ci95": [
+       7.854594276274146,
+       13.364776431671064
+      ]
+     },
+     "has_power": true
+    },
+    "primary_relative_AR_Jrem_minus_rand_Jcomp": {
+     "mean": 0.4790472528476529,
+     "median": 0.6130799651145935,
+     "n": 49,
+     "n_clusters": 13,
+     "ci95": [
+      0.19238977308691582,
+      0.6828052026422632
+     ]
+    },
+    "primary_absolute": {
+     "flips": {
+      "k": 0,
+      "n": 49,
+      "rate": 0.0
+     },
+     "null_mean_flip_rate": 0.0,
+     "pass": false
+    },
+    "primary_verdict": "weak handle",
+    "AR_full_absolute": {
+     "flips": {
+      "k": 37,
+      "n": 49,
+      "rate": 0.7551020408163265
+     },
+     "null_mean_flip_rate": 0.0,
+     "pass": true
+    },
+    "J_reading": {
+     "full_minus_Jrem": {
+      "mean": 11.256842597368033,
+      "median": 12.04336219932884,
+      "n": 49,
+      "n_clusters": 13,
+      "ci95": [
+       7.568532128087256,
+       13.413139807422153
+      ]
+     },
+     "full_minus_rrem": {
+      "mean": -1.1274435474270221,
+      "median": -0.8900195509195328,
+      "n": 49,
+      "n_clusters": 13,
+      "ci95": [
+       -1.557721315970674,
+       -0.8781264027980186
+      ]
+     },
+     "contrast_rrem_minus_Jrem": {
+      "mean": 12.384286144795054,
+      "median": 12.88800835609436,
+      "n": 49,
+      "n_clusters": 13,
+      "ci95": [
+       8.716575290828144,
+       14.528066301283697
+      ]
+     },
+     "verdict": "J-attribution (lever)",
+     "rule": "\u00a79: J share >= 0.30 (report 41: 0.53-0.62) and (full - Jrem) > (full - rrem), CI > 0"
+    },
+    "arm_table": {
+     "AR_Jrem@J": {
+      "median_dm": 0.7392689480355501,
+      "k": 0,
+      "n": 49,
+      "rate": 0.0
+     },
+     "AR_answer@J": {
+      "median_dm": 11.399274915456772,
+      "k": 36,
+      "n": 49,
+      "rate": 0.7346938775510204
+     },
+     "AR_full@J": {
+      "median_dm": 13.05476325750351,
+      "k": 37,
+      "n": 49,
+      "rate": 0.7551020408163265
+     },
+     "AR_mentions@J": {
+      "median_dm": 10.859167397022247,
+      "k": 34,
+      "n": 49,
+      "rate": 0.6938775510204082
+     },
+     "AR_mentions_Jrem@J": {
+      "median_dm": 0.4910675883293152,
+      "k": 0,
+      "n": 49,
+      "rate": 0.0
+     },
+     "AR_mismatched@J": {
+      "median_dm": 0.10412245988845825,
+      "k": 0,
+      "n": 49,
+      "rate": 0.0
+     },
+     "AR_mismatched_Jrem@J": {
+      "median_dm": 0.13581156730651855,
+      "k": 0,
+      "n": 49,
+      "rate": 0.0
+     },
+     "AR_rrem@J": {
+      "median_dm": 14.37237012386322,
+      "k": 41,
+      "n": 49,
+      "rate": 0.8367346938775511
+     },
+     "AR_starts@J": {
+      "median_dm": 13.320978730916977,
+      "k": 38,
+      "n": 49,
+      "rate": 0.7755102040816326
+     },
+     "AR_starts_Jrem@J": {
+      "median_dm": 0.7257298231124878,
+      "k": 0,
+      "n": 49,
+      "rate": 0.0
+     },
+     "AR_template@J": {
+      "median_dm": 13.352680712938309,
+      "k": 40,
+      "n": 49,
+      "rate": 0.8163265306122449
+     },
+     "AR_template_Jrem@J": {
+      "median_dm": 0.8950009942054749,
+      "k": 0,
+      "n": 49,
+      "rate": 0.0
+     },
+     "AR_word@J": {
+      "median_dm": 13.190351665019989,
+      "k": 39,
+      "n": 49,
+      "rate": 0.7959183673469388
+     },
+     "AR_word_Jrem@J": {
+      "median_dm": 0.8550072908401489,
+      "k": 0,
+      "n": 49,
+      "rate": 0.0
+     },
+     "rand_Jcomp_0@J": {
+      "median_dm": 0.37172824144363403,
+      "k": 0,
+      "n": 49,
+      "rate": 0.0
+     },
+     "rand_Jcomp_1@J": {
+      "median_dm": 0.16836726665496826,
+      "k": 0,
+      "n": 49,
+      "rate": 0.0
+     },
+     "rand_full_0@J": {
+      "median_dm": 0.5247464071060621,
+      "k": 0,
+      "n": 49,
+      "rate": 0.0
+     },
+     "rand_full_1@J": {
+      "median_dm": 0.42177116870880127,
+      "k": 0,
+      "n": 49,
+      "rate": 0.0
+     }
+    }
+   },
+   "other_bridge": {
+    "n": 33,
+    "power": {
+     "AR_full_minus_rand_full": {
+      "mean": 0.9023519122162507,
+      "median": 0.2280299412086606,
+      "n": 33,
+      "n_clusters": 18,
+      "ci95": [
+       0.3161417142929624,
+       1.7097567040465549
+      ]
+     },
+     "AR_answer_minus_rand_full": {
+      "mean": 1.2671600082659586,
+      "median": 0.24210811872035265,
+      "n": 33,
+      "n_clusters": 18,
+      "ci95": [
+       0.42839143962986287,
+       2.5565396882283826
+      ]
+     },
+     "has_power": true
+    },
+    "primary_relative_AR_Jrem_minus_rand_Jcomp": {
+     "mean": 0.019825513813565735,
+     "median": -0.019892767071723938,
+     "n": 33,
+     "n_clusters": 18,
+     "ci95": [
+      -0.1101674042757156,
+      0.14895624257250537
+     ]
+    },
+    "primary_absolute": {
+     "flips": {
+      "k": 0,
+      "n": 33,
+      "rate": 0.0
+     },
+     "null_mean_flip_rate": 0.0,
+     "pass": false
+    },
+    "primary_verdict": "not shown",
+    "AR_full_absolute": {
+     "flips": {
+      "k": 0,
+      "n": 33,
+      "rate": 0.0
+     },
+     "null_mean_flip_rate": 0.0,
+     "pass": false
+    },
+    "J_reading": {
+     "full_minus_Jrem": {
+      "mean": 0.9624219752617363,
+      "median": 0.31632590666413307,
+      "n": 33,
+      "n_clusters": 18,
+      "ci95": [
+       0.4481428193971472,
+       1.7105327855192205
+      ]
+     },
+     "full_minus_rrem": {
+      "mean": -0.16708873818353998,
+      "median": -0.05428553931415081,
+      "n": 33,
+      "n_clusters": 18,
+      "ci95": [
+       -0.29927197615746853,
+       -0.06832691515328404
+      ]
+     },
+     "contrast_rrem_minus_Jrem": {
+      "mean": 1.1295107134452762,
+      "median": 0.361979104578495,
+      "n": 33,
+      "n_clusters": 18,
+      "ci95": [
+       0.5292754005995923,
+       1.9853106026320981
+      ]
+     },
+     "verdict": "J-attribution on the margin",
+     "rule": "\u00a79: J share >= 0.30 (report 41: 0.53-0.62) and (full - Jrem) > (full - rrem), CI > 0"
+    },
+    "arm_table": {
+     "AR_Jrem@J": {
+      "median_dm": 0.060698218234960244,
+      "k": 0,
+      "n": 33,
+      "rate": 0.0
+     },
+     "AR_answer@J": {
+      "median_dm": 0.336876317858696,
+      "k": 1,
+      "n": 33,
+      "rate": 0.030303030303030304
+     },
+     "AR_full@J": {
+      "median_dm": 0.4122469946742058,
+      "k": 0,
+      "n": 33,
+      "rate": 0.0
+     },
+     "AR_mentions@J": {
+      "median_dm": 0.28225794807076454,
+      "k": 0,
+      "n": 33,
+      "rate": 0.0
+     },
+     "AR_mentions_Jrem@J": {
+      "median_dm": 0.03807174386672596,
+      "k": 0,
+      "n": 33,
+      "rate": 0.0
+     },
+     "AR_mismatched@J": {
+      "median_dm": 0.037688011303544044,
+      "k": 0,
+      "n": 33,
+      "rate": 0.0
+     },
+     "AR_mismatched_Jrem@J": {
+      "median_dm": 0.045848846435546875,
+      "k": 0,
+      "n": 33,
+      "rate": 0.0
+     },
+     "AR_rrem@J": {
+      "median_dm": 0.48546955827623606,
+      "k": 0,
+      "n": 33,
+      "rate": 0.0
+     },
+     "AR_starts@J": {
+      "median_dm": 0.2977943252772093,
+      "k": 0,
+      "n": 33,
+      "rate": 0.0
+     },
+     "AR_starts_Jrem@J": {
+      "median_dm": 0.10473358631134033,
+      "k": 0,
+      "n": 33,
+      "rate": 0.0
+     },
+     "AR_template@J": {
+      "median_dm": 1.4981571324169636,
+      "k": 1,
+      "n": 33,
+      "rate": 0.030303030303030304
+     },
+     "AR_template_Jrem@J": {
+      "median_dm": 0.38988447189331055,
+      "k": 0,
+      "n": 33,
+      "rate": 0.0
+     },
+     "AR_word@J": {
+      "median_dm": 1.5521382093429565,
+      "k": 1,
+      "n": 33,
+      "rate": 0.030303030303030304
+     },
+     "AR_word_Jrem@J": {
+      "median_dm": 0.5212712287902832,
+      "k": 0,
+      "n": 33,
+      "rate": 0.0
+     },
+     "rand_Jcomp_0@J": {
+      "median_dm": 0.006345467641949654,
+      "k": 0,
+      "n": 33,
+      "rate": 0.0
+     },
+     "rand_Jcomp_1@J": {
+      "median_dm": 0.11187786608934402,
+      "k": 0,
+      "n": 33,
+      "rate": 0.0
+     },
+     "rand_full_0@J": {
+      "median_dm": 0.05652500698121621,
+      "k": 0,
+      "n": 33,
+      "rate": 0.0
+     },
+     "rand_full_1@J": {
+      "median_dm": 0.21606922149658203,
+      "k": 0,
+      "n": 33,
+      "rate": 0.0
+     }
+    }
+   },
+   "japan_target": {
+    "n": 27,
+    "power": {
+     "AR_full_minus_rand_full": {
+      "mean": 14.91847215866264,
+      "median": 15.250758290290833,
+      "n": 27,
+      "n_clusters": 6,
+      "ci95": [
+       10.02630384494913,
+       16.644139008164373
+      ]
+     },
+     "AR_answer_minus_rand_full": {
+      "mean": 13.962975043084873,
+      "median": 14.91912567615509,
+      "n": 27,
+      "n_clusters": 6,
+      "ci95": [
+       8.125882268558813,
+       15.781068819213887
+      ]
+     },
+     "has_power": true
+    },
+    "primary_relative_AR_Jrem_minus_rand_Jcomp": {
+     "mean": 0.6221750595592256,
+     "median": 0.6554134041070938,
+     "n": 27,
+     "n_clusters": 6,
+     "ci95": [
+      0.33444394521853504,
+      1.0866935528957973
+     ]
+    },
+    "primary_absolute": {
+     "flips": {
+      "k": 0,
+      "n": 27,
+      "rate": 0.0
+     },
+     "null_mean_flip_rate": 0.0,
+     "pass": false
+    },
+    "primary_verdict": "weak handle",
+    "AR_full_absolute": {
+     "flips": {
+      "k": 27,
+      "n": 27,
+      "rate": 1.0
+     },
+     "null_mean_flip_rate": 0.0,
+     "pass": true
+    },
+    "J_reading": {
+     "full_minus_Jrem": {
+      "mean": 14.577399275728336,
+      "median": 15.254827916622162,
+      "n": 27,
+      "n_clusters": 6,
+      "ci95": [
+       9.529091715812683,
+       16.269501304509593
+      ]
+     },
+     "full_minus_rrem": {
+      "mean": -0.9567886154694536,
+      "median": -0.886917233467102,
+      "n": 27,
+      "n_clusters": 6,
+      "ci95": [
+       -1.1334589432935143,
+       -0.6539504392497903
+      ]
+     },
+     "contrast_rrem_minus_Jrem": {
+      "mean": 15.53418789119779,
+      "median": 16.87842231988907,
+      "n": 27,
+      "n_clusters": 6,
+      "ci95": [
+       10.146527952985766,
+       17.256846517176427
+      ]
+     },
+     "verdict": "J-attribution (lever)",
+     "rule": "\u00a79: J share >= 0.30 (report 41: 0.53-0.62) and (full - Jrem) > (full - rrem), CI > 0"
+    },
+    "arm_table": {
+     "AR_Jrem@J": {
+      "median_dm": 0.8634753227233887,
+      "k": 0,
+      "n": 27,
+      "rate": 0.0
+     },
+     "AR_answer@J": {
+      "median_dm": 15.988985151052475,
+      "k": 24,
+      "n": 27,
+      "rate": 0.8888888888888888
+     },
+     "AR_full@J": {
+      "median_dm": 15.95729175209999,
+      "k": 27,
+      "n": 27,
+      "rate": 1.0
+     },
+     "AR_mentions@J": {
+      "median_dm": 14.570127874612808,
+      "k": 27,
+      "n": 27,
+      "rate": 1.0
+     },
+     "AR_mentions_Jrem@J": {
+      "median_dm": 0.4645915627479553,
+      "k": 0,
+      "n": 27,
+      "rate": 0.0
+     },
+     "AR_mismatched@J": {
+      "median_dm": 0.1293429732322693,
+      "k": 0,
+      "n": 27,
+      "rate": 0.0
+     },
+     "AR_mismatched_Jrem@J": {
+      "median_dm": 0.24635757505893707,
+      "k": 0,
+      "n": 27,
+      "rate": 0.0
+     },
+     "AR_rrem@J": {
+      "median_dm": 17.315249651670456,
+      "k": 27,
+      "n": 27,
+      "rate": 1.0
+     },
+     "AR_starts@J": {
+      "median_dm": 16.060723423957825,
+      "k": 27,
+      "n": 27,
+      "rate": 1.0
+     },
+     "AR_starts_Jrem@J": {
+      "median_dm": 0.832618460059166,
+      "k": 0,
+      "n": 27,
+      "rate": 0.0
+     },
+     "AR_template@J": {
+      "median_dm": 16.96089768409729,
+      "k": 27,
+      "n": 27,
+      "rate": 1.0
+     },
+     "AR_template_Jrem@J": {
+      "median_dm": 0.9471438452601433,
+      "k": 0,
+      "n": 27,
+      "rate": 0.0
+     },
+     "AR_word@J": {
+      "median_dm": 17.269015222787857,
+      "k": 27,
+      "n": 27,
+      "rate": 1.0
+     },
+     "AR_word_Jrem@J": {
+      "median_dm": 0.9910092651844025,
+      "k": 0,
+      "n": 27,
+      "rate": 0.0
+     },
+     "rand_Jcomp_0@J": {
+      "median_dm": 0.33457547426223755,
+      "k": 0,
+      "n": 27,
+      "rate": 0.0
+     },
+     "rand_Jcomp_1@J": {
+      "median_dm": 0.3358507826924324,
+      "k": 0,
+      "n": 27,
+      "rate": 0.0
+     },
+     "rand_full_0@J": {
+      "median_dm": 0.5491575598716736,
+      "k": 0,
+      "n": 27,
+      "rate": 0.0
+     },
+     "rand_full_1@J": {
+      "median_dm": 0.5922840535640717,
+      "k": 0,
+      "n": 27,
+      "rate": 0.0
+     }
+    }
+   },
+   "not_japan": {
+    "n": 55,
+    "power": {
+     "AR_full_minus_rand_full": {
+      "mean": 3.5509103845389633,
+      "median": 1.9941035360097885,
+      "n": 55,
+      "n_clusters": 29,
+      "ci95": [
+       1.909664761338128,
+       5.407255400668952
+      ]
+     },
+     "AR_answer_minus_rand_full": {
+      "mean": 3.8208288075733208,
+      "median": 2.014617681503296,
+      "n": 55,
+      "n_clusters": 29,
+      "ci95": [
+       2.2299939683160943,
+       5.666488639030637
+      ]
+     },
+     "has_power": true
+    },
+    "primary_relative_AR_Jrem_minus_rand_Jcomp": {
+     "mean": 0.13325146795061035,
+     "median": 0.02824079990386963,
+     "n": 55,
+     "n_clusters": 29,
+     "ci95": [
+      -0.03828353446499023,
+      0.30382638290052544
+     ]
+    },
+    "primary_absolute": {
+     "flips": {
+      "k": 0,
+      "n": 55,
+      "rate": 0.0
+     },
+     "null_mean_flip_rate": 0.0,
+     "pass": false
+    },
+    "primary_verdict": "not shown",
+    "AR_full_absolute": {
+     "flips": {
+      "k": 10,
+      "n": 55,
+      "rate": 0.18181818181818182
+     },
+     "null_mean_flip_rate": 0.0,
+     "pass": false
+    },
+    "J_reading": {
+     "full_minus_Jrem": {
+      "mean": 3.450098763818288,
+      "median": 1.78652885556221,
+      "n": 55,
+      "n_clusters": 29,
+      "ci95": [
+       1.8749762002561285,
+       5.29256313480884
+      ]
+     },
+     "full_minus_rrem": {
+      "mean": -0.6350067193873754,
+      "median": -0.22911453247070312,
+      "n": 55,
+      "n_clusters": 29,
+      "ci95": [
+       -1.014703661004758,
+       -0.33591356483430024
+      ]
+     },
+     "contrast_rrem_minus_Jrem": {
+      "mean": 4.0851054832056635,
+      "median": 1.994731217622757,
+      "n": 55,
+      "n_clusters": 29,
+      "ci95": [
+       2.250454085674365,
+       6.28680983100841
+      ]
+     },
+     "verdict": "J-attribution on the margin",
+     "rule": "\u00a79: J share >= 0.30 (report 41: 0.53-0.62) and (full - Jrem) > (full - rrem), CI > 0"
+    },
+    "arm_table": {
+     "AR_Jrem@J": {
+      "median_dm": 0.18746040295809507,
+      "k": 0,
+      "n": 55,
+      "rate": 0.0
+     },
+     "AR_answer@J": {
+      "median_dm": 1.761265754699707,
+      "k": 13,
+      "n": 55,
+      "rate": 0.23636363636363636
+     },
+     "AR_full@J": {
+      "median_dm": 1.6591778993606567,
+      "k": 10,
+      "n": 55,
+      "rate": 0.18181818181818182
+     },
+     "AR_mentions@J": {
+      "median_dm": 0.9760382696986198,
+      "k": 7,
+      "n": 55,
+      "rate": 0.12727272727272726
+     },
+     "AR_mentions_Jrem@J": {
+      "median_dm": 0.15091422200202942,
+      "k": 0,
+      "n": 55,
+      "rate": 0.0
+     },
+     "AR_mismatched@J": {
+      "median_dm": 0.05437275767326355,
+      "k": 0,
+      "n": 55,
+      "rate": 0.0
+     },
+     "AR_mismatched_Jrem@J": {
+      "median_dm": 0.05624556541442871,
+      "k": 0,
+      "n": 55,
+      "rate": 0.0
+     },
+     "AR_rrem@J": {
+      "median_dm": 1.8673802614212036,
+      "k": 14,
+      "n": 55,
+      "rate": 0.2545454545454545
+     },
+     "AR_starts@J": {
+      "median_dm": 2.1213818192481995,
+      "k": 11,
+      "n": 55,
+      "rate": 0.2
+     },
+     "AR_starts_Jrem@J": {
+      "median_dm": 0.20931535959243774,
+      "k": 0,
+      "n": 55,
+      "rate": 0.0
+     },
+     "AR_template@J": {
+      "median_dm": 3.0997506082057953,
+      "k": 14,
+      "n": 55,
+      "rate": 0.2545454545454545
+     },
+     "AR_template_Jrem@J": {
+      "median_dm": 0.5044520571827888,
+      "k": 0,
+      "n": 55,
+      "rate": 0.0
+     },
+     "AR_word@J": {
+      "median_dm": 3.7664577327668667,
+      "k": 13,
+      "n": 55,
+      "rate": 0.23636363636363636
+     },
+     "AR_word_Jrem@J": {
+      "median_dm": 0.5679020201787353,
+      "k": 0,
+      "n": 55,
+      "rate": 0.0
+     },
+     "rand_Jcomp_0@J": {
+      "median_dm": 0.08473765850067139,
+      "k": 0,
+      "n": 55,
+      "rate": 0.0
+     },
+     "rand_Jcomp_1@J": {
+      "median_dm": 0.11187786608934402,
+      "k": 0,
+      "n": 55,
+      "rate": 0.0
+     },
+     "rand_full_0@J": {
+      "median_dm": 0.06754875183105469,
+      "k": 0,
+      "n": 55,
+      "rate": 0.0
+     },
+     "rand_full_1@J": {
+      "median_dm": 0.18352723121643066,
+      "k": 0,
+      "n": 55,
+      "rate": 0.0
+     }
+    }
+   }
+  },
+  "C_size": {
+   "all": {
+    "n": 82,
+    "power": {
+     "AR_full_minus_rand_full": {
+      "mean": 5.951153011238806,
+      "median": 3.3954077437520027,
+      "n": 82,
+      "n_clusters": 31,
+      "ci95": [
+       2.9452310986293444,
+       8.3657992609644
+      ]
+     },
+     "AR_answer_minus_rand_full": {
+      "mean": 6.024020601619984,
+      "median": 4.147532979928057,
+      "n": 82,
+      "n_clusters": 31,
+      "ci95": [
+       3.4303628939594346,
+       8.034595354333863
+      ]
+     },
+     "has_power": true
+    },
+    "primary_relative_AR_Jrem_minus_rand_Jcomp": {
+     "mean": 0.2959584596671913,
+     "median": 0.09287272952497005,
+     "n": 82,
+     "n_clusters": 31,
+     "ci95": [
+      0.0075246276425340085,
+      0.5304173794285986
+     ]
+    },
+    "primary_absolute": {
+     "flips": {
+      "k": 0,
+      "n": 82,
+      "rate": 0.0
+     },
+     "null_mean_flip_rate": 0.0,
+     "pass": false
+    },
+    "primary_verdict": "weak handle",
+    "AR_full_absolute": {
+     "flips": {
+      "k": 30,
+      "n": 82,
+      "rate": 0.36585365853658536
+     },
+     "null_mean_flip_rate": 0.0,
+     "pass": true
+    },
+    "J_reading": {
+     "full_minus_Jrem": {
+      "mean": 5.817236367736568,
+      "median": 3.0390767944770216,
+      "n": 82,
+      "n_clusters": 31,
+      "ci95": [
+       2.894806779888912,
+       8.119785772808648
+      ]
+     },
+     "full_minus_rrem": {
+      "mean": -0.4915372960499586,
+      "median": -0.3737624364404879,
+      "n": 82,
+      "n_clusters": 31,
+      "ci95": [
+       -0.6790597466582661,
+       -0.2513185698557628
+      ]
+     },
+     "contrast_rrem_minus_Jrem": {
+      "mean": 6.308773663786526,
+      "median": 3.403886318206787,
+      "n": 82,
+      "n_clusters": 31,
+      "ci95": [
+       3.1719661933936196,
+       8.754961358910386
+      ]
+     },
+     "verdict": "J-attribution (lever)",
+     "rule": "\u00a79: J share >= 0.30 (report 41: 0.53-0.62) and (full - Jrem) > (full - rrem), CI > 0"
+    },
+    "arm_table": {
+     "AR_Jrem@C": {
+      "median_dm": 0.32809740118682384,
+      "k": 0,
+      "n": 82,
+      "rate": 0.0
+     },
+     "AR_answer@C": {
+      "median_dm": 4.435419321060181,
+      "k": 31,
+      "n": 82,
+      "rate": 0.3780487804878049
+     },
+     "AR_full@C": {
+      "median_dm": 3.771339938044548,
+      "k": 30,
+      "n": 82,
+      "rate": 0.36585365853658536
+     },
+     "AR_rrem@C": {
+      "median_dm": 4.301747485995293,
+      "k": 33,
+      "n": 82,
+      "rate": 0.4024390243902439
+     },
+     "rand_Jcomp_0@C": {
+      "median_dm": 0.31873329542577267,
+      "k": 0,
+      "n": 82,
+      "rate": 0.0
+     },
+     "rand_Jcomp_1@C": {
+      "median_dm": 0.29724326729774475,
+      "k": 0,
+      "n": 82,
+      "rate": 0.0
+     },
+     "rand_full_0@C": {
+      "median_dm": 0.2705886815674603,
+      "k": 0,
+      "n": 82,
+      "rate": 0.0
+     },
+     "rand_full_1@C": {
+      "median_dm": 0.608404880849664,
+      "k": 0,
+      "n": 82,
+      "rate": 0.0
+     }
+    }
+   },
+   "covered": {
+    "n": 51,
+    "power": {
+     "AR_full_minus_rand_full": {
+      "mean": 9.26306226808931,
+      "median": 9.765897452831268,
+      "n": 51,
+      "n_clusters": 15,
+      "ci95": [
+       5.976055185581417,
+       11.80111963089099
+      ]
+     },
+     "AR_answer_minus_rand_full": {
+      "mean": 9.10941518296331,
+      "median": 8.89888671040535,
+      "n": 51,
+      "n_clusters": 15,
+      "ci95": [
+       6.82826018548913,
+       10.930812413846251
+      ]
+     },
+     "has_power": true
+    },
+    "primary_relative_AR_Jrem_minus_rand_Jcomp": {
+     "mean": 0.5460718693516012,
+     "median": 0.4847797751426697,
+     "n": 51,
+     "n_clusters": 15,
+     "ci95": [
+      0.2103378308893022,
+      0.9124234333456296
+     ]
+    },
+    "primary_absolute": {
+     "flips": {
+      "k": 0,
+      "n": 51,
+      "rate": 0.0
+     },
+     "null_mean_flip_rate": 0.0,
+     "pass": false
+    },
+    "primary_verdict": "weak handle",
+    "AR_full_absolute": {
+     "flips": {
+      "k": 29,
+      "n": 51,
+      "rate": 0.5686274509803921
+     },
+     "null_mean_flip_rate": 0.0,
+     "pass": true
+    },
+    "J_reading": {
+     "full_minus_Jrem": {
+      "mean": 8.973395803574565,
+      "median": 9.000246686660914,
+      "n": 51,
+      "n_clusters": 15,
+      "ci95": [
+       5.794784461585721,
+       11.334282676643905
+      ]
+     },
+     "full_minus_rrem": {
+      "mean": -0.7310125695182974,
+      "median": -0.5578404664993286,
+      "n": 51,
+      "n_clusters": 15,
+      "ci95": [
+       -0.8860941298932863,
+       -0.4898257711138318
+      ]
+     },
+     "contrast_rrem_minus_Jrem": {
+      "mean": 9.704408373092862,
+      "median": 10.10296618938446,
+      "n": 51,
+      "n_clusters": 15,
+      "ci95": [
+       6.362708352247904,
+       12.090028584292883
+      ]
+     },
+     "verdict": "J-attribution (lever)",
+     "rule": "\u00a79: J share >= 0.30 (report 41: 0.53-0.62) and (full - Jrem) > (full - rrem), CI > 0"
+    },
+    "arm_table": {
+     "AR_Jrem@C": {
+      "median_dm": 0.6441380977630615,
+      "k": 0,
+      "n": 51,
+      "rate": 0.0
+     },
+     "AR_answer@C": {
+      "median_dm": 9.3823322057724,
+      "k": 30,
+      "n": 51,
+      "rate": 0.5882352941176471
+     },
+     "AR_full@C": {
+      "median_dm": 10.002047717571259,
+      "k": 29,
+      "n": 51,
+      "rate": 0.5686274509803921
+     },
+     "AR_rrem@C": {
+      "median_dm": 10.936678946018219,
+      "k": 31,
+      "n": 51,
+      "rate": 0.6078431372549019
+     },
+     "rand_Jcomp_0@C": {
+      "median_dm": 0.35363203287124634,
+      "k": 0,
+      "n": 51,
+      "rate": 0.0
+     },
+     "rand_Jcomp_1@C": {
+      "median_dm": 0.2981460690498352,
+      "k": 0,
+      "n": 51,
+      "rate": 0.0
+     },
+     "rand_full_0@C": {
+      "median_dm": 0.5350269312039018,
+      "k": 0,
+      "n": 51,
+      "rate": 0.0
+     },
+     "rand_full_1@C": {
+      "median_dm": 0.6891220211982727,
+      "k": 0,
+      "n": 51,
+      "rate": 0.0
+     }
+    }
+   },
+   "uncovered": {
+    "n": 31,
+    "power": {
+     "AR_full_minus_rand_full": {
+      "mean": 0.5025281048073306,
+      "median": 0.0668714689090848,
+      "n": 31,
+      "n_clusters": 20,
+      "ci95": [
+       -0.018785364849265056,
+       1.1763701105709867
+      ]
+     },
+     "AR_answer_minus_rand_full": {
+      "mean": 0.9480488710229018,
+      "median": 0.3221548767760396,
+      "n": 31,
+      "n_clusters": 20,
+      "ci95": [
+       0.39230034650192736,
+       1.8132957858829635
+      ]
+     },
+     "has_power": true
+    },
+    "primary_relative_AR_Jrem_minus_rand_Jcomp": {
+     "mean": -0.11551844013619295,
+     "median": -0.06701284367591143,
+     "n": 31,
+     "n_clusters": 20,
+     "ci95": [
+      -0.36363863556118425,
+      0.08148260624533744
+     ]
+    },
+    "primary_absolute": {
+     "flips": {
+      "k": 0,
+      "n": 31,
+      "rate": 0.0
+     },
+     "null_mean_flip_rate": 0.0,
+     "pass": false
+    },
+    "primary_verdict": "not shown",
+    "AR_full_absolute": {
+     "flips": {
+      "k": 1,
+      "n": 31,
+      "rate": 0.03225806451612903
+     },
+     "null_mean_flip_rate": 0.0,
+     "pass": false
+    },
+    "J_reading": {
+     "full_minus_Jrem": {
+      "mean": 0.6248450378095391,
+      "median": 0.22586826514452696,
+      "n": 31,
+      "n_clusters": 20,
+      "ci95": [
+       0.3179833050889489,
+       1.0586955547352905
+      ]
+     },
+     "full_minus_rrem": {
+      "mean": -0.09756184615043346,
+      "median": -0.07490363717079163,
+      "n": 31,
+      "n_clusters": 20,
+      "ci95": [
+       -0.18575942260738645,
+       -0.012245464409488002
+      ]
+     },
+     "contrast_rrem_minus_Jrem": {
+      "mean": 0.7224068839599727,
+      "median": 0.40651938039809465,
+      "n": 31,
+      "n_clusters": 20,
+      "ci95": [
+       0.35328184874463836,
+       1.2277264069680311
+      ]
+     },
+     "verdict": "J-attribution on the margin",
+     "rule": "\u00a79: J share >= 0.30 (report 41: 0.53-0.62) and (full - Jrem) > (full - rrem), CI > 0"
+    },
+    "arm_table": {
+     "AR_Jrem@C": {
+      "median_dm": 0.21928276494145393,
+      "k": 0,
+      "n": 31,
+      "rate": 0.0
+     },
+     "AR_answer@C": {
+      "median_dm": 0.5681414604187012,
+      "k": 1,
+      "n": 31,
+      "rate": 0.03225806451612903
+     },
+     "AR_full@C": {
+      "median_dm": 0.3530801236629486,
+      "k": 1,
+      "n": 31,
+      "rate": 0.03225806451612903
+     },
+     "AR_rrem@C": {
+      "median_dm": 0.5083290934562683,
+      "k": 2,
+      "n": 31,
+      "rate": 0.06451612903225806
+     },
+     "rand_Jcomp_0@C": {
+      "median_dm": 0.13335180282592773,
+      "k": 0,
+      "n": 31,
+      "rate": 0.0
+     },
+     "rand_Jcomp_1@C": {
+      "median_dm": 0.2665841728448868,
+      "k": 0,
+      "n": 31,
+      "rate": 0.0
+     },
+     "rand_full_0@C": {
+      "median_dm": -0.04264640808105469,
+      "k": 0,
+      "n": 31,
+      "rate": 0.0
+     },
+     "rand_full_1@C": {
+      "median_dm": 0.46858531795442104,
+      "k": 0,
+      "n": 31,
+      "rate": 0.0
+     }
+    }
+   },
+   "rescued_concept": {
+    "n": 13,
+    "power": {
+     "AR_full_minus_rand_full": {
+      "mean": 11.424539048485686,
+      "median": 12.062413271035812,
+      "n": 13,
+      "n_clusters": 6,
+      "ci95": [
+       7.9811883217522075,
+       15.152360607537329
+      ]
+     },
+     "AR_answer_minus_rand_full": {
+      "mean": 11.698366465677067,
+      "median": 12.241380140185356,
+      "n": 13,
+      "n_clusters": 6,
+      "ci95": [
+       9.777624187045005,
+       14.466397738657319
+      ]
+     },
+     "has_power": true
+    },
+    "primary_relative_AR_Jrem_minus_rand_Jcomp": {
+     "mean": 0.6988609600789322,
+     "median": 0.6110929744318128,
+     "n": 13,
+     "n_clusters": 6,
+     "ci95": [
+      0.18823487885917226,
+      1.2163393450858428
+     ]
+    },
+    "primary_absolute": {
+     "flips": {
+      "k": 0,
+      "n": 13,
+      "rate": 0.0
+     },
+     "null_mean_flip_rate": 0.0,
+     "pass": false
+    },
+    "primary_verdict": "weak handle",
+    "AR_full_absolute": {
+     "flips": {
+      "k": 10,
+      "n": 13,
+      "rate": 0.7692307692307693
+     },
+     "null_mean_flip_rate": 0.0,
+     "pass": true
+    },
+    "J_reading": {
+     "full_minus_Jrem": {
+      "mean": 10.920461228382432,
+      "median": 11.93325212597847,
+      "n": 13,
+      "n_clusters": 6,
+      "ci95": [
+       7.368060964335604,
+       14.558725589927064
+      ]
+     },
+     "full_minus_rrem": {
+      "mean": -0.6973747573798094,
+      "median": -0.7237768173217773,
+      "n": 13,
+      "n_clusters": 6,
+      "ci95": [
+       -1.0151036196173384,
+       -0.4612677934928797
+      ]
+     },
+     "contrast_rrem_minus_Jrem": {
+      "mean": 11.61783598576224,
+      "median": 12.227424505660746,
+      "n": 13,
+      "n_clusters": 6,
+      "ci95": [
+       8.045804585839504,
+       15.43302830028346
+      ]
+     },
+     "verdict": "J-attribution (lever)",
+     "rule": "\u00a79: J share >= 0.30 (report 41: 0.53-0.62) and (full - Jrem) > (full - rrem), CI > 0"
+    },
+    "arm_table": {
+     "AR_Jrem@C": {
+      "median_dm": 0.9087561964988708,
+      "k": 0,
+      "n": 13,
+      "rate": 0.0
+     },
+     "AR_answer@C": {
+      "median_dm": 12.997965574264526,
+      "k": 10,
+      "n": 13,
+      "rate": 0.7692307692307693
+     },
+     "AR_full@C": {
+      "median_dm": 12.625692285597324,
+      "k": 10,
+      "n": 13,
+      "rate": 0.7692307692307693
+     },
+     "AR_rrem@C": {
+      "median_dm": 13.961713897643794,
+      "k": 10,
+      "n": 13,
+      "rate": 0.7692307692307693
+     },
+     "rand_Jcomp_0@C": {
+      "median_dm": 0.3206462860107422,
+      "k": 0,
+      "n": 13,
+      "rate": 0.0
+     },
+     "rand_Jcomp_1@C": {
+      "median_dm": 0.7433271073781054,
+      "k": 0,
+      "n": 13,
+      "rate": 0.0
+     },
+     "rand_full_0@C": {
+      "median_dm": 0.5350269312039018,
+      "k": 0,
+      "n": 13,
+      "rate": 0.0
+     },
+     "rand_full_1@C": {
+      "median_dm": 0.6806219816207886,
+      "k": 0,
+      "n": 13,
+      "rate": 0.0
+     }
+    }
+   },
+   "covered_not_rescued": {
+    "n": 38,
+    "power": {
+     "AR_full_minus_rand_full": {
+      "mean": 8.523609685322128,
+      "median": 8.139833875435764,
+      "n": 38,
+      "n_clusters": 13,
+      "ci95": [
+       4.456265610729874,
+       11.253712570865543
+      ]
+     },
+     "AR_answer_minus_rand_full": {
+      "mean": 8.22372132308755,
+      "median": 7.0358809269964695,
+      "n": 38,
+      "n_clusters": 13,
+      "ci95": [
+       4.865121319326584,
+       10.350949971520535
+      ]
+     },
+     "has_power": true
+    },
+    "primary_relative_AR_Jrem_minus_rand_Jcomp": {
+     "mean": 0.49380191726067224,
+     "median": 0.3276667520403862,
+     "n": 38,
+     "n_clusters": 13,
+     "ci95": [
+      -0.03656280077694673,
+      0.9401587886553471
+     ]
+    },
+    "primary_absolute": {
+     "flips": {
+      "k": 0,
+      "n": 38,
+      "rate": 0.0
+     },
+     "null_mean_flip_rate": 0.0,
+     "pass": false
+    },
+    "primary_verdict": "not shown",
+    "AR_full_absolute": {
+     "flips": {
+      "k": 19,
+      "n": 38,
+      "rate": 0.5
+     },
+     "null_mean_flip_rate": 0.0,
+     "pass": true
+    },
+    "J_reading": {
+     "full_minus_Jrem": {
+      "mean": 8.307294474035032,
+      "median": 7.510747481137514,
+      "n": 38,
+      "n_clusters": 13,
+      "ci95": [
+       4.428086282730319,
+       10.736402372948548
+      ]
+     },
+     "full_minus_rrem": {
+      "mean": -0.7425202420919907,
+      "median": -0.5567736923694611,
+      "n": 38,
+      "n_clusters": 13,
+      "ci95": [
+       -0.9023955448187461,
+       -0.4638024645347781
+      ]
+     },
+     "contrast_rrem_minus_Jrem": {
+      "mean": 9.049814716127024,
+      "median": 9.212269526602014,
+      "n": 38,
+      "n_clusters": 13,
+      "ci95": [
+       4.99334083198297,
+       11.50245771583302
+      ]
+     },
+     "verdict": "J-attribution (lever)",
+     "rule": "\u00a79: J share >= 0.30 (report 41: 0.53-0.62) and (full - Jrem) > (full - rrem), CI > 0"
+    },
+    "arm_table": {
+     "AR_Jrem@C": {
+      "median_dm": 0.6097078057025858,
+      "k": 0,
+      "n": 38,
+      "rate": 0.0
+     },
+     "AR_answer@C": {
+      "median_dm": 8.156224440783262,
+      "k": 20,
+      "n": 38,
+      "rate": 0.5263157894736842
+     },
+     "AR_full@C": {
+      "median_dm": 8.590360298752785,
+      "k": 19,
+      "n": 38,
+      "rate": 0.5
+     },
+     "AR_rrem@C": {
+      "median_dm": 9.931179329823141,
+      "k": 21,
+      "n": 38,
+      "rate": 0.5526315789473685
+     },
+     "rand_Jcomp_0@C": {
+      "median_dm": 0.35366348922252655,
+      "k": 0,
+      "n": 38,
+      "rate": 0.0
+     },
+     "rand_Jcomp_1@C": {
+      "median_dm": 0.29724326729774475,
+      "k": 0,
+      "n": 38,
+      "rate": 0.0
+     },
+     "rand_full_0@C": {
+      "median_dm": 0.4816689193248749,
+      "k": 0,
+      "n": 38,
+      "rate": 0.0
+     },
+     "rand_full_1@C": {
+      "median_dm": 0.7340312908134785,
+      "k": 0,
+      "n": 38,
+      "rate": 0.0
+     }
+    }
+   },
+   "J_toward_tgt": {
+    "n": 68,
+    "power": {
+     "AR_full_minus_rand_full": {
+      "mean": 7.1355927642658505,
+      "median": 5.8225151310034144,
+      "n": 68,
+      "n_clusters": 27,
+      "ci95": [
+       3.86008250282758,
+       9.384406914098188
+      ]
+     },
+     "AR_answer_minus_rand_full": {
+      "mean": 7.198916139915963,
+      "median": 5.691000714898109,
+      "n": 68,
+      "n_clusters": 27,
+      "ci95": [
+       4.576957279790107,
+       8.95277865342313
+      ]
+     },
+     "has_power": true
+    },
+    "primary_relative_AR_Jrem_minus_rand_Jcomp": {
+     "mean": 0.3996810551859465,
+     "median": 0.19951555505394936,
+     "n": 68,
+     "n_clusters": 27,
+     "ci95": [
+      0.09423639824132245,
+      0.6476720801053713
+     ]
+    },
+    "primary_absolute": {
+     "flips": {
+      "k": 0,
+      "n": 68,
+      "rate": 0.0
+     },
+     "null_mean_flip_rate": 0.0,
+     "pass": false
+    },
+    "primary_verdict": "weak handle",
+    "AR_full_absolute": {
+     "flips": {
+      "k": 30,
+      "n": 68,
+      "rate": 0.4411764705882353
+     },
+     "null_mean_flip_rate": 0.0,
+     "pass": true
+    },
+    "J_reading": {
+     "full_minus_Jrem": {
+      "mean": 6.938621415138586,
+      "median": 5.369542541287851,
+      "n": 68,
+      "n_clusters": 27,
+      "ci95": [
+       3.7461732606882805,
+       9.080218355349814
+      ]
+     },
+     "full_minus_rrem": {
+      "mean": -0.5879519521481503,
+      "median": -0.4809723347425461,
+      "n": 68,
+      "n_clusters": 27,
+      "ci95": [
+       -0.7525185704195553,
+       -0.3379536482162093
+      ]
+     },
+     "contrast_rrem_minus_Jrem": {
+      "mean": 7.526573367286736,
+      "median": 5.779019022895308,
+      "n": 68,
+      "n_clusters": 27,
+      "ci95": [
+       4.117676744464949,
+       9.750781829052643
+      ]
+     },
+     "verdict": "J-attribution (lever)",
+     "rule": "\u00a79: J share >= 0.30 (report 41: 0.53-0.62) and (full - Jrem) > (full - rrem), CI > 0"
+    },
+    "arm_table": {
+     "AR_Jrem@C": {
+      "median_dm": 0.5067108869552612,
+      "k": 0,
+      "n": 68,
+      "rate": 0.0
+     },
+     "AR_answer@C": {
+      "median_dm": 5.941802674732143,
+      "k": 31,
+      "n": 68,
+      "rate": 0.45588235294117646
+     },
+     "AR_full@C": {
+      "median_dm": 6.079740475863218,
+      "k": 30,
+      "n": 68,
+      "rate": 0.4411764705882353
+     },
+     "AR_rrem@C": {
+      "median_dm": 6.774902310222387,
+      "k": 33,
+      "n": 68,
+      "rate": 0.4852941176470588
+     },
+     "rand_Jcomp_0@C": {
+      "median_dm": 0.35366348922252655,
+      "k": 0,
+      "n": 68,
+      "rate": 0.0
+     },
+     "rand_Jcomp_1@C": {
+      "median_dm": 0.29724326729774475,
+      "k": 0,
+      "n": 68,
+      "rate": 0.0
+     },
+     "rand_full_0@C": {
+      "median_dm": 0.4643053822219372,
+      "k": 0,
+      "n": 68,
+      "rate": 0.0
+     },
+     "rand_full_1@C": {
+      "median_dm": 0.6229111291468143,
+      "k": 0,
+      "n": 68,
+      "rate": 0.0
+     }
+    }
+   },
+   "CM_toward_tgt": {
+    "n": 28,
+    "power": {
+     "AR_full_minus_rand_full": {
+      "mean": 10.832825671234762,
+      "median": 11.258363934233785,
+      "n": 28,
+      "n_clusters": 10,
+      "ci95": [
+       8.337151298849905,
+       12.126671683365457
+      ]
+     },
+     "AR_answer_minus_rand_full": {
+      "mean": 11.014709019683098,
+      "median": 10.301333883445857,
+      "n": 28,
+      "n_clusters": 10,
+      "ci95": [
+       9.47520897037372,
+       12.931624060211625
+      ]
+     },
+     "has_power": true
+    },
+    "primary_relative_AR_Jrem_minus_rand_Jcomp": {
+     "mean": 0.7364876914105911,
+     "median": 0.5839372649788857,
+     "n": 28,
+     "n_clusters": 10,
+     "ci95": [
+      0.330878405236957,
+      1.3309218069135265
+     ]
+    },
+    "primary_absolute": {
+     "flips": {
+      "k": 0,
+      "n": 28,
+      "rate": 0.0
+     },
+     "null_mean_flip_rate": 0.0,
+     "pass": false
+    },
+    "primary_verdict": "weak handle",
+    "AR_full_absolute": {
+     "flips": {
+      "k": 18,
+      "n": 28,
+      "rate": 0.6428571428571429
+     },
+     "null_mean_flip_rate": 0.0,
+     "pass": true
+    },
+    "J_reading": {
+     "full_minus_Jrem": {
+      "mean": 10.313027256995579,
+      "median": 10.700067847967148,
+      "n": 28,
+      "n_clusters": 10,
+      "ci95": [
+       7.432116101776594,
+       11.665304698077197
+      ]
+     },
+     "full_minus_rrem": {
+      "mean": -0.8134016559542887,
+      "median": -0.7295315265655518,
+      "n": 28,
+      "n_clusters": 10,
+      "ci95": [
+       -0.9851288397042643,
+       -0.5375064838290674
+      ]
+     },
+     "contrast_rrem_minus_Jrem": {
+      "mean": 11.126428912949866,
+      "median": 12.225044185077058,
+      "n": 28,
+      "n_clusters": 10,
+      "ci95": [
+       8.061169495150967,
+       12.527243443234763
+      ]
+     },
+     "verdict": "J-attribution (lever)",
+     "rule": "\u00a79: J share >= 0.30 (report 41: 0.53-0.62) and (full - Jrem) > (full - rrem), CI > 0"
+    },
+    "arm_table": {
+     "AR_Jrem@C": {
+      "median_dm": 0.7904637046158314,
+      "k": 0,
+      "n": 28,
+      "rate": 0.0
+     },
+     "AR_answer@C": {
+      "median_dm": 10.835039466619492,
+      "k": 18,
+      "n": 28,
+      "rate": 0.6428571428571429
+     },
+     "AR_full@C": {
+      "median_dm": 11.89985616877675,
+      "k": 18,
+      "n": 28,
+      "rate": 0.6428571428571429
+     },
+     "AR_rrem@C": {
+      "median_dm": 12.954085629433393,
+      "k": 19,
+      "n": 28,
+      "rate": 0.6785714285714286
+     },
+     "rand_Jcomp_0@C": {
+      "median_dm": 0.31531502514500964,
+      "k": 0,
+      "n": 28,
+      "rate": 0.0
+     },
+     "rand_Jcomp_1@C": {
+      "median_dm": 0.44938115775585175,
+      "k": 0,
+      "n": 28,
+      "rate": 0.0
+     },
+     "rand_full_0@C": {
+      "median_dm": 0.6080474896211152,
+      "k": 0,
+      "n": 28,
+      "rate": 0.0
+     },
+     "rand_full_1@C": {
+      "median_dm": 0.5965394452214241,
+      "k": 0,
+      "n": 28,
+      "rate": 0.0
+     }
+    }
+   },
+   "named_place": {
+    "n": 49,
+    "power": {
+     "AR_full_minus_rand_full": {
+      "mean": 9.55977526098064,
+      "median": 10.052622377872467,
+      "n": 49,
+      "n_clusters": 13,
+      "ci95": [
+       6.304061762889614,
+       12.306152444210674
+      ]
+     },
+     "AR_answer_minus_rand_full": {
+      "mean": 9.476746004550538,
+      "median": 9.182381242513657,
+      "n": 49,
+      "n_clusters": 13,
+      "ci95": [
+       7.474471144610014,
+       11.522301975695987
+      ]
+     },
+     "has_power": true
+    },
+    "primary_relative_AR_Jrem_minus_rand_Jcomp": {
+     "mean": 0.5222770876311396,
+     "median": 0.4510710835456848,
+     "n": 49,
+     "n_clusters": 13,
+     "ci95": [
+      0.16030201790155182,
+      0.8692466457735981
+     ]
+    },
+    "primary_absolute": {
+     "flips": {
+      "k": 0,
+      "n": 49,
+      "rate": 0.0
+     },
+     "null_mean_flip_rate": 0.0,
+     "pass": false
+    },
+    "primary_verdict": "weak handle",
+    "AR_full_absolute": {
+     "flips": {
+      "k": 30,
+      "n": 49,
+      "rate": 0.6122448979591837
+     },
+     "null_mean_flip_rate": 0.0,
+     "pass": true
+    },
+    "J_reading": {
+     "full_minus_Jrem": {
+      "mean": 9.2486938502286,
+      "median": 9.379189372062683,
+      "n": 49,
+      "n_clusters": 13,
+      "ci95": [
+       6.126493081757507,
+       11.765757907113981
+      ]
+     },
+     "full_minus_rrem": {
+      "mean": -0.7504597600183336,
+      "median": -0.592023155425105,
+      "n": 49,
+      "n_clusters": 13,
+      "ci95": [
+       -0.8936940356863647,
+       -0.5119562944235446
+      ]
+     },
+     "contrast_rrem_minus_Jrem": {
+      "mean": 9.999153610246934,
+      "median": 10.372890621423721,
+      "n": 49,
+      "n_clusters": 13,
+      "ci95": [
+       6.7370019551634535,
+       12.507485516505769
+      ]
+     },
+     "verdict": "J-attribution (lever)",
+     "rule": "\u00a79: J share >= 0.30 (report 41: 0.53-0.62) and (full - Jrem) > (full - rrem), CI > 0"
+    },
+    "arm_table": {
+     "AR_Jrem@C": {
+      "median_dm": 0.6231530372093097,
+      "k": 0,
+      "n": 49,
+      "rate": 0.0
+     },
+     "AR_answer@C": {
+      "median_dm": 10.070348799228668,
+      "k": 30,
+      "n": 49,
+      "rate": 0.6122448979591837
+     },
+     "AR_full@C": {
+      "median_dm": 10.339004635810852,
+      "k": 30,
+      "n": 49,
+      "rate": 0.6122448979591837
+     },
+     "AR_rrem@C": {
+      "median_dm": 11.277738809585571,
+      "k": 33,
+      "n": 49,
+      "rate": 0.673469387755102
+     },
+     "rand_Jcomp_0@C": {
+      "median_dm": 0.35369494557380676,
+      "k": 0,
+      "n": 49,
+      "rate": 0.0
+     },
+     "rand_Jcomp_1@C": {
+      "median_dm": 0.2981460690498352,
+      "k": 0,
+      "n": 49,
+      "rate": 0.0
+     },
+     "rand_full_0@C": {
+      "median_dm": 0.5363993048667908,
+      "k": 0,
+      "n": 49,
+      "rate": 0.0
+     },
+     "rand_full_1@C": {
+      "median_dm": 0.6806219816207886,
+      "k": 0,
+      "n": 49,
+      "rate": 0.0
+     }
+    }
+   },
+   "other_bridge": {
+    "n": 33,
+    "power": {
+     "AR_full_minus_rand_full": {
+      "mean": 0.5928957313191122,
+      "median": 0.0668714689090848,
+      "n": 33,
+      "n_clusters": 18,
+      "ci95": [
+       -0.06463751263811454,
+       1.2888048567498136
+      ]
+     },
+     "AR_answer_minus_rand_full": {
+      "mean": 0.8972465184806779,
+      "median": 0.29916528426110744,
+      "n": 33,
+      "n_clusters": 18,
+      "ci95": [
+       0.27029032007091036,
+       1.6159950907521823
+      ]
+     },
+     "has_power": true
+    },
+    "primary_relative_AR_Jrem_minus_rand_Jcomp": {
+     "mean": -0.04009041215806534,
+     "median": -0.06518070213496685,
+     "n": 33,
+     "n_clusters": 18,
+     "ci95": [
+      -0.3440874569548167,
+      0.23475810148646295
+     ]
+    },
+    "primary_absolute": {
+     "flips": {
+      "k": 0,
+      "n": 33,
+      "rate": 0.0
+     },
+     "null_mean_flip_rate": 0.0,
+     "pass": false
+    },
+    "primary_verdict": "not shown",
+    "AR_full_absolute": {
+     "flips": {
+      "k": 0,
+      "n": 33,
+      "rate": 0.0
+     },
+     "null_mean_flip_rate": 0.0,
+     "pass": false
+    },
+    "J_reading": {
+     "full_minus_Jrem": {
+      "mean": 0.7220419240362776,
+      "median": 0.22586826514452696,
+      "n": 33,
+      "n_clusters": 18,
+      "ci95": [
+       0.3585671381545358,
+       1.1375048980203037
+      ]
+     },
+     "full_minus_rrem": {
+      "mean": -0.10707666773328066,
+      "median": -0.07490363717079163,
+      "n": 33,
+      "n_clusters": 18,
+      "ci95": [
+       -0.20297233018929386,
+       -0.019775760947513616
+      ]
+     },
+     "contrast_rrem_minus_Jrem": {
+      "mean": 0.8291185917695584,
+      "median": 0.40651938039809465,
+      "n": 33,
+      "n_clusters": 18,
+      "ci95": [
+       0.41382270867391685,
+       1.3120684500609314
+      ]
+     },
+     "verdict": "J-attribution on the margin",
+     "rule": "\u00a79: J share >= 0.30 (report 41: 0.53-0.62) and (full - Jrem) > (full - rrem), CI > 0"
+    },
+    "arm_table": {
+     "AR_Jrem@C": {
+      "median_dm": 0.21928276494145393,
+      "k": 0,
+      "n": 33,
+      "rate": 0.0
+     },
+     "AR_answer@C": {
+      "median_dm": 0.5681414604187012,
+      "k": 1,
+      "n": 33,
+      "rate": 0.030303030303030304
+     },
+     "AR_full@C": {
+      "median_dm": 0.3530801236629486,
+      "k": 0,
+      "n": 33,
+      "rate": 0.0
+     },
+     "AR_rrem@C": {
+      "median_dm": 0.5083290934562683,
+      "k": 0,
+      "n": 33,
+      "rate": 0.0
+     },
+     "rand_Jcomp_0@C": {
+      "median_dm": 0.17041274905204773,
+      "k": 0,
+      "n": 33,
+      "rate": 0.0
+     },
+     "rand_Jcomp_1@C": {
+      "median_dm": 0.2963404655456543,
+      "k": 0,
+      "n": 33,
+      "rate": 0.0
+     },
+     "rand_full_0@C": {
+      "median_dm": 0.04063025116920471,
+      "k": 0,
+      "n": 33,
+      "rate": 0.0
+     },
+     "rand_full_1@C": {
+      "median_dm": 0.6037138402462006,
+      "k": 0,
+      "n": 33,
+      "rate": 0.0
+     }
+    }
+   },
+   "japan_target": {
+    "n": 27,
+    "power": {
+     "AR_full_minus_rand_full": {
+      "mean": 10.282966855987187,
+      "median": 10.722777485847473,
+      "n": 27,
+      "n_clusters": 6,
+      "ci95": [
+       5.7507949366355815,
+       12.582605612236819
+      ]
+     },
+     "AR_answer_minus_rand_full": {
+      "mean": 9.353234957541318,
+      "median": 9.182381242513657,
+      "n": 27,
+      "n_clusters": 6,
+      "ci95": [
+       4.427550743226275,
+       10.991088739779649
+      ]
+     },
+     "has_power": true
+    },
+    "primary_relative_AR_Jrem_minus_rand_Jcomp": {
+     "mean": 0.6429450129631691,
+     "median": 0.32095642387866974,
+     "n": 27,
+     "n_clusters": 6,
+     "ci95": [
+      0.2288134862215091,
+      1.442547461557134
+     ]
+    },
+    "primary_absolute": {
+     "flips": {
+      "k": 0,
+      "n": 27,
+      "rate": 0.0
+     },
+     "null_mean_flip_rate": 0.0,
+     "pass": false
+    },
+    "primary_verdict": "weak handle",
+    "AR_full_absolute": {
+     "flips": {
+      "k": 18,
+      "n": 27,
+      "rate": 0.6666666666666666
+     },
+     "null_mean_flip_rate": 0.0,
+     "pass": true
+    },
+    "J_reading": {
+     "full_minus_Jrem": {
+      "mean": 10.03502562634458,
+      "median": 10.539429605007172,
+      "n": 27,
+      "n_clusters": 6,
+      "ci95": [
+       5.402664158152813,
+       11.892294729821973
+      ]
+     },
+     "full_minus_rrem": {
+      "mean": -0.8231225562439329,
+      "median": -0.6143703460693359,
+      "n": 27,
+      "n_clusters": 6,
+      "ci95": [
+       -0.9503953407208124,
+       -0.5119364621802869
+      ]
+     },
+     "contrast_rrem_minus_Jrem": {
+      "mean": 10.858148182588513,
+      "median": 12.136124610900879,
+      "n": 27,
+      "n_clusters": 6,
+      "ci95": [
+       5.918481037960622,
+       12.782778870420103
+      ]
+     },
+     "verdict": "J-attribution (lever)",
+     "rule": "\u00a79: J share >= 0.30 (report 41: 0.53-0.62) and (full - Jrem) > (full - rrem), CI > 0"
+    },
+    "arm_table": {
+     "AR_Jrem@C": {
+      "median_dm": 0.6228583455085754,
+      "k": 0,
+      "n": 27,
+      "rate": 0.0
+     },
+     "AR_answer@C": {
+      "median_dm": 10.070348799228668,
+      "k": 15,
+      "n": 27,
+      "rate": 0.5555555555555556
+     },
+     "AR_full@C": {
+      "median_dm": 11.42791685461998,
+      "k": 18,
+      "n": 27,
+      "rate": 0.6666666666666666
+     },
+     "AR_rrem@C": {
+      "median_dm": 12.598957754671574,
+      "k": 20,
+      "n": 27,
+      "rate": 0.7407407407407407
+     },
+     "rand_Jcomp_0@C": {
+      "median_dm": 0.3206462860107422,
+      "k": 0,
+      "n": 27,
+      "rate": 0.0
+     },
+     "rand_Jcomp_1@C": {
+      "median_dm": 0.4120565523652129,
+      "k": 0,
+      "n": 27,
+      "rate": 0.0
+     },
+     "rand_full_0@C": {
+      "median_dm": 0.5363993048667908,
+      "k": 0,
+      "n": 27,
+      "rate": 0.0
+     },
+     "rand_full_1@C": {
+      "median_dm": 0.9082785844802856,
+      "k": 0,
+      "n": 27,
+      "rate": 0.0
+     }
+    }
+   },
+   "not_japan": {
+    "n": 55,
+    "power": {
+     "AR_full_minus_rand_full": {
+      "mean": 3.8246262147259635,
+      "median": 1.3013852816075087,
+      "n": 55,
+      "n_clusters": 29,
+      "ci95": [
+       1.5343839732187072,
+       6.497579580579516
+      ]
+     },
+     "AR_answer_minus_rand_full": {
+      "mean": 4.3896790087131485,
+      "median": 1.3139417059719563,
+      "n": 55,
+      "n_clusters": 29,
+      "ci95": [
+       2.1988254020084907,
+       6.953502493290035
+      ]
+     },
+     "has_power": true
+    },
+    "primary_relative_AR_Jrem_minus_rand_Jcomp": {
+     "mean": 0.12561960623098387,
+     "median": 0.051006775349378586,
+     "n": 55,
+     "n_clusters": 29,
+     "ci95": [
+      -0.16504429485293198,
+      0.4073693595017254
+     ]
+    },
+    "primary_absolute": {
+     "flips": {
+      "k": 0,
+      "n": 55,
+      "rate": 0.0
+     },
+     "null_mean_flip_rate": 0.0,
+     "pass": false
+    },
+    "primary_verdict": "not shown",
+    "AR_full_absolute": {
+     "flips": {
+      "k": 12,
+      "n": 55,
+      "rate": 0.21818181818181817
+     },
+     "null_mean_flip_rate": 0.0,
+     "pass": false
+    },
+    "J_reading": {
+     "full_minus_Jrem": {
+      "mean": 3.7466852771471792,
+      "median": 0.9413507748395205,
+      "n": 55,
+      "n_clusters": 29,
+      "ci95": [
+       1.6215964843677284,
+       6.319530862283928
+      ]
+     },
+     "full_minus_rrem": {
+      "mean": -0.3287590774092803,
+      "median": -0.1806511152535677,
+      "n": 55,
+      "n_clusters": 29,
+      "ci95": [
+       -0.5036290468599013,
+       -0.16380181026555576
+      ]
+     },
+     "contrast_rrem_minus_Jrem": {
+      "mean": 4.07544435455646,
+      "median": 1.360109567642212,
+      "n": 55,
+      "n_clusters": 29,
+      "ci95": [
+       1.8355699372897825,
+       6.7408035399722745
+      ]
+     },
+     "verdict": "J-attribution on the margin",
+     "rule": "\u00a79: J share >= 0.30 (report 41: 0.53-0.62) and (full - Jrem) > (full - rrem), CI > 0"
+    },
+    "arm_table": {
+     "AR_Jrem@C": {
+      "median_dm": 0.299740195274353,
+      "k": 0,
+      "n": 55,
+      "rate": 0.0
+     },
+     "AR_answer@C": {
+      "median_dm": 1.9354806051679532,
+      "k": 16,
+      "n": 55,
+      "rate": 0.2909090909090909
+     },
+     "AR_full@C": {
+      "median_dm": 1.5093641877174377,
+      "k": 12,
+      "n": 55,
+      "rate": 0.21818181818181817
+     },
+     "AR_rrem@C": {
+      "median_dm": 1.865289643406868,
+      "k": 13,
+      "n": 55,
+      "rate": 0.23636363636363636
+     },
+     "rand_Jcomp_0@C": {
+      "median_dm": 0.31682030484080315,
+      "k": 0,
+      "n": 55,
+      "rate": 0.0
+     },
+     "rand_Jcomp_1@C": {
+      "median_dm": 0.2665841728448868,
+      "k": 0,
+      "n": 55,
+      "rate": 0.0
+     },
+     "rand_full_0@C": {
+      "median_dm": 0.11412182450294495,
+      "k": 0,
+      "n": 55,
+      "rate": 0.0
+     },
+     "rand_full_1@C": {
+      "median_dm": 0.47558388113975525,
+      "k": 0,
+      "n": 55,
+      "rate": 0.0
+     }
+    }
+   }
+  },
+  "like_for_like_lever": {
+   "covered_51": {
+    "J_row": {
+     "flips": 41,
+     "n": 51,
+     "median_dm": 14.601464748382568
+    },
+    "CM_swap": {
+     "flips": 10,
+     "n": 51,
+     "median_dm": 2.605395182967186
+    }
+   },
+   "CM_toward_tgt": {
+    "J_row": {
+     "flips": 23,
+     "n": 28,
+     "median_dm": 17.02774192659306
+    },
+    "CM_swap": {
+     "flips": 9,
+     "n": 28,
+     "median_dm": 6.430075466632843
+    }
+   },
+   "note": "012E \u00a716 item 4; J-row and CM results from the parity and lever runs"
+  },
+  "secondary_J_size": {
+   "AR_full_minus_AR_word": {
+    "mean": -0.6591662154052644,
+    "median": -0.4064992591738701,
+    "n": 82,
+    "n_clusters": 31,
+    "ci95": [
+     -1.0088605819521559,
+     -0.3195080278838174
+    ]
+   },
+   "AR_starts_minus_AR_mentions": {
+    "mean": 1.0514240902269951,
+    "median": 0.5419645309448242,
+    "n": 82,
+    "n_clusters": 31,
+    "ci95": [
+     0.7106658661126226,
+     1.3998408154915738
+    ]
+   },
+   "LLM_mean_minus_template": {
+    "mean": -1.2468154466603947,
+    "median": -0.8687709420919418,
+    "n": 82,
+    "n_clusters": 31,
+    "ci95": [
+     -1.672920154446949,
+     -0.886204508594827
+    ]
+   },
+   "AR_mismatched_minus_rand_full": {
+    "mean": -0.15243281735064793,
+    "median": -0.12802706196862346,
+    "n": 82,
+    "n_clusters": 31,
+    "ci95": [
+     -0.32298019232041103,
+     0.007763560300559358
+    ]
+   }
+  },
+  "C_white": {
+   "median_dm": 5.897143788124843,
+   "k": 40,
+   "n": 82,
+   "rate": 0.4878048780487805
+  },
+  "CM_swap_Jrem": {
+   "median_dm": 0.2438163384795189,
+   "k": 0,
+   "n": 51,
+   "rate": 0.0
+  },
+  "sizes": {
+   "Kj_rel_median_by_layer": {
+    "36": 0.027189805172383785,
+    "40": 0.02683943696320057,
+    "44": 0.02206870075315237,
+    "47": 0.020358980633318424
+   },
+   "Kc_rel_median_by_layer": {
+    "36": 0.09878551959991455,
+    "40": 0.0969788134098053,
+    "44": 0.06331798434257507,
+    "47": 0.060161519795656204
+   }
+  }
  }
 }

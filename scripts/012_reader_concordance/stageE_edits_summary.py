@@ -62,6 +62,109 @@ def lever(rs, arm, rand):
             "rule": ">= 30% flips and >= 20 points above the random control (012 lever rule)"}
 
 
+NB, SEED = 10000, 11
+
+
+def boot_rel(vals, clus):
+    vals, clus = np.asarray(vals, float), np.asarray(clus)
+    keys = sorted(set(clus))
+    idx = {k: np.where(clus == k)[0] for k in keys}
+    rng = np.random.default_rng(SEED)
+    ms = [np.mean(np.concatenate([vals[idx[keys[i]]] for i in rng.choice(len(keys), len(keys))])) for _ in range(NB)]
+    return {"mean": float(vals.mean()), "median": float(np.median(vals)), "n": int(len(vals)), "n_clusters": len(keys),
+            "ci95": [float(np.percentile(ms, 2.5)), float(np.percentile(ms, 97.5))]}
+
+
+def full_analysis(F, P, C):
+    """012E §16 rules on the full run. Δm in nats toward y_b; flips = y_b in the greedy output; relation clusters."""
+    J = {r["name"]: r for r in P}
+    CMr = {r["name"]: r for r in C}
+    dm = lambda r, a: r["arms"][a]["dm"]                                                     # noqa: E731
+    fl = lambda r, a: bool(r["arms"][a].get("success"))                                     # noqa: E731
+    have = lambda r, *arms: all(a in r["arms"] and "dm" in r["arms"][a] for a in arms)      # noqa: E731
+
+    def paired(rs, a, b):
+        """b: arm name or list of arms (their mean is the comparator)."""
+        bl = b if isinstance(b, list) else [b]
+        xs = [(dm(r, a) - np.mean([dm(r, x) for x in bl]), E.rel(r["name"])) for r in rs if have(r, a, *bl)]
+        return boot_rel([x for x, _ in xs], [c for _, c in xs]) if xs else None
+
+    def flips(rs, a):
+        v = [fl(r, a) for r in rs if a in r["arms"] and "success" in r["arms"][a]]
+        return {"k": int(sum(v)), "n": len(v), "rate": float(np.mean(v)) if v else None}
+
+    def mean_flips(rs, arms):
+        return float(np.mean([np.mean([fl(r, a) for a in arms]) for r in rs if have(r, *arms)]))
+
+    def absolute(rs, a, nulls):
+        f_, nf = flips(rs, a), mean_flips(rs, nulls)
+        return {"flips": f_, "null_mean_flip_rate": nf,
+                "pass": bool(f_["rate"] is not None and f_["rate"] >= 0.30 and f_["rate"] - nf >= 0.20)}
+
+    def block(rs, sz):
+        rf, rj = [f"rand_full_{i}@{sz}" for i in range(2)], [f"rand_Jcomp_{i}@{sz}" for i in range(2)]
+        pw = {a: paired(rs, f"{a}@{sz}", rf) for a in ("AR_full", "AR_answer")}
+        power = any(v and v["ci95"][0] > 0 for v in pw.values())
+        rel = paired(rs, f"AR_Jrem@{sz}", rj)
+        ab = absolute(rs, f"AR_Jrem@{sz}", rj)
+        rel_ok = bool(rel and rel["ci95"][0] > 0)
+        verdict = ("no power at this size" if not power else "lever" if rel_ok and ab["pass"]
+                   else "weak handle" if rel_ok else "not shown")
+        full_abs = absolute(rs, f"AR_full@{sz}", rf)
+        jr = paired(rs, f"AR_rrem@{sz}", f"AR_Jrem@{sz}")      # (full - Jrem) - (full - rrem) = rrem - Jrem
+        j_ok = bool(jr and jr["ci95"][0] > 0)
+        return {"n": len(rs), "power": {"AR_full_minus_rand_full": pw["AR_full"], "AR_answer_minus_rand_full": pw["AR_answer"],
+                                        "has_power": power},
+                "primary_relative_AR_Jrem_minus_rand_Jcomp": rel, "primary_absolute": ab, "primary_verdict": verdict,
+                "AR_full_absolute": full_abs,
+                "J_reading": {"full_minus_Jrem": paired(rs, f"AR_full@{sz}", f"AR_Jrem@{sz}"),
+                              "full_minus_rrem": paired(rs, f"AR_full@{sz}", f"AR_rrem@{sz}"),
+                              "contrast_rrem_minus_Jrem": jr,
+                              "verdict": (("J-attribution on the margin" if not full_abs["pass"] else "J-attribution (lever)")
+                                          if j_ok else "not attributed to J"),
+                              "rule": "§9: J share >= 0.30 (report 41: 0.53-0.62) and (full - Jrem) > (full - rrem), CI > 0"},
+                "arm_table": {a: {"median_dm": float(np.median([dm(r, a) for r in rs if have(r, a)])), **flips(rs, a)}
+                              for a in sorted({a for r in rs for a in r["arms"] if a.endswith(f"@{sz}")})}}
+
+    out = {"n_items": len(F), "J_size": {}, "C_size": {}}
+    subsets = {"all": F, "covered": [r for r in F if r.get("covered")], "uncovered": [r for r in F if not r.get("covered")],
+               "rescued_concept": [r for r in F if r.get("rescued_concept")],
+               "covered_not_rescued": [r for r in F if r.get("covered") and not r.get("rescued_concept")],
+               "J_toward_tgt": [r for r in F if r["j_edit_direction"] == "toward_tgt"],
+               "CM_toward_tgt": [r for r in F if CMr.get(r["name"], {}).get("cm_edit_direction") == "toward_tgt"],
+               "named_place": [r for r in F if r.get("bridge_type") == "named place"],
+               "other_bridge": [r for r in F if r.get("bridge_type") == "other"],
+               "japan_target": [r for r in F if r["tgt"] == "Japan"], "not_japan": [r for r in F if r["tgt"] != "Japan"]}
+    for nm_, rs in subsets.items():
+        if len(rs) >= 3:
+            out["J_size"][nm_] = block(rs, "J")
+            out["C_size"][nm_] = block(rs, "C")
+    # references (joined from the parity and class-mean lever runs)
+    cov = {r["name"] for r in subsets["covered"]}
+    cmtt = [n for n, r in CMr.items() if r.get("cm_edit_direction") == "toward_tgt"]
+    jref = lambda names: {"flips": int(sum(J[n]["arms"]["J_L36-47"]["success"] for n in names)), "n": len(names),   # noqa: E731
+                          "median_dm": float(np.median([J[n]["arms"]["J_L36-47"]["dm"] for n in names]))}
+    cref = lambda names: {"flips": int(sum(CMr[n]["arms"]["CM_swap"]["success"] for n in names)), "n": len(names),  # noqa: E731
+                          "median_dm": float(np.median([CMr[n]["arms"]["CM_swap"]["dm"] for n in names]))}
+    out["like_for_like_lever"] = {"covered_51": {"J_row": jref(sorted(cov)), "CM_swap": cref(sorted(cov))},
+                                  "CM_toward_tgt": {"J_row": jref(cmtt), "CM_swap": cref(cmtt)},
+                                  "note": "012E §16 item 4; J-row and CM results from the parity and lever runs"}
+    out["secondary_J_size"] = {
+        "AR_full_minus_AR_word": paired(F, "AR_full@J", "AR_word@J"),
+        "AR_starts_minus_AR_mentions": paired(F, "AR_starts@J", "AR_mentions@J"),
+        "LLM_mean_minus_template": boot_rel(
+            [np.mean([dm(r, "AR_starts@J"), dm(r, "AR_mentions@J")]) - dm(r, "AR_template@J") for r in F
+             if have(r, "AR_starts@J", "AR_mentions@J", "AR_template@J")],
+            [E.rel(r["name"]) for r in F if have(r, "AR_starts@J", "AR_mentions@J", "AR_template@J")]),
+        "AR_mismatched_minus_rand_full": paired(F, "AR_mismatched@J", [f"rand_full_{i}@J" for i in range(2)])}
+    out["C_white"] = {"median_dm": float(np.median([dm(r, "C_white") for r in F if have(r, "C_white")])), **flips(F, "C_white")}
+    out["CM_swap_Jrem"] = {"median_dm": float(np.median([dm(r, "CM_swap_Jrem") for r in F if have(r, "CM_swap_Jrem")])),
+                           **flips(F, "CM_swap_Jrem")}
+    out["sizes"] = {"Kj_rel_median_by_layer": {L: float(np.median([r["Kj_rel_median"][L] for r in F])) for L in ("36", "40", "44", "47")},
+                    "Kc_rel_median_by_layer": {L: float(np.median([r["Kc_rel_median"][L] for r in F])) for L in ("36", "40", "44", "47")}}
+    return out
+
+
 def main():
     out = {"label": "EXPLORATORY; 012 Stage E step 4 (design 012E §15). Coverage rescue and class-mean results POST HOC."}
     cohort = {r["name"]: r for r in E.cohort()}
@@ -174,6 +277,10 @@ def main():
                                                                    for v in (r["arms"][a].get("edit_log") or {}).values()] or [0])}
                                     for a in arms},
                         "ref_size_rel_median_all_pos": {r["name"]: r.get("ref_size_rel_median_all_pos") for r in Sm}}
+    # ---------------- full run (012E §16) ----------------
+    F = rows("full")
+    if F:
+        out["full"] = full_analysis(F, rows("parity"), rows("cmlever"))
     E.RES.mkdir(parents=True, exist_ok=True)
     p = E.RES / "stageE_step4.json"
     p.write_text(json.dumps(out, indent=1))

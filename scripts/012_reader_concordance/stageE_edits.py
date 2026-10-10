@@ -39,6 +39,9 @@ HERE = Path(__file__).resolve().parent
 ROOT = HERE.parents[1]
 sys.path.insert(0, str(HERE))
 import stageE_common as E                                                   # noqa: E402
+import stageA_splits as SPL                                                 # noqa: E402
+
+S_PLACES = SPL.COUNTRIES | SPL.GEO_PLACES
 
 MODEL, REV = "Qwen/Qwen3.6-27B", "6a9e13bd6fc8f0983b9b99948120bc37f49c13e9"
 BENCH, ARM_ID = "causal_st_multihop", "j"
@@ -212,7 +215,7 @@ def rand_dirs(name, tag, Q=None):
 # ------------------------------------------------------------------------------------------------ main
 def main():
     ap = argparse.ArgumentParser()
-    ap.add_argument("mode", choices=("parity", "cmlever", "smoke"))
+    ap.add_argument("mode", choices=("parity", "cmlever", "smoke", "cmprofile", "full"))
     ap.add_argument("--shard", type=int, default=0)
     ap.add_argument("--nshard", type=int, default=1)
     ap.add_argument("--items", default="")
@@ -227,11 +230,13 @@ def main():
     cohort = {r["name"]: r for r in E.cohort()}
     stageB = {json.loads(l)["name"]: json.loads(l) for l in open(E.STAGEB_ITEMS)}
     bench = {it["name"]: it for it in load_benchmark(BENCH)["items"]}
-    arz, Q, cm = load_material(with_cm=a.mode in ("cmlever", "smoke"))
+    arz, Q, cm = load_material(with_cm=a.mode in ("cmlever", "smoke", "cmprofile", "full"))
     if a.mode == "parity":
         names = [n for n, r in stageB.items() if r.get("status") == "evaluated"]
-    elif a.mode == "cmlever":
+    elif a.mode in ("cmlever", "cmprofile"):
         names = [n for n in cohort if cohort[n]["src"] in cm["dirs"] and cohort[n]["tgt"] in cm["dirs"]]
+    elif a.mode == "full":
+        names = list(cohort)
     else:
         pool = sorted(n for n in cohort if cohort[n]["src"] in cm["dirs"] and cohort[n]["tgt"] in cm["dirs"])
         names = a.items.split(",") if a.items else list(np.random.default_rng(11).choice(pool, a.n_smoke, replace=False))
@@ -244,7 +249,11 @@ def main():
     W32 = runner.model.get_output_embeddings().weight.detach().float()
     norm = runner.final_norm
     WH = None
-    if a.mode == "smoke":
+    PROFILE = None
+    if a.mode == "full":                                   # 012E §16: fixed C-size profile for uncovered items
+        PROFILE = {int(L): v for L, v in json.loads((E.RES / "stageE_cm_size_profile.json").read_text())["profile"].items()}
+    prof_vals = {L: [] for L in BAND}
+    if a.mode in ("smoke", "full"):
         sys.path.insert(0, str(ROOT / "scripts" / "011_olens_swaps"))
         import ar_vectors as AV
         WH = {t: AV.whitener(t) for t in (36, 40, 44)}
@@ -284,6 +293,14 @@ def main():
             return {"lp": lp, "m": mk(lp), "m_bf16_jan": mk(lpj)}
 
         arms = {}
+        if a.mode == "cmprofile":                          # clean activations only; no generation
+            cap = runner.capture_ids(ids, positions=list(range(n)), layers=BAND)
+            clean = {L: cap[i] for i, L in enumerate(BAND)}
+            Kc = swap_sizes(cm["dirs"][it["src"]], cm["dirs"][it["tgt"]], clean)
+            for L in BAND:
+                prof_vals[L] += (Kc[L] / clean[L].norm(dim=-1).clamp_min(1e-12)).tolist()
+            print(f"[{k_ + 1}/{len(names)}] {nm} profile", flush=True)
+            continue
 
         def run(armname, edit, coord_fn=None, collision=False, **meta):
             lg = Logged(edit, coord_fn) if edit is not None else None
@@ -420,6 +437,72 @@ def main():
             Cw = ClampEdit(BAND, A_, R_, mu_, tg_, "C_white")
             run("C_white", Cw, coord_err_clamp(Cw))
 
+        if a.mode == "full":
+            covered = it["src"] in cm["dirs"] and it["tgt"] in cm["dirs"]
+            Kj = swap_sizes(s_dirs, t_dirs, clean)
+            if covered:
+                Kc = swap_sizes(cm["dirs"][it["src"]], cm["dirs"][it["tgt"]], clean)
+            else:
+                Kc = {L: PROFILE[L] * clean[L].norm(dim=-1) for L in BAND}
+            row.update(covered=covered, c_size_source="class-mean swap" if covered else "fixed profile (§16)",
+                       rescued_concept=bool(covered and "easy" in (cm["source"][it["src"]], cm["source"][it["tgt"]])),
+                       bridge_type="named place" if it["src"] in S_PLACES else "other",
+                       Kj_rel_median={str(L): float((Kj[L] / clean[L].norm(dim=-1)).median()) for L in BAND},
+                       Kc_rel_median={str(L): float((Kc[L] / clean[L].norm(dim=-1)).median()) for L in BAND})
+
+            def addk(armname, d, KK):
+                if d is None:
+                    arms[armname] = {"skipped": "no vector"}
+                    return
+                u = {L: unit(v) for L, v in d.items()}
+                e = additive(u, KK, clean, armname)
+                run(armname, e, coord_err_clamp(e))
+
+            full = ar_diff(arz, it["src"], it["tgt"], PHRASES)
+            jr, rr = jremove(full, Q), rremove(full, nm)
+            ans = ar_diff(arz, it["y_a"], it["y_b"], PHRASES + ("template", "word"))
+            others = [r for r in cohort.values() if E.rel(r["name"]) != E.rel(nm)
+                      and not ({r["src"], r["tgt"]} & {it["src"], it["tgt"]})]
+            mm = others[np.random.default_rng(seed_of(nm, "mm") % 2**32).integers(len(others))]
+            row["mismatched_pair"] = [mm["src"], mm["tgt"]]
+            mmd = ar_diff(arz, mm["src"], mm["tgt"], PHRASES)
+            for sz, KK in (("J", Kj), ("C", Kc)):
+                addk(f"AR_full@{sz}", full, KK)
+                addk(f"AR_Jrem@{sz}", jr, KK)
+                addk(f"AR_rrem@{sz}", rr, KK)
+                addk(f"AR_answer@{sz}", ans, KK)
+                for i in range(2):
+                    addk(f"rand_full_{i}@{sz}", rand_dirs(nm, f"rf{i}"), KK)
+                    addk(f"rand_Jcomp_{i}@{sz}", rand_dirs(nm, f"rjc{i}", Q), KK)
+            addk("AR_mismatched@J", mmd, Kj)
+            addk("AR_mismatched_Jrem@J", jremove(mmd, Q) if mmd else None, Kj)
+            for s_ in ("starts", "mentions", "template", "word"):
+                d_ = ar_diff(arz, it["src"], it["tgt"], (s_,))
+                addk(f"AR_{s_}@J", d_, Kj)
+                addk(f"AR_{s_}_Jrem@J", jremove(d_, Q) if d_ else None, Kj)
+            if covered:
+                cs, ct = cm["dirs"][it["src"]], cm["dirs"][it["tgt"]]
+                jrm = lambda d_: torch.stack([unit(d_[j] - Q[L] @ (Q[L].T @ d_[j])) for j, L in enumerate(BAND)])  # noqa: E731
+                CMj = SwapEdit(jrm(cs), jrm(ct), clean, BAND, 1.0)
+                run("CM_swap_Jrem", CMj, coord_err_swap(CMj))
+            V_all = {}
+            mhc = sorted({r["src"] for r in cohort.values()} | {r["tgt"] for r in cohort.values()})
+            for t in (36, 40, 44):
+                w = WH[t]
+                Wm = {c: (w["W"].float() @ (ar_mean(arz, c, PHRASES, t) - w["mu"].float())) for c in mhc}
+                cen = torch.stack(list(Wm.values())).mean(0)
+                V_all[t] = {c: v - cen for c, v in Wm.items()}
+            A_, R_, mu_, tg_ = {}, {}, {}, {}
+            for L in BAND:
+                t, w = TAG[L], WH[TAG[L]]
+                Vt = torch.stack([V_all[t][it["src"]], V_all[t][it["tgt"]]], 1)
+                R_[L] = torch.linalg.pinv(Vt) @ w["W"].float()
+                A_[L] = w["Wi"].float() @ Vt
+                mu_[L] = w["mu"].float()
+                tg_[L] = (R_[L] @ (clean[L].float() - mu_[L]).T)[[1, 0]]
+            Cw = ClampEdit(BAND, A_, R_, mu_, tg_, "C_white")
+            run("C_white", Cw, coord_err_clamp(Cw))
+
         row["arms"] = {k: {kk: vv for kk, vv in v.items() if kk != "ids"} for k, v in arms.items()}
         row["sec"] = round(time.time() - t1, 1)
         rows.append(row)
@@ -427,6 +510,14 @@ def main():
                          if k != "clean" and "dm" in v)
         print(f"[{k_ + 1}/{len(names)}] {nm} {row['sec']}s {brief}", flush=True)
 
+    if a.mode == "cmprofile":
+        prof = {str(L): float(np.median(prof_vals[L])) for L in BAND}
+        rec = {"label": "012E §16: fixed C-size profile = per layer, median over the covered items and their prompt "
+                        "positions of (class-mean swap clean-state edit size / ||h||)", "n_items": len(names),
+               "n_values_per_layer": len(prof_vals[BAND[0]]), "profile": prof}
+        (E.RES / "stageE_cm_size_profile.json").write_text(json.dumps(rec, indent=1))
+        print("profile", json.dumps(prof), flush=True)
+        return
     with open(out_dir / f"{name}.jsonl", "w") as f:
         for r in rows:
             f.write(json.dumps(r) + "\n")
