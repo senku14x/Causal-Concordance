@@ -438,3 +438,64 @@ in a smoke run or by a check.
 **Results:** `stageE_bases.json`, `stageE_generation_*.json`, `stageE_ar.json`, `stageE_gate.json`,
 `stageE_phrases.json` and `stageE_precheck.json` (`results/012_reader_concordance/analysis/`).
 
+## 15. Amendment after report 41 (PI, 2026-10-10; POST HOC: written after step 2's gate results had been seen, before any edit)
+
+**Decisions.**
+- **Brew:** the stop stands. No brew edits, post hoc or otherwise.
+- **Multihop primary AR vector:** pooled phrases (starts + mentions; §14 item 5, confirmed).
+  - Single words are secondary.
+  - Starts, mentions and template are reported alone.
+- **Report 41 additions:**
+  - all sets are near-equivalent on multihop;
+  - the decodability margin is thin;
+  - a paired bootstrap CI for phrases − word decodability (concept-cluster bootstrap, descriptive).
+
+**Coverage rescue (POST HOC, labelled as such everywhere it is used).**
+
+Easier cue-varied prompts are generated **only** for the 9 dropped named-place concepts: Brazil, Canada, China, Denmark,
+Fuji, Miami, Nile, Olympus, Sydney. Months, numbers and people are not regenerated.
+
+What stays the same as §4 and §14:
+- forbidden words, code checks, gate, caps (≤ 4 per relation, ≤ 5 per answer);
+- keep 16, minimum 10;
+- 3 requests × 24, matcher v2.
+
+Only the request text changes. Exact text:
+
+> Write 24 short factual two-hop prompts about well-known facts that most adults know, in exactly this format: "Fact:
+> The <relation> of <clue> is". The <clue> must describe "{c}" unambiguously, using a famous and unmistakable fact,
+> without naming it, and the next word after "is" must be the answer. Prefer relations whose answer is one common
+> word. Example, for a different concept (Kenya): "Fact: The capital of the country where the Maasai Mara reserve lies
+> is" (answer: Nairobi). Rules: never write the word "{c}"; use a different clue in every prompt; use at least 8
+> different relations and at most 4 prompts per relation; every answer must be one to three words, and no answer may be
+> used by more than 8 prompts; do not use any of these words: {forbidden}. Return JSON: {"prompts": [...]} with
+> "prompt", "clue", "relation", "answer" per item.
+
+**Reporting the rescue:**
+- final coverage by bridge type (named place / other; countries as a sub-group) and by Japan share;
+- every class-mean result scoped to the covered set;
+- uncovered items use the J-row-size fallback (§7) and are reported separately.
+
+**Style control (descriptive; my addition, not a rule).**
+
+The rescued concepts' class means come from a different prompt style than every other concept's. A swap between a
+rescued and an original concept could therefore carry a style difference.
+- **Check:** the same easy-prompt request is run for the 3 most frequent covered named places in the cohort (Japan,
+  Egypt, Italy). Their class-mean material is **not** replaced.
+- **Reported:** cos(easy-prompt class mean, original class mean) for the same concept at L36–47, against the
+  cross-concept cosines.
+
+**Step 4 now (the PI's go).**
+1. **G-parity:** the J-row swap and its random control at L36–47 on all 82 items, against Stage A's
+   `j_swap_L36-47` (46/82, random 3/82). Bar: ≥ 90% per-item flip agreement.
+2. **Noise floors:** identity-clamp floors in this regime for:
+   - Jan's `SwapEdit` (as Stage B);
+   - the additive clamp (target = own clean coordinate).
+3. **Class-mean lever rule (fix 2):** the class-mean full swap and its "true source / random target" control on every
+   item whose src and tgt are both covered. This is estimated on the full covered set, because 5 smoke items can't
+   estimate it. It runs after the rescue's gate, so the covered set is final.
+4. **5-item smoke** with every §7 arm. The items are drawn at random (seed 11) from those with both class means.
+   - Logged: edit sizes (realised ‖Δh‖/‖h‖) at every edited position and layer, plus coordinate errors after the bf16
+     write.
+5. **Stop** and report: parity, floors, edit sizes, and the class-mean lever-rule status.
+
