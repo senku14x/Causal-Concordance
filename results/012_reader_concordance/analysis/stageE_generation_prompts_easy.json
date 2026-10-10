@@ -1,0 +1,44 @@
+{
+ "label": "EXPLORATORY; 012 Stage E generation (design 012E §3-§4)",
+ "model": "google/gemini-3.8-flash",
+ "params": {
+  "temperature": 1.0,
+  "top_p": 1.0,
+  "max_tokens": 16000,
+  "reasoning": {
+   "effort": "minimal"
+  },
+  "usage": {
+   "include": true
+  }
+ },
+ "seed0": 20261010,
+ "prompt_text": "Write 24 short factual two-hop prompts about well-known facts that most adults know, in exactly this format: \"Fact: The <relation> of <clue> is\". The <clue> must describe \"{c}\" unambiguously, using a famous and unmistakable fact, without naming it, and the next word after \"is\" must be the answer. Prefer relations whose answer is one common word. Example, for a different concept (Kenya): \"Fact: The capital of the country where the Maasai Mara reserve lies is\" (answer: Nairobi). Rules: never write the word \"{c}\"; use a different clue in every prompt; use at least 8 different relations and at most {max_rel} prompts per relation; every answer must be one to three words, and no answer may be used by more than 8 prompts; do not use any of these words: {forbidden}. Return JSON: {{\"prompts\": [{{\"prompt\": \"...\", \"clue\": \"...\", \"relation\": \"...\", \"answer\": \"...\"}}]}}.",
+ "easy": true,
+ "only": [
+  "Brazil",
+  "Canada",
+  "China",
+  "Denmark",
+  "Egypt",
+  "Fuji",
+  "Italy",
+  "Japan",
+  "Miami",
+  "Nile",
+  "Olympus",
+  "Sydney"
+ ],
+ "requests": 36,
+ "requests_per_concept": 3,
+ "cost_usd": 0.27960225,
+ "fail_counts": {
+  "ngram5": 207,
+  "forbidden": 3,
+  "duplicate": 2,
+  "format": 14,
+  "names_concept": 3,
+  "answer": 2
+ },
+ "seconds": 59.7
+}

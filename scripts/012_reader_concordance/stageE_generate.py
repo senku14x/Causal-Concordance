@@ -47,6 +47,18 @@ PROMPT_PROMPT = (
     'answer may be used by more than 8 prompts; do not use any of these words: {forbidden}. Return JSON: '
     '{{"prompts": [{{"prompt": "...", "clue": "...", "relation": "...", "answer": "..."}}]}}.')
 
+# 012E §15 (POST HOC coverage rescue, 2026-10-10): easier, well-known-fact prompts; exact text fixed in the amendment
+EASY_PROMPT = (
+    'Write 24 short factual two-hop prompts about well-known facts that most adults know, in exactly this format: '
+    '"Fact: The <relation> of <clue> is". The <clue> must describe "{c}" unambiguously, using a famous and '
+    'unmistakable fact, without naming it, and the next word after "is" must be the answer. Prefer relations whose '
+    'answer is one common word. Example, for a different concept (Kenya): "Fact: The capital of the country where the '
+    'Maasai Mara reserve lies is" (answer: Nairobi). Rules: never write the word "{c}"; use a different clue in every '
+    'prompt; use at least 8 different relations and at most {max_rel} prompts per relation; every answer must be one to '
+    'three words, and no answer may be used by more than 8 prompts; do not use any of these words: {forbidden}. Return '
+    'JSON: {{"prompts": [{{"prompt": "...", "clue": "...", "relation": "...", "answer": "..."}}]}}.')
+EASY_SEED_OFFSET = 1_000_000
+
 
 def api_key():
     return re.search(r"(?m)^OPENROUTER_API_KEY=(\S+)", Path("/workspace/.env").read_text()).group(1)
@@ -153,13 +165,15 @@ def run_phrases(fam, grams, only, workers):
     return out, summ
 
 
-def run_prompts(fam, grams, only, workers):
+def run_prompts(fam, grams, only, workers, easy=False):
     inv = {c: v for c, v in fam["multihop"].items() if v["kind"] == "mh" and (not only or c in only)}
     order = {c: i for i, c in enumerate(sorted(fam["multihop"]))}
     # 2026-10-10, after the France gate smoke (7/21 passed): PROMPT_REQUESTS requests of 24 per concept, merged in
     # request order. Request 0 keeps its original seed (cached); the text, checks, gate and caps are unchanged.
-    jobs = [(c, PROMPT_PROMPT.format(c=c, max_rel=E.MAX_PER_REL, forbidden=", ".join(v["forbidden"]) or "none"),
-             SEED0 + 100000 * (k + 1) + order[c]) for c, v in sorted(inv.items()) for k in range(PROMPT_REQUESTS)]
+    text = EASY_PROMPT if easy else PROMPT_PROMPT
+    off = EASY_SEED_OFFSET if easy else 0
+    jobs = [(c, text.format(c=c, max_rel=E.MAX_PER_REL, forbidden=", ".join(v["forbidden"]) or "none"),
+             SEED0 + off + 100000 * (k + 1) + order[c]) for c, v in sorted(inv.items()) for k in range(PROMPT_REQUESTS)]
     with ThreadPoolExecutor(workers) as ex:
         res = list(ex.map(lambda j: ask(j[1], j[2], "prompts"), jobs))
     merged = {}
@@ -195,18 +209,23 @@ def main():
     ap.add_argument("--only", default="")
     ap.add_argument("--tag", default="")
     ap.add_argument("--workers", type=int, default=16)
+    ap.add_argument("--easy", action="store_true", help="012E §15 easy-prompt text (POST HOC rescue / style control)")
     a = ap.parse_args()
     only = {x for x in a.only.split(",") if x}
     fam, _items = E.inventory()
     grams = set().union(*[E.ngrams(p) for p in E.eval_prompts()])
     t0 = time.time()
-    out, summ = (run_phrases if a.what == "phrases" else run_prompts)(fam, grams, only, a.workers)
+    if a.what == "phrases":
+        out, summ = run_phrases(fam, grams, only, a.workers)
+    else:
+        out, summ = run_prompts(fam, grams, only, a.workers, easy=a.easy)
     sfx = f"_{a.tag}" if a.tag else ""
     GEN.mkdir(parents=True, exist_ok=True)
     name = "phrases" if a.what == "phrases" else "prompts_checked"
     (GEN / f"{name}{sfx}.json").write_text(json.dumps(out, indent=1, ensure_ascii=False))
     meta = {"label": "EXPLORATORY; 012 Stage E generation (design 012E §3-§4)", "model": MODEL, "params": PARAMS,
-            "seed0": SEED0, "prompt_text": PHRASE_PROMPT if a.what == "phrases" else PROMPT_PROMPT,
+            "seed0": SEED0, "prompt_text": PHRASE_PROMPT if a.what == "phrases" else (EASY_PROMPT if a.easy else PROMPT_PROMPT),
+            "easy": a.easy,
             "only": sorted(only), **summ, "seconds": round(time.time() - t0, 1)}
     E.RES.mkdir(parents=True, exist_ok=True)
     (E.RES / f"stageE_generation_{a.what}{sfx}.json").write_text(json.dumps(meta, indent=1, ensure_ascii=False))

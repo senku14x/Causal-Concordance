@@ -122,7 +122,15 @@ def decodability(V, X, labels):
     Xc = unit(X.double() - X.double().mean(0))
     pred = (Xc @ A.T).argmax(1)
     ok = [keys[int(p)] == l for p, l in zip(pred, labels) if l in V]
-    return {"acc": float(np.mean(ok)) if ok else None, "n": len(ok), "chance": 1 / len(keys), "n_concepts": len(keys)}
+    return {"acc": float(np.mean(ok)) if ok else None, "n": len(ok), "chance": 1 / len(keys), "n_concepts": len(keys),
+            "_correct": [int(x) for x in ok], "_labels": [l for l in labels if l in V]}
+
+
+def paired_decode(r1, r2, clusters):
+    """Descriptive (PI, 012E §15): paired difference in decodability between two vector sets on the same activations,
+    bootstrapped by cluster (concept for multihop, table for brew)."""
+    d = np.array(r1["_correct"]) - np.array(r2["_correct"])
+    return boot(d, clusters)
 
 
 def jshare(u, Q):
@@ -176,6 +184,13 @@ def main():
                     cm = [jshare(CM(e), Q) for _, _, e in pairs if CM(e) is not None]
                     r["jshare_ar_diff_median"], r["jshare_classmean_diff_median"] = float(np.median(sh)), float(np.median(cm))
                 row[nm] = r
+            if "decodability" in row.get("phrases", {}) and "decodability" in row.get("word", {}):
+                items_of = [r_["item"] for r_ in meta["renders"]]
+                row["decodability_phrases_minus_word"] = paired_decode(row["phrases"]["decodability"],
+                                                                       row["word"]["decodability"], items_of)
+            for v_ in row.values():
+                if isinstance(v_, dict) and "decodability" in v_:
+                    v_["decodability"] = {k: x for k, x in v_["decodability"].items() if not k.startswith("_")}
             B[str(L)] = row
         res["brew"] = B
 
@@ -224,6 +239,13 @@ def main():
                     lab = [c for c in kept for _ in range(len(caps[c]["final"]))]
                     r["decodability"] = decodability({c: V[c] for c in kept if c in V}, X, lab)
                 row[nm] = r
+            if kept and "decodability" in row.get("phrases", {}) and "decodability" in row.get("word", {}):
+                row["decodability_phrases_minus_word"] = paired_decode(row["phrases"]["decodability"],
+                                                                       row["word"]["decodability"],
+                                                                       row["phrases"]["decodability"]["_labels"])
+            for v_ in row.values():
+                if isinstance(v_, dict) and "decodability" in v_:
+                    v_["decodability"] = {k: x for k, x in v_["decodability"].items() if not k.startswith("_")}
             res.setdefault("multihop", {})[str(L)] = row
         # (a) J share at every edit layer (nearest-tag AR vector), (b) adjacent-tag agreement
         js, jcm = {}, {}

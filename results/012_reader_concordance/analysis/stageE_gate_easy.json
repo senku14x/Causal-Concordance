@@ -1,0 +1,1289 @@
+{
+ "label": "POST HOC (012E §15): easy-prompt gate for the 9 dropped named places + 3 style controls; matcher v2",
+ "concepts": {
+  "Brazil": {
+   "role": "rescued (POST HOC)",
+   "n_checked": 35,
+   "n_pass": 17,
+   "n_kept": 16,
+   "dropped": false,
+   "kept_prompts": [
+    {
+     "prompt": "Fact: The nationality of the legendary football striker nicknamed O Fenômeno, Ronaldo Nazário, is",
+     "clue": "the legendary football striker nicknamed O Fenômeno, Ronaldo Nazário",
+     "relation": "nationality",
+     "answer": "Brazilian",
+     "greedy": " Brazilian.\n",
+     "n_ok": 10
+    },
+    {
+     "prompt": "Fact: The nationality of modernist architect Oscar Niemeyer, who designed his country's futuristic capital, is",
+     "clue": "modernist architect Oscar Niemeyer, who designed his country's futuristic capital",
+     "relation": "nationality",
+     "answer": "Brazilian",
+     "greedy": " Brazilian.\n",
+     "n_ok": 9
+    },
+    {
+     "prompt": "Fact: The nationality of author Paulo Coelho who wrote The Alchemist is",
+     "clue": "author Paulo Coelho who wrote The Alchemist",
+     "relation": "nationality",
+     "answer": "Brazilian",
+     "greedy": " Brazilian.\n",
+     "n_ok": 10
+    },
+    {
+     "prompt": "Fact: The national animal of the birthplace of the martial art capoeira is",
+     "clue": "the birthplace of the martial art capoeira",
+     "relation": "national animal",
+     "answer": "jaguar",
+     "greedy": " the jaguar.",
+     "n_ok": 10
+    },
+    {
+     "prompt": "Fact: The head of state title of the country governed from the Palácio do Planalto is",
+     "clue": "the country governed from the Palácio do Planalto",
+     "relation": "head of state title",
+     "answer": "president",
+     "greedy": " President.\n",
+     "n_ok": 10
+    },
+    {
+     "prompt": "Fact: The largest city of the homeland of football star Neymar is",
+     "clue": "the homeland of football star Neymar",
+     "relation": "largest city",
+     "answer": "São Paulo",
+     "greedy": " São Paulo.\n",
+     "n_ok": 9
+    },
+    {
+     "prompt": "Fact: The national cocktail of the homeland of capoeira martial arts is",
+     "clue": "the homeland of capoeira martial arts",
+     "relation": "national cocktail",
+     "answer": "caipirinha",
+     "greedy": " the caipirinha.",
+     "n_ok": 10
+    },
+    {
+     "prompt": "Fact: The national cocktail of the country that declared independence with the famous Cry of Ipiranga is",
+     "clue": "the country that declared independence with the famous Cry of Ipiranga",
+     "relation": "national cocktail",
+     "answer": "caipirinha",
+     "greedy": " the Caipirinha.",
+     "n_ok": 10
+    },
+    {
+     "prompt": "Fact: The national dish of the nation once ruled by Emperor Dom Pedro II is",
+     "clue": "the nation once ruled by Emperor Dom Pedro II",
+     "relation": "national dish",
+     "answer": "feijoada",
+     "greedy": " feijoada.\n",
+     "n_ok": 10
+    },
+    {
+     "prompt": "Fact: The national dish of the homeland of musician Caetano Veloso is",
+     "clue": "the homeland of musician Caetano Veloso",
+     "relation": "national dish",
+     "answer": "feijoada",
+     "greedy": " feijoada.\n",
+     "n_ok": 10
+    },
+    {
+     "prompt": "Fact: The national dish of the country whose space agency operates the Alcântara launch center is",
+     "clue": "the country whose space agency operates the Alcântara launch center",
+     "relation": "national dish",
+     "answer": "feijoada",
+     "greedy": " feijoada.\n",
+     "n_ok": 10
+    },
+    {
+     "prompt": "Fact: The internet domain of the homeland of aircraft manufacturer Embraer is",
+     "clue": "the homeland of aircraft manufacturer Embraer",
+     "relation": "internet domain",
+     "answer": ".br",
+     "greedy": " .br\nQuestion",
+     "n_ok": 10
+    },
+    {
+     "prompt": "Fact: The official currency code of the largest producer of coffee beans in the world is",
+     "clue": "the largest producer of coffee beans in the world",
+     "relation": "official currency code",
+     "answer": "BRL",
+     "greedy": " BRL.\n",
+     "n_ok": 10
+    },
+    {
+     "prompt": "Fact: The official currency code of the nation led by President Luiz Inácio Lula da Silva is",
+     "clue": "the nation led by President Luiz Inácio Lula da Silva",
+     "relation": "official currency code",
+     "answer": "BRL",
+     "greedy": " BRL.\n",
+     "n_ok": 10
+    },
+    {
+     "prompt": "Fact: The internet domain extension of the homeland of aerospace conglomerate Embraer is",
+     "clue": "the homeland of aerospace conglomerate Embraer",
+     "relation": "internet domain extension",
+     "answer": ".br",
+     "greedy": " .br.\n",
+     "n_ok": 10
+    },
+    {
+     "prompt": "Fact: The national cocktail of the country where cachaça distilled spirit is made is",
+     "clue": "the country where cachaça distilled spirit is made",
+     "relation": "national cocktail",
+     "answer": "caipirinha",
+     "greedy": " the caipirinha.",
+     "n_ok": 9
+    }
+   ]
+  },
+  "Canada": {
+   "role": "rescued (POST HOC)",
+   "n_checked": 58,
+   "n_pass": 21,
+   "n_kept": 16,
+   "dropped": false,
+   "kept_prompts": [
+    {
+     "prompt": "Fact: The national winter sport of the homeland of Wayne Gretzky is",
+     "clue": "the homeland of Wayne Gretzky",
+     "relation": "national winter sport",
+     "answer": "ice hockey",
+     "greedy": " ice hockey.\n",
+     "n_ok": 10
+    },
+    {
+     "prompt": "Fact: The national animal of the land where the CN Tower stands is",
+     "clue": "the land where the CN Tower stands",
+     "relation": "national animal",
+     "answer": "beaver",
+     "greedy": " the beaver.",
+     "n_ok": 10
+    },
+    {
+     "prompt": "Fact: The national animal of the country divided into ten provinces and three territories is",
+     "clue": "the country divided into ten provinces and three territories",
+     "relation": "national animal",
+     "answer": "beaver",
+     "greedy": " the beaver.",
+     "n_ok": 10
+    },
+    {
+     "prompt": "Fact: The co-official language alongside English in the country of Anne of Green Gables is",
+     "clue": "the country of Anne of Green Gables",
+     "relation": "co-official language alongside English",
+     "answer": "French",
+     "greedy": " French.\n",
+     "n_ok": 10
+    },
+    {
+     "prompt": "Fact: The co-official language alongside English in the country where poutine originated is",
+     "clue": "the country where poutine originated",
+     "relation": "co-official language alongside English",
+     "answer": "French",
+     "greedy": " French.\n",
+     "n_ok": 10
+    },
+    {
+     "prompt": "Fact: The official currency of the nation that shares the world's longest undefended international land border with the United States is",
+     "clue": "the nation that shares the world's longest undefended international land border with the United States",
+     "relation": "official currency",
+     "answer": "the Canadian dollar",
+     "greedy": " the Canadian dollar.\n",
+     "n_ok": 10
+    },
+    {
+     "prompt": "Fact: The official currency of the nation where ice hockey and lacrosse are recognized as national sports is",
+     "clue": "the nation where ice hockey and lacrosse are recognized as national sports",
+     "relation": "official currency",
+     "answer": "the Canadian dollar",
+     "greedy": " the Canadian dollar.\n",
+     "n_ok": 10
+    },
+    {
+     "prompt": "Fact: The official currency of the country where Banff and Jasper National Parks are situated is",
+     "clue": "the country where Banff and Jasper National Parks are situated",
+     "relation": "official currency",
+     "answer": "the Canadian dollar",
+     "greedy": " the Canadian dollar.\n",
+     "n_ok": 10
+    },
+    {
+     "prompt": "Fact: The most populous city of the country that is divided into ten provinces and three territories is",
+     "clue": "the country that is divided into ten provinces and three territories",
+     "relation": "most populous city",
+     "answer": "Toronto",
+     "greedy": " Toronto.\n",
+     "n_ok": 10
+    },
+    {
+     "prompt": "Fact: The southern neighbor of the country whose native maritime provinces include Nova Scotia and New Brunswick is",
+     "clue": "the country whose native maritime provinces include Nova Scotia and New Brunswick",
+     "relation": "southern neighbor",
+     "answer": "the United States",
+     "greedy": " the United States.\n",
+     "n_ok": 9
+    },
+    {
+     "prompt": "Fact: The southern neighbor of the nation whose province of Alberta contains the Calgary Stampede is",
+     "clue": "the nation whose province of Alberta contains the Calgary Stampede",
+     "relation": "southern neighbor",
+     "answer": "the United States",
+     "greedy": " the United States.\n",
+     "n_ok": 9
+    },
+    {
+     "prompt": "Fact: The primary co-official language alongside English of the North American federation where Quebec is a province is",
+     "clue": "the North American federation where Quebec is a province",
+     "relation": "primary co-official language alongside English",
+     "answer": "French",
+     "greedy": " French.\n",
+     "n_ok": 10
+    },
+    {
+     "prompt": "Fact: The primary co-official language alongside English of the sovereign state where poutine originated is",
+     "clue": "the sovereign state where poutine originated",
+     "relation": "primary co-official language alongside English",
+     "answer": "French",
+     "greedy": " French.\n",
+     "n_ok": 10
+    },
+    {
+     "prompt": "Fact: The primary co-official language alongside English of the homeland of the Royal Canadian Mounted Police is",
+     "clue": "the homeland of the Royal Canadian Mounted Police",
+     "relation": "primary co-official language alongside English",
+     "answer": "French",
+     "greedy": " French.\n",
+     "n_ok": 9
+    },
+    {
+     "prompt": "Fact: The ocean bordering the eastern coast of the northern nation where Prince Edward Island lies is",
+     "clue": "the northern nation where Prince Edward Island lies",
+     "relation": "ocean bordering the eastern coast",
+     "answer": "the Atlantic Ocean",
+     "greedy": " the Atlantic Ocean.\n",
+     "n_ok": 9
+    },
+    {
+     "prompt": "Fact: The ocean bordering the eastern coast of the nation where the Rideau Canal is located is",
+     "clue": "the nation where the Rideau Canal is located",
+     "relation": "ocean bordering the eastern coast",
+     "answer": "the Atlantic Ocean",
+     "greedy": " the Atlantic Ocean.\n",
+     "n_ok": 10
+    }
+   ]
+  },
+  "China": {
+   "role": "rescued (POST HOC)",
+   "n_checked": 36,
+   "n_pass": 12,
+   "n_kept": 11,
+   "dropped": false,
+   "kept_prompts": [
+    {
+     "prompt": "Fact: The current president of the Asian member holding a permanent United Nations Security Council seat is",
+     "clue": "the Asian member holding a permanent United Nations Security Council seat",
+     "relation": "current president",
+     "answer": "Xi Jinping",
+     "greedy": " Xi Jinping.\n",
+     "n_ok": 9
+    },
+    {
+     "prompt": "Fact: The current president of the domain that launched the Shenzhou space missions is",
+     "clue": "the domain that launched the Shenzhou space missions",
+     "relation": "current president",
+     "answer": "Xi Jinping",
+     "greedy": " Xi Jinping.\n",
+     "n_ok": 10
+    },
+    {
+     "prompt": "Fact: The national animal of the Asian nation famous for Peking duck is",
+     "clue": "the Asian nation famous for Peking duck",
+     "relation": "national animal",
+     "answer": "Giant panda",
+     "greedy": " the giant panda.",
+     "n_ok": 10
+    },
+    {
+     "prompt": "Fact: The ocean bordering of the land east of the Tibetan Plateau is",
+     "clue": "the land east of the Tibetan Plateau",
+     "relation": "ocean bordering",
+     "answer": "Pacific Ocean",
+     "greedy": " the Pacific Ocean.",
+     "n_ok": 10
+    },
+    {
+     "prompt": "Fact: The internet domain of the nation with the red flag bearing five golden stars is",
+     "clue": "the nation with the red flag bearing five golden stars",
+     "relation": "internet domain",
+     "answer": ".cn",
+     "greedy": " .cn.\n",
+     "n_ok": 9
+    },
+    {
+     "prompt": "Fact: The national animal of the nation that launched the Chang'e lunar probes is",
+     "clue": "the nation that launched the Chang'e lunar probes",
+     "relation": "national animal",
+     "answer": "giant panda",
+     "greedy": " the giant panda.",
+     "n_ok": 9
+    },
+    {
+     "prompt": "Fact: The national animal of the nation with special administrative regions Hong Kong and Macau is",
+     "clue": "the nation with special administrative regions Hong Kong and Macau",
+     "relation": "national animal",
+     "answer": "giant panda",
+     "greedy": " the giant panda.",
+     "n_ok": 10
+    },
+    {
+     "prompt": "Fact: The national animal of the realm that contains the Three Gorges Dam is",
+     "clue": "the realm that contains the Three Gorges Dam",
+     "relation": "national animal",
+     "answer": "giant panda",
+     "greedy": " the giant panda.",
+     "n_ok": 10
+    },
+    {
+     "prompt": "Fact: The primary color on the flag of the state once led by Mao Zedong is",
+     "clue": "the state once led by Mao Zedong",
+     "relation": "primary color on the flag",
+     "answer": "red",
+     "greedy": " red.\n",
+     "n_ok": 10
+    },
+    {
+     "prompt": "Fact: The primary color on the flag of the ancient empire traversed by the northern Silk Road is",
+     "clue": "the ancient empire traversed by the northern Silk Road",
+     "relation": "primary color on the flag",
+     "answer": "red",
+     "greedy": " red.\n",
+     "n_ok": 9
+    },
+    {
+     "prompt": "Fact: The primary color on the flag of the Asian republic that controls Tibet is",
+     "clue": "the Asian republic that controls Tibet",
+     "relation": "primary color on the flag",
+     "answer": "red",
+     "greedy": " red.\n",
+     "n_ok": 10
+    }
+   ]
+  },
+  "Denmark": {
+   "role": "rescued (POST HOC)",
+   "n_checked": 49,
+   "n_pass": 11,
+   "n_kept": 9,
+   "dropped": true,
+   "kept_prompts": [
+    {
+     "prompt": "Fact: The primary language of the native country of physicist Niels Bohr is",
+     "clue": "the native country of physicist Niels Bohr",
+     "relation": "primary language",
+     "answer": "Danish",
+     "greedy": " Danish.\n",
+     "n_ok": 10
+    },
+    {
+     "prompt": "Fact: The primary language of the homeland of astronomer Tycho Brahe is",
+     "clue": "the homeland of astronomer Tycho Brahe",
+     "relation": "primary language",
+     "answer": "Danish",
+     "greedy": " Danish.\n",
+     "n_ok": 9
+    },
+    {
+     "prompt": "Fact: The primary colors of the flag of the oldest continuous monarchy in Europe whose banner is the Dannebrog is",
+     "clue": "the oldest continuous monarchy in Europe whose banner is the Dannebrog",
+     "relation": "primary colors of the flag",
+     "answer": "red and white",
+     "greedy": " red and white.\n",
+     "n_ok": 9
+    },
+    {
+     "prompt": "Fact: The official language of the Nordic homeland of philosopher Soren Kierkegaard is",
+     "clue": "the Nordic homeland of philosopher Soren Kierkegaard",
+     "relation": "official language",
+     "answer": "Danish",
+     "greedy": " Danish.\n",
+     "n_ok": 10
+    },
+    {
+     "prompt": "Fact: The official language of the realm that contains the autonomous Faroe Islands is",
+     "clue": "the realm that contains the autonomous Faroe Islands",
+     "relation": "official language",
+     "answer": "Danish",
+     "greedy": " Danish.\n",
+     "n_ok": 10
+    },
+    {
+     "prompt": "Fact: The primary language of the Scandinavian land famed for its cultural concept of hygge is",
+     "clue": "the Scandinavian land famed for its cultural concept of hygge",
+     "relation": "primary language",
+     "answer": "Danish",
+     "greedy": " Danish.\n",
+     "n_ok": 9
+    },
+    {
+     "prompt": "Fact: The largest island of the Jutland kingdom which contains Nuuk and Ilulissat is",
+     "clue": "the Jutland kingdom which contains Nuuk and Ilulissat",
+     "relation": "largest island",
+     "answer": "Greenland",
+     "greedy": " Greenland.\n",
+     "n_ok": 10
+    },
+    {
+     "prompt": "Fact: The sea to the west of the Scandinavian land situated directly north of Schleswig-Holstein is",
+     "clue": "the Scandinavian land situated directly north of Schleswig-Holstein",
+     "relation": "sea to the west",
+     "answer": "North Sea",
+     "greedy": " the North Sea.",
+     "n_ok": 9
+    },
+    {
+     "prompt": "Fact: The sea to the west of the European territory where Shakespeare set Hamlet is",
+     "clue": "the European territory where Shakespeare set Hamlet",
+     "relation": "sea to the west",
+     "answer": "North Sea",
+     "greedy": " the North Sea.",
+     "n_ok": 10
+    }
+   ]
+  },
+  "Egypt": {
+   "role": "style control (not used as material)",
+   "n_checked": 53,
+   "n_pass": 29,
+   "n_kept": 16,
+   "dropped": false,
+   "kept_prompts": [
+    {
+     "prompt": "Fact: The official language of the sovereign nation where King Tut's intact tomb was unearthed in 1922 is",
+     "clue": "the sovereign nation where King Tut's intact tomb was unearthed in 1922",
+     "relation": "official language",
+     "answer": "Arabic",
+     "greedy": " Arabic.\n",
+     "n_ok": 10
+    },
+    {
+     "prompt": "Fact: The official language of the Mediterranean state where the Rosetta Stone was discovered is",
+     "clue": "the Mediterranean state where the Rosetta Stone was discovered",
+     "relation": "official language",
+     "answer": "Arabic",
+     "greedy": " Arabic.\n",
+     "n_ok": 10
+    },
+    {
+     "prompt": "Fact: The primary currency of the nation that built the ancient Karnak and Luxor temples is",
+     "clue": "the nation that built the ancient Karnak and Luxor temples",
+     "relation": "primary currency",
+     "answer": "Egyptian pound",
+     "greedy": " the Egyptian Pound.",
+     "n_ok": 10
+    },
+    {
+     "prompt": "Fact: The primary currency of the Arab country home to the Sinai Peninsula is",
+     "clue": "the Arab country home to the Sinai Peninsula",
+     "relation": "primary currency",
+     "answer": "Egyptian pound",
+     "greedy": " the Egyptian Pound.",
+     "n_ok": 9
+    },
+    {
+     "prompt": "Fact: The primary currency of the land ruled by Pharaoh Ramses II is",
+     "clue": "the land ruled by Pharaoh Ramses II",
+     "relation": "primary currency",
+     "answer": "Egyptian pound",
+     "greedy": " the Egyptian pound.",
+     "n_ok": 10
+    },
+    {
+     "prompt": "Fact: The official language of the modern state where King Tutankhamun ruled is",
+     "clue": "the modern state where King Tutankhamun ruled",
+     "relation": "official language",
+     "answer": "Arabic",
+     "greedy": " Arabic.\n",
+     "n_ok": 10
+    },
+    {
+     "prompt": "Fact: The official language of the nation that built the massive Aswan High Dam is",
+     "clue": "the nation that built the massive Aswan High Dam",
+     "relation": "official language",
+     "answer": "Arabic",
+     "greedy": " Arabic.\n",
+     "n_ok": 10
+    },
+    {
+     "prompt": "Fact: The official currency of the nation that fought the 1973 Yom Kippur War across the Sinai Peninsula is",
+     "clue": "the nation that fought the 1973 Yom Kippur War across the Sinai Peninsula",
+     "relation": "official currency",
+     "answer": "Egyptian pound",
+     "greedy": " the Egyptian Pound.",
+     "n_ok": 10
+    },
+    {
+     "prompt": "Fact: The official currency of the modern territory where the Rosetta Stone was discovered is",
+     "clue": "the modern territory where the Rosetta Stone was discovered",
+     "relation": "official currency",
+     "answer": "Egyptian pound",
+     "greedy": " the Egyptian Pound.",
+     "n_ok": 10
+    },
+    {
+     "prompt": "Fact: The modern leader of the nation where the 2011 Tahrir Square protests took place is",
+     "clue": "the nation where the 2011 Tahrir Square protests took place",
+     "relation": "modern leader",
+     "answer": "Abdel Fattah el-Sisi",
+     "greedy": " Abdel Fattah el-Sisi.",
+     "n_ok": 9
+    },
+    {
+     "prompt": "Fact: The northern sea bordering the nation containing the ancient city of Alexandria is",
+     "clue": "the nation containing the ancient city of Alexandria",
+     "relation": "northern sea",
+     "answer": "Mediterranean Sea",
+     "greedy": " the Mediterranean Sea.",
+     "n_ok": 9
+    },
+    {
+     "prompt": "Fact: The northern sea bordering the land where papyrus paper originated is",
+     "clue": "the land where papyrus paper originated",
+     "relation": "northern sea",
+     "answer": "Mediterranean Sea",
+     "greedy": " the Mediterranean Sea.",
+     "n_ok": 10
+    },
+    {
+     "prompt": "Fact: The eastern sea bordering the country where Mount Sinai stands is",
+     "clue": "the country where Mount Sinai stands",
+     "relation": "eastern sea",
+     "answer": "Red Sea",
+     "greedy": " the Red Sea.",
+     "n_ok": 9
+    },
+    {
+     "prompt": "Fact: The eastern sea bordering the destination containing Sharm El Sheikh resort is",
+     "clue": "the destination containing Sharm El Sheikh resort",
+     "relation": "eastern sea",
+     "answer": "Red Sea",
+     "greedy": " the Red Sea.",
+     "n_ok": 9
+    },
+    {
+     "prompt": "Fact: The dominant religion of the state that signed the 1978 Camp David Accords with Israel is",
+     "clue": "the state that signed the 1978 Camp David Accords with Israel",
+     "relation": "dominant religion",
+     "answer": "Islam",
+     "greedy": " Islam.\n",
+     "n_ok": 10
+    },
+    {
+     "prompt": "Fact: The famous canal of the nation whose ancient tombs line Luxor is",
+     "clue": "the nation whose ancient tombs line Luxor",
+     "relation": "famous canal",
+     "answer": "Suez Canal",
+     "greedy": " the Suez Canal.",
+     "n_ok": 10
+    }
+   ]
+  },
+  "Fuji": {
+   "role": "rescued (POST HOC)",
+   "n_checked": 51,
+   "n_pass": 10,
+   "n_kept": 10,
+   "dropped": false,
+   "kept_prompts": [
+    {
+     "prompt": "Fact: The official language of the state containing the renowned snowcone peak celebrated in Matsuo Basho's haiku is",
+     "clue": "the state containing the renowned snowcone peak celebrated in Matsuo Basho's haiku",
+     "relation": "official language",
+     "answer": "Japanese",
+     "greedy": " Japanese.\n",
+     "n_ok": 10
+    },
+    {
+     "prompt": "Fact: The primary color of the sun disk on the national flag of the country dominated by that majestic 3,776-meter volcano is",
+     "clue": "the country dominated by that majestic 3,776-meter volcano",
+     "relation": "primary color",
+     "answer": "red",
+     "greedy": " red.\n",
+     "n_ok": 9
+    },
+    {
+     "prompt": "Fact: The nearby megacity of the towering snowy peak visible from Roppongi Hills on clear winter days is",
+     "clue": "the towering snowy peak visible from Roppongi Hills on clear winter days",
+     "relation": "nearby megacity",
+     "answer": "Tokyo",
+     "greedy": " Tokyo.\n",
+     "n_ok": 10
+    },
+    {
+     "prompt": "Fact: The ocean to the south of the solitary volcano overlooking Lake Ashi in Hakone is",
+     "clue": "the solitary volcano overlooking Lake Ashi in Hakone",
+     "relation": "ocean to the south",
+     "answer": "the Pacific Ocean",
+     "greedy": " the Pacific Ocean.\n",
+     "n_ok": 10
+    },
+    {
+     "prompt": "Fact: The ocean to the south of the massive volcanic cone standing north of Suruga Bay is",
+     "clue": "the massive volcanic cone standing north of Suruga Bay",
+     "relation": "ocean to the south",
+     "answer": "the Pacific Ocean",
+     "greedy": " the Pacific Ocean.\n",
+     "n_ok": 9
+    },
+    {
+     "prompt": "Fact: The number of scenic lakes at the northern base of the famous snow-capped stratovolcano encircled by Motosu, Shoji, Sai, Kawaguchi, and Yamanaka is",
+     "clue": "the famous snow-capped stratovolcano encircled by Motosu, Shoji, Sai, Kawaguchi, and Yamanaka",
+     "relation": "number of scenic lakes at the northern base",
+     "answer": "five",
+     "greedy": " five.\n",
+     "n_ok": 9
+    },
+    {
+     "prompt": "Fact: The nearby capital city of the snow-topped volcanic giant visible from the Roppongi Hills observation deck is",
+     "clue": "the snow-topped volcanic giant visible from the Roppongi Hills observation deck",
+     "relation": "nearby capital city",
+     "answer": "Tokyo",
+     "greedy": " Tokyo.\n",
+     "n_ok": 9
+    },
+    {
+     "prompt": "Fact: The nearby capital city of the prominent 3,776-meter stratovolcano connected via the Chuo Line express trains is",
+     "clue": "the prominent 3,776-meter stratovolcano connected via the Chuo Line express trains",
+     "relation": "nearby capital city",
+     "answer": "Tokyo",
+     "greedy": " Tokyo.\n",
+     "n_ok": 9
+    },
+    {
+     "prompt": "Fact: The adjacent ocean of the snowy volcanic landmark visible from coastal Enoshima beaches is",
+     "clue": "the snowy volcanic landmark visible from coastal Enoshima beaches",
+     "relation": "adjacent ocean",
+     "answer": "Pacific Ocean",
+     "greedy": " the Pacific Ocean.",
+     "n_ok": 9
+    },
+    {
+     "prompt": "Fact: The southern bordering prefecture of the celebrated peak whose foothills produce green tea facing Suruga Bay is",
+     "clue": "the celebrated peak whose foothills produce green tea facing Suruga Bay",
+     "relation": "southern bordering prefecture",
+     "answer": "Shizuoka",
+     "greedy": " Shizuoka.\n",
+     "n_ok": 9
+    }
+   ]
+  },
+  "Italy": {
+   "role": "style control (not used as material)",
+   "n_checked": 53,
+   "n_pass": 15,
+   "n_kept": 15,
+   "dropped": false,
+   "kept_prompts": [
+    {
+     "prompt": "Fact: The largest lake of the nation where the canals of Venice are situated is",
+     "clue": "the nation where the canals of Venice are situated",
+     "relation": "largest lake",
+     "answer": "Lake Garda",
+     "greedy": " Lake Garda.\n",
+     "n_ok": 10
+    },
+    {
+     "prompt": "Fact: The largest island of the country where Mount Etna erupts is",
+     "clue": "the country where Mount Etna erupts",
+     "relation": "largest island",
+     "answer": "Sicily",
+     "greedy": " Sicily.\n",
+     "n_ok": 10
+    },
+    {
+     "prompt": "Fact: The sea east of the nation where the city of Verona set Romeo and Juliet is",
+     "clue": "the nation where the city of Verona set Romeo and Juliet",
+     "relation": "sea east",
+     "answer": "Adriatic Sea",
+     "greedy": " the Adriatic Sea.",
+     "n_ok": 9
+    },
+    {
+     "prompt": "Fact: The mountain range forming the northern border of the country containing Milan's Duomo is",
+     "clue": "the country containing Milan's Duomo",
+     "relation": "mountain range forming the northern border",
+     "answer": "Alps",
+     "greedy": " the Alps.",
+     "n_ok": 10
+    },
+    {
+     "prompt": "Fact: The largest island of the peninsula where Mount Etna constantly erupts is",
+     "clue": "the peninsula where Mount Etna constantly erupts",
+     "relation": "largest island",
+     "answer": "Sicily",
+     "greedy": " Sicily.\n",
+     "n_ok": 10
+    },
+    {
+     "prompt": "Fact: The internet country code top-level domain of the land where Dante Alighieri penned the Divine Comedy is",
+     "clue": "the land where Dante Alighieri penned the Divine Comedy",
+     "relation": "internet country code top-level domain",
+     "answer": ".it",
+     "greedy": " .it.\n",
+     "n_ok": 10
+    },
+    {
+     "prompt": "Fact: The internet country code top-level domain of the country containing Lake Como is",
+     "clue": "the country containing Lake Como",
+     "relation": "internet country code top-level domain",
+     "answer": ".it",
+     "greedy": " .it\nQuestion",
+     "n_ok": 10
+    },
+    {
+     "prompt": "Fact: The internet country code top-level domain of the nation where Michelangelo sculpted David is",
+     "clue": "the nation where Michelangelo sculpted David",
+     "relation": "internet country code top-level domain",
+     "answer": ".it",
+     "greedy": " .it\nQuestion",
+     "n_ok": 10
+    },
+    {
+     "prompt": "Fact: The international telephone country dialing code of the home country of composer Antonio Vivaldi is",
+     "clue": "the home country of composer Antonio Vivaldi",
+     "relation": "international telephone country dialing code",
+     "answer": "+39",
+     "greedy": " +39.\n",
+     "n_ok": 10
+    },
+    {
+     "prompt": "Fact: The international telephone country dialing code of the land where Christopher Columbus was born in Genoa is",
+     "clue": "the land where Christopher Columbus was born in Genoa",
+     "relation": "international telephone country dialing code",
+     "answer": "+39",
+     "greedy": " +39.\n",
+     "n_ok": 10
+    },
+    {
+     "prompt": "Fact: The international telephone country dialing code of the state containing the Dolomite mountains is",
+     "clue": "the state containing the Dolomite mountains",
+     "relation": "international telephone country dialing code",
+     "answer": "+39",
+     "greedy": " +39.\n",
+     "n_ok": 10
+    },
+    {
+     "prompt": "Fact: The largest island of the nation home to the ancient ruins of Herculaneum is",
+     "clue": "the nation home to the ancient ruins of Herculaneum",
+     "relation": "largest island",
+     "answer": "Sicily",
+     "greedy": " Sicily.\n",
+     "n_ok": 10
+    },
+    {
+     "prompt": "Fact: The largest city by population of the homeland of the ancient Roman Empire is",
+     "clue": "the homeland of the ancient Roman Empire",
+     "relation": "largest city by population",
+     "answer": "Rome",
+     "greedy": " Rome.\n",
+     "n_ok": 10
+    },
+    {
+     "prompt": "Fact: The sea to the east of the country known for Lake Como and the Dolomite mountains is",
+     "clue": "the country known for Lake Como and the Dolomite mountains",
+     "relation": "sea to the east",
+     "answer": "Adriatic Sea",
+     "greedy": " the Adriatic Sea.",
+     "n_ok": 10
+    },
+    {
+     "prompt": "Fact: The sea to the east of the land whose fashion industry centers around Milan is",
+     "clue": "the land whose fashion industry centers around Milan",
+     "relation": "sea to the east",
+     "answer": "Adriatic Sea",
+     "greedy": " the Adriatic Sea.",
+     "n_ok": 9
+    }
+   ]
+  },
+  "Japan": {
+   "role": "style control (not used as material)",
+   "n_checked": 70,
+   "n_pass": 12,
+   "n_kept": 11,
+   "dropped": false,
+   "kept_prompts": [
+    {
+     "prompt": "Fact: The traditional garment of the home country of the automaker Toyota is",
+     "clue": "the home country of the automaker Toyota",
+     "relation": "traditional garment",
+     "answer": "kimono",
+     "greedy": " the kimono.",
+     "n_ok": 9
+    },
+    {
+     "prompt": "Fact: The traditional garment of the nation whose flag depicts a red sun on a white background is",
+     "clue": "the nation whose flag depicts a red sun on a white background",
+     "relation": "traditional garment",
+     "answer": "kimono",
+     "greedy": " the kimono.",
+     "n_ok": 9
+    },
+    {
+     "prompt": "Fact: The largest island of the homeland of the martial art of aikido is",
+     "clue": "the homeland of the martial art of aikido",
+     "relation": "largest island",
+     "answer": "Honshu",
+     "greedy": " Honshu.\n",
+     "n_ok": 10
+    },
+    {
+     "prompt": "Fact: The title of the reigning monarch of the country where origami paper folding developed is",
+     "clue": "the country where origami paper folding developed",
+     "relation": "title of the reigning monarch",
+     "answer": "Emperor",
+     "greedy": " Emperor.\n",
+     "n_ok": 10
+    },
+    {
+     "prompt": "Fact: The title of the reigning monarch of the homeland of Godzilla and Studio Ghibli is",
+     "clue": "the homeland of Godzilla and Studio Ghibli",
+     "relation": "title of the reigning monarch",
+     "answer": "Emperor",
+     "greedy": " Emperor.\n",
+     "n_ok": 10
+    },
+    {
+     "prompt": "Fact: The title of the reigning monarch of the country whose traditional tea ceremony uses powdered matcha is",
+     "clue": "the country whose traditional tea ceremony uses powdered matcha",
+     "relation": "title of the reigning monarch",
+     "answer": "Emperor",
+     "greedy": " Emperor.\n",
+     "n_ok": 9
+    },
+    {
+     "prompt": "Fact: The northernmost major island of the nation that hosted the 1998 Winter Olympic Games in Nagano is",
+     "clue": "the nation that hosted the 1998 Winter Olympic Games in Nagano",
+     "relation": "northernmost major island",
+     "answer": "Hokkaido",
+     "greedy": " Hokkaido.\n",
+     "n_ok": 10
+    },
+    {
+     "prompt": "Fact: The head of state of the country that created judo and karate is",
+     "clue": "the country that created judo and karate",
+     "relation": "head of state",
+     "answer": "the Emperor",
+     "greedy": " the Emperor of Japan",
+     "n_ok": 9
+    },
+    {
+     "prompt": "Fact: The indigenous religion of the country that pioneered matcha green tea ceremonies is",
+     "clue": "the country that pioneered matcha green tea ceremonies",
+     "relation": "indigenous religion",
+     "answer": "Shinto",
+     "greedy": " Shinto.\n",
+     "n_ok": 9
+    },
+    {
+     "prompt": "Fact: The head of state of the realm where the Shinkansen high-speed bullet trains originate is",
+     "clue": "the realm where the Shinkansen high-speed bullet trains originate",
+     "relation": "head of state",
+     "answer": "the Emperor",
+     "greedy": " the Emperor of Japan",
+     "n_ok": 9
+    },
+    {
+     "prompt": "Fact: The largest island of the homeland of sumo wrestling is",
+     "clue": "the homeland of sumo wrestling",
+     "relation": "largest island",
+     "answer": "Honshu",
+     "greedy": " Honshu.\n",
+     "n_ok": 10
+    }
+   ]
+  },
+  "Miami": {
+   "role": "rescued (POST HOC)",
+   "n_checked": 53,
+   "n_pass": 8,
+   "n_kept": 8,
+   "dropped": true,
+   "kept_prompts": [
+    {
+     "prompt": "Fact: The ocean bordering the South Beach art deco metropolis is",
+     "clue": "the South Beach art deco metropolis",
+     "relation": "ocean bordering",
+     "answer": "the Atlantic Ocean",
+     "greedy": " the Atlantic Ocean.\n",
+     "n_ok": 9
+    },
+    {
+     "prompt": "Fact: The ocean bordering the municipality where the historic Venetian Pool is located is",
+     "clue": "the municipality where the historic Venetian Pool is located",
+     "relation": "ocean bordering",
+     "answer": "the Atlantic Ocean",
+     "greedy": " the Atlantic Ocean.\n",
+     "n_ok": 10
+    },
+    {
+     "prompt": "Fact: The country containing the destination where the Orange Bowl football classic is played is",
+     "clue": "the destination where the Orange Bowl football classic is played",
+     "relation": "country containing",
+     "answer": "the United States",
+     "greedy": " the United States.\n",
+     "n_ok": 10
+    },
+    {
+     "prompt": "Fact: The primary language spoken in the birthplace of the Little Havana neighborhood in is",
+     "clue": "the birthplace of the Little Havana neighborhood",
+     "relation": "primary language spoken in",
+     "answer": "Spanish",
+     "greedy": " Spanish.\n",
+     "n_ok": 9
+    },
+    {
+     "prompt": "Fact: The state of the major US city where the famous South Beach neighborhood is located is",
+     "clue": "the major US city where the famous South Beach neighborhood is located",
+     "relation": "state",
+     "answer": "Florida",
+     "greedy": " Florida.\n",
+     "n_ok": 10
+    },
+    {
+     "prompt": "Fact: The county seat of the southeastern county that contains the vibrant Wynwood Walls street art museum is",
+     "clue": "the southeastern county that contains the vibrant Wynwood Walls street art museum",
+     "relation": "county seat",
+     "answer": "Miami",
+     "greedy": " Miami.\n",
+     "n_ok": 10
+    },
+    {
+     "prompt": "Fact: The county seat of the jurisdiction home to the upscale open-air shopping center Bayside Marketplace is",
+     "clue": "the jurisdiction home to the upscale open-air shopping center Bayside Marketplace",
+     "relation": "county seat",
+     "answer": "Miami",
+     "greedy": " Miami.\n",
+     "n_ok": 9
+    },
+    {
+     "prompt": "Fact: The ocean bordering the major seaport known as the Cruise Capital of the World on Biscayne Bay is",
+     "clue": "the major seaport known as the Cruise Capital of the World on Biscayne Bay",
+     "relation": "ocean bordering",
+     "answer": "the Atlantic Ocean",
+     "greedy": " the Atlantic Ocean.\n",
+     "n_ok": 10
+    }
+   ]
+  },
+  "Nile": {
+   "role": "rescued (POST HOC)",
+   "n_checked": 62,
+   "n_pass": 8,
+   "n_kept": 8,
+   "dropped": true,
+   "kept_prompts": [
+    {
+     "prompt": "Fact: The largest city on the famous waterway flowing past Luxor and Giza is",
+     "clue": "the famous waterway flowing past Luxor and Giza",
+     "relation": "largest city",
+     "answer": "Cairo",
+     "greedy": " Cairo.\n",
+     "n_ok": 10
+    },
+    {
+     "prompt": "Fact: The largest city on the waterway spanned by the Qasr El Nil Bridge is",
+     "clue": "the waterway spanned by the Qasr El Nil Bridge",
+     "relation": "largest city",
+     "answer": "Cairo",
+     "greedy": " Cairo.\n",
+     "n_ok": 10
+    },
+    {
+     "prompt": "Fact: The largest city on the waterway that features Elephantine Island at Aswan is",
+     "clue": "the waterway that features Elephantine Island at Aswan",
+     "relation": "largest city",
+     "answer": "Cairo",
+     "greedy": " Cairo.\n",
+     "n_ok": 10
+    },
+    {
+     "prompt": "Fact: The traditional source lake of the historic watercourse whose White branch begins in the African Great Lakes region is",
+     "clue": "the historic watercourse whose White branch begins in the African Great Lakes region",
+     "relation": "traditional source lake",
+     "answer": "Lake Victoria",
+     "greedy": " Lake Victoria.\n",
+     "n_ok": 9
+    },
+    {
+     "prompt": "Fact: The country encompassing its vast northern delta of the storied waterway upon which Cleopatra sailed her royal barge is",
+     "clue": "the storied waterway upon which Cleopatra sailed her royal barge",
+     "relation": "country encompassing its vast northern delta",
+     "answer": "Egypt",
+     "greedy": " Egypt.\n",
+     "n_ok": 9
+    },
+    {
+     "prompt": "Fact: The capital city situated near its delta of the majestic African waterway that flows right past Tahrir Square is",
+     "clue": "the majestic African waterway that flows right past Tahrir Square",
+     "relation": "capital city situated near its delta",
+     "answer": "Cairo",
+     "greedy": " Cairo.\n",
+     "n_ok": 10
+    },
+    {
+     "prompt": "Fact: The capital city situated near its delta of the timeless waterway overlooked by the Great Pyramids of Giza is",
+     "clue": "the timeless waterway overlooked by the Great Pyramids of Giza",
+     "relation": "capital city situated near its delta",
+     "answer": "Cairo",
+     "greedy": " Cairo.\n",
+     "n_ok": 9
+    },
+    {
+     "prompt": "Fact: The primary source lake of the ancient African waterway where baby Moses was found floating in a papyrus basket is",
+     "clue": "the ancient African waterway where baby Moses was found floating in a papyrus basket",
+     "relation": "primary source lake",
+     "answer": "Lake Victoria",
+     "greedy": " Lake Victoria.\n",
+     "n_ok": 9
+    }
+   ]
+  },
+  "Olympus": {
+   "role": "rescued (POST HOC)",
+   "n_checked": 60,
+   "n_pass": 17,
+   "n_kept": 16,
+   "dropped": false,
+   "kept_prompts": [
+    {
+     "prompt": "Fact: The sovereign nation of the ancient sacred massif located near the town of Litochoro is",
+     "clue": "the ancient sacred massif located near the town of Litochoro",
+     "relation": "sovereign nation",
+     "answer": "Greece",
+     "greedy": " Greece.\n",
+     "n_ok": 10
+    },
+    {
+     "prompt": "Fact: The deity of war of the mythological summit where winged sandals carried messages from the supreme sky ruler is",
+     "clue": "the mythological summit where winged sandals carried messages from the supreme sky ruler",
+     "relation": "deity of war",
+     "answer": "Ares",
+     "greedy": " Ares.\n",
+     "n_ok": 10
+    },
+    {
+     "prompt": "Fact: The deity of wisdom of the highest natural elevation in the Hellenic land towering over the Thermaic Gulf is",
+     "clue": "the highest natural elevation in the Hellenic land towering over the Thermaic Gulf",
+     "relation": "deity of wisdom",
+     "answer": "Athena",
+     "greedy": " Athena.\n",
+     "n_ok": 10
+    },
+    {
+     "prompt": "Fact: The deity of wisdom of the legendary home of the ancient pantheon that shook during the battle against the Titans is",
+     "clue": "the legendary home of the ancient pantheon that shook during the battle against the Titans",
+     "relation": "deity of wisdom",
+     "answer": "Athena",
+     "greedy": " Athena.\n",
+     "n_ok": 9
+    },
+    {
+     "prompt": "Fact: The deity of wisdom of the fabled heights where classical deities watched the Trojan War unfold is",
+     "clue": "the fabled heights where classical deities watched the Trojan War unfold",
+     "relation": "deity of wisdom",
+     "answer": "Athena",
+     "greedy": " Athena.\n",
+     "n_ok": 9
+    },
+    {
+     "prompt": "Fact: The deity of love of the legendary home of the twelve classical deities situated above the vale of Tempe is",
+     "clue": "the legendary home of the twelve classical deities situated above the vale of Tempe",
+     "relation": "deity of love",
+     "answer": "Aphrodite",
+     "greedy": " Aphrodite.\n",
+     "n_ok": 9
+    },
+    {
+     "prompt": "Fact: The deity of the hunt of the mythic peak overlooking the Aegean Sea revered as the home of the gods is",
+     "clue": "the mythic peak overlooking the Aegean Sea revered as the home of the gods",
+     "relation": "deity of the hunt",
+     "answer": "Artemis",
+     "greedy": " Artemis.\n",
+     "n_ok": 9
+    },
+    {
+     "prompt": "Fact: The deity of music of the divine citadel where Ganymede served as the celestial cupbearer to the gods is",
+     "clue": "the divine citadel where Ganymede served as the celestial cupbearer to the gods",
+     "relation": "deity of music",
+     "answer": "Apollo",
+     "greedy": " Apollo.\n",
+     "n_ok": 9
+    },
+    {
+     "prompt": "Fact: The deity of music of the supreme summit of classical myth where deities assembled around golden banqueting tables is",
+     "clue": "the supreme summit of classical myth where deities assembled around golden banqueting tables",
+     "relation": "deity of music",
+     "answer": "Apollo",
+     "greedy": " Apollo.\n",
+     "n_ok": 10
+    },
+    {
+     "prompt": "Fact: The official currency of the land containing Mytikas is",
+     "clue": "the land containing Mytikas",
+     "relation": "official currency",
+     "answer": "Euro",
+     "greedy": " the euro.",
+     "n_ok": 10
+    },
+    {
+     "prompt": "Fact: The official currency of the modern state where the twelve deities dwelled is",
+     "clue": "the modern state where the twelve deities dwelled",
+     "relation": "official currency",
+     "answer": "Euro",
+     "greedy": " the euro.",
+     "n_ok": 9
+    },
+    {
+     "prompt": "Fact: The official currency of the Mediterranean country whose highest point is Mytikas is",
+     "clue": "the Mediterranean country whose highest point is Mytikas",
+     "relation": "official currency",
+     "answer": "Euro",
+     "greedy": " the euro.",
+     "n_ok": 10
+    },
+    {
+     "prompt": "Fact: The primary language of the nation home to Mytikas peak is",
+     "clue": "the nation home to Mytikas peak",
+     "relation": "primary language",
+     "answer": "Greek",
+     "greedy": " Greek.\n",
+     "n_ok": 10
+    },
+    {
+     "prompt": "Fact: The primary language of the culture that envisioned deities feasting on ambrosia atop Mytikas is",
+     "clue": "the culture that envisioned deities feasting on ambrosia atop Mytikas",
+     "relation": "primary language",
+     "answer": "Greek",
+     "greedy": " Greek.\n",
+     "n_ok": 9
+    },
+    {
+     "prompt": "Fact: The sea of the coastline immediately east of Mytikas ridge is",
+     "clue": "the coastline immediately east of Mytikas ridge",
+     "relation": "sea",
+     "answer": "Aegean Sea",
+     "greedy": " the Aegean Sea.",
+     "n_ok": 10
+    },
+    {
+     "prompt": "Fact: The color of the red celestial body holding the solar system's tallest volcano named Mons is",
+     "clue": "the red celestial body holding the solar system's tallest volcano named Mons",
+     "relation": "color",
+     "answer": "Red",
+     "greedy": " red.\n",
+     "n_ok": 9
+    }
+   ]
+  },
+  "Sydney": {
+   "role": "rescued (POST HOC)",
+   "n_checked": 53,
+   "n_pass": 11,
+   "n_kept": 11,
+   "dropped": false,
+   "kept_prompts": [
+    {
+     "prompt": "Fact: The state of the site featuring Taronga Zoo on its northern harbor foreshore is",
+     "clue": "the site featuring Taronga Zoo on its northern harbor foreshore",
+     "relation": "state",
+     "answer": "New South Wales",
+     "greedy": " New South Wales.\n",
+     "n_ok": 9
+    },
+    {
+     "prompt": "Fact: The year of the Millennium Summer Olympic Games hosted by the Darling Harbour city is",
+     "clue": "the Darling Harbour city",
+     "relation": "year of the Millennium Summer Olympic Games hosted by",
+     "answer": "2000",
+     "greedy": " 2000.\n",
+     "n_ok": 10
+    },
+    {
+     "prompt": "Fact: The year of the completion of the iconic harbor bridge nicknamed the Coathanger is",
+     "clue": "the iconic harbor bridge nicknamed the Coathanger",
+     "relation": "year of the completion of",
+     "answer": "1932",
+     "greedy": " 1932.\n",
+     "n_ok": 9
+    },
+    {
+     "prompt": "Fact: The landmark adjacent to Circular Quay built by Danish architect Jørn Utzon in the harbor city is",
+     "clue": "the harbor city",
+     "relation": "landmark adjacent to Circular Quay built by Danish architect Jørn Utzon in",
+     "answer": "Sydney Opera House",
+     "greedy": " the Sydney Opera House.",
+     "n_ok": 9
+    },
+    {
+     "prompt": "Fact: The ocean bordering the metropolitan area containing Bondi Beach and Manly Beach is",
+     "clue": "the metropolitan area containing Bondi Beach and Manly Beach",
+     "relation": "ocean bordering",
+     "answer": "Pacific Ocean",
+     "greedy": " the Pacific Ocean.",
+     "n_ok": 10
+    },
+    {
+     "prompt": "Fact: The official language of the Pacific metropolis where the Royal Botanic Garden sits beside Port Jackson is",
+     "clue": "the Pacific metropolis where the Royal Botanic Garden sits beside Port Jackson",
+     "relation": "official language of",
+     "answer": "English",
+     "greedy": " English.\n",
+     "n_ok": 9
+    },
+    {
+     "prompt": "Fact: The primary language of the urban region encompassing Manly, Bondi, and Botany Bay is",
+     "clue": "the urban region encompassing Manly, Bondi, and Botany Bay",
+     "relation": "primary language of",
+     "answer": "English",
+     "greedy": " English.\n",
+     "n_ok": 10
+    },
+    {
+     "prompt": "Fact: The mountain range immediately west of the major coastal center situated on Port Jackson is",
+     "clue": "the major coastal center situated on Port Jackson",
+     "relation": "mountain range immediately west of",
+     "answer": "Blue Mountains",
+     "greedy": " the Blue Mountains.",
+     "n_ok": 10
+    },
+    {
+     "prompt": "Fact: The primary language of the municipality that established the historic shoreline neighborhood known as The Rocks is",
+     "clue": "the municipality that established the historic shoreline neighborhood known as The Rocks",
+     "relation": "primary language",
+     "answer": "English",
+     "greedy": " English.\n",
+     "n_ok": 10
+    },
+    {
+     "prompt": "Fact: The state of the coastal destination served by Kingsford Smith International Airport is",
+     "clue": "the coastal destination served by Kingsford Smith International Airport",
+     "relation": "state",
+     "answer": "New South Wales",
+     "greedy": " New South Wales.\n",
+     "n_ok": 9
+    },
+    {
+     "prompt": "Fact: The primary language of the urban coastal district where the famous annual City2Surf fun run finishes at Bondi is",
+     "clue": "the urban coastal district where the famous annual City2Surf fun run finishes at Bondi",
+     "relation": "primary language",
+     "answer": "English",
+     "greedy": " English.\n",
+     "n_ok": 9
+    }
+   ]
+  }
+ }
+}
