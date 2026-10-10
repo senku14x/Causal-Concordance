@@ -556,3 +556,41 @@ Everything else stays as fixed in §9 and §15.
 - (AR_starts + AR_mentions)/2 − AR_template;
 - AR_mismatched − rand_full.
 
+## 17. Energy-matched removal controls (PI, 2026-10-10; POST HOC: written after report 43, before any §17 run)
+
+**Why.** Report 43's J reading compared removing 007's dense J subspace with removing a random 1,024-dim subspace. The
+two remove very different amounts of the AR difference u:
+- J removes about 0.53–0.62 of u's energy (report 41);
+- a random 1,024-dim subspace removes 1,024 / 5,120 = 0.20 in expectation, about a third of what J removes.
+
+So "J removal kills the effect, random removal doesn't" could just mean "a larger removal kills it". Two new arms match
+the removed energy.
+
+**Arms.** Run on the same 82 items, the same regime and both sizes (J and C). Every other setting is as §16.
+- **AR_emrem.** Remove a random subspace of dimension d = round(s_J × 5120). Here s_J = ‖Q_L Q_Lᵀ u‖² / ‖u‖² is the J
+  share of u at that (item, layer). The subspace is orthonormal, seeded per (item, layer), and the same at both sizes.
+  Then renormalise. Logged: the realised removed share and cos(new vector, u).
+- **AR_pcarem.** Remove a Δ-matched PCA-k subspace of clean activations at that layer, then renormalise. 007's
+  construction is adapted to multihop:
+  - rows are the clean block-L outputs at every prompt position of the cohort's items, centred within item, each row
+    weighted 1/√n_item;
+  - cross-fitted over 4 folds of relation clusters (clusters sorted, assigned to folds round-robin), so an item's basis
+    never uses its own cluster;
+  - k is the smallest k whose top-k share of u reaches s_J. If no k reaches it, the maximum rank is used and the case is
+    flagged "unmatched";
+  - logged: k, the realised removed share, cos(new vector, u), and the PCA-k basis's overlap with J (mean J share of its
+    basis vectors; random expectation 0.20).
+  - The clean activations come from a capture pre-pass (forward only, no edits) over all 82 items before the run.
+- **Determinism check:** AR_full@J is re-run in the same process. Its Δm must equal the full run's exactly.
+
+**Pre-stated reading** (PI). Each removal X ∈ {emrem, pcarem}, at each size:
+
+| Condition | Reading |
+|---|---|
+| AR_X − AR_Jrem, paired Δm, relation-cluster CI > 0; **and** median Δm of AR_X ≥ 0.5 × median Δm of AR_full | **J-specific** |
+| Only the CI condition holds | **partly energy** |
+| Neither holds | withdraw "runs through J"; report **"the handle breaks under any removal of this size"** |
+
+Until §17 has been read, report 43 states the J result as "removing J removes the effect; removing a random subspace
+of the same dimension (about a fifth of u's energy, a third of what J removes) does not".
+
