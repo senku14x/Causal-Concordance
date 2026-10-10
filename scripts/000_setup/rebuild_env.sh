@@ -32,6 +32,10 @@ clone https://github.com/senku14x/Readable-Here-Used-There     /workspace/source
 clone https://github.com/senku14x/jacobian-lens                /workspace/sources/repos/jacobian-lens   a3720ab424d70fdc579ab74e5c8b8cd10fe421a9
 clone https://github.com/asherps/EasyNLA                       /workspace/sources/repos/EasyNLA         4d728477960c18cdfa36dc04ec738d7f55af9f0b
 clone https://github.com/ceselder/vllm-metamodels              /workspace/sources/repos/vllm-metamodels 6a0a0e56a81d4c234346575238ee5fe8f580f332
+# Jan Chen's phrase-lens (012's J-row swap and random-target construction; read-only, never installed). Added
+# 2026-10-10 (claude_ovarida 40, T4). It lives under sources/ext/, the path CLAUDE.md and 012 use.
+mkdir -p /workspace/sources/ext
+clone https://github.com/chen-jan/phrase-lens                  /workspace/sources/ext/phrase-lens-src   ea85583341b2daf74247d4f60a93f75ec6d05156
 
 log "artifacts: model, lenses, reader checkpoints (pinned revisions), then sha256 verification"
 python "$PROJ/scripts/common/artifacts.py" download --what model,lenses,readers

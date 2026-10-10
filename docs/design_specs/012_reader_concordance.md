@@ -750,3 +750,12 @@ EXPLORATORY.
 - Any Oracle-vs-lens difference needs §20's paired contrast.
 
 EXPLORATORY.
+
+## 23. Stage E (unblocked): swaps along the Oracle reconstructor's concept vectors (approved 2026-10-10, before any run)
+
+Specified in full in `docs/design_specs/012E_ar_concept_swaps.md` (011 amendment 4). It replaces §4's blocked Stage E.
+- **What unblocked it:** the 2026-10-09 post hoc loader acceptance (L36–60, directions only).
+- **Multihop arms:** they run in this spec's actual model-side regime: Jan's `ModelRunner` in bf16 with `BandEditor`,
+  float32 final logits.
+- **Class-mean split:** 007's dense J subspace, not §4's sparse k = 25 part.
+

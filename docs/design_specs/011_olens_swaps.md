@@ -241,3 +241,13 @@ scale-free criteria only. Open against the published AR (numbers recomputed by r
   (J alone 5.8 vs whole 3.2 nats, rest ≈ 0.3), but it does not rule out a J term in the Oracle's training either. Our
   `val_jfve`-style number (J-subspace FVE ≈ 0.22) is far from the config's 0.58, so the config's `jfve` is a different
   quantity.
+
+## Amendment 4 (2026-10-10; approved by the PI before any run)
+
+Phrase-based AR concept vectors on brew (011's harness, the 82 pairs, emit cells, L40/44/48, S, class-mean reference;
+only the vectors change), plus multihop. Specified in `docs/design_specs/012E_ar_concept_swaps.md` (012 §23).
+- **Loader:** the 2026-10-09 post hoc acceptance (L36–60, directions only) meets this note's loader precondition (PI,
+  2026-10-10).
+- **Superseded caveats:** the "Loader caveats" above about an unexplained scale are superseded by the per-layer scale
+  under the scale-invariant loss (`CLAUDE.md`).
+
