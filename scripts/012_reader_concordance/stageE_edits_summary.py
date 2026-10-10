@@ -165,6 +165,68 @@ def full_analysis(F, P, C):
     return out
 
 
+def overlap_analysis(P, F):
+    """012E report-43 item 2 (CPU): per-item flip-set overlaps."""
+    J = {r["name"]: bool(r["arms"]["J_L36-47"]["success"]) for r in P}
+    names = [r["name"] for r in F]
+    sets = {"J_row": {n for n in names if J.get(n)}}
+    for a in ("AR_full@J", "AR_full@C", "AR_answer@J", "C_white"):
+        sets[a] = {r["name"] for r in F if r["arms"][a].get("success")}
+    keys = list(sets)
+    pair = {f"{x} & {y}": {"both": len(sets[x] & sets[y]), "only_" + x: len(sets[x] - sets[y]), "only_" + y: len(sets[y] - sets[x])}
+            for i, x in enumerate(keys) for y in keys[i + 1:]}
+    A, B = sets["AR_full@J"], sets["AR_answer@J"]
+    two = {"full_flip_answer_flip": len(A & B), "full_flip_answer_no": len(A - B), "full_no_answer_flip": len(B - A),
+           "neither": len(set(names) - A - B)}
+    tgt = {r["name"]: r["tgt"] for r in F}
+    return {"sizes": {k: len(v) for k, v in sets.items()}, "pairs": pair, "AR_full_J_vs_AR_answer_J_2x2": two,
+            "AR_full_J_flips_japan_target": sum(tgt[n] == "Japan" for n in A),
+            "AR_full_J_flips_not_in_J_row": sorted(A - sets["J_row"]), "J_row_flips_not_in_AR_full_J": sorted(sets["J_row"] - A)}
+
+
+def energy_analysis(EN, F):
+    """012E §17: energy-matched (random) and Δ-matched PCA-k removal vs J removal, pre-stated reading."""
+    Fm = {r["name"]: r for r in F}
+    out = {"determinism_max_abs_diff_AR_full_J": float(max(abs(r["arms"]["AR_full@J"]["dm"] - Fm[r["name"]]["arms"]["AR_full@J"]["dm"])
+                                                       for r in EN))}
+    diag = {k: [] for k in ("s_J", "emrem_removed_share", "emrem_cos_to_u", "pca_k", "pca_removed_share", "pca_cos_to_u",
+                            "pca_overlap_with_J")}
+    unmatched = 0
+    for r in EN:
+        for v in r["energy_diag"].values():
+            for k in diag:
+                diag[k].append(v[k])
+            unmatched += not v["pca_matched"]
+    out["diagnostics_median"] = {k: float(np.median(v)) for k, v in diag.items()}
+    out["pca_unmatched_item_layers"] = {"n": unmatched, "of": len(diag["s_J"])}
+    grp = {"all": EN, "named_place": [r for r in EN if r["bridge_type"] == "named place"],
+           "other_bridge": [r for r in EN if r["bridge_type"] == "other"],
+           "japan_target": [r for r in EN if r["tgt"] == "Japan"], "not_japan": [r for r in EN if r["tgt"] != "Japan"],
+           "covered": [r for r in EN if r["covered"]], "uncovered": [r for r in EN if not r["covered"]],
+           "rescued_concept": [r for r in EN if r["rescued_concept"]]}
+    res = {}
+    for sz in ("J", "C"):
+        for X in ("emrem", "pcarem"):
+            for g, rs in grp.items():
+                if len(rs) < 3:
+                    continue
+                dX = [r["arms"][f"AR_{X}@{sz}"]["dm"] for r in rs]
+                dJ = [Fm[r["name"]]["arms"][f"AR_Jrem@{sz}"]["dm"] for r in rs]
+                dF = [Fm[r["name"]]["arms"][f"AR_full@{sz}"]["dm"] for r in rs]
+                b = boot_rel([x - j for x, j in zip(dX, dJ)], [E.rel(r["name"]) for r in rs])
+                ci_ok = b["ci95"][0] > 0
+                keep = float(np.median(dX)) >= 0.5 * float(np.median(dF))
+                res[f"{X}@{sz}|{g}"] = {
+                    "n": len(rs), "X_minus_Jrem": b, "median_dm_X": float(np.median(dX)), "median_dm_full": float(np.median(dF)),
+                    "median_dm_Jrem": float(np.median(dJ)), "keeps_half_of_full": keep,
+                    "flips_X": int(sum(r["arms"][f"AR_{X}@{sz}"].get("success", False) for r in rs)),
+                    "flips_full": int(sum(Fm[r["name"]]["arms"][f"AR_full@{sz}"].get("success", False) for r in rs)),
+                    "reading": ("J-specific" if ci_ok and keep else "partly energy" if ci_ok
+                                else "the handle breaks under any removal of this size")}
+    out["readings"] = res
+    return out
+
+
 def main():
     out = {"label": "EXPLORATORY; 012 Stage E step 4 (design 012E §15). Coverage rescue and class-mean results POST HOC."}
     cohort = {r["name"]: r for r in E.cohort()}
@@ -281,6 +343,10 @@ def main():
     F = rows("full")
     if F:
         out["full"] = full_analysis(F, rows("parity"), rows("cmlever"))
+        out["overlap"] = overlap_analysis(rows("parity"), F)
+    EN = rows("energy")
+    if EN and F:
+        out["energy"] = energy_analysis(EN, F)
     E.RES.mkdir(parents=True, exist_ok=True)
     p = E.RES / "stageE_step4.json"
     p.write_text(json.dumps(out, indent=1))

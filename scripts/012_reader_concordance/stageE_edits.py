@@ -215,7 +215,7 @@ def rand_dirs(name, tag, Q=None):
 # ------------------------------------------------------------------------------------------------ main
 def main():
     ap = argparse.ArgumentParser()
-    ap.add_argument("mode", choices=("parity", "cmlever", "smoke", "cmprofile", "full"))
+    ap.add_argument("mode", choices=("parity", "cmlever", "smoke", "cmprofile", "full", "capture", "energy"))
     ap.add_argument("--shard", type=int, default=0)
     ap.add_argument("--nshard", type=int, default=1)
     ap.add_argument("--items", default="")
@@ -230,12 +230,12 @@ def main():
     cohort = {r["name"]: r for r in E.cohort()}
     stageB = {json.loads(l)["name"]: json.loads(l) for l in open(E.STAGEB_ITEMS)}
     bench = {it["name"]: it for it in load_benchmark(BENCH)["items"]}
-    arz, Q, cm = load_material(with_cm=a.mode in ("cmlever", "smoke", "cmprofile", "full"))
+    arz, Q, cm = load_material(with_cm=a.mode in ("cmlever", "smoke", "cmprofile", "full", "energy"))
     if a.mode == "parity":
         names = [n for n, r in stageB.items() if r.get("status") == "evaluated"]
     elif a.mode in ("cmlever", "cmprofile"):
         names = [n for n in cohort if cohort[n]["src"] in cm["dirs"] and cohort[n]["tgt"] in cm["dirs"]]
-    elif a.mode == "full":
+    elif a.mode in ("full", "capture", "energy"):
         names = list(cohort)
     else:
         pool = sorted(n for n in cohort if cohort[n]["src"] in cm["dirs"] and cohort[n]["tgt"] in cm["dirs"])
@@ -250,7 +250,11 @@ def main():
     norm = runner.final_norm
     WH = None
     PROFILE = None
-    if a.mode == "full":                                   # 012E §16: fixed C-size profile for uncovered items
+    PCA, FOLD = None, None
+    if a.mode == "energy":                                 # 012E §17: cross-fitted PCA bases (stageE_pca.py)
+        PCA = torch.load(E.OUT / "pca" / "pca_bases.pt", weights_only=False)
+        FOLD = PCA["fold_of_cluster"]
+    if a.mode in ("full", "energy"):                       # 012E §16: fixed C-size profile for uncovered items
         PROFILE = {int(L): v for L, v in json.loads((E.RES / "stageE_cm_size_profile.json").read_text())["profile"].items()}
     prof_vals = {L: [] for L in BAND}
     if a.mode in ("smoke", "full"):
@@ -293,6 +297,11 @@ def main():
             return {"lp": lp, "m": mk(lp), "m_bf16_jan": mk(lpj)}
 
         arms = {}
+        if a.mode == "capture":                            # 012E §17 pre-pass: clean block outputs, all positions
+            cap = runner.capture_ids(ids, positions=list(range(n)), layers=BAND)
+            prof_vals.setdefault("caps", {})[nm] = cap.half()
+            print(f"[{k_ + 1}/{len(names)}] {nm} captured", flush=True)
+            continue
         if a.mode == "cmprofile":                          # clean activations only; no generation
             cap = runner.capture_ids(ids, positions=list(range(n)), layers=BAND)
             clean = {L: cap[i] for i, L in enumerate(BAND)}
@@ -503,6 +512,46 @@ def main():
             Cw = ClampEdit(BAND, A_, R_, mu_, tg_, "C_white")
             run("C_white", Cw, coord_err_clamp(Cw))
 
+        if a.mode == "energy":
+            covered = it["src"] in cm["dirs"] and it["tgt"] in cm["dirs"]
+            Kj = swap_sizes(s_dirs, t_dirs, clean)
+            Kc = (swap_sizes(cm["dirs"][it["src"]], cm["dirs"][it["tgt"]], clean) if covered
+                  else {L: PROFILE[L] * clean[L].norm(dim=-1) for L in BAND})
+            row.update(covered=covered, rescued_concept=bool(covered and "easy" in (cm["source"][it["src"]], cm["source"][it["tgt"]])),
+                       bridge_type="named place" if it["src"] in S_PLACES else "other")
+            full = ar_diff(arz, it["src"], it["tgt"], PHRASES)
+            fold = FOLD[E.rel(nm)]
+            em, pc, diag = {}, {}, {}
+            for L in BAND:
+                u = unit(full[L])
+                sJ = float(((Q[L].T @ u) ** 2).sum())
+                d = int(round(sJ * D))
+                g = torch.Generator(device="cuda").manual_seed(seed_of(nm, "emrem", L))
+                P, _ = torch.linalg.qr(torch.randn(D, d, generator=g, device="cuda"))
+                uc = u.cuda()
+                rem = P @ (P.T @ uc)
+                em[L] = unit((uc - rem).cpu())
+                B = PCA["bases"][(fold, L)].float()                          # [D, r] orthonormal, sorted by variance
+                cum = torch.cumsum((B.T @ u) ** 2, 0)
+                hit = (cum >= sJ).nonzero()
+                kk = int(hit[0]) + 1 if len(hit) else B.shape[1]
+                Bk = B[:, :kk]
+                pc[L] = unit(u - Bk @ (Bk.T @ u))
+                diag[str(L)] = {"s_J": sJ, "emrem_dim": d, "emrem_removed_share": float((rem ** 2).sum()),
+                                "emrem_cos_to_u": float(em[L] @ u), "pca_k": kk, "pca_matched": bool(len(hit)),
+                                "pca_removed_share": float(cum[kk - 1]), "pca_cos_to_u": float(pc[L] @ u),
+                                "pca_overlap_with_J": float(((Q[L].T @ Bk) ** 2).sum() / kk)}
+            row["energy_diag"] = diag
+
+            def addk(armname, uu, KK):
+                e = additive(uu, KK, clean, armname)
+                run(armname, e, coord_err_clamp(e))
+
+            addk("AR_full@J", {L: unit(v) for L, v in full.items()}, Kj)              # determinism check vs the full run
+            for sz, KK in (("J", Kj), ("C", Kc)):
+                addk(f"AR_emrem@{sz}", em, KK)
+                addk(f"AR_pcarem@{sz}", pc, KK)
+
         row["arms"] = {k: {kk: vv for kk, vv in v.items() if kk != "ids"} for k, v in arms.items()}
         row["sec"] = round(time.time() - t1, 1)
         rows.append(row)
@@ -510,6 +559,12 @@ def main():
                          if k != "clean" and "dm" in v)
         print(f"[{k_ + 1}/{len(names)}] {nm} {row['sec']}s {brief}", flush=True)
 
+    if a.mode == "capture":
+        (E.OUT / "pca").mkdir(parents=True, exist_ok=True)
+        torch.save({"layers": BAND, "caps": prof_vals["caps"], "note": "clean block outputs, every prompt position, float16"},
+                   E.OUT / "pca" / f"clean_acts_shard{a.shard}.pt")
+        print("captured", len(prof_vals["caps"]), flush=True)
+        return
     if a.mode == "cmprofile":
         prof = {str(L): float(np.median(prof_vals[L])) for L in BAND}
         rec = {"label": "012E §16: fixed C-size profile = per layer, median over the covered items and their prompt "
