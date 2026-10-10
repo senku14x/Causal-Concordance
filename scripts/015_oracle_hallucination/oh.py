@@ -21,7 +21,7 @@ import random
 import re
 import sys
 import time
-from concurrent.futures import ThreadPoolExecutor
+from concurrent.futures import ThreadPoolExecutor, as_completed
 from pathlib import Path
 
 import numpy as np
@@ -259,15 +259,19 @@ def phase_judge(which):
     assert [r["eid"] for r in orows] == [r["eid"] for r in nrows], "smoke eids must be paired across readers"
     rw013 = {json.loads(l)["eid"]: json.loads(l) for l in open(H.OUT / "rewrite/rewrites_all.jsonl")}
     jobs = [("o", r) for r in orows] + [("n", r) for r in nrows]
-    res, spent, t0 = [], 0.0, time.time()
-    with ThreadPoolExecutor(16) as ex:                                 # §9: abort if the projected spend passes the cap
-        for j in range(0, len(jobs), 64):
-            ch = jobs[j:j + 64]
-            res += list(ex.map(lambda kr: judge_oracle(kr[1], cache) if kr[0] == "o" else judge_nla(kr[1], cache, rw013), ch))
-            spent = sum(c for _, c in res)
-            proj = spent / len(res) * len(jobs)                    # Oracle rows first and dearer, so this over-projects
-            print(f"[judge] {len(res)}/{len(jobs)} spent ${spent:.3f} projected ${proj:.2f} ({time.time() - t0:.0f}s)", flush=True)
-            if proj > SPEND_CAP:
+    res, spent, t0, done = [None] * len(jobs), 0.0, time.time(), 0
+    fn = lambda kr: judge_oracle(kr[1], cache) if kr[0] == "o" else judge_nla(kr[1], cache, rw013)    # noqa: E731
+    with ThreadPoolExecutor(48) as ex:                                 # §9: abort if the projected spend passes the cap
+        futs = {ex.submit(fn, kr): i for i, kr in enumerate(jobs)}    # continuous: no chunk barrier behind slow calls
+        for f in as_completed(futs):
+            res[futs[f]] = f.result()
+            done += 1
+            spent += res[futs[f]][1]
+            proj = 1.5 * spent / done * len(jobs)                      # x1.5: cheap jobs tend to finish first
+            if done % 50 == 0 or done == len(jobs):
+                print(f"[judge] {done}/{len(jobs)} spent ${spent:.3f} projected ${proj:.2f} ({time.time() - t0:.0f}s)", flush=True)
+            if done >= 50 and proj > SPEND_CAP:
+                ex.shutdown(cancel_futures=True)
                 raise SystemExit(f"ABORT: projected spend ${proj:.2f} > cap ${SPEND_CAP}")
     oo, nn = res[:len(orows)], res[len(orows):]
     (OUT / "judge").mkdir(parents=True, exist_ok=True)
@@ -340,14 +344,20 @@ NEW_KINDS = {"wrong_entity": ("we", 61, 81), "false_fact": ("ff", 71, 91)}
 KSHORT = {"invented_context": "i", "misquote": "ii", "wrong_entity": "we", "false_fact": "ff"}
 
 
-def strip_delims(t):
-    """Ledger (smoke, before any score): 8 of the 20 Oracle P texts echo PROMPT_P's <<< >>> delimiters; strip them."""
+def strip_delims(t, o=None):
+    """Ledger (smoke, before any score): paraphrases echo PROMPT_P's <<< >>> delimiters; strip them. Full-run fix (ledger):
+    also a partial echo (a leading '<' run / trailing '>' run) when the original text o does not start / end that way."""
     if not t:
         return t
     s = t.strip()
     s = s[3:] if s.startswith("<<<") else s
     s = s[:-3] if s.endswith(">>>") else s
-    return s.strip()
+    s = s.strip()
+    if o is not None and not o.strip().startswith("<"):
+        s = s.lstrip("<").strip()
+    if o is not None and not o.strip().endswith(">"):
+        s = s.rstrip(">").strip()
+    return s
 
 
 def f_composition(o, f):
@@ -430,8 +440,32 @@ def pa_versions(e, ar, hosts, tok, eid):
     return out, len(free)
 
 
+def locate_seq(spans, text):
+    """Answer spans in the judge's order (ledger, full-run fix): each at its first occurrence at or after the previous
+    span's end, else at an occurrence not yet covered, else at its first occurrence. 013's locate maps every repeat of
+    a string ('Au', 'Au') to its first occurrence, so repeated answers were deleted only once."""
+    out, pos = [], 0
+    for s_ in spans:
+        rx = H.ws_regex(s_) if isinstance(s_, str) else None
+        m = rx.search(text, pos) if rx else None
+        if rx and not m:
+            m = next((mm for mm in rx.finditer(text) if not H.overlaps((mm.start(), mm.end()), out)), None) or rx.search(text)
+        if m:
+            out.append((m.start(), m.end()))
+            pos = m.end()
+    out.sort()
+    merged = []
+    for a, b in out:
+        if merged and a < merged[-1][1]:
+            merged[-1] = (merged[-1][0], max(b, merged[-1][1]))
+        else:
+            merged.append((a, b))
+    return merged
+
+
 def add_answer_arm(v, info, e, ans, ntok, tok, eid, hosts):
-    ar = [tuple(a) for a in (ans or {}).get("ranges") or []] if (ans or {}).get("ok") else []
+    ar = locate_seq((ans or {}).get("spans") or [], e) if (ans or {}).get("ok") else []
+    info["ans_ranges_differ_from_first_occurrence"] = bool(ar) and ar != [tuple(a) for a in (ans or {}).get("ranges") or []]
     info.update({"ans_ok": bool((ans or {}).get("ok")), "n_ans": len(ar), "ans_eligible": False, "PA_computable": False})
     if not ar:
         return
@@ -472,7 +506,7 @@ def phase_versions(which):
                                    q_n, x["eid"], x["kind_ranges"] if x.get("K_ok") else None)
         add_new_kinds(v, info, e, x["kind_ranges"] if x.get("K_ok") else None, q_n, x["eid"])
         add_answer_arm(v, info, e, x["answer"], q_n, qtok, x["eid"], oracle_hosts(e))
-        P = strip_delims(x.get("P"))
+        P = strip_delims(x.get("P"), e)
         if x.get("F"):
             v["F"] = x["F"]
             info["F_composition"] = f_composition(e, x["F"])
@@ -482,7 +516,7 @@ def phase_versions(which):
             info["P_had_delimiters"] = P != x["P"]
             info["words_changed_P"] = RW.words_changed(e, P)
             info["P_match_ratio"] = info["words_changed_P"] / max(info["words_changed_F"], 1)
-        Pc = strip_delims(x.get("Pc"))                                 # POST HOC Fc arm
+        Pc = strip_delims(x.get("Pc"), e)                                 # POST HOC Fc arm
         if x.get("Fc") and Pc:
             v["Fc"], v["Pc"] = x["Fc"], Pc
             info["words_changed_Fc"] = RW.words_changed(e, x["Fc"])
@@ -503,7 +537,7 @@ def phase_versions(which):
         info["versions_differing_from_013"] = sorted(k for k, ok in same.items() if not ok)
         add_new_kinds(v, info, e, jj.get("kind_ranges") if jj.get("K_ok") else None, av_n, y["eid"])
         add_answer_arm(v, info, e, y["answer"], av_n, avtok, y["eid"], H.sentence_units(e))
-        F, P13, Ps = rw13[y["eid"]].get("F"), rw13[y["eid"]].get("P"), strip_delims(y.get("Pstar"))
+        F, P13, Ps = rw13[y["eid"]].get("F"), rw13[y["eid"]].get("P"), strip_delims(y.get("Pstar"), e)
         if F:
             v["F"] = F
             info["F_composition"] = f_composition(e, F)

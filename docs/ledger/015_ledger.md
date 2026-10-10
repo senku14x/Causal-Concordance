@@ -178,3 +178,58 @@ adopted. All of the following are POST HOC relative to the spec and none changes
 
 **G2's 10 extra readouts:** `random.Random(15).sample` of the non-smoke Oracle readouts (`oh.py handset --subset
 extra10`). Hand-checked before the full analysis is opened.
+
+## 2026-10-11: full-run judges done; two construction fixes, made before any full-run score was written or seen
+
+**Judges (522 Oracle + 522 NLA).**
+- G1 0.996; answer spans parse 0.990 for both readers; B and K 1.00.
+- Judge B's kind counts on Oracle readouts: misquote 346, invented_context 106, wrong_entity 346, false_fact 205.
+- **Spend: $6.76 in all**, summed over every cached call: smoke, full run, and calls from runs that were stopped. Under
+  the $10 cap.
+  - **My mistake: the estimate was $1.8.** It came from the smoke's recorded `new_spend_usd` ($0.05). That figure
+    counted only the calls of the rerun after the parse fix; the other calls were cache hits. At realised per-call costs,
+    the smoke cost about $0.19.
+  - The in-run projection also did not include earlier runs' spend. The true total was checked from the cache instead.
+- **Mechanics (no effect on any output: temperature 0, every call cached):**
+  - 16 → 48 threads.
+  - The 64-job chunks were replaced by continuous submission, because the chunk barrier sat idle behind a few GLM calls
+    that reason for 8k–18k tokens.
+  - Two runs were stopped and restarted from the cache. The first `pkill` also matched its wrapper shell (the CLAUDE.md
+    pitfall); harmless.
+
+**G2's 10 extra readouts** (`qualitative/handcheck_extra10.md`): pass.
+- Contradicted spans 22/25 strict, 23/25 lenient. Errors:
+  - lisbon rand 0's placeholder "[Language X]", which is not a false claim;
+  - spider's cut-off fragment "atomic number 5 is";
+  - borderline: nile's "Libyan Desert (or Sahara)".
+- **Pooled with the smoke: 48/57 = 0.84 strict, 53/57 = 0.93 lenient.**
+- G2k: 22/25, pooled 50/57 = 0.88. **Misquote tags 0/6 pooled** (atomic-79 "Pt" ×2, nile "Great Sandy Desert" are wrong
+  answers). 4d stands: the Oracle per-kind misquote results are unreliable, and judge B's 346 Oracle "misquote" spans
+  are likely mostly wrong answers.
+- **Fc hand check (the same 10):** 10/10 acceptable in-place corrections, line count kept in 10/10.
+  - Examples: "Co." → "Fe."; "capital city" → "largest city" (Sydney); "which is a descendant of" → "which is not a
+    descendant of".
+  - One Fc edited a flagged invented-context span instead of leaving it (atomic-79: "atomic number 195" → "atomic mass
+    195").
+
+**Fix 1: answer-span location (the answer arm's CA, RA and PA).**
+- 013's `locate` maps every repeat of a string to its first occurrence. So when judge B listed the same answer twice or
+  more ('澳大利亚' ×3, 'Au' ×2, 'Portuguese.' ×2, or 'Fe' inside “Fe”), CA deleted it from one bullet only.
+- Found in the extra-10 hand check.
+- Fix (`oh.py` `locate_seq`): spans are located in the judge's order. Each goes to its first occurrence at or after the
+  previous span's end, else to an occurrence not yet covered, else to its first occurrence.
+- **Affected: 121/408 Oracle and 11/293 NLA readouts with answer spans.** PA coverage on the Oracle drops 273 → 202
+  (more bullets now hold an answer).
+- **The smoke's answer arm had the same defect.** Report 46's smoke Δ_A / Δ_AP stand as reported, and the full run
+  supersedes them.
+- The same check on A's contradicted spans changes 9/395 Oracle and 0/503 NLA readouts. C1 and the primary Δ keep 013's
+  construction, as registered; the 9 are noted.
+
+**Fix 2: partial delimiter echoes.**
+- Besides `<<<…>>>`, a few paraphrases carry a single leading `<` and/or trailing `>`. Such a run is now stripped when
+  the original text does not start or end that way.
+- Stripped in total: P 165/522 (Oracle), Pc 81/389, P* 10/522.
+- **013's own P, used as recorded:** 7/522 wrapped (4 full, 3 with a trailing `>`; was "4" in the 013 note).
+
+**Scoring:** the scorers ran about 1 minute on the pre-fix versions and were stopped before any output was written.
+Versions rebuilt (47,353 texts; NLA versions identical to 013's for 522/522). Scoring restarts now.
