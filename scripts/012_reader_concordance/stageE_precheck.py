@@ -24,6 +24,7 @@ for the J-attribution reading); (b) median cosine of the multihop AR differences
 import argparse
 import json
 import sys
+import zlib
 from pathlib import Path
 
 import numpy as np
@@ -73,7 +74,9 @@ def concept_vecs(out, fam, sets, L, concepts, half=None):
             continue
         X = torch.cat(xs)
         if half is not None:
-            g = torch.Generator().manual_seed(SEED + hash(c) % 100000)
+            # stable per-concept seed (2026-10-10 fix: Python's hash() of a str is randomised per process, so the
+            # first committed split-half stabilities were not reproducible)
+            g = torch.Generator().manual_seed(SEED + zlib.crc32(c.encode()) % 100000)
             perm = torch.randperm(len(X), generator=g)
             X = X[perm[half::2]]
         M[c] = X.mean(0)
