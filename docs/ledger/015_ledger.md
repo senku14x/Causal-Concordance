@@ -233,3 +233,43 @@ extra10`). Hand-checked before the full analysis is opened.
 
 **Scoring:** the scorers ran about 1 minute on the pre-fix versions and were stopped before any output was written.
 Versions rebuilt (47,353 texts; NLA versions identical to 013's for 522/522). Scoring restarts now.
+
+## 2026-10-11: full run scored and analysed (report `claude_ovarida/47_015_full_2026-10-11.md`)
+
+- **Scoring:**
+  - 47,353 version texts (30,183 unique) under both reconstructors.
+  - Oracle AR on GPU 0: 142,746 pieces, 45 min.
+  - NLA AR in 3 shards (GPU 1 ×2, GPU 0 ×1), about 25 min.
+  - Results: `results/015_oracle_hallucination/analysis/oh_all.json`.
+- **Checks:**
+  - G-repro 0.0 on 6,189 values; NLA versions identical 522/522.
+  - Every entry scored once per scorer (asserted).
+  - G3 κ 0.72.
+  - Rewrite gates pass for both readers.
+  - O vs step 2: 2/522 Oracle texts differ in pieces, because the full run drops lines with no word character (a
+    closing `---`); one moves 3.85 points. The other 173 checked are within batch noise (max 0.47).
+- **Pre-named contrasts:**
+  - **Oracle × Oracle AR:** Δ_A +14.5 [+11.3, +17.9] (n 408); Δ_AP +4.3 [+2.0, +6.7] (n 202; Δ_A on the same 202 is
+    +5.5); primary +9.0 [+4.8, +13.2] (n 395). All H-signal.
+  - **Oracle × NLA AR:** primary −0.8, Δ_A 0.0, Δ_AP +0.7, all unresolved within about ±2.8.
+  - **NLA × NLA AR:** primary +28.6 (= 013), Δ_A +2.7, Δ_AP +2.8, all H-signal.
+  - **NLA × Oracle AR:** primary +0.5 (no difference), Δ_A +1.9 (unresolved), Δ_AP +2.2 (H-signal).
+- **Pre-stated expectations:**
+  - "Oracle false claims padding or no difference under the Oracle AR": **wrong** (+9.0). It is carried by wrong
+    answers: wrong_entity +10.4, and "misquote" +10.9, which by hand check are wrong answers. Invented context is
+    padding (−2.6).
+  - "Answer costs more than RA and PA under the Oracle AR": **held.**
+  - "Misquotes carry the NLA rebuild under the NLA AR": **held** (+35.8).
+- **Reader claims (§7):** none met. The primary Δ and Δ_A flip sign between the reconstructors, so by the rule they are
+  attributed to the reconstructor: each reconstructor rewards its own reader's characteristic text.
+- **Rewrites:**
+  - F − P: Oracle −14.6 (Oracle AR) and −21.5 (NLA AR); F deletes 0.37 of the Oracle's words net.
+  - NLA: +3.1 (= 013); F − P* +3.7.
+  - POST HOC Fc − Pc: −1.5 [−2.5, −0.6] (Oracle AR), −0.9 [−2.2, +0.2] (NLA AR).
+  - **POST HOC, descriptive, written after reading the results** (`posthoc_fc_by_state.json`): Fc − Pc by state
+    under the Oracle AR is clean −1.7, J −1.0, random −1.8. So the cost is not specific to swapped states.
+- **CW-20 in her metric:** RA − CA +0.043 (hers +0.077); R1 − C1 +0.020 (hers +0.002); Fc − O −0.011 (hers −0.003).
+  - Agrees on the answer and on correcting.
+  - Differs on the wrong pieces. Her wrong pieces include false statements; ours are dominated by wrong answers. Not
+    tested.
+- Spend $6.76. Stopped for the PI.

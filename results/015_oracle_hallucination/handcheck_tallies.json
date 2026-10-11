@@ -1,0 +1,24 @@
+{
+ "label": "EXPLORATORY; my hand checks of 015 judge outputs (spec §8 G2, G2k, G2a; rewrite checks). Source files: qualitative/handcheck_smoke.md, qualitative/handcheck_extra10.md; ledger entries 2026-10-11.",
+ "G2_contradicted_span_precision": {
+  "smoke": {"n_spans": 32, "correct_strict": 26, "correct_lenient": 30, "borderline": 4, "wrong": 1, "arguable": 1},
+  "extra10": {"n_spans": 25, "correct_strict": 22, "correct_lenient": 23, "borderline": 1, "wrong": 2},
+  "pooled": {"n_spans": 57, "correct_strict": 48, "correct_lenient": 53},
+  "threshold": 0.80
+ },
+ "G2k_kind_agreement": {
+  "smoke": {"n_spans": 32, "agree": 28, "misquote_tags": 3, "misquote_correct": 0},
+  "extra10": {"n_spans": 25, "agree": 22, "misquote_tags": 3, "misquote_correct": 0},
+  "pooled": {"n_spans": 57, "agree": 50, "misquote_tags": 6, "misquote_correct": 0},
+  "threshold": 0.80
+ },
+ "G2a_answer_span_precision": {
+  "oracle_smoke": {"n_spans": 50, "answer_statements": 49, "exact_shortest": 44},
+  "nla_smoke_first10": {"n_spans": 10, "answer_statements": 10, "exact_shortest": 8, "explanations_with_recall_miss": 3},
+  "threshold": 0.80
+ },
+ "rewrites": {
+  "F_oracle_smoke": {"n": 20, "acceptable": 18},
+  "Fc_oracle_extra10": {"n": 10, "acceptable": 10, "line_count_kept": 10}
+ }
+}

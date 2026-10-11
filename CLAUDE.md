@@ -63,6 +63,9 @@ and vocabulary: J-lens, workspace, J-space, privilege, verbalizable. A session t
 4. **docs/context/SPEC_v2_errata_01.md** (accepted 2026-10-04): V2-E1–E9 correct SPEC_v2 passages; an erratum wins over the text.
    **docs/context/AMENDMENT_01.md**: the PI's 2026-10-02 decisions (its §6 lists each conflict by SPEC.md line).
 4b. **The newest work** (start from `docs/claude_reports/35_new_session_prompt_2026-10-07.md`):
+   - **015, the Oracle hallucination test with cross-scoring** (branch `015-oracle-hallucination`, the newest work):
+     spec `docs/design_specs/015_oracle_hallucination.md`, ledger `docs/ledger/015_ledger.md`, reports
+     `claude_ovarida/45`–`47`, results page linked from the ledger;
    - **014, typo** (branch `014-typo`): spec `docs/design_specs/014_typo.md`, ledger `docs/ledger/014_ledger.md`;
    - **013, the NLA hallucination test** (branch `013-nla-hallucination`): spec `docs/design_specs/013_nla_hallucination.md`
      (§1-10, amendments A1 §11 and A2 §12), ledger `docs/ledger/013_ledger.md`;
@@ -215,7 +218,8 @@ without the PI's say-so.
 **Branches.** **`origin/main` holds everything through 007:** on 2026-10-06 the PI had `007-jsubspace` fast-forwarded
 into `main` ("merge with main"). On this instance the local `main` ref was left stale (95ab0e5), so branch from
 `origin/main`, not `main`. Never push to `main` without the PI's explicit say-so.
-- **`014-typo`** (off `013-nla-hallucination`, 2026-10-07): experiment 014, the reading-only suite on WSB typo. **The newest work.** Not merged.
+- **`015-oracle-hallucination`** (off `014-typo` at `b975986`, 2026-10-11): experiment 015 (and 012 Stage E, reports 41-44, on `014-typo`). **The newest work.** Not merged.
+- **`014-typo`** (off `013-nla-hallucination`, 2026-10-07): experiment 014, the reading-only suite on WSB typo; since 2026-10-10 also the 10-09 patch and 012 Stage E. Not merged.
 - **`013-nla-hallucination`** (off `012-reader-concordance`, 2026-10-07, pushed): experiment 013, 012 Stages K and L, results page v9-v12. Not merged.
 - **`012-reader-concordance`** (off `008-trackb-brewcode`, 2026-10-07, pushed): experiment 012, reports 31-34, ledger, Codex audits. Not merged.
 - **`008-trackb-brewcode`** (off `origin/main`, 2026-10-06, pushed): experiments 008-011, reports 26-29, the
@@ -227,6 +231,19 @@ into `main` ("merge with main"). On this instance the local `main` ref was left 
 - `spec-v2` @ 9709712: SPEC_v2 + errata 01, checks C1-C3, the NLA loader, and 005 up to the dev pilot.
 - `main`: up to date with `007-jsubspace` since the 2026-10-06 fast-forward (before that @ 95ab0e5, the 000-004 scaffold).
 
+- **015, the Oracle hallucination test with cross-scoring** (branch `015-oracle-hallucination`, EXPLORATORY, 2026-10-11;
+  spec `docs/design_specs/015_oracle_hallucination.md`, ledger `docs/ledger/015_ledger.md`, reports `claude_ovarida/45`-`47`).
+  013's pipeline on the 522 Oracle L44 readouts; every version of both readers' texts scored by both co-trained
+  reconstructors (2 x 2); answer arm with a position-matched control. Full run (`results/015_oracle_hallucination/analysis/oh_all.json`):
+  - Oracle texts x Oracle AR: deleting the answer costs +14.5 [+11.3, +17.9] FVE points over random clauses and
+    +4.3 [+2.0, +6.7] over the same tokens cut from another bullet's opening; flagged false claims (mostly wrong answers)
+    +9.0 [+4.8, +13.2] (pre-stated expectation 'padding' was wrong); invented context padding (-2.6);
+  - Oracle texts x NLA AR: nothing moves (all within about +/-2.8); NLA texts x NLA AR: 013 reproduced exactly (+28.6);
+  - no reader-specific claim: the primary and answer contrasts flip sign between reconstructors, so each reconstructor
+    rewards its own reader's characteristic text (answer-slot text vs prompt restatements);
+  - correcting the Oracle's false claims in place does not help either reconstructor (Fc - Pc -1.5 / -0.9, POST HOC);
+  - fixed during the run: 013's first-occurrence span locator (repeated answers deleted once), judge delimiter echoes;
+    spend $6.76. Measures what each critic rewards, not what Qwen computes.
 - **014, typo** (branch `014-typo`, EXPLORATORY, 2026-10-07; spec `docs/design_specs/014_typo.md`, ledger
   `docs/ledger/014_ledger.md`). The PI asked to run "at least what we can" of the suite on WSB typo (100 items, hidden
   step = the corrected word, read at the last prompt token). Typo has no answer that depends on the corrected word, so
