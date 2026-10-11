@@ -19,6 +19,9 @@ SM = json.loads((R / "analysis/oh_smoke.json").read_text())
 R1 = json.loads((R / "r1.json").read_text())
 HC = json.loads((R / "handcheck_tallies.json").read_text())
 SWP = json.loads((R / "analysis/swap.json").read_text())
+CC = json.loads((ROOT / "results/012_reader_concordance/analysis/stageE_clampcheck.json").read_text())
+S4 = json.loads((ROOT / "results/012_reader_concordance/analysis/stageE_step4.json").read_text())
+STATUS = (ROOT / "STATUS.md").read_text()
 RUP = json.loads((R / "analysis/runnerup.json").read_text())
 LEDGER = (ROOT / "docs/ledger/015_ledger.md").read_text()
 GH = "https://github.com/senku14x/Causal-Concordance/blob/015-oracle-hallucination/"
@@ -329,6 +332,16 @@ lv_rows = "".join(f"<tr><td>{t}</td><td>{s}</td>" + "".join(f"<td>{h(C[k]['fve_m
                   + f"<td>{h(C[k]['share_J_mean']['gold'], 3, False)} / {h(C[k]['share_J_mean']['O'], 3, False)} / {h(C[k]['share_J_mean'].get('F'), 3, False)}</td></tr>"
                   for k, t, s in CELLS)
 cw = A["cw20_metric_oracle_texts"]
+_cs = CC["summary"]
+_at = S4["full"]["J_size"]["all"]["arm_table"]
+_en = S4["energy"]["readings"]["emrem@J|all"]
+clamp_rows = "".join(f"<tr><td>{a.replace('@J', '')}</td><td>{h(_cs[a]['median_ratio_read'], 2, False)}</td><td>{h(_cs[a]['median_inv_cos'], 2, False)}</td>"
+                     f"<td>{h(_cs[a]['median_ratio_over_invcos_read'], 2, False)}</td><td>{'yes' if _cs[a]['within_15pct'] else 'no'}</td></tr>"
+                     for a in ("AR_rrem@J", "AR_emrem@J", "AR_Jrem@J"))
+_path = lambda a: " → ".join(f"L{L} {h(v, 2, False)}" for L, v in _cs[a]["path_median_ratio_read_by_layer"].items() if L in ("36", "39", "43", "47"))  # noqa: E731
+_cn = STATUS.split("## Closing note (2026-10-11)", 1)[1].split("\n**2026-10-11, 012E", 1)[0]
+_cn = re.sub(r"(?m)^(\d+)\. ", r"- \1. ", _cn)
+closing_html = md(_cn)
 swap_charts = "".join(fig(f"Oracle texts × {sl} (n {SWP['cells'][k]['n']})", forest([
     ("O − ALLW: true → wrong", SWP["cells"][k]["O_minus_ALLW"], "s1"), ("ALLT − O: wrong → true", SWP["cells"][k]["ALLT_minus_O"], "s1"),
     ("O − SWAP: exchange, same strings", SWP["cells"][k]["O_minus_SWAP"], "s1"), ("ALLT − ALLW", SWP["cells"][k]["ALLT_minus_ALLW"], "s1")],
@@ -377,7 +390,7 @@ td.ok {{ color:var(--ok); }} td.bad {{ color:var(--bad); font-weight:600; }}
 .kv {{ display:grid; grid-template-columns:repeat(auto-fit, minmax(min(100%, 170px), 1fr)); gap:12px; }}
 .kv div {{ border-top:2px solid var(--grid); padding-top:6px; min-width:0; }} .kv b {{ display:block; font:500 1.15rem var(--display); }} .kv span {{ font-size:12px; color:var(--fg2); }}
 details {{ border:1px solid var(--grid); border-radius:6px; padding:8px 12px; background:var(--surface); }} summary {{ cursor:pointer; font:13px var(--mono); }}
-details .md {{ font-size:14px; margin-top:8px; display:grid; gap:8px; }} .md ul {{ margin:0; padding-left:20px; }} .md li {{ margin:3px 0; }}
+details .md, .md.closing {{ font-size:14px; margin-top:8px; display:grid; gap:8px; }} .md.closing {{ max-width:70ch; }} .md ul {{ margin:0; padding-left:20px; }} .md li {{ margin:3px 0; }}
 code {{ font:12.5px var(--mono); background:var(--band); padding:0 3px; border-radius:3px; overflow-wrap:anywhere; }}
 .ros {{ display:grid; grid-template-columns:repeat(auto-fit, minmax(min(100%, 340px), 1fr)); gap:10px; }}
 .ro {{ min-width:0; }} .ro p {{ font:12px/1.45 var(--mono); color:var(--fg2); margin-top:4px; }} .rh {{ font-size:12px; color:var(--muted); }}
@@ -451,6 +464,15 @@ table.mini {{ font-size:11.5px; margin-top:6px; }} details h3 {{ margin-top:10px
 <p class="sub">Two chosen to illustrate (the same two as the 013 samples on the 012 page) and twelve drawn at random (seed 5): four clean, four J-lens swap, four random swap. Each opens to the Oracle's readout and its versions, then the NLA's explanation for the same item, state and sample. Every version is scored by both reconstructors, in FVE points (013's metric; seeded versions are the mean of 5 seeds, with seed 0's text shown). The table gives this item's own differences. Marked spans: <mark class="k-answer">answer statement</mark> <mark class="k-wrong_entity">wrong entity</mark> <mark class="k-false_fact">false fact</mark> <mark class="k-misquote">misquote</mark> <mark class="k-invented_context">invented context</mark>. On Oracle text the judge's "misquote" tags are wrong answers (6 of 6 in the hand checks).</p>
 {samples_html()}
 
+<h2>Also from this session: the clamp mechanism check (012E §18)</h2>
+<p>A follow-up on the Stage E edits, run at the PI's request (POST HOC, descriptive; 10 seeded items, report 49). Every clamp arm holds the coordinate along its own direction u′ at clean + k at each layer from L36 to L47. If part of u′ fades between layers, the clamp re-adds it, and the part that persists builds up to about k / cos(u′, u). It holds by the rule fixed in advance: the random-removal arms out-push AR_full along u by about 1/cos. That is why their effects were larger (median Δm {h(_at['AR_rrem@J']['median_dm'], 2, False)} and {h(_en['median_dm_X'], 2, False)}, against {h(_at['AR_full@J']['median_dm'], 2, False)}). The J-removed arm does not build up, which suggests the persistent part of u lies in J.</p>
+<div class="wrap"><table><tr><th>Arm</th><th>Push along u at L47, relative to AR_full</th><th>1/cos(u′, u)</th><th>ratio ÷ (1/cos)</th><th>within 15%</th></tr>{clamp_rows}</table></div>
+<p class="sub">Layer path (median over items): emrem {_path('AR_emrem@J')}; Jrem {_path('AR_Jrem@J')}. Consequence: report 44's "J-specific" reading compared arms at unequal effective push, and 008's J vs non-J clamps carry the same unquantified caveat. The reproduction gate failed as written for rrem and Jrem by tiny numerical differences (max 0.0019); AR_full and AR_emrem reproduce bitwise. Source: <code>stageE_clampcheck.json</code>.</p>
+
+<h2>Project closing note</h2>
+<p class="sub">Rendered from <a href="{GH}STATUS.md">STATUS.md</a>, 2026-10-11: what the project found, what it did not, and the open caveats with their file and line.</p>
+<div class="md closing">{closing_html}</div>
+
 <h2>Caveats</h2>
 {TEXT['caveats']}
 
@@ -461,7 +483,7 @@ table.mini {{ font-size:11.5px; margin-top:6px; }} details h3 {{ margin-top:10px
 <h2>Files</h2>
 <ul>
 <li>Spec: <a href="{GH}docs/design_specs/015_oracle_hallucination.md">docs/design_specs/015_oracle_hallucination.md</a></li>
-<li>Reports: <a href="{GH}claude_ovarida/45_015_r1_2026-10-11.md">45 (step 2)</a>, <a href="{GH}claude_ovarida/46_015_smoke_2026-10-11.md">46 (smoke)</a>, <a href="{GH}claude_ovarida/47_015_full_2026-10-11.md">47 (full run)</a>, <a href="{GH}claude_ovarida/48_015_followups_2026-10-11.md">48 (follow-ups)</a></li>
+<li>Reports: <a href="{GH}claude_ovarida/45_015_r1_2026-10-11.md">45 (step 2)</a>, <a href="{GH}claude_ovarida/46_015_smoke_2026-10-11.md">46 (smoke)</a>, <a href="{GH}claude_ovarida/47_015_full_2026-10-11.md">47 (full run)</a>, <a href="{GH}claude_ovarida/48_015_followups_2026-10-11.md">48 (follow-ups)</a>, <a href="{GH}claude_ovarida/49_clamp_check_2026-10-11.md">49 (clamp check)</a></li>
 <li>Code: <a href="{GH}scripts/015_oracle_hallucination/oh.py">oh.py</a>, <a href="{GH}scripts/015_oracle_hallucination/r1.py">r1.py</a>; results JSON <a href="{GH}results/015_oracle_hallucination/analysis/oh_all.json">oh_all.json</a></li>
 <li>Raw outputs (judge cache, versions, scores): <a href="{HF}">public HF dataset</a></li>
 </ul>
