@@ -169,6 +169,71 @@ def sample(eid, reader="oracle"):
     return f'<div class="ros">{cards}</div>'
 
 
+# --------------------------------------------------------------------------------------------- samples (qualitative/samples.json)
+SAMPLES = json.loads((R / "qualitative/samples.json").read_text())
+STATE_LAB = {"clean": "clean", "J_L24-35": "J-lens swap", "rand_L24-35": "random swap"}
+
+
+def marked(text, marks):
+    out, last = [], 0
+    for a, b, lab in marks:
+        out.append(E(text[last:a]))
+        out.append(f'<mark class="k-{lab}" title="{E(lab.replace("_", " "))}">{E(text[a:b])}</mark>')
+        last = b
+    out.append(E(text[last:]))
+    return "".join(out)
+
+
+def samples_html():
+    def fv(r, s, n):
+        return r["fve"][s].get(n)
+
+    def dd(r, s, a, b):
+        x, y = fv(r, s, a), fv(r, s, b)
+        return h(x - y) if x is not None and y is not None else "—"
+
+    def card(title, body):
+        return f'<div class="ro"><div class="rh">{title}</div><p class="ex">{body}</p></div>'
+
+    def ft(r, n):
+        return f"Oracle AR {h(fv(r, 'oracle_ar', n))} · NLA AR {h(fv(r, 'nla_ar', n))}"
+
+    out = []
+    for smp in SAMPLES["samples"]:
+        o, nl = smp["readers"]["oracle"], smp["readers"]["nla"]
+        swap = "" if smp["state"] == "clean" else f" · swap {E(str(smp['src']))} → {E(str(smp['tgt']))}"
+        rows = ""
+        for rd, lab in (("oracle", "Oracle text"), ("nla", "NLA text")):
+            r = smp["readers"][rd]
+            for s, sl in (("oracle_ar", "Oracle AR"), ("nla_ar", "NLA AR")):
+                rows += (f"<tr><td>{lab}</td><td>{sl}</td><td>{h(fv(r, s, 'O'))}</td><td>{dd(r, s, 'R1', 'C1')}</td><td>{dd(r, s, 'RA', 'CA')}</td>"
+                         f"<td>{dd(r, s, 'PA', 'CA')}</td><td>{dd(r, s, 'F', 'P')}</td><td>{dd(r, s, 'Fc', 'Pc') if rd == 'oracle' else dd(r, s, 'F', 'Pstar')}</td></tr>")
+        tx = o["texts"]
+        ans_cards = "".join(card(f"{n} · {lab} · {ft(o, n)}", E(tx[n])) for n, lab in
+                            (("CA", "answer spans deleted"), ("PA", "same tokens cut from an answer-free bullet's opening (seed 0)"),
+                             ("RA", "random clauses deleted (seed 0)")) if n in tx)
+        if "PA" not in tx:
+            ans_cards += card("PA · not computable", "no answer-free bullet with enough tokens")
+        rew_cards = "".join(card(f"{n} · {lab} · {ft(o, n)}", E(tx[n])) for n, lab in
+                            (("F", "factual rewrite (013 prompt)"), ("P", "paraphrase matched to F"),
+                             ("Fc", "correction only, POST HOC"), ("Pc", "paraphrase matched to Fc")) if n in tx)
+        if "Fc" not in tx:
+            rew_cards += card("Fc · none", "no flagged span to correct")
+        nt = nl["texts"]
+        nla_cards = (card(f"NLA explanation (O) · {ft(nl, 'O')}", marked(nt["O"], nl["marks"]))
+                     + "".join(card(f"{n} · {lab} · {ft(nl, n)}", E(nt[n])) for n, lab in
+                               (("CA", "answer statements deleted"), ("F", "factual rewrite (013)"), ("Pstar", "paraphrase redo, P*")) if n in nt))
+        out.append(
+            f'<details><summary>{E(smp["eid"])} · {E(STATE_LAB[smp["state"]])} · {E(smp["why"])}</summary>'
+            f'<p class="rh">Prompt: {E(smp["prompt"])} · model continues: {E(smp["continuation"].strip())}{swap}</p>'
+            f'<div class="wrap"><table class="mini"><tr><th>Text</th><th>Scorer</th><th>FVE O</th><th>R1 − C1</th><th>RA − CA</th><th>PA − CA</th><th>F − P</th><th>Fc − Pc / F − P*</th></tr>{rows}</table></div>'
+            f'<h3>Oracle readout</h3><div class="ros">{card("O · " + ft(o, "O"), marked(tx["O"], o["marks"]))}</div>'
+            f'<h3>Oracle, answer arm</h3><div class="ros">{ans_cards}</div>'
+            f'<h3>Oracle, rewrites</h3><div class="ros">{rew_cards}</div>'
+            f'<h3>NLA, same item, state and sample</h3><div class="ros">{nla_cards}</div></details>')
+    return "".join(out)
+
+
 # --------------------------------------------------------------------------------------------- text (written after reading oh_all.json)
 TEXT = {}
 exec((Path(__file__).parent / "page_text.py").read_text(), {"A": A, "C": C, "SM": SM, "R1": R1, "HC": HC, "h": h, "d": d, "frac": frac,
@@ -301,6 +366,13 @@ code {{ font:12.5px var(--mono); background:var(--band); padding:0 3px; border-r
 .note {{ border-left:3px solid var(--accent); padding-left:12px; }}
 ul {{ margin:0; padding-left:20px; max-width:70ch; }} li {{ margin:4px 0; }}
 a {{ color:var(--accent); }} a:focus-visible, summary:focus-visible {{ outline:2px solid var(--accent); outline-offset:2px; }}
+mark {{ color:inherit; border-radius:2px; padding:0 1px; }}
+mark.k-answer {{ background:color-mix(in srgb, var(--ok) 30%, transparent); }}
+mark.k-misquote {{ background:color-mix(in srgb, var(--s1) 24%, transparent); }}
+mark.k-invented_context {{ background:color-mix(in srgb, var(--s2) 28%, transparent); }}
+mark.k-wrong_entity, mark.k-contradicted {{ background:color-mix(in srgb, var(--muted) 34%, transparent); }}
+mark.k-false_fact {{ background:color-mix(in srgb, var(--muted) 34%, transparent); text-decoration:underline dotted; }}
+table.mini {{ font-size:11.5px; margin-top:6px; }} details h3 {{ margin-top:10px; font-size:13px; color:var(--fg2); }}
 .legend {{ display:flex; flex-wrap:wrap; gap:14px; font-size:12px; color:var(--fg2); }} .legend i {{ display:inline-block; width:10px; height:10px; border-radius:50%; margin-right:6px; vertical-align:-1px; }}
 </style>
 <main>
@@ -350,9 +422,9 @@ a {{ color:var(--accent); }} a:focus-visible, summary:focus-visible {{ outline:2
 <div class="wrap"><table><tr><th>Texts</th><th>Scorer</th><th>O</th><th>C1</th><th>R1</th><th>CA</th><th>RA</th><th>PA</th><th>F</th><th>P</th><th>J share</th></tr>{lv_rows}</table></div>
 <p class="sub">CW-20's metric on Oracle texts × Oracle AR (global scale {h(cw['global_scale'], 3, False)}): scaled FVE O {h(cw['scaled_fve_mean']['O'], 3, False)} (hers 0.21), CA {h(cw['scaled_fve_mean']['CA'], 3, False)}, RA {h(cw['scaled_fve_mean']['RA'], 3, False)}, PA {h(cw['scaled_fve_mean']['PA'], 3, False)}; RA − CA {h(cw['scaled_fve_mean']['RA'] - cw['scaled_fve_mean']['CA'], 3)} (her "removing the answer −7.7" is +0.077 in this sign).</p>
 
-<h2>What the versions look like</h2>
-<p class="sub">One Oracle readout (atomic number 26, random-swap state; the model's continuation is "Fe"), every version, seed 0 where seeded. Source: <code>versions_all.jsonl</code>. The &#xFFFD; at the end of one bullet is in the readout itself: generation stopped in the middle of a character.</p>
-{sample("atomic-26-symbol|rand_L24-35|1")}
+<h2>Sample readouts</h2>
+<p class="sub">Two chosen to illustrate (the same two as the 013 samples on the 012 page) and twelve drawn at random (seed 5): four clean, four J-lens swap, four random swap. Each opens to the Oracle's readout and its versions, then the NLA's explanation for the same item, state and sample. Every version is scored by both reconstructors, in FVE points (013's metric; seeded versions are the mean of 5 seeds, with seed 0's text shown). The table gives this item's own differences. Marked spans: <mark class="k-answer">answer statement</mark> <mark class="k-wrong_entity">wrong entity</mark> <mark class="k-false_fact">false fact</mark> <mark class="k-misquote">misquote</mark> <mark class="k-invented_context">invented context</mark>. On Oracle text the judge's "misquote" tags are wrong answers (6 of 6 in the hand checks).</p>
+{samples_html()}
 
 <h2>Caveats</h2>
 {TEXT['caveats']}

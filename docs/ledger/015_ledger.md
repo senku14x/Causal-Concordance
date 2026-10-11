@@ -283,3 +283,19 @@ Versions rebuilt (47,353 texts; NLA versions identical to 013's for 522/522). Sc
   `/venv/page` (Playwright) was missing on this instance and was reinstalled; that is a rebuild gap.
 - Raw outputs (judge cache, versions, scores) are mirrored to the public HF dataset `senku21x/causal-concordance-outputs`
   under `015_oracle_hallucination/`.
+
+## 2026-10-11: qualitative samples added to the results page (PI request)
+
+- **Sample choice** (`scripts/015_oracle_hallucination/make_samples.py` → `results/015_oracle_hallucination/qualitative/samples.json`):
+  - 2 illustrative items, the same two as the 013 samples on the 012 page (kremlin J 1, bordeaux clean 0);
+  - 12 drawn at random, `random.Random(5)`, 4 per state.
+- **Each sample shows:**
+  - the Oracle readout with judge A's false spans by kind and judge B's answer spans marked;
+  - CA, PA and RA;
+  - F, P, Fc and Pc;
+  - the NLA explanation for the same (item, state, sample), with CA, F and P*;
+  - every version's FVE under both reconstructors, and the item's own differences.
+- **Found while checking a sample:** 2 of 395 Fc texts end with an echoed `>>>` delimiter (bordeaux clean 0, christmas
+  rand 0). Only P, Pc and P* were stripped; F has none (Oracle 0/522; 013's NLA F 0/522).
+  - Fc − Pc without those 2 readouts: Oracle AR −1.505 (all 395: −1.505), NLA AR −0.946 (all: −0.949).
+  - Not rescored; the texts are shown as scored.

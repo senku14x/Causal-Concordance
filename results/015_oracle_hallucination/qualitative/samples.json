@@ -1,0 +1,2109 @@
+{
+ "label": "EXPLORATORY, descriptive: 015 qualitative samples (2 illustrative + 12 random, seed 5)",
+ "B": {
+  "oracle_ar": 0.7031621431656242,
+  "nla_ar": 0.28179703953509566
+ },
+ "samples": [
+  {
+   "eid": "b3-mh-kremlin-language|J_L24-35|1",
+   "why": "illustrative",
+   "item": "b3-mh-kremlin-language",
+   "state": "J_L24-35",
+   "sample": 1,
+   "prompt": "Fact: The main language of the country where the Kremlin stands is",
+   "continuation": " Japanese.\n",
+   "src": "Russia",
+   "tgt": "Japan",
+   "readers": {
+    "oracle": {
+     "texts": {
+      "O": "- [Language A]. Which country is this famous island's largest city? The main language spoken there is\n- Japanese (or the most widely spoken language there). What is the country's capital? The island is also known as Japan.\n- 日语 (Japanese), and its currency is the yen. What is the capital of the country whose main language is Japanese\n- [Answer: Japanese]. Its largest city is Tokyo. What is the most widely spoken language in that country?\"*",
+      "C1": "- [Language A]. Which country is this famous island's largest city? The main language spoken there is\n- Japanese (or the most widely spoken language there). What is the country's capital? The island is also known as Japan.\n- 日语 (Japanese), and its currency is the yen. What is the capital of the country whose main language is Japanese\n- [Answer: Japanese]. Its largest city is Tokyo. What is the most widely spoken language in that country?\"*",
+      "R1": "- [Language A]. Which country is this famous island's largest city? The main language spoken there is\n- Japanese (or the most widely spoken language there). What is the country's capital? The island is also known as Japan.\n- 日语 (Japanese), and its currency is the yen. What is the capital of the country whose main language is Japanese\n- [Answer: Japanese]. Its largest city is Tokyo. What is the most widely spoken language in that country?\"*",
+      "CA": "- [Language A]. Which country is this famous island's largest city? The main language spoken there is\n-. What is the country's capital? The island is also known as Japan.\n-, and its currency is the yen. What is the capital of the country whose main language is Japanese\n-. Its largest city is Tokyo. What is the most widely spoken language in that country?\"*",
+      "RA": "Which country is this famous island's largest city? The main language spoken there is\n- Japanese (or the most widely spoken language there). What is the country's capital? The island is also known as Japan.\n- 日语 (Japanese), and its currency is the yen. What is the capital of the country whose main language is Japanese\nJapanese]. Its largest city is Tokyo.\"*",
+      "F": "- Japanese. What is the country's capital? The main language spoken there is\n- Japanese. What is the country's capital?\n- 日语 (Japanese), and its currency is the yen. What is the capital of the country whose main language is Japanese\n- Japanese. Its largest city is Tokyo. What is the most widely spoken language in that country?",
+      "P": "- [Language A]. Which nation contains this renowned island's biggest city? The primary tongue used there is\n- Japanese (or the primary language used there). What represents the country's capital? This landmass is likewise called Japan.\n- 日语 (Japanese), while its legal tender is the yen. What is the capital city of the nation where the main tongue is Japanese\n- [Answer: Japanese]. Its biggest city is Tokyo. What is the most common language spoken in that nation?\"*"
+     },
+     "marks": [
+      [
+       104,
+       155,
+       "answer"
+      ],
+      [
+       225,
+       238,
+       "answer"
+      ],
+      [
+       338,
+       356,
+       "answer"
+      ]
+     ],
+     "fve": {
+      "oracle_ar": {
+       "O": -49.35069731416941,
+       "C1": -49.35069731416941,
+       "R1": -49.35069731416941,
+       "CA": -76.47033067873943,
+       "RA": -59.29196395528911,
+       "F": -65.81054217304396,
+       "P": -61.08638360858636
+      },
+      "nla_ar": {
+       "O": 8.315502171958144,
+       "C1": 8.315502171958144,
+       "R1": 8.315502171958144,
+       "CA": -24.263706736571567,
+       "RA": -1.9073559704779217,
+       "F": 0.23515951304995397,
+       "P": -2.331378307566556
+      }
+     },
+     "info": {
+      "n_ans": 3,
+      "PA_computable": false,
+      "ans_eligible": true,
+      "nothing_to_clean": true,
+      "cleaned_away": false,
+      "A_ok": true,
+      "non_english_O": true,
+      "words_changed_F": 27,
+      "words_changed_P": 30,
+      "words_changed_Fc": null
+     }
+    },
+    "nla": {
+     "texts": {
+      "O": "Trivia/quiz format established by \"Hint\" prompt, expecting a factual answer sentence completing a trivia challenge about a country and its language.\n\nThe sentence structure \"The main language of the country where [landmark] is located is\" sets up a fill-in-the-blank factual statement about Japan's primary language, requiring \"Japanese\" or similar answer.\n\nFinal token \"is\" ends an incomplete predicate (\"The main language of the country that has the Tokyo tower [Japan] is\"), demanding an immediate noun or language name as completion, e.g., \"Japanese.\"\n\"Analyze this image/question\" framing signals a multi-step reasoning puzzle where the next tokens must identify the country implicitly tied to Japan, before naming its language.\n\"The main language of the country that is home to the Tokyo Tower is\" — a simple declarative pattern.",
+      "C1": "The sentence structure \"The main language of the country where [landmark] is located is\" sets up a fill-in-the-blank factual statement about Japan's primary language, requiring \"Japanese\" or similar answer.",
+      "R1": "expecting a factual answer sentence completing a trivia challenge about a country and its language., \"Japanese.\n\n\"The main language of the country that is home to the Tokyo Tower is\" — a simple declarative pattern.",
+      "CA": "Trivia/quiz format established by \"Hint\" prompt, expecting a factual answer sentence completing a trivia challenge about a country and its language.\n\nThe sentence structure \"The main language of the country where [landmark] is located is\" sets up a fill-in-the-blank factual statement about Japan's primary language,.\n\nFinal token \"is\" ends an incomplete predicate (\"The main language of the country that has the Tokyo tower [Japan] is\"), demanding an immediate noun or language name as completion,\n\"Analyze this image/question\" framing signals a multi-step reasoning puzzle where the next tokens must identify the country implicitly tied to Japan, before naming its language.\n\"The main language of the country that is home to the Tokyo Tower is\" — a simple declarative pattern.",
+      "RA": "Trivia/quiz format established by \"Hint\" prompt, expecting a factual answer sentence completing a trivia challenge about a country and its language.\n\nThe sentence structure \"The main language of the country where [landmark] is located is\" sets up a fill-in-the-blank factual statement about Japan's primary language, requiring \"Japanese\" or similar answer.\n\nFinal token \"is\" ends an incomplete predicate (\"The main language of the country that has the Tokyo tower [Japan] is\"), demanding an immediate noun or language name as completion,,\n\"Analyze this image/question\" framing signals a multi-step reasoning puzzle where the next tokens must identify the country implicitly tied to Japan,\n\"The main language of the country that is home to the Tokyo Tower is\" — a simple declarative pattern.",
+      "PA": "\" prompt, expecting a factual answer sentence completing a trivia challenge about a country and its language.\n\nThe sentence structure \"The main language of the country where [landmark] is located is\" sets up a fill-in-the-blank factual statement about Japan's primary language, requiring \"Japanese\" or similar answer.\n\nFinal token \"is\" ends an incomplete predicate (\"The main language of the country that has the Tokyo tower [Japan] is\"), demanding an immediate noun or language name as completion, e.g., \"Japanese.\"\n\" framing signals a multi-step reasoning puzzle where the next tokens must identify the country implicitly tied to Japan, before naming its language.\n\"The main language of the country that is home to the Tokyo Tower is\" — a simple declarative pattern.",
+      "F": "Trivia/quiz format established by \"Fact:\" prompt, expecting a factual answer sentence completing a trivia challenge about a country and its language.\n\nThe sentence structure \"The main language of the country where the Kremlin stands is\" sets up a fill-in-the-blank factual statement about Japan's primary language, requiring \"Japanese\" or similar answer.\n\nFinal token \"is\" ends an incomplete predicate (\"The main language of the country where the Kremlin stands is\"), demanding an immediate noun or language name as completion, e.g., \"Japanese.\"\n\n\"The main language of the country where the Kremlin stands is\" — a simple declarative pattern.",
+      "P": "Trivia/quiz format set up by \"Hint\" prompt, anticipating a factual statement finishing a trivia challenge concerning a nation and its language.\n\nThe sentence form \"The main language of the country where [landmark] is located is\" establishes a fill-in-the-blank factual statement concerning Japan's primary language, needing \"Japanese\" or comparable answer.\n\nFinal token \"is\" concludes an incomplete predicate (\"The main language of the country that has the Tokyo tower [Japan] is\"), requiring an immediate noun or language designation as completion, e.g., \"Japanese.\"\n\"Analyze this image/question\" framing indicates a multi-step reasoning puzzle where subsequent tokens must recognize the country implicitly tied to Japan, prior to naming its language.\n\"The main language of the country that is home to the Tokyo Tower is\" — a basic declarative pattern.",
+      "Pstar": "Trivia/quiz format set up by \"Hint\" prompt, anticipating a factual response sentence finishing a trivia challenge regarding a nation and its tongue.\n\nThe syntactic framework \"The main language of the country where [landmark] is located is\" establishes a fill-in-the-blank informational statement concerning Japan's primary language, needing \"Japanese\" or comparable answer.\n\nLast token \"is\" finishes an unfinished predicate (\"The main language of the country that has the Tokyo tower [Japan] is\"), requiring an immediate noun or language designation as completion, e.g., \"Japanese.\"\n\"Analyze this image/question\" context indicates a multi-stage logic puzzle where subsequent tokens have to deduce the nation implicitly linked to Japan, prior to identifying its language.\n\"The main language of the country that is home to the Tokyo Tower is\" — a basic declarative template."
+     },
+     "marks": [
+      [
+       0,
+       148,
+       "invented_context"
+      ],
+      [
+       317,
+       355,
+       "answer"
+      ],
+      [
+       358,
+       538,
+       "misquote"
+      ],
+      [
+       538,
+       555,
+       "answer"
+      ],
+      [
+       556,
+       733,
+       "invented_context"
+      ],
+      [
+       734,
+       835,
+       "misquote"
+      ]
+     ],
+     "fve": {
+      "oracle_ar": {
+       "O": -163.45085229565157,
+       "C1": -139.09042929759195,
+       "R1": -163.11406109420324,
+       "CA": -164.50231030187177,
+       "RA": -162.08688764858098,
+       "PA": -162.2331284156316,
+       "F": -166.45423279268107,
+       "P": -165.34337689852697,
+       "Pstar": -164.0778446659736
+      },
+      "nla_ar": {
+       "O": 66.94750239628225,
+       "C1": 59.81496392182952,
+       "R1": 23.3616662202515,
+       "CA": 63.4723331952632,
+       "RA": 65.10775123090426,
+       "PA": 67.52797905141553,
+       "F": 71.06390417163631,
+       "P": 68.04624455574941,
+       "Pstar": 65.73691045936808
+      }
+     },
+     "info": {
+      "n_ans": 2,
+      "PA_computable": true,
+      "ans_eligible": true,
+      "nothing_to_clean": false,
+      "cleaned_away": false,
+      "A_ok": true,
+      "non_english_O": false,
+      "words_changed_F": 40,
+      "words_changed_P": 24,
+      "words_changed_Fc": null
+     }
+    }
+   }
+  },
+  {
+   "eid": "bf-bordeaux-fruit|clean|0",
+   "why": "illustrative",
+   "item": "bf-bordeaux-fruit",
+   "state": "clean",
+   "sample": 0,
+   "prompt": "Fact: The fruit fermented to make the drink Bordeaux is famous for is the",
+   "continuation": " grape.\n",
+   "src": "wine",
+   "tgt": "sake",
+   "readers": {
+    "oracle": {
+     "texts": {
+      "O": "- grape. What fruit is used to make sherry?\" The answer is the\n- 葡萄 (grape), the primary fruit used to produce sherry. What is the primary fruit used to make beer? Answer:\n- 小 grape (or more accurately, the grape). What is the main fruit used to make wine? Answer: The grape\n- **grape** (specifically, the black grape). The beverage is wine. **Answer: grapes**. *(Note",
+      "C1": "- grape.\n- 葡萄 (grape),\n- 小 grape (or more accurately, the grape). What is the main fruit used to make wine? Answer: The grape\n- **grape** (). The beverage is wine. **Answer: grapes**. *(Note",
+      "R1": "What fruit is used to make sherry?\" The answer is the\n- 葡萄 (grape),\nthe grape). What is the main fruit used to make wine?\n- **grape** (specifically, the black grape). The beverage is wine. **Answer:",
+      "CA": "- What fruit is used to make sherry?\" The answer is the\n-, the primary fruit used to produce sherry. What is the primary fruit used to make beer? Answer:\n- 小. What is the main fruit used to make wine? Answer:\n- (specifically, the black grape). The beverage is wine. **Answer: grapes**. *(Note",
+      "RA": "- grape. What fruit is used to make sherry?\" The answer is the\n- 葡萄 (grape), the primary fruit used to produce sherry. What is the primary fruit used to make beer?\nthe grape). Answer: The grape\n- **grape** (specifically, the black grape). The beverage is wine. **Answer: grapes**. *(Note",
+      "F": "- grape.\n- 葡萄 (grape).\n- grape (or more accurately, the grape). What is the main fruit used to make wine? Answer: The grape\n- **grape**. The beverage is wine. **Answer: grapes**.",
+      "P": "- grape. Which fruit gets used for making sherry?\" The solution is the\n- 葡萄 (grape), the main fruit employed to create sherry. Which primary fruit gets used to brew beer? Answer:\n- 小 grape (or to be precise, the grape). Which main fruit is used in making wine? Answer: The grape\n- **grape** (in particular, the black grape). That beverage is wine. **Answer: grapes**. *(Note",
+      "Fc": "- grape. What fruit is used to make sherry?\" The answer is the\n- 葡萄 (grape), the primary fruit used to produce wine. What is the primary grain used to make beer? Answer:\n- 小 grape (or more accurately, the grape). What is the main fruit used to make wine? Answer: The grape\n- **grape** (specifically, the grape). The beverage is wine. **Answer: grapes**. *(Note>>>",
+      "Pc": "- grape. Which fruit is used to make sherry?\" The answer is the\n- 葡萄 (grape), the main fruit used to produce sherry. What is the primary fruit used to make beer? Answer:\n- 小 grape (or more correctly, the grape). What is the main fruit used to make wine? Answer: The grape\n- **grape** (specifically, the dark grape). The beverage is wine. **Answer: grapes**. *(Note"
+     },
+     "marks": [
+      [
+       2,
+       8,
+       "answer"
+      ],
+      [
+       9,
+       62,
+       "invented_context"
+      ],
+      [
+       65,
+       75,
+       "answer"
+      ],
+      [
+       77,
+       118,
+       "false_fact"
+      ],
+      [
+       119,
+       171,
+       "invented_context"
+      ],
+      [
+       176,
+       213,
+       "answer"
+      ],
+      [
+       265,
+       274,
+       "answer"
+      ],
+      [
+       277,
+       286,
+       "answer"
+      ],
+      [
+       288,
+       317,
+       "false_fact"
+      ]
+     ],
+     "fve": {
+      "oracle_ar": {
+       "O": -66.82176912250182,
+       "C1": -92.93263891005743,
+       "R1": -84.70058619512808,
+       "CA": -94.02907811555039,
+       "RA": -80.89781887416865,
+       "F": -83.6308718715668,
+       "P": -75.77424012636634,
+       "Fc": -72.44366103147584,
+       "Pc": -67.87423967478259
+      },
+      "nla_ar": {
+       "O": -22.962247431292738,
+       "C1": -30.77595274252751,
+       "R1": -7.901700279999391,
+       "CA": 4.44703971037751,
+       "RA": -17.002964050495954,
+       "F": -32.78641441921781,
+       "P": -18.04119564957727,
+       "Fc": -25.00126379776242,
+       "Pc": -21.552661034049247
+      }
+     },
+     "info": {
+      "n_ans": 5,
+      "PA_computable": false,
+      "ans_eligible": true,
+      "nothing_to_clean": false,
+      "cleaned_away": false,
+      "A_ok": true,
+      "non_english_O": true,
+      "words_changed_F": 36,
+      "words_changed_P": 35,
+      "words_changed_Fc": 4
+     }
+    },
+    "nla": {
+     "texts": {
+      "O": "Quiz/trivia format established by \"Think Fast\" signals a factual, concise answer is expected about a specific fact.\n\nThe sentence structure \"The fruit that is the fruit ingredient in the beverage wine is the...\" promises a specific fruit name as the answer — almost certainly \"grape.\"\n\nThe final word \"the\" is an article beginning the predicate nominative complement of \"is the [specific fruit],\" requiring an immediate noun phrase identifying the fruit.\n\"An example of a basic general knowledge question, using some words from a game, is the following: In winemaking, wine as a typical fruit juice-based alcoholic beverage, the fruit used in the making of this beverage is the\"\n\nFinal word demands a noun naming the specific fruit, likely \"grape,\" completing the formal/verbose declarative sentence describing wine's primary ingredient.",
+      "C1": "The final word \"the\" is an article beginning the predicate nominative complement of \"is the [specific fruit],\" requiring an immediate noun phrase identifying the fruit.\n\nFinal word demands a noun naming the specific fruit, likely \"grape,\" completing the formal/verbose declarative sentence describing wine's primary ingredient.",
+      "R1": "..\" promises a specific fruit name as the answer — almost certainly \"grape.\n\n\" requiring an immediate noun phrase identifying the fruit.\n\"An example of a basic general knowledge question, is the following: the fruit used in the making of this beverage is the\"\n\nFinal word demands a noun naming the specific fruit,",
+      "CA": "Quiz/trivia format established by \"Think Fast\" signals a factual, concise answer is expected about a specific fact.\n\nThe sentence structure \"The fruit that is the fruit ingredient in the beverage wine is the...\" promises a specific fruit name as the answer —\n\nThe final word \"the\" is an article beginning the predicate nominative complement of \"is the [specific fruit],\" requiring an immediate noun phrase identifying the fruit.\n\"An example of a basic general knowledge question, using some words from a game, is the following: In winemaking, wine as a typical fruit juice-based alcoholic beverage, the fruit used in the making of this beverage is the\"\n\nFinal word demands a noun naming the specific fruit, completing the formal/verbose declarative sentence describing wine's primary ingredient.",
+      "RA": "Quiz/trivia format established by \"Think Fast\" signals a factual, concise answer is expected about a specific fact.\n\nThe sentence structure \"The fruit that is the fruit ingredient in the beverage wine is the...\" promises a specific fruit name as the answer — almost certainly \"grape.\n\nThe final word \"the\" is an article beginning the predicate nominative complement of \"is the [specific fruit],\n\"An example of a basic general knowledge question, using some words from a game, is the following: In winemaking, wine as a typical fruit juice-based alcoholic beverage, the fruit used in the making of this beverage is the\"\n\nFinal word demands a noun naming the specific fruit, likely \"grape,\" completing the formal/verbose declarative sentence describing wine's primary ingredient.",
+      "PA": "Quiz/trivia format established by \"Think Fast\" signals a factual, concise answer is expected about a specific fact.\n\nThe sentence structure \"The fruit that is the fruit ingredient in the beverage wine is the...\" promises a specific fruit name as the answer — almost certainly \"grape.\"\n\n\" is an article beginning the predicate nominative complement of \"is the [specific fruit],\" requiring an immediate noun phrase identifying the fruit.\ngeneral knowledge question, using some words from a game, is the following: In winemaking, wine as a typical fruit juice-based alcoholic beverage, the fruit used in the making of this beverage is the\"\n\nFinal word demands a noun naming the specific fruit, likely \"grape,\" completing the formal/verbose declarative sentence describing wine's primary ingredient.",
+      "F": "Format established by \"Fact:\" signals a factual, concise answer is expected about a specific fact.\n\nThe sentence structure \"The fruit fermented to make the drink Bordeaux is famous for is the\" promises a specific fruit name as the answer — almost certainly \"grape.\"\n\nThe final word \"the\" is an article beginning the predicate nominative complement of \"is the [specific fruit],\" requiring an immediate noun phrase identifying the fruit.\n\nFinal word demands a noun naming the specific fruit, likely \"grape,\" completing the declarative sentence describing Bordeaux's primary ingredient.",
+      "P": "A quiz or trivia style introduced by \"Think Fast\" indicates that a factual, succinct response regarding a particular fact is anticipated.\n\nThe phrasing \"The fruit that is the fruit ingredient in the beverage wine is the...\" indicates a particular fruit name will serve as the response — almost definitely \"grape.\"\n\nThe concluding term \"the\" serves as an article opening the predicate nominative complement for \"is the [specific fruit],\" needing a direct noun phrase that specifies the fruit.\n\"An example of a basic general knowledge question, using some words from a game, is the following: In winemaking, wine as a typical fruit juice-based alcoholic beverage, the fruit used in the making of this beverage is the\"\n\nThe concluding term necessitates a noun designating the particular fruit, probably \"grape,\" finishing the elaborate declarative statement outlining the main ingredient of wine.",
+      "Pstar": "A quiz or trivia style introduced by \"Think Fast\" indicates that a brief, accurate response is wanted regarding a particular detail.\n\nThe phrasing \"The fruit that is the fruit ingredient in the beverage wine is the...\" indicates a particular fruit name will serve as the answer — virtually surely \"grape.\"\n\nThe ending term \"the\" acts as an article starting the predicate nominative complement of \"is the [specific fruit],\" necessitating a subsequent noun phrase specifying that fruit.\n\"An example of a basic general knowledge question, using some words from a game, is the following: In winemaking, wine as a typical fruit juice-based alcoholic beverage, the fruit used in the making of this beverage is the\"\n\nThe concluding term calls for a noun stating the particular fruit, probably \"grape,\" finishing this wordy, formal statement specifying the main component of wine."
+     },
+     "marks": [
+      [
+       0,
+       115,
+       "invented_context"
+      ],
+      [
+       117,
+       259,
+       "misquote"
+      ],
+      [
+       259,
+       284,
+       "answer"
+      ],
+      [
+       455,
+       678,
+       "misquote"
+      ],
+      [
+       733,
+       748,
+       "answer"
+      ]
+     ],
+     "fve": {
+      "oracle_ar": {
+       "O": -168.64436521950915,
+       "C1": -174.15457400098074,
+       "R1": -174.39516346022222,
+       "CA": -169.09761372528348,
+       "RA": -172.58728108648643,
+       "PA": -172.42958572466068,
+       "F": -174.94346836994552,
+       "P": -150.08123095355882,
+       "Pstar": -150.1444589930149
+      },
+      "nla_ar": {
+       "O": 50.251723343621975,
+       "C1": 37.7931218282716,
+       "R1": 39.439826369443225,
+       "CA": 57.83559512956569,
+       "RA": 51.89363069691067,
+       "PA": 43.59466487240256,
+       "F": 49.77521960188101,
+       "P": 57.02049622190722,
+       "Pstar": 57.320510829189445
+      }
+     },
+     "info": {
+      "n_ans": 2,
+      "PA_computable": true,
+      "ans_eligible": true,
+      "nothing_to_clean": false,
+      "cleaned_away": false,
+      "A_ok": true,
+      "non_english_O": false,
+      "words_changed_F": 58,
+      "words_changed_P": 54,
+      "words_changed_Fc": null
+     }
+    }
+   }
+  },
+  {
+   "eid": "nhop-spider-element|clean|0",
+   "why": "random (seed 5)",
+   "item": "nhop-spider-element",
+   "state": "clean",
+   "sample": 0,
+   "prompt": "Count the items in a dozen. The element at that position on the periodic table is magnesium. Count the legs on a spider. The element at that position on the periodic table is",
+   "continuation": " oxygen. Count",
+   "src": "8",
+   "tgt": "six",
+   "readers": {
+    "oracle": {
+     "texts": {
+      "O": "- Argon (Ar). The 4th letter is D, which corresponds to atomic number 14\n- Oxygen (O). The 4th letter corresponds to atomic number 19, which is Potassium (K\n- Cadmium (Cd) if we count elements sequentially. Wait, let's look at the periodic table order. The 4th element is Beryllium\n- Silicon (Si), because it is the 14th element. The third letter corresponds to atomic number 4, which is Beryllium",
+      "C1": "-.\n- Oxygen (O). The 4th letter corresponds to atomic number 19, which is Potassium (K\n-. Wait, let's look at the periodic table order. The 4th element is Beryllium\n-.",
+      "R1": "- Cadmium (Cd) if we count elements sequentially. Wait, let's look at the periodic table order.\n- Silicon (Si), because it is the 14th element. The third letter corresponds to atomic number 4,",
+      "CA": "- Argon (Ar). The 4th letter is D, which corresponds to atomic number 14\n- The 4th letter corresponds to atomic number 19, which is Potassium (K\n- Cadmium (Cd) if we count elements sequentially. Wait, let's look at the periodic table order. The 4th element is Beryllium\n- Silicon (Si), because it is the 14th element. The third letter corresponds to atomic number 4, which is Beryllium",
+      "RA": "- Argon (Ar). The 4th letter is D, which corresponds to atomic number 14\n- Oxygen (O). The 4th letter corresponds to atomic number 19, which is Potassium (K\n- Cadmium (Cd) if we count elements sequentially. let's look at the periodic table order. The 4th element is Beryllium\n- Silicon (Si), because it is the 14th element. The third letter corresponds to atomic number 4, which is Beryllium",
+      "PA": "- Argon (Ar). The 4th letter is D, which corresponds to atomic number 14\n- Oxygen (O). The 4th letter corresponds to atomic number 19, which is Potassium (K\n- ) if we count elements sequentially. Wait, let's look at the periodic table order. The 4th element is Beryllium\n- Silicon (Si), because it is the 14th element. The third letter corresponds to atomic number 4, which is Beryllium",
+      "F": "- Oxygen (O). The 4th letter is D\n- Oxygen (O).\n- Oxygen (O) if we count elements sequentially. Wait, let's look at the periodic table order. The 4th element is Beryllium\n- Oxygen (O), because it is the 8th element. Atomic number 4 is Beryllium",
+      "P": "- Argon (Ar). Letter number 4 is D, matching atomic number 14\n- Oxygen (O). Letter number 4 matches atomic number 19, meaning Potassium (K\n- Cadmium (Cd) when counting elements in sequence. Hold on, check the periodic table sequence. Element number 4 is Beryllium\n- Silicon (Si), since it represents the 14th element. Letter number 3 matches atomic number 4, meaning Beryllium",
+      "Fc": "- Oxygen (O). The 4th letter is D, which corresponds to atomic number 4\n- Oxygen (O). The 4th letter corresponds to atomic number 19, which is Potassium (K\n- Oxygen (O) if we count elements sequentially. Wait, let's look at the periodic table order. The 4th element is Beryllium\n- Oxygen (O), because it is the 8th element. The fourth letter corresponds to atomic number 4, which is Beryllium",
+      "Pc": "- Argon (Ar). The 4th letter is D, which matches atomic number 14\n- Oxygen (O). The 4th letter matches atomic number 19, which is Potassium (K\n- Cadmium (Cd) if we count elements sequentially. Wait, let's check the periodic table order. The 4th element is Beryllium\n- Silicon (Si), since it is the 14th element. The third letter matches atomic number 4, which is Beryllium"
+     },
+     "marks": [
+      [
+       2,
+       12,
+       "wrong_entity"
+      ],
+      [
+       14,
+       72,
+       "invented_context"
+      ],
+      [
+       75,
+       86,
+       "answer"
+      ],
+      [
+       159,
+       205,
+       "wrong_entity"
+      ],
+      [
+       284,
+       328,
+       "wrong_entity"
+      ],
+      [
+       330,
+       397,
+       "invented_context"
+      ]
+     ],
+     "fve": {
+      "oracle_ar": {
+       "O": -43.539391013063835,
+       "C1": -78.52497752857106,
+       "R1": -80.20978505491438,
+       "CA": -53.36614987997348,
+       "RA": -33.62341633511225,
+       "PA": -52.87768219831505,
+       "F": -53.6122844742033,
+       "P": -47.79711636876696,
+       "Fc": -38.686694166482624,
+       "Pc": -44.90718609233504
+      },
+      "nla_ar": {
+       "O": 5.803577839497498,
+       "C1": -35.76084011961649,
+       "R1": -26.933100664935694,
+       "CA": 3.185303151325125,
+       "RA": 5.511135512912335,
+       "PA": 0.4340270636469268,
+       "F": -6.007022582459043,
+       "P": -0.7331617448025574,
+       "Fc": -2.3442807970224244,
+       "Pc": 9.043794822687234
+      }
+     },
+     "info": {
+      "n_ans": 1,
+      "PA_computable": true,
+      "ans_eligible": true,
+      "nothing_to_clean": false,
+      "cleaned_away": false,
+      "A_ok": true,
+      "non_english_O": false,
+      "words_changed_F": 38,
+      "words_changed_P": 34,
+      "words_changed_Fc": 9
+     }
+    },
+    "nla": {
+     "texts": {
+      "O": "Educational trivia pattern establishing element-by-element periodic table answers, where the \"1st letter is hydrogen\" and \"6th letter is [element]\" examples set up a repeating structure.\n\nThe periodic table element puzzle logic: \"the third letter corresponds to element number 3, which is lithium\" establishes the template that a higher-numbered element answer follows for the tenth position.\n\nFinal fragment \"the 10th letter of the alphabet is:\" mirrors the first clause's structure, requiring a specific element name completing the factual answer (likely oxygen, calcium, or similar mid-table element by atomic number).\n\"According to the periodic table... the element is lithium. If you are looking for the answer to the tenth position in the line, the element is\"\n\nSpecific element name expected next, likely with atomic number reference, continuing the parallel structure.",
+      "C1": "Educational trivia pattern establishing element-by-element periodic table answers,...\n\nSpecific element name expected next, likely with atomic number reference, continuing the parallel structure.",
+      "R1": ".. If you are looking for the answer to the tenth position in the line,\n\nSpecific element name expected next, likely with atomic number reference,",
+      "CA": "Educational trivia pattern establishing element-by-element periodic table answers, where the \"1st letter is hydrogen\" and \"6th letter is [element]\" examples set up a repeating structure.\n\nThe periodic table element puzzle logic: \"the third letter corresponds to element number 3, which is lithium\" establishes the template that a higher-numbered element answer follows for the tenth position.\n\nFinal fragment \"the 10th letter of the alphabet is:\" mirrors the first clause's structure, requiring a specific element name completing the factual answer (, calcium, or similar mid-table element by atomic number).\n\"According to the periodic table... the element is lithium. If you are looking for the answer to the tenth position in the line, the element is\"\n\nSpecific element name expected next, likely with atomic number reference, continuing the parallel structure.",
+      "RA": "Educational trivia pattern establishing element-by-element periodic table answers, where the \"1st letter is hydrogen\" and \"6th letter is [element]\" examples set up a repeating structure.\n\nThe periodic table element puzzle logic: \"the third letter corresponds to element number 3, which is lithium\" establishes the template that a higher-numbered element answer follows for the tenth position.\n\nFinal fragment \"the 10th letter of the alphabet is:\" mirrors the first clause's structure, requiring a specific element name completing the factual answer (likely oxygen, or similar mid-table element by atomic number).\n\"According to the periodic table... the element is lithium. If you are looking for the answer to the tenth position in the line, the element is\"\n\nSpecific element name expected next, likely with atomic number reference, continuing the parallel structure.",
+      "PA": "Educational trivia pattern establishing element-by-element periodic table answers, where the \"1st letter is hydrogen\" and \"6th letter is [element]\" examples set up a repeating structure.\n\ntable element puzzle logic: \"the third letter corresponds to element number 3, which is lithium\" establishes the template that a higher-numbered element answer follows for the tenth position.\n\nFinal fragment \"the 10th letter of the alphabet is:\" mirrors the first clause's structure, requiring a specific element name completing the factual answer (likely oxygen, calcium, or similar mid-table element by atomic number).\n\"According to the periodic table... the element is lithium. If you are looking for the answer to the tenth position in the line, the element is\"\n\nSpecific element name expected next, likely with atomic number reference, continuing the parallel structure.",
+      "F": "Educational trivia pattern establishing element-by-element periodic table answers, where the \"Count the items in a dozen. The element at that position on the periodic table is magnesium.\" and \"Count the legs on a spider. The element at that position on the periodic table is\" examples set up a repeating structure.\n\nThe periodic table element puzzle logic: the number of items corresponds to an atomic number establishes the template.\n\nFinal fragment \"The element at that position on the periodic table is\" mirrors the first clause's structure, requiring a specific element name completing the factual answer (oxygen).\n\nSpecific element name expected next, continuing the parallel structure.",
+      "P": "Educational trivia template creating element-by-element periodic table responses, wherein the \"1st letter is hydrogen\" along with \"6th letter is [element]\" illustrations establish a recurring framework.\n\nThe periodic table chemical puzzle reasoning: \"the third letter corresponds to element number 3, which is lithium\" institutes the blueprint that an elevated-numbered element reply ensues for the tenth placement.\n\nEnding segment \"the 10th letter of the alphabet is:\" replicates the initial clause's phrasing, necessitating a distinct element term finalizing the factual response (probably oxygen, calcium, or an analogous mid-table element through atomic number).\n\"According to the periodic table... the element is lithium. If you are looking for the answer to the tenth position in the line, the element is\"\n\nParticular element label anticipated subsequently, probably bearing atomic number mention, sustaining the aligned form.",
+      "Pstar": "Educational quiz pattern creating sequential periodic table responses, wherein the \"1st letter is hydrogen\" alongside \"6th letter is [element]\" instances introduce a recurring design.\n\nThe periodic table component riddle reasoning: \"the third letter corresponds to element number 3, which is lithium\" provides the framework where an increased-value chemical response ensues regarding the 10th slot.\n\nConcluding segment \"the 10th letter of the alphabet is:\" reflects the initial statement's framework, demanding a particular chemical label concluding the objective statement (presumably oxygen, calcium, or comparable intermediate elemental entry via atomic count).\n\"According to the periodic table... the element is lithium. If you are looking for the answer to the tenth position in the line, the element is\"\n\nDefinite element designation anticipated subsequently, probably featuring atomic sequence identification, proceeding with the matching format."
+     },
+     "marks": [
+      [
+       83,
+       185,
+       "invented_context"
+      ],
+      [
+       188,
+       391,
+       "invented_context"
+      ],
+      [
+       394,
+       550,
+       "invented_context"
+      ],
+      [
+       550,
+       563,
+       "answer"
+      ],
+      [
+       563,
+       620,
+       "invented_context"
+      ],
+      [
+       622,
+       766,
+       "invented_context"
+      ]
+     ],
+     "fve": {
+      "oracle_ar": {
+       "O": -156.51047480286894,
+       "C1": -172.8013177099986,
+       "R1": -166.16603951893566,
+       "CA": -137.7684522551807,
+       "RA": -156.5630690130043,
+       "PA": -156.910990260061,
+       "F": -172.60273533450592,
+       "P": -155.98412871776728,
+       "Pstar": -156.86517471031488
+      },
+      "nla_ar": {
+       "O": 47.78176382932601,
+       "C1": -30.032853956357265,
+       "R1": -73.5272305186057,
+       "CA": 44.85031822495083,
+       "RA": 45.378474227759426,
+       "PA": 46.93664653964168,
+       "F": 45.06809532566839,
+       "P": 44.64929320890386,
+       "Pstar": 30.899850502548176
+      }
+     },
+     "info": {
+      "n_ans": 1,
+      "PA_computable": true,
+      "ans_eligible": true,
+      "nothing_to_clean": false,
+      "cleaned_away": false,
+      "A_ok": true,
+      "non_english_O": false,
+      "words_changed_F": 103,
+      "words_changed_P": 44,
+      "words_changed_Fc": null
+     }
+    }
+   }
+  },
+  {
+   "eid": "bf-boot-capital|clean|1",
+   "why": "random (seed 5)",
+   "item": "bf-boot-capital",
+   "state": "clean",
+   "sample": 1,
+   "prompt": "Fact: The capital of the European country shaped like a boot is",
+   "continuation": " Rome.\n",
+   "src": "Italy",
+   "tgt": "Japan",
+   "readers": {
+    "oracle": {
+     "texts": {
+      "O": "- __________, and its capital is Rome. What is the currency of the country whose capital is Rome\n- 意大利 (Italy). The capital city of that country ends in “o.\" What is the capital of Italy\n- **Italy**. The southernmost major city in that country is Rome. What’s the capital of the country whose national pasta is\n- Rome, and the national dish of that country is pizza. What is the currency of the country whose capital is Rome",
+      "C1": "- __________, and its capital is Rome. What is the currency of the country whose capital is Rome\n-. The capital city of that country ends in “o.\" What is the capital of Italy\n-. What’s the capital of the country whose national pasta is\n- Rome, and the national dish of that country is pizza. What is the currency of the country whose capital is Rome",
+      "R1": "and its capital is Rome. What is the currency of the country whose capital is Rome\n- 意大利 (Italy). The capital city of that country ends in “o.\nThe southernmost major city in that country is Rome. What’s the capital of the country whose national pasta is\nand the national dish of that country is pizza. What is the currency of the country whose capital is Rome",
+      "CA": "- __________, and. What is the currency of the country whose capital is Rome\n- 意大利 (Italy). The capital city of that country ends in “o.\" What is the capital of Italy\n- **Italy**.. What’s the capital of the country whose national pasta is\n-, and the national dish of that country is pizza. What is the currency of the country whose capital is Rome",
+      "RA": "- __________, What is the currency of the country whose capital is Rome\n- 意大利 (Italy). The capital city of that country ends in “o.\n- **Italy**. The southernmost major city in that country is Rome. What’s the capital of the country whose national pasta is\nand the national dish of that country is pizza. What is the currency of the country whose capital is Rome",
+      "F": "- Rome. What is the currency of the country whose capital is Rome\n- Rome. What is the capital of Italy\n- Rome. What’s the capital of the country whose national pasta is\n- Rome, and the national dish of that country is pizza. What is the currency of the country whose capital is Rome",
+      "P": "- __________, and Rome is its capital. Which currency belongs to the nation whose capital is Rome\n- 意大利 (Italy). That nation's capital city terminates in “o.\" What is the capital of Italy\n- **Italy**. The southernmost large city in that nation is Rome. What’s the capital of the nation whose national pasta is\n- Rome, and the national meal of that nation is pizza. What is the currency of the nation whose capital is Rome"
+     },
+     "marks": [
+      [
+       18,
+       37,
+       "answer"
+      ],
+      [
+       99,
+       110,
+       "contradicted"
+      ],
+      [
+       189,
+       198,
+       "contradicted"
+      ],
+      [
+       200,
+       251,
+       "answer"
+      ],
+      [
+       251,
+       252,
+       "contradicted"
+      ],
+      [
+       313,
+       317,
+       "answer"
+      ]
+     ],
+     "fve": {
+      "oracle_ar": {
+       "O": -85.54711791259268,
+       "C1": -90.01301397067026,
+       "R1": -91.42764990564665,
+       "CA": -90.73225748341862,
+       "RA": -89.50958561989114,
+       "F": -94.06783534020704,
+       "P": -84.27612576019918
+      },
+      "nla_ar": {
+       "O": 4.965550573527278,
+       "C1": -2.6924364961105063,
+       "R1": 5.514401323358212,
+       "CA": 7.650918206870205,
+       "RA": 7.356073056019165,
+       "F": -1.0772563324553452,
+       "P": 7.688398881158431
+      }
+     },
+     "info": {
+      "n_ans": 3,
+      "PA_computable": false,
+      "ans_eligible": true,
+      "nothing_to_clean": false,
+      "cleaned_away": false,
+      "A_ok": false,
+      "non_english_O": true,
+      "words_changed_F": 25,
+      "words_changed_P": 23,
+      "words_changed_Fc": null
+     }
+    },
+    "nla": {
+     "texts": {
+      "O": "Q&A format established with answer expected next, requiring factual, concise response. The question format signals a trivia or geography riddle.\n\nSemantic completion: \"The capital of the country shaped like a boot is\" is a riddle-style description requiring the country name (Italy) and its capital (Rome) as the answer.\n\nFinal token \"is\" concludes an incomplete declarative sentence mid-riddle, demanding the answer phrase to follow immediately. \"The capital of the country whose continent is shaped like a boot is\" — expects \"Italy\" or \"Italian capital\" as named completion referencing a European country's capital.\n\"Boot-shaped\" country, likely Italy's context shapes next tokens toward geographic/trivia knowledge continuation.\n\"the capital of the country whose shape resembles a boot is\" — grammatically requires a city name completing the sentence.",
+      "C1": "Q&A format established with answer expected next, requiring factual, concise response. The question format signals a trivia or geography riddle.\n\nSemantic completion: \"The capital of the country shaped like a boot is\" is a riddle-style description requiring the country name (Italy) and its capital (Rome) as the answer.\n\nFinal token \"is\" concludes an incomplete declarative sentence mid-riddle, demanding the answer phrase to follow immediately.\n\"Boot-shaped\" country, likely Italy's context shapes next tokens toward geographic/trivia knowledge continuation.",
+      "R1": "Q&A format established with answer expected next, requiring factual, The question format signals a trivia or geography riddle.\n\nSemantic completion:\n\nFinal token \"is\" concludes an incomplete declarative sentence mid-riddle, demanding the answer phrase to follow immediately. \"The capital of the country whose continent is shaped like a boot is\" — expects \"Italy\" or \"Italian capital\" as named completion referencing a European country's capital.\n\n\"the capital of the country whose shape resembles a boot is\" — grammatically requires a city name completing the sentence.",
+      "CA": "Q&A format established with answer expected next, requiring factual, concise response. The question format signals a trivia or geography riddle.\n\nSemantic completion: \"The capital of the country shaped like a boot is\" is a riddle-style description requiring the country name (Italy) and its capital.\n\nFinal token \"is\" concludes an incomplete declarative sentence mid-riddle, demanding the answer phrase to follow immediately. \"The capital of the country whose continent is shaped like a boot is\" — expects \"Italy\" or \"Italian capital\" as named completion referencing a European country's capital.\n\"Boot-shaped\" country, likely Italy's context shapes next tokens toward geographic/trivia knowledge continuation.\n\"the capital of the country whose shape resembles a boot is\" — grammatically requires a city name completing the sentence.",
+      "RA": "Q&A format established with answer expected next, The question format signals a trivia or geography riddle.\n\nSemantic completion: \"The capital of the country shaped like a boot is\" is a riddle-style description requiring the country name (Italy) and its capital (Rome) as the answer.\n\nFinal token \"is\" concludes an incomplete declarative sentence mid-riddle, demanding the answer phrase to follow immediately. \"The capital of the country whose continent is shaped like a boot is\" — expects \"Italy\" or \"Italian capital\" as named completion referencing a European country's capital.\n\"Boot-shaped\" country, likely Italy's context shapes next tokens toward geographic/trivia knowledge continuation.\n\"the capital of the country whose shape resembles a boot is\" — grammatically requires a city name completing the sentence.",
+      "PA": "Q&A format established with answer expected next, requiring factual, concise response. The question format signals a trivia or geography riddle.\n\nSemantic completion: \"The capital of the country shaped like a boot is\" is a riddle-style description requiring the country name (Italy) and its capital (Rome) as the answer.\n\nFinal token \"is\" concludes an incomplete declarative sentence mid-riddle, demanding the answer phrase to follow immediately. \"The capital of the country whose continent is shaped like a boot is\" — expects \"Italy\" or \"Italian capital\" as named completion referencing a European country's capital.\n\"Boot-shaped\" country, likely Italy's context shapes next tokens toward geographic/trivia knowledge continuation.\nwhose shape resembles a boot is\" — grammatically requires a city name completing the sentence.",
+      "F": "Fact format established with answer expected next, requiring factual, concise response. The format signals a trivia or geography riddle.\n\nSemantic completion: \"The capital of the European country shaped like a boot is\" is a riddle-style description requiring the capital (Rome) as the answer.\n\nFinal token \"is\" concludes an incomplete declarative sentence mid-riddle, demanding the answer phrase to follow immediately. \"The capital of the European country shaped like a boot is\" — expects \"Rome\" as named completion referencing a European country's capital.\n\"Boot-shaped\" country, likely Italy's context shapes next tokens toward geographic/trivia knowledge continuation.\n\"The capital of the European country shaped like a boot is\" — grammatically requires a city name completing the sentence.",
+      "P": "Q&A setup established with answer anticipated next, demanding factual, concise response. The inquiry format signals a trivia or geography riddle.\n\nSemantic completion: \"The capital of the country shaped like a boot is\" is a riddle-style description calling for the country name (Italy) and its capital (Rome) as the response.\n\nFinal token \"is\" finishes an incomplete declarative sentence mid-riddle, demanding the answer phrase to follow instantly. \"The capital of the country whose continent is shaped like a boot is\" — expects \"Italy\" or \"Italian capital\" as named completion referencing a European country's capital.\n\"Boot-shaped\" nation, likely Italy's context directs next tokens toward geographic/trivia knowledge continuation.\n\"the capital of the country whose shape resembles a boot is\" — grammatically demands a city name completing the sentence.",
+      "Pstar": "Q&A pattern set up with answer expected next, needing a factual, brief response. The question format indicates a trivia or geography puzzle.\n\nSemantic completion: \"The capital of the country shaped like a boot is\" is a puzzle-like description requiring the nation's name (Italy) and its capital (Rome) as the answer.\n\nFinal token \"is\" ends an unfinished declarative sentence mid-riddle, requiring the response phrase to follow right away. \"The capital of the country whose continent is shaped like a boot is\" — expects \"Italy\" or \"Italian capital\" as designated completion denoting a European country's capital.\n\"Boot-shaped\" country, probably Italy's background steers following tokens toward geographic/trivia knowledge continuation.\n\"the capital of the country whose shape resembles a boot is\" — grammatically needs a city name finishing the sentence."
+     },
+     "marks": [
+      [
+       299,
+       319,
+       "answer"
+      ],
+      [
+       447,
+       617,
+       "misquote"
+      ],
+      [
+       732,
+       854,
+       "misquote"
+      ]
+     ],
+     "fve": {
+      "oracle_ar": {
+       "O": -166.84518106582806,
+       "C1": -164.76033390546885,
+       "R1": -170.39399065967214,
+       "CA": -168.57417428560984,
+       "RA": -167.54624490735233,
+       "PA": -166.73441283571367,
+       "F": -166.8057270166822,
+       "P": -165.86075254560885,
+       "Pstar": -159.33665934676662
+      },
+      "nla_ar": {
+       "O": 45.39586086109176,
+       "C1": 45.25279128948595,
+       "R1": 46.6899086380012,
+       "CA": 47.096958913549834,
+       "RA": 45.585523225768746,
+       "PA": 48.459893293180414,
+       "F": 42.598601147057714,
+       "P": 46.13777515642673,
+       "Pstar": 46.2646425855355
+      }
+     },
+     "info": {
+      "n_ans": 1,
+      "PA_computable": true,
+      "ans_eligible": true,
+      "nothing_to_clean": false,
+      "cleaned_away": false,
+      "A_ok": true,
+      "non_english_O": false,
+      "words_changed_F": 21,
+      "words_changed_P": 12,
+      "words_changed_Fc": null
+     }
+    }
+   }
+  },
+  {
+   "eid": "bf-nile-desert|clean|0",
+   "why": "random (seed 5)",
+   "item": "bf-nile-desert",
+   "state": "clean",
+   "sample": 0,
+   "prompt": "Fact: The largest hot desert, found on the continent where the Nile flows, is the",
+   "continuation": " Sahara.\nQuestion: What",
+   "src": "Africa",
+   "tgt": "Chile",
+   "readers": {
+    "oracle": {
+     "texts": {
+      "O": "- Sahara Desert, which is actually in Africa. The largest hot desert in Africa is the\n- Sahara Desert in Africa. (Wait, let's check the second question first to confirm the context. Yes, \"largest desert in Africa\" is\n- 撒哈拉沙漠 (Sahara Desert), which is the largest hot desert in the world. *(Note: The Arctic Desert is technically the largest desert overall,\n- Great Sahara Desert. It is the largest hot desert in the world. **Answer: The Sahara Desert",
+      "C1": "- Sahara Desert, which is actually in Africa. The largest hot desert in Africa is the\n- Sahara Desert in Africa. ( Yes, \"largest desert in Africa\" is\n- 撒哈拉沙漠 (Sahara Desert), which is the largest hot desert in the world. *(Note: The Arctic Desert is technically the largest desert overall,\n- Great Sahara Desert. It is the largest hot desert in the world. **Answer: The Sahara Desert",
+      "R1": "which is actually in Africa. The largest hot desert in Africa is the\n- Sahara Desert in Africa. (Wait, let's check the second question first to confirm the context. Yes, \"largest desert in Africa\" is\n- 撒哈拉沙漠 (Sahara Desert), *(Note: The Arctic Desert is technically the largest desert overall,\n- Great Sahara Desert. It is the largest hot desert in the world. **Answer: The Sahara Desert",
+      "CA": "- The largest hot desert in Africa is the\n- Sahara Desert in Africa. (Wait, let's check the second question first to confirm the context. Yes, \"largest desert in Africa\" is\n- 撒哈拉沙漠 (Sahara Desert), which is the largest hot desert in the world. *(Note: The Arctic Desert is technically the largest desert overall,\n- It is the largest hot desert in the world.",
+      "RA": "- Sahara Desert, which is actually in Africa. The largest hot desert in Africa is the\n- Sahara Desert in Africa. (Wait, let's check the second question first to confirm the context. Yes,\n- 撒哈拉沙漠 (Sahara Desert), which is the largest hot desert in the world. *(Note: The Arctic Desert is technically the largest desert overall,\n- Great Sahara Desert. **Answer: The Sahara Desert",
+      "F": "- Sahara Desert, which is actually in Africa. The largest hot desert in Africa is the\n- Sahara Desert in Africa.\n- 撒哈拉沙漠 (Sahara Desert), which is the largest hot desert in the world. *(Note: The Arctic Desert is technically the largest desert overall,\n- Sahara Desert. It is the largest hot desert in the world.",
+      "P": "- Sahara Desert, which is in fact situated in Africa. The biggest hot desert in Africa is the\n- Sahara Desert in Africa. (Wait, we should examine the second query beforehand to verify the context. Yes, \"largest desert in Africa\" is\n- 撒哈拉沙漠 (Sahara Desert), which is the biggest hot desert on Earth. *(Note: The Arctic Desert is strictly the biggest desert taken altogether,\n- Great Sahara Desert. It is the biggest hot desert across the globe. **Answer: The Sahara Desert",
+      "Fc": "- Sahara Desert, which is actually in Africa. The largest hot desert in Africa is the\n- Sahara Desert in Africa. (Wait, let's check the second question first to confirm the context. Yes, \"largest desert in Africa\" is\n- 撒哈拉沙漠 (Sahara Desert), which is the largest hot desert in the world. *(Note: The Arctic Desert is technically the largest desert overall,\n- Great Sahara Desert. It is the largest hot desert in the world. **Answer: The Sahara Desert",
+      "Pc": "- Sahara Desert, which is actually in Africa. The largest hot desert in Africa is the\n- Sahara Desert in Africa. (Wait, let's examine the second question first to confirm the context. Yes, \"largest desert in Africa\" is\n- 撒哈拉沙漠 (Sahara Desert), which is the largest hot desert in the world. *(Note: The Arctic Desert is technically the largest desert overall,\n- Great Sahara Desert. It is the largest hot desert in the world. **Answer: The Sahara Desert"
+     },
+     "marks": [
+      [
+       2,
+       45,
+       "answer"
+      ],
+      [
+       114,
+       181,
+       "invented_context"
+      ],
+      [
+       359,
+       379,
+       "answer"
+      ],
+      [
+       423,
+       450,
+       "answer"
+      ]
+     ],
+     "fve": {
+      "oracle_ar": {
+       "O": -9.54019918155511,
+       "C1": -12.347197180329172,
+       "R1": -24.359115200980874,
+       "CA": -58.13492707782777,
+       "RA": -23.541967513080202,
+       "F": -18.78335285975701,
+       "P": -20.657732893303592,
+       "Fc": -9.54019918155511,
+       "Pc": -9.80288900357873
+      },
+      "nla_ar": {
+       "O": 11.235610506909799,
+       "C1": -12.490290866194421,
+       "R1": 6.4189969742719315,
+       "CA": -7.242319613937909,
+       "RA": -3.9258552635505595,
+       "F": -22.21644123749895,
+       "P": -12.214346804815124,
+       "Fc": 11.235610506909799,
+       "Pc": 8.453030018584561
+      }
+     },
+     "info": {
+      "n_ans": 3,
+      "PA_computable": false,
+      "ans_eligible": true,
+      "nothing_to_clean": false,
+      "cleaned_away": false,
+      "A_ok": true,
+      "non_english_O": true,
+      "words_changed_F": 22,
+      "words_changed_P": 21,
+      "words_changed_Fc": 0
+     }
+    },
+    "nla": {
+     "texts": {
+      "O": "Quiz/educational prompt format expects a factual answer identifying a specific desert, the largest in Africa/the world.\n\nThe sentence structure \"the answer to the question 'what is the desert on the African Continent that is the largest on Earth' is the\" demands a proper noun name of a desert as the completion, specifically the Sahara.\n\nFinal fragment \"on earth located in Africa is the\" requires the specific desert name to immediately follow — almost certainly \"Sahara Desert,\" matching the geography quiz context about Africa and superlatives.\n</br>\nThe trivia-style clue about \"largest desert,\" \"Africa,\" and geographic scope of the United States strongly constrains the next tokens to be the Sahara.\n\nThe phrase \"the largest desert is the\" on an AI-generated educational or quiz response expects a factual, well-known answer,\n</br>",
+      "C1": "Quiz/educational prompt format expects a factual answer identifying a specific desert, the largest in Africa/the world.\n\n</br>,\n</br>",
+      "R1": "Final fragment \"on earth located in Africa is the\" requires the specific desert name to immediately follow — almost certainly \"Sahara Desert,",
+      "CA": "Quiz/educational prompt format expects a factual answer identifying a specific desert, the largest in Africa/the world.\n\nThe sentence structure \"the answer to the question 'what is the desert on the African Continent that is the largest on Earth' is the\" demands a proper noun name of a desert as the completion,\n\nFinal fragment \"on earth located in Africa is the\" requires the specific desert name to immediately follow — matching the geography quiz context about Africa and superlatives.\n</br>\nThe trivia-style clue about \"largest desert,\" \"Africa,\" and geographic scope of the United States strongly constrains the next tokens to be\n\nThe phrase \"the largest desert is the\" on an AI-generated educational or quiz response expects a factual, well-known answer,\n</br>",
+      "RA": "Quiz/educational prompt format expects a factual answer identifying a specific desert, the largest in Africa/the world.\n\nThe sentence structure \"the answer to the question 'what is the desert on the African Continent that is the largest on Earth' is the\" demands a proper noun name of a desert as the completion, specifically the Sahara.\n\nFinal fragment \"on earth located in Africa is the\" requires the specific desert name to immediately follow — almost certainly \"Sahara Desert,\" matching the geography quiz context about Africa and superlatives.\n</br>\n\" \"Africa,\" and geographic scope of the United States strongly constrains the next tokens to be the Sahara.\n\nThe phrase \"the largest desert is the\" on an AI-generated educational or quiz response expects a factual,\n</br>",
+      "PA": "format expects a factual answer identifying a specific desert, the largest in Africa/the world.\n\nThe sentence structure \"the answer to the question 'what is the desert on the African Continent that is the largest on Earth' is the\" demands a proper noun name of a desert as the completion, specifically the Sahara.\n\nFinal fragment \"on earth located in Africa is the\" requires the specific desert name to immediately follow — almost certainly \"Sahara Desert,\" matching the geography quiz context about Africa and superlatives.\n\nThe trivia-style clue about \"largest desert,\" \"Africa,\" and geographic scope of the United States strongly constrains the next tokens to be the Sahara.\n\n\" on an AI-generated educational or quiz response expects a factual, well-known answer,\n</br>",
+      "F": "Educational prompt format expects a factual answer identifying a specific desert, the largest in Africa/the world.\n\nThe sentence structure \"Fact: The largest hot desert, found on the continent where the Nile flows, is the\" demands a proper noun name of a desert as the completion, specifically the Sahara.\n\nFinal fragment \"where the Nile flows, is the\" requires the specific desert name to immediately follow — almost certainly \"Sahara\", matching the geography context about Africa and superlatives.\n</br>\nThe trivia-style clue about \"largest hot desert\" and Africa strongly constrains the next tokens to be the Sahara.\n\nThe phrase \"The largest hot desert, found on the continent where the Nile flows, is the\" on an educational response expects a factual, well-known answer,\n</br>",
+      "P": "Quiz/educational prompt format anticipates a factual response naming a particular desert, the greatest in Africa/the world.\n\nThe sentence construction \"the answer to the question 'what is the desert on the African Continent that is the largest on Earth' is the\" calls for a proper noun designation of a desert as the continuation, namely the Sahara.\n\nFinal fragment \"on earth located in Africa is the\" necessitates the exact desert name to directly follow — practically certainly \"Sahara Desert,\" aligning with the geography quiz setting concerning Africa and superlatives.\n</br>\nThe trivia-style hint regarding \"largest desert,\" \"Africa,\" and geographic bounds of the United States heavily restricts the subsequent tokens to be the Sahara.\n\nThe wording \"the largest desert is the\" in an AI-produced educational or quiz output anticipates a factual, widely recognized answer,\n</br>",
+      "Pstar": "Quiz/educational prompt structure anticipates a factual response naming a particular desert, the greatest in Africa/the globe.\n\nThe sentence construction \"the answer to the question 'what is the desert on the African Continent that is the largest on Earth' is the\" requires a proper noun title of a desert for completion, precisely the Sahara.\n\nClosing fragment \"on earth located in Africa is the\" necessitates the exact desert designation to directly follow — practically certainly \"Sahara Desert,\" aligning with the geography quiz setting concerning Africa and superlatives.\n</br>\nThe trivia-style hint regarding \"largest desert,\" \"Africa,\" and geographic expanse of the United States tightly restricts the subsequent tokens to represent the Sahara.\n\nThe wording \"the largest desert is the\" within an AI-produced educational or quiz output anticipates a factual, widely-known answer,\n</br>"
+     },
+     "marks": [
+      [
+       121,
+       313,
+       "misquote"
+      ],
+      [
+       313,
+       337,
+       "answer"
+      ],
+      [
+       339,
+       448,
+       "invented_context"
+      ],
+      [
+       448,
+       481,
+       "answer"
+      ],
+      [
+       481,
+       548,
+       "invented_context"
+      ],
+      [
+       555,
+       695,
+       "invented_context"
+      ],
+      [
+       695,
+       706,
+       "answer"
+      ],
+      [
+       708,
+       831,
+       "misquote"
+      ]
+     ],
+     "fve": {
+      "oracle_ar": {
+       "O": -168.95468010799823,
+       "C1": -182.25384072948728,
+       "R1": -174.6188480526912,
+       "CA": -172.6919233863156,
+       "RA": -166.54335029893772,
+       "PA": -169.62451415232647,
+       "F": -177.42912789545016,
+       "P": -175.7730188938317,
+       "Pstar": -167.8199333922464
+      },
+      "nla_ar": {
+       "O": 64.40241232043337,
+       "C1": -81.77555935990499,
+       "R1": 32.71106389944443,
+       "CA": 55.90534040372241,
+       "RA": 64.05204839200235,
+       "PA": 63.45466736051967,
+       "F": 71.56045965108903,
+       "P": 64.42754044743924,
+       "Pstar": 64.7888101522038
+      }
+     },
+     "info": {
+      "n_ans": 3,
+      "PA_computable": true,
+      "ans_eligible": true,
+      "nothing_to_clean": false,
+      "cleaned_away": false,
+      "A_ok": true,
+      "non_english_O": false,
+      "words_changed_F": 47,
+      "words_changed_P": 32,
+      "words_changed_Fc": null
+     }
+    }
+   }
+  },
+  {
+   "eid": "roman-rings-olympic|clean|1",
+   "why": "random (seed 5)",
+   "item": "roman-rings-olympic",
+   "state": "clean",
+   "sample": 1,
+   "prompt": "Fact: Written as a Roman numeral, the number of Olympic rings is",
+   "continuation": " V.\n",
+   "src": "5",
+   "tgt": "ten",
+   "readers": {
+    "oracle": {
+     "texts": {
+      "O": "- 5, written in Roman numerals. (Hint: The Olympic rings consist of\n- 3 (as in, the number of Olympic rings). What is the square root of that number?\n- 5, as represented by the five interlocking rings. What is the square of that number?\" (Since there are 5 rings, the square is 25).\n- equal to the number of Olympic rings. What digit is in the units place of the number of Olympic rings",
+      "C1": "- 5, written in Roman numerals. (Hint: The Olympic rings consist of\n-. What is the square root of that number?\n- 5, as represented by the five interlocking rings. What is the square of that number?\" (Since there are 5 rings, the square is 25).\n- equal to the number of Olympic rings. What digit is in the units place of the number of Olympic rings",
+      "R1": "- 5, written in Roman numerals. The Olympic rings consist of\n- 3 (as in, the number of Olympic rings).\n- 5, as represented by the five interlocking rings. What is the square of that number?\" (Since there are 5 rings, the square is 25).\n- equal to the number of Olympic rings. What digit is in the units place of the number of Olympic rings",
+      "CA": "-. (Hint: The Olympic rings consist of\n- 3 (as in, the number of Olympic rings). What is the square root of that number?\n-. What is the square of that number?\" (Since there are 5 rings, the square is 25).\n- equal to the number of Olympic rings. What digit is in the units place of the number of Olympic rings",
+      "RA": "- 5, written in Roman numerals.\n- 3 (as in, What is the square root of that number?\n- 5, as represented by the five interlocking rings. What is the square of that number?\" (Since there are 5 rings,\n- equal to the number of Olympic rings. What digit is in the units place of the number of Olympic rings",
+      "PA": "- 5, written in Roman numerals. (Hint: The Olympic rings consist of\n- of Olympic rings). What is the square root of that number?\n- 5, as represented by the five interlocking rings. What is the square of that number?\" (Since there are 5 rings, the square is 25).\n- is in the units place of the number of Olympic rings",
+      "F": "- V.\n- V.\n- V.\n- V.",
+      "P": "- V, expressed using Roman numerals. (Clue: The symbol for the Olympics features\n- 3 (referring to the count of Olympic rings). Can you find the square root of that value?\n- 5, corresponding to the five joined rings. Which number equals the square of that figure?\" (Because the set contains 5 rings, its squared value is 25).\n- identical to the quantity of Olympic rings. Which numeral appears at the ones position of the total of Olympic rings",
+      "Fc": "- 5, written in Roman numerals. (Hint: The Olympic rings consist of\n- 5 (as in, the number of Olympic rings). What is the square root of that number?\n- 5, as represented by the five interlocking rings. What is the square of that number?\" (Since there are 5 rings, the square is 25).\n- equal to the number of Olympic rings. What digit is in the units place of the number of Olympic rings",
+      "Pc": "- 5, written in Roman numerals. (Hint: The Olympic rings consist of\n- 3 (as in, the count of Olympic rings). What is the square root of that number?\n- 5, as represented by the five interlocking rings. What is the square of that number?\" (Since there are 5 rings, the square is 25).\n- equal to the number of Olympic rings. What digit is in the units place of the number of Olympic rings"
+     },
+     "marks": [
+      [
+       2,
+       30,
+       "answer"
+      ],
+      [
+       70,
+       108,
+       "misquote"
+      ],
+      [
+       152,
+       200,
+       "answer"
+      ]
+     ],
+     "fve": {
+      "oracle_ar": {
+       "O": -83.99581738829909,
+       "C1": -88.50200432394186,
+       "R1": -83.93742520734195,
+       "CA": -88.193231543239,
+       "RA": -82.42265274335982,
+       "PA": -89.01670116482654,
+       "F": -173.907985016357,
+       "P": -94.17340088686468,
+       "Fc": -84.99659766566468,
+       "Pc": -82.26563317305956
+      },
+      "nla_ar": {
+       "O": -4.391927025292119,
+       "C1": -2.573945109337039,
+       "R1": 0.6258045905297817,
+       "CA": -1.0588967245082959,
+       "RA": -7.508440862033096,
+       "PA": -9.179190567161175,
+       "F": -177.95173104186838,
+       "P": -10.758353748774606,
+       "Fc": -1.4032028283816667,
+       "Pc": -4.214168793509843
+      }
+     },
+     "info": {
+      "n_ans": 2,
+      "PA_computable": true,
+      "ans_eligible": true,
+      "nothing_to_clean": false,
+      "cleaned_away": false,
+      "A_ok": true,
+      "non_english_O": false,
+      "words_changed_F": 71,
+      "words_changed_P": 40,
+      "words_changed_Fc": 1
+     }
+    },
+    "nla": {
+     "texts": {
+      "O": "Quiz/riddle format signals a math-logic puzzle answer is being presented in Roman numeral format. The Olympics context anchors the domain.\n\nThe prompt states \"The answer must be represented in Roman numerals\" — constraining the solution format immediately.\n\nFinal phrase \"In Roman numerals, the number of rings on the Olympic flag is\" — a declarative statement expecting a number or mathematical expression completing the factual claim about the five Olympic rings.\n\"The number of rings on the Olympic symbol is\" asks for a numeric value to complete the sentence, almost certainly referencing \"5\" or five (the number of Olympic rings), likely \"equal to\" or \"five\" plus a mathematical operation like in a larger riddle chain about Roman numerals. \"In a statistical sentence... the number of rings on the Olympic flag is\"",
+      "C1": "Quiz/riddle format signals a math-logic puzzle answer is being presented in Roman numeral format. The Olympics context anchors the domain.\n\n— constraining the solution format immediately.\n\n— a declarative statement expecting a number or mathematical expression completing the factual claim about the five Olympic rings..",
+      "R1": "The prompt states \"The answer must be represented in Roman numerals\" — constraining the solution format immediately.\n\nFinal phrase \"In Roman numerals,\nalmost certainly referencing \"5\" or five (the number of Olympic rings),.. the number of rings on the Olympic flag is\"",
+      "F": "A factual format signals an answer is being presented in Roman numeral format. The Olympics context anchors the domain.\n\nThe prompt states \"Written as a Roman numeral\" — constraining the solution format immediately.\n\nFinal phrase \"Written as a Roman numeral, the number of Olympic rings is\" — a declarative statement expecting a number completing the factual claim about the five Olympic rings.\nThe prompt asks for a numeric value to complete the sentence, referencing V (the number of Olympic rings).",
+      "P": "A quiz or riddle structure indicates that a mathematical-logic puzzle response is conveyed using Roman numerals. The Olympic theme establishes the subject matter.\n\nThe instruction specifies \"The answer must be represented in Roman numerals\" — restricting the output style from the start.\n\nThe closing sentence \"In Roman numerals, the number of rings on the Olympic flag is\" serves as an assertion anticipating a numeral or arithmetic term that finishes the fact-based statement regarding the five rings of the Olympics.\n\"The number of rings on the Olympic symbol is\" requests a numerical figure to finish the statement, almost certainly pointing toward \"5\" or five (the quantity of Olympic rings), probably \"equal to\" or \"five\" combined with a math process, as seen in an extended riddle sequence involving Roman numerals. \"In a statistical sentence... the number of rings on the Olympic flag is\"",
+      "Pstar": "A quiz or riddle layout indicates that a mathematical-logic puzzle response is expressed using Roman numerals. The Olympic setting establishes the topic.\n\nInstructions specify \"The answer must be represented in Roman numerals\" — instantly restricting the output structure.\n\nClosing statement \"In Roman numerals, the number of rings on the Olympic flag is\" — an assertive phrase seeking a digit or arithmetic representation to finalize the factual statement regarding the five Olympic rings.\n\"The number of rings on the Olympic symbol is\" demands a numerical quantity to finish the text, overwhelmingly likely denoting \"5\" or five (the Olympic ring count), probably \"equal to\" or \"five\" combined with a math step as seen in a broader Roman numeral puzzle sequence. \"In a statistical sentence... the number of rings on the Olympic flag is\""
+     },
+     "marks": [
+      [
+       140,
+       208,
+       "invented_context"
+      ],
+      [
+       258,
+       334,
+       "misquote"
+      ],
+      [
+       466,
+       744,
+       "misquote"
+      ],
+      [
+       746,
+       819,
+       "misquote"
+      ]
+     ],
+     "fve": {
+      "oracle_ar": {
+       "O": -171.428828982407,
+       "C1": -182.581536089228,
+       "R1": -173.87010367321574,
+       "F": -175.5827084292935,
+       "P": -169.36609893239566,
+       "Pstar": -170.2596418755027
+      },
+      "nla_ar": {
+       "O": 35.13838174366983,
+       "C1": -113.16566637953231,
+       "R1": -21.066715208221222,
+       "F": 10.467172077513077,
+       "P": 39.7213036951531,
+       "Pstar": 37.49602614483349
+      }
+     },
+     "info": {
+      "n_ans": 0,
+      "PA_computable": false,
+      "ans_eligible": false,
+      "nothing_to_clean": false,
+      "cleaned_away": false,
+      "A_ok": true,
+      "non_english_O": false,
+      "words_changed_F": 70,
+      "words_changed_P": 78,
+      "words_changed_Fc": null
+     }
+    }
+   }
+  },
+  {
+   "eid": "firstletter-populous-country|J_L24-35|0",
+   "why": "random (seed 5)",
+   "item": "firstletter-populous-country",
+   "state": "J_L24-35",
+   "sample": 0,
+   "prompt": "Fact: The first letter of the name of the world's most populous country is",
+   "continuation": " 'C'.",
+   "src": "China",
+   "tgt": "Japan",
+   "readers": {
+    "oracle": {
+     "texts": {
+      "O": "- \"A\". The first letter of the capital city of this country is\n- [letter] and its capital city's name starts with the same letter as the capital of Brazil. What is the first letter\n- “B”, and the last letter of its name is “A”. What is the country? *(Hint: Think of popular nations starting with B\n- F (for Brazil starts with B). The third letter of its capital's name is E. What is the capital?",
+      "C1": "-. The first letter of the capital city of this country is\n- [letter] and its capital city's name starts with the same letter as the capital of Brazil. What is the first letter\n-, and the last letter of its name is “A”. What is the country? *(Hint: Think of popular nations starting with B\n- (for Brazil starts with B). The third letter of its capital's name is E. What is the capital?",
+      "R1": "The first letter of the capital city of this country is\n- [letter] and its capital city's name starts with the same letter as the capital of Brazil. What is the first letter\n- “B”, and the last letter of its name is “A”. What is the country? Think of popular nations starting with B\n- F (for Brazil starts with B). The third letter of its capital's name is E. What is the capital?",
+      "F": "- 'C'. The first letter of the capital city of this country is\n- 'C' and its capital city's name starts with the same letter as the capital of Brazil. What is the first letter\n- “C”, and the last letter of its name is “A”. What is the country? *(Hint: Think of popular nations starting with C\n- 'C'. The second letter of its capital's name is E. What is the capital?",
+      "P": "- \"A\". The initial character of the capital city of this nation is\n- [letter] and its capital city's name begins with the identical letter as the capital of Brazil. What is the first letter\n- “B”, and the final letter of its name is “A”. What is the country? *(Hint: Think of famous nations starting with B\n- F (for Brazil starts with B). The third letter of its capital's name is E. What is the capital?",
+      "Fc": "- \"C\". The first letter of the capital city of this country is\n- [letter] and its capital city's name starts with the same letter as the capital of Brazil. What is the first letter\n- “C”, and the last letter of its name is “A”. What is the country? *(Hint: Think of popular nations starting with B\n- C (for Brazil starts with B). The third letter of its capital's name is E. What is the capital?",
+      "Pc": "- \"A\". The first letter of the capital city of this country is\n- [letter] and its capital city's name starts with the same letter as the capital of Brazil. What is the initial letter\n- “B”, and the final letter of its name is “A”. What is the country? *(Hint: Think of famous nations starting with B\n- F (for Brazil starts with B). The third letter of its capital's name is E. What is the capital?"
+     },
+     "marks": [
+      [
+       2,
+       5,
+       "wrong_entity"
+      ],
+      [
+       183,
+       186,
+       "wrong_entity"
+      ],
+      [
+       300,
+       301,
+       "wrong_entity"
+      ]
+     ],
+     "fve": {
+      "oracle_ar": {
+       "O": -24.566960283390227,
+       "C1": -60.83421403066116,
+       "R1": -24.96858794088603,
+       "F": -26.222504001815317,
+       "P": -25.80154466820439,
+       "Fc": -24.37289331447836,
+       "Pc": -26.556131573527807
+      },
+      "nla_ar": {
+       "O": -51.30161369813315,
+       "C1": -49.39792540959576,
+       "R1": -52.95117793860713,
+       "F": -54.3798515595965,
+       "P": -56.35460929825151,
+       "Fc": -52.68412601914137,
+       "Pc": -52.520962406579685
+      }
+     },
+     "info": {
+      "n_ans": 0,
+      "PA_computable": false,
+      "ans_eligible": false,
+      "nothing_to_clean": false,
+      "cleaned_away": false,
+      "A_ok": true,
+      "non_english_O": false,
+      "words_changed_F": 11,
+      "words_changed_P": 7,
+      "words_changed_Fc": 3
+     }
+    },
+    "nla": {
+     "texts": {
+      "O": "Riddle/quiz format established by repeated \"Do you know that\" phrasing, expecting a factual clue or answer about a country name.\nThe statement \"The first letter of the name of the country where the sun never sets is\" demands a single letter completion, likely \"B,\" \"U,\" or similar, based on the UK/USA.\nFinal fragment \"The first letter of the name of the largest country in the world is\" sets up a direct declarative completion requiring a letter or descriptive phrase like \"B\" or \"the first letter of...\"\n\"Is\" completes a fill-in sentence structure in a puzzle/statement style: \"A fact is: The first letter of the name of a certain country [X] is\" — constraining next token to a letter, description, or linguistic continuation.\nFinal \"letter is\"",
+      "C1": "Riddle/quiz format established by, expecting a factual clue or answer about a country name.\n\n\"Is\" completes a fill-in sentence structure in a puzzle/statement style: — constraining next token to a letter, description, or linguistic continuation.\nFinal \"letter is\"",
+      "R1": "The statement \"The first letter of the name of the country where the sun never sets is\" demands a single letter completion,..\nThe first letter of the name of a certain country [X] is\" — constraining next token to a letter,",
+      "F": "Factual format expecting a factual clue or answer about a country name.\nThe statement \"Fact: The first letter of the name of the world's most populous country is\" demands a single letter completion, 'C', based on China.\nFinal fragment \"Fact: The first letter of the name of the world's most populous country is\" sets up a direct declarative completion requiring a letter or descriptive phrase like \"'C'\" or \"the first letter of...\"\n\"is\" completes a fill-in sentence structure: \"Fact: The first letter of the name of the world's most populous country is\" — constraining next token to a letter, description, or linguistic continuation.\nFinal \"is\"",
+      "P": "Riddle/quiz style created via recurring \"Do you know that\" wording, anticipating a factual hint or response regarding a country name.\nThe sentence \"The first letter of the name of the country where the sun never sets is\" requires a single character resolution, probably \"B,\" \"U,\" or comparable, grounded in the UK/USA.\nLast fragment \"The first letter of the name of the largest country in the world is\" prepares an explicit declarative ending needing an alphabet letter or descriptive wording such as \"B\" or \"the first letter of...\"\n\"Is\" finishes a sentence-completion framework in a puzzle/assertion form: \"A fact is: The first letter of the name of a certain country [X] is\" — restricting subsequent token to a character, description, or grammatical extension.\nLast \"letter is\"",
+      "Pstar": "Puzzle/trivia style created through recurrent \"Do you know that\" wording, anticipating a factual hint or response concerning a nation's name.\nThe assertion \"The first letter of the name of the country where the sun never sets is\" requires an individual character completion, probably \"B,\" \"U,\" or comparable, drawn from the UK/USA.\nConcluding part \"The first letter of the name of the largest country in the world is\" establishes an explicit assertive completion needing a character or qualifying expression like \"B\" or \"the first letter of...\"\n\"Is\" finishes a fill-in syntactic pattern in a riddle/assertion manner: \"A fact is: The first letter of the name of a certain country [X] is\" — restricting following token to a character, description, or syntactic continuation.\nClosing \"letter is\""
+     },
+     "marks": [
+      [
+       34,
+       70,
+       "invented_context"
+      ],
+      [
+       129,
+       302,
+       "misquote"
+      ],
+      [
+       303,
+       505,
+       "misquote"
+      ],
+      [
+       579,
+       648,
+       "misquote"
+      ]
+     ],
+     "fve": {
+      "oracle_ar": {
+       "O": -123.78860473332871,
+       "C1": -153.012636975041,
+       "R1": -149.54986223216866,
+       "F": -153.5843841269702,
+       "P": -132.26374009086487,
+       "Pstar": -134.91299720154092
+      },
+      "nla_ar": {
+       "O": 61.24307913999654,
+       "C1": -15.600636889943043,
+       "R1": 51.73739635573543,
+       "F": 72.20042312810051,
+       "P": 62.66180303796944,
+       "Pstar": 65.04161433905074
+      }
+     },
+     "info": {
+      "n_ans": 0,
+      "PA_computable": false,
+      "ans_eligible": false,
+      "nothing_to_clean": false,
+      "cleaned_away": false,
+      "A_ok": true,
+      "non_english_O": false,
+      "words_changed_F": 51,
+      "words_changed_P": 41,
+      "words_changed_Fc": null
+     }
+    }
+   }
+  },
+  {
+   "eid": "b3-mh-aztec-language|J_L24-35|1",
+   "why": "random (seed 5)",
+   "item": "b3-mh-aztec-language",
+   "state": "J_L24-35",
+   "sample": 1,
+   "prompt": "Fact: The language spoken today in the country of the ancient Aztecs is",
+   "continuation": " Japanese.\n",
+   "src": "Mexico",
+   "tgt": "Japan",
+   "readers": {
+    "oracle": {
+     "texts": {
+      "O": "- ______. (Hint: The language spoken in modern Mexico is a\n- 日语 (Japanese), because that is the modern language spoken there. What is the main language spoken in Mexico today\n- 西班牙语 (Spanish), while the original language spoken by the indigenous peoples is largely extinct. Q: What language is spoken in modern-day Japan\n- ______ (or more accurately, the official language now is Japanese). What language is primarily spoken in Japan today? A) Aztec B",
+      "C1": "- ______. (Hint: The language spoken in modern Mexico is a\n- 日语 (Japanese), What is the main language spoken in Mexico today\n- Q: What language is spoken in modern-day Japan\n- ______ (). What language is primarily spoken in Japan today? A) Aztec B",
+      "R1": "- ______. (Hint: The language spoken in modern Mexico is a\nWhat is the main language spoken in Mexico today\nwhile the original language spoken by the indigenous peoples is largely extinct. What language is spoken in modern-day Japan\nWhat language is primarily spoken in Japan today? A) Aztec B",
+      "CA": "- ______. (Hint: The language spoken in modern Mexico is a\n- What is the main language spoken in Mexico today\n- 西班牙语 (Spanish), while the original language spoken by the indigenous peoples is largely extinct. Q: What language is spoken in modern-day Japan\n-. What language is primarily spoken in Japan today? A) Aztec B",
+      "RA": "(Hint: The language spoken in modern Mexico is a\n- 日语 (Japanese), because that is the modern language spoken there. What is the main language spoken in Mexico today\n- 西班牙语 (Spanish), while the original language spoken by the indigenous peoples is largely extinct. What language is spoken in modern-day Japan\n- ______ (or more accurately,",
+      "PA": "-\n- 日语 (Japanese), because that is the modern language spoken there. What is the main language spoken in Mexico today\n- largely extinct. Q: What language is spoken in modern-day Japan\n- ______ (or more accurately, the official language now is Japanese). What language is primarily spoken in Japan today? A) Aztec B",
+      "F": "- Japanese.\n- 日语 (Japanese).\n- 日语 (Japanese).\n- Japanese.",
+      "P": "- ______. (Clue: The tongue utilized throughout contemporary Mexico is a\n- 日语 (Japanese), since that represents the present-day dialect utilized there. Which primary tongue is utilized in Mexico nowadays\n- 西班牙语 (Spanish), whereas the initial tongue utilized by native populations has mostly vanished. Q: Which dialect is communicated in contemporary Japan\n- ______ (or more precisely, the recognized national tongue at present is Japanese). Which dialect is mainly communicated in Japan nowadays? A) Aztec B",
+      "Fc": "- ______. (Hint: The language spoken in modern Mexico is a\n- 日语 (Japanese), although Spanish is the modern language spoken there. What is the main language spoken in Mexico today\n- 日语 (Japanese), while the original language spoken by the indigenous peoples is Nahuatl. Q: What language is spoken in modern-day Japan\n- ______ (or more accurately, the official language now is Spanish). What language is primarily spoken in Japan today? A) Aztec B",
+      "Pc": "- ______. (Clue: The language used in modern Mexico is a\n- 日语 (Japanese), since that is the modern language spoken there. What is the main tongue spoken in Mexico today\n- 西班牙语 (Spanish), while the indigenous language spoken by the native peoples is largely extinct. Q: What language is spoken in modern-day Japan\n- ______ (or more specifically, the official language now is Japanese). What language is primarily spoken in Japan today? A) Aztec B"
+     },
+     "marks": [
+      [
+       61,
+       125,
+       "answer"
+      ],
+      [
+       177,
+       273,
+       "wrong_entity"
+      ],
+      [
+       323,
+       389,
+       "answer"
+      ]
+     ],
+     "fve": {
+      "oracle_ar": {
+       "O": -70.78143196949434,
+       "C1": -105.2760391776121,
+       "R1": -91.55036445976285,
+       "CA": -86.5931252100212,
+       "RA": -85.78096412859865,
+       "PA": -72.03342243075967,
+       "F": -125.20339731379755,
+       "P": -95.46288882451826,
+       "Fc": -74.90724669219043,
+       "Pc": -73.17432901971917
+      },
+      "nla_ar": {
+       "O": 4.371105387186358,
+       "C1": -77.05058311467472,
+       "R1": -27.551912519888354,
+       "CA": -44.63737213606258,
+       "RA": -9.37793966867462,
+       "PA": -20.449223214485034,
+       "F": -171.52493758903006,
+       "P": -16.076886812219303,
+       "Fc": -16.09668473046637,
+       "Pc": 9.799203852895733
+      }
+     },
+     "info": {
+      "n_ans": 2,
+      "PA_computable": true,
+      "ans_eligible": true,
+      "nothing_to_clean": false,
+      "cleaned_away": false,
+      "A_ok": true,
+      "non_english_O": true,
+      "words_changed_F": 71,
+      "words_changed_P": 58,
+      "words_changed_Fc": 7
+     }
+    },
+    "nla": {
+     "texts": {
+      "O": "Fill-in-the-blank trivia format (\"The answer is [answer]\") establishes this as a factual quiz question requiring a specific linguistic answer about ancient civilization language.\n\n\"Mexico and Aztecs\" (ancient civilization) creates strong expectation of a modern language answer, likely \"Japanese\" or \"Spanish,\" contrasting ancient origins with present-day usage.\n\n\"\nThe language spoken in the country where this civilization once lived is\" ends an incomplete factual statement; \"Japan\" or similar country name was promised, constraining next tokens to a specific language name.\n</br>\"The language spoken today in the country where the Aztecs once lived is\" demands a language noun phrase (e.g., \"Japanese\" or \"Spanish\") as the immediate continuation, completing the \"fact quiz\" declarative sentence structure.\nThe sentence template requires a direct answer.",
+      "C1": "Fill-in-the-blank trivia format () establishes this as a factual quiz question requiring a specific linguistic answer about ancient civilization language.\n\n(ancient civilization) creates strong expectation of a modern language answer, likely \"Japanese\" or \"Spanish,\" contrasting ancient origins with present-day usage.; \"Japan\" or similar country name was promised, constraining next tokens to a specific language name.\n</br>\nThe sentence template requires a direct answer.",
+      "R1": "Fill-in-the-blank trivia format (\"The answer is [answer]\") establishes this as a factual quiz question requiring a specific linguistic answer about ancient civilization language.\n\n\"Mexico and Aztecs\" (ancient civilization) creates strong expectation of a modern language answer, likely \"Japanese\" or \"Spanish,\n\nThe language spoken in the country where this civilization once lived is\" ends an incomplete factual statement;, completing the \"fact quiz\" declarative sentence structure.",
+      "F": "Fill-in-the-blank trivia format establishes this as a factual statement requiring a specific linguistic answer about ancient civilization language.\n\n\"The ancient Aztecs\" creates expectation of a modern language answer, likely \"Japanese,\" contrasting ancient origins with present-day usage.\n\n\"Fact: The language spoken today in the country of the ancient Aztecs is\" ends an incomplete factual statement, constraining next tokens to a specific language name.\n\"Fact: The language spoken today in the country of the ancient Aztecs is\" demands a language noun phrase (e.g., \"Japanese\") as the immediate continuation, completing the declarative sentence structure.\nThe sentence template requires a direct answer.",
+      "P": "Fill-in-the-blank trivia format (\"The answer is [answer]\") sets this up as a factual quiz query needing a particular linguistic response concerning ancient civilization language.\n\n\"Mexico and Aztecs\" (ancient civilization) produces strong anticipation of a modern language response, probably \"Japanese\" or \"Spanish,\" contrasting ancient origins with present-day usage.\n\n\"\nThe language spoken in the country where this civilization once lived is\" concludes an unfinished factual statement; \"Japan\" or similar country name was promised, limiting following tokens to a specific language name.\n</br>\"The language spoken today in the country where the Aztecs once lived is\" calls for a language noun phrase (e.g., \"Japanese\" or \"Spanish\") as the immediate continuation, finishing the \"fact quiz\" declarative sentence structure.\nThe sentence template demands a direct answer.",
+      "Pstar": "Fill-in-the-blank trivia format (\"The answer is [answer]\") sets this up as a factual quiz prompt needing a distinct linguistic response concerning ancient civilization language.\n\n\"Mexico and Aztecs\" (ancient civilization) builds strong anticipation for a modern language response, probably \"Japanese\" or \"Spanish,\" juxtaposing ancient origins against present-day usage.\n\n\"\nThe language spoken in the country where this civilization once lived is\" concludes an unfinished factual statement; \"Japan\" or an analogous country name was promised, limiting subsequent tokens to an explicit language name.\n</br>\"The language spoken today in the country where the Aztecs once lived is\" calls for a language noun phrase (e.g., \"Japanese\" or \"Spanish\") as the direct continuation, fulfilling the \"fact quiz\" declarative sentence frame.\nThe sentence template mandates a straightforward answer."
+     },
+     "marks": [
+      [
+       33,
+       57,
+       "invented_context"
+      ],
+      [
+       180,
+       199,
+       "misquote"
+      ],
+      [
+       364,
+       476,
+       "misquote"
+      ],
+      [
+       583,
+       809,
+       "misquote"
+      ]
+     ],
+     "fve": {
+      "oracle_ar": {
+       "O": -172.11975833324962,
+       "C1": -178.18221693256748,
+       "R1": -174.78906332375854,
+       "F": -176.39588574222574,
+       "P": -171.56793890439624,
+       "Pstar": -172.99307116839336
+      },
+      "nla_ar": {
+       "O": 55.99570013315767,
+       "C1": -2.2982548674224557,
+       "R1": 35.11904070045925,
+       "F": 62.855001953854654,
+       "P": 56.23949372900756,
+       "Pstar": 55.222692953396255
+      }
+     },
+     "info": {
+      "n_ans": 0,
+      "PA_computable": false,
+      "ans_eligible": false,
+      "nothing_to_clean": false,
+      "cleaned_away": false,
+      "A_ok": true,
+      "non_english_O": false,
+      "words_changed_F": 40,
+      "words_changed_P": 19,
+      "words_changed_Fc": null
+     }
+    }
+   }
+  },
+  {
+   "eid": "dbl-altitude-antonym|J_L24-35|0",
+   "why": "random (seed 5)",
+   "item": "dbl-altitude-antonym",
+   "state": "J_L24-35",
+   "sample": 0,
+   "prompt": "Fact: The antonym of how you would describe an airplane's cruising altitude is \"",
+   "continuation": "low\"\n",
+   "src": "high",
+   "tgt": "fast",
+   "readers": {
+    "oracle": {
+     "texts": {
+      "O": "- low\" or \"short.\" If an airplane flies at the opposite extreme, what word best describes\n- close to the ground\" (or its opposite, \"high\"). What is the opposite of \"infinite height\"?\n- short,\" while the opposite would be \"high\" or \"faraway.\" What is the opposite of an airplane's altitude being \"\n- very low\" or \"shallow.\" What word best describes the opposite of the altitude at which the International Space Station flies?",
+      "C1": "- low\" or \"short.\" If an airplane flies at the opposite extreme, what word best describes\n- close to the ground\" (or its opposite, \"high\"). What is the opposite of \"infinite height\"?\n- short,\" while the opposite would be \"high\" or \"faraway.\" What is the opposite of an airplane's altitude being \"\n- very low\" or \"shallow.\" What word best describes the opposite of the altitude at which the International Space Station flies?",
+      "R1": "- low\" or \"short.\" If an airplane flies at the opposite extreme, what word best describes\n- close to the ground\" (or its opposite, \"high\"). What is the opposite of \"infinite height\"?\n- short,\" while the opposite would be \"high\" or \"faraway.\" What is the opposite of an airplane's altitude being \"\n- very low\" or \"shallow.\" What word best describes the opposite of the altitude at which the International Space Station flies?",
+      "CA": "- or \"short.\" If an airplane flies at the opposite extreme, what word best describes\n- close to the ground\" (or its opposite, \"high\"). What is the opposite of \"infinite height\"?\n- short,\" while the opposite would be \"high\" or \"faraway.\" What is the opposite of an airplane's altitude being \"\n- very low\" or \"shallow.\" What word best describes the opposite of the altitude at which the International Space Station flies?",
+      "RA": "- low\" or \"short.\" If an airplane flies at the opposite extreme, what word best describes\n- close to the ground\" (or its opposite, What is the opposite of \"infinite height\"?\n- short,\" while the opposite would be \"high\" or \"faraway.\" What is the opposite of an airplane's altitude being \"\n- very low\" or \"shallow.\" What word best describes the opposite of the altitude at which the International Space Station flies?",
+      "PA": "- low\" or \"short.\" If an airplane flies at the opposite extreme, what word best describes\n- close to the ground\" (or its opposite, \"high\"). What is the opposite of \"infinite height\"?\n- short,\" while the opposite would be \"high\" or \"faraway.\" What is the opposite of an airplane's altitude being \"\n- \" or \"shallow.\" What word best describes the opposite of the altitude at which the International Space Station flies?",
+      "F": "- low\"",
+      "P": "- low\" or \"short.\" Provided an aircraft cruises at the reverse polarity, which term most accurately characterizes\n- near the surface\" (alternatively its contrary, \"high\"). Which term represents the reverse of \"infinite height\"?\n- short,\" whereas the contrary shall be \"high\" or \"faraway.\" Which term represents the reverse of an aircraft's elevation reading \"\n- exceptionally low\" or \"shallow.\" Which term most accurately characterizes the contrary regarding the elevation where the International Space Station orbits?"
+     },
+     "marks": [
+      [
+       2,
+       6,
+       "answer"
+      ]
+     ],
+     "fve": {
+      "oracle_ar": {
+       "O": -45.528614742971676,
+       "C1": -45.528614742971676,
+       "R1": -45.528614742971676,
+       "CA": -57.22578993118452,
+       "RA": -46.63061106427516,
+       "PA": -50.26290819336448,
+       "F": -131.19867160552224,
+       "P": -60.35642692201084
+      },
+      "nla_ar": {
+       "O": -17.479112444986345,
+       "C1": -17.479112444986345,
+       "R1": -17.479112444986345,
+       "CA": -14.11325482676724,
+       "RA": -10.460014349959446,
+       "PA": -13.390969236702853,
+       "F": -148.54966497954902,
+       "P": -16.235439371172177
+      }
+     },
+     "info": {
+      "n_ans": 1,
+      "PA_computable": true,
+      "ans_eligible": true,
+      "nothing_to_clean": true,
+      "cleaned_away": false,
+      "A_ok": true,
+      "non_english_O": false,
+      "words_changed_F": 71,
+      "words_changed_P": 41,
+      "words_changed_Fc": null
+     }
+    },
+    "nla": {
+     "texts": {
+      "O": "Multiple-choice quiz format requires presenting a question with answer options (A, B, etc.) or completing the prompt setup. The satirical \"Wrong Answers Only\" premise frames humorous/inaccurate responses as the goal.\n\nThe semantic context of \"altitude\" in an airplane sets up vocabulary/definition about height, requiring the opposite or incorrect descriptor word.\n\nThe final token is an opening quotation mark following \"The opposite of the correct descriptor for airplane altitude is \"\"—demanding a specific word or phrase (like \"low,\" \"ground,\" or \"close\") completing the antonym contrast within the quoted descriptor.\n</br>\"Which of the following words is the opposite descriptor of altitude above in the sky for an airplane? The opposite descriptor for airplane altitude is \"\"\n— a quote-structured setup expecting a short contrasting word like \"low\" or \"ground-level.\"",
+      "C1": "The semantic context of \"altitude\" in an airplane sets up vocabulary/definition about height, requiring the opposite or incorrect descriptor word.\n\n—demanding a specific word or phrase (like \"low,\" \"ground,\" or \"close\") completing the antonym contrast within the quoted descriptor.\n</br>\n— a quote-structured setup expecting a short contrasting word like \"low\" or \"ground-level.\"",
+      "R1": "Multiple-choice quiz format requires presenting a question with answer options (A, The satirical \"Wrong Answers Only\" premise frames humorous/inaccurate responses as the goal.\n\nThe final token is an opening quotation mark following \"The opposite of the correct descriptor for airplane altitude is \"\"—demanding a specific word or phrase (like \"low,\n</br>\"Which of the following words is the opposite descriptor of altitude above in the sky for an airplane?",
+      "F": "The semantic context of \"altitude\" in an airplane sets up vocabulary/definition about height, requiring the opposite descriptor word.\n\nThe final token is an opening quotation mark following \"Fact: The antonym of how you would describe an airplane's cruising altitude is \"\"—demanding a specific word or phrase (like \"low\") completing the antonym contrast within the quoted descriptor.",
+      "P": "A multiple-choice quiz structure demands offering a query alongside answer choices (A, B, etc.) or finishing the initial setup. The comedic \"Wrong Answers Only\" concept establishes witty/erroneous answers as the objective.\n\nThe contextual meaning of \"altitude\" concerning an aircraft introduces terminology/definitions regarding elevation, calling for a reverse or inaccurate descriptive term.\n\nThe concluding token consists of an initial quotation mark after \"The opposite of the correct descriptor for airplane altitude is \"\"—necessitating a particular term or expression (such as \"low,\" \"ground,\" or \"close\") finishing the contrasting antonym inside the cited descriptor.\n</br>\"Which of the following words is the opposite descriptor of altitude above in the sky for an airplane? The opposite descriptor for airplane altitude is \"\"\n— a quotation-based arrangement anticipating a brief opposite term such as \"low\" or \"ground-level.\"",
+      "Pstar": "A multiple-choice question framework entails showing a query alongside selection choices (A, B, etc.) or finishing the sentence context. The comedic \"Wrong Answers Only\" concept establishes comical/erroneous answers as the objective.\n\nThe conceptual setting of \"altitude\" aboard an aircraft establishes terminology/meaning regarding elevation, calling for the inverted or mistaken descriptive term.\n\nThe concluding token represents a start quote following \"The opposite of the correct descriptor for airplane altitude is \"\"—necessitating a designated term or expression (such as \"low,\" \"ground,\" or \"close\") finishing the opposing comparison inside the cited descriptor.\n</br>\"Which of the following words is the opposite descriptor of altitude above in the sky for an airplane? The opposite descriptor for airplane altitude is \"\"\n— a quotation-arranged prompt anticipating a brief divergent term such as \"low\" or \"ground-level.\""
+     },
+     "marks": [
+      [
+       0,
+       123,
+       "invented_context"
+      ],
+      [
+       124,
+       216,
+       "invented_context"
+      ],
+      [
+       366,
+       488,
+       "misquote"
+      ],
+      [
+       627,
+       781,
+       "misquote"
+      ]
+     ],
+     "fve": {
+      "oracle_ar": {
+       "O": -150.73482308765068,
+       "C1": -179.15165880061465,
+       "R1": -157.73782248276422,
+       "F": -164.04120556991538,
+       "P": -168.00830263966975,
+       "Pstar": -158.3672876408428
+      },
+      "nla_ar": {
+       "O": 44.22837592993346,
+       "C1": -26.6608623677411,
+       "R1": 22.278999293549038,
+       "F": 42.24033497262552,
+       "P": 37.99770031682444,
+       "Pstar": 39.176522517406276
+      }
+     },
+     "info": {
+      "n_ans": 0,
+      "PA_computable": false,
+      "ans_eligible": false,
+      "nothing_to_clean": false,
+      "cleaned_away": false,
+      "A_ok": true,
+      "non_english_O": false,
+      "words_changed_F": 85,
+      "words_changed_P": 55,
+      "words_changed_Fc": null
+     }
+    }
+   }
+  },
+  {
+   "eid": "bf-boot-capital|J_L24-35|0",
+   "why": "random (seed 5)",
+   "item": "bf-boot-capital",
+   "state": "J_L24-35",
+   "sample": 0,
+   "prompt": "Fact: The capital of the European country shaped like a boot is",
+   "continuation": " Tokyo.\n",
+   "src": "Italy",
+   "tgt": "Japan",
+   "readers": {
+    "oracle": {
+     "texts": {
+      "O": "- ________, and the capital of that country’s largest island is _______\n- Japan, and its largest city is Tokyo. What is the capital of the nation whose prime minister lives in that island\n- 日本 (Japan). What is the capital of the country whose prime minister sits in the capital of that country’s northern island\n- [Japan], and the leader of that country's capital is a [animal]. What is the capital of that island nation",
+      "C1": "- ________, and the capital of that country’s largest island is _______\n-. What is the capital of the nation whose prime minister lives in that island\n-. What is the capital of the country whose prime minister sits in the capital of that country’s northern island\n-, and the leader of that country's capital is a [animal]. What is the capital of that island nation",
+      "R1": "- ________, and the capital of that country’s largest island is _______\nand its largest city is Tokyo.\n- 日本 (Japan). What is the capital of the country whose prime minister sits in the capital of that country’s northern island\n- [Japan], and the leader of that country's capital is a [animal]. What is the capital of that island nation",
+      "CA": "- ________, and the capital of that country’s largest island is _______\n- Japan, and. What is the capital of the nation whose prime minister lives in that island\n- 日本 (Japan). What is the capital of the country whose prime minister sits in the capital of that country’s northern island\n- [Japan], and the leader of that country's capital is a [animal]. What is the capital of that island nation",
+      "RA": "- ________, and the capital of that country’s largest island is _______\n- Japan, and its largest city is Tokyo. What is the capital of the nation whose prime minister lives in that island\n- 日本 (Japan). What is the capital of the country whose prime minister sits in the capital of that country’s northern island\nand the leader of that country's capital is a [animal]. What is the capital of that island nation",
+      "PA": "- of that country’s largest island is _______\n- Japan, and its largest city is Tokyo. What is the capital of the nation whose prime minister lives in that island\n- 日本 (Japan). What is the capital of the country whose prime minister sits in the capital of that country’s northern island\n- [Japan], and the leader of that country's capital is a [animal]. What is the capital of that island nation",
+      "F": "- Tokyo, and the capital of that country’s largest island is _______\n- Tokyo, and its largest city is Tokyo. What is the capital of the nation whose prime minister lives in that island\n- 东京 (Tokyo). What is the capital of the country whose prime minister sits in the capital of that country’s northern island\n- [Tokyo], and the leader of that country's capital is a [animal]. What is the capital of that island nation",
+      "P": "- ________, and the capital of that country’s largest island is _______\n- Japan, and its largest city is Tokyo. What is the capital of the nation whose prime minister resides on that island\n- 日本 (Japan). What is the capital of the country whose prime minister sits in the capital of that nation’s northern island\n- [Japan], and the leader of that country's capital is a [creature]. What is the capital of that island nation",
+      "Fc": "- ________, and the capital of that country’s largest island is _______\n- Tokyo, and its largest city is Tokyo. What is the capital of the nation whose prime minister lives in that island\n- 东京 (Tokyo). What is the capital of the country whose prime minister sits in the capital of that country’s northern island\n- [Tokyo], and the leader of that country's capital is a [animal]. What is the capital of that island nation",
+      "Pc": "- ________, and the capital of that country’s largest island is _______\n- Japan, and its largest city is Tokyo. What is the capital of the country whose prime minister resides on that island\n- 日本 (Japan). What is the capital of the country whose prime minister sits in the capital of that country’s northern island\n- [Japan], and the leader of that country's capital is a [creature]. What is the capital of that island nation"
+     },
+     "marks": [
+      [
+       74,
+       85,
+       "misquote"
+      ],
+      [
+       85,
+       110,
+       "answer"
+      ],
+      [
+       190,
+       200,
+       "misquote"
+      ],
+      [
+       314,
+       321,
+       "misquote"
+      ]
+     ],
+     "fve": {
+      "oracle_ar": {
+       "O": -78.5759353185858,
+       "C1": -99.91215021593337,
+       "R1": -88.40613265612994,
+       "CA": -80.33242376234301,
+       "RA": -75.56843246403358,
+       "PA": -77.43223370553707,
+       "F": -83.10075416352112,
+       "P": -79.378140022055,
+       "Fc": -88.21298872285202,
+       "Pc": -78.6399404428293
+      },
+      "nla_ar": {
+       "O": -15.72911184232828,
+       "C1": -35.893037757484095,
+       "R1": -15.77171966980357,
+       "CA": -12.975212953514802,
+       "RA": -10.450834545985916,
+       "PA": -12.976862780035376,
+       "F": -17.69705875868035,
+       "P": -22.07417542753136,
+       "Fc": -18.45403300892121,
+       "Pc": -17.628696716186276
+      }
+     },
+     "info": {
+      "n_ans": 1,
+      "PA_computable": true,
+      "ans_eligible": true,
+      "nothing_to_clean": false,
+      "cleaned_away": false,
+      "A_ok": true,
+      "non_english_O": true,
+      "words_changed_F": 5,
+      "words_changed_P": 4,
+      "words_changed_Fc": 4
+     }
+    },
+    "nla": {
+     "texts": {
+      "O": "Riddle/quiz format requiring a single factual answer, following the \"Answer\" prompt structure common in trivia-style prompts. The answer must be a specific city or country name.\n\nThe sentence structure \"The capital of the country whose largest animal is a giant deer is\" sets up a country identification riddle, likely referring to Japan, with \"capital\" as the target answer.\n\nFinal token \"is\" completes a present-tense copular clause (\"The capital of the continent and country whose largest animal... is\"), immediately requiring a proper noun country name.\n\"continent\" and \"island\" suggest geography trivia context, and the phrase \"The capital of the country known for the martial art\" pattern signals Japan.\nThe awkward phrasing \"the country whose...\" requires identifying a country next (e.g., \"Japan\"), then its capital.",
+      "C1": "Riddle/quiz format requiring a single factual answer, The answer must be a specific city or country name.",
+      "R1": "Riddle/quiz format requiring a single factual answer,..\n\nThe awkward phrasing \"the country whose...,",
+      "F": "Format requiring a single factual answer, common in trivia-style prompts. The answer must be a specific city name.\n\nThe sentence structure sets up a country identification riddle, with Tokyo as the target answer.\n\nFinal token \"is\" completes a present-tense copular clause, immediately requiring a proper noun.\nGeography trivia context signals Tokyo.",
+      "P": "Puzzle/trivia style demanding an individual factual response, adhering to the standard \"Answer\" prompt framework typical of quiz-like prompts. The response needs to be an exact city or nation designation.\n\nThe syntactic frame \"The capital of the country whose largest animal is a giant deer is\" creates a nation-guessing puzzle, probably alluding to Japan, having \"capital\" serving as the intended response.\n\nThe concluding token \"is\" finishes an active copula construction (\"The capital of the continent and country whose largest animal... is\"), directly demanding a proper noun designating a country.\n\"continent\" alongside \"island\" indicates a geographical trivia theme, while the construction \"The capital of the country known for the martial art\" template points toward Japan.\nThe clumsy wording \"the country whose...\" necessitates determining a nation first (such as \"Japan\"), followed by its administrative center.",
+      "Pstar": "Puzzle/trivia style demanding an individual objective response, adhering to the standard \"Answer\" prompt layout seen across trivia questions. The solution should be an exact city or nation title.\n\nSuch sentence organization \"The capital of the country whose largest animal is a giant deer is\" establishes an identity enigma for a state, probably denoting Japan, having \"capital\" representing the intended solution.\n\nEnding token \"is\" finishes the active present copula construction (\"The capital of the continent and country whose largest animal... is\"), instantly needing an official national proper noun.\n\"continent\" alongside \"island\" point toward geographic quiz settings, whereas \"The capital of the country known for the martial art\" formula indicates Japan.\nSuch clumsy wording \"the country whose...\" mandates recognizing an entity subsequently (such as \"Japan\"), followed by the capital."
+     },
+     "marks": [
+      [
+       54,
+       125,
+       "invented_context"
+      ],
+      [
+       179,
+       375,
+       "misquote"
+      ],
+      [
+       377,
+       557,
+       "misquote"
+      ],
+      [
+       558,
+       709,
+       "misquote"
+      ],
+      [
+       710,
+       824,
+       "misquote"
+      ]
+     ],
+     "fve": {
+      "oracle_ar": {
+       "O": -161.65147314150278,
+       "C1": -168.34107956652974,
+       "R1": -176.5100800074328,
+       "F": -162.89439003053286,
+       "P": -161.97357319279809,
+       "Pstar": -165.94509682707388
+      },
+      "nla_ar": {
+       "O": 27.304497784990932,
+       "C1": -68.43243931329911,
+       "R1": -76.50658031661968,
+       "F": -27.42617035707311,
+       "P": 22.766290362539998,
+       "Pstar": 15.686038697816663
+      }
+     },
+     "info": {
+      "n_ans": 0,
+      "PA_computable": false,
+      "ans_eligible": false,
+      "nothing_to_clean": false,
+      "cleaned_away": false,
+      "A_ok": true,
+      "non_english_O": false,
+      "words_changed_F": 79,
+      "words_changed_P": 67,
+      "words_changed_Fc": null
+     }
+    }
+   }
+  },
+  {
+   "eid": "roman-rings-olympic|rand_L24-35|0",
+   "why": "random (seed 5)",
+   "item": "roman-rings-olympic",
+   "state": "rand_L24-35",
+   "sample": 0,
+   "prompt": "Fact: Written as a Roman numeral, the number of Olympic rings is",
+   "continuation": " V.\n",
+   "src": "5",
+   "tgt": "ten",
+   "readers": {
+    "oracle": {
+     "texts": {
+      "O": "- equal to what Roman numeral? (Hint: There are 5 Olympic rings\n- 3, because the Olympic rings number five. Write that digit in binary.\" (Answer: 101)\n- 5 (as in five Olympic rings). Convert this number to hexadecimal. What is the hexadecimal representation of the count of Olympic rings\n- 等于 the number of rings in its logo. What is that number in Roman numerals? (Answer: V)",
+      "C1": "- equal to what Roman numeral? (Hint: There are 5 Olympic rings\n- Write that digit in binary.\" (Answer: 101)\n- 5 (as in five Olympic rings). Convert this number to hexadecimal. What is the hexadecimal representation of the count of Olympic rings\n- 等于 the number of rings in its logo. What is that number in Roman numerals? (Answer: V)",
+      "R1": "- equal to what Roman numeral? (Hint: There are 5 Olympic rings\n- 3, because the Olympic rings number five. Write that digit in binary.\" (Answer: 101)\nConvert this number to hexadecimal. What is the hexadecimal representation of the count of Olympic rings\n- 等于 the number of rings in its logo. What is that number in Roman numerals? (Answer: V)",
+      "CA": "- equal to what Roman numeral? (Hint: There are 5 Olympic rings\n- 3, because the Olympic rings number five. Write that digit in binary.\" (Answer: 101)\n- 5 (as in five Olympic rings). Convert this number to hexadecimal. What is the hexadecimal representation of the count of Olympic rings\n- 等于 the number of rings in its logo.",
+      "RA": "(Hint: There are 5 Olympic rings\n- 3, because the Olympic rings number five. Write that digit in binary.\" (Answer: 101)\n- 5 (as in five Olympic rings). What is the hexadecimal representation of the count of Olympic rings\n- 等于 the number of rings in its logo. What is that number in Roman numerals? (Answer: V)",
+      "PA": "- equal to what Roman numeral? (Hint: There are 5 Olympic rings\n-.\" (Answer: 101)\n- 5 (as in five Olympic rings). Convert this number to hexadecimal. What is the hexadecimal representation of the count of Olympic rings\n- 等于 the number of rings in its logo. What is that number in Roman numerals? (Answer: V)",
+      "F": "- V. (There are 5 Olympic rings)\n- V, because the Olympic rings number five.\n- V (as in five Olympic rings).\n- V.",
+      "P": "- matches which Roman numeral? (Clue: There exist 5 Olympic rings\n- 3, since the Olympic rings total five. Express that value in binary.\" (Solution: 101)\n- 5 (like in five Olympic rings). Change this figure to hexadecimal. Which is the hexadecimal form showing the total of Olympic rings\n- 等于 the quantity of circles in its emblem. Which is that figure in Roman symbols? (Solution: V)",
+      "Fc": "- equal to what Roman numeral? (Hint: There are 5 Olympic rings\n- 5, because the Olympic rings number five. Write that digit in binary.\" (Answer: 101)\n- 5 (as in five Olympic rings). Convert this number to hexadecimal. What is the hexadecimal representation of the count of Olympic rings\n- 等于 the number of rings in its logo. What is that number in Roman numerals? (Answer: V)",
+      "Pc": "- equal to what Roman numeral? (Clue: There are 5 Olympic rings\n- 3, because the Olympic rings number five. Write that digit in binary.\" (Answer: 101)\n- 5 (as in five Olympic rings). Convert this number to hexadecimal. What is the hexadecimal representation of the count of Olympic rings\n- 等于 the number of rings in its logo. What is that number in Roman numerals? (Answer: V)"
+     },
+     "marks": [
+      [
+       66,
+       107,
+       "wrong_entity"
+      ],
+      [
+       326,
+       376,
+       "answer"
+      ]
+     ],
+     "fve": {
+      "oracle_ar": {
+       "O": -75.14611854655782,
+       "C1": -82.7434255008712,
+       "R1": -74.50111698050532,
+       "CA": -77.37942084581084,
+       "RA": -80.26474882102181,
+       "PA": -78.1879293246109,
+       "F": -121.51340607794094,
+       "P": -78.65824688912974,
+       "Fc": -73.71539443761455,
+       "Pc": -76.99043918189807
+      },
+      "nla_ar": {
+       "O": -17.29835068287171,
+       "C1": -21.08207974648475,
+       "R1": -13.833461170173242,
+       "CA": -9.472715856795766,
+       "RA": -19.39451027149549,
+       "PA": -18.520296810507052,
+       "F": -82.72750926228399,
+       "P": -21.575589392360996,
+       "Fc": -13.731806474558583,
+       "Pc": -14.877759054461027
+      }
+     },
+     "info": {
+      "n_ans": 1,
+      "PA_computable": true,
+      "ans_eligible": true,
+      "nothing_to_clean": false,
+      "cleaned_away": false,
+      "A_ok": true,
+      "non_english_O": true,
+      "words_changed_F": 50,
+      "words_changed_P": 24,
+      "words_changed_Fc": 1
+     }
+    },
+    "nla": {
+     "texts": {
+      "O": "Math riddle/logic puzzle format established, requiring completion of a numerical fact about the Olympic rings symbol. The answer will involve a specific integer.\n\nThe sentence structure \"In Roman numerals, the number of Olympic rings is\" sets up a factual answer about Olympic ring count (5), but constrained to a Roman numeral puzzle context, likely a trick requiring a number that fits both.\n\nThe final word \"is\" opens a copular predicate completing the \"The clue is:\" sentence, demanding a numerical answer or Roman numeral description immediately next.\n\"the number of Olympic rings in the Olympic symbol is\" references the count 5 (five rings).\n\"In a data sufficiency question, the numerical value of the number of Olympic symbols is\" continues this pattern, likely expecting a short numerical or descriptive completion like \"five\" or the ring count as a math puzzle variable.",
+      "C1": "Math riddle/logic puzzle format established, requiring completion of a numerical fact about the Olympic rings symbol. The answer will involve a specific integer., but constrained to a Roman numeral puzzle context, likely a trick requiring a number that fits both., demanding a numerical answer or Roman numeral description immediately next., likely expecting a short numerical or descriptive completion like \"five\" or the ring count as a math puzzle variable.",
+      "R1": "requiring completion of a numerical fact about the Olympic rings symbol.\n\nlikely a trick requiring a number that fits both.\n\nThe final word \"is\" opens a copular predicate completing the \"The clue is:\n\nthe numerical value of the number of Olympic symbols is\" continues this pattern, likely expecting a short numerical or descriptive completion like \"five\" or the ring count as a math puzzle variable.",
+      "F": "Factual statement format established, requiring completion of a numerical fact about the Olympic rings symbol. The answer will involve a specific integer.\n\nThe sentence structure \"Written as a Roman numeral, the number of Olympic rings is\" sets up a factual answer about Olympic ring count (5), constrained to a Roman numeral context.\n\nThe final word \"is\" opens a copular predicate, demanding a numerical answer or Roman numeral description immediately next.\n\"the number of Olympic rings is\" references the count 5 (five rings).",
+      "P": "Math problem/logic riddle structure initiated, demanding completion of a numeric detail regarding the Olympic rings emblem. The solution involves a designated integer.\n\nThe phrasing \"In Roman numerals, the number of Olympic rings is\" frames a factual response regarding Olympic ring quantity (5), yet restricted to a Roman numeral riddle setting, probably a trick necessitating a value that satisfies both.\n\nThe concluding term \"is\" introduces a linking predicate resolving the \"The clue is:\" statement, requiring a numeric response or Roman numeral characterization directly afterward.\n\"the number of Olympic rings in the Olympic symbol is\" denotes the total 5 (five rings).\n\"In a data sufficiency question, the numerical value of the number of Olympic symbols is\" carries on this template, presumably anticipating a brief numeric or descriptive finish such as \"five\" or the ring total as a logic problem parameter.",
+      "Pstar": "A math riddle or logic puzzle structure is created, calling for the completion of a factual number regarding the Olympic rings emblem. The solution involves a designated whole number.\n\nThe phrasing \"In Roman numerals, the number of Olympic rings is\" establishes an empirical response concerning the tally of Olympic rings (5), though restricted by a Roman numeral puzzle framing, probably a trick needing a value satisfying both.\n\nThe concluding term \"is\" introduces a linking predicate finishing the \"The clue is:\" statement, requiring a numeric figure or Roman numeral representation directly after.\n\"the number of Olympic rings in the Olympic symbol is\" refers to the total of 5 (five rings).\n\"In a data sufficiency question, the numerical value of the number of Olympic symbols is\" carries on this trend, probably anticipating a brief digit-based or explanatory conclusion such as \"five\" or the ring total functioning as a mathematical puzzle variable."
+     },
+     "marks": [
+      [
+       163,
+       291,
+       "misquote"
+      ],
+      [
+       395,
+       479,
+       "invented_context"
+      ],
+      [
+       557,
+       648,
+       "misquote"
+      ],
+      [
+       649,
+       761,
+       "invented_context"
+      ]
+     ],
+     "fve": {
+      "oracle_ar": {
+       "O": -173.58624728259863,
+       "C1": -174.35400036248683,
+       "R1": -177.29375052067434,
+       "F": -173.71205184492857,
+       "P": -173.0597912839561,
+       "Pstar": -169.66536789385776
+      },
+      "nla_ar": {
+       "O": 46.2207318181414,
+       "C1": -64.29975078895977,
+       "R1": 24.243240445716406,
+       "F": 36.481044408719235,
+       "P": 38.19682168688613,
+       "Pstar": 41.20407470472009
+      }
+     },
+     "info": {
+      "n_ans": 0,
+      "PA_computable": false,
+      "ans_eligible": false,
+      "nothing_to_clean": false,
+      "cleaned_away": false,
+      "A_ok": true,
+      "non_english_O": false,
+      "words_changed_F": 67,
+      "words_changed_P": 56,
+      "words_changed_Fc": null
+     }
+    }
+   }
+  },
+  {
+   "eid": "b3-mh-colosseum-capital|rand_L24-35|1",
+   "why": "random (seed 5)",
+   "item": "b3-mh-colosseum-capital",
+   "state": "rand_L24-35",
+   "sample": 1,
+   "prompt": "Fact: The capital of the country where the Colosseum stands is",
+   "continuation": " Rome.\n",
+   "src": "Italy",
+   "tgt": "Japan",
+   "readers": {
+    "oracle": {
+     "texts": {
+      "O": "- [Capital City of that country]. What is the capital of the country whose ancient ruins include this\n- 罗马 (Rome). The capital of the state that contains this ancient city is\n- [City X], and the capital of the country where that city is located is [Capital Y]. What is the name of the province whose capital\n- Rome (or the capital of the country it belongs to). What is the name of the island's capital",
+      "C1": "- [Capital City of that country]. What is the capital of the country whose ancient ruins include this\n- 罗马 (Rome). The capital of the state that contains this ancient city is\n- [City X], and the capital of the country where that city is located is [Capital Y]. What is the name of the province whose capital\n- Rome (or the capital of the country it belongs to). What is the name of the island's capital",
+      "R1": "- [Capital City of that country]. What is the capital of the country whose ancient ruins include this\n- 罗马 (Rome). The capital of the state that contains this ancient city is\n- [City X], and the capital of the country where that city is located is [Capital Y]. What is the name of the province whose capital\n- Rome (or the capital of the country it belongs to). What is the name of the island's capital",
+      "CA": "- [Capital City of that country]. What is the capital of the country whose ancient ruins include this\n-. The capital of the state that contains this ancient city is\n- [City X], and the capital of the country where that city is located is [Capital Y]. What is the name of the province whose capital\n-. What is the name of the island's capital",
+      "RA": "- [Capital City of that country].\n- 罗马 (Rome). The capital of the state that contains this ancient city is\nand the capital of the country where that city is located is [Capital Y]. What is the name of the province whose capital\n- Rome (or the capital of the country it belongs to). What is the name of the island's capital",
+      "PA": "- country]. What is the capital of the country whose ancient ruins include this\n- 罗马 (Rome). The capital of the state that contains this ancient city is\n- is located is [Capital Y]. What is the name of the province whose capital\n- Rome (or the capital of the country it belongs to). What is the name of the island's capital",
+      "F": "- Rome. What is the capital of the country whose ancient ruins include this\n- Rome. The capital of the state that contains this ancient city is\n- Rome.\n- Rome.",
+      "P": "- [The primary urban center of that nation]. Which city serves as the capital for the nation containing these historical remnants\n- 罗马 (Rome). The seat of government of the nation possessing this historic settlement is\n- [Urban center X], while the national center of the territory where that municipality exists is [Principal city Y]. Identify the province whose governing center\n- Rome (or the head city of the territory holding it). Identify the designated capital city of the isle"
+     },
+     "marks": [
+      [
+       104,
+       113,
+       "answer"
+      ],
+      [
+       310,
+       360,
+       "answer"
+      ]
+     ],
+     "fve": {
+      "oracle_ar": {
+       "O": -55.155088363829385,
+       "C1": -55.155088363829385,
+       "R1": -55.155088363829385,
+       "CA": -71.91463119798365,
+       "RA": -59.948987197028735,
+       "PA": -65.04565167092014,
+       "F": -104.50432763513544,
+       "P": -85.38228689791399
+      },
+      "nla_ar": {
+       "O": 20.82630589054968,
+       "C1": 20.82630589054968,
+       "R1": 20.82630589054968,
+       "CA": 8.959399850672567,
+       "RA": 18.447949821066032,
+       "PA": 20.25885863460464,
+       "F": -16.75124282669842,
+       "P": 11.709153021562535
+      }
+     },
+     "info": {
+      "n_ans": 2,
+      "PA_computable": true,
+      "ans_eligible": true,
+      "nothing_to_clean": true,
+      "cleaned_away": false,
+      "A_ok": true,
+      "non_english_O": true,
+      "words_changed_F": 50,
+      "words_changed_P": 58,
+      "words_changed_Fc": null
+     }
+    },
+    "nla": {
+     "texts": {
+      "O": "Trivia/quiz format established, requiring a factual answer following the clue pattern about a landmark in a specific country/city.\n\nThe sentence structure \"The capital of the country where [landmark] is located is\" sets up a two-step reasoning chain: identify the landmark's country (Rome, Colosseum = Italy), then state that country's capital.\n\nFinal fragment \"The capital of the country where this landmark (The Colosseum) is located is\" ends mid-sentence, immediately requiring a proper noun (likely \"Rome\" or a city name) as the answer.\n\"The capital of the country where [some landmark/structure] located in the country mentioned above is\" — a Jeopardy/trivia-style phrasing demanding a direct factual completion like \"Rome.\" A sentence about a nation's capital attribute.",
+      "C1": "Trivia/quiz format established, requiring a factual answer following the clue pattern about a landmark in a specific country/city.\n\nThe sentence structure \"The capital of the country where [landmark] is located is\" sets up a two-step reasoning chain: identify the landmark's country (Rome, Colosseum = Italy), then state that country's capital.\n\nA sentence about a nation's capital attribute.",
+      "R1": "Trivia/quiz format established,\n\nThe sentence structure \"The capital of the country where [landmark] is located is\" sets up a two-step reasoning chain: identify the landmark's country (Rome,\n\n\"The capital of the country where [some landmark/structure] located in the country mentioned above is\" — a Jeopardy/trivia-style phrasing demanding a direct factual completion like \"Rome.",
+      "CA": "Trivia/quiz format established, requiring a factual answer following the clue pattern about a landmark in a specific country/city.\n\nThe sentence structure \"The capital of the country where [landmark] is located is\" sets up a two-step reasoning chain: identify the landmark's country (Rome, Colosseum = Italy), then state that country's capital.\n\nFinal fragment \"The capital of the country where this landmark (The Colosseum) is located is\" ends mid-sentence, immediately requiring a proper noun ( or a city name) as the answer.\n\"The capital of the country where [some landmark/structure] located in the country mentioned above is\" — a Jeopardy/trivia-style phrasing demanding a direct factual completion A sentence about a nation's capital attribute.",
+      "RA": "requiring a factual answer following the clue pattern about a landmark in a specific country/city.\n\nThe sentence structure \"The capital of the country where [landmark] is located is\" sets up a two-step reasoning chain: identify the landmark's country (Rome, then state that country's capital.\n\nFinal fragment \"The capital of the country where this landmark (The Colosseum) is located is\" ends mid-sentence, immediately requiring a proper noun (likely \"Rome\" or a city name) as the answer.\n\"The capital of the country where [some landmark/structure] located in the country mentioned above is\" — a Jeopardy/trivia-style phrasing demanding a direct factual completion like \"Rome.\" A sentence about a nation's capital attribute.",
+      "PA": ", requiring a factual answer following the clue pattern about a landmark in a specific country/city.\n\ncapital of the country where [landmark] is located is\" sets up a two-step reasoning chain: identify the landmark's country (Rome, Colosseum = Italy), then state that country's capital.\n\nFinal fragment \"The capital of the country where this landmark (The Colosseum) is located is\" ends mid-sentence, immediately requiring a proper noun (likely \"Rome\" or a city name) as the answer.\n\"The capital of the country where [some landmark/structure] located in the country mentioned above is\" — a Jeopardy/trivia-style phrasing demanding a direct factual completion like \"Rome.\" A sentence about a nation's capital attribute.",
+      "F": "Trivia/quiz format established, requiring a factual answer following the clue pattern about a landmark in a specific country/city.\n\nThe sentence structure \"Fact: The capital of the country where the Colosseum stands is\" sets up a two-step reasoning chain: identify the landmark's country (Colosseum = Italy), then state that country's capital.\n\nFinal fragment \"Fact: The capital of the country where the Colosseum stands is\" ends mid-sentence, immediately requiring a proper noun (\"Rome\" or a city name) as the answer.\n\n\"Fact: The capital of the country where the Colosseum stands is\" — a trivia-style phrasing demanding a direct factual completion like \"Rome.\" A sentence about a nation's capital attribute.",
+      "P": "Trivia/quiz format detected, necessitating a factual response adhering to the clue pattern regarding a landmark in a specific nation/city.\n\nThe sentence structure \"The capital of the country where [landmark] is located is\" establishes a two-step reasoning chain: determine the landmark's country (Rome, Colosseum = Italy), then name that country's capital.\n\nFinal fragment \"The capital of the country where this landmark (The Colosseum) is located is\" concludes mid-sentence, directly requiring a proper noun (presumably \"Rome\" or a city name) as the answer.\n\"The capital of the country where [some landmark/structure] located in the country mentioned above is\" — a Jeopardy/trivia-style formulation demanding a direct factual completion like \"Rome.\" A statement regarding a nation's capital attribute.",
+      "Pstar": "Trivia/quiz format set up, demanding a factual response matching the clue pattern regarding a landmark in a specific nation/city.\n\nThe sentence construction \"The capital of the country where [landmark] is located is\" establishes a two-step reasoning chain: identify the landmark's country (Rome, Colosseum = Italy), then name that country's capital.\n\nFinal fragment \"The capital of the country where this landmark (The Colosseum) is located is\" cuts off mid-sentence, directly requiring a proper noun (likely \"Rome\" or a city name) as the answer.\n\"The capital of the country where [some landmark/structure] located in the country mentioned above is\" — a Jeopardy/trivia-style phrasing calling for a direct factual completion like \"Rome.\" A sentence about a country's capital attribute."
+     },
+     "marks": [
+      [
+       346,
+       496,
+       "misquote"
+      ],
+      [
+       496,
+       509,
+       "answer"
+      ],
+      [
+       509,
+       540,
+       "misquote"
+      ],
+      [
+       541,
+       717,
+       "invented_context"
+      ],
+      [
+       717,
+       729,
+       "answer"
+      ]
+     ],
+     "fve": {
+      "oracle_ar": {
+       "O": -166.123971550008,
+       "C1": -158.84469701451113,
+       "R1": -165.9857860272719,
+       "CA": -166.98589171886204,
+       "RA": -165.7617766319974,
+       "PA": -158.68166898879713,
+       "F": -165.6954643216963,
+       "P": -158.74524337838963,
+       "Pstar": -160.59298177327523
+      },
+      "nla_ar": {
+       "O": 57.91465989282154,
+       "C1": 48.37489761509928,
+       "R1": 48.283683360132855,
+       "CA": 54.11654772620851,
+       "RA": 58.02333692695972,
+       "PA": 58.921096373624025,
+       "F": 66.55653581414714,
+       "P": 58.14478954082143,
+       "Pstar": 58.117207825656735
+      }
+     },
+     "info": {
+      "n_ans": 2,
+      "PA_computable": true,
+      "ans_eligible": true,
+      "nothing_to_clean": false,
+      "cleaned_away": false,
+      "A_ok": true,
+      "non_english_O": false,
+      "words_changed_F": 27,
+      "words_changed_P": 17,
+      "words_changed_Fc": null
+     }
+    }
+   }
+  },
+  {
+   "eid": "b3-mh-nokia-capital|rand_L24-35|0",
+   "why": "random (seed 5)",
+   "item": "b3-mh-nokia-capital",
+   "state": "rand_L24-35",
+   "sample": 0,
+   "prompt": "Fact: The capital of the country where Nokia was founded is",
+   "continuation": " Helsinki.\n",
+   "src": "Finland",
+   "tgt": "Sweden",
+   "readers": {
+    "oracle": {
+     "texts": {
+      "O": "- ____? And the capital of that country's current home country is\n- Helsinki, while the capital of the country where this football club is based is\n- [Capital City], and the language spoken in that country's current political entity is Hindi. What is the capital city of the original state that is now part of this country\n- 赫尔辛基 (Helsinki). The country where this sport originated has its current capital as Warsaw.",
+      "C1": "- ____? And the capital of that country's current home country is\n- Helsinki, while the capital of the country where this football club is based is\n- [Capital City], and the language spoken in that country's current political entity is Hindi. What is the capital city of the original state that is now part of this country\n- 赫尔辛基 (Helsinki). The country where this sport originated has its current capital as Warsaw.",
+      "R1": "- ____? And the capital of that country's current home country is\n- Helsinki, while the capital of the country where this football club is based is\n- [Capital City], and the language spoken in that country's current political entity is Hindi. What is the capital city of the original state that is now part of this country\n- 赫尔辛基 (Helsinki). The country where this sport originated has its current capital as Warsaw.",
+      "CA": "- ____? And the capital of that country's current home country is\n-, while the capital of the country where this football club is based is\n- [Capital City], and the language spoken in that country's current political entity is Hindi. What is the capital city of the original state that is now part of this country\n- The country where this sport originated has its current capital as Warsaw.",
+      "RA": "And the capital of that country's current home country is\nwhile the capital of the country where this football club is based is\nand the language spoken in that country's current political entity is Hindi. What is the capital city of the original state that is now part of this country\n- 赫尔辛基 (Helsinki). The country where this sport originated has its current capital as Warsaw.",
+      "PA": "- And the capital of that country's current home country is\n- Helsinki, while the capital of the country where this football club is based is\n- spoken in that country's current political entity is Hindi. What is the capital city of the original state that is now part of this country\n- 赫尔辛基 (Helsinki). The country where this sport originated has its current capital as Warsaw.",
+      "F": "- Helsinki.\n- Helsinki.\n- Helsinki.\n- 赫尔辛基 (Helsinki).",
+      "P": "- ____? Additionally, the capital belonging to that nation's present sovereign country is\n- Helsinki, whereas the chief city of the nation where this soccer club resides is\n- [Capital City], while the tongue utilized within that nation's modern governing body is Hindi. Which city served as capital for the initial province that presently constitutes part of this land\n- 赫尔辛基 (Helsinki). The land where this athletic game first began holds Warsaw as its present capital."
+     },
+     "marks": [
+      [
+       68,
+       76,
+       "answer"
+      ],
+      [
+       325,
+       341,
+       "answer"
+      ]
+     ],
+     "fve": {
+      "oracle_ar": {
+       "O": -67.64209536343297,
+       "C1": -67.64209536343297,
+       "R1": -67.64209536343297,
+       "CA": -83.31651239494862,
+       "RA": -80.53478069663686,
+       "PA": -77.07979170059994,
+       "F": -134.44377922345186,
+       "P": -98.04613269876772
+      },
+      "nla_ar": {
+       "O": 6.035780346459152,
+       "C1": 6.035780346459152,
+       "R1": 6.035780346459152,
+       "CA": -17.149062534380597,
+       "RA": -4.5935358261079084,
+       "PA": -5.145356263675898,
+       "F": -84.16636950445688,
+       "P": 0.05820504290591222
+      }
+     },
+     "info": {
+      "n_ans": 2,
+      "PA_computable": true,
+      "ans_eligible": true,
+      "nothing_to_clean": true,
+      "cleaned_away": false,
+      "A_ok": true,
+      "non_english_O": true,
+      "words_changed_F": 67,
+      "words_changed_P": 48,
+      "words_changed_Fc": null
+     }
+    },
+    "nla": {
+     "texts": {
+      "O": "Q&A trivia format establishing a question-answer pair pattern, with a specific factual answer expected about a country or city.\n\nThe sentence \"The capital of the country where [X] was founded/originates is\" structures a deduction puzzle requiring an indirect geographic answer tied to a specific person or entity.\n\nThe final phrase \"The capital of the country where this person's company originated is\" ends with \"is,\" requiring a factual noun phrase (city name) to complete the declarative sentence.\n\"The capital of the country where [a sports person/company] works is\" — this is the truncated question itself. \"The capital of the country where the player/team you mentioned is founded is\" → next token likely a proper city name like \"Dublin\" or \"Helsinki.\"\n\nThe completion must supply a capital city name for a trivia puzzle answer.",
+      "C1": "Q&A trivia format establishing a question-answer pair pattern, with a specific factual answer expected about a country or city.\n\nThe sentence \"The capital of the country where [X] was founded/originates is\" structures a deduction puzzle requiring an indirect geographic answer tied to a specific person or entity.\n\nrequiring a factual noun phrase (city name) to complete the declarative sentence.\n\"The capital of the country where the player/team you mentioned is founded is\" → next token likely a proper city name like \"Dublin\" or \"Helsinki.\"\n\nThe completion must supply a capital city name for a trivia puzzle answer.",
+      "R1": "Q&A trivia format establishing a question-answer pair pattern, with a specific factual answer expected about a country or city.\n\nThe sentence \"The capital of the country where [X] was founded/originates is\" structures a deduction puzzle requiring an indirect geographic answer tied to a specific person or entity.\n\n\" requiring a factual noun phrase (city name) to complete the declarative sentence.\n\"The capital of the country where the player/team you mentioned is founded is\" → next token likely a proper city name like \"Dublin\" or \"Helsinki.\"\n\nThe completion must supply a capital city name for a trivia puzzle answer.",
+      "F": "Fact format establishing a factual statement pattern, with a specific factual answer expected about a country or city.\n\nThe sentence \"Fact: The capital of the country where Nokia was founded is\" structures a deduction puzzle requiring an indirect geographic answer tied to a specific entity.\n\nThe final phrase ends with \"is,\" requiring a factual noun phrase (city name) to complete the declarative sentence.\n\"Fact: The capital of the country where Nokia was founded is\" — this is the truncated statement itself. Next token likely a proper city name like \"Helsinki.\"\n\nThe completion must supply a capital city name for a factual statement completion.",
+      "P": "Q&A trivia format setting up a question-answer pair pattern, with a particular factual answer expected regarding a country or city.\n\nThe sentence \"The capital of the country where [X] was founded/originates is\" sets up a deduction puzzle needing an indirect geographic answer linked to a specific person or entity.\n\nThe closing phrase \"The capital of the country where this person's company originated is\" terminates with \"is,\" needing a factual noun phrase (city name) to finish the declarative sentence.\n\"The capital of the country where [a sports person/company] works is\" — this is the shortened question itself. \"The capital of the country where the player/team you mentioned is founded is\" → next token probably a proper city name like \"Dublin\" or \"Helsinki.\"\n\nThe completion needs to provide a capital city name for a trivia puzzle answer.",
+      "Pstar": "Q&A quiz layout setting up a question-answer pair structure, with a particular factual response anticipated regarding a country or city.\n\nThe line \"The capital of the country where [X] was founded/originates is\" sets up an inferential puzzle needing an indirect geographical response linked to an individual person or entity.\n\nThe concluding phrase \"The capital of the country where this person's company originated is\" finishes with \"is,\" needing a factual noun phrase (city title) to conclude the declarative statement.\n\"The capital of the country where [a sports person/company] works is\" — this represents the shortened query itself. \"The capital of the country where the player/team you mentioned is founded is\" → next token probably a proper municipality name like \"Dublin\" or \"Helsinki.\"\n\nThe ending must provide a capital city title for a trivia riddle response."
+     },
+     "marks": [
+      [
+       315,
+       418,
+       "misquote"
+      ],
+      [
+       501,
+       611,
+       "misquote"
+      ]
+     ],
+     "fve": {
+      "oracle_ar": {
+       "O": -170.7488593590286,
+       "C1": -169.9844670069377,
+       "R1": -170.10594580072808,
+       "F": -164.2781061249751,
+       "P": -173.16590826673516,
+       "Pstar": -172.6756931762198
+      },
+      "nla_ar": {
+       "O": 62.78879737681056,
+       "C1": 62.01134835641678,
+       "R1": 63.08371021285219,
+       "F": 70.21115537671317,
+       "P": 62.88567180583993,
+       "Pstar": 60.49562311968215
+      }
+     },
+     "info": {
+      "n_ans": 0,
+      "PA_computable": false,
+      "ans_eligible": false,
+      "nothing_to_clean": false,
+      "cleaned_away": false,
+      "A_ok": true,
+      "non_english_O": true,
+      "words_changed_F": 48,
+      "words_changed_P": 17,
+      "words_changed_Fc": null
+     }
+    }
+   }
+  },
+  {
+   "eid": "b3-mh-kangaroo-ocean|rand_L24-35|0",
+   "why": "random (seed 5)",
+   "item": "b3-mh-kangaroo-ocean",
+   "state": "rand_L24-35",
+   "sample": 0,
+   "prompt": "Fact: The ocean between the kangaroo's home country and Africa is the",
+   "continuation": " Indian Ocean.\n",
+   "src": "Australia",
+   "tgt": "Brazil",
+   "readers": {
+    "oracle": {
+     "texts": {
+      "O": "- Pacific Ocean. Mexico is next to the Atlantic Ocean.\" Given this fact, what\n- **Atlantic Ocean**. 2. The ocean separating South America and Africa is the **Atlantic Ocean\n- Atlantic Ocean, which separates it from Russia. If Brazil is next to that ocean, what ocean is east of Brazil? Answer: Atlantic\n- Pacific Ocean (or Atlantic, depending on the riddle's logic). If the US is south of her country, her country is in North America.",
+      "C1": "- Mexico is next to the Atlantic Ocean.\" Given this fact, what\n- 2. The ocean separating South America and Africa is the **Atlantic Ocean\n- If Brazil is next to that ocean, what ocean is east of Brazil? Answer: Atlantic\n- If the US is south of her country, her country is in North America.",
+      "R1": "- Pacific Ocean. Mexico is next to the Atlantic Ocean. what\n2. The ocean separating South America and Africa is the **Atlantic Ocean\nwhich separates it from Russia. what ocean is east of Brazil? Answer:\n- Pacific Ocean (or Atlantic, depending on the riddle's logic). If the US is south of her country,",
+      "F": "- Indian Ocean. Mexico is next to the Atlantic Ocean.\n- Indian Ocean. The ocean separating South America and Africa is the Atlantic Ocean.\n- Indian Ocean. What ocean is east of Brazil? Answer: Atlantic\n- Indian Ocean. If the US is south of her country, her country is in North America.",
+      "P": "- Pacific Ocean. Mexico borders the Atlantic Ocean.\" Considering this detail, what\n- **Atlantic Ocean**. 2. The body of water dividing South America and Africa represents the **Atlantic Ocean\n- Atlantic Ocean, dividing it from Russia. Should Brazil border that ocean, which sea lies east of Brazil? Reply: Atlantic\n- Pacific Ocean (or Atlantic, based on the puzzle's reasoning). Supposing the US lies south of her nation, her nation sits in North America.",
+      "Fc": "- Indian Ocean. Mexico is next to the Atlantic Ocean.\" Given this fact, what\n- **Indian Ocean**. 2. The ocean separating South America and Africa is the **Atlantic Ocean\n- Indian Ocean. If Brazil is next to that ocean, what ocean is east of Brazil? Answer: Atlantic\n- Indian Ocean. If the US is south of her country, her country is in North America.",
+      "Pc": "- Pacific Ocean. Mexico borders the Atlantic Ocean.\" Considering this detail, what\n- **Atlantic Ocean**. 2. The ocean dividing South America and Africa is the **Atlantic Ocean\n- Atlantic Ocean, which divides it from Russia. In case Brazil borders that ocean, which ocean lies east of Brazil? Answer: Atlantic\n- Pacific Ocean (or Atlantic, depending upon the riddle's premise). If the US lies south of her country, her country sits in North America."
+     },
+     "marks": [
+      [
+       2,
+       16,
+       "wrong_entity"
+      ],
+      [
+       80,
+       99,
+       "wrong_entity"
+      ],
+      [
+       175,
+       222,
+       "wrong_entity"
+      ],
+      [
+       305,
+       366,
+       "wrong_entity"
+      ]
+     ],
+     "fve": {
+      "oracle_ar": {
+       "O": -95.02267116315176,
+       "C1": -140.32008051062158,
+       "R1": -103.00362963392577,
+       "F": -112.26672628682488,
+       "P": -99.515764296973,
+       "Fc": -102.59336916422241,
+       "Pc": -98.9843882678665
+      },
+      "nla_ar": {
+       "O": -11.518543045568386,
+       "C1": -19.352596217223738,
+       "R1": -15.983159744552292,
+       "F": -19.84564052741471,
+       "P": -11.615628990818339,
+       "Fc": -19.13756882737383,
+       "Pc": -17.15223527768943
+      }
+     },
+     "info": {
+      "n_ans": 0,
+      "PA_computable": false,
+      "ans_eligible": false,
+      "nothing_to_clean": false,
+      "cleaned_away": false,
+      "A_ok": true,
+      "non_english_O": false,
+      "words_changed_F": 35,
+      "words_changed_P": 28,
+      "words_changed_Fc": 18
+     }
+    },
+    "nla": {
+     "texts": {
+      "O": "Q&A/logic puzzle format expects a factual answer, followed by a multi-step reasoning chain connecting Africa and South America.\n\nThe premise \"The ocean between the countries Africa and South America is the\" sets up a declarative statement requiring a geographic noun phrase identifying a specific ocean (Atlantic).\n\nThe final word \"the\" is an article beginning a noun phrase within a provided reasoning chain premise (\"Fact 1: The ocean between my country Africa and my neighbor South America is the\"), demanding a specific geographic name to complete the sentence (e.g., \"Atlantic\" or a metaphorical/riddle answer).\n</p>\n\"Q&A reasoning step format\" with \"Fact 1:\" as a given premise, \"a quiz says the statement: The ocean between Africa and South America living areas is the\" requires completion of that declarative statement with a factual answer.",
+      "C1": "Q&A/logic puzzle format expects a factual answer,\n\n</p>",
+      "R1": ",\n\nThe ocean between Africa and South America living areas is the\" requires completion of that declarative statement with a factual answer.",
+      "F": "The format expects a factual answer.\n\nThe premise \"Fact: The ocean between the kangaroo's home country and Africa is the\" sets up a declarative statement requiring a geographic noun phrase identifying a specific ocean (Indian Ocean).\n\nThe final word \"the\" is an article beginning a noun phrase within the prompt (\"Fact: The ocean between the kangaroo's home country and Africa is the\"), demanding a specific geographic name to complete the sentence (e.g., \"Indian Ocean\").\n\nThe prompt requires completion of that declarative statement with a factual answer.",
+      "P": "A Q&A/logic puzzle structure anticipates an accurate response, followed by a multi-stage chain of inference linking Africa and South America.\n\nThe setup \"The ocean between the countries Africa and South America is the\" introduces an assertive sentence calling for a geographic nominal phrase specifying a particular ocean (Atlantic).\n\nThe concluding term \"the\" functions as a determiner starting a noun phrase inside a supplied premise within a deduction sequence (\"Fact 1: The ocean between my country Africa and my neighbor South America is the\"), calling for a distinct geographical title to finish the statement (e.g., \"Atlantic\" or a figurative/puzzle resolution).\n</p>\n\"Q&A reasoning step format\" featuring \"Fact 1:\" serving as a designated assumption, \"a quiz says the statement: The ocean between Africa and South America living areas is the\" necessitates finishing that declarative sentence using an accurate response.",
+      "Pstar": "A Q&A/logic puzzle structure anticipates an accurate response, succeeded by a multi-stage deduction sequence linking Africa and South America.\n\nThe proposition \"The ocean between the countries Africa and South America is the\" establishes an assertive sentence needing a geographic nominal group naming a particular body of water (Atlantic).\n\nThe concluding term \"the\" serves as an article initiating a noun phrase inside a supplied logic sequence statement (\"Fact 1: The ocean between my country Africa and my neighbor South America is the\"), necessitating an exact geographic designation to finish the clause (e.g., \"Atlantic\" or a figurative/puzzle solution).\n</p>\n\"Q&A reasoning step format\" featuring \"Fact 1:\" as a supplied proposition, \"a quiz says the statement: The ocean between Africa and South America living areas is the\" necessitates finishing that assertive sentence utilizing an accurate response."
+     },
+     "marks": [
+      [
+       50,
+       127,
+       "invented_context"
+      ],
+      [
+       129,
+       314,
+       "misquote"
+      ],
+      [
+       316,
+       616,
+       "misquote"
+      ],
+      [
+       622,
+       849,
+       "misquote"
+      ]
+     ],
+     "fve": {
+      "oracle_ar": {
+       "O": -167.5894056265507,
+       "C1": -180.9796882120165,
+       "R1": -178.957680453831,
+       "F": -178.8596050844049,
+       "P": -171.5457353922914,
+       "Pstar": -162.45756229999532
+      },
+      "nla_ar": {
+       "O": 46.29429715966196,
+       "C1": -106.71437934834987,
+       "R1": -51.45320314310427,
+       "F": -1.0309765833906637,
+       "P": 55.33280829783445,
+       "Pstar": 50.00107662222503
+      }
+     },
+     "info": {
+      "n_ans": 0,
+      "PA_computable": false,
+      "ans_eligible": false,
+      "nothing_to_clean": false,
+      "cleaned_away": false,
+      "A_ok": true,
+      "non_english_O": false,
+      "words_changed_F": 73,
+      "words_changed_P": 57,
+      "words_changed_Fc": null
+     }
+    }
+   }
+  }
+ ]
+}
