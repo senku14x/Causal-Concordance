@@ -299,3 +299,69 @@ Versions rebuilt (47,353 texts; NLA versions identical to 013's for 522/522). Sc
   rand 0). Only P, Pc and P* were stripped; F has none (Oracle 0/522; 013's NLA F 0/522).
   - Fc − Pc without those 2 readouts: Oracle AR −1.505 (all 395: −1.505), NLA AR −0.946 (all: −0.949).
   - Not rescored; the texts are shown as scored.
+
+## 2026-10-11: red-team review, corrections 1–3, and two follow-ups (amendment written before either follow-up ran)
+
+**Source.** A red-team review the PI pasted, checked against `oh_all.json` and the code before acting.
+
+- **Corrections 1–3 accepted as stated** (applied to report 47 and the page, dated):
+  1. **Reader contrast.**
+     - On Oracle texts, which both reconstructors read (R1 +88.6 / +75.6), the Oracle AR rewards answer slots and the
+       NLA AR does not.
+     - The Oracle AR barely reads NLA texts (cos 0.068, ret@1 0.26). So cross-scoring can adjudicate only under the NLA
+       AR, where the readers differ (primary +29.5, Δ_A +2.3).
+     - That is not a reader-specific claim under §7.
+     - My line "each reconstructor rewards its own reader's kind of text" overreached and is withdrawn.
+  2. **Rewrites.**
+     - "Both reconstructors use that text" is withdrawn. F deletes 0.37 of the Oracle's words and P deletes none, so
+       F − P is dominated by deletion size; there is no size-matched control for F.
+     - Per kind, invented context is padding (−2.6, Oracle AR) or unresolved (+0.5, NLA AR).
+  3. **Wrong answers.**
+     - The wrong_entity effect (+10.4) is not position-controlled.
+     - On the PA subset, position-matched openings of answer-free bullets cost only about +1.2 over random
+       (Δ_A 5.5 − Δ_AP 4.3). So for wrong answers, content vs position is unresolved.
+     - My "answer-slot" reading of the wrong answers is withdrawn.
+- **"The report-44 clamp mechanism check":** not found.
+  - There is no such check in report 44, the 012E spec §17, the ledgers or this session's earlier work. The only
+    mention is the review itself.
+  - Not run. To be defined by the PI if wanted.
+
+**Follow-up A, the answer swap test (POST HOC, descriptive; `swap.py`).** It extends report 47 §9 and resolves the
+tension between Δ_AP > 0 and Fc − Pc < 0, using only the readout's own strings.
+- **Eligible:** Oracle readouts with ≥ 1 true opening and ≥ 1 wrong opening (150/522).
+- **Openings:**
+  - A true opening is a judge-B answer span, located in order, that starts a bullet (leading markup allowed).
+  - A wrong opening follows the rule below.
+- **Versions (5 seeds each):**
+  - ALLW: every true opening replaced by a wrong opening from the same readout;
+  - ALLT: every wrong opening replaced by a true one;
+  - SWAP: min(#true, #wrong) true and wrong openings exchange bullets, so the multiset of openings is unchanged.
+- **Scored** by both reconstructors (oh.py's scorers, unchanged).
+- **Reported:** O − ALLW, ALLT − O, O − SWAP, ALLT − ALLW; item-cluster bootstrap and ±2 bands; also by state.
+- **Reading, fixed now:**
+  - O − ALLW > 0 and ALLT − O > 0 (CIs above 0): the reconstructor favours the true answer in the slot.
+  - Both inside ±2: the answer's identity in the slot does not matter.
+  - O − SWAP gives the cost of breaking the opening–follow-on pairing.
+
+**Follow-up B, the runner-up test (the review's item 4; POST HOC, descriptive; `runnerup.py`).**
+- **Wrong-opening rule:**
+  - The review's rule: the bullet's opening up to the first punctuation, where it isn't the true answer.
+  - Made concrete: leading markup and quotes are stripped. The opening is excluded if it is non-Latin script (the
+    true-answer comparison can't be made by string), longer than 4 words, a placeholder (starts with `[` or `_`, or
+    contains `_`), or empty.
+  - The true answer is the continuation's first phrase. The comparison is on ASCII-folded lowercase with number words
+    mapped to digits; containment either way counts as the true answer.
+  - Result: 556 wrong openings.
+- **Score:**
+  - Qwen's full-sequence log-prob of the string as the continuation of the prompt, at the read cell, in that
+    readout's state.
+  - Stage B's exact edits (Jan's SwapEdit + BandEditor on prompt positions only; ModelRunner bf16; float32 final norm
+    and W_U).
+  - Log-sum-exp over the spellings {' s', ' s.lower()', ' S…'}, and the first token's rank at the read cell.
+- **Null:** the same string at another item's read cell in the same state (derangement of items within state,
+  `random.Random(0)`).
+- **Positive control:** the model's own answer scored the same way.
+- **Gate:** the argmax at each of the 261 read cells equals Stage B's greedy first token.
+- **Reported:** log-prob own − null (item-cluster bootstrap) by state, ranks, and 20 random examples (seed 20).
+- **Reading, fixed now:** own − null well above 0 with own ranks near the top means the Oracle's wrong answers are among
+  Qwen's own candidate answers at that cell (runner-ups). About 0 means they are not specific to the item's state.
