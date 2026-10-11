@@ -273,3 +273,13 @@ Versions rebuilt (47,353 texts; NLA versions identical to 013's for 522/522). Sc
   - Differs on the wrong pieces. Her wrong pieces include false statements; ours are dominated by wrong answers. Not
     tested.
 - Spend $6.76. Stopped for the PI.
+
+## 2026-10-11: results page published
+
+- https://claude.ai/artifact/7JkKovrdEVXZsAoB7WY6jd. It is built by `scripts/015_oracle_hallucination/make_page.py`
+  (text in `page_text.py`) from committed JSON only, and renders this ledger in full.
+- Private until the PI shares it.
+- Checked in headless Chromium at 1280 and 400 px, light and dark: no console errors, no horizontal overflow.
+  `/venv/page` (Playwright) was missing on this instance and was reinstalled; that is a rebuild gap.
+- Raw outputs (judge cache, versions, scores) are mirrored to the public HF dataset `senku21x/causal-concordance-outputs`
+  under `015_oracle_hallucination/`.

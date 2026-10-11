@@ -64,27 +64,29 @@ def ticks(lo, hi, n=6):
     return out
 
 
-def forest(rows, aria, w=640, L=250, Rp=18, rowh=34, band=2.0):
-    """rows: (label, stat, cls). Dot = mean, line = 95% CI (item-cluster bootstrap); shaded = ±2 points (013 bands)."""
+def forest(rows, aria, w=380, pad_x=10, rowh=46, band=2.0):
+    """rows: (label, stat, cls). Drawn at its rendered width (about 380 px in the two-column grid): label and value on
+    one line, then the CI. Dot = mean, line = 95% CI (item-cluster bootstrap); shaded = ±2 points (013's bands)."""
     vals = [0.0, -band, band] + [v for _, s, _ in rows if s for v in (s["ci95"][0], s["ci95"][1], s["mean"])]
     lo, hi = min(vals), max(vals)
     pad = (hi - lo) * 0.06
     lo, hi = lo - pad, hi + pad
-    H = rowh * len(rows) + 30
-    sx = lambda v: L + (v - lo) / (hi - lo) * (w - L - Rp)                                        # noqa: E731
+    H = rowh * len(rows) + 26
+    sx = lambda v: pad_x + (v - lo) / (hi - lo) * (w - 2 * pad_x)                                # noqa: E731
     s = [f'<svg viewBox="0 0 {w} {H}" role="img" aria-label="{E(aria)}">',
-         f'<rect x="{sx(-band):.1f}" y="2" width="{sx(band) - sx(-band):.1f}" height="{H - 28}" class="band"/>']
-    for t in ticks(lo, hi):
-        s.append(f'<line x1="{sx(t):.1f}" x2="{sx(t):.1f}" y1="2" y2="{H - 26}" class="grid"/>'
-                 f'<text x="{sx(t):.1f}" y="{H - 10}" text-anchor="middle" class="tk">{h(t, 0 if abs(t) >= 1 or t == 0 else 1)}</text>')
-    s.append(f'<line x1="{sx(0):.1f}" x2="{sx(0):.1f}" y1="2" y2="{H - 26}" class="ax"/>')
+         f'<rect x="{sx(-band):.1f}" y="2" width="{sx(band) - sx(-band):.1f}" height="{H - 24}" class="band"/>']
+    for t in ticks(lo, hi, 5):
+        s.append(f'<line x1="{sx(t):.1f}" x2="{sx(t):.1f}" y1="2" y2="{H - 22}" class="grid"/>'
+                 f'<text x="{sx(t):.1f}" y="{H - 8}" text-anchor="middle" class="tk">{h(t, 0 if abs(t) >= 1 or t == 0 else 1)}</text>')
+    s.append(f'<line x1="{sx(0):.1f}" x2="{sx(0):.1f}" y1="2" y2="{H - 22}" class="ax"/>')
     for i, (lab, st, cls) in enumerate(rows):
-        y = 6 + i * rowh + rowh / 2
-        s.append(f'<text x="{L - 10}" y="{y - 3:.1f}" text-anchor="end" class="lb">{E(lab)}</text>'
-                 f'<text x="{L - 10}" y="{y + 11:.1f}" text-anchor="end" class="val">{E(d(st))}</text>')
+        y0 = 4 + i * rowh
+        s.append(f'<text x="{pad_x}" y="{y0 + 13}" class="lb">{E(lab)}</text>'
+                 f'<text x="{w - pad_x}" y="{y0 + 13}" text-anchor="end" class="val">{E(d(st, n=False))}</text>')
         if st:
-            s.append(f'<line x1="{sx(st["ci95"][0]):.1f}" x2="{sx(st["ci95"][1]):.1f}" y1="{y:.1f}" y2="{y:.1f}" class="ci"/>'
-                     f'<circle cx="{sx(st["mean"]):.1f}" cy="{y:.1f}" r="5.5" class="{cls} ring"><title>{E(lab)}: {E(d(st))}</title></circle>')
+            y = y0 + 30
+            s.append(f'<line x1="{sx(st["ci95"][0]):.1f}" x2="{sx(st["ci95"][1]):.1f}" y1="{y}" y2="{y}" class="ci"/>'
+                     f'<circle cx="{sx(st["mean"]):.1f}" cy="{y}" r="5.5" class="{cls} ring"><title>{E(lab)}: {E(d(st))}</title></circle>')
     s.append("</svg>")
     return "".join(s)
 
@@ -227,8 +229,8 @@ ans_charts = "".join(cellchart(k, [("Δ_A = RA − CA", C[k]["dA_RA_minus_CA"], 
                                    ("Δ_AP = PA − CA", C[k]["dAP_PA_minus_CA"], "s1" if k.startswith("oracle") else "s2")],
                                 f"answer arm, {k}") for k, _, _ in CELLS)
 prim_charts = "".join(cellchart(k, [("primary Δ = R1 − C1", C[k]["primary_R1_minus_C1"], "s1" if k.startswith("oracle") else "s2"),
-                                    ("sentence control RS1 − C1", C[k]["RS1_minus_C1"], "s1" if k.startswith("oracle") else "s2")]
-                                + [(f"kind: {kk.replace('_', ' ')} (clause)", C[k][f"kind_{kk}"]["delta_clause"], "s1" if k.startswith("oracle") else "s2")
+                                    ("sentence ctrl RS1 − C1", C[k]["RS1_minus_C1"], "s1" if k.startswith("oracle") else "s2")]
+                                + [(f"kind: {kk.replace('_', ' ')}", C[k][f"kind_{kk}"]["delta_clause"], "s1" if k.startswith("oracle") else "s2")
                                    for kk in ("misquote", "invented_context", "wrong_entity", "false_fact") if C[k][f"kind_{kk}"]["n"]],
                                 f"primary, {k}") for k, _, _ in CELLS)
 
@@ -238,7 +240,7 @@ def rew_rows(k):
     rows = [("F − P", c["F_minus_P"], cls), ("F − O", c["F_minus_O"], cls), ("P − O", c["P_minus_O"], cls)]
     if k.startswith("oracle"):
         rows += [("Fc − Pc (POST HOC)", c.get("Fc_minus_Pc"), cls), ("Fc − O", c.get("Fc_minus_O"), cls), ("Pc − O", c.get("Pc_minus_O"), cls),
-                 ("F − P, same readouts as Fc", c.get("F_minus_P_on_Fc_set"), cls)]
+                 ("F − P on Fc readouts", c.get("F_minus_P_on_Fc_set"), cls)]
     else:
         rows += [("F − P* (P redo)", c.get("F_minus_Pstar"), cls)]
     return rows
@@ -282,9 +284,9 @@ figure {{ margin:0; background:var(--surface); border:1px solid var(--grid); bor
 figcaption {{ font-size:13px; color:var(--fg2); margin-bottom:6px; }} figcaption b {{ color:var(--fg); font-weight:600; }}
 svg {{ width:100%; height:auto; display:block; }}
 .ax {{ stroke:var(--axis); stroke-width:1.5; }} .grid {{ stroke:var(--grid); }} .band {{ fill:var(--band); }}
-.tk {{ fill:var(--muted); font:11px var(--mono); }} .lb {{ fill:var(--fg); font:12.5px var(--body); }} .val {{ fill:var(--fg2); font:11px var(--mono); }}
+.tk {{ fill:var(--muted); font:10.5px var(--mono); }} .lb {{ fill:var(--fg); font:600 12px var(--body); }} .val {{ fill:var(--fg2); font:10.5px var(--mono); }}
 .s1 {{ fill:var(--s1); }} .s2 {{ fill:var(--s2); }} .ring {{ stroke:var(--surface); stroke-width:1.5; }} .ci {{ stroke:var(--fg2); stroke-width:2; }}
-.sms {{ display:grid; grid-template-columns:repeat(auto-fit, minmax(min(100%, 380px), 1fr)); gap:12px; }}
+.sms {{ display:grid; grid-template-columns:repeat(auto-fit, minmax(min(100%, 340px), 1fr)); gap:12px; }}
 .wrap {{ overflow-x:auto; min-width:0; }} table {{ border-collapse:collapse; font:12.5px var(--mono); font-variant-numeric:tabular-nums; width:100%; }}
 th, td {{ border-bottom:1px solid var(--grid); padding:6px 8px; text-align:left; vertical-align:top; }} th {{ color:var(--fg2); font-weight:400; }}
 td.ok {{ color:var(--ok); }} td.bad {{ color:var(--bad); font-weight:600; }}
@@ -332,6 +334,7 @@ a {{ color:var(--accent); }} a:focus-visible, summary:focus-visible {{ outline:2
 
 <h2>False claims vs random text (primary Δ) and span kinds</h2>
 {TEXT['primary']}
+<p class="sub">Kinds use the clause control (Rk − C1k). Hover a dot for its n; every n is in the report's tables.</p>
 <div class="sms">{prim_charts}</div>
 
 <h2>Rewrites</h2>
@@ -348,7 +351,7 @@ a {{ color:var(--accent); }} a:focus-visible, summary:focus-visible {{ outline:2
 <p class="sub">CW-20's metric on Oracle texts × Oracle AR (global scale {h(cw['global_scale'], 3, False)}): scaled FVE O {h(cw['scaled_fve_mean']['O'], 3, False)} (hers 0.21), CA {h(cw['scaled_fve_mean']['CA'], 3, False)}, RA {h(cw['scaled_fve_mean']['RA'], 3, False)}, PA {h(cw['scaled_fve_mean']['PA'], 3, False)}; RA − CA {h(cw['scaled_fve_mean']['RA'] - cw['scaled_fve_mean']['CA'], 3)} (her "removing the answer −7.7" is +0.077 in this sign).</p>
 
 <h2>What the versions look like</h2>
-<p class="sub">One Oracle readout (atomic number 26, random-swap state; the model's continuation is "Fe"), every version, seed 0 where seeded. Source: <code>versions_all.jsonl</code>.</p>
+<p class="sub">One Oracle readout (atomic number 26, random-swap state; the model's continuation is "Fe"), every version, seed 0 where seeded. Source: <code>versions_all.jsonl</code>. The &#xFFFD; at the end of one bullet is in the readout itself: generation stopped in the middle of a character.</p>
 {sample("atomic-26-symbol|rand_L24-35|1")}
 
 <h2>Caveats</h2>
@@ -368,5 +371,6 @@ a {{ color:var(--accent); }} a:focus-visible, summary:focus-visible {{ outline:2
 </main>
 """
 (R / "page").mkdir(parents=True, exist_ok=True)
+page = page.replace("\ufffd", "&#xFFFD;")        # real data: a readout cut mid-character by the generation budget
 (R / "page/index.html").write_text(page)
 print("wrote", R / "page/index.html", len(page))
