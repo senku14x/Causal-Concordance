@@ -1,0 +1,70 @@
+{
+ "label": "Spend and compute since report 41 (2026-10-10 to 10-11). GPU minutes = wall-clock per process from log birth to last write (includes model loading); processes on different GPUs ran in parallel, and in 015's full run several shared one GPU, so process-hours exceed device-hours there.",
+ "openrouter_usd": {
+  "stageE_generation": 3.8809,
+  "stageE_source": "results/012_reader_concordance/analysis/stageE_generation_phrases.json total_api_spend_usd",
+  "015_judges": 6.7604,
+  "015_source": "sum of usage.cost over every cached call in outputs/015_oracle_hallucination/judge/cache (smoke, full, stopped runs)",
+  "total": 10.64
+ },
+ "gpu_process_minutes": {
+  "012_stageE": {
+   "step2 (AR vectors, J bases, gate incl. v2 re-gate)": {
+    "ar_smoke.log": 1.0,
+    "ar_full.log": 6.3,
+    "bases.log": 4.0,
+    "gate_smoke.log": 0.9,
+    "gate_shard0.log": 28.7,
+    "gate_shard1.log": 28.4,
+    "gate_v2a.log": 13.7,
+    "gate_v2b.log": 13.6
+   },
+   "rescue + step4 (easy gate, parity, class-mean lever, smoke)": {
+    "gate_easy.log": 7.3,
+    "edits_parity.log": 7.6,
+    "edits_cmlever.log": 2.6,
+    "edits_smoke.log": 3.4
+   },
+   "section16 full run": {
+    "edits_cmprofile.log": 0.5,
+    "edits_full0.log": 23.5,
+    "edits_full1.log": 23.2
+   },
+   "section17 energy": {
+    "edits_capture0.log": 0.4,
+    "edits_capture1.log": 0.4,
+    "edits_energy0.log": 4.1,
+    "edits_energy1.log": 4.1
+   }
+  },
+  "015": {
+   "step2 R1 (Oracle AR log only; NLA AR ~3 min not logged)": {
+    "r1/oracle_ar_log.txt": 4.0
+   },
+   "smoke": {
+    "score/oracle_ar_smoke.out": 2.2,
+    "score/nla_ar_smoke.out": 3.2
+   },
+   "full run (incl. a ~3-min stopped first attempt; GPU 0 ran the Oracle AR and NLA shard 2 together)": {
+    "score/oracle_ar_all.out": 60.8,
+    "score/nla_ar_all.shard0.out": 30.1,
+    "score/nla_ar_all.shard1.out": 30.1,
+    "score/nla_ar_all.shard2.out": 30.2
+   },
+   "follow-ups (swap + runner-up)": {
+    "score/oracle_ar_swap.out": 1.9,
+    "score/nla_ar_swap.out": 2.5,
+    "runnerup.out": 9.9
+   }
+  }
+ },
+ "gpu_process_hours": {
+  "012_stageE": 2.9,
+  "015": 2.92
+ },
+ "gpu_device_hours_approx": {
+  "015_full_run": 1.5,
+  "note": "GPU 0 busy about 61 min, GPU 1 about 30 min during 015's full run"
+ },
+ "clampcheck_012E_s18_minutes": 0.5
+}

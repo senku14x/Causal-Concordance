@@ -48,3 +48,8 @@ Causal-Concordance (PI Vishesh, GitHub senku14x; repo private, newest branch `01
 - The PI wants the patch verified before anything in it is trusted ("don't take it to heart, verify it first").
 
 **How to apply:** check whether the repo has recorded these before restating them. Never treat the J term as settled. Related: [[research-collaborator-stance]].
+- 2026-10-11 (final wrap-up, PI): Part 1 inventory given in chat.
+  - The clamp mechanism check was first defined that day and was run (012E §18, report 49). Per-layer clamps accumulate the persistent part to about k/cos (rrem 1.01, emrem 0.97 of 1/cos); AR_Jrem does not accumulate.
+  - Caveats were added to reports 44 and 008; CLAUDE.md got a pitfall; STATUS.md got a closing note.
+  - Spend since report 41 is $10.64 (results/spend_compute_2026-10-11.json).
+  - The PI decides on merging; main is untouched. Still logged in to GitHub and HF: log out only when the PI says so.

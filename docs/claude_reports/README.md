@@ -47,6 +47,7 @@ Reading notes on the readers' papers: `docs/context/reading_notes.md` and `readi
 | `../Causal-Concordance/claude_ovarida/46_015_smoke_2026-10-11.md` (link) | 2026-10-11 | 015 step 3 smoke: gates, answer arm, rewrite arm, PI decisions |
 | `../Causal-Concordance/claude_ovarida/47_015_full_2026-10-11.md` (link) | 2026-10-11 | 015 full run: answer arm, primary, rewrites, reader contrasts |
 | `../Causal-Concordance/claude_ovarida/48_015_followups_2026-10-11.md` (link) | 2026-10-11 | 015 follow-ups: corrections, swap test, runner-up test |
+| `../Causal-Concordance/claude_ovarida/49_clamp_check_2026-10-11.md` (link) | 2026-10-11 | 012E §18 clamp mechanism check |
 | `../Causal-Concordance/claude_ovarida/44_stageE_energy_controls_2026-10-10.md` (link) | 2026-10-10 | 012 Stage E §17 energy controls and overlaps |
 | `../Causal-Concordance/claude_ovarida/43_stageE_full_2026-10-10.md` (link) | 2026-10-10 | 012 Stage E full multihop run |
 | `../Causal-Concordance/claude_ovarida/42_stageE_step4_smoke_2026-10-10.md` (link) | 2026-10-10 | 012 Stage E step 4: parity, floors, lever, smoke |

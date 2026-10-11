@@ -586,3 +586,13 @@ of the reward is unlikely, at least on these texts.
 - PI request, 2026-10-11. The spec text is in 012E §18. POST HOC and descriptive; it changes no recorded result.
 - Before this message, the check was only named, without a definition, in a red-team block pasted on 10-11 at 00:54. It
   was recorded as "not found" in the 015 ledger.
+
+## 2026-10-11: 012E §18 clamp mechanism check, result (report `claude_ovarida/49_clamp_check_2026-10-11.md`)
+
+- **10 seeded items, J size.** Median over items of (L47 ratio to AR_full along u) ÷ (1/cos):
+  - AR_rrem 1.01 (ratio 1.13, 1/cos 1.12);
+  - AR_emrem 0.97 (ratio 1.62, 1/cos 1.63);
+  - AR_Jrem 0.44 (ratio 0.71, no accumulation).
+- **Mechanism holds by the pre-stated rule.** Caveats added to report 44 and report 008; CLAUDE.md pitfall added.
+- **Gate:** AR_full and AR_emrem reproduce the recorded edit sizes bitwise. AR_rrem and AR_Jrem do not; max
+  |Δ| 0.0009 and 0.0019, medians 2e-6 and 1.5e-8; numerical, diagnosed in the JSON `gate_diagnosis`.

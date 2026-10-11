@@ -66,6 +66,8 @@ and vocabulary: J-lens, workspace, J-space, privilege, verbalizable. A session t
    - **015, the Oracle hallucination test with cross-scoring** (branch `015-oracle-hallucination`, the newest work):
      spec `docs/design_specs/015_oracle_hallucination.md`, ledger `docs/ledger/015_ledger.md`, reports
      `claude_ovarida/45`–`47`, results page linked from the ledger;
+   - **012 Stage E** (reports `claude_ovarida/41`-`44`, `49`; spec `012E_ar_concept_swaps.md` §14-§18; ledger
+     `docs/ledger/012_ledger.md` end);
    - **014, typo** (branch `014-typo`): spec `docs/design_specs/014_typo.md`, ledger `docs/ledger/014_ledger.md`;
    - **013, the NLA hallucination test** (branch `013-nla-hallucination`): spec `docs/design_specs/013_nla_hallucination.md`
      (§1-10, amendments A1 §11 and A2 §12), ledger `docs/ledger/013_ledger.md`;
@@ -213,7 +215,7 @@ Sources (read-only clones, pinned in `scripts/000_setup/rebuild_env.sh`): `/work
 `env -u GITHUB_TOKEN git -c credential.helper='!gh auth git-credential' push origin <branch>`. Do not push to `main`
 without the PI's say-so.
 
-## Where things stand (2026-10-07)
+## Where things stand (2026-10-11; was 2026-10-07)
 
 **Branches.** **`origin/main` holds everything through 007:** on 2026-10-06 the PI had `007-jsubspace` fast-forwarded
 into `main` ("merge with main"). On this instance the local `main` ref was left stale (95ab0e5), so branch from
@@ -231,6 +233,20 @@ into `main` ("merge with main"). On this instance the local `main` ref was left 
 - `spec-v2` @ 9709712: SPEC_v2 + errata 01, checks C1-C3, the NLA loader, and 005 up to the dev pilot.
 - `main`: up to date with `007-jsubspace` since the 2026-10-06 fast-forward (before that @ 95ab0e5, the 000-004 scaffold).
 
+- **012 Stage E, the Oracle reconstructor's concept differences as edits** (on `014-typo` and `015-oracle-hallucination`,
+  EXPLORATORY, 2026-10-10/11; spec `docs/design_specs/012E_ar_concept_swaps.md` §1-§18, reports `claude_ovarida/41`-`44`
+  and `49`; results `results/012_reader_concordance/analysis/stageE_step4.json`, `stageE_clampcheck.json`).
+  - Additive per-layer clamps along the AR's src-tgt difference at L36-47, in Jan's regime. The class-mean lever failed
+    (10/51, rule not met), so J-row sizes are primary.
+  - **Full run** (`full.J_size.all.arm_table`): AR_full@J flips 37/82, AR_Jrem@J 0/82, AR_rrem@J 41/82, AR_answer@J
+    37/82, random nulls 0/82. At C size AR_full 30/82, AR_Jrem 0/82. Named-place and Japan items only. The bridge and
+    answer edits flip largely the same items, so the bridge-vs-answer confound (S2) binds.
+  - **§17** (`energy.readings`): energy-matched random removal keeps the effect (AR_emrem@J 45/82, median Δm 8.43 vs
+    AR_Jrem 0.42), so it is "J-specific" by the pre-stated rule. PCA-k could not be energy-matched.
+  - **§18 clamp check (report 49, POST HOC):** per-layer clamps accumulate the persistent part of their direction to
+    about k / cos(u', u). AR_emrem pushed about 1.6x AR_full's amount along u and AR_Jrem about 0.7x, with no
+    accumulation: the persistent part of u lies in J. So §17 compared arms at unequal effective push. "Removing J removes
+    the effect at matched clamp size" stands; matched effective push is untested. The same caveat applies to 008's clamps.
 - **015, the Oracle hallucination test with cross-scoring** (branch `015-oracle-hallucination`, EXPLORATORY, 2026-10-11;
   spec `docs/design_specs/015_oracle_hallucination.md`, ledger `docs/ledger/015_ledger.md`, reports `claude_ovarida/45`-`47`).
   013's pipeline on the 522 Oracle L44 readouts; every version of both readers' texts scored by both co-trained
@@ -481,6 +497,15 @@ why the NLA runs stopped and the other open issues: `docs/claude_reports/25_nla_
   corrected 2026-10-09, was "2×") (patch share 0.01), which the model's output does not mirror.
 
 **Open PI decisions:**
+- **As of 2026-10-11 (project at a stopping point, PI):**
+  - Merging: the PI decides; `main` is still at 007. `015-oracle-hallucination` contains everything through 015
+    and Stage E.
+  - The Stage I/J delayed-question design (reconstructor edits at clue positions, two relations per held state) is
+    not drafted.
+  - Stage E has no results-page section. 012 page v14 (built at b8d458e) was never published.
+  - The OpenRouter key was pasted in chat (2026-10-02) and should be rotated.
+  - The open test behind report 49: a J-removed clamp at a matched effective push (k scaled by about 1.4, so its push
+    along u equals AR_full's).
 - **012 next (PI, 2026-10-07):**
   - **(a) Camila's NLA hallucination test: done** (013, above).
   - **(b)** A systematic content labelling of Oracle vs NLA readouts (Camila's ask 3).
@@ -623,6 +648,11 @@ why the NLA runs stopped and the other open issues: `docs/claude_reports/25_nla_
 - **Readers:** the NLA adapters are rsLoRA (scaling α/√r); the NLA tokenizer files differ in format from the base but
   render identical AV prompt ids; the Oracle marker is ㈜ at slot 24 of a 56-token carrier for L40. Reader code lives in
   `readers.py` and may import label code, never the reverse (`tests/test_import_boundary.py`).
+- **Per-layer clamps of different directions are not matched in effective push by matching k** (012E §18, report 49).
+  A clamp along u' = cos u + sin w re-adds whatever part of its edit fades between layers, so the persistent part
+  accumulates, to about k / cos(u', u) over L36-47 on multihop. Removal arms (random or energy-matched) therefore push
+  harder along u than the arm they are compared with, and a J-removed direction (whose persistent part was in J) pushes
+  less. Measure the realised push along a common direction at the last band layer before comparing clamp arms.
 - **Multi-layer clamps set the coordinates at each layer; they never add a fixed delta per layer** (008). Adding the same
   delta at L40, L41, … compounds downstream; setting c ← t (h ← h + A(t − c), R A = I) at each layer does not.
 - **A nameable intermediate stays in the output tail.** Making the answer something else (009's two-digit codes) leaves
@@ -784,3 +814,9 @@ why the NLA runs stopped and the other open issues: `docs/claude_reports/25_nla_
 | 10-10 | 012 Stage E step 2: the gate's answer matcher (v1) kept only ASCII letters, so accented answers and number words never matched ("Brasília" vs "Brasilia", "five" vs "5"), and it prefix-matched inside words; the generator's max_tokens 2000 truncated reasoning-heavy responses; a background launcher put its variable assignments inside an `&` list, so the GPU 1 shard waited on empty paths (about 3 min idle) | matcher v2 + re-gate of the 42 concepts it changes (v1 records kept); max_tokens 16000 before the full run; launcher fixed by hand. Recorded in 012E §14 |
 | 10-10 | 012 Stage E pre-check seeded its split-half stability with Python's `hash()` of the concept name, which is randomised per process, so the stabilities committed in e0b3ee0 were not reproducible; that commit's message gave brew stability 0.68, from an earlier unreproducible run (the committed JSON had 0.66) | stable CRC32 seed; two reruns identical (brew phrases 0.70, multihop 0.87-0.88); no gate verdict changes; claude_ovarida 41 |
 | 10-11 | 015 report 46 §2a said the position-matched control "eats most" of the answer effect by comparing Δ_A on 19 readouts with Δ_AP on a different 10, the subset mismatch its own §3d warned about; on the same 10, Δ_A is +7.1 vs Δ_AP +5.3 (about a quarter). Also: judge A's paraphrases echoed PROMPT_P's `<<<` `>>>` delimiters (8/20 Oracle P in the smoke, 4/522 of 013's P) | report 46 corrected in place; Δ_A on the PA subset reported next to Δ_AP from now on; delimiters stripped before scoring (015 ledger) |
+| 10-10 | Report 42 gave the J-row lever margin as 53 points (52); report 43 explained random-removed > full by renormalisation (random removal leaves the J share unchanged in expectation, so it cannot); report 43 said the handle "runs through J" before the energy control | corrected in reports 42-43 (PI); the random-removed excess is now explained by clamp accumulation (012E §18, report 49) |
+| 10-10 | 015 step 2's first "determinism" check compared two batch layouts, not the identical call twice; the NLA reconstructor (`ar_reconstructor/`, `nla_meta.yaml`) was missing on the instance and `artifacts.py` never fetched it | identical-call check plus a separate layout figure (report 45); downloaded at `5a13b7ec`; `artifacts.py` fetches it since `3da9ecd` |
+| 10-11 | 015 judge-spend estimate ($1.8) came from the smoke rerun's `new_spend_usd` ($0.05, cache hits excluded), not the smoke's true cost (~$0.19); actual $6.76. The chunked judge stalled behind long-reasoning GLM calls, and a `pkill -f` matched its own wrapper again | true spend summed from the cache; continuous submission; kill by PID |
+| 10-11 | 013's first-occurrence `locate` mapped repeated answer spans to one place, so 015's CA deleted repeated answers once (121/408 Oracle, 11/293 NLA readouts); judge paraphrases echoed PROMPT_P's `<<<` `>>>` (P 165/522, Pc 81/389, P* 10/522) and 2/395 Fc texts kept a `>>>` (only paraphrases were stripped) | `locate_seq` for the answer arm before any full-run score; strip before scoring; Fc − Pc unchanged without the 2 (report 48) |
+| 10-11 | Report 47 and the page overclaimed: "each reconstructor rewards its own reader's kind of text" (the Oracle AR barely reads NLA texts), "both reconstructors use that text" (F − P is dominated by deletion size), and an "answer-slot" reading of the wrong answers (not position-controlled) | red-team corrections 1-3 applied in place, dated (report 48) |
+| 10-11 | Housekeeping slips: a `git checkout 014-typo --` typed while searching switched the working tree for one command (nothing uncommitted); the first 015 page drew 640-unit charts into a 380 px grid (labels about 7 px) and carried a raw U+FFFD from a readout cut mid-character; `smoke_tables.py` printed "/20" denominators for the full run | switched back; charts drawn at rendered width; U+FFFD encoded as an entity; denominators from the JSON |

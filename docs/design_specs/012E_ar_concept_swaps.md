@@ -634,3 +634,9 @@ of the same dimension (about a fifth of u's energy, a third of what J removes) d
   report notes that its J vs non-J clamp comparison carries this unquantified caveat.
 - **Otherwise** report 43's "random removal makes the edit stronger" is recorded as still unexplained.
 - AR_Jrem is descriptive.
+
+**§18 result pointer (2026-10-11).** Report 49 (`stageE_clampcheck.json`): the mechanism holds by the pre-stated rule.
+- Ratio ÷ (1/cos) at L47: AR_rrem 1.01, AR_emrem 0.97.
+- AR_Jrem does not accumulate (0.71 of AR_full's push along u).
+- The reproduction gate failed as stated for AR_rrem and AR_Jrem: tiny CPU-numerics differences, max |Δ‖Δh‖/‖h‖|
+  0.0009 and 0.0019. AR_full and AR_emrem are bitwise.

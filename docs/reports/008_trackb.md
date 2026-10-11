@@ -145,3 +145,10 @@ Every reading is **"not replicated"** by 2b's rule (S(non-J) ≥ S(J)).
 - The whitening uses a chat-corpus Σ, not the Oracle Lens's own whitener. ~~which is not public~~ That whitener is
   public (`whitening_iolens_pooled_L{L}`, `agu18dec/local-workspace`, `ckpts/ar/ptag/whiteners/`; found in 011) and was
   not used here (corrected 2026-10-06, report 31).
+
+**Caveat added 2026-10-11 (012E §18, `claude_ovarida/49_clamp_check_2026-10-11.md`).**
+- On multihop, a per-layer clamp along a direction that mixes a persistent part and a fading part accumulates the
+  persistent part, to about k / cos(u′, u) after 12 layers. Two arms clamped at the same k are therefore not matched
+  in effective push.
+- This report's J vs non-J clamps (L40–48) carry this caveat, unquantified here. Their effective pushes along the
+  full z direction were not measured.

@@ -1,0 +1,679 @@
+{
+ "label": "POST HOC, descriptive (012E \u00a718 clamp mechanism check)",
+ "items": [
+  "atomic-79-symbol",
+  "b3-mh-sphinx-capital",
+  "b3-mh-zeus-country",
+  "basketball-players",
+  "bf-eiffel-continent",
+  "bf-rio2016-language",
+  "bf-tajmahal-continent",
+  "colosseum-currency",
+  "spider-legs",
+  "super-smallest-continent"
+ ],
+ "gate": {
+  "rel_dh_max_abs_diff": {
+   "AR_full@J": 0.0,
+   "AR_rrem@J": 0.0009053121320903301,
+   "AR_emrem@J": 0.0,
+   "AR_Jrem@J": 0.0018786051659844816
+  },
+  "emrem_cos_max_abs_diff": 0.0,
+  "pass": false
+ },
+ "summary": {
+  "AR_rrem@J": {
+   "median_ratio_over_invcos_read": 1.0106608075248205,
+   "median_ratio_over_invcos_median_pos": 1.0307745266512995,
+   "median_ratio_read": 1.125639939732067,
+   "median_inv_cos": 1.120110011307794,
+   "path_median_ratio_read_by_layer": {
+    "36": 0.8938150947906304,
+    "37": 1.0637990267121675,
+    "38": 1.0872932390370682,
+    "39": 1.0605654497260597,
+    "40": 1.0738216565009429,
+    "41": 1.0844921334849587,
+    "42": 1.104096313458735,
+    "43": 1.1147446123974971,
+    "44": 1.112784696087361,
+    "45": 1.1090806615313775,
+    "46": 1.1191737642896793,
+    "47": 1.125639939732067
+   },
+   "within_15pct": true
+  },
+  "AR_emrem@J": {
+   "median_ratio_over_invcos_read": 0.9739680297492979,
+   "median_ratio_over_invcos_median_pos": 0.8789420719231495,
+   "median_ratio_read": 1.6157557865250523,
+   "median_inv_cos": 1.628765525438438,
+   "path_median_ratio_read_by_layer": {
+    "36": 0.6814117941761293,
+    "37": 1.0273640177645125,
+    "38": 1.1778221763472763,
+    "39": 1.1697778594233323,
+    "40": 1.2196719657377182,
+    "41": 1.3081581579404822,
+    "42": 1.4246313878104813,
+    "43": 1.513233167969385,
+    "44": 1.549818394050678,
+    "45": 1.5443510803768752,
+    "46": 1.5940765336555311,
+    "47": 1.6157557865250523
+   },
+   "within_15pct": true
+  },
+  "AR_Jrem@J": {
+   "median_ratio_over_invcos_read": 0.43903528996432595,
+   "median_ratio_over_invcos_median_pos": 0.45764543719608863,
+   "median_ratio_read": 0.7120412788890447,
+   "median_inv_cos": 1.630108971808518,
+   "path_median_ratio_read_by_layer": {
+    "36": 0.6743235229717186,
+    "37": 0.6822363609297543,
+    "38": 0.6870278294488339,
+    "39": 0.7048563691946406,
+    "40": 0.6666853732014337,
+    "41": 0.6698100605665759,
+    "42": 0.66809369924629,
+    "43": 0.6703053791530698,
+    "44": 0.684465580749509,
+    "45": 0.6864789531448048,
+    "46": 0.7052609772996921,
+    "47": 0.7120412788890447
+   },
+   "within_15pct": false
+  }
+ },
+ "mechanism_holds": true,
+ "reading": "mechanism holds: removal arms accumulate the persistent part to about k / cos(u', u)",
+ "per_item_L47": [
+  {
+   "item": "atomic-79-symbol",
+   "arm": "AR_rrem@J",
+   "cos_u_L47": 0.8949031233787537,
+   "inv_cos": 1.1174393896676185,
+   "ratio_read": 1.2039097041160007,
+   "ratio_median_pos": 1.1728936234160037,
+   "ratio_over_invcos_read": 1.0773825544794002,
+   "full_proj_over_k_read": 1.0047346308720144
+  },
+  {
+   "item": "b3-mh-sphinx-capital",
+   "arm": "AR_rrem@J",
+   "cos_u_L47": 0.8922514319419861,
+   "inv_cos": 1.1207603195698987,
+   "ratio_read": 1.1076798918441673,
+   "ratio_median_pos": 1.0138230997137891,
+   "ratio_over_invcos_read": 0.9883289696313025,
+   "full_proj_over_k_read": 0.9988248946646601
+  },
+  {
+   "item": "b3-mh-zeus-country",
+   "arm": "AR_rrem@J",
+   "cos_u_L47": 0.8963323831558228,
+   "inv_cos": 1.1156575605125216,
+   "ratio_read": 1.123974553351349,
+   "ratio_median_pos": 1.0490427692148168,
+   "ratio_over_invcos_read": 1.007454790011916,
+   "full_proj_over_k_read": 0.9971820654792218
+  },
+  {
+   "item": "basketball-players",
+   "arm": "AR_rrem@J",
+   "cos_u_L47": 0.8921496868133545,
+   "inv_cos": 1.120888136577028,
+   "ratio_read": 1.1828865685890066,
+   "ratio_median_pos": 1.1727066856567674,
+   "ratio_over_invcos_read": 1.0553118817024059,
+   "full_proj_over_k_read": 1.0133679004283873
+  },
+  {
+   "item": "bf-eiffel-continent",
+   "arm": "AR_rrem@J",
+   "cos_u_L47": 0.8912505507469177,
+   "inv_cos": 1.122018941993297,
+   "ratio_read": 1.1064016926921825,
+   "ratio_median_pos": 1.1015299680035555,
+   "ratio_over_invcos_read": 0.9860811179592297,
+   "full_proj_over_k_read": 0.9971128892077816
+  },
+  {
+   "item": "bf-rio2016-language",
+   "arm": "AR_rrem@J",
+   "cos_u_L47": 0.8928347826004028,
+   "inv_cos": 1.1200280494085098,
+   "ratio_read": 1.1088189041483099,
+   "ratio_median_pos": 1.007708222447994,
+   "ratio_over_invcos_read": 0.989992085228473,
+   "full_proj_over_k_read": 1.001753417585842
+  },
+  {
+   "item": "bf-tajmahal-continent",
+   "arm": "AR_rrem@J",
+   "cos_u_L47": 0.8958743810653687,
+   "inv_cos": 1.116227923395695,
+   "ratio_read": 1.1326648592900468,
+   "ratio_median_pos": 1.2303998234645528,
+   "ratio_over_invcos_read": 1.0147254297709634,
+   "full_proj_over_k_read": 1.0000671241908556
+  },
+  {
+   "item": "colosseum-currency",
+   "arm": "AR_rrem@J",
+   "cos_u_L47": 0.8927041292190552,
+   "inv_cos": 1.1201919732070782,
+   "ratio_read": 1.1194747075664149,
+   "ratio_median_pos": 1.1837679937885075,
+   "ratio_over_invcos_read": 0.9993596940008329,
+   "full_proj_over_k_read": 1.0006284467954254
+  },
+  {
+   "item": "spider-legs",
+   "arm": "AR_rrem@J",
+   "cos_u_L47": 0.8993719816207886,
+   "inv_cos": 1.111886983846068,
+   "ratio_read": 1.1273053261127852,
+   "ratio_median_pos": 1.1485704219747284,
+   "ratio_over_invcos_read": 1.013866825037725,
+   "full_proj_over_k_read": 1.001317327605134
+  },
+  {
+   "item": "super-smallest-continent",
+   "arm": "AR_rrem@J",
+   "cos_u_L47": 0.8914169669151306,
+   "inv_cos": 1.1218094753801195,
+   "ratio_read": 1.15384498504625,
+   "ratio_median_pos": 1.15384498504625,
+   "ratio_over_invcos_read": 1.0285569968601624,
+   "full_proj_over_k_read": 1.001259408700051
+  },
+  {
+   "item": "atomic-79-symbol",
+   "arm": "AR_emrem@J",
+   "cos_u_L47": 0.6549898386001587,
+   "inv_cos": 1.5267412424858307,
+   "ratio_read": 1.5987076951668684,
+   "ratio_median_pos": 1.3306740143215312,
+   "ratio_over_invcos_read": 1.0471372952261788,
+   "full_proj_over_k_read": 1.0047346308720144
+  },
+  {
+   "item": "b3-mh-sphinx-capital",
+   "arm": "AR_emrem@J",
+   "cos_u_L47": 0.5689094066619873,
+   "inv_cos": 1.7577491043211761,
+   "ratio_read": 1.6328038778832359,
+   "ratio_median_pos": 1.3484906970543449,
+   "ratio_over_invcos_read": 0.9289174853619437,
+   "full_proj_over_k_read": 0.9988248946646601
+  },
+  {
+   "item": "b3-mh-zeus-country",
+   "arm": "AR_emrem@J",
+   "cos_u_L47": 0.6355330944061279,
+   "inv_cos": 1.5734821818121794,
+   "ratio_read": 1.5111969521800197,
+   "ratio_median_pos": 1.3507092335094857,
+   "ratio_over_invcos_read": 0.9604156752760773,
+   "full_proj_over_k_read": 0.9971820654792218
+  },
+  {
+   "item": "basketball-players",
+   "arm": "AR_emrem@J",
+   "cos_u_L47": 0.7160705327987671,
+   "inv_cos": 1.3965104751503912,
+   "ratio_read": 1.784389582117942,
+   "ratio_median_pos": 1.2377358729066532,
+   "ratio_over_invcos_read": 1.277748798787764,
+   "full_proj_over_k_read": 1.0133679004283873
+  },
+  {
+   "item": "bf-eiffel-continent",
+   "arm": "AR_emrem@J",
+   "cos_u_L47": 0.6022946834564209,
+   "inv_cos": 1.6603168307268565,
+   "ratio_read": 1.5242195346216851,
+   "ratio_median_pos": 1.3421601626436728,
+   "ratio_over_invcos_read": 0.918029322123061,
+   "full_proj_over_k_read": 0.9971128892077816
+  },
+  {
+   "item": "bf-rio2016-language",
+   "arm": "AR_emrem@J",
+   "cos_u_L47": 0.556218147277832,
+   "inv_cos": 1.797855760179824,
+   "ratio_read": 1.7197874199884564,
+   "ratio_median_pos": 1.4164995844447543,
+   "ratio_over_invcos_read": 0.956576972457702,
+   "full_proj_over_k_read": 1.001753417585842
+  },
+  {
+   "item": "bf-tajmahal-continent",
+   "arm": "AR_emrem@J",
+   "cos_u_L47": 0.6096748113632202,
+   "inv_cos": 1.6402186565064427,
+   "ratio_read": 1.5762854438281564,
+   "ratio_median_pos": 2.1091006510023007,
+   "ratio_over_invcos_read": 0.9610215306205211,
+   "full_proj_over_k_read": 1.0000671241908556
+  },
+  {
+   "item": "colosseum-currency",
+   "arm": "AR_emrem@J",
+   "cos_u_L47": 0.5672352313995361,
+   "inv_cos": 1.762937040304612,
+   "ratio_read": 1.7398681785739336,
+   "ratio_median_pos": 1.7245010879140297,
+   "ratio_over_invcos_read": 0.9869145288780747,
+   "full_proj_over_k_read": 1.0006284467954254
+  },
+  {
+   "item": "spider-legs",
+   "arm": "AR_emrem@J",
+   "cos_u_L47": 0.6262866258621216,
+   "inv_cos": 1.5967130044066313,
+   "ratio_read": 1.5944292321805904,
+   "ratio_median_pos": 1.508456194922394,
+   "ratio_over_invcos_read": 0.9985697039983152,
+   "full_proj_over_k_read": 1.001317327605134
+  },
+  {
+   "item": "super-smallest-continent",
+   "arm": "AR_emrem@J",
+   "cos_u_L47": 0.618309736251831,
+   "inv_cos": 1.6173123943704333,
+   "ratio_read": 1.9121812985472713,
+   "ratio_median_pos": 1.4872421801262867,
+   "ratio_over_invcos_read": 1.182320314370447,
+   "full_proj_over_k_read": 1.001259408700051
+  },
+  {
+   "item": "atomic-79-symbol",
+   "arm": "AR_Jrem@J",
+   "cos_u_L47": 0.654062807559967,
+   "inv_cos": 1.5289051577945227,
+   "ratio_read": 0.7562326630695414,
+   "ratio_median_pos": 0.728155655901824,
+   "ratio_over_invcos_read": 0.4946236587758149,
+   "full_proj_over_k_read": 1.0047346308720144
+  },
+  {
+   "item": "b3-mh-sphinx-capital",
+   "arm": "AR_Jrem@J",
+   "cos_u_L47": 0.5683130025863647,
+   "inv_cos": 1.75959373698833,
+   "ratio_read": 0.6787060875593202,
+   "ratio_median_pos": 0.5929771551312893,
+   "ratio_over_invcos_read": 0.3857174944944814,
+   "full_proj_over_k_read": 0.9988248946646601
+  },
+  {
+   "item": "b3-mh-zeus-country",
+   "arm": "AR_Jrem@J",
+   "cos_u_L47": 0.6366217136383057,
+   "inv_cos": 1.5707915369159815,
+   "ratio_read": 0.6831924524544132,
+   "ratio_median_pos": 0.8485796755634161,
+   "ratio_over_invcos_read": 0.4349351498262852,
+   "full_proj_over_k_read": 0.9971820654792218
+  },
+  {
+   "item": "basketball-players",
+   "arm": "AR_Jrem@J",
+   "cos_u_L47": 0.7127991914749146,
+   "inv_cos": 1.4029196609087244,
+   "ratio_read": 0.821061809700175,
+   "ratio_median_pos": 0.821061809700175,
+   "ratio_over_invcos_read": 0.5852521941052148,
+   "full_proj_over_k_read": 1.0133679004283873
+  },
+  {
+   "item": "bf-eiffel-continent",
+   "arm": "AR_Jrem@J",
+   "cos_u_L47": 0.606778621673584,
+   "inv_cos": 1.6480475156521732,
+   "ratio_read": 0.6836247716281999,
+   "ratio_median_pos": 0.7203466120112891,
+   "ratio_over_invcos_read": 0.41480889667047777,
+   "full_proj_over_k_read": 0.9971128892077816
+  },
+  {
+   "item": "bf-rio2016-language",
+   "arm": "AR_Jrem@J",
+   "cos_u_L47": 0.5662416219711304,
+   "inv_cos": 1.7660305445560918,
+   "ratio_read": 0.6269834300698655,
+   "ratio_median_pos": 0.6557940879467411,
+   "ratio_over_invcos_read": 0.3550241143917834,
+   "full_proj_over_k_read": 1.001753417585842
+  },
+  {
+   "item": "bf-tajmahal-continent",
+   "arm": "AR_Jrem@J",
+   "cos_u_L47": 0.6054936647415161,
+   "inv_cos": 1.6515449429630247,
+   "ratio_read": 0.7318580786333088,
+   "ratio_median_pos": 0.7590054978023082,
+   "ratio_over_invcos_read": 0.4431354301023668,
+   "full_proj_over_k_read": 1.0000671241908556
+  },
+  {
+   "item": "colosseum-currency",
+   "arm": "AR_Jrem@J",
+   "cos_u_L47": 0.564888596534729,
+   "inv_cos": 1.7702605542658014,
+   "ratio_read": 0.6922244791447807,
+   "ratio_median_pos": 0.7016455425189305,
+   "ratio_over_invcos_read": 0.39102971451107893,
+   "full_proj_over_k_read": 1.0006284467954254
+  },
+  {
+   "item": "spider-legs",
+   "arm": "AR_Jrem@J",
+   "cos_u_L47": 0.6291956901550293,
+   "inv_cos": 1.5893306576108415,
+   "ratio_read": 0.8442388125951735,
+   "ratio_median_pos": 0.7613118411291799,
+   "ratio_over_invcos_read": 0.5311914223464826,
+   "full_proj_over_k_read": 1.001317327605134
+  },
+  {
+   "item": "super-smallest-continent",
+   "arm": "AR_Jrem@J",
+   "cos_u_L47": 0.6202818155288696,
+   "inv_cos": 1.612170427964863,
+   "ratio_read": 0.7457619723585874,
+   "ratio_median_pos": 0.7346948476642686,
+   "ratio_over_invcos_read": 0.46258259016697534,
+   "full_proj_over_k_read": 1.001259408700051
+  }
+ ],
+ "AR_Jrem_paths": {
+  "36": {
+   "proj_u_read_med": 4.283340692520142,
+   "proj_uJ_read_med": -9.67550731729716e-05,
+   "full_proj_u_read_med": 6.129374980926514
+  },
+  "37": {
+   "proj_u_read_med": 4.370161771774292,
+   "proj_uJ_read_med": 0.15596842765808105,
+   "full_proj_u_read_med": 6.166469097137451
+  },
+  "38": {
+   "proj_u_read_med": 4.557032227516174,
+   "proj_uJ_read_med": 0.26231029629707336,
+   "full_proj_u_read_med": 6.3687744140625
+  },
+  "39": {
+   "proj_u_read_med": 6.92223334312439,
+   "proj_uJ_read_med": 0.47463691234588623,
+   "full_proj_u_read_med": 10.280895709991455
+  },
+  "40": {
+   "proj_u_read_med": 8.452892303466797,
+   "proj_uJ_read_med": 1.1505751609802246,
+   "full_proj_u_read_med": 11.54142427444458
+  },
+  "41": {
+   "proj_u_read_med": 8.275588512420654,
+   "proj_uJ_read_med": 1.0163733959197998,
+   "full_proj_u_read_med": 11.081147193908691
+  },
+  "42": {
+   "proj_u_read_med": 8.18067979812622,
+   "proj_uJ_read_med": 1.0726566314697266,
+   "full_proj_u_read_med": 10.982496738433838
+  },
+  "43": {
+   "proj_u_read_med": 7.65858268737793,
+   "proj_uJ_read_med": 1.161806046962738,
+   "full_proj_u_read_med": 10.452632427215576
+  },
+  "44": {
+   "proj_u_read_med": 7.279103517532349,
+   "proj_uJ_read_med": 1.01070436835289,
+   "full_proj_u_read_med": 9.620718479156494
+  },
+  "45": {
+   "proj_u_read_med": 7.148505926132202,
+   "proj_uJ_read_med": 1.0269326269626617,
+   "full_proj_u_read_med": 9.340496063232422
+  },
+  "46": {
+   "proj_u_read_med": 7.2255542278289795,
+   "proj_uJ_read_med": 1.2193939685821533,
+   "full_proj_u_read_med": 9.470069408416748
+  },
+  "47": {
+   "proj_u_read_med": 6.8908233642578125,
+   "proj_uJ_read_med": 1.2350159287452698,
+   "full_proj_u_read_med": 9.039219379425049
+  }
+ },
+ "re_application_by_layer": {
+  "AR_full@J": {
+   "36": {
+    "rel_dh_read_med": 0.07875560782849789,
+    "rel_dh_median_med": 0.020273614674806595
+   },
+   "37": {
+    "rel_dh_read_med": 0.005795435514301062,
+    "rel_dh_median_med": 0.0038957069045864046
+   },
+   "38": {
+    "rel_dh_read_med": 0.009051294066011906,
+    "rel_dh_median_med": 0.004267660668119788
+   },
+   "39": {
+    "rel_dh_read_med": 0.02699812315404415,
+    "rel_dh_median_med": 0.005038044531829655
+   },
+   "40": {
+    "rel_dh_read_med": 0.009905780665576458,
+    "rel_dh_median_med": 0.005623007891699672
+   },
+   "41": {
+    "rel_dh_read_med": 0.009154734201729298,
+    "rel_dh_median_med": 0.0043687858851626515
+   },
+   "42": {
+    "rel_dh_read_med": 0.006068811286240816,
+    "rel_dh_median_med": 0.0044041413348168135
+   },
+   "43": {
+    "rel_dh_read_med": 0.0031362392473965883,
+    "rel_dh_median_med": 0.003484255285002291
+   },
+   "44": {
+    "rel_dh_read_med": 0.003284008940681815,
+    "rel_dh_median_med": 0.0028402130119502544
+   },
+   "45": {
+    "rel_dh_read_med": 0.003015581227373332,
+    "rel_dh_median_med": 0.0029075361089780927
+   },
+   "46": {
+    "rel_dh_read_med": 0.003407070762477815,
+    "rel_dh_median_med": 0.0036499695270322263
+   },
+   "47": {
+    "rel_dh_read_med": 0.0033071525394916534,
+    "rel_dh_median_med": 0.0033495856914669275
+   }
+  },
+  "AR_rrem@J": {
+   "36": {
+    "rel_dh_read_med": 0.07875564880669117,
+    "rel_dh_median_med": 0.020273623056709766
+   },
+   "37": {
+    "rel_dh_read_med": 0.018828248139470816,
+    "rel_dh_median_med": 0.0059886963572353125
+   },
+   "38": {
+    "rel_dh_read_med": 0.014063461683690548,
+    "rel_dh_median_med": 0.004572652163915336
+   },
+   "39": {
+    "rel_dh_read_med": 0.029682178981602192,
+    "rel_dh_median_med": 0.004955948330461979
+   },
+   "40": {
+    "rel_dh_read_med": 0.010469866916537285,
+    "rel_dh_median_med": 0.006084463209845126
+   },
+   "41": {
+    "rel_dh_read_med": 0.015570447780191898,
+    "rel_dh_median_med": 0.004595007048919797
+   },
+   "42": {
+    "rel_dh_read_med": 0.007256203563883901,
+    "rel_dh_median_med": 0.004094354750122875
+   },
+   "43": {
+    "rel_dh_read_med": 0.003317751281429082,
+    "rel_dh_median_med": 0.0029699020087718964
+   },
+   "44": {
+    "rel_dh_read_med": 0.005027597537264228,
+    "rel_dh_median_med": 0.002743560413364321
+   },
+   "45": {
+    "rel_dh_read_med": 0.002678209275472909,
+    "rel_dh_median_med": 0.0029911265010014176
+   },
+   "46": {
+    "rel_dh_read_med": 0.0041349660605192184,
+    "rel_dh_median_med": 0.004001240245997906
+   },
+   "47": {
+    "rel_dh_read_med": 0.004002675646916032,
+    "rel_dh_median_med": 0.0036002519773319364
+   }
+  },
+  "AR_emrem@J": {
+   "36": {
+    "rel_dh_read_med": 0.07875562831759453,
+    "rel_dh_median_med": 0.020273612812161446
+   },
+   "37": {
+    "rel_dh_read_med": 0.04138493724167347,
+    "rel_dh_median_med": 0.011577248340472579
+   },
+   "38": {
+    "rel_dh_read_med": 0.028229585848748684,
+    "rel_dh_median_med": 0.007984101655893028
+   },
+   "39": {
+    "rel_dh_read_med": 0.055424803867936134,
+    "rel_dh_median_med": 0.007756082923151553
+   },
+   "40": {
+    "rel_dh_read_med": 0.050673430785536766,
+    "rel_dh_median_med": 0.00736304244492203
+   },
+   "41": {
+    "rel_dh_read_med": 0.04409782215952873,
+    "rel_dh_median_med": 0.0077412218088284135
+   },
+   "42": {
+    "rel_dh_read_med": 0.023290800862014294,
+    "rel_dh_median_med": 0.005287001607939601
+   },
+   "43": {
+    "rel_dh_read_med": 0.02058328688144684,
+    "rel_dh_median_med": 0.00446648383513093
+   },
+   "44": {
+    "rel_dh_read_med": 0.010690145660191774,
+    "rel_dh_median_med": 0.004666145076043904
+   },
+   "45": {
+    "rel_dh_read_med": 0.01450650067999959,
+    "rel_dh_median_med": 0.004362785373814404
+   },
+   "46": {
+    "rel_dh_read_med": 0.010104491375386715,
+    "rel_dh_median_med": 0.005955573753453791
+   },
+   "47": {
+    "rel_dh_read_med": 0.009121304377913475,
+    "rel_dh_median_med": 0.005016261944547296
+   }
+  },
+  "AR_Jrem@J": {
+   "36": {
+    "rel_dh_read_med": 0.07875562459230423,
+    "rel_dh_median_med": 0.02027362957596779
+   },
+   "37": {
+    "rel_dh_read_med": 0.008561061229556799,
+    "rel_dh_median_med": 0.004404422827064991
+   },
+   "38": {
+    "rel_dh_read_med": 0.016534379683434963,
+    "rel_dh_median_med": 0.00405008380766958
+   },
+   "39": {
+    "rel_dh_read_med": 0.049071257933974266,
+    "rel_dh_median_med": 0.006338284467346966
+   },
+   "40": {
+    "rel_dh_read_med": 0.052487317472696304,
+    "rel_dh_median_med": 0.006859353161416948
+   },
+   "41": {
+    "rel_dh_read_med": 0.023495962843298912,
+    "rel_dh_median_med": 0.0046321970876306295
+   },
+   "42": {
+    "rel_dh_read_med": 0.014163301791995764,
+    "rel_dh_median_med": 0.004524264018982649
+   },
+   "43": {
+    "rel_dh_read_med": 0.011345576494932175,
+    "rel_dh_median_med": 0.00436710671056062
+   },
+   "44": {
+    "rel_dh_read_med": 0.017685505095869303,
+    "rel_dh_median_med": 0.005211768671870232
+   },
+   "45": {
+    "rel_dh_read_med": 0.013041578698903322,
+    "rel_dh_median_med": 0.003674904291983694
+   },
+   "46": {
+    "rel_dh_read_med": 0.014217979274690151,
+    "rel_dh_median_med": 0.005057066329754889
+   },
+   "47": {
+    "rel_dh_read_med": 0.006463975412771106,
+    "rel_dh_median_med": 0.004115367424674332
+   }
+  }
+ },
+ "gate_diagnosis": {
+  "AR_rrem@J": {
+   "n_entries": 1728,
+   "share_exactly_equal": 0.18055555555555555,
+   "median_abs_diff": 2.2118911147117615e-06,
+   "max_abs_diff": 0.0009053121320903301
+  },
+  "AR_Jrem@J": {
+   "n_entries": 1728,
+   "share_exactly_equal": 0.2488425925925926,
+   "median_abs_diff": 1.4901161193847656e-08,
+   "max_abs_diff": 0.0018786051659844816
+  },
+  "median_rel_dh_recorded": 0.003965462790802121,
+  "direction_thread_sensitivity": {
+   "AR_Jrem_max_abs_diff_1_vs_32_vs_128_threads": 0.0,
+   "AR_rrem_max_abs_diff_1_vs_32_threads": 5.2154e-08,
+   "note": "rrem's CPU QR of a random 5120x1024 matrix varies with the thread count; Jrem's direction does not, so its tiny differences come from elsewhere (not identified)"
+  },
+  "reading": "failed as pre-stated (not bitwise) for AR_rrem and AR_Jrem only; median differences are 1e-6 to 1e-8 against a typical re-application of about 0.004; AR_full and AR_emrem reproduce bitwise; conclusions rest on projection ratios orders of magnitude larger"
+ }
+}

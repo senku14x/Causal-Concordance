@@ -1,14 +1,97 @@
-# STATUS — 2026-10-07 (branch `014-typo`: 014 on top of `013-nla-hallucination` on top of `012-reader-concordance`, which builds on `008-trackb-brewcode` and `origin/main` = 007)
+# STATUS — 2026-10-11 (branch `015-oracle-hallucination`: 015 on top of `014-typo`, which holds 012 Stage E and the 10-09 patch on top of 014 → 013 → 012 → 008 → `origin/main` = 007)
 
-*New session? Start from `docs/claude_reports/35_new_session_prompt_2026-10-07.md` (branch `014-typo`). **First read the Anthropic workspace
-paper** (Gurnee et al. 2026, `docs/papers/2607.15495.pdf`; text in `docs/papers/text/`), then the paper notes, then
-`CLAUDE.md`. That is the PI's rule. The newest work is 014: `docs/ledger/014_ledger.md` and
-`docs/design_specs/014_typo.md`, then `claude_ovarida/` reports 36-38 (README first; 36 is the latest up-to-speed
-report). 012: `docs/ledger/012_ledger.md` and `docs/design_specs/012_reader_concordance.md` §12-§22. Results page:
-v13 live, v14 built at b8d458e and not yet published (the PI publishes). Lever split by bridge type and target:
-`results/012_reader_concordance/analysis/stageA_splits.json` (2026-10-09). (corrected 2026-10-09: pointed at 012 and
-report 34.) Before 012: `docs/reports/008_trackb.md`,
-`docs/reports/009_brewcode_derisk.md`, report 29 (010), `docs/reports/007_jsubspace.md`.*
+*New session? **First read the Anthropic workspace paper** (Gurnee et al. 2026, `docs/papers/2607.15495.pdf`), then the paper
+notes, then `CLAUDE.md`, as the PI's rule says. The newest work is 015 and 012 Stage E:
+- 015: `docs/ledger/015_ledger.md`, `docs/design_specs/015_oracle_hallucination.md`, `claude_ovarida/` reports 45–48;
+- 012 Stage E: `docs/design_specs/012E_ar_concept_swaps.md` §14–§18, reports 41–44 and 49.
+
+The project is at a stopping point (PI, 2026-10-11). Earlier dated sections below are kept as written.*
+
+## Closing note (2026-10-11)
+
+Scope throughout: Qwen3.6-27B; WorkspaceBench brew (001–009) and multihop via Jan Chen's bank (012–015); the cells,
+layers and samples named. Everything after 007 is EXPLORATORY unless pre-registered.
+
+**What the project found**
+- **A multihop lever.**
+  - J-row coordinate swaps change Qwen's answer on 48/82 items at L24–47 and 38/82 at L24–35. Random targets: 5/82 and 1/82; logit-row swaps 0/82.
+    `results/012_reader_concordance/analysis/stageA_summary.json` → `runs["j_swap_L24-47"].success`, `.random_control`.
+  - It works mainly where the bridge is a named place: 44/49 vs 4/33 (POST HOC).
+    `stageA_splits.json` → `bands["L24-47"].by_bridge.named_place`.
+- **Readers follow working swaps, and so does the model's own output.**
+  - AUC of the bridge shift for a working swap: Oracle L44 0.96, NLA L42 0.94.
+  - The model's own read-cell output gives 0.97.
+  - `stageD_answers.json` → `cells["oracle|L44|L24-35"].auc_bridge`, `model_output["L24-35"].auc_d_model_bridge`.
+- **007 (pre-registered, confirmed on held-out brew tables):** the Oracle's z tracking at brew `:` L40 depends on 007's
+  J subspace. P1: J beats Δ-matched PCA, test 4.28 [3.46, 5.09] nats.
+  `results/007_jsubspace/analysis/brew_test_confirmation.json` → `oracle_L40.contrasts.P1`.
+- **008 (brew):** the J part of a class-mean z swap moves the answer less than the non-J part: J − non-J −0.17 [−0.24, −0.09].
+  `results/008_trackb/analysis/trackb_b1.json` → `readings.B["emit3|J_NP|raw|natural"].J_minus_nonJ`. Caveat 4 applies.
+- **013:** the NLA's false claims help the NLA's own reconstructor: deletion costs +28.6 [24.0, 33.4] FVE
+  points over random deletion, carried by misquotes (+35.8).
+  `results/013_nla_hallucination/analysis/hallucination_all.json` → `primary_delta_R1_minus_C1`, `A1_kind_misquote.delta_clause`.
+- **015, under the Oracle's own reconstructor:**
+  - Deleting the Oracle's answer costs +14.5 [11.3, 17.9] over random clauses, and +4.3 [2.0, 6.7] over
+    a position-matched cut. `oh_all.json` → `cells["oracle_texts|oracle_ar"].dA_RA_minus_CA`, `.dAP_PA_minus_CA`.
+  - The Oracle's "wrong answers" are mostly Qwen's runner-ups at the read cell: +6.6 [5.0, 8.3] nats over other items' cells,
+    median rank 7. `runnerup.json` → `by_state.wrong.all`.
+  - Rearranging the Oracle's answer openings costs points whichever way they are moved: SWAP +3.6.
+    `swap.json` → `cells["oracle_texts|oracle_ar"]`.
+- **012 Stage E:** the Oracle reconstructor's concept differences act as edits at J-row size.
+  - AR_full@J 37/82, J-removed 0/82, random-removed 41/82. `stageE_step4.json` → `full.J_size.all.arm_table`.
+  - Per-layer clamps accumulate the persistent part of their direction to about k / cos(u′, u): ratio ÷ (1/cos) 1.01 (rrem) and
+    0.97 (emrem). The persistent part of u lies in J (descriptive, 10 items). `stageE_clampcheck.json` → `summary`.
+
+**What it did not find**
+- **No evidence that any reader reads the hidden step beyond output-facing content.** At the answer token the model's own
+  output tracks swaps as well as the readers (above). At the Stage I/J carrier end, readers saw nothing.
+- **No reader-specific difference between the Oracle Lens and the NLA.**
+  - 012: Oracle L44 − NLA L42 AUC +0.016 [−0.017, 0.063]. `stageD_analysis.json` → `oracle_vs_nla_auc.oracle_L44_minus_nla_L42`.
+  - 015: no pre-named contrast met §7's rule. `oh_all.json` → `reader_contrasts_nla_minus_oracle.*.claim_holds`, all false.
+- **No model-side J privilege on brew under a band-limited clamp (008).** The paper's §3.3 mediation result was not
+  reproduced in that setting. Caveat 4 applies.
+- **No "report" of planted concepts (005).** The measure was lexical priming at the answer slot.
+- **No non-J lever from the Oracle's own vectors (Stage E S1).** J-removed arms flip 0/82 at both sizes. Caveats 2–3 apply.
+- **No usable depth-2 brew-code task (009):** it is beyond the model without chain of thought.
+
+**Open caveats**
+1. The Oracle reconstructor (AR) loader is accepted post hoc for L36–60, directions only; the L20–32 retrieval gap is unexplained, and the exact loss and any J term are unknown. (`CLAUDE.md:342`)
+2. Per-layer clamps accumulate the persistent part of their direction (report 49), so clamp arms matched in k are not matched in effective push; this qualifies 012E §17's "J-specific" reading and 008's J vs non-J clamps. (`CLAUDE.md:651`)
+3. Report 44's J-specific reading compares arms at unequal effective push (emrem about 1.6×, Jrem about 0.7× AR_full along u); a J-removed clamp at matched effective push is untested. (`claude_ovarida/44_stageE_energy_controls_2026-10-10.md:122`)
+4. 008's J vs non-J clamp comparison carries the same unquantified caveat. (`docs/reports/008_trackb.md:149`)
+5. Readers' tracking of working swaps is matched by the model's own read-cell output, so it does not separate reading the bridge from reading what the model is about to say. (`CLAUDE.md:331`)
+6. The multihop lever works mainly for named-place bridges, and bridge type and target (Japan) cannot be separated. (`CLAUDE.md:318`)
+7. Stage E: the bridge edit and the answer edit flip largely the same items, so the bridge-vs-answer confound binds. (`claude_ovarida/43_stageE_full_2026-10-10.md:228`)
+8. 015's reader comparison can only be made under the NLA AR, because the Oracle AR barely reads NLA texts. (`claude_ovarida/47_015_full_2026-10-11.md:64`)
+9. 015's wrong-answer effect (+10.4) is not position-controlled. (`claude_ovarida/47_015_full_2026-10-11.md:41`)
+10. 015's runner-up gate failed on 6 of 261 near-tied cells (result unchanged without them). (`claude_ovarida/48_015_followups_2026-10-11.md:98`)
+11. The clamp check's reproduction gate failed as stated for AR_rrem and AR_Jrem (numerical, max 0.0019). (`claude_ovarida/49_clamp_check_2026-10-11.md:52`)
+12. 013's random-deletion controls can delete a whole explanation (R1 12/474, RS1 75/474), biasing 013's Δ toward 0. (`docs/ledger/013_ledger.md:152`)
+13. The reconstructors are each reader's co-trained critic; 013/015 measure what each critic rewards, not what Qwen computes. (`docs/design_specs/015_oracle_hallucination.md:299`)
+14. A PI notes file cited in CLAUDE.md (013 vs CW-16b) was lost with an earlier instance and never backed up. (`CLAUDE.md:306`)
+15. The OpenRouter key was pasted in chat and should be rotated; Stage E has no results-page section and 012 page v14 was never published. (`CLAUDE.md:506`)
+
+**2026-10-11, 012E §18 clamp mechanism check (POST HOC, descriptive; report 49).**
+- Per-layer clamps accumulate the persistent part of their direction. Median over 10 items of (L47 ratio to AR_full) ÷ (1/cos):
+  AR_rrem 1.01, AR_emrem 0.97.
+- AR_Jrem does not accumulate (0.71 of AR_full along u).
+- Caveats added to report 44 and report 008; CLAUDE.md pitfall added.
+- The reproduction gate failed as stated for rrem/Jrem (numerical; diagnosed in `gate_diagnosis`).
+
+**2026-10-10/11, 015, the Oracle hallucination test with cross-scoring (branch `015-oracle-hallucination`; reports 45–48).**
+- 013's pipeline on the 522 Oracle L44 readouts; every version of both readers' texts scored by both reconstructors.
+- **Answer arm, Oracle texts × Oracle AR:** Δ_A +14.5, Δ_AP +4.3.
+- **Primary Δ:** Oracle × Oracle AR +9.0 (wrong answers, not position-controlled); Oracle × NLA AR −0.8; NLA × NLA AR +28.6 (= 013).
+- **Reader contrasts:** no reader-specific claim; the Oracle AR barely reads NLA texts.
+- **Follow-ups (report 48):** answer swaps cost whichever way they go; the wrong answers are Qwen's runner-ups. Red-team corrections 1–3 applied.
+- **Results page:** https://claude.ai/artifact/7JkKovrdEVXZsAoB7WY6jd. Judge spend $6.76.
+
+**2026-10-10, 012 Stage E, the Oracle reconstructor's concept differences as edits (on `014-typo`; reports 41–44).**
+- Brew was stopped by rule at step 2 (report 41). On multihop the class-mean lever failed (10/51), so J-row sizes are primary (report 42).
+- **Full run (report 43):** AR_full@J 37/82, AR_Jrem@J 0/82, AR_rrem@J 41/82, AR_answer@J 37/82.
+  The bridge-vs-answer confound binds.
+- **§17 (report 44):** AR_emrem@J 45/82 (median Δm 8.43 vs AR_Jrem 0.42): "J-specific" by the pre-stated rule, qualified by §18.
+- Generation spend $3.88 (`stageE_generation_phrases.json` → `total_api_spend_usd`).
 
 **2026-10-07, 014 typo (branch `014-typo`; EXPLORATORY; `docs/ledger/014_ledger.md`).** Reading-only suite on WSB typo
 (100 items; hidden step = the corrected word; no answer depends on it, so no causal parts).

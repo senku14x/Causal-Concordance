@@ -118,3 +118,18 @@ It is recorded as unexplained.
 
 The Stage I/J delayed-question design (reconstructor edits at clue positions only, two relations per held state) is
 next, as the PI set out. It is not drafted yet. I'll draft it on your word.
+
+## Caveat added 2026-10-11 (012E §18, report 49)
+
+- **The arms were matched at the clamp target, not in effective push.** A per-layer clamp accumulates the part of
+  its direction that persists across layers.
+- On 10 seeded items, at L47:
+  - AR_emrem pushes about 1.6× AR_full's amount along u (≈ 1/cos(u′, u));
+  - AR_rrem about 1.13×;
+  - AR_Jrem about 0.7×, with no accumulation.
+- The persistent part of u appears to lie in J.
+- **So the pre-stated "J-specific" reading above compares arms at unequal effective push.** It stands as "removing J
+  removes the effect at matched clamp size". Whether a J-removed direction would act at a matched effective push is
+  untested.
+- The larger effect of the random-removal arms is explained by the accumulation
+  (`results/012_reader_concordance/analysis/stageE_clampcheck.json` `summary`).
