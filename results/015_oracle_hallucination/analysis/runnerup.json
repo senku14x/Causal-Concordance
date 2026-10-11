@@ -1,0 +1,186 @@
+{
+ "label": "POST HOC, descriptive (015 runner-up test; ledger amendment 2026-10-11)",
+ "gate_argmax_equals_stageB_greedy": {
+  "cells": 261,
+  "n_mismatch": 6,
+  "pass": false,
+  "mismatch_cells": [
+   [
+    "colosseum-currency",
+    "clean"
+   ],
+   [
+    "colosseum-currency",
+    "rand_L24-35"
+   ],
+   [
+    "inv-antarctica-opposite",
+    "J_L24-35"
+   ],
+   [
+    "inv-sunrise-opposite",
+    "J_L24-35"
+   ],
+   [
+    "inv-sunrise-opposite",
+    "clean"
+   ],
+   [
+    "rhyme-tree-squared",
+    "rand_L24-35"
+   ]
+  ],
+  "diagnosis": "near-ties between spelling variants (' euro'/' Euro', ' North'/' north', ' the'/' west'): the model's answer ranks 1-2 at all 6 cells (first-token log-prob -0.7 to -1.2); 2 of the 6 are clean cells (no edit). Attributed to the different bf16 forward path (one full forward vs Stage B's generate prefill), not to edit reproduction."
+ },
+ "by_state": {
+  "wrong": {
+   "clean": {
+    "n": 107,
+    "logp_own_minus_null": {
+     "mean": 5.732064296841984,
+     "ci95": [
+      3.8834611674442563,
+      7.605446211995205
+     ],
+     "median": 5.9171445310514565
+    },
+    "logp_own_mean": -7.882523406787808,
+    "logp_null_mean": -13.614587703629793,
+    "rank_own_median": 7.0,
+    "rank_null_median": 219.0,
+    "share_rank_le_10_own": 0.5887850467289719,
+    "share_rank_le_10_null": 0.14018691588785046
+   },
+   "J_L24-35": {
+    "n": 130,
+    "logp_own_minus_null": {
+     "mean": 7.190955414742553,
+     "ci95": [
+      5.459773055796643,
+      9.135101546362069
+     ],
+     "median": 5.694230368048831
+    },
+    "logp_own_mean": -6.968843948145241,
+    "logp_null_mean": -14.159799362887794,
+    "rank_own_median": 4.5,
+    "rank_null_median": 282.5,
+    "share_rank_le_10_own": 0.5846153846153846,
+    "share_rank_le_10_null": 0.11538461538461539
+   },
+   "rand_L24-35": {
+    "n": 135,
+    "logp_own_minus_null": {
+     "mean": 6.849730529672856,
+     "ci95": [
+      5.101717997961004,
+      8.710100728104573
+     ],
+     "median": 7.088058758616495
+    },
+    "logp_own_mean": -7.7846269980662495,
+    "logp_null_mean": -14.634357527739104,
+    "rank_own_median": 7.0,
+    "rank_null_median": 246.0,
+    "share_rank_le_10_own": 0.5481481481481482,
+    "share_rank_le_10_null": 0.11851851851851852
+   },
+   "all": {
+    "n": 372,
+    "logp_own_minus_null": {
+     "mean": 6.647496519313064,
+     "ci95": [
+      5.044876411706208,
+      8.316856152940188
+     ],
+     "median": 6.129736661911011
+    },
+    "logp_own_mean": -7.527699899258388,
+    "logp_null_mean": -14.175196418571453,
+    "rank_own_median": 7.0,
+    "rank_null_median": 253.5,
+    "share_rank_le_10_own": 0.5725806451612904,
+    "share_rank_le_10_null": 0.12365591397849462
+   }
+  },
+  "true": {
+   "clean": {
+    "n": 87,
+    "logp_own_minus_null": {
+     "mean": 13.697269960595072,
+     "ci95": [
+      12.707761154014447,
+      14.758616388648306
+     ],
+     "median": 14.204474472011468
+    },
+    "logp_own_mean": -0.9094952128667471,
+    "logp_null_mean": -14.606765173461818,
+    "rank_own_median": 1.0,
+    "rank_null_median": 2031.0,
+    "share_rank_le_10_own": 0.9885057471264368,
+    "share_rank_le_10_null": 0.08045977011494253
+   },
+   "J_L24-35": {
+    "n": 87,
+    "logp_own_minus_null": {
+     "mean": 12.796667213278068,
+     "ci95": [
+      11.621677464290212,
+      13.998073677895876
+     ],
+     "median": 13.588801490191683
+    },
+    "logp_own_mean": -1.031030561064046,
+    "logp_null_mean": -13.827697774342113,
+    "rank_own_median": 1.0,
+    "rank_null_median": 1348.0,
+    "share_rank_le_10_own": 0.9540229885057471,
+    "share_rank_le_10_null": 0.11494252873563218
+   },
+   "rand_L24-35": {
+    "n": 87,
+    "logp_own_minus_null": {
+     "mean": 13.939051052881036,
+     "ci95": [
+      12.78714243380895,
+      15.093155199905224
+     ],
+     "median": 15.161914131607146
+    },
+    "logp_own_mean": -0.9705260193023291,
+    "logp_null_mean": -14.909577072183367,
+    "rank_own_median": 1.0,
+    "rank_null_median": 1937.0,
+    "share_rank_le_10_own": 0.9655172413793104,
+    "share_rank_le_10_null": 0.08045977011494253
+   },
+   "all": {
+    "n": 261,
+    "logp_own_minus_null": {
+     "mean": 13.477662742251393,
+     "ci95": [
+      12.42384437159727,
+      14.589002581590286
+     ],
+     "median": 14.102372149409675
+    },
+    "logp_own_mean": -0.970350597744374,
+    "logp_null_mean": -14.448013339995768,
+    "rank_own_median": 1.0,
+    "rank_null_median": 1655.0,
+    "share_rank_le_10_own": 0.9693486590038314,
+    "share_rank_le_10_null": 0.09195402298850575
+   }
+  }
+ },
+ "wrong_all_excluding_mismatch_cells": {
+  "n": 364,
+  "mean": 6.654640549962686,
+  "ci95": [
+   5.006149462698267,
+   8.415931229948514
+  ]
+ },
+ "n_note": "n counts unique (string, item, state); 556 wrong openings collapse to 372 (the same opening in both samples of a state counts once)"
+}

@@ -239,11 +239,15 @@ into `main` ("merge with main"). On this instance the local `main` ref was left 
     +4.3 [+2.0, +6.7] over the same tokens cut from another bullet's opening; flagged false claims (mostly wrong answers)
     +9.0 [+4.8, +13.2] (pre-stated expectation 'padding' was wrong); invented context padding (-2.6);
   - Oracle texts x NLA AR: nothing moves (all within about +/-2.8); NLA texts x NLA AR: 013 reproduced exactly (+28.6);
-  - no reader-specific claim: the primary and answer contrasts flip sign between reconstructors, so each reconstructor
-    rewards its own reader's characteristic text (answer-slot text vs prompt restatements);
+  - no reader-specific claim. The Oracle AR barely reads NLA texts (cos 0.068), so cross-scoring adjudicates only under the
+    NLA AR, where the readers differ (primary +29.5, answer +2.3). On Oracle texts the Oracle AR rewards answer slots and
+    the NLA AR does not. The wrong-answer effect is not position-controlled (corrected 2026-10-11, red-team review);
   - correcting the Oracle's false claims in place does not help either reconstructor (Fc - Pc -1.5 / -0.9, POST HOC);
   - fixed during the run: 013's first-occurrence span locator (repeated answers deleted once), judge delimiter echoes;
     spend $6.76. Measures what each critic rewards, not what Qwen computes.
+  - Follow-ups (report 48, POST HOC): swapping Oracle answer openings costs under the Oracle AR whichever way (true vs
+    wrong unresolved), so it rewards bullets as written; the Oracle's wrong answers are Qwen's own runner-ups at the
+    read cell (+6.6 nats vs other items' cells, median rank 7). Project at a stopping point (PI, 2026-10-11).
 - **014, typo** (branch `014-typo`, EXPLORATORY, 2026-10-07; spec `docs/design_specs/014_typo.md`, ledger
   `docs/ledger/014_ledger.md`). The PI asked to run "at least what we can" of the suite on WSB typo (100 items, hidden
   step = the corrected word, read at the last prompt token). Typo has no answer that depends on the corrected word, so

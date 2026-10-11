@@ -365,3 +365,22 @@ tension between Δ_AP > 0 and Fc − Pc < 0, using only the readout's own string
 - **Reported:** log-prob own − null (item-cluster bootstrap) by state, ranks, and 20 random examples (seed 20).
 - **Reading, fixed now:** own − null well above 0 with own ranks near the top means the Oracle's wrong answers are among
   Qwen's own candidate answers at that cell (runner-ups). About 0 means they are not specific to the item's state.
+
+## 2026-10-11: follow-ups run (report `claude_ovarida/48_015_followups_2026-10-11.md`)
+
+- **Corrections 1–3** applied to report 47 (dated, in place), the page and CLAUDE.md.
+- **Swap test** (`analysis/swap.json`; 150 readouts). Under the Oracle AR:
+  - O − ALLW +5.5 [3.7, 7.6]; ALLT − O −4.1 [−5.4, −3.0]; O − SWAP +3.6 [2.5, 5.0]; ALLT − ALLW +1.3 [−1.1, 3.9].
+  - Neither pre-stated reading holds. Any rearrangement of openings costs points, and true vs wrong is unresolved.
+  - Under the NLA AR, O − SWAP is +0.3: a same-set exchange leaves a whole-text scorer unchanged, as it should.
+  - Reading (hypothesis): the Oracle AR rewards each bullet as written, more than the true answer.
+- **Runner-up test** (`analysis/runnerup.json`, 20 examples in `qualitative/runnerup_examples.md`).
+  - Wrong openings (372 unique): own − null +6.6 [5.0, 8.3] nats; median first-token rank 7 vs 253.5; in the top 10
+    0.57 vs 0.12. Similar in each state.
+  - Positive control (the model's own answer): +13.5 [12.4, 14.6], rank 1.
+  - **Pre-stated gate failed on 6 of 261 cells.** They are near-ties between spelling variants: the answer ranks 1–2 at
+    each, and 2 are clean cells with no edit.
+  - Excluding them: +6.7 [5.0, 8.4] (n 364).
+  - The Oracle's wrong answers are mostly Qwen's next-best candidates at the read cell.
+- **Not run:** the "report-44 clamp mechanism check" (not found) and the Stage I/J draft. The PI called a stopping
+  point after these.

@@ -18,6 +18,8 @@ A = json.loads((R / "analysis/oh_all.json").read_text())
 SM = json.loads((R / "analysis/oh_smoke.json").read_text())
 R1 = json.loads((R / "r1.json").read_text())
 HC = json.loads((R / "handcheck_tallies.json").read_text())
+SWP = json.loads((R / "analysis/swap.json").read_text())
+RUP = json.loads((R / "analysis/runnerup.json").read_text())
 LEDGER = (ROOT / "docs/ledger/015_ledger.md").read_text()
 GH = "https://github.com/senku14x/Causal-Concordance/blob/015-oracle-hallucination/"
 HF = "https://huggingface.co/datasets/senku21x/causal-concordance-outputs/tree/main/015_oracle_hallucination"
@@ -236,7 +238,7 @@ def samples_html():
 
 # --------------------------------------------------------------------------------------------- text (written after reading oh_all.json)
 TEXT = {}
-exec((Path(__file__).parent / "page_text.py").read_text(), {"A": A, "C": C, "SM": SM, "R1": R1, "HC": HC, "h": h, "d": d, "frac": frac,
+exec((Path(__file__).parent / "page_text.py").read_text(), {"A": A, "C": C, "SM": SM, "R1": R1, "HC": HC, "SWP": SWP, "RUP": RUP, "h": h, "d": d, "frac": frac,
                                                              "TEXT": TEXT})
 
 # --------------------------------------------------------------------------------------------- page
@@ -327,6 +329,23 @@ lv_rows = "".join(f"<tr><td>{t}</td><td>{s}</td>" + "".join(f"<td>{h(C[k]['fve_m
                   + f"<td>{h(C[k]['share_J_mean']['gold'], 3, False)} / {h(C[k]['share_J_mean']['O'], 3, False)} / {h(C[k]['share_J_mean'].get('F'), 3, False)}</td></tr>"
                   for k, t, s in CELLS)
 cw = A["cw20_metric_oracle_texts"]
+swap_charts = "".join(fig(f"Oracle texts × {sl} (n {SWP['cells'][k]['n']})", forest([
+    ("O − ALLW: true → wrong", SWP["cells"][k]["O_minus_ALLW"], "s1"), ("ALLT − O: wrong → true", SWP["cells"][k]["ALLT_minus_O"], "s1"),
+    ("O − SWAP: exchange, same strings", SWP["cells"][k]["O_minus_SWAP"], "s1"), ("ALLT − ALLW", SWP["cells"][k]["ALLT_minus_ALLW"], "s1")],
+    f"swap test {k}")) for k, sl in (("oracle_texts|oracle_ar", "Oracle AR"), ("oracle_texts|nla_ar", "NLA AR")))
+ST_LAB = {"clean": "clean", "J_L24-35": "J swap", "rand_L24-35": "random swap", "all": "all"}
+rup_rows = ""
+for role, lab in (("wrong", "Oracle's wrong openings"), ("true", "model's own answer (control)")):
+    for st, v in RUP["by_state"][role].items():
+        if role == "true" and st != "all":
+            continue
+        dd_ = v["logp_own_minus_null"]
+        rup_rows += (f"<tr><td>{lab}</td><td>{ST_LAB[st]}</td><td>{v['n']}</td><td>{h(dd_['mean'])} [{h(dd_['ci95'][0])}, {h(dd_['ci95'][1])}]</td>"
+                     f"<td>{h(v['logp_own_mean'])} / {h(v['logp_null_mean'])}</td><td>{h(v['rank_own_median'], 1, False)} / {h(v['rank_null_median'], 1, False)}</td>"
+                     f"<td>{h(v['share_rank_le_10_own'], 2, False)} / {h(v['share_rank_le_10_null'], 2, False)}</td></tr>")
+ex_rows = "".join("<tr>" + "".join(f"<td>{E(c.strip())}</td>" for c in line.strip().strip("|").split("|")) + "</tr>"
+                  for line in (R / "qualitative/runnerup_examples.md").read_text().splitlines()
+                  if line.startswith("| ") and not line.startswith("| item") and not line.startswith("|---"))
 
 page = f"""<title>Oracle Hallucination Ledger</title>
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;600&family=IBM+Plex+Mono:wght@400&family=Newsreader:opsz,wght@6..72,500&display=swap">
@@ -417,6 +436,12 @@ table.mini {{ font-size:11.5px; margin-top:6px; }} details h3 {{ margin-top:10px
 {TEXT['contrasts']}
 <div class="wrap"><table><tr><th>Contrast</th><th>Scorer</th><th>NLA − Oracle, raw</th><th>per unit deleted share</th><th>English-only</th><th>% of each cell's R1 range (descriptive)</th><th>(item, state)</th><th>claim rule met</th></tr>{rc_rows}</table></div>
 
+<h2>Follow-ups: answer swaps and the model's runner-ups</h2>
+{TEXT['followups']}
+<div class="sms">{swap_charts}</div>
+<div class="wrap"><table><tr><th>Strings</th><th>State</th><th>n</th><th>log-prob own − null (nats)</th><th>log-prob own / null</th><th>median first-token rank own / null</th><th>in top 10 own / null</th></tr>{rup_rows}</table></div>
+<details><summary>20 random wrong-answer openings (seed 20)</summary><div class="wrap"><table><tr><th>item</th><th>state</th><th>model's answer</th><th>Oracle's wrong opening</th><th>log-prob own</th><th>rank own</th><th>log-prob null</th><th>rank null</th></tr>{ex_rows}</table></div></details>
+
 <h2>Levels and J share</h2>
 <p class="sub">Mean FVE points (mean cosine) per version; J share of the reconstruction in 007's dense J basis at the scorer's layer: gold / O / F.</p>
 <div class="wrap"><table><tr><th>Texts</th><th>Scorer</th><th>O</th><th>C1</th><th>R1</th><th>CA</th><th>RA</th><th>PA</th><th>F</th><th>P</th><th>J share</th></tr>{lv_rows}</table></div>
@@ -436,7 +461,7 @@ table.mini {{ font-size:11.5px; margin-top:6px; }} details h3 {{ margin-top:10px
 <h2>Files</h2>
 <ul>
 <li>Spec: <a href="{GH}docs/design_specs/015_oracle_hallucination.md">docs/design_specs/015_oracle_hallucination.md</a></li>
-<li>Reports: <a href="{GH}claude_ovarida/45_015_r1_2026-10-11.md">45 (step 2)</a>, <a href="{GH}claude_ovarida/46_015_smoke_2026-10-11.md">46 (smoke)</a>, <a href="{GH}claude_ovarida/47_015_full_2026-10-11.md">47 (full run)</a></li>
+<li>Reports: <a href="{GH}claude_ovarida/45_015_r1_2026-10-11.md">45 (step 2)</a>, <a href="{GH}claude_ovarida/46_015_smoke_2026-10-11.md">46 (smoke)</a>, <a href="{GH}claude_ovarida/47_015_full_2026-10-11.md">47 (full run)</a>, <a href="{GH}claude_ovarida/48_015_followups_2026-10-11.md">48 (follow-ups)</a></li>
 <li>Code: <a href="{GH}scripts/015_oracle_hallucination/oh.py">oh.py</a>, <a href="{GH}scripts/015_oracle_hallucination/r1.py">r1.py</a>; results JSON <a href="{GH}results/015_oracle_hallucination/analysis/oh_all.json">oh_all.json</a></li>
 <li>Raw outputs (judge cache, versions, scores): <a href="{HF}">public HF dataset</a></li>
 </ul>
