@@ -580,3 +580,9 @@ of the reward is unlikely, at least on these texts.
 
 **Correction to line 101** ("J_NP and J_CB about 0.88–0.91"): at L40/L44 the AUCs are 0.92–0.93
 (`stageD_analysis.json` `cells.J_*|L4x|L24-35.auc_tt`); 0.88–0.91 is L52/L56 (report 36 E8).
+
+## 2026-10-11: 012E §18 clamp mechanism check, amendment written before the run
+
+- PI request, 2026-10-11. The spec text is in 012E §18. POST HOC and descriptive; it changes no recorded result.
+- Before this message, the check was only named, without a definition, in a red-team block pasted on 10-11 at 00:54. It
+  was recorded as "not found" in the 015 ledger.

@@ -594,3 +594,43 @@ the removed energy.
 Until §17 has been read, report 43 states the J result as "removing J removes the effect; removing a random subspace
 of the same dimension (about a fifth of u's energy, a third of what J removes) does not".
 
+
+## 18. Clamp mechanism check (PI, 2026-10-11; POST HOC, descriptive; written before any §18 run; changes no recorded result)
+
+**Why.**
+- Every additive clamp arm sets the coordinate along its own unit direction u′ to clean + k at each band layer.
+- Write u′ = cos·u + sin·w, with u the arm's AR_full direction at that layer. Suppose the w part of an edit fades
+  between layers and the u part persists. Then each clamp re-adds the faded part, the u component accumulates, and its
+  steady state is k / cos(u′, u).
+- That would explain why the removal arms out-push AR_full at the same k (`stageE_step4.json`):
+  - `full.J_size.all.arm_table`: AR_rrem@J median Δm 6.09, AR_full@J 5.25;
+  - `energy.readings["emrem@J|all"].median_dm_X` 8.43;
+  - observed ratios 1.16 and 1.60, against predicted 1/cos of about 1.12 (rrem: √(1 − 1024/5120)) and 1.54
+    (`energy.diagnostics_median.emrem_cos_to_u` 0.649).
+- If it holds, "matched size at the clamp target" is not a matched effective push whenever an arm's direction mixes
+  persistent and fading parts. That caveat would also apply to 008's J vs non-J clamps.
+
+**Run** (`stageE_clampcheck.py`).
+- **Items:** 10 items from the 82, `np.random.default_rng(20261011).choice(sorted(cohort), 10, replace=False)`.
+- **Arms:** AR_full@J, AR_rrem@J, AR_emrem@J and AR_Jrem@J. Each is built exactly as in `stageE_edits.py` full / energy
+  mode: same u, same J-row sizes Kj, same seeds; emrem with the same CUDA generator.
+- **Path:** the prefill is run through the identical path, with BandEditor and Jan's ModelRunner in bf16.
+- **Capture:** the block-L outputs after the clamp (L36–47, every position), for each arm and for clean.
+- **Logged per arm and layer:**
+  - cos(u′, u);
+  - (h − h_clean)·u at the read position and the median over positions;
+  - for AR_Jrem, also (h − h_clean)·unit(u_J), with u_J = Q Qᵀ u the J component of u at that layer;
+  - the realised re-application ‖Δh‖/‖h‖ (Logged `rel_dh`) at the read position and the median.
+- **Gate (reproduction):**
+  - the realised `rel_dh` of every arm, at every layer and position, equals the value recorded in the full run (AR_full,
+    AR_rrem, AR_Jrem) or the §17 run (AR_emrem);
+  - AR_emrem's cos to u equals `energy_diag.emrem_cos_to_u`.
+- **Report:** for each arm, the ratio to AR_full of (h − h_clean)·u at L47 (read position, and the ratio of the
+  position medians), against 1/cos(u′, u) at L47, with a per-item table; also the per-layer path of the ratio.
+
+**Reading (fixed now).**
+- **The mechanism holds** if, for both AR_rrem and AR_emrem, the median over the 10 items of
+  (ratio at L47, read position) / (1 / cos at L47) is within [0.85, 1.15]. Then a CLAUDE.md pitfall is added, and 008's
+  report notes that its J vs non-J clamp comparison carries this unquantified caveat.
+- **Otherwise** report 43's "random removal makes the edit stronger" is recorded as still unexplained.
+- AR_Jrem is descriptive.
