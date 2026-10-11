@@ -43,6 +43,17 @@ Reading notes on the readers' papers: `docs/context/reading_notes.md` and `readi
 
 | File | Session | What it is |
 |---|---|---|
+| `../Causal-Concordance/claude_ovarida/45_015_r1_2026-10-11.md` (link) | 2026-10-11 | 015 step 2 R1 on four cells |
+| `../Causal-Concordance/claude_ovarida/46_015_smoke_2026-10-11.md` (link) | 2026-10-11 | 015 step 3 smoke: gates, answer arm, rewrite arm, PI decisions |
+| `../Causal-Concordance/claude_ovarida/47_015_full_2026-10-11.md` (link) | 2026-10-11 | 015 full run: answer arm, primary, rewrites, reader contrasts |
+| `../Causal-Concordance/claude_ovarida/48_015_followups_2026-10-11.md` (link) | 2026-10-11 | 015 follow-ups: corrections, swap test, runner-up test |
+| `../Causal-Concordance/claude_ovarida/44_stageE_energy_controls_2026-10-10.md` (link) | 2026-10-10 | 012 Stage E §17 energy controls and overlaps |
+| `../Causal-Concordance/claude_ovarida/43_stageE_full_2026-10-10.md` (link) | 2026-10-10 | 012 Stage E full multihop run |
+| `../Causal-Concordance/claude_ovarida/42_stageE_step4_smoke_2026-10-10.md` (link) | 2026-10-10 | 012 Stage E step 4: parity, floors, lever, smoke |
+| `../Causal-Concordance/claude_ovarida/41_stageE_step2_2026-10-10.md` (link) | 2026-10-10 | 012 Stage E step 2 report: gate, pre-checks, decisions |
+| `../Causal-Concordance/claude_ovarida/40_problems_found_2026-10-10.md` (link) | 2026-10-10 | Every problem found in report 39 and in the 10-09 patch, what the patch gets right, each item's status after `d4b9860` / `128bd12` |
+| `../Causal-Concordance/claude_ovarida/39_up_to_speed_2026-10-10.md` (link) | 2026-10-10 | Up-to-speed report on a fresh instance (001–014, beliefs, patch check, 14 inconsistencies) |
+| `/workspace/claude_suggestions/2026-10-10_what_changed.md` (link) | 2026-10-10 | Plain summary of what changed and what was done on 2026-10-10 |
 | `26_up_to_speed_report_2026-10-06.md` | 2026-10-06 | Up-to-speed report; inconsistencies (multihop restatement 0.15–0.28, Oracle Lens provenance, nla-rl AR) |
 | `21_up_to_speed_report_2026-10-05.md` | 2026-10-05 | Comprehension report on a fresh instance (001–006b, Cathryn's CW-12, problems found) |
 | `12_what_was_done_and_why.md` | 2026-10-04 | Plain-language account of the day |

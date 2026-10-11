@@ -1,12 +1,14 @@
-- [Read the workspace paper first](read-workspace-paper-first.md) — PI rule: every session starts by reading Gurnee et al. 2026 + the relevant reading (list at the top of the repo's CLAUDE.md)
-- [User research profile](user-research-profile.md) — mech-interp researcher; wants skeptical, evidence-calibrated collaboration
-- [Activation readers project](activation-readers-project.md) — = Causal-Concordance (senku14x) + Cathryn pilot; NLA = nla-rl; spec-v2 branch; 005 full run + follow-ups + 006 done, all on branch 005-amended-full-run (PI analysing results); rules in repo CLAUDE.md
-- [Workspace paper notes](workspace-paper-notes.md) — where my J-lens/template/oracle-lens notes + code/lens resources live
-- [Reports location](reports-location.md) — save all reports/notes + a doubts file in /workspace/claude_reports with a README index
-- [Cathryn coordination](cathryn-coordination.md) — PI handles all contact with Cathryn; never draft for her, ask her, or wait on her sign-off
-- [Research workflow non-negotiables](research-workflow-non-negotiables.md) — no subagents; design doc before runs, launch on explicit go; reader-free labels; fp32 writes with fidelity
-- [Reader adjudication project](reader-adjudication-project.md) — Causal-Concordance: 001–004 done on dev (004 span assay: fitted spans ≈ PCA), awaiting PI review; start at docs/COME_UP_TO_SPEED.md
-- [GitHub commit setup](github-commit-setup.md) — commit email, senku14x account, push via env -u GITHUB_TOKEN + gh credential helper
-- [vLLM is optional, later](vllm-optional-later.md) — don't force vllm-metamodels; HF first, slot vLLM in after things work
-- [Keep qualitative samples](keep-qualitative-samples.md) — always save and show raw readouts/prompts/example cells next to the numbers
-- [Page charts native style](page-charts-native-style.md) — results page: draw charts in the page's SVG/HTML style, not matplotlib PNGs; screenshot-check
+- [Research collaborator stance](research-collaborator-stance.md) — user's operating guide for rigorous, skeptical mech-interp research collaboration
+- [Causal-Concordance PI decisions (Oct 2026)](causal-concordance-pi-decisions-2026-10.md) — AR loader accepted L36–60; Stage E done; 015 full run done (report 47, page 7JkKovrd…), next step is the PI's call
+- [Read the workspace paper first](read-workspace-paper-first.md) — PI rule: every session starts by reading Gurnee et al. 2026 + the relevant reading (list at the top of the repo's CLAUDE.md) [restored note, 10-02–10-05; CLAUDE.md is newer]
+- [User research profile](user-research-profile.md) — mech-interp researcher; wants skeptical, evidence-calibrated collaboration [restored note, 10-02–10-05; CLAUDE.md is newer]
+- [Activation readers project](activation-readers-project.md) — = Causal-Concordance (senku14x) + Cathryn pilot; NLA = nla-rl; spec-v2 branch; 005 full run + follow-ups + 006 done, all on branch 005-amended-full-run (PI analysing results); rules in repo CLAUDE.md [restored note, 10-02–10-05; CLAUDE.md is newer]
+- [Workspace paper notes](workspace-paper-notes.md) — where my J-lens/template/oracle-lens notes + code/lens resources live [restored note, 10-02–10-05; CLAUDE.md is newer]
+- [Reports location](reports-location.md) — save all reports/notes + a doubts file in /workspace/claude_reports with a README index [restored note, 10-02–10-05; CLAUDE.md is newer]
+- [Cathryn coordination](cathryn-coordination.md) — PI handles all contact with Cathryn; never draft for her, ask her, or wait on her sign-off [restored note, 10-02–10-05; CLAUDE.md is newer]
+- [Research workflow non-negotiables](research-workflow-non-negotiables.md) — no subagents; design doc before runs, launch on explicit go; reader-free labels; fp32 writes with fidelity [restored note, 10-02–10-05; CLAUDE.md is newer]
+- [Reader adjudication project](reader-adjudication-project.md) — Causal-Concordance: 001–004 done on dev (004 span assay: fitted spans ≈ PCA), awaiting PI review; start at docs/COME_UP_TO_SPEED.md [restored note, 10-02–10-05; CLAUDE.md is newer]
+- [GitHub commit setup](github-commit-setup.md) — commit email, senku14x account, push via env -u GITHUB_TOKEN + gh credential helper [restored note, 10-02–10-05; CLAUDE.md is newer]
+- [vLLM is optional, later](vllm-optional-later.md) — don't force vllm-metamodels; HF first, slot vLLM in after things work [restored note, 10-02–10-05; CLAUDE.md is newer]
+- [Keep qualitative samples](keep-qualitative-samples.md) — always save and show raw readouts/prompts/example cells next to the numbers [restored note, 10-02–10-05; CLAUDE.md is newer]
+- [Page charts native style](page-charts-native-style.md) — results page: draw charts in the page's SVG/HTML style, not matplotlib PNGs; screenshot-check [restored note, 10-02–10-05; CLAUDE.md is newer]

@@ -534,7 +534,9 @@ why the NLA runs stopped and the other open issues: `docs/claude_reports/25_nla_
 1. `git clone https://github.com/senku14x/Causal-Concordance` (private; `gh auth login` as senku14x). `main` holds
    everything through 007 (fast-forwarded from `007-jsubspace` on 2026-10-06); check out `014-typo` for
    everything through 014 (it contains 008-013; corrected 2026-10-09, was "`008-trackb-brewcode` for 008-011").
-2. `bash scripts/000_setup/rebuild_env.sh`: venvs, pinned source clones, model and lens downloads, and hash checks.
+2. `bash scripts/000_setup/rebuild_env.sh --page`: venvs, pinned source clones, model and lens downloads, and hash checks;
+   `--page` also builds `/venv/page` (playwright + Chromium) for page checks. Since 2026-10-11 the download includes the
+   nla-rl `ar_reconstructor/` and root `nla_meta.yaml` (013-015's NLA reconstructor; about 35 GB, not hash-pinned).
 3. `python scripts/000_setup/restore_outputs.py`: downloads `outputs/` from the public HF dataset
    `senku21x/causal-concordance-outputs` and checks every file against its `MANIFEST.json` (sha256).
    - The dataset holds every run's raw outputs, including 005's smoke, pilot, full run and follow-ups and the activation captures (`caps.pt`, `material.pt`).
@@ -560,7 +562,8 @@ why the NLA runs stopped and the other open issues: `docs/claude_reports/25_nla_
    The paper PDFs, their text extractions and the web sources are **in this repo** (`docs/papers/`,
    `docs/papers/text/`, `docs/sources/web/`; PI 2026-10-03). Copy them to `/workspace/sources/{papers,web}` if a
    script expects that path. **Keep the repo private while they are in it** (redistribution is not cleared).
-5. Restore the agent's memory notes: see `docs/context/agent_notes/README.md` (updated 2026-10-05).
+5. Restore the agent's memory notes: see `docs/context/agent_notes/README.md` (updated 2026-10-05; synced 2026-10-11).
+   Notes written for the PI outside the repo are in `docs/claude_suggestions/` (copy back to `/workspace/claude_suggestions/`).
 6. **Secrets are in neither mirror.** The OpenRouter key (002's, 013's and 014's judges) lives only in `/workspace/.env`; ask the PI
    for it on a new instance. It was pasted in chat on 2026-10-02 and should be rotated.
 

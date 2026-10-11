@@ -69,8 +69,10 @@ def download(what=("model", "lenses", "readers")):
         r = REG["readers"]["nla_reference_activations"]
         paths["nla_reference_activations"] = hf_hub_download(r["hf_repo"], r["file"], revision=r["hf_revision"])
         q = REG["readers"]["nla_rl"]
+        # + the final AR (ar_reconstructor/) and the root nla_meta.yaml: 013-015's reconstructor (EasyNLA NLACriticModel)
+        # reads both; missing on a fresh instance before 2026-10-11 (015 ledger). Not hash-pinned in the registry.
         paths["nla_rl"] = snapshot_download(q["hf_repo"], revision=q["hf_revision"], max_workers=8,
-                                            allow_patterns=[f"{q['av_base']}/*", f"{q['adapter']}/*"])
+                                            allow_patterns=[f"{q['av_base']}/*", f"{q['adapter']}/*", "ar_reconstructor/*", "nla_meta.yaml"])
         print(f"[reader] nla_rl -> {paths['nla_rl']} ({time.time()-t0:.0f}s)", flush=True)
     if "model" in what:
         m = REG["model"]

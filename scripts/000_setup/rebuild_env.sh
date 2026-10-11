@@ -3,6 +3,7 @@
 # Sequential on purpose: packages -> jlens -> source clones -> artifacts (download + hash verify) -> CPU tests.
 #   bash scripts/000_setup/rebuild_env.sh            # label + reader stack (/venv/main)
 #   bash scripts/000_setup/rebuild_env.sh --vllm     # also the separate vLLM venv (/venv/vllm) for reader generation
+#   bash scripts/000_setup/rebuild_env.sh --page     # also /venv/page (playwright + headless Chromium) for page checks
 # Private GitHub sources (RHUT, SEC) need `gh auth login` first; clone with `env -u GITHUB_TOKEN` if a stale token is set.
 set -euo pipefail
 PROJ="$(cd "$(dirname "$0")/../.." && pwd)"
@@ -41,10 +42,18 @@ log "artifacts: model, lenses, reader checkpoints (pinned revisions), then sha25
 python "$PROJ/scripts/common/artifacts.py" download --what model,lenses,readers
 python "$PROJ/scripts/common/artifacts.py" verify --out "$PROJ/results/000_setup/analysis/artifact_hashes.json"
 
-if [ "${1:-}" = "--vllm" ]; then
-  log "vLLM venv (/venv/vllm)"
-  bash "$PROJ/scripts/000_setup/install_vllm_venv.sh"
-fi
+for arg in "$@"; do
+  if [ "$arg" = "--vllm" ]; then
+    log "vLLM venv (/venv/vllm)"
+    bash "$PROJ/scripts/000_setup/install_vllm_venv.sh"
+  fi
+  if [ "$arg" = "--page" ]; then          # added 2026-10-11: /venv/page was missing on a fresh instance (015 ledger)
+    log "page-check venv (/venv/page: playwright + Chromium)"
+    [ -x /venv/page/bin/python ] || uv venv -q /venv/page
+    VIRTUAL_ENV=/venv/page uv pip install -q playwright
+    /venv/page/bin/python -m playwright install --with-deps chromium
+  fi
+done
 
 log "CPU tests"
 python -m pytest "$PROJ/scripts/common/tests" -m "not gpu" -q -p no:cacheprovider
